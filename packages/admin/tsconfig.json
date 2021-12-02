@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "paths": {
+      "@shared": ["../shared/src"],
+      "@shared/*":[ "../shared/src/*"],
+      "@styles/*":[ "src/styles/*"],
+      "@pages/*":[ "src/pages/*"],
+      "@components/*":[ "src/components/*"],
+      "@assets/*":[ "src/assets/*"],
+      "@layouts":[ "src/layouts"],
+      "@types":[ "src/types"],
+    }
+  },
+  "include": ["./src", "vite-env.d.ts"]
+}
