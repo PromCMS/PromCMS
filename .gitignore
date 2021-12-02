@@ -6,6 +6,9 @@ dev
 .env*
 .pnp
 .pnp.js
+dist
+dist-ssr
+*.local
 
 # testing
 coverage
@@ -31,3 +34,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+/packages/**/yarn.lock
