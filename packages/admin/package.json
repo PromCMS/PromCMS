@@ -1,28 +1,27 @@
 {
   "name": "@prom/admin",
   "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "react": "17.0.0",
-    "react-dom": "17.0.0",
-    "react-router": "6.0.2",
-    "react-router-config": "5.1.1",
-    "react-router-dom": "6.0.2",
-    "vite-tsconfig-paths": "3.3.17"
+    "next": "12.0.4",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "lowdb": "3.0.0"
   },
   "devDependencies": {
-    "@types/react": "17.0.0",
-    "@types/react-dom": "17.0.0",
-    "@vitejs/plugin-react": "1.0.0",
+    "@types/node": "16.11.11",
+    "@types/react": "17.0.37",
+    "eslint": "7",
+    "eslint-config-next": "12.0.4",
+    "typescript": "4.5.2",
     "autoprefixer": "^10.4.0",
     "postcss": "^8.4.4",
-    "tailwindcss": "^2.2.19",
-    "typescript": "4.3.2",
-    "vite": "2.6.4",
-    "vite-plugin-pages": "0.19.0-beta.6"
+    "tailwindcss": "^2.2.19"
   }
 }
