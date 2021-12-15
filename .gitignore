@@ -9,6 +9,7 @@ dev
 dist
 dist-ssr
 *.local
+dev
 
 # testing
 coverage
@@ -35,3 +36,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 /packages/**/yarn.lock
+*.generate-config*
+*mocks.json
