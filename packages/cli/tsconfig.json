@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "isolatedModules": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "target": "ESNEXT" ,
+    "module": "esnext",
+    "moduleResolution": "Node",
+    "paths": {
+      "@shared": ["../shared/src"],
+      "@shared/*":[ "../shared/src/*"],
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

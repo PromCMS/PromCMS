@@ -1,0 +1,31 @@
+{
+  "name": "@prom/cli",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "author": "Ondřej Langr <hi@ondrejlangr.cz>",
+  "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "license": "ISC",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ondrej-langr/prom.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "generate:api-mocks": "node --loader=ts-node/esm --experimental-specifier-resolution=node -r tsconfig-paths/register src/generate-mocks/index.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/ondrej-langr/prom/issues"
+  },
+  "devDependencies": {
+    "ts-node": "10.4.0",
+    "tsconfig-paths": "3.12.0",
+    "faker": "5.5.3",
+    "@types/faker": "5.5.9",
+    "lowdb": "3.0.0",
+    "fs-extra": "10.0.0",
+    "@types/fs-extra": "9.0.13",
+    "@prom/shared": "1.0.0",
+    "chalk": "5.0.0"
+  }
+}
