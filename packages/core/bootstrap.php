@@ -13,23 +13,27 @@ use Slim\Factory\AppFactory;
 include(__DIR__ . '/vendor/autoload.php');
 
 // load .env file if exists
-Dotenv::load(__DIR__);
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$dotenv->required(['APP_NAME', 'APP_URL']);
 
 // check for custom defines
 if (file_exists(__DIR__ . '/defines.php')) {
     include(__DIR__ . '/defines.php');
 }
 
-$PROM_BASE               = '';
+$PROM_BASE               = $_ENV["APP_PREFIX"];
 $PROM_ROOT_FOLDER        = __DIR__ . strlen($PROM_BASE) ? "/$PROM_BASE" : "";
 $PROM_URL_BASE           = strlen($PROM_BASE) ? "/{$PROM_BASE}" : $PROM_BASE;
-$PROM_DEVELOPMENT_MODE   = $_ENV['ENVIRONMENT'] == 'dev';
+$PROM_DEVELOPMENT_MODE   = $_ENV['APP_ENV'] == 'dev';
 $DIRECTORY_SEPARATOR     = DIRECTORY_SEPARATOR;
 
 /*
  * SYSTEM DEFINES
  */
 if (!defined('PROM_ROOT_FOLDER'))               define('PROM_ROOT_FOLDER', $PROM_BASE);
+if (!defined('PROM_APP_NAME'))                  define('PROM_APP_NAME', $_ENV["APP_NAME"]);
+if (!defined('PROM_URL'))                       define('PROM_URL', $_ENV["APP_URL"]);
 if (!defined('PROM_IS_DEV'))                    define('PROM_IS_DEV', $PROM_DEVELOPMENT_MODE);
 if (!defined('PROM_URL_BASE'))                  define('PROM_URL_BASE', $PROM_URL_BASE);
 if (!defined('PROM_CORE_DIR'))                  define('PROM_CORE_DIR', __DIR__ . DIRECTORY_SEPARATOR . implode(DIRECTORY_SEPARATOR, ['modules', 'Core']));
