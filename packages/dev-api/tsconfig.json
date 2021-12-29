@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "lib": ["es2020"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "paths": {
+      "@prom/shared": ["../shared/src"],
+      "@prom/shared/*": ["../shared/src/*"],
+      "@prom/cli/*": ["../cli/src/*"],
+      "@database": ["./app/database"],
+    }
+  },
+  "include": ["./app"]
+}
