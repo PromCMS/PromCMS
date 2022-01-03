@@ -1,5 +1,11 @@
 <?php
+/** @var \Slim\App $app */
+/** @var Router $router */
 
-$app->get('/', function () use ($router) {
-    return $router->app->version();
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Slim\Routing\RouteCollectorProxy as Router;
+
+
+$router->group('/system', function (Router $innerRouter) use ($app) {
 });
