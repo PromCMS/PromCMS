@@ -14,5 +14,4 @@
       "@database": ["./app/database"],
     }
   },
-  "include": ["./app"]
 }

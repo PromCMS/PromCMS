@@ -4,19 +4,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "nodemon ./app/index.ts",
-    "dev": "node --experimental-specifier-resolution=node --loader ./loader.mjs php-subprocess.ts",
-    "dev-old": "npm run start"
+    "dev": "node --experimental-specifier-resolution=node --loader ./loader.mjs app/index.ts"
   },
   "dependencies": {
     "chalk": "5.0.0",
-    "fastify": "3.25.1",
-    "lodash.find": "^4.6.0",
-    "lowdb": "3.0.0",
-    "php-server": "^1.0.0"
+    "fs-extra": "10.0.0",
+    "execa": "6.0.0"
   },
   "devDependencies": {
-    "@types/lodash.find": "^4.6.6",
     "@types/node": "16.11.11",
     "ts-node": "10.4.0",
     "tsconfig-paths": "3.12.0"

@@ -1,39 +1,41 @@
 import { loadRootEnv } from '@prom/shared';
 import chalk from 'chalk';
-import Fastify, { FastifyInstance } from 'fastify';
-import routesPlugin from './routes';
+import fs from 'fs-extra';
+import { execa } from 'execa';
 
 loadRootEnv();
-const { PORT: FRONT_PORT = 3000 } = process.env;
 
+const { PORT: FRONT_PORT = 3000 } = process.env;
 const SERVER_PORT = Number(FRONT_PORT) + 1;
 
 console.log(
   chalk.green.bold('🔔 Welcome to dev-api server of prom cms generator!')
 );
+
 console.log(chalk.blue.bold('🔄 Booting up...'));
 
-const server: FastifyInstance = Fastify({});
+console.log(chalk.blue.bold('🔄 Clearing old log file...'));
+fs.remove('log.txt');
 
-console.log(chalk.blue.bold('🔄 Registering up routes...'));
-server.register(routesPlugin);
+const serverProcess = execa('php', [
+  '-S',
+  `127.0.0.1:${SERVER_PORT}`,
+  '-t',
+  '../core/public',
+  '../core/public/index.php',
+]);
 
-console.log(chalk.blue.bold('🔄 Starting up...'));
-const start = async () => {
-  try {
-    await server.listen(SERVER_PORT);
+if (!serverProcess.stderr) {
+  throw Error('Stderr not found');
+}
 
-    const address = server.server.address();
-    const port = typeof address === 'string' ? address : address?.port;
+serverProcess.stderr.setEncoding('utf8');
+serverProcess.stderr.on('data', function (data) {
+  fs.appendFileSync('log.txt', data);
+});
 
-    console.log(
-      chalk.green.bold(
-        `✅ Finished and listening to connections on: http://localhost:${port}`
-      )
-    );
-  } catch (err) {
-    server.log.error(err);
-    process.exit(1);
-  }
-};
-start();
+console.log(
+  chalk.green.bold(
+    `✅ Finished and listening to connections on: http://localhost:${SERVER_PORT}`
+  )
+);
