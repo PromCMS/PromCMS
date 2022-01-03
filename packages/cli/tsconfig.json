@@ -9,8 +9,8 @@
     "module": "esnext",
     "moduleResolution": "Node",
     "paths": {
-      "@shared": ["../shared/src"],
-      "@shared/*":[ "../shared/src/*"],
+      "@prom/shared": ["../shared/src"],
+      "@prom/shared/*":[ "../shared/src/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

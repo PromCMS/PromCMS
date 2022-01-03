@@ -11,18 +11,26 @@
     "url": "git+https://github.com/ondrej-langr/prom.git"
   },
   "scripts": {
-    "test": "echo \"Error: run tests from root\" && exit 1",
-    "generate:api-mocks": "node --loader=ts-node/esm --experimental-specifier-resolution=node -r tsconfig-paths/register src/generate-mocks/index.ts"
+    "generate:cms": "node --loader=ts-node/esm --experimental-specifier-resolution=node src/generate-cms/index.ts",
+    "construct": "npm run generate:cms",
+    "prepare-dev": "node --loader=ts-node/esm --experimental-specifier-resolution=node src/generate-develop/index.ts"
   },
   "bugs": {
     "url": "https://github.com/ondrej-langr/prom/issues"
   },
   "devDependencies": {
+    "execa": "6.0.0",
+    "better-sqlite3": "7.4.6",
+    "@types/better-sqlite3": "7.4.2",
+    "prettier": "2.5.1",
+    "@types/prettier": "2.4.2",
+    "ejs": "3.1.6",
+    "@types/ejs": "3.1.0",
+    "enquirer": "2.3.6",
     "ts-node": "10.4.0",
     "tsconfig-paths": "3.12.0",
     "faker": "5.5.3",
     "@types/faker": "5.5.9",
-    "lowdb": "3.0.0",
     "fs-extra": "10.0.0",
     "@types/fs-extra": "9.0.13",
     "@prom/shared": "1.0.0",
