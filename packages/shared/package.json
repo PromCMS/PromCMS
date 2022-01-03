@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "type": "module",
+  "main": "src/index.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ondrej-langr/prom.git"
@@ -12,8 +14,10 @@
   },
   "devDependencies": {
     "chalk": "5.0.0",
-    "find-config": "1.0.0",
     "dotenv": "10.0.0",
+    "find-config": "1.0.0",
+    "@heroicons/react": "1.0.5",
     "@types/find-config": "1.0.1"
-  }
+  },
+  "dependencies": {}
 }

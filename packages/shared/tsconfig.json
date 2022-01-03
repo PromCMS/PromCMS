@@ -2,5 +2,18 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./",
-  }
+    "moduleResolution": "Node",
+    "paths": {
+        "@prom/cli/*": ["../cli/src/*"]
+    }
+  },
+  "include": [
+    "../**/*.ts",
+    "../**/*.tsx",
+    "../../dev/*",
+    "../../prom.generate-config.js",
+  ],
+  "exclude": [
+    "node_modules"
+  ],
 }
