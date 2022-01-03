@@ -10,6 +10,7 @@ dist
 dist-ssr
 *.local
 dev
+.temp
 
 # testing
 coverage
@@ -38,3 +39,4 @@ yarn-error.log*
 /packages/**/yarn.lock
 *.generate-config*
 *mocks.json
+private

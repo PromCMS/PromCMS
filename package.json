@@ -4,17 +4,20 @@
   "private": true,
   "description": "",
   "scripts": {
-    "dev": "lerna run dev --scope @prom/admin --parallel",
-    "generate:mocks": "yarn workspace @prom/cli run generate:api-mocks"
+    "dev": "lerna run dev --scope @prom/mock-api --scope @prom/admin --parallel",
+    "sync-database": "php packages/core/app/scripts/sync-database.php",
+    "prepare-dev": "yarn workspace @prom/cli run prepare-dev"
   },
   "license": "ISC",
   "workspaces": [
     "./packages/*"
   ],
   "devDependencies": {
-    "lerna": "3.22.1",
-    "typescript": "4.5.2",
     "@types/node": "16.11.10",
-    "rimraf": "3.0.2"
+    "@prettier/plugin-php": "0.17.6",
+    "lerna": "3.22.1",
+    "rimraf": "3.0.2",
+    "typescript": "4.5.2",
+    "@swc/core": "1.2.120"
   }
 }
