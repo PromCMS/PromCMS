@@ -66,6 +66,9 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
           [currentColumnKey]: {
             required: true,
             editable: true,
+            unique: false,
+            hide: false,
+            ...(column.type === 'number' ? { autoIncrement: false } : {}),
             ...column,
           },
         };
