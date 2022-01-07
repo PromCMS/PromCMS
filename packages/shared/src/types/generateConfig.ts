@@ -1,5 +1,38 @@
 import { iconSet } from '../icons';
 
+type ColumnSettingsBase = {
+  /**
+   * Human readable title. Defaults to the column key of this object
+   * @default string {keyOfThisObject}
+   */
+  title: string;
+  /**
+   * Decides if column should be visible in api response
+   * @default false
+   */
+  hide?: boolean;
+  /**
+   * Decides if column should be required or not
+   * @default true
+   */
+  required?: boolean;
+  /**
+   * Determines if column should be unique across table
+   * @default false
+   */
+  unique?: boolean;
+};
+
+export type ModelColumnType = ColumnSettingsBase &
+  (
+    | { type: 'enum'; enum: string[] }
+    | { type: 'number'; autoIncrement?: boolean }
+    | { type: 'string' | 'boolean' | 'date' | 'password' | 'dateTime' }
+  );
+
+export type ModelColumnName = string;
+export type DatabaseTableName = string;
+
 export interface DatabaseConfigModel {
   /**
    * Generated icon for this model, is visible in admin
@@ -21,38 +54,12 @@ export interface DatabaseConfigModel {
   /**
    * Table columns
    */
-  columns: Record<
-    string,
-    ColumnSettingsBase &
-      (
-        | { type: 'enum'; enum: string[] }
-        | { type: 'number'; autoIncrement?: boolean }
-        | { type: 'string' | 'boolean' | 'date' | 'password' | 'dateTime' }
-      )
-  >;
+  columns: Record<ModelColumnName, ModelColumnType>;
 }
 
 export interface DatabaseConfig {
-  models: Record<string, DatabaseConfigModel>;
+  models: Record<DatabaseTableName, DatabaseConfigModel>;
 }
-
-type ColumnSettingsBase = {
-  /**
-   * Decides if column should be visible in api response
-   * @default false
-   */
-  hide?: boolean;
-  /**
-   * Decides if column should be required or not
-   * @default true
-   */
-  required?: boolean;
-  /**
-   * Determines if column should be unique across table
-   * @default false
-   */
-  unique?: boolean;
-};
 
 export interface ExportConfig {
   database: DatabaseConfig;

@@ -1,3 +1,5 @@
+import { DatabaseConfigModel, DatabaseTableName } from '.';
+
 export type ItemID = number | string;
 
 export interface ApiResultItem {
@@ -7,6 +9,10 @@ export interface ApiResultItem {
   id: ItemID;
   [x: string]: any;
 }
+
+export interface ApiResultModel extends DatabaseConfigModel {}
+
+export type ApiResultModels = Record<DatabaseTableName, ApiResultModel>;
 
 export interface PagedResult<T> {
   /**

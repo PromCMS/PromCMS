@@ -18,23 +18,28 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     columns: {
       ...((models['users'] || {}).columns || {}),
       name: {
+        title: 'Name',
         type: 'string',
         required: true,
       },
       password: {
+        title: 'Password',
         type: 'password',
         required: true,
         hide: true,
       },
       email: {
+        title: 'Email',
         type: 'string',
         required: true,
         unique: true,
       },
       avatar: {
+        title: 'Avatar',
         type: 'string',
       },
       role: {
+        title: 'Role',
         type: 'enum',
         enum: ['Admin', 'Anonymous'],
       },
@@ -46,6 +51,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
 
     model.columns = {
       id: {
+        title: 'ID',
         type: 'number',
         autoIncrement: true,
       },
