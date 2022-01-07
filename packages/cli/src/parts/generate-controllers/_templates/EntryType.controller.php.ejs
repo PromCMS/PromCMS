@@ -97,7 +97,7 @@ class EntryType
 
         $response->getBody()->write(json_encode(
             [
-                "data" => $modelInstancePath::where('id', $args['id'])->update($parsedBody["data"])
+                "data" => $modelInstancePath::where('id', $args['itemId'])->update($parsedBody["data"])
             ]
         ));
 
@@ -108,14 +108,18 @@ class EntryType
     {
         $modelInstancePath = $this->getModelFromArg($args["modelId"]);
         if ($modelInstancePath === false) return $response->withStatus(404);
-
-        $response->getBody()->write(json_encode(
+        
+        try {
+            $response->getBody()->write(json_encode(
             [
-                "data" => $modelInstancePath::where('id', $args['id'])->get()
-            ]
-        ));
-
-        return $response->withHeader('Content-Type', 'application/json');
+                    "data" => $modelInstancePath::where('id', $args['itemId'])->get()->firstOrFail()
+                    ]
+                    ));
+                    
+                    return $response->withHeader('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+        return $response->withStatus(404);
+        }
     }
 
     public function createEntry(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -141,7 +145,7 @@ class EntryType
 
         $response->getBody()->write(json_encode(
             [
-                "data" => $modelInstancePath::where('id', $args['id'])->delete()
+                "data" => $modelInstancePath::where('id', $args['itemId'])->delete()
             ]
         ));
 
