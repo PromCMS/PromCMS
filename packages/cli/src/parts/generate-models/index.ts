@@ -20,12 +20,52 @@ const generateModels = async (
 
   for (const modelKey in configModels) {
     const capitalizedModelName = capitalizeFirstLetter(modelKey);
+    const currentModel = configModels[modelKey];
+
     const info = {
       softDelete: false,
       timestamp: false,
       tableName: modelKey.toLocaleLowerCase(),
       modelName: capitalizedModelName,
-      ...configModels[modelKey],
+      ...currentModel,
+      formattedColumns: Object.keys(currentModel.columns).reduce(
+        (finalTransformedColumns, currentColumnKey) => {
+          const currentColumn = currentModel.columns[currentColumnKey];
+          const transformedSettings: string[] = [];
+
+          // Some column types are special and need some special logic
+          // we offload that logic outside of those that are simple values
+          const commonSettingsKeys = Object.keys(currentColumn).filter(
+            (settingKey) => !['enum'].includes(settingKey)
+          );
+          for (const settingsKey of commonSettingsKeys) {
+            // translates to php-like structure
+            // We also use String here since we may also encounter some boolean values which we just translate to its string
+            const settingValue = currentColumn[settingsKey];
+            const formattedValue =
+              typeof settingValue === 'boolean'
+                ? String(settingValue)
+                : `'${String(settingValue)}'`;
+
+            transformedSettings.push(`'${settingsKey}' => ${formattedValue}`);
+          }
+
+          // We now take care of those special column types
+
+          // we know for sure that enum column type has enum setting key
+          if (currentColumn.type === 'enum') {
+            transformedSettings.push(
+              `'enum' => ['${currentColumn.enum.join("', '")}']`
+            );
+          }
+
+          return {
+            ...finalTransformedColumns,
+            [currentColumnKey]: transformedSettings,
+          };
+        },
+        {} as Record<string, string[]>
+      ),
     };
 
     // Module

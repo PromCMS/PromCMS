@@ -18,21 +18,11 @@ class <%- modelName %> extends Model
 
   protected $tableColumns = [
     <% 
-      Object.keys(columns).forEach(columnKey => { 
-      const column = columns[columnKey];
+      Object.keys(formattedColumns).forEach(columnKey => { 
+      const formattedColumnSettings = formattedColumns[columnKey];
     %>
        '<%- columnKey %>' => [
-          'type' => '<%- column.type %>',
-          'title' => '<%- column.title %>',
-          'editable' => '<%- column.editable %>',
-          <% if (column.type == 'enum') { %>
-          'enum' => ['<%- column.enum.join("', '") %>'],
-          <% } else if (column.type == 'number') { %>
-          'autoIncrement' => <%- column.autoIncrement ? 'true' : 'false' %>,
-          <% } %>
-          'required' => <%- column.required ? 'true' : 'false'  %>,
-          'hide' => <%- column.hide ? 'true' : 'false'  %>,
-          'unique' => <%- column.unique ? 'true' : 'false'  %>,
+          <%- formattedColumnSettings.join(', ') %>
         ],
     <% }) %>
   ];
