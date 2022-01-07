@@ -25,7 +25,10 @@ const seedDatabase = async (
         const shouldInput = !!Math.floor(Math.random() * 2);
 
         // If its not required and random input decision decides that it wont be filled then we continue
-        if (!required && !shouldInput) return;
+        if (!required && !shouldInput) {
+          finalObj[columnKey] = null;
+          return;
+        }
 
         switch (type) {
           case 'boolean':
