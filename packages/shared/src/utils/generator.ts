@@ -37,6 +37,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       avatar: {
         title: 'Avatar',
         type: 'string',
+        required: false,
       },
       role: {
         title: 'Role',
