@@ -53,12 +53,24 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       id: {
         title: 'ID',
         type: 'number',
+        editable: false,
         autoIncrement: true,
       },
-      ...model.columns,
-    };
+      // Iterate over all of columns that user provided
+      ...Object.keys(model.columns).reduce((finalColumns, currentColumnKey) => {
+        const column = model.columns[currentColumnKey];
 
-    Object.keys(model.columns).forEach((columnKey) => {});
+        // set default values
+        return {
+          ...finalColumns,
+          [currentColumnKey]: {
+            required: true,
+            editable: true,
+            ...column,
+          },
+        };
+      }, {} as typeof model.columns),
+    };
   });
 
   return { ...config, database: { ...databaseConfig, models } };

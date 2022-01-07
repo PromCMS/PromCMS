@@ -7,7 +7,7 @@ type ColumnSettingsBase = {
    */
   title: string;
   /**
-   * Decides if column should be visible in api response
+   * Decides if column should be visible in api response and returned from eloquent.
    * @default false
    */
   hide?: boolean;
@@ -21,6 +21,11 @@ type ColumnSettingsBase = {
    * @default false
    */
   unique?: boolean;
+  /**
+   * Determines if column should be editable.
+   * @default true
+   */
+  editable?: boolean;
 };
 
 export type ModelColumnType = ColumnSettingsBase &

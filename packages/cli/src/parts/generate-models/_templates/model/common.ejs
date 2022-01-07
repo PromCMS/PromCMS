@@ -24,6 +24,7 @@ class <%- modelName %> extends Model
        '<%- columnKey %>' => [
           'type' => '<%- column.type %>',
           'title' => '<%- column.title %>',
+          'editable' => '<%- column.editable %>',
           <% if (column.type == 'enum') { %>
           'enum' => ['<%- column.enum.join("', '") %>'],
           <% } else if (column.type == 'number') { %>
