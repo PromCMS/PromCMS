@@ -88,16 +88,12 @@ try {
                 $field->nullable();
               }
             }
-
-            if ($modelSummary->hasTimestamps) {
-              $table->timestamps();
-            }
           });
         } catch (Exception $e) {
           $tableName = $modelSummary->tableName;
           $message = $e->getMessage();
-          echo "⛔️ An error happened during table '$tableName' creating: $message" .
-            PHP_EOL;
+          throw new Exception("⛔️ An error happened during table '$tableName' creating: $message" .
+            PHP_EOL);
         }
       }
     }
