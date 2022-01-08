@@ -58,6 +58,8 @@ function bootstrap()
     });
 
     $app->addRoutingMiddleware();
+    
+    $app->addBodyParsingMiddleware();
 
     $app->addErrorMiddleware(PROM_DEBUG_MODE, true, true);
 
