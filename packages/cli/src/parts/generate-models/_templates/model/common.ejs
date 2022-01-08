@@ -13,7 +13,7 @@ class <%- modelName %> extends Model
 
   protected $table = '<%- tableName %>';
   protected $modelIcon = '<%- icon %>';
-  protected $hasTimestamps = <%- timestamp ? 'true' : 'false' %>;
+  public $timestamps = <%- timestamp ? 'true' : 'false' %>;
   protected $hasSoftDeletes = <%- softDelete ? 'true' : 'false' %>;
 
   protected $tableColumns = [
@@ -54,7 +54,7 @@ class <%- modelName %> extends Model
         "columns" => $this->tableColumns,
         "tableName" => $this->table,
         "icon" => $this->modelIcon,
-        "hasTimestamps" => $this->hasTimestamps,
+        "hasTimestamps" => $this->timestamps,
         "hasSoftDelete" => $this->hasSoftDeletes
       ];
   }
