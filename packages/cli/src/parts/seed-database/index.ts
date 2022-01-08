@@ -73,7 +73,10 @@ const seedDatabase = async (
         finalObj[columnKey] = finalValue;
       });
 
-      const formattedColumnKeys = Object.keys(model.columns)
+      const formattedColumnKeys = Object.keys({
+        ...model.columns,
+        ...(model.timestamp ? { created_at: {}, updated_at: {} } : {}),
+      })
         .map((columnKey) => `:${columnKey}`)
         .join(', ');
 
@@ -82,7 +85,15 @@ const seedDatabase = async (
           model.tableName || modelKey.toLowerCase()
         } VALUES (${formattedColumnKeys})`
       );
-      stmt.run(finalObj);
+      stmt.run({
+        ...finalObj,
+        ...(model.timestamp
+          ? {
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString(),
+            }
+          : {}),
+      });
     }
   });
 };
