@@ -56,14 +56,6 @@ try {
           ) use ($modelSummary) {
             /** @var \Illuminate\Database\Schema\Blueprint $table */
 
-            if ($modelSummary->hasTimestamps) {
-              $table->timestamps();
-            }
-
-            if ($modelSummary->hasSoftDelete) {
-              $table->softDeletes();
-            }
-
             foreach ($modelSummary->columns as $columnKey => $column) {
               $type = $column['type'];
               $field = null;
@@ -88,6 +80,15 @@ try {
                 $field->nullable();
               }
             }
+
+            if ($modelSummary->hasTimestamps) {
+              $table->timestamps();
+            }
+
+            if ($modelSummary->hasSoftDelete) {
+              $table->softDeletes();
+            }
+
           });
         } catch (Exception $e) {
           $tableName = $modelSummary->tableName;
