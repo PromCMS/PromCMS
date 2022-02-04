@@ -6,12 +6,10 @@
   "scripts": {
     "dev": "lerna run dev --scope @prom/mock-api --scope @prom/admin --parallel",
     "sync-database": "php packages/core/app/scripts/sync-database.php",
-    "prepare-dev": "yarn workspace @prom/cli run prepare-dev"
+    "generate:dev": "yarn workspace @prom/cli run generate:dev"
   },
   "license": "ISC",
-  "workspaces": [
-    "./packages/*"
-  ],
+  "workspaces": ["./packages/*"],
   "devDependencies": {
     "@types/node": "16.11.10",
     "@prettier/plugin-php": "0.17.6",

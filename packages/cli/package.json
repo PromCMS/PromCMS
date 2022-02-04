@@ -13,7 +13,7 @@
   "scripts": {
     "generate:cms": "node --loader=ts-node/esm --experimental-specifier-resolution=node src/generate-cms/index.ts",
     "construct": "npm run generate:cms",
-    "prepare-dev": "node --loader=ts-node/esm --experimental-specifier-resolution=node src/generate-develop/index.ts"
+    "generate:dev": "node --loader=ts-node/esm --experimental-specifier-resolution=node src/generate-develop/index.ts"
   },
   "bugs": {
     "url": "https://github.com/ondrej-langr/prom/issues"
@@ -34,6 +34,7 @@
     "fs-extra": "10.0.0",
     "@types/fs-extra": "9.0.13",
     "@prom/shared": "1.0.0",
-    "chalk": "5.0.0"
+    "chalk": "5.0.0",
+    "dayjs": "1.10.7"
   }
 }
