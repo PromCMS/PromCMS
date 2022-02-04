@@ -1,0 +1,14 @@
+<?php
+
+/** @var \DI\Container $container */
+
+// get container
+$container = $app->getContainer();
+
+$utilsService = $container->get('utils-service');
+
+$utilsService->autoloadFolder(__DIR__ . '/Services');
+
+$container->set('password-service', function () {
+  return new \App\Services\Password();
+});

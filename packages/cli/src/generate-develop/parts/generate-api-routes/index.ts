@@ -2,7 +2,7 @@ import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import fs from 'fs-extra';
 import ejs from 'ejs';
-import { formatCodeString } from '../utils';
+import { formatCodeString } from '../../../parts/utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

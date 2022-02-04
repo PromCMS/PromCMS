@@ -4,6 +4,10 @@ use Slim\Routing\RouteCollectorProxy as Router;
 
 $router->group('/profile', function (Router $innerRouter) {
   $innerRouter->get('/me', '\App\Controllers\UserProfile:getCurrent');
+
+  $innerRouter->post('/login', '\App\Controllers\UserProfile:login');
+  
+  $innerRouter->get('/logout', '\App\Controllers\UserProfile:logout');
 });
 
 $router->group('/entry-types', function (Router $innerRouter) {

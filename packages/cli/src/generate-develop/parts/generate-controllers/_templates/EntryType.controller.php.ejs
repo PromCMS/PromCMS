@@ -47,7 +47,7 @@ class EntryType
             ]
         ));
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 
     public function create(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -63,7 +63,7 @@ class EntryType
             ]
         ));
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 
     public function getManyEntries(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -85,7 +85,7 @@ class EntryType
 
         $response->getBody()->write(json_encode($dataPaginated));
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 
     public function updateEntry(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -101,7 +101,7 @@ class EntryType
             ]
         ));
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 
     public function getEntry(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -111,12 +111,12 @@ class EntryType
         
         try {
             $response->getBody()->write(json_encode(
-            [
+                [
                     "data" => $modelInstancePath::where('id', $args['itemId'])->get()->firstOrFail()
-                    ]
-                    ));
+                ]
+            ));
                     
-                    return $response->withHeader('Content-Type', 'application/json');
+                    return $response;
         } catch (\Exception $e) {
         return $response->withStatus(404);
         }
@@ -135,7 +135,7 @@ class EntryType
             ]
         ));
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 
     public function deleteEntry(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
@@ -149,6 +149,6 @@ class EntryType
             ]
         ));
 
-        return $response->withHeader('Content-Type', 'application/json');
+        return $response;
     }
 }

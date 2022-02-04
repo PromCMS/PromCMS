@@ -13,12 +13,15 @@ import {
 import {
   generateModule,
   generateModels,
-  generateControllers,
-  generateApiRoutes,
   seedDatabase,
   syncDatabase,
-  clearDatabase,
 } from '../parts';
+import {
+  generateApiRoutes,
+  generateControllers,
+  generateRootFiles,
+  generateServices,
+} from './parts';
 
 loadRootEnv();
 const envFilepath = getEnvFilepath();
@@ -39,17 +42,19 @@ const success = (text: any) => console.log(chalk.bold.green(text));
 const db = new Database(path.join(CORE_ROOT, DB_DATABASE));
 const { database: databaseConfig } = formatGeneratorConfig(GENERATOR_CONFIG);
 
+const MODULE_NAME = 'Core';
+
 const DEV_API_ROOT = path.join(PROJECT_ROOT, 'packages', 'dev-api');
 const CORE_MODULES_ROOT = path.join(CORE_ROOT, 'modules');
 const DEV_API_MODULES_ROOT = path.join(DEV_API_ROOT, '.temp', 'modules');
-const DEV_MODULE_ROOT = path.join(DEV_API_MODULES_ROOT, 'Development');
+const DEV_MODULE_ROOT = path.join(DEV_API_MODULES_ROOT, MODULE_NAME);
 
 success(
   '🙇‍♂️ Welcome back, PROM DEVELOPER! Sit back a few seconds while we prepare development...'
 );
 
 info('🔃 Generating development module into core...');
-await generateModule(DEV_API_MODULES_ROOT, 'Development', {
+await generateModule(DEV_API_MODULES_ROOT, MODULE_NAME, {
   author: 'PROM CMS Developer',
   description: 'This is just for development purposes.',
 });
@@ -66,6 +71,12 @@ for (const moduleName of modules) {
 
 info('🔃 Making symlink of .env variable file from project root...');
 await fs.createSymlink(envFilepath, path.join(CORE_ROOT, '.env'), 'file');
+
+info('🔃 Creating root files...');
+await generateRootFiles(DEV_MODULE_ROOT);
+
+info('🔃 Creating services...');
+await generateServices(DEV_MODULE_ROOT);
 
 info('🔃 Generating models...');
 await generateModels(DEV_MODULE_ROOT, databaseConfig.models);

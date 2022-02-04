@@ -4,6 +4,12 @@ import child_process from 'child_process';
 import faker from 'faker';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -42,7 +48,7 @@ const seedDatabase = async (
               : columnKey.includes('avatar')
               ? faker.internet.avatar()
               : columnKey.includes('email')
-              ? faker.internet.email()
+              ? faker.internet.email().toLowerCase()
               : faker.lorem.word();
             break;
           case 'enum':
@@ -85,12 +91,15 @@ const seedDatabase = async (
           model.tableName || modelKey.toLowerCase()
         } VALUES (${formattedColumnKeys})`
       );
+
+      const timeNow = dayjs().format('DD/MM/YYYY HH:mm:ss Z');
+
       stmt.run({
         ...finalObj,
         ...(model.timestamp
           ? {
-              created_at: new Date().toISOString(),
-              updated_at: new Date().toISOString(),
+              created_at: timeNow,
+              updated_at: timeNow,
             }
           : {}),
       });

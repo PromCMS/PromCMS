@@ -1,0 +1,98 @@
+<?php
+
+namespace App\Controllers;
+
+use DI\Container;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use App\Services\Password as PasswordService;
+
+class UserProfile
+{
+    private $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
+    <%# GET LOGGED IN USER %> 
+    public function getCurrent(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $userId = $this->container->get('session')->get('user_id', false);
+
+        if ($userId === false) return $response;
+
+        $response->getBody()->write(json_encode(
+            [
+                "data" => \Users::find('id', $userId)
+            ]
+        ));
+
+        return $response;
+    }
+
+    <%# LOGIN %> 
+    public function login(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $userId = $this->container->get('session')->get('user_id', false);
+        $passwordService = $this->container->get('password-service');
+        $args = $request->getParsedBody();
+        
+        $code = 200;
+        $responseAry = [
+            "result" => "success"
+        ];
+
+        if ($userId !== false) {
+            $responseAry["result"] = "success";
+            $responseAry["message"] = "already logged in";
+            $code = 200;
+        };
+
+        if (!isset($args["password"]) || !isset($args["email"])) {
+            $responseAry["result"] = "error";
+            $responseAry["message"] = "missing params";
+            $code = 400;
+        } else {
+            try {
+                $user = \Users::where('email', $args['email'])->get()->firstOrFail();
+                $passwordIsValid = $passwordService->validate($args['password'], $user->password);
+
+                if (!$passwordIsValid) throw new \Exception("Wrong password");
+
+                $this->container->get('session')->set('user_id', $user->id);
+                $responseAry["result"] = "success";
+                $responseAry["message"] = "successfully logged in";
+                $code = 200;
+            } catch (\Exception $e) {
+                $responseAry["result"] = "error";
+                $responseAry["message"] = "wrong password or email";
+                $code = 400;
+            }
+        }
+
+
+        $response->getBody()->write(json_encode($responseAry));
+
+        return $response->withStatus($code);
+    }
+
+    <%# LOGOUT %> 
+    public function logout(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $userId = $this->container->get('session')->get('user_id', false);
+
+        if ($userId === false) return $response->withStatus(401);
+
+        $this->container->get('session')::destroy();
+
+        $response->getBody()->write(json_encode(
+            [
+                "result" => "success"
+            ]
+        ));
+
+        return $response;
+    }
+}
