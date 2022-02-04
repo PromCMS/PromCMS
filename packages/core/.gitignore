@@ -9,4 +9,4 @@ Homestead.yaml
 .env
 .phpunit.result.cache
 .temp
-modules/Development
+modules/*
