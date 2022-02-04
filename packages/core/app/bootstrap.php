@@ -49,7 +49,7 @@ function bootstrap()
       return $config;
     });
 
-    $container->set('utilsService', function ($c) use ($utils) {
+    $container->set('utils-service', function ($c) use ($utils) {
       return $utils;
     });
 
@@ -58,7 +58,7 @@ function bootstrap()
     });
 
     $app->addRoutingMiddleware();
-    
+
     $app->addBodyParsingMiddleware();
 
     $app->addErrorMiddleware(PROM_DEBUG_MODE, true, true);
@@ -66,7 +66,7 @@ function bootstrap()
     // Session
     $app->add(
       new Session([
-        'name' => 'dummy_session',
+        'name' => 'prom_session',
         'autorefresh' => true,
         'lifetime' => '1 hour',
       ]),
@@ -143,7 +143,8 @@ function bootstrap()
             ->withHeader(
               'Access-Control-Allow-Methods',
               'GET, POST, DELETE, PATCH',
-            );
+            )
+            ->withHeader('Content-Type', 'application/json');
         });
 
       // Load front routes second - same as api
