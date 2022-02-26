@@ -27,6 +27,7 @@
     "vlucas/phpdotenv": "^5.4",
     "php-di/php-di": "^6.3",
     "illuminate/database": "^8.77",
-    "bryanjhv/slim-session": "~4.0"
+    "bryanjhv/slim-session": "~4.0",
+    "league/flysystem": "2.0"
   }
 }
