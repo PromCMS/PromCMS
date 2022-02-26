@@ -20,6 +20,8 @@ const seedDatabase = async (
   Object.keys(databaseConfig.models).forEach((modelKey) => {
     const model = databaseConfig.models[modelKey];
 
+    if (model.ignoreSeeding) return;
+
     for (let i = 0; i < 20; i++) {
       const finalObj = {};
       Object.keys(model.columns).forEach((columnKey) => {
@@ -38,7 +40,7 @@ const seedDatabase = async (
 
         switch (type) {
           case 'boolean':
-            finalValue = faker.datatype.boolean();
+            finalValue = faker.datatype.boolean() ? 1 : 0;
             break;
           case 'string':
             finalValue = columnKey.includes('name')
@@ -67,6 +69,7 @@ const seedDatabase = async (
               [path.join(__dirname, 'generate-password.php'), 'test123'],
               { encoding: 'utf8' }
             );
+
             finalValue = result.stdout;
             break;
           default:

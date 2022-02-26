@@ -60,6 +60,11 @@ export interface DatabaseConfigModel {
    * Table columns
    */
   columns: Record<ModelColumnName, ModelColumnType>;
+  /**
+   * If seeding process should be omitted for this model
+   * @defaultValue false
+   */
+  ignoreSeeding?: boolean;
 }
 
 export interface DatabaseConfig {
