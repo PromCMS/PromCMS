@@ -1,14 +1,14 @@
 {
-  "name": "prom",
+  "name": "prom-cms",
   "version": "0.0.0",
   "private": true,
   "description": "",
   "scripts": {
-    "dev": "turbo run dev --scope @prom/mock-api --scope @prom/admin --parallel",
-    "dev:api": "turbo run dev --scope @prom/mock-api --parallel",
+    "dev": "turbo run dev --scope @prom-cms/mock-api --scope @prom-cms/admin --parallel",
+    "dev:api": "turbo run dev --scope @prom-cms/mock-api --parallel",
     "sync-database": "php packages/core/app/scripts/sync-database.php",
-    "generate:dev": "yarn workspace @prom/cli run generate:dev",
-    "generate:cms": "yarn workspace @prom/cli run generate:cms"
+    "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
+    "generate:cms": "yarn workspace @prom-cms/cli run generate:cms"
   },
   "license": "ISC",
   "workspaces": [
