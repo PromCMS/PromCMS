@@ -1,6 +1,7 @@
 {
   "extends": "../../tsconfig.options.json",
   "compilerOptions": {
+    "baseUrl": ".",
     "lib": ["es2020"],
     "module": "ESNext",
     "moduleResolution": "node",
