@@ -9,6 +9,7 @@ dev
 dist
 dist-ssr
 *.local
+export
 dev
 .temp
 
@@ -40,3 +41,5 @@ yarn-error.log*
 *.generate-config*
 *mocks.json
 private
+
+!.env.ejs
