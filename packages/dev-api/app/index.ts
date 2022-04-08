@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import { execa } from 'execa';
 import { loadRootEnv } from '@prom-cms/shared';
 
-loadRootEnv();
+await loadRootEnv();
 
 const { PORT: FRONT_PORT = 3000 } = process.env;
 const SERVER_PORT = Number(FRONT_PORT) + 1;
