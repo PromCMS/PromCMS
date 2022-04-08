@@ -1,4 +1,4 @@
-import { iconSet } from '../icons';
+import { iconSet } from '@prom-cms/icons';
 
 type ColumnSettingsBase = {
   /**
@@ -28,21 +28,38 @@ type ColumnSettingsBase = {
   editable?: boolean;
 };
 
-export type ModelColumnType = ColumnSettingsBase &
+export type ColumnType = ColumnSettingsBase &
   (
     | { type: 'enum'; enum: string[] }
     | { type: 'number'; autoIncrement?: boolean }
-    | { type: 'string' | 'boolean' | 'date' | 'password' | 'dateTime' }
+    | {
+        type:
+          | 'string'
+          | 'boolean'
+          | 'date'
+          | 'password'
+          | 'dateTime'
+          | 'longText'
+          | 'json';
+      }
   );
 
 export type ModelColumnName = string;
 export type DatabaseTableName = string;
 
-export interface DatabaseConfigModel {
+export interface DatabaseConfigItemBase {
   /**
    * Generated icon for this model, is visible in admin
    */
   icon: keyof typeof iconSet;
+  /**
+   * If seeding process should be omitted for this model
+   * @defaultValue false
+   */
+  ignoreSeeding?: boolean;
+}
+
+export interface DatabaseConfigModel extends DatabaseConfigItemBase {
   /**
    * If generated table should have timestamps
    */
@@ -57,21 +74,54 @@ export interface DatabaseConfigModel {
    */
   softDelete?: boolean;
   /**
+   * Admin config
+   */
+  admin?: {
+    /**
+     * Indicates the resulted template for this model. "post-like" option generates default column "content" which is a block editor
+     * @defaultValue post-like
+     */
+    layout?: 'simple' | 'post-like';
+  };
+  /**
    * Table columns
    */
-  columns: Record<ModelColumnName, ModelColumnType>;
-  /**
-   * If seeding process should be omitted for this model
-   * @defaultValue false
-   */
-  ignoreSeeding?: boolean;
+  columns: Record<ModelColumnName, ColumnType>;
+}
+
+export interface DatabaseConfigSingleton extends DatabaseConfigItemBase {
+  columns: Record<ModelColumnName, ColumnType>;
 }
 
 export interface DatabaseConfig {
   models: Record<DatabaseTableName, DatabaseConfigModel>;
 }
 
+export interface ProjectSecurityConfig {
+  secret?: string;
+}
+
+export interface ProjectConfig {
+  /**
+   * A project name
+   */
+  name: string;
+  /**
+   * If final project will be hosted on different folder that in the root
+   */
+  prefix?: string;
+  /**
+   * Final project url
+   */
+  url: string;
+  /**
+   * Projects security config
+   */
+  security?: ProjectSecurityConfig;
+}
+
 export interface ExportConfig {
+  project: ProjectConfig;
   database: DatabaseConfig;
 }
 

@@ -3,8 +3,8 @@ import path from 'path';
 import ejs from 'ejs';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { capitalizeFirstLetter } from '@prom/shared';
-import { formatCodeString } from '../utils';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { formatCodeString } from '../../utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

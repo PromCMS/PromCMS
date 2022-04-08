@@ -6,7 +6,7 @@
  *
  */
 
-include_once __DIR__ . '/env.bootstrap.php';
+include_once __DIR__ . '/libs/env.bootstrap.php';
 
 function getDirContents($dir, &$results = [])
 {
@@ -34,7 +34,9 @@ class Utils
   public function autoloadFolder(string $pathToFolder)
   {
     $importedFilePaths = [];
-    if (!is_dir($pathToFolder)) return false;
+    if (!is_dir($pathToFolder)) {
+      return false;
+    }
 
     $filePaths = getDirContents($pathToFolder);
     foreach ($filePaths as $filePath) {
@@ -47,20 +49,22 @@ class Utils
 
   /**
    * Autoloads models for specified module root. This is primarily used by modules.
-   * @return string[]|false An array of module names or 
+   * @return string[]|false An array of module names or
    */
   public function autoloadModels(string $moduleRoot)
   {
     global $PROM_OPINIONATED_SETTINGS;
-    $folderName = $PROM_OPINIONATED_SETTINGS->modules["modelsFolderName"];
-    
+    $folderName = $PROM_OPINIONATED_SETTINGS->modules['modelsFolderName'];
+
     // Save previously declared classes in memory
     $classes = get_declared_classes();
 
     // Autoload files and save imported filepaths to an array
     $importedFilepaths = $this->autoloadFolder("$moduleRoot/$folderName");
 
-    if (!$importedFilepaths) return false;
+    if (!$importedFilepaths) {
+      return false;
+    }
 
     // Should have all of loaded model names in array
     $diff = array_values(array_diff(get_declared_classes(), $classes));
@@ -72,10 +76,12 @@ class Utils
   {
     global $PROM_OPINIONATED_SETTINGS;
 
-    $folderName = $PROM_OPINIONATED_SETTINGS->modules["controllersFolderName"];
+    $folderName = $PROM_OPINIONATED_SETTINGS->modules['controllersFolderName'];
 
     $importedFilepaths = $this->autoloadFolder("$moduleRoot/$folderName");
-    if (!$importedFilepaths) return false;
+    if (!$importedFilepaths) {
+      return false;
+    }
 
     return array_map(function (string $filePath) {
       $baseName = basename($filePath, '.controller.php');

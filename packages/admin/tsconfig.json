@@ -1,16 +1,31 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "../../tsconfig.options.json",
   "compilerOptions": {
-    "baseUrl": "./",
+    "target": "ESNEXT",
+    "module": "ESNEXT",
+    "rootDir": "src",
+    "baseUrl": "./src",
     "paths": {
-      "@shared": ["../shared/src"],
-      "@shared/*":[ "../shared/src/*"],
-      "@styles/*":[ "styles/*"],
-      "@pages/*":[ "pages/*"],
-      "@components/*":[ "components/*"],
-      "@layouts":[ "layouts"],
-    }
+      "@styles/*": ["./styles/*"],
+      "@custom-types": ["./types"],
+      "@pages/*": ["./pages/*"],
+      "@config": ["./config"],
+      "@utils": ["./utils"],
+      "@api": ["./misc/api"],
+      "@components/*": ["./components/*"],
+      "@contexts/*": ["./misc/contexts/*"],
+      "@services": ["./misc/services"],
+      "@schemas": ["./misc/schemas"],
+      "@constants": ["./misc/constants"],
+      "@events": ["./misc/events"],
+      "@hooks/*": ["./misc/hooks/*"],
+      "@layouts": ["./layouts"]
+    },
+    "jsx": "preserve",
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "src",
+  ],
   "exclude": ["node_modules"]
 }

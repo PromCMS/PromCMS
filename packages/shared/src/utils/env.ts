@@ -1,8 +1,12 @@
-import dotenv from 'dotenv';
-import findConfig from 'find-config';
+export const getEnvFilepath = async () => {
+  const findConfig = (await import(/* webpackIgnore: true */ 'find-config'))
+    .default;
 
-export const getEnvFilepath = () => findConfig('.env') || '.env';
+  return findConfig('.env') || '.env';
+};
 
-export const loadRootEnv = () => {
-  dotenv.config({ path: getEnvFilepath() });
+export const loadRootEnv = async () => {
+  const dotenv = (await import(/* webpackIgnore: true */ 'dotenv')).default;
+
+  dotenv.config({ path: await getEnvFilepath() });
 };

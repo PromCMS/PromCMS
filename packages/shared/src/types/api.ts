@@ -1,4 +1,7 @@
-import { DatabaseConfigModel, DatabaseTableName } from '.';
+import { DatabaseConfigModel, DatabaseTableName } from './generateConfig';
+import { File as FileInfo } from './users';
+
+export type PrimitiveTypes = 'number' | 'string' | 'boolean' | 'date';
 
 export type ItemID = number | string;
 
@@ -10,7 +13,15 @@ export interface ApiResultItem {
   [x: string]: any;
 }
 
-export interface ApiResultModel extends DatabaseConfigModel {}
+export type ApiFileInputData = Pick<FileInfo, 'private' | 'description'> & {
+  root: string;
+};
+
+export interface ApiResultModel
+  extends Omit<DatabaseConfigModel, 'timestamp' | 'softDelete'> {
+  hasTimestamps: DatabaseConfigModel['timestamp'];
+  hasSoftDelete: DatabaseConfigModel['softDelete'];
+}
 
 export type ApiResultModels = Record<DatabaseTableName, ApiResultModel>;
 

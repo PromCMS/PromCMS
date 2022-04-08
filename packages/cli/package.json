@@ -1,40 +1,57 @@
 {
-  "name": "@prom/cli",
+  "name": "@prom-cms/cli",
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/ondrej-langr/prom#readme",
   "license": "ISC",
   "type": "module",
+  "main": "src/index.ts",
+  "source": "src/index.ts",
+  "types": "src/index.ts",
+  "files":[
+    "dist/**"
+  ],
+  "bin": {
+    "prom-cli": "./bin/cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ondrej-langr/prom.git"
   },
   "scripts": {
-    "generate:cms": "node --loader=ts-node/esm --experimental-specifier-resolution=node src/generate-cms/index.ts",
-    "construct": "npm run generate:cms",
-    "generate:dev": "node --loader=ts-node/esm --experimental-specifier-resolution=node src/generate-develop/index.ts"
+    "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
+    "generate:dev": "npm run starter-commands -- generate:develop && npm run seed-database",
+    "generate:cms": "npm run starter-commands -- generate:cms",
+    "seed-database": "npm run starter-commands -- seed-database",
+    "build": "tsc --build"
   },
   "bugs": {
     "url": "https://github.com/ondrej-langr/prom/issues"
   },
-  "devDependencies": {
-    "execa": "6.0.0",
+  "dependencies": {
+    "recursive-copy": "2.0.14",
+    "ink": "3.2.0",
+    "@prom-cms/shared": "*",
     "better-sqlite3": "7.4.6",
-    "@types/better-sqlite3": "7.4.2",
-    "prettier": "2.5.1",
-    "@types/prettier": "2.4.2",
     "ejs": "3.1.6",
-    "@types/ejs": "3.1.0",
     "enquirer": "2.3.6",
+    "@faker-js/faker": "6.0.0",
+    "@boost/cli": "3.0.3",
+    "chalk-animation": "1.6.0",
+    "chalk": "5.0.0",
+    "execa": "6.0.0",
+    "fs-extra": "10.0.0",
+    "prettier": "2.5.1",
+    "dayjs": "1.10.7"
+  },
+  "devDependencies": {
+    "microbundle": "0.14.2",
+    "@types/better-sqlite3": "7.4.2",
+    "@types/prettier": "2.4.2",
+    "@types/ejs": "3.1.0",
     "ts-node": "10.4.0",
     "tsconfig-paths": "3.12.0",
-    "faker": "5.5.3",
-    "@types/faker": "5.5.9",
-    "fs-extra": "10.0.0",
-    "@types/fs-extra": "9.0.13",
-    "@prom/shared": "1.0.0",
-    "chalk": "5.0.0",
-    "dayjs": "1.10.7"
+    "@types/fs-extra": "9.0.13"
   }
 }

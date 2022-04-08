@@ -19,10 +19,6 @@ ExpiresByType application/x-javascript "access plus 600 seconds"
 RewriteEngine On
 RewriteBase /
 
-# HTTP >> HTTPS 
-RewriteCond %{HTTPS} !=on    
-RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
 ErrorDocument 404 /public/index.php
 
 RewriteCond %{REQUEST_URI} !^/public/

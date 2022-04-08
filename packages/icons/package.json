@@ -1,0 +1,26 @@
+{
+  "name": "@prom-cms/icons",
+  "version": "1.0.0",
+  "author": "Ondřej Langr <hi@ondrejlangr.cz>",
+  "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "type": "module",
+  "main": "src/index.ts",
+  "source": "src/index.ts",
+  "types": "src/index.ts",
+  "files":[
+    "dist/**"
+  ],
+  "scripts": {
+    "build": "tsc --build --clean"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ondrej-langr/prom.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ondrej-langr/prom/issues"
+  },
+  "dependencies": {
+    "@heroicons/react": "1.0.5"
+  }
+}

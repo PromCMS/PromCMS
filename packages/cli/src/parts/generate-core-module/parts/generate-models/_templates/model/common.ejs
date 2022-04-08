@@ -1,0 +1,74 @@
+<?php
+
+use Illuminate\Database\Eloquent\Model;
+<% if (softDelete) { %>
+  use Illuminate\Database\Eloquent\SoftDeletes;
+<% } %>
+
+class <%- modelName %> extends Model
+{
+  <% if (softDelete) { %>
+    use SoftDeletes;
+  <% } %>
+
+  protected $table = '<%- tableName %>';
+  protected $modelIcon = '<%- icon %>';
+  public $timestamps = <%- timestamp ? 'true' : 'false' %>;
+  protected $hasSoftDeletes = <%- softDelete ? 'true' : 'false' %>;
+  protected $adminSettings = [
+    "layout" => "<%- admin.layout %>"
+  ];
+  
+  <% if (columnCasts.length) { %>
+    protected $casts = [
+      <% columnCasts.forEach(([columnKey, castTo]) => { %>
+        '<%- columnKey %>' => '<%- castTo %>',
+      <%  });%> 
+    ];
+  <% } %>
+
+
+  protected $tableColumns = [
+    <% 
+      Object.keys(formattedColumns).forEach(columnKey => { 
+      const formattedColumnSettings = formattedColumns[columnKey];
+    %>
+       '<%- columnKey %>' => [
+          <%- formattedColumnSettings.join(', ') %>
+        ],
+    <% }) %>
+  ];
+
+  <%
+    const fillableKeys =
+      Object.keys(columns)
+        .filter((columnKey) => !columns[columnKey].hide)
+        .join("', '");
+  %>
+  protected $fillable = [
+    '<%- fillableKeys %>'
+  ];
+
+  <%
+    const hiddenKeys =
+      Object.keys(columns)
+        .filter((columnKey) => columns[columnKey].hide)
+        .join("', '");
+  %>
+  <% if (hiddenKeys.length) { %>
+  protected $hidden = [
+    '<%- hiddenKeys %>'
+  ];
+  <% } %>
+
+  public function getSummary () {
+      return (object)[
+        "columns" => $this->tableColumns,
+        "tableName" => $this->table,
+        "icon" => $this->modelIcon,
+        "hasTimestamps" => $this->timestamps,
+        "hasSoftDelete" => $this->hasSoftDeletes,
+        "admin" => $this->adminSettings
+      ];
+  }
+}

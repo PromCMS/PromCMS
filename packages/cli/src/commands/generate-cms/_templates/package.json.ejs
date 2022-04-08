@@ -1,0 +1,11 @@
+{
+  "name": "<%= project.name %>",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "scripts": {
+    "build": "webpack --config webpack.config.js --env NODE_ENV=local --env production --progress",
+    "dev": "webpack serve --config webpack.config.js",
+    "prepare": "docker-compose up -d"
+  }
+}

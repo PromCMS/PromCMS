@@ -1,14 +1,16 @@
 {
-  "name": "@prom/mock-api",
+  "name": "@prom-cms/dev-api",
   "version": "0.0.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --experimental-specifier-resolution=node --loader ./loader.mjs app/index.ts"
+    "start": "node --experimental-specifier-resolution=node --loader ./loader.mjs app/index.ts",
+    "dev": "npm run start"
   },
   "dependencies": {
     "chalk": "5.0.0",
     "fs-extra": "10.0.0",
+    "@prom-cms/shared": "*",
     "execa": "6.0.0"
   },
   "devDependencies": {

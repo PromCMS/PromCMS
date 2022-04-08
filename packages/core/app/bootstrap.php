@@ -11,9 +11,12 @@ use DI\Container;
 use Slim\Middleware\Session;
 
 include_once __DIR__ . '/../vendor/autoload.php';
-include_once __DIR__ . '/env.bootstrap.php';
+include_once __DIR__ . '/libs/env.bootstrap.php';
 include_once __DIR__ . '/utils.php';
-include_once __DIR__ . '/db.bootstrap.php';
+include_once __DIR__ . '/libs/db.bootstrap.php';
+include_once __DIR__ . '/libs/flysystem.bootstrap.php';
+include_once __DIR__ . '/libs/mailer.bootstrap.php';
+include_once __DIR__ . '/libs/twig.bootstrap.php';
 
 function bootstrap()
 {
@@ -89,6 +92,11 @@ function bootstrap()
       $apiRoutesFilepath = "$moduleRoot/api.routes.php";
       $frontRoutesFilepath = "$moduleRoot/front.routes.php";
 
+      // Load bootstrap for that module
+      if (file_exists($bootstrapFilepath)) {
+        include_once $bootstrapFilepath;
+      }
+
       // Load models beforehand and save these models to array
       $loadedModuleModels = $utils->autoloadModels($moduleRoot);
       if ($loadedModuleModels) {
@@ -97,11 +105,6 @@ function bootstrap()
 
       // Loads controllers beforehand
       $utils->autoloadControllers($moduleRoot);
-
-      // Load bootstrap for that module
-      if (file_exists($bootstrapFilepath)) {
-        include_once $bootstrapFilepath;
-      }
 
       // Add api routes definition file to set
       if (file_exists($apiRoutesFilepath)) {
@@ -121,6 +124,31 @@ function bootstrap()
       ];
     });
 
+    // Set filesystem module and attach it to container
+    $container->set('filesystem', function () {
+      global $filesystem;
+      return $filesystem;
+    });
+
+    // TODO: Do not create this much fs instance - we need to create one and think about different solution
+    // Set locales filesystem module and attach it to container
+    $container->set('locales-filesystem', function () {
+      global $filesystem;
+      return $filesystem;
+    });
+
+    // Set mailer module and attach it to container
+    $container->set('email', function () {
+      global $mailer;
+      return $mailer;
+    });
+
+    // Set twig module and attach it to container
+    $container->set('twig', function () {
+      global $twig;
+      return $twig;
+    });
+
     // Every module should have been bootstrapped by now so we can continue to including custom routes
     $app->group(PROM_URL_BASE ? '/' . PROM_URL_BASE : '', function (
       $router
@@ -134,6 +162,8 @@ function bootstrap()
         })
         ->add(function ($request, $handler) {
           $response = $handler->handle($request);
+          $responseHeaders = $response->getHeaders();
+
           return $response
             ->withHeader('Access-Control-Allow-Origin', PROM_IS_DEV ? '*' : '')
             ->withHeader(
@@ -144,7 +174,12 @@ function bootstrap()
               'Access-Control-Allow-Methods',
               'GET, POST, DELETE, PATCH',
             )
-            ->withHeader('Content-Type', 'application/json');
+            ->withHeader(
+              'Content-Type',
+              isset($responseHeaders['Content-Type'])
+                ? $responseHeaders['Content-Type']
+                : 'application/json',
+            );
         });
 
       // Load front routes second - same as api

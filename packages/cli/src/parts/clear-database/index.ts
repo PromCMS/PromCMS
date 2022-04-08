@@ -1,4 +1,4 @@
-import { ExportConfig } from '@prom/shared';
+import { ExportConfig } from '@prom-cms/shared';
 import { Database } from 'better-sqlite3';
 
 const clearDatabase = (

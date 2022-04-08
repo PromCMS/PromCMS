@@ -4,11 +4,18 @@
   "private": true,
   "description": "",
   "scripts": {
-    "dev": "turbo run dev --scope @prom-cms/mock-api --scope @prom-cms/admin --parallel",
-    "dev:api": "turbo run dev --scope @prom-cms/mock-api --parallel",
-    "sync-database": "php packages/core/app/scripts/sync-database.php",
+    "clean": "del **/dist/** && del **/.next/**",
+
+    "dev": "turbo run dev --parallel",
+    
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
-    "generate:cms": "yarn workspace @prom-cms/cli run generate:cms"
+    "generate:cms": "yarn workspace @prom-cms/cli run generate:cms",
+
+    "build:library": "turbo run build --scope=\"@prom-cms/cli\" --scope=\"@prom-cms/icons\" --scope=\"@prom-cms/shared\" --no-deps",
+    "build:admin": "turbo run build --scope=\"@prom-cms/admin\" --no-deps",
+
+    "version-packages": "changeset version && yarn prettier",
+    "release": "yarn build:library && changeset publish"
   },
   "license": "ISC",
   "workspaces": [
@@ -16,10 +23,12 @@
   ],
   "devDependencies": {
     "@prettier/plugin-php": "0.17.6",
+    "prettier": "2.6.2",
     "@swc/core": "1.2.120",
     "@types/node": "16.11.10",
     "rimraf": "3.0.2",
     "turbo": "^1.1.10",
+    "del-cli": "4.0.1",
     "typescript": "4.5.2"
   },
   "dependencies": {

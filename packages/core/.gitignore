@@ -10,4 +10,5 @@ Homestead.yaml
 .phpunit.result.cache
 .temp
 modules/*
-upload
+uploads
+public/admin

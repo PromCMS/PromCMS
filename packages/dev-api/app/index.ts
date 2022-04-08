@@ -1,7 +1,7 @@
-import { loadRootEnv } from '@prom/shared';
 import chalk from 'chalk';
 import fs from 'fs-extra';
 import { execa } from 'execa';
+import { loadRootEnv } from '@prom-cms/shared';
 
 loadRootEnv();
 
