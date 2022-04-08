@@ -45,6 +45,11 @@ export class GenerateCMSProgram extends Command {
   })
   override: boolean = false;
 
+  @Arg.Flag('To just only regenerate admin and Core', {
+    short: 'o',
+  })
+  regenerate: boolean = false;
+
   @Arg.Params<CustomParams>({
     label: 'root',
     description: 'Root of your final project',
@@ -113,6 +118,7 @@ export class GenerateCMSProgram extends Command {
       },
       {
         title: 'Add another project resources',
+        skip: this.regenerate,
         async job() {
           await generateByTemplates(
             path.join(__dirname, '_templates'),
@@ -132,7 +138,11 @@ export class GenerateCMSProgram extends Command {
               },
             }
           );
-
+        },
+      },
+      {
+        title: 'Paste generator config to project',
+        async job() {
           await fs.writeJSON(
             path.join(FINAL_PATH, GENERATOR_FILENAME),
             generatorConfig
@@ -171,7 +181,10 @@ export class GenerateCMSProgram extends Command {
         title: 'Copy admin html',
         async job() {
           const adminFinalPath = path.join(FINAL_PATH, 'public', 'admin');
+
           await fs.ensureDir(adminFinalPath);
+          await fs.emptyDir(adminFinalPath);
+
           await recopy(
             path.join(ADMIN_ROOT, 'out'),
             path.join(FINAL_PATH, 'public', 'admin'),
@@ -181,6 +194,7 @@ export class GenerateCMSProgram extends Command {
       },
       {
         title: 'Install dependencies',
+        skip: this.regenerate,
         async job() {
           const devDeps = [
             'mini-css-extract-plugin',
