@@ -1,12 +1,6 @@
 /** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
 module.exports = {
-  content: [
-    './components/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}',
-    './layouts/**/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}',
-    './misc/**/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}',
-    './pages/**/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}',
-    './stzles/**/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}',
-  ],
+  content: ['./src/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
     container: {
