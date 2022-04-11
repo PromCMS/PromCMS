@@ -41,9 +41,7 @@ class <%- modelName %> extends Model
 
   <%
     const fillableKeys =
-      Object.keys(columns)
-        .filter((columnKey) => !columns[columnKey].hide)
-        .join("', '");
+      Object.keys(columns).join("', '");
   %>
   protected $fillable = [
     '<%- fillableKeys %>'
