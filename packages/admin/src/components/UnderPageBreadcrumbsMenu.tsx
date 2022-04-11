@@ -1,5 +1,11 @@
 import clsx from 'clsx'
-import { DetailedHTMLProps, HTMLAttributes, ReactChild, VFC } from 'react'
+import {
+  DetailedHTMLProps,
+  Fragment,
+  HTMLAttributes,
+  ReactChild,
+  VFC,
+} from 'react'
 import Link from 'next/link'
 import { HomeIcon } from '@heroicons/react/solid'
 
@@ -30,17 +36,17 @@ const UnderPageBreadcrumbsMenu: VFC<UnderPageBreadcrumbsMenuProps> = ({
           <HomeIcon className="w-5" />
         </a>
       </Link>
-      {items.map(({ content, isLinkTo }) => (
-        <>
+      {items.map(({ content, isLinkTo }, key) => (
+        <Fragment key={key}>
           <CustomChevronRight />
           {isLinkTo ? (
             <Link href={isLinkTo}>
               <a className="flex-none hover:underline">{content}</a>
             </Link>
           ) : (
-            <p className="flex-none">{content}</p>
+            <div className="flex-none">{content}</div>
           )}
-        </>
+        </Fragment>
       ))}
     </nav>
   )

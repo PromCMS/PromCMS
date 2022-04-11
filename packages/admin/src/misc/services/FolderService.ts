@@ -22,24 +22,12 @@ export class FolderService {
   }
 
   static async delete(path: string) {
-    try {
-      await apiClient.delete(`${API_ENTRY_TYPES_URL}/files/folders`, {
-        params: {
-          path,
-        },
-      })
+    await apiClient.delete(`${API_ENTRY_TYPES_URL}/files/folders`, {
+      params: {
+        path,
+      },
+    })
 
-      return
-    } catch (e) {
-      if (axios.isAxiosError(e) && e.response?.status === 400) {
-        alert(
-          '[FolderService]: TODO: Create a hamburger notification that this folder is not empty to be deleted'
-        )
-
-        return
-      }
-
-      throw e
-    }
+    return
   }
 }

@@ -3,13 +3,18 @@ import EditorJS, { EditorConfig } from '@editorjs/editorjs'
 import Table from '@editorjs/table'
 import Underline from '@editorjs/underline'
 import Marker from '@editorjs/marker'
-import ImageTool from '@editorjs/image'
 import List from '@editorjs/list'
 import Tooltip from 'editorjs-tooltip'
 import ChangeCase from 'editorjs-change-case'
 import Header from '@editorjs/header'
 import AlignmentTool from 'editorjs-text-alignment-blocktune'
 import ParagraphTool from '@editorjs/paragraph'
+import { ImageTool } from './ImageTool'
+import { generateLayoutConfig } from './utils'
+import { useTranslation } from 'react-i18next'
+import { GalleryTool } from './GalleryTool'
+import Embed from '@editorjs/embed'
+import { ButtonLinkTool } from './ButtonLink'
 
 export const EDITOR_HOLDER_ID = 'editor-content'
 
@@ -21,31 +26,44 @@ export interface LazyEditorProps
 export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
   function LazyEditor({ initialValue, ...config }, ref) {
     const innerRef = useRef<EditorJS>()
+    const { t } = useTranslation()
 
     useImperativeHandle(ref, () => innerRef.current)
 
     useEffect(() => {
-      const editorInstance = new EditorJS({
+      const editorConfig: EditorConfig = {
         /**
          * Create a holder for the Editor and pass its ID
          */
         holder: EDITOR_HOLDER_ID,
+        placeholder: t('Start typing here...') as string,
         tools: {
-          header: Header,
+          header: {
+            class: Header,
+            config: {
+              placeholder: t('Start typing here...'),
+              levels: [2, 3, 4],
+              defaultLevel: 2,
+            },
+          },
           table: Table,
           underline: Underline,
           Marker: {
             class: Marker,
-            shortcut: 'CMD+SHIFT+M',
+          },
+          embed: {
+            class: Embed,
+          },
+          buttonLink: {
+            class: ButtonLinkTool,
           },
           image: {
             class: ImageTool,
-            config: {
-              endpoints: {
-                byFile: 'http://localhost:8008/uploadFile', // Your backend file uploader endpoint
-                byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
-              },
-            },
+            inlineToolbar: true,
+          },
+          gallery: {
+            class: GalleryTool,
+            inlineToolbar: true,
           },
           list: {
             class: List,
@@ -85,11 +103,29 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
           paragraph: {
             class: ParagraphTool,
             inlineToolbar: true,
+            config: {
+              placeholder: t('Start typing here...'),
+            },
           },
         },
         data: initialValue,
+        inlineToolbar: true,
         ...config,
-      })
+      }
+
+      const editorConfigWithLayouts = {
+        ...editorConfig,
+        tools: {
+          ...editorConfig.tools,
+          columns: generateLayoutConfig({
+            numberOfCols: 4,
+            editorJSConfig: editorConfig,
+            t,
+          }),
+        },
+      }
+
+      const editorInstance = new EditorJS(editorConfigWithLayouts)
 
       innerRef.current = editorInstance
 
@@ -98,7 +134,7 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
           innerRef.current?.destroy()
         }
       }
-    }, [])
+    }, [t])
 
     return <div id={EDITOR_HOLDER_ID} />
   }

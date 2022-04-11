@@ -72,14 +72,14 @@ const EntryTypeUnderpage: VFC = ({}) => {
       <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
         <h1 className="text-3xl font-semibold capitalize">{t(model.name)}</h1>
         <div className="flex gap-5">
-          <form onSubmit={handleSubmit(console.log)} className="w-full">
+          {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
             <Input
               placeholder="input..."
               className="w-full"
               prefixIcon={<iconSet.SearchIcon className="rotate-90" />}
               {...register('query')}
             />
-          </form>
+  </form>*/}
           <Button
             color="success"
             className="flex flex-none items-center font-semibold uppercase"

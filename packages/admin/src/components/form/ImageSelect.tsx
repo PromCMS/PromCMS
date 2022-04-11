@@ -1,45 +1,89 @@
+import BackendImage from '@components/BackendImage'
 import { Button } from '@components/Button'
 import FilePickerModal from '@components/FilePickerModal'
 import { PhotographIcon } from '@heroicons/react/outline'
+import { ItemID } from '@prom-cms/shared'
 import clsx from 'clsx'
 import {
   DetailedHTMLProps,
   forwardRef,
   InputHTMLAttributes,
   ReactElement,
+  useCallback,
+  useMemo,
   useState,
 } from 'react'
 import { Label } from './Label'
 
 export interface ImageSelectProps
-  extends DetailedHTMLProps<
-    InputHTMLAttributes<HTMLInputElement>,
-    HTMLInputElement
+  extends Omit<
+    DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
+    'value' | 'onChange' | 'multiple' | 'onBlur'
   > {
   label?: string
   prefixIcon?: ReactElement
   error?: string
   touched?: boolean
+  multiple?: boolean
   wrapperClassName?: string
+  selected: ItemID | ItemID[] | null
+  onChange: (newValue: ItemID | ItemID[] | null) => void
+  onBlur?: () => void
 }
 
 const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
   function ImageSelect(
-    { wrapperClassName, label, className, onChange, ...rest },
+    {
+      wrapperClassName,
+      label,
+      className,
+      selected,
+      onChange,
+      onBlur,
+      multiple,
+    },
     ref
   ) {
     const [modalOpen, setModalOpen] = useState(false)
 
+    const onChangeCallback = useCallback(
+      (ids: ItemID[]) => {
+        onChange(multiple ? ids[0] || null : ids)
+      },
+      [onChange, multiple]
+    )
+
+    const onClose = useCallback(() => {
+      setModalOpen(false)
+      if (onBlur) onBlur()
+    }, [onBlur, setModalOpen])
+
+    const modalPickedFiles = useMemo(
+      () =>
+        selected === null
+          ? []
+          : Array.isArray(selected)
+          ? selected
+          : [selected],
+      [selected]
+    )
+
     return (
       <>
-        <div className={wrapperClassName}>
+        <div className={clsx(wrapperClassName, className)}>
           {label && <Label>{label}</Label>}
-          <input ref={ref} className={clsx('hidden', className)} {...rest} />
           <div className="mt-1 flex items-center">
             <div className="relative mr-6 aspect-square w-20 overflow-hidden rounded-full">
-              <div className="absolute flex h-full w-full bg-gray-200">
-                <PhotographIcon className="m-auto aspect-square w-10 stroke-slate-500" />
-              </div>
+              {modalPickedFiles.length ? (
+                <BackendImage
+                  imageId={modalPickedFiles[0]}
+                  className="absolute h-full w-full object-cover object-center"
+                />
+              ) : (
+                <div className="absolute flex h-full w-full bg-gray-200">
+                  <PhotographIcon className="m-auto aspect-square w-10 stroke-slate-500" />
+                </div>
+              )}
             </div>
 
             <Button
@@ -53,8 +97,11 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
           </div>
         </div>
         <FilePickerModal
+          multiple={multiple}
           isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
+          onClose={onClose}
+          pickedFiles={modalPickedFiles}
+          onChange={onChangeCallback}
         />
       </>
     )

@@ -90,6 +90,34 @@ class UserProfile
     return $response->withStatus($code);
   }
 
+  public function update(
+    ServerRequestInterface $request,
+    ResponseInterface $response
+  ): ResponseInterface {
+    $userId = $this->container->get('session')->get('user_id');
+    $parsedBody = $request->getParsedBody();
+
+    if (!$userId) {
+      return $response;
+    }
+
+    if (!$parsedBody['data']) {
+      return $response->withStatus(400);
+    }
+
+    if (isset($parsedBody['data']['password'])) {
+      unset($parsedBody['data']['password']);
+    }
+
+    $response->getBody()->write(
+      json_encode([
+        'data' => \Users::where('id', $userId)->update($parsedBody['data']),
+      ]),
+    );
+
+    return $response;
+  }
+
   public function logout(
     ServerRequestInterface $request,
     ResponseInterface $response

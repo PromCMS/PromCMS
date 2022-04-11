@@ -9,16 +9,18 @@ import { I18nextProvider, initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { localizationConfig } from '@config'
 
-function MyApp({ Component, pageProps }: AppProps) {
-  // Use the layout defined at the page level, if available
-  const getLayout =
-    (Component as any).getLayout || ((page) => <SiteLayout>{page}</SiteLayout>)
-
+if (!i18next.isInitialized) {
   i18next
     .use(Backend)
     .use(initReactI18next)
     .use(LanguageDetector)
     .init(localizationConfig)
+}
+
+function MyApp({ Component, pageProps }: AppProps) {
+  // Use the layout defined at the page level, if available
+  const getLayout =
+    (Component as any).getLayout || ((page) => <SiteLayout>{page}</SiteLayout>)
 
   return (
     <I18nextProvider i18n={i18next}>

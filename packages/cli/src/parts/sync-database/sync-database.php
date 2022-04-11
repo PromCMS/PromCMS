@@ -99,7 +99,9 @@ try {
   }
 
   echo '✅ Done! Goodbye.' . PHP_EOL;
+  exit(0);
 } catch (Exception $e) {
   $message = $e->getMessage();
-  throw new Exception("⛔️ An error happened: $message" . PHP_EOL);
+  echo "⛔️ An error happened: $message" . PHP_EOL;
+  exit(1);
 }

@@ -1,11 +1,15 @@
-import { ItemID } from '@prom-cms/shared'
+import { File, ItemID } from '@prom-cms/shared'
 import { createContext, useContext, useReducer } from 'react'
 
 type ContextReadonlyKeys = Omit<ISmallFileListContext, 'updateValues'>
 
 export interface ISmallFileListContext {
-  currentPath: string
+  files: File[]
+  isLoading: boolean
+  searchValue: string
   selectedFiles: ItemID[]
+  isUploading: boolean
+  multiple: boolean
   updateValue: <T extends keyof ContextReadonlyKeys>(config: {
     name: T
     value: ISmallFileListContext[T]
@@ -26,13 +30,18 @@ function reducer<T extends keyof ISmallFileListContext>(
 }
 
 const initialValues: ISmallFileListContext = {
-  currentPath: '/',
+  searchValue: '',
+  multiple: false,
+  files: [],
+  isUploading: false,
+  isLoading: true,
   selectedFiles: [],
   updateValue: () => {},
 }
 
-export const useSmallFileListContextReducer = () =>
-  useReducer(reducer, initialValues)
+export const useSmallFileListContextReducer = (
+  bonusInitialValues: Partial<ISmallFileListContext> = {}
+) => useReducer(reducer, { ...initialValues, ...bonusInitialValues })
 
 export const SmallFileListContext =
   createContext<ISmallFileListContext>(initialValues)

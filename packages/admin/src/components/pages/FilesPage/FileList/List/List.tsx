@@ -8,6 +8,8 @@ import { useClassNames } from '../useClassNames'
 import { FileItemSkeleton, FileItem, FileItemProps } from './FileItem'
 import { FolderItem, FolderItemProps } from './FolderItem'
 import { NewFolderCreator } from './NewFolderCreator'
+import axios from 'axios'
+import { useNotifications } from '@mantine/notifications'
 
 export const List: VFC = () => {
   const {
@@ -20,6 +22,7 @@ export const List: VFC = () => {
     mutateFiles,
     mutateFolders,
   } = useFileListContext()
+  const notifications = useNotifications()
   const classNames = useClassNames()
   const { t } = useTranslation()
 
@@ -32,6 +35,15 @@ export const List: VFC = () => {
 
   const onFolderDeleteClick: FolderItemProps['onDeleteClick'] = useCallback(
     async (path) => {
+      const notificationId = notifications.showNotification({
+        loading: true,
+        title: 'Deleting folder',
+        id: 'Deleting folder',
+        message: t('Deleting your folder...'),
+        autoClose: false,
+        disallowClose: true,
+      })
+
       if (confirm(t('Do you really want to delete this folder?'))) {
         const folderName = path.split('/').at(-1)
         updateValue('workingFolders', {
@@ -39,18 +51,34 @@ export const List: VFC = () => {
           path: { type: 'deleting' },
         })
 
-        await FolderService.delete(path)
-        await mutateFolders((folders) => {
-          return folders?.filter((folder) => folder !== folderName)
-        })
+        try {
+          await FolderService.delete(path)
+          await mutateFolders((folders) => {
+            return folders?.filter((folder) => folder !== folderName)
+          })
 
-        updateValue('workingFolders', {
-          ...workingFolders,
-          path: { type: 'none' },
-        })
+          updateValue('workingFolders', {
+            ...workingFolders,
+            path: { type: 'none' },
+          })
+        } catch (e) {
+          if (axios.isAxiosError(e) && e.response?.status === 400) {
+            notifications.updateNotification(notificationId, {
+              color: 'red',
+              message: t('This folder is not empty! Delete its contents first'),
+              autoClose: 2000,
+            })
+            return
+          }
+          notifications.updateNotification(notificationId, {
+            color: 'red',
+            message: t('An unexpected error happened'),
+            autoClose: 2000,
+          })
+        }
       }
     },
-    [workingFolders, updateValue, mutateFolders, t]
+    [workingFolders, updateValue, mutateFolders, t, notifications]
   )
 
   const onFileDeleteClick: FileItemProps['onDeleteClick'] = useCallback(

@@ -2,7 +2,56 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "./editor.css";
+
 .ce-toolbar__content,
 .ce-block__content {
   max-width: none !important;
+}
+
+.editor-js__layout__wrap {
+  border-top: 2px solid rgb(233 235 238);
+  display: flex;
+  justify-content: space-around;
+  padding: 16px 10px;
+  gap: 10px;
+}
+
+.editor-js__layout__item {
+  border: 2px solid #dfdfdf; 
+  @apply rounded-lg w-full py-2 px-5;
+}
+
+.editor-js__layout__item .codex-editor > .codex-editor__redactor {
+  margin: 0!important;
+}
+
+dialog {
+  @apply rounded-lg;
+}
+
+dialog > div {
+  padding: 60px 150px;
+  
+}
+
+.codex-editor svg.icon-tabler {
+  fill: none!important;
+}
+
+.ce-header {
+  @apply font-bold;
+}
+
+h2.ce-header {
+  @apply text-4xl;
+}
+h3.ce-header {
+  @apply text-3xl;
+}
+h4.ce-header {
+  @apply text-2xl;
+}
+h5.ce-header {
+  @apply text-xl;
 }

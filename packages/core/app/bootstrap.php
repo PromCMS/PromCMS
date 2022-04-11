@@ -133,8 +133,8 @@ function bootstrap()
     // TODO: Do not create this much fs instance - we need to create one and think about different solution
     // Set locales filesystem module and attach it to container
     $container->set('locales-filesystem', function () {
-      global $filesystem;
-      return $filesystem;
+      global $localesFilesystem;
+      return $localesFilesystem;
     });
 
     // Set mailer module and attach it to container

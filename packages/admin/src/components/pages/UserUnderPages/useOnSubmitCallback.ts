@@ -32,6 +32,7 @@ export const useOnSubmitCallback = () => {
         getObjectDiff(user, values) as ApiResultItem
       ).catch(() => {
         notifications.updateNotification(id, {
+          color: 'red',
           message: t('An error happened'),
           autoClose: 2000,
         })
@@ -46,6 +47,7 @@ export const useOnSubmitCallback = () => {
         getObjectDiff(user || {}, values) as ApiResultItem
       ).catch(() => {
         notifications.updateNotification(id, {
+          color: 'red',
           message: t('An error happened'),
           autoClose: 2000,
         })

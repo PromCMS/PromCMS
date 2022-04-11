@@ -1,5 +1,4 @@
 import { ApiFileInputData, ApiResultItem, ItemID } from '@prom-cms/shared'
-import axios from 'axios'
 import { apiClient } from '@api'
 import { API_ENTRY_TYPES_URL } from '@constants'
 
@@ -10,6 +9,10 @@ export class FileService {
 
   static getUrl(id: ItemID) {
     return `${this.getListUrl()}/entries/${id}`
+  }
+
+  static getApiUrl(id: ItemID) {
+    return `${API_ENTRY_TYPES_URL}/files/items/${id}`
   }
 
   static async create(file: File, info?: ApiFileInputData) {
@@ -33,6 +36,6 @@ export class FileService {
   }
 
   static async delete(id: ItemID) {
-    return apiClient.delete(`${API_ENTRY_TYPES_URL}/files/items/${id}`)
+    return apiClient.delete(this.getApiUrl(id))
   }
 }

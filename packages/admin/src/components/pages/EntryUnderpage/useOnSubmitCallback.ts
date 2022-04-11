@@ -18,6 +18,7 @@ export const useOnSubmitCallback = () => {
     const id = notifications.showNotification({
       loading: true,
       title: currentView === 'update' ? 'Updating' : 'Creating',
+      id: currentView === 'update' ? 'on-update-entry' : 'on-create-entry',
       message: t(
         currentView === 'update'
           ? 'Updating your entry, please wait...'
@@ -34,17 +35,20 @@ export const useOnSubmitCallback = () => {
           model: (model as NonNullable<typeof model>).name,
         },
         getObjectDiff(itemData, values) as ApiResultItem
-      ).catch(() => {
-        notifications.updateNotification(id, {
-          message: t('An error happened'),
-          autoClose: 2000,
+      )
+        .catch(() => {
+          notifications.updateNotification(id, {
+            color: 'red',
+            message: t('An error happened'),
+            autoClose: 2000,
+          })
         })
-      })
-
-      notifications.updateNotification(id, {
-        message: t('Your entry is updated!'),
-        autoClose: 2000,
-      })
+        .then(() => {
+          notifications.updateNotification(id, {
+            message: t('Your entry is updated!'),
+            autoClose: 2000,
+          })
+        })
     } else if (currentView === 'create') {
       const result = await EntryService.create(
         {
@@ -53,6 +57,7 @@ export const useOnSubmitCallback = () => {
         getObjectDiff(itemData || {}, values) as ApiResultItem
       ).catch(() => {
         notifications.updateNotification(id, {
+          color: 'red',
           message: t('An error happened'),
           autoClose: 2000,
         })

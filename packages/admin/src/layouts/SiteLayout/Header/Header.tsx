@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { getInitials } from '@utils'
 import { useConstructedMenuItems } from './utils'
 import { useTranslation } from 'react-i18next'
+import BackendImage from '@components/BackendImage'
 
 const Header: VFC = () => {
   const { isBooting, currentUser } = useGlobalContext()
@@ -51,8 +52,8 @@ const Header: VFC = () => {
               {isBooting ? (
                 <Skeleton className={s.skeleton} />
               ) : currentUser && currentUser.avatar && !hasError ? (
-                <img
-                  src={currentUser.avatar}
+                <BackendImage
+                  imageId={currentUser.avatar}
                   alt=""
                   onError={() => setError(true)}
                 />

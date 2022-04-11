@@ -12,7 +12,12 @@ $router->group('/profile', function (Router $innerRouter) use ($auth) {
     ->get('/me', '\App\Controllers\UserProfile:getCurrent')
     ->add($auth);
 
-  $innerRouter->post('/login', '\App\Controllers\UserProfile:login');
+  $innerRouter
+    ->post('/login', '\App\Controllers\UserProfile:login');
+
+  $innerRouter
+    ->post('/update', '\App\Controllers\UserProfile:update')
+    ->add($auth);
 
   $innerRouter
     ->get('/request-password-reset', '\App\Controllers\UserProfile:requestPasswordReset');
@@ -37,6 +42,10 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
 
   // Files
   $innerRouter->group('/files', function (Router $innerRouter) use ($auth) {
+    $innerRouter
+      ->get('/paged-items', '\App\Controllers\Files:getManyListed')
+      ->add($auth);
+
     $innerRouter->group('/folders', function (Router $innerRouter) use ($auth) {
       $innerRouter->get('', '\App\Controllers\Folders:get')->add($auth);
 

@@ -147,7 +147,7 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
         groupedFields &&
         groupedFields.length && (
           <AsideItemWrap title="Other info" className="mt-10">
-            <div className="p-4">
+            <div className="grid gap-5 p-4">
               <FieldMapper fields={groupedFields} />
             </div>
           </AsideItemWrap>

@@ -23,9 +23,16 @@ class EntryType
     private function getModelFromArg (string $modelName) {
         $modelIndex = array_search(
             strtolower($modelName), 
-            array_map(
-                function ($modelName) { return strtolower($modelName); }, 
-                $this->loadedModels
+            // filter out those files we wanted to opt out 
+            array_filter(
+                // format all model names to be all in lowercase
+                array_map(
+                    function ($modelName) { return strtolower($modelName); }, 
+                    $this->loadedModels
+                ), 
+                function ($modelName) {
+                    return !in_array($modelName, ['files']);
+                }
             )
         );
         if ($modelIndex === false) return false;

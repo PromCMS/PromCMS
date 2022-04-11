@@ -15,4 +15,4 @@ $localesAdapter = new League\Flysystem\Local\LocalFilesystemAdapter(
 );
 
 // The FilesystemOperator
-$localesFilesystem = new League\Flysystem\Filesystem($adapter);
+$localesFilesystem = new League\Flysystem\Filesystem($localesAdapter);

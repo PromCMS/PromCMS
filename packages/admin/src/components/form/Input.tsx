@@ -48,7 +48,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
           ref={ref}
           disabled={disabled}
           className={clsx(
-            'mt-1 block rounded-lg border-2 bg-white py-2 px-3.5 placeholder-gray-400 outline-none focus:border-indigo-500',
+            'block rounded-lg border-2 bg-white py-2 px-3.5 placeholder-gray-400 outline-none focus:border-indigo-500',
+            label && 'mt-1',
             prefixIcon && 'pl-10',
             disabled && 'cursor-not-allowed opacity-50',
             error ? 'border-red-500' : 'border-project-border',

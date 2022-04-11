@@ -94,6 +94,7 @@ export class SeedDatabaseProgram extends Command {
             ? { email: 'test@example.com' }
             : {}),
           ...(model.timestamp ? { created_at: {}, updated_at: {} } : {}),
+          ...(model.softDelete ? { deleted_at: {} } : {}),
         })
           .map((columnKey) => `:${columnKey}`)
           .join(', ');
@@ -119,6 +120,11 @@ export class SeedDatabaseProgram extends Command {
             ? {
                 created_at: timeNow,
                 updated_at: timeNow,
+              }
+            : {}),
+          ...(model.softDelete
+            ? {
+                deleted_at: null,
               }
             : {}),
         });
