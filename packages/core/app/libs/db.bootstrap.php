@@ -4,10 +4,10 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 $capsule = new Capsule();
 
-$isSqlite = getenv('DB_CONNECTION') === 'sqlite';
+$isSqlite = $_ENV['DB_CONNECTION'] === 'sqlite';
 
 if ($isSqlite) {
-  $dbFilePath = __DIR__ . '/../../' . getenv('DB_DATABASE');
+  $dbFilePath = __DIR__ . '/../../' . $_ENV['DB_DATABASE'];
   if (!file_exists($dbFilePath)) {
     echo '⚠️ Seems like you are trying to use sqlite but the db file is not present, creating it...';
 
@@ -22,13 +22,13 @@ if ($isSqlite) {
 }
 
 $capsule->addConnection([
-  'driver' => getenv('DB_CONNECTION'),
-  'host' => getenv('DB_HOST'),
+  'driver' => $_ENV['DB_CONNECTION'],
+  'host' => $_ENV['DB_HOST'],
   'database' => $isSqlite
-    ? __DIR__ . '/../../' . getenv('DB_DATABASE')
-    : getenv('DB_DATABASE'),
-  'username' => getenv('DB_USERNAME'),
-  'password' => getenv('DB_PASSWORD'),
+    ? __DIR__ . '/../../' . $_ENV['DB_DATABASE']
+    : $_ENV['DB_DATABASE'],
+  'username' => $_ENV['DB_USERNAME'],
+  'password' => $_ENV['DB_PASSWORD'],
   'charset' => 'utf8',
   'collation' => 'utf8_unicode_ci',
   'prefix' => '',

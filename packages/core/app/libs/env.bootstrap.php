@@ -21,9 +21,9 @@ $dotenv = Dotenv::createImmutable($PROM_ROOT_FOLDER);
 $dotenv->load();
 $dotenv->required(['APP_NAME', 'APP_URL', 'DB_CONNECTION', 'DB_DATABASE']);
 
-$PROM_BASE = getenv('APP_PREFIX');
+$PROM_BASE = $_ENV['APP_PREFIX'];
 $PROM_URL_BASE = strlen($PROM_BASE) ? "/{$PROM_BASE}" : $PROM_BASE;
-$PROM_DEVELOPMENT_MODE = getenv('APP_ENV') == 'development';
+$PROM_DEVELOPMENT_MODE = $_ENV['APP_ENV'] == 'development';
 $DIRECTORY_SEPARATOR = DIRECTORY_SEPARATOR;
 $PROM_OPINIONATED_SETTINGS = (object) [
   'modules' => [
@@ -45,13 +45,13 @@ if (!defined('PROM_UPLOADS_ROOT')) {
   define('PROM_UPLOADS_ROOT', $PROM_UPLOADS_ROOT);
 }
 if (!defined('PROM_APP_NAME')) {
-  define('PROM_APP_NAME', getenv('APP_NAME'));
+  define('PROM_APP_NAME', $_ENV['APP_NAME']);
 }
 if (!defined('PROM_URL')) {
-  define('PROM_URL', getenv('APP_URL'));
+  define('PROM_URL', $_ENV['APP_URL']);
 }
 if (!defined('PROM_DEBUG_MODE')) {
-  define('PROM_DEBUG_MODE', getenv('APP_DEBUG'));
+  define('PROM_DEBUG_MODE', $_ENV['APP_DEBUG']);
 }
 if (!defined('PROM_IS_DEV')) {
   define('PROM_IS_DEV', $PROM_DEVELOPMENT_MODE);
