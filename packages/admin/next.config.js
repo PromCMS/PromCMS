@@ -17,6 +17,7 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: { esmExternals: true },
   externalDir: true,
+  trailingSlash: true,
   // TODO accept a another route prefix
   basePath: isDev ? '' : '/admin',
   webpack: (config, options) => {
