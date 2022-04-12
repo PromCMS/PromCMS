@@ -4,7 +4,7 @@ import path, { dirname } from 'path';
 import {
   CORE_ROOT,
   PROJECT_ROOT,
-  GENERATOR_FILENAME,
+  GENERATOR_FILENAME__JSON,
 } from '@prom-cms/shared/src/generator-constants';
 import fs from 'fs-extra';
 import { execa } from 'execa';
@@ -143,7 +143,7 @@ export class GenerateCMSProgram extends Command {
         title: 'Paste generator config to project',
         async job() {
           await fs.writeJSON(
-            path.join(FINAL_PATH, GENERATOR_FILENAME),
+            path.join(FINAL_PATH, GENERATOR_FILENAME__JSON),
             generatorConfig
           );
         },
