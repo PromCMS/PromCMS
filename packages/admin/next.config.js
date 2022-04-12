@@ -17,6 +17,8 @@ const nextConfig = {
   reactStrictMode: true,
   experimental: { esmExternals: true },
   externalDir: true,
+  // TODO accept a another route prefix
+  basePath: isDev ? '' : '/admin',
   webpack: (config, options) => {
     config.experiments = { ...(config.experiments || {}), topLevelAwait: true }
 
