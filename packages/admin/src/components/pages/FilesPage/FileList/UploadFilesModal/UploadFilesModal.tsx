@@ -20,7 +20,6 @@ export const UploadFilesModal: VFC<UploadFilesModalProps> = ({
             'flex h-full min-h-[750px] w-full rounded-2xl border-4 border-dashed border-blue-300 bg-gray-100',
         })}
       >
-        <input {...getDropZoneInputProps({})} />
         <div className="m-auto text-center">
           <p className="text-xl font-semibold text-gray-400">
             {t('Drag your files here here')}

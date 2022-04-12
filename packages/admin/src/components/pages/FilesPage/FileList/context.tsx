@@ -202,6 +202,7 @@ export const FileListContextProvider: FC = ({ children }) => {
 
   return (
     <FileListContext.Provider value={contextValue}>
+      <input {...getDropZoneInputProps({ className: 'hidden' })} />
       {children}
     </FileListContext.Provider>
   )
