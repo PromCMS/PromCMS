@@ -57,22 +57,6 @@ class EntryType
         return $response;
     }
 
-    public function create(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
-    {
-        $modelInstancePath = $this->getModelFromArg($args["modelId"]);
-        if ($modelInstancePath === false) return $response->withStatus(404);
-
-        $parsedBody = $request->getParsedBody();
-
-        $response->getBody()->write(json_encode(
-            [
-                "data" => $modelInstancePath::create($parsedBody["data"])
-            ]
-        ));
-
-        return $response;
-    }
-
     public function getManyEntries(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
         $modelInstancePath = $this->getModelFromArg($args["modelId"]);

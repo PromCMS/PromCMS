@@ -71,8 +71,38 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
     });
   });
 
+  // custom user type group
+  $innerRouter->group('/users', function (Router $innerRouter) use ($auth) {
+    // get info only about one entry type
+    $innerRouter->get('', '\App\Controllers\Users:getInfo')->add($auth);
+
+    // entry type items group
+    $innerRouter->group('/items', function (Router $innerRouter) use ($auth) {
+      // get many entries for type
+      $innerRouter->get('', '\App\Controllers\Users:getManyEntries');
+
+      // create a entry-type entry
+      $innerRouter
+        ->post('/create', '\App\Controllers\Users:createEntry')
+        ->add($auth);
+
+      // entry-type entry group
+      $innerRouter->group('/{itemId}', function (Router $innerRouter) use (
+        $auth
+      ) {
+        $innerRouter->get('', '\App\Controllers\Users:getEntry');
+        $innerRouter
+          ->patch('', '\App\Controllers\Users:updateEntry')
+          ->add($auth);
+        $innerRouter
+          ->delete('', '\App\Controllers\Users:deleteEntry')
+          ->add($auth);
+      });
+    });
+  });
+
   // entry type group
-  $innerRouter->group('/{modelId}', function (Router $innerRouter) use ($auth) {
+  $innerRouter->group('/{modelId:^(?!users$).*}', function (Router $innerRouter) use ($auth) {
     // get info only about one entry type
     $innerRouter->get('', '\App\Controllers\EntryType:getInfo')->add($auth);
 
