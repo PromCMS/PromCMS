@@ -4,6 +4,13 @@
 
 @import "./editor.css";
 
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
 .ce-toolbar__content,
 .ce-block__content {
   max-width: none !important;
