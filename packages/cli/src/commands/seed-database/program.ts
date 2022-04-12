@@ -1,5 +1,9 @@
-import { Command, Config } from '@boost/cli';
-import { formatGeneratorConfig, getGeneratorConfig } from '@prom-cms/shared';
+import { Arg, Command, Config } from '@boost/cli';
+import {
+  formatGeneratorConfig,
+  getGeneratorConfig,
+  loadRootEnv,
+} from '@prom-cms/shared';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -7,20 +11,56 @@ import { getCarbonTime, hashPassword, specialStringFaker } from './utils';
 import { faker } from '@faker-js/faker';
 import { Logger } from '@utils';
 import Database from 'better-sqlite3';
-import { CORE_ROOT } from '@prom-cms/shared/src/generator-constants';
+import {
+  CORE_ROOT,
+  PROJECT_ROOT,
+} from '@prom-cms/shared/src/generator-constants';
 import path from 'path';
+import fs from 'fs-extra';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+type CustomParams = [string];
+
 @Config('seed-database', 'Sync database with provided config', {})
 export class SeedDatabaseProgram extends Command {
+  /*@Arg.Params<CustomParams>({
+    label: 'root',
+    description: 'Root of your final project',
+    required: true,
+    type: 'string',
+
+    validate(value) {
+      if (
+        !/^((\.)|((\.|\.\.)\/((?!\/).*(\/)?){1,})|((?!\/).*(\/)))$/g.test(value)
+      ) {
+        throw new Error(
+          'Folder path must be valid path, eq: ".", "../somefolder", "./somefolder"'
+        );
+      }
+
+      const referenceFolder = path.join(PROJECT_ROOT, value);
+
+      if (
+        fs.existsSync(referenceFolder) &&
+        fs.lstatSync(referenceFolder).isFile()
+      ) {
+        throw new Error('Root folder cannot be file');
+      }
+    },
+  })
+  async run(root) {*/
   async run() {
     // TODO make this script php first and take advantage of eloquent
     Logger.info('🔃 Starting the database seeder...');
 
+    // const PROVIDED_ROOT = path.join(PROJECT_ROOT, ...root.split('/'));
+    // await loadRootEnv(PROVIDED_ROOT);
+
     const { DB_DATABASE } = process.env as { DB_DATABASE: string };
     const db = new Database(path.join(CORE_ROOT, DB_DATABASE));
+    //const GENERATOR_CONFIG = await getGeneratorConfig(PROVIDED_ROOT);
     const GENERATOR_CONFIG = await getGeneratorConfig();
 
     if (!GENERATOR_CONFIG) {
