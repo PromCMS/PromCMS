@@ -18,49 +18,17 @@ class Users
     $this->loadedModels = $container->get('sysinfo')['loadedModels'];
   }
 
-  /**
-   * Checks if model is loaded/exists and returns the real, usable model name
-   */
-  private function getModelFromArg(string $modelName)
-  {
-    $modelIndex = array_search(
-      strtolower($modelName),
-      // filter out those files we wanted to opt out
-      array_filter(
-        // format all model names to be all in lowercase
-        array_map(function ($modelName) {
-          return strtolower($modelName);
-        }, $this->loadedModels),
-        function ($modelName) {
-          return !in_array($modelName, ['files']);
-        },
-      ),
-    );
-    if ($modelIndex === false) {
-      return false;
-    }
-
-    $modelName = $this->loadedModels[$modelIndex];
-
-    return "\\$modelName";
-  }
-
   public function getInfo(
     ServerRequestInterface $request,
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
-    $classInstance = new $modelInstancePath();
+    $classInstance = new \Users();
 
     $response->getBody()->write(
       json_encode([
         'data' => $classInstance->getSummary(),
-      ]),
+      ])
     );
 
     return $response;
@@ -71,16 +39,11 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
 
     $dataPaginated = json_decode(
-      $modelInstancePath::paginate(15, ['*'], 'page', $page)->toJson(),
+      \Users::paginate(15, ['*'], 'page', $page)->toJson()
     );
     // Unset some things as they are not useful or active
     unset($dataPaginated->links);
@@ -100,11 +63,6 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
     $parsedBody = $request->getParsedBody();
 
     if (isset($parsedBody['data']['password'])) {
@@ -113,10 +71,10 @@ class Users
 
     $response->getBody()->write(
       json_encode([
-        'data' => $modelInstancePath
-          ::where('id', $args['itemId'])
-          ->update($parsedBody['data']),
-      ]),
+        'data' => \Users::where('id', $args['itemId'])->update(
+          $parsedBody['data']
+        ),
+      ])
     );
 
     return $response;
@@ -127,19 +85,13 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
     try {
       $response->getBody()->write(
         json_encode([
-          'data' => $modelInstancePath
-            ::where('id', $args['itemId'])
+          'data' => \Users::where('id', $args['itemId'])
             ->get()
             ->firstOrFail(),
-        ]),
+        ])
       );
 
       return $response;
@@ -153,23 +105,18 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
     $parsedBody = $request->getParsedBody();
 
     if (isset($parsedBody['data']['password'])) {
       $parsedBody['data']['password'] = $this->passwordService->generate(
-        $parsedBody['data']['password'],
+        $parsedBody['data']['password']
       );
     }
 
     $response->getBody()->write(
       json_encode([
-        'data' => $modelInstancePath::create($parsedBody['data']),
-      ]),
+        'data' => \Users::create($parsedBody['data']),
+      ])
     );
 
     return $response;
@@ -180,15 +127,10 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
     $response->getBody()->write(
       json_encode([
-        'data' => $modelInstancePath::where('id', $args['itemId'])->delete(),
-      ]),
+        'data' => \Users::where('id', $args['itemId'])->delete(),
+      ])
     );
 
     return $response;

@@ -102,7 +102,7 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
   });
 
   // entry type group
-  $innerRouter->group('/{modelId:^(?!users$).*}', function (Router $innerRouter) use ($auth) {
+  $innerRouter->group('/{modelId}', function (Router $innerRouter) use ($auth) {
     // get info only about one entry type
     $innerRouter->get('', '\App\Controllers\EntryType:getInfo')->add($auth);
 
