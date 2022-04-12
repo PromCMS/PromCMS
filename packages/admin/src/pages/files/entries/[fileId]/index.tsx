@@ -1,8 +1,8 @@
 import SlideOver from '@components/SlideOver'
 import { SiteLayout } from '@layouts'
 import { useRouter } from 'next/router'
-import { NextPage } from '../../../types'
-import FilesPage from '../index'
+import { NextPage } from '../../../../types'
+import FilesPage from '../../index'
 
 const FilePage: NextPage = () => {
   const { back } = useRouter()
