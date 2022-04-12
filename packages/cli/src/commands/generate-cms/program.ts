@@ -36,7 +36,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 type CustomParams = [string];
 
 const simplifyProjectName = (name: string) =>
-  name.replaceAll(' ', '_').toLocaleLowerCase();
+  name.replaceAll(' ', '-').toLocaleLowerCase();
 
 @Config('generate:cms', 'Controls a cms generator', {})
 export class GenerateCMSProgram extends Command {
@@ -46,7 +46,7 @@ export class GenerateCMSProgram extends Command {
   override: boolean = false;
 
   @Arg.Flag('To just only regenerate admin and Core', {
-    short: 'o',
+    short: 'r',
   })
   regenerate: boolean = false;
 
@@ -95,12 +95,11 @@ export class GenerateCMSProgram extends Command {
 
     if (
       !this.override &&
+      !this.regenerate &&
       fs.existsSync(FINAL_PATH) &&
       fs.readdirSync(FINAL_PATH).length !== 0
     ) {
-      throw new Error(
-        `⛔️ Your path to project "${FINAL_PATH}" cannot be empty`
-      );
+      throw new Error(`⛔️ Your path to project "${FINAL_PATH}" must be empty`);
     }
 
     const jobs: LoggedWorkerJob[] = [
@@ -221,6 +220,11 @@ export class GenerateCMSProgram extends Command {
           });
         },
       },
+      // TODO
+      // {
+      //  title: 'Sync database',
+      //  job: syncDatabase,
+      //},
     ];
 
     await loggedJobWorker(jobs);
