@@ -7,6 +7,7 @@
     "clean": "del **/dist/** && del **/.next/**",
 
     "dev": "turbo run dev --parallel",
+    "dev:api": "turbo run dev --scope=\"@prom-cms/dev-api\" --parallel",
     
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
     "generate:cms": "yarn workspace @prom-cms/cli run generate:cms",
