@@ -135,7 +135,6 @@ export const FileListContextProvider: FC = ({ children }) => {
       const files = formatDroppedFiles(currentPath, acceptedFiles)
       updateValue('uploadingFiles', files)
 
-      let index = 0
       for (const filePath in files) {
         let isError = false
         const entry = files[filePath]
@@ -152,8 +151,6 @@ export const FileListContextProvider: FC = ({ children }) => {
         } as any)
 
         mutateFiles()
-
-        index++
       }
     },
     [updateValue, currentPath, mutateFiles]
@@ -169,22 +166,42 @@ export const FileListContextProvider: FC = ({ children }) => {
     noKeyboard: true,
   })
 
+  const openFilePicker = useCallback(() => {
+    console.log('OPen')
+    open()
+  }, [open])
+
+  const contextValue = useMemo(
+    () => ({
+      ...state,
+      files,
+      isError,
+      isLoading,
+      updateValue,
+      openFilePicker,
+      getDropZoneRootProps,
+      getDropZoneInputProps,
+      currentPath,
+      mutateFiles,
+      mutateFolders,
+    }),
+    [
+      files,
+      isError,
+      isLoading,
+      updateValue,
+      openFilePicker,
+      getDropZoneRootProps,
+      getDropZoneInputProps,
+      currentPath,
+      mutateFiles,
+      mutateFolders,
+      state,
+    ]
+  )
+
   return (
-    <FileListContext.Provider
-      value={{
-        ...state,
-        files,
-        isError,
-        isLoading,
-        updateValue,
-        openFilePicker: open,
-        getDropZoneRootProps,
-        getDropZoneInputProps,
-        currentPath,
-        mutateFiles,
-        mutateFolders,
-      }}
-    >
+    <FileListContext.Provider value={contextValue}>
       {children}
     </FileListContext.Provider>
   )

@@ -61,6 +61,12 @@ export const List: VFC = () => {
             ...workingFolders,
             path: { type: 'none' },
           })
+
+          notifications.updateNotification(notificationId, {
+            color: 'green',
+            message: t('Your folder has been deleted'),
+            autoClose: 2000,
+          })
         } catch (e) {
           if (axios.isAxiosError(e) && e.response?.status === 400) {
             notifications.updateNotification(notificationId, {
