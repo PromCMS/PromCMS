@@ -1,4 +1,3 @@
-import { execa } from 'execa';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import child_process from 'child_process';

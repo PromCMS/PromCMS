@@ -44,6 +44,7 @@
     "execa": "6.0.0",
     "fs-extra": "10.0.0",
     "prettier": "2.5.1",
+    "dotenv-cli": "^5.1.0",
     "dayjs": "1.10.7"
   },
   "devDependencies": {
