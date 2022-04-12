@@ -1,8 +1,14 @@
-import { ApiResultModel, ModelColumnName, ColumnType } from '@prom-cms/shared'
+import {
+  ApiResultModel,
+  ModelColumnName,
+  ColumnType,
+  capitalizeFirstLetter,
+} from '@prom-cms/shared'
 import { VFC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Input from './form/Input'
+import { Select } from './form/Select'
 import Textarea from './form/Textarea'
 
 export interface FieldMapperProps {
@@ -32,7 +38,9 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
       {fields.map((rowItems, rowIndex) =>
         rowItems.length ? (
           <div key={rowIndex} className="grid w-full gap-5">
-            {rowItems.map(({ title, type, columnName }) => {
+            {rowItems.map((values) => {
+              const { title, type, columnName } = values
+
               if (type === 'string' || type === 'number')
                 return (
                   <Input
@@ -55,6 +63,21 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     className="w-full"
                     touched={formState.touchedFields[columnName]}
                     error={t(formState.errors[columnName]?.message || '')}
+                    {...register(columnName)}
+                  />
+                )
+              } else if (type === 'enum') {
+                return (
+                  <Select
+                    key={columnName}
+                    label={title}
+                    className="w-full"
+                    error={t(formState.errors[columnName]?.message || '')}
+                    options={values.enum.map((enumKey) => [
+                      enumKey,
+                      t(capitalizeFirstLetter(enumKey)),
+                    ])}
+                    emptyPlaceholder={t('Select an option')}
                     {...register(columnName)}
                   />
                 )

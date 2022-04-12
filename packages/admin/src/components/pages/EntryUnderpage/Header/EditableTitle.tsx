@@ -11,7 +11,7 @@ export const EditableTitle: VFC = () => {
   const onSubmitCallback = useOnSubmitCallback()
   const { currentView } = useEntryUnderpageContext()
   const [editingMode, setEditingMode] = useState(currentView === 'create')
-  const { register, watch } = useFormContext()
+  const { register, watch, formState } = useFormContext()
   const { ref: inputFormRef, ...restInputProps } = register('title')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const { t } = useTranslation()
@@ -36,19 +36,26 @@ export const EditableTitle: VFC = () => {
 
   return (
     <div className="flex w-full items-center">
-      <input
-        className={clsx(
-          'w-full bg-transparent text-5xl font-bold outline-none',
-          !editingMode && 'cursor-default'
+      <div className="relative">
+        <input
+          className={clsx(
+            'w-full bg-transparent text-5xl font-bold outline-none',
+            !editingMode && 'cursor-default'
+          )}
+          placeholder={t('Enter your title here...')}
+          readOnly={!editingMode}
+          ref={(e) => {
+            inputFormRef(e)
+            inputRef.current = e
+          }}
+          {...restInputProps}
+        />
+        {formState.errors?.['title']?.message && (
+          <small className="font-bold text-red-500">
+            {formState.errors['title'].message}
+          </small>
         )}
-        placeholder={t('Enter your title here...')}
-        readOnly={!editingMode}
-        ref={(e) => {
-          inputFormRef(e)
-          inputRef.current = e
-        }}
-        {...restInputProps}
-      />
+      </div>
       {currentView === 'update' &&
         (editingMode ? (
           <button
