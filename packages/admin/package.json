@@ -29,7 +29,7 @@
     "sass": "^1.45.0",
     "swr": "1.1.2",
     "react-hook-form": "7.22.5",
-    "react-dropzone": "12.0.4",
+    "react-dropzone": "12.0.5",
     "@editorjs/editorjs": "2.23.2",
     "@editorjs/list": "1.7.0",
     "@editorjs/link": "2.4.0",
