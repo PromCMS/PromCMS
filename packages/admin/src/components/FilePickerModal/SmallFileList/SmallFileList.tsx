@@ -60,7 +60,9 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
       if (name === 'selectedFiles') {
         const resultValue = pickedFiles.includes(value as ItemID)
           ? pickedFiles.filter((id) => id !== value)
-          : [...pickedFiles, value as ItemID]
+          : multiple
+          ? [...pickedFiles, value as ItemID]
+          : [value as ItemID]
 
         onChange(resultValue)
         if (!multiple && triggerClose) triggerClose()
