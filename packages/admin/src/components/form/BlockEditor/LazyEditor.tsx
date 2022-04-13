@@ -1,4 +1,10 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 import EditorJS, { EditorConfig } from '@editorjs/editorjs'
 import Table from '@editorjs/table'
 import Underline from '@editorjs/underline'
@@ -26,6 +32,7 @@ export interface LazyEditorProps
 export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
   function LazyEditor({ initialValue, ...config }, ref) {
     const innerRef = useRef<EditorJS>()
+    const [editorReady, setEditorReady] = useState(false)
     const { t } = useTranslation()
 
     useImperativeHandle(ref, () => innerRef.current)
@@ -108,8 +115,11 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
             },
           },
         },
-        data: initialValue,
         inlineToolbar: true,
+        onReady: () => {
+          if (config.onReady) config.onReady()
+          setEditorReady(true)
+        },
         ...config,
       }
 
@@ -141,12 +151,17 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
         innerRef.current &&
         innerRef.current.isReady &&
         initialValue &&
-        innerRef.current.render
+        innerRef.current.render &&
+        editorReady
       ) {
-        console.log({ initialValue })
-        innerRef.current.render(initialValue)
+        const value =
+          typeof initialValue == 'string'
+            ? JSON.parse(initialValue)
+            : initialValue
+
+        innerRef.current.render(value || {})
       }
-    }, [initialValue])
+    }, [editorReady, initialValue])
 
     return <div id={EDITOR_HOLDER_ID} />
   }
