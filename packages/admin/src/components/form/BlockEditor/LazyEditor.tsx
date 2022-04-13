@@ -136,6 +136,18 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
       }
     }, [t])
 
+    useEffect(() => {
+      if (
+        innerRef.current &&
+        innerRef.current.isReady &&
+        initialValue &&
+        innerRef.current.render
+      ) {
+        console.log({ initialValue })
+        innerRef.current.render(initialValue)
+      }
+    }, [initialValue])
+
     return <div id={EDITOR_HOLDER_ID} />
   }
 )

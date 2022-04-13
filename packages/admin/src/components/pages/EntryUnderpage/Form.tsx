@@ -12,11 +12,9 @@ export interface FormProps {
 }
 
 export const EntryUnderpageForm: VFC<FormProps> = ({}) => {
-  const { currentView } = useEntryUnderpageContext()
-  const { formState, watch } = useFormContext<ItemFormValues>()
+  const { currentView, itemData } = useEntryUnderpageContext()
+  const { formState } = useFormContext<ItemFormValues>()
   const model = useCurrentModel()
-
-  const content = watch('content')
 
   const groupedFields = useMemo<
     Array<ColumnType & { columnName: ModelColumnName }>[] | undefined
@@ -34,7 +32,7 @@ export const EntryUnderpageForm: VFC<FormProps> = ({}) => {
         groupedFields && <FieldMapper fields={groupedFields} />
       ) : (
         <BlockEditor
-          initialValue={content as any}
+          initialValue={itemData?.content}
           autofocus={currentView === 'update'}
         />
       )}
