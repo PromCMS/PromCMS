@@ -48,7 +48,7 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
     [updateValue, mutate]
   )
 
-  const { open } = useDropzone({
+  const { open, getInputProps } = useDropzone({
     onDrop,
     noClick: true,
     noKeyboard: true,
@@ -87,6 +87,7 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   return (
     <SmallFileListContext.Provider value={contextValue}>
       <div className="p-5">
+        <input {...getInputProps({ className: 'hidden' })} />
         <h1 className="mb-5 text-3xl font-semibold">
           {multiple ? 'Select files' : 'Select a file'}
         </h1>
