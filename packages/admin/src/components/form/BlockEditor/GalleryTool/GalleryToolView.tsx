@@ -4,7 +4,7 @@ import {
   SmallFileListProps,
 } from '@components/FilePickerModal/SmallFileList'
 import clsx from 'clsx'
-import { useEffect, useMemo, useState, VFC } from 'react'
+import { useEffect, useState, VFC } from 'react'
 import { GalleryToolData } from './GalleryTool'
 
 export const ImageToolView: VFC<{

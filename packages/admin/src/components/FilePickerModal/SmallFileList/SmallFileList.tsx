@@ -27,6 +27,7 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   pickedFiles,
   onChange,
 }) => {
+  const [searchBarOpen, setSearchBarOpen] = useState(false)
   const [state, updateValue] = useSmallFileListContextReducer()
   const [currentPage, setCurrentPage] = useState(1)
   const { data, isError, isLoading, mutate } = useFileList({
@@ -90,11 +91,24 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
     <SmallFileListContext.Provider value={contextValue}>
       <div className="p-5">
         <input {...getInputProps({ className: 'hidden' })} />
-        <h1 className="mb-5 text-3xl font-semibold">
-          {multiple ? 'Select files' : 'Select a file'}
-        </h1>
-        <SearchBar onAddButtonClick={open} />
-        <hr className="mt-8 mb-2 h-0.5 w-full border-none bg-gray-200" />
+        <div className="flex items-center justify-between">
+          <h1 className="text-4xl font-semibold">
+            {multiple ? 'Select files' : 'Select a file'}
+          </h1>
+          <div className="flex gap-2">
+            <Button
+              className="flex-none"
+              onClick={() => setSearchBarOpen(!searchBarOpen)}
+            >
+              <iconSet.SearchIcon className="!-mx-2 aspect-square w-8" />
+            </Button>
+            <Button color="success" className="flex-none" onClick={open}>
+              <iconSet.PlusIcon className="!-mx-3 aspect-square w-8" />
+            </Button>
+          </div>
+        </div>
+        {searchBarOpen && <SearchBar />}
+        <hr className="my-5 mb-2 h-0.5 w-full border-none bg-gray-200" />
         <List onDeleteClick={onDeleteClick} />
         <div className="mt-5 flex items-center justify-between">
           {triggerClose && (
