@@ -5,7 +5,7 @@ import child_process from 'child_process';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const syncDatabase = async () => {
-  let messages = 'none';
+  let messages = '';
   try {
     await new Promise((resolve, reject) => {
       const child = child_process.exec(
@@ -13,14 +13,17 @@ const syncDatabase = async () => {
       );
 
       child.stdout?.on('data', (data) => {
-        messages = data;
+        messages += data;
       });
 
       child.on('exit', function (code) {
+        console.log('Exit', { code });
         if (code === 0) {
           resolve(true);
         } else {
-          reject(false);
+          throw new Error(
+            `⛔️ An error happened during database syncing(from php script): \n${messages}`
+          );
         }
       });
     });
