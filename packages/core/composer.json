@@ -23,7 +23,6 @@
     "illuminate/pagination": "8.77.1",
     "guzzlehttp/psr7": "^2",
     "guzzlehttp/guzzle": "^7.4",
-    "vlucas/phpdotenv": "^5.4",
     "php-di/php-di": "^6.3",
     "illuminate/database": "^8.77",
     "bryanjhv/slim-session": "~4.0",
@@ -31,6 +30,7 @@
     "firebase/php-jwt": "^6.0",
     "paragonie/sodium_compat": "^1.17",
     "phpmailer/phpmailer": "^6.6",
-    "twig/twig": "^3.0"
+    "twig/twig": "^3.0",
+    "symfony/dotenv": "^5.4"
   }
 }
