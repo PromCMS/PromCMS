@@ -3,8 +3,5 @@ RewriteBase /
 
 ErrorDocument 404 /public/index.php
 
-RewriteRule ^/public/(.+)$ /$1 [L,QSA]
-
 RewriteCond %{REQUEST_URI} !^/public
-RewriteRule ^/admin.* public/$1 [L]
-RewriteRule (.*) public/$1 [L]
+RewriteRule (.*) public/$1 [L,QSA]
