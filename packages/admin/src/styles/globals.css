@@ -17,16 +17,12 @@ select {
 }
 
 .editor-js__layout__wrap {
-  border-top: 2px solid rgb(233 235 238);
-  display: flex;
-  justify-content: space-around;
-  padding: 16px 10px;
-  gap: 10px;
+  @apply grid grid-cols-2 justify-around gap-x-2.5 gap-y-5 mt-3 mb-5;
 }
 
 .editor-js__layout__item {
   border: 2px solid #dfdfdf; 
-  @apply rounded-lg w-full py-2 px-5;
+  @apply rounded-lg w-full py-2 px-5 min-h-[200px];
 }
 
 .editor-js__layout__item .codex-editor > .codex-editor__redactor {

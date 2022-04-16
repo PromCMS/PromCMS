@@ -24,7 +24,7 @@ export const ImageToolView: VFC<{
   return (
     <div
       className={clsx(
-        'relative min-h-[200px] w-full',
+        'relative mt-3 mb-5 min-h-[200px] w-full',
         readOnly
           ? 'grid grid-cols-2 gap-3'
           : 'border-2 border-project-border shadow-md'
