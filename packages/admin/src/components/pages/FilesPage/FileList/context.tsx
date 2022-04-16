@@ -166,11 +166,6 @@ export const FileListContextProvider: FC = ({ children }) => {
     noKeyboard: true,
   })
 
-  const openFilePicker = useCallback(() => {
-    console.log('OPen')
-    open()
-  }, [open])
-
   const contextValue = useMemo(
     () => ({
       ...state,
@@ -178,7 +173,7 @@ export const FileListContextProvider: FC = ({ children }) => {
       isError,
       isLoading,
       updateValue,
-      openFilePicker,
+      openFilePicker: open,
       getDropZoneRootProps,
       getDropZoneInputProps,
       currentPath,
@@ -190,7 +185,7 @@ export const FileListContextProvider: FC = ({ children }) => {
       isError,
       isLoading,
       updateValue,
-      openFilePicker,
+      open,
       getDropZoneRootProps,
       getDropZoneInputProps,
       currentPath,
