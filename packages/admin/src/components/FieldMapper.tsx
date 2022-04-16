@@ -110,7 +110,13 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                   />
                 )
               } else if (type === 'enum') {
-                return <CustomSelect error={errorMessage} {...values} />
+                return (
+                  <CustomSelect
+                    key={columnName}
+                    error={errorMessage}
+                    {...values}
+                  />
+                )
               }
             })}
           </div>
