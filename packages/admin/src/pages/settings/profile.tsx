@@ -32,6 +32,7 @@ const SettingsPage: NextPage = () => {
 
   const onSubmit = async (values) => {
     const id = notifications.showNotification({
+      id: 'settings-update-notification',
       loading: true,
       title: 'Updating',
       message: t('Updating your data, please wait...'),

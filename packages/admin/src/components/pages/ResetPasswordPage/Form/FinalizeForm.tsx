@@ -43,6 +43,7 @@ export const FinalizeForm: VFC<{ token?: string }> = ({ token }) => {
           setError('token', { message: 'Your token seems expired...' })
         } else {
           notifications.showNotification({
+            id: 'reset-password-finalization-notification',
             color: 'red',
             title: 'An error happened',
             message: 'An error happened during request. Please try again...',

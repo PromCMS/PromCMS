@@ -16,9 +16,9 @@ export const useOnSubmitCallback = () => {
 
   return async (values) => {
     const id = notifications.showNotification({
+      id: currentView === 'update' ? 'on-update-entry' : 'on-create-entry',
       loading: true,
       title: currentView === 'update' ? 'Updating' : 'Creating',
-      id: currentView === 'update' ? 'on-update-entry' : 'on-create-entry',
       message: t(
         currentView === 'update'
           ? 'Updating your entry, please wait...'

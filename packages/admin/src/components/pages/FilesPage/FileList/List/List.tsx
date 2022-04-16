@@ -36,9 +36,9 @@ export const List: VFC = () => {
   const onFolderDeleteClick: FolderItemProps['onDeleteClick'] = useCallback(
     async (path) => {
       const notificationId = notifications.showNotification({
+        id: 'Deleting folder',
         loading: true,
         title: 'Deleting folder',
-        id: 'Deleting folder',
         message: t('Deleting your folder...'),
         autoClose: false,
         disallowClose: true,

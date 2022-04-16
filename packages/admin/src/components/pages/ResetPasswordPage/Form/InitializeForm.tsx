@@ -35,6 +35,7 @@ export const InitializeForm: VFC = () => {
     } catch (e) {
       if (axios.isAxiosError(e)) {
         notifications.showNotification({
+          id: 'reset-password-request-notification',
           color: 'red',
           title: 'An error happened',
           message: 'An error happened during request. Please try again...',

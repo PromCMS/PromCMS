@@ -1,4 +1,3 @@
-import useCurrentModel from '@hooks/useCurrentModel'
 import { useNotifications } from '@mantine/notifications'
 import { ApiResultItem } from '@prom-cms/shared'
 import { UserService } from '@services'
@@ -15,6 +14,10 @@ export const useOnSubmitCallback = () => {
 
   const callback = async (values) => {
     const id = notifications.showNotification({
+      id:
+        view === 'update'
+          ? 'update-user-notification'
+          : 'create-user-notification',
       loading: true,
       title: view === 'update' ? 'Updating' : 'Creating',
       message: t(
