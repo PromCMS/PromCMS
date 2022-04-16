@@ -39,11 +39,12 @@ const CustomSelect: VFC<
     <>
       <Controller
         name={columnName}
-        render={({ field: { onChange } }) => (
+        render={({ field: { onChange, value } }) => (
           <Select
             data={enumValues}
             key={columnName}
             label={title}
+            value={value}
             onChange={onChange}
             className="w-full"
             placeholder={t('Select an option')}
