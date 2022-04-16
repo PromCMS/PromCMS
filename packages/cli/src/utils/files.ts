@@ -42,7 +42,7 @@ export const generateByTemplates = async (
     let result = ejs.render(rawString, pickedTemplateData);
 
     try {
-      result = formatCodeString(result, finalFilename);
+      result = await formatCodeString(result, finalFilename);
     } catch (e) {
       console.log(`An error happened during formating of ${finalFilename}`);
       throw e;

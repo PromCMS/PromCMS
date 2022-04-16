@@ -47,7 +47,7 @@ const generateModule = async (
       {}
     );
 
-    result = formatCodeString(result, finalFilename);
+    result = await formatCodeString(result, finalFilename);
 
     const filepath = path.join(pluginRoot, finalFilename);
     await fs.ensureFile(filepath);

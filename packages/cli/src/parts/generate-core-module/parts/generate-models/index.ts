@@ -92,17 +92,15 @@ const generateModels = async (
     };
 
     // Module
+    const moduleFilename = `${capitalizedModelName}.model.php`;
     const moduleTemplateString = fs.readFileSync(
       path.join(templatesRoot, 'model', 'common.ejs'),
       'utf-8'
     );
-    const moduleFilepath = path.join(
-      modelsRoot,
-      `${capitalizedModelName}.model.php`
-    );
-    const moduleResult = formatCodeString(
+    const moduleFilepath = path.join(modelsRoot, moduleFilename);
+    const moduleResult = await formatCodeString(
       ejs.render(moduleTemplateString, info),
-      moduleFilepath
+      moduleFilename
     );
     await fs.ensureFile(moduleFilepath);
     await fs.writeFile(moduleFilepath, moduleResult);

@@ -17,7 +17,6 @@ const syncDatabase = async () => {
       });
 
       child.on('exit', function (code) {
-        console.log('Exit', { code });
         if (code === 0) {
           resolve(true);
         } else {
