@@ -5,11 +5,11 @@ use Psr\Http\Message\ServerRequestInterface;
 $container = $app->getContainer();
 $promBase = PROM_URL_BASE ? PROM_URL_BASE : '/';
 
-$router->get('/admin[/{routePiece:.*}]', function (
+function adminRouting(
   ServerRequestInterface $request,
   ResponseInterface $response,
   $args
-) use ($container, $promBase) {
+) {
   $adminPath = __DIR__ . '/../../public/admin';
   $pieces = explode('/', $args['routePiece']);
 
@@ -37,4 +37,7 @@ $router->get('/admin[/{routePiece:.*}]', function (
   $response->getBody()->write($content);
 
   return $response;
-});
+}
+
+$router->get('/admin[/{routePiece:.*}]', 'adminRouting');
+$router->get('/public/admin[/{routePiece:.*}]', 'adminRouting');
