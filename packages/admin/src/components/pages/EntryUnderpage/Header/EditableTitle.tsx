@@ -32,11 +32,9 @@ export const EditableTitle: VFC = () => {
     }
   }, [editingMode])
 
-  // TODO: Show error
-
   return (
     <div className="flex w-full items-center">
-      <div className="relative">
+      <div className="relative w-full">
         <input
           className={clsx(
             'w-full bg-transparent text-5xl font-bold outline-none',
