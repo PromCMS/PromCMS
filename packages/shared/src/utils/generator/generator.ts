@@ -61,7 +61,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     },
     icon: 'UserGroupIcon',
     columns: {
-      ...((models['users'] || {}).columns || {}),
+      // TODO: Do not make these values overridable
       name: {
         title: 'Name',
         type: 'string',
@@ -89,6 +89,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         type: 'enum',
         enum: ['Admin', 'Maintainer', 'Editor'],
       },
+      ...((models['users'] || {}).columns || {}),
     },
   };
 
@@ -102,8 +103,12 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     };
 
     if (model.admin?.layout === 'post-like') {
+      const {
+        title: unsetTitle,
+        content: unsetContent,
+        ...restColumns
+      } = model.columns;
       model.columns = {
-        ...model.columns,
         title: {
           title: 'Title',
           type: 'string',
@@ -112,6 +117,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
           title: 'Content',
           type: 'json',
         },
+        ...restColumns,
       };
     }
 
