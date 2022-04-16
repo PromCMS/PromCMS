@@ -1,20 +1,58 @@
+import { Select, SelectItem } from '@mantine/core'
 import {
   ApiResultModel,
   ModelColumnName,
   ColumnType,
   capitalizeFirstLetter,
+  EnumColumnType,
 } from '@prom-cms/shared'
-import { VFC } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useMemo, VFC } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import Input from './form/Input'
-import { Select } from './form/Select'
 import Textarea from './form/Textarea'
 
 export interface FieldMapperProps {
   fields: (ColumnType & {
     columnName: ModelColumnName
   })[][]
+}
+
+const CustomSelect: VFC<
+  EnumColumnType & {
+    columnName: ModelColumnName
+    error: string
+  }
+> = ({ columnName, title, error, enum: enumValue }) => {
+  const { t } = useTranslation()
+
+  const enumValues = useMemo<SelectItem[]>(
+    () =>
+      enumValue.map((enumKey) => ({
+        value: enumKey,
+        label: t(capitalizeFirstLetter(enumKey)),
+      })),
+    [enumValue, t]
+  )
+
+  return (
+    <>
+      <Controller
+        name={columnName}
+        render={({ field: { onChange } }) => (
+          <Select
+            data={enumValues}
+            key={columnName}
+            label={title}
+            onChange={onChange}
+            className="w-full"
+            placeholder={t('Select an option')}
+            error={error}
+          />
+        )}
+      />
+    </>
+  )
 }
 
 export const prepareFieldsForMapper = (model: ApiResultModel) =>
@@ -40,6 +78,10 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
           <div key={rowIndex} className="grid w-full gap-5">
             {rowItems.map((values) => {
               const { title, type, columnName } = values
+              const errorMessage = t(
+                formState.errors[columnName]?.message || ''
+              )
+              const isTouched = formState.touchedFields[columnName]
 
               if (type === 'string' || type === 'number')
                 return (
@@ -49,8 +91,8 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     type={type === 'string' ? 'text' : type}
                     className="w-full"
                     autoComplete="off"
-                    touched={formState.touchedFields[columnName]}
-                    error={t(formState.errors[columnName]?.message || '')}
+                    touched={isTouched}
+                    error={errorMessage}
                     {...register(columnName)}
                   />
                 )
@@ -61,26 +103,13 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     key={columnName}
                     label={title}
                     className="w-full"
-                    touched={formState.touchedFields[columnName]}
-                    error={t(formState.errors[columnName]?.message || '')}
+                    touched={isTouched}
+                    error={errorMessage}
                     {...register(columnName)}
                   />
                 )
               } else if (type === 'enum') {
-                return (
-                  <Select
-                    key={columnName}
-                    label={title}
-                    className="w-full"
-                    error={t(formState.errors[columnName]?.message || '')}
-                    options={values.enum.map((enumKey) => [
-                      enumKey,
-                      t(capitalizeFirstLetter(enumKey)),
-                    ])}
-                    emptyPlaceholder={t('Select an option')}
-                    {...register(columnName)}
-                  />
-                )
+                return <CustomSelect error={errorMessage} {...values} />
               }
             })}
           </div>

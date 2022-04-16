@@ -21,7 +21,7 @@ const LeftAside: VFC = () => {
   const { t } = useTranslation()
 
   return (
-    <div className="h-full border-r-2 border-project-border px-5 pt-6">
+    <div className="h-full px-5 pt-6">
       <p className="text-4xl font-semibold">{t('Menu')}</p>
       <hr className="mt-4 h-0 border-t-4 border-gray-200" />
       <nav className="mt-5 flex flex-none gap-3 overflow-auto lg:flex-col">
@@ -50,7 +50,7 @@ export const ProfileLayout: FC = ({ children }) => {
     <PageLayout withAside leftAside={<LeftAside />}>
       <PageLayout.Header title={t('Settings')} />
 
-      <PageLayout.Section className="mt-5 justify-evenly lg:flex">
+      <PageLayout.Section className="mt-5 min-h-[500px] justify-evenly lg:flex">
         <div className="w-full">{children}</div>
       </PageLayout.Section>
     </PageLayout>

@@ -1,3 +1,8 @@
+import {
+  localizationCookieStorageKey,
+  localizationLocalStorageKey,
+  localizationSessionStorageKey,
+} from '@constants'
 import { InitOptions } from 'i18next'
 
 export const localizationConfig: InitOptions = {
@@ -7,22 +12,12 @@ export const localizationConfig: InitOptions = {
   fallbackLng: false,
   detection: {
     // order and from where user language should be detected
-    order: [
-      'localStorage',
-      'sessionStorage',
-      'querystring',
-      'navigator',
-      'htmlTag',
-      'path',
-      'subdomain',
-    ],
+    order: ['localStorage', 'sessionStorage', 'cookie', 'navigator'],
 
     // keys or params to lookup language from
-    lookupQuerystring: 'lng',
-    lookupLocalStorage: 'i18nextLng',
-    lookupSessionStorage: 'i18nextLng',
-    lookupFromPathIndex: 0,
-    lookupFromSubdomainIndex: 0,
+    lookupLocalStorage: localizationLocalStorageKey,
+    lookupSessionStorage: localizationSessionStorageKey,
+    lookupCookie: localizationCookieStorageKey,
 
     // cache user language on
     caches: ['localStorage', 'cookie'],

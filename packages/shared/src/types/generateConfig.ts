@@ -28,21 +28,28 @@ type ColumnSettingsBase = {
   editable?: boolean;
 };
 
-export type ColumnType = ColumnSettingsBase &
-  (
-    | { type: 'enum'; enum: string[] }
-    | { type: 'number'; autoIncrement?: boolean }
-    | {
-        type:
-          | 'string'
-          | 'boolean'
-          | 'date'
-          | 'password'
-          | 'dateTime'
-          | 'longText'
-          | 'json';
-      }
-  );
+export type EnumColumnType = ColumnSettingsBase & {
+  type: 'enum';
+  enum: string[];
+};
+
+export type NumberColumnType = ColumnSettingsBase & {
+  type: 'number';
+  autoIncrement?: boolean;
+};
+
+export type NormalColumnType = ColumnSettingsBase & {
+  type:
+    | 'string'
+    | 'boolean'
+    | 'date'
+    | 'password'
+    | 'dateTime'
+    | 'longText'
+    | 'json';
+};
+
+export type ColumnType = EnumColumnType | NumberColumnType | NormalColumnType;
 
 export type ModelColumnName = string;
 export type DatabaseTableName = string;
