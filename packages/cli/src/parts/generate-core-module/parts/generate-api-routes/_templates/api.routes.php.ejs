@@ -5,31 +5,41 @@ use App\Middleware\Auth as AuthMiddleware;
 
 $auth = new AuthMiddleware($app->getContainer());
 
-$router->get('/locales/{lang}.json', '\App\Controllers\Localization:getLocalization');
+$router->get(
+  '/locales/{lang}.json',
+  '\App\Controllers\Localization:getLocalization',
+);
 
 $router->group('/profile', function (Router $innerRouter) use ($auth) {
   $innerRouter
     ->get('/me', '\App\Controllers\UserProfile:getCurrent')
     ->add($auth);
 
-  $innerRouter
-    ->post('/login', '\App\Controllers\UserProfile:login');
+  $innerRouter->post('/login', '\App\Controllers\UserProfile:login');
 
   $innerRouter
     ->post('/update', '\App\Controllers\UserProfile:update')
     ->add($auth);
 
-  $innerRouter
-    ->get('/request-password-reset', '\App\Controllers\UserProfile:requestPasswordReset');
+  $innerRouter->get(
+    '/request-password-reset',
+    '\App\Controllers\UserProfile:requestPasswordReset',
+  );
 
-  $innerRouter
-    ->post('/finalize-password-reset', '\App\Controllers\UserProfile:finalizePasswordReset');
+  $innerRouter->post(
+    '/finalize-password-reset',
+    '\App\Controllers\UserProfile:finalizePasswordReset',
+  );
 
-  $innerRouter
-    ->get('/request-email-change', '\App\Controllers\UserProfile:requestEmailChange');
+  $innerRouter->get(
+    '/request-email-change',
+    '\App\Controllers\UserProfile:requestEmailChange',
+  );
 
-  $innerRouter
-    ->post('/finalize-email-change', '\App\Controllers\UserProfile:finalizeEmailChange');
+  $innerRouter->post(
+    '/finalize-email-change',
+    '\App\Controllers\UserProfile:finalizeEmailChange',
+  );
 
   $innerRouter
     ->get('/logout', '\App\Controllers\UserProfile:logout')
@@ -40,19 +50,19 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
   // get info about all of models
   $innerRouter->get('', 'App\Controllers\EntryTypes:getInfo')->add($auth);
 
+  $innerRouter->group('/folders', function (Router $innerRouter) use ($auth) {
+    $innerRouter->get('', '\App\Controllers\Folders:get')->add($auth);
+
+    $innerRouter->post('', '\App\Controllers\Folders:create')->add($auth);
+
+    $innerRouter->delete('', '\App\Controllers\Folders:delete')->add($auth);
+  });
+
   // Files
   $innerRouter->group('/files', function (Router $innerRouter) use ($auth) {
     $innerRouter
       ->get('/paged-items', '\App\Controllers\Files:getManyListed')
       ->add($auth);
-
-    $innerRouter->group('/folders', function (Router $innerRouter) use ($auth) {
-      $innerRouter->get('', '\App\Controllers\Folders:get')->add($auth);
-
-      $innerRouter->post('', '\App\Controllers\Folders:create')->add($auth);
-
-      $innerRouter->delete('', '\App\Controllers\Folders:delete')->add($auth);
-    });
 
     $innerRouter->group('/items', function (Router $innerRouter) use ($auth) {
       $innerRouter->get('', '\App\Controllers\Files:getMany')->add($auth);
@@ -63,8 +73,8 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
       $innerRouter->group('/{itemId}', function (Router $innerRouter) use (
         $auth
       ) {
-        $innerRouter->get('', '\App\Controllers\Files:getFile');
-        $innerRouter->get('/info', '\App\Controllers\Files:get')->add($auth);
+        $innerRouter->get('/raw', '\App\Controllers\Files:getFile');
+        $innerRouter->get('', '\App\Controllers\Files:get')->add($auth);
         $innerRouter->patch('', '\App\Controllers\Files:update')->add($auth);
         $innerRouter->delete('', '\App\Controllers\Files:delete')->add($auth);
       });
