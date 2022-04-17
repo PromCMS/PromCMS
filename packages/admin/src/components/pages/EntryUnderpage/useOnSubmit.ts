@@ -1,20 +1,26 @@
 import useCurrentModel from '@hooks/useCurrentModel'
+import EditorJS from '@editorjs/editorjs'
 import { useNotifications } from '@mantine/notifications'
 import { ApiResultItem } from '@prom-cms/shared'
 import { EntryService } from '@services'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
 import { getObjectDiff } from '@utils'
+import { useRouter } from 'next/router'
+import { RefObject, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useEntryUnderpageContext } from './context'
 
-export const useOnSubmitCallback = () => {
+export const useOnSubmit = (): [
+  (values: any) => Promise<void>,
+  RefObject<EditorJS>
+] => {
+  const editorRef = useRef<EditorJS>(null)
   const { currentView, itemData } = useEntryUnderpageContext()
   const { t } = useTranslation()
   const model = useCurrentModel()
   const { push } = useRouter()
   const notifications = useNotifications()
 
-  return async (values) => {
+  const onSubmit = async (values) => {
     const id = notifications.showNotification({
       id: currentView === 'update' ? 'on-update-entry' : 'on-create-entry',
       loading: true,
@@ -28,49 +34,59 @@ export const useOnSubmitCallback = () => {
       disallowClose: true,
     })
 
+    if (editorRef.current && (await editorRef.current.isReady)) {
+      values.content = await editorRef.current.saver.save()
+    }
+
     if (currentView === 'update') {
-      const result = await EntryService.update(
-        {
-          id: (itemData as NonNullable<typeof itemData>).id,
-          model: (model as NonNullable<typeof model>).name,
-        },
-        getObjectDiff(itemData, values) as ApiResultItem
-      )
-        .catch(() => {
-          notifications.updateNotification(id, {
-            color: 'red',
-            message: t('An error happened'),
-            autoClose: 2000,
-          })
+      try {
+        await EntryService.update(
+          {
+            id: (itemData as NonNullable<typeof itemData>).id,
+            model: (model as NonNullable<typeof model>).name,
+          },
+          getObjectDiff(itemData, values) as ApiResultItem
+        )
+
+        notifications.updateNotification(id, {
+          message: t('Your entry is updated!'),
+          autoClose: 2000,
         })
-        .then(() => {
-          notifications.updateNotification(id, {
-            message: t('Your entry is updated!'),
-            autoClose: 2000,
-          })
-        })
-    } else if (currentView === 'create') {
-      const result = await EntryService.create(
-        {
-          model: (model as NonNullable<typeof model>).name,
-        },
-        getObjectDiff(itemData || {}, values) as ApiResultItem
-      ).catch(() => {
+      } catch {
         notifications.updateNotification(id, {
           color: 'red',
           message: t('An error happened'),
           autoClose: 2000,
         })
-      })
+      }
+    } else if (currentView === 'create') {
+      try {
+        const result = await EntryService.create(
+          {
+            model: (model as NonNullable<typeof model>).name,
+          },
+          values
+        )
 
-      if (result?.data) {
+        if (!result?.data) {
+          throw new Error('No data has been received')
+        }
+
         push(EntryService.getListUrl(model?.name as string))
 
         notifications.updateNotification(id, {
           message: t('New entry has been created!'),
           autoClose: 2000,
         })
+      } catch {
+        notifications.updateNotification(id, {
+          color: 'red',
+          message: t('An error happened'),
+          autoClose: 2000,
+        })
       }
     }
   }
+
+  return [onSubmit, editorRef]
 }

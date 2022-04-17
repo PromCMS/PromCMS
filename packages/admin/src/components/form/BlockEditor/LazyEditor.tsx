@@ -1,5 +1,6 @@
 import {
   forwardRef,
+  Ref,
   useEffect,
   useImperativeHandle,
   useRef,
@@ -27,15 +28,16 @@ export const EDITOR_HOLDER_ID = 'editor-content'
 export interface LazyEditorProps
   extends Omit<EditorConfig, 'holder' | 'tools'> {
   initialValue?: EditorConfig['data']
+  editorRef?: Ref<EditorJS | undefined>
 }
 
 export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
-  function LazyEditor({ initialValue, ...config }, ref) {
+  function LazyEditor({ initialValue, editorRef, ...config }, ref) {
     const innerRef = useRef<EditorJS>()
     const [editorReady, setEditorReady] = useState(false)
     const { t } = useTranslation()
 
-    useImperativeHandle(ref, () => innerRef.current)
+    useImperativeHandle(editorRef, () => innerRef.current)
 
     useEffect(() => {
       const editorConfig: EditorConfig = {

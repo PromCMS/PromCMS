@@ -1,4 +1,4 @@
-import { useCallback, useRef, VFC } from 'react'
+import { forwardRef, useCallback } from 'react'
 import dynamic from 'next/dynamic'
 import type EditorJS from '@editorjs/editorjs'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -12,29 +12,30 @@ const LazyEditor = dynamic(
 
 export type BlockEditorProps = LazyEditorProps
 
-export const BlockEditor: VFC<BlockEditorProps> = (props) => {
-  const editorRef = useRef<EditorJS>()
-  const { control } = useFormContext()
-  const { t } = useTranslation()
+export const BlockEditor = forwardRef<EditorJS, BlockEditorProps>(
+  function BlockEditor(props, editorRef) {
+    const { control } = useFormContext()
+    const { t } = useTranslation()
 
-  const onEditorChange = useCallback(
-    (onChange) => async (api: EditorJS.API, event: CustomEvent) =>
-      onChange(JSON.stringify(await api.saver.save())),
-    []
-  )
+    const onEditorChange = useCallback(
+      (onChange) => async (api: EditorJS.API) =>
+        onChange(JSON.stringify(await api.saver.save())),
+      []
+    )
 
-  return (
-    <Controller
-      control={control}
-      name="content"
-      render={({ field: { onChange } }) => (
-        <LazyEditor
-          ref={editorRef}
-          onChange={onEditorChange(onChange)}
-          placeholder={t('Start typing here...') as string}
-          {...props}
-        />
-      )}
-    />
-  )
-}
+    return (
+      <Controller
+        control={control}
+        name="content"
+        render={({ field: { onChange } }) => (
+          <LazyEditor
+            editorRef={editorRef}
+            onChange={onEditorChange(onChange)}
+            placeholder={t('Start typing here...') as string}
+            {...props}
+          />
+        )}
+      />
+    )
+  }
+)
