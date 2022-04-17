@@ -4,6 +4,7 @@ import { useClassNames as getClassnames } from '../../useClassNames'
 import { useSmallFileList } from '../../context'
 import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
+import { FileService } from '@services'
 
 const classNames = getClassnames()
 
@@ -42,7 +43,7 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
           <img
             alt="uploaded file"
             className="absolute top-0 left-0 h-full w-full object-cover"
-            src={`/api/entry-types/files/items/${id}`}
+            src={`/api${FileService.getApiRawUrl(id)}`}
           />
         ) : (
           <div className="flex h-full w-full">

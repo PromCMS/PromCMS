@@ -15,6 +15,10 @@ export class FileService {
     return `${API_ENTRY_TYPES_URL}/files/items/${id}`
   }
 
+  static getApiRawUrl(id: ItemID) {
+    return `${API_ENTRY_TYPES_URL}/files/items/${id}/raw`
+  }
+
   static async create(file: File, info?: ApiFileInputData) {
     const formData = new FormData()
     formData.append('file', file)

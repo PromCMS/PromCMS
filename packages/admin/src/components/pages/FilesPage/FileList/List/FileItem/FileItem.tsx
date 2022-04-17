@@ -50,7 +50,7 @@ export const FileItem: VFC<FileItemProps> = ({
             <img
               alt="uploaded file"
               className="absolute top-0 left-0 h-full w-full object-cover"
-              src={`/api/entry-types/files/items/${id}`}
+              src={`/api${FileService.getApiRawUrl(id)}`}
             />
           ) : (
             <div className="flex h-full w-full">

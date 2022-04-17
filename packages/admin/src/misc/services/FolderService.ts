@@ -1,16 +1,14 @@
 import { ApiResultItem, ItemID } from '@prom-cms/shared'
-import axios from 'axios'
 import { apiClient } from '@api'
 import { API_ENTRY_TYPES_URL } from '@constants'
-import { FileService } from '.'
 
 export class FolderService {
   static apiGetListUrl(path: string) {
-    return `${FileService.getListUrl}/folders?path=${path}`
+    return `${API_ENTRY_TYPES_URL}/folders?path=${path}`
   }
 
   static async create(path: string) {
-    return apiClient.post(`${API_ENTRY_TYPES_URL}/files/folders`, {
+    return apiClient.post(`${API_ENTRY_TYPES_URL}/folders`, {
       data: {
         path: path.replaceAll(' ', '_'),
       },
@@ -22,7 +20,7 @@ export class FolderService {
   }
 
   static async delete(path: string) {
-    await apiClient.delete(`${API_ENTRY_TYPES_URL}/files/folders`, {
+    await apiClient.delete(`${API_ENTRY_TYPES_URL}/folders`, {
       params: {
         path,
       },

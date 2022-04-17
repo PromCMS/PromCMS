@@ -44,8 +44,6 @@ export const Form: VFC = () => {
       case 0:
         try {
           const { data } = await ProfileService.login({ password, email })
-          console.log({ data })
-
           // set current user since we are logged in
           updateValue('currentUser', data.data)
 

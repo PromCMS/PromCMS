@@ -17,7 +17,7 @@ const BackendImage: VFC<BackendImageProps> = ({
   ...rest
 }) => {
   const imageSrc = useMemo(
-    () => '/api/' + FileService.getApiUrl(imageId),
+    () => '/api' + FileService.getApiRawUrl(imageId),
     [imageId]
   )
 
