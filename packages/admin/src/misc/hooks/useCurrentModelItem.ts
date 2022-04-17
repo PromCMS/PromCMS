@@ -6,7 +6,14 @@ const useCurrentModelItem = () => {
   const entryId = useRouterQuery('entryId')
   const itemInfo = useModelItem(
     modelInfo?.name,
-    (entryId as string) || undefined
+    (entryId as string) || undefined,
+    {
+      refreshInterval: 0,
+      revalidateOnFocus: false,
+      revalidateIfStale: false,
+      revalidateOnMount: true,
+      revalidateOnReconnect: false,
+    }
   )
 
   return itemInfo
