@@ -79,7 +79,7 @@ export class GenerateCMSProgram extends Command {
     // TODO: when in release take path from process.cwd() and attach path parameter from cli
     const currentRoot = PROJECT_ROOT;
     const generatorConfig = await getGeneratorConfig(currentRoot);
-    const PROVIDED_ROOT = path.join(PROJECT_ROOT, ...root.split('/'));
+    const FINAL_PATH = path.join(PROJECT_ROOT, ...root.split('/'));
 
     if (!generatorConfig)
       throw new Error(
@@ -90,7 +90,6 @@ export class GenerateCMSProgram extends Command {
       generatorConfig
     );
     const projectNameSimplified = simplifyProjectName(project.name);
-    const FINAL_PATH = path.join(PROVIDED_ROOT, projectNameSimplified);
     const ADMIN_ROOT = path.join(PROJECT_ROOT, 'packages', 'admin');
 
     if (
