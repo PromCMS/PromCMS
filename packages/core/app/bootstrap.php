@@ -89,6 +89,7 @@ function bootstrap()
       $moduleRoot = BootstrapUtils::getModuleRoot($dirname);
       // Make sure that plugin has valid info file
       $bootstrapFilepath = "$moduleRoot/bootstrap.php";
+      $bootstrapAfter = "$moduleRoot/bootstrap.after.php";
       $apiRoutesFilepath = "$moduleRoot/api.routes.php";
       $frontRoutesFilepath = "$moduleRoot/front.routes.php";
 
@@ -105,6 +106,10 @@ function bootstrap()
 
       // Loads controllers beforehand
       $utils->autoloadControllers($moduleRoot);
+
+      if (file_exists($bootstrapAfter)) {
+        include_once $bootstrapAfter;
+      }
 
       // Add api routes definition file to set
       if (file_exists($apiRoutesFilepath)) {
