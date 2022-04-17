@@ -4,11 +4,11 @@ import { useEffect, useRef, useState, VFC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useEntryUnderpageContext } from '..'
-import { useOnSubmitCallback } from '../useOnSubmitCallback'
+import { useOnSubmit } from '../useOnSubmit'
 
 export const EditableTitle: VFC = () => {
   const [editModeSubmitting, setEditModeSubmitting] = useState(false)
-  const onSubmitCallback = useOnSubmitCallback()
+  const [onSubmitCallback] = useOnSubmit()
   const { currentView } = useEntryUnderpageContext()
   const [editingMode, setEditingMode] = useState(currentView === 'create')
   const { register, watch, formState } = useFormContext()
