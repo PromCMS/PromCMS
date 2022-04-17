@@ -81,7 +81,7 @@ const SettingsPage: NextPage = () => {
             {/* TODO */}
             {false && (
               <div className="w-full">
-                <Button className="flex-none" color="ghost" icon="AtSymbolIcon">
+                <Button className="flex-none" color="ghost" icon="At">
                   {t('Change email')}
                 </Button>
               </div>

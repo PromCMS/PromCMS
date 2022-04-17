@@ -1,4 +1,4 @@
-import { Icon } from '@prom-cms/icons'
+import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react'
 
@@ -7,7 +7,7 @@ export interface IconButtonProps
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  icon: Icon
+  icon: typeof iconSet.AB
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(

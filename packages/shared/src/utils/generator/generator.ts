@@ -22,7 +22,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
 
   // Files are predefined and cannot be changed
   models['files'] = {
-    icon: 'FolderIcon',
+    icon: 'Folder',
     admin: {
       layout: 'simple',
     },
@@ -59,7 +59,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     admin: {
       layout: 'simple',
     },
-    icon: 'UserGroupIcon',
+    icon: 'Users',
     columns: {
       // TODO: Do not make these values overridable
       name: {

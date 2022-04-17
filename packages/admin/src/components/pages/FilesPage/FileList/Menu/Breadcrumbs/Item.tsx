@@ -1,9 +1,9 @@
-import { Icon } from '@prom-cms/icons'
+import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { VFC } from 'react'
 
 type ItemProps = {
-  icon: Icon
+  icon: typeof iconSet.AB
   title?: string
   onClick: () => void
   isLast?: boolean
