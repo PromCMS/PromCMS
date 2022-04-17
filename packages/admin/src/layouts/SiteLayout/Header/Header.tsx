@@ -23,7 +23,7 @@ const Header: VFC = () => {
   return (
     <header className={s.root}>
       <div className={s.top}>
-        <iconSet.BriefcaseIcon className="mx-auto h-8 w-8" />
+        <iconSet.Briefcase className="mx-auto h-8 w-8" />
       </div>
       <div className="grid gap-5 py-10">
         {menuItems.map((item) => (
@@ -68,7 +68,7 @@ const Header: VFC = () => {
           {({ close }) => (
             <PopoverList>
               <PopoverList.Item
-                icon={'UserIcon'}
+                icon={'User'}
                 className="text-blue-500"
                 onClick={() => {
                   close()
@@ -78,7 +78,7 @@ const Header: VFC = () => {
                 {t('Profile')}
               </PopoverList.Item>
               <PopoverList.Item
-                icon={'UserGroupIcon'}
+                icon={'Users'}
                 className="text-blue-500"
                 onClick={() => {
                   close()
@@ -88,7 +88,7 @@ const Header: VFC = () => {
                 {t('Users')}
               </PopoverList.Item>
               <PopoverList.Item
-                icon={'CogIcon'}
+                icon={'Settings'}
                 className="text-blue-500"
                 onClick={() => {
                   close()
@@ -98,7 +98,7 @@ const Header: VFC = () => {
                 {t('Settings')}
               </PopoverList.Item>
               <PopoverList.Item
-                icon={'LogoutIcon'}
+                icon={'Logout'}
                 className="text-red-500"
                 onClick={() => {
                   close()

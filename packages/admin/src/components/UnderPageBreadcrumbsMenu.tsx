@@ -7,7 +7,7 @@ import {
   VFC,
 } from 'react'
 import Link from 'next/link'
-import { HomeIcon } from '@heroicons/react/solid'
+import { iconSet } from '@prom-cms/icons'
 
 export interface UnderPageBreadcrumbsMenuProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
@@ -33,7 +33,7 @@ const UnderPageBreadcrumbsMenu: VFC<UnderPageBreadcrumbsMenuProps> = ({
     >
       <Link href="/">
         <a className="flex-none hover:underline">
-          <HomeIcon className="w-5" />
+          <iconSet.Home className="w-5" />
         </a>
       </Link>
       {items.map(({ content, isLinkTo }, key) => (

@@ -1,4 +1,3 @@
-import { FolderAddIcon } from '@heroicons/react/outline'
 import { getUseFoldersRoute } from '@hooks/useFolders'
 import axios from 'axios'
 import clsx from 'clsx'
@@ -10,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { useSWRConfig } from 'swr'
 import { useFileListContext } from '../../context'
 import { useClassNames } from '../../useClassNames'
+import { iconSet } from '@prom-cms/icons'
 
 export const NewFolderCreator = () => {
   const { updateValue, currentPath } = useFileListContext()
@@ -56,7 +56,7 @@ export const NewFolderCreator = () => {
       )}
     >
       <motion.div className={clsx(classNames.itemSquare(false), 'flex')}>
-        <FolderAddIcon className="m-auto w-28 text-blue-500" />
+        <iconSet.FolderPlus className="m-auto h-28 w-28 text-blue-500" />
       </motion.div>
       <form onSubmit={handleSubmit(onSubmit)} className="relative">
         <input

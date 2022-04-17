@@ -100,10 +100,10 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
               className="flex-none"
               onClick={() => setSearchBarOpen(!searchBarOpen)}
             >
-              <iconSet.SearchIcon className="!-mx-2 aspect-square w-8" />
+              <iconSet.Search className="!-mx-2 aspect-square w-8" />
             </Button>
             <Button color="success" className="flex-none" onClick={open}>
-              <iconSet.PlusIcon className="!-mx-3 aspect-square w-8" />
+              <iconSet.Plus className="!-mx-3 aspect-square w-8" />
             </Button>
           </div>
         </div>
@@ -126,7 +126,7 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
               onClick={changePage('prev')}
               className=""
             >
-              <iconSet.ChevronLeftIcon className="h-6 w-6" />
+              <iconSet.ChevronLeft className="h-6 w-6" />
             </Button>
             <div className="flex items-center justify-center rounded-lg bg-gray-100 py-2 px-4 font-semibold">
               {currentPage}
@@ -135,7 +135,7 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
               disabled={data?.last_page === currentPage || isLoading}
               onClick={changePage('next')}
             >
-              <iconSet.ChevronRightIcon className="h-6 w-6" />
+              <iconSet.ChevronRight className="h-6 w-6" />
             </Button>
           </div>
         </div>

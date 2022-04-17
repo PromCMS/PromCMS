@@ -5,8 +5,8 @@ import { useMemo } from 'react'
 import { modelIsCustom } from '@utils'
 
 const menuItems = [
-  { label: 'Domů', href: '/', icon: iconSet.HomeIcon },
-  { label: 'Files', href: '/files', icon: iconSet.PhotographIcon },
+  { label: 'Domů', href: '/', icon: iconSet.Home },
+  { label: 'Files', href: '/files', icon: iconSet.Photo },
 ]
 
 export const useConstructedMenuItems = () => {

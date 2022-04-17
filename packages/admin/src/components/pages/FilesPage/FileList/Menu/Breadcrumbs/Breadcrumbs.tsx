@@ -1,4 +1,4 @@
-import { FolderOpenIcon, HomeIcon } from '@heroicons/react/solid'
+import { iconSet } from '@prom-cms/icons'
 import { useCallback, useMemo, VFC } from 'react'
 import { useFileListContext } from '../../context'
 import { Item } from './Item'
@@ -24,14 +24,14 @@ export const Breadcrumbs: VFC = () => {
       className="flex w-full items-center overflow-auto rounded-2xl border-2 border-project-border bg-white px-4"
     >
       <Item
-        icon={HomeIcon}
+        icon={iconSet.Home}
         onClick={goToPath('/')}
         isLast={!pathPieces.length}
       />
       {pathPieces.map((folderName, index) => (
         <Item
           key={folderName}
-          icon={FolderOpenIcon}
+          icon={iconSet.Folders}
           label={'/' + pathPieces.slice(0, index + 1).join('/')}
           onClick={goToPath('/' + pathPieces.slice(0, index + 1).join('/'))}
           title={folderName}

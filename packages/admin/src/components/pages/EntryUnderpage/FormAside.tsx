@@ -2,8 +2,6 @@ import AsideItemWrap from '@components/AsideItemWrap'
 import { Button } from '@components/Button'
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper'
 import Skeleton, { SkeltonProps } from '@components/Skeleton'
-import { TrashIcon } from '@heroicons/react/outline'
-import { RefreshIcon } from '@heroicons/react/solid'
 import useCurrentModel from '@hooks/useCurrentModel'
 import { ColumnType, ModelColumnName } from '@prom-cms/shared'
 import clsx from 'clsx'
@@ -16,6 +14,7 @@ import { useTranslation } from 'react-i18next'
 import { getObjectDiff } from '@utils'
 import { useEntryUnderpageContext } from './context'
 import { useClassNames } from './useClassNames'
+import { iconSet } from '@prom-cms/icons'
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
@@ -118,7 +117,7 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
                 '!pl-0 text-sm text-red-500'
               )}
             >
-              <TrashIcon className="mr-3 -mt-1 inline w-5" />
+              <iconSet.Trash className="mr-3 -mt-1 inline w-5" />
               {t('Delete')}
             </Button>
           ) : (
@@ -127,7 +126,7 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
           <div className="flex flex-row items-center justify-end gap-5">
             {isSubmitting && (
               <p className="animate-pulse text-lg font-semibold text-orange-500">
-                <RefreshIcon className="mr-1.5 inline w-5 animate-spin" />
+                <iconSet.Refresh className="mr-1.5 inline w-5 animate-spin" />
                 {t('Saving...')}
               </p>
             )}

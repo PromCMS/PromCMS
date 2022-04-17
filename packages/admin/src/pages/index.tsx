@@ -40,8 +40,8 @@ const Home: NextPage = () => {
             <Link href={itemInfo.href} key={itemInfo.href}>
               <a className="group flex aspect-square rounded-2xl shadow-lg shadow-blue-200">
                 <div className="m-auto text-center">
-                  <itemInfo.icon className="mx-auto aspect-square w-1/2 text-gray-500 duration-150 group-hover:text-blue-500" />
-                  <span className="text-xl font-semibold">
+                  <itemInfo.icon className="mx-auto aspect-square h-12 w-12 text-gray-400 duration-150 group-hover:text-blue-500" />
+                  <span className="mt-3 block text-xl font-semibold">
                     {t(capitalizeFirstLetter(itemInfo.label))}
                   </span>
                 </div>

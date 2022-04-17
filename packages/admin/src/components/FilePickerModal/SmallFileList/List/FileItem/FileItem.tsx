@@ -61,7 +61,7 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
             isPicked ? 'text-green-600' : 'text-white group-hover:text-blue-200'
           )}
         >
-          <iconSet.CheckIcon
+          <iconSet.Check
             className={clsx(
               'm-auto h-8 w-8',
               isPicked ? 'scale-100' : 'scale-80 '

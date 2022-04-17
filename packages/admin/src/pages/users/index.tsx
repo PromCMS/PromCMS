@@ -76,7 +76,7 @@ const UsersListPage: VFC = () => {
               onClick={onCreateRequest}
             >
               <span className="hidden md:block">{t('Add new user')}</span>
-              <iconSet.UserAddIcon className="inline-block h-5 w-5 md:ml-3" />{' '}
+              <iconSet.UserPlus className="inline-block h-5 w-5 md:ml-3" />{' '}
             </Button>
           </div>
         </div>

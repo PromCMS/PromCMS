@@ -3,17 +3,13 @@ import { FC, VFC } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import clsx from 'clsx'
-import {
-  UserCircleIcon,
-  CogIcon,
-  LockClosedIcon,
-} from '@heroicons/react/outline'
 import { useTranslation } from 'react-i18next'
+import { iconSet } from '@prom-cms/icons'
 
 const items = [
-  { title: 'Profile', url: '/settings/profile', Icon: UserCircleIcon },
-  { title: 'System', url: '/settings', Icon: CogIcon },
-  { title: 'Authentication', url: '/settings/password', Icon: LockClosedIcon },
+  { title: 'Profile', url: '/settings/profile', Icon: iconSet.UserCircle },
+  { title: 'System', url: '/settings', Icon: iconSet.Settings },
+  { title: 'Authentication', url: '/settings/password', Icon: iconSet.Lock },
 ]
 
 const LeftAside: VFC = () => {

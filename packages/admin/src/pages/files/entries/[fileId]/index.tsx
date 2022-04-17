@@ -31,7 +31,7 @@ const FilePage: NextPage = () => {
             <Button
               className="bg-blue-100"
               variant="light"
-              rightIcon={<iconSet.ClipboardCheckIcon className="h-5 w-5" />}
+              rightIcon={<iconSet.ClipboardCheck className="h-5 w-5" />}
               radius="xl"
               size="md"
               styles={{

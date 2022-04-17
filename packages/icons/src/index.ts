@@ -1,3 +1,4 @@
-import * as icons from '@heroicons/react/solid';
+import * as icons from 'tabler-icons-react';
+export { Icon } from 'tabler-icons-react';
 
 export const iconSet = icons;

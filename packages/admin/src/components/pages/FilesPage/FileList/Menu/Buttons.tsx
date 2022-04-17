@@ -28,13 +28,11 @@ export const Buttons: VFC = () => {
         buttonClassName="h-full aspect-square flex"
         offset={[0, 10]}
         placement="bottom-end"
-        buttonContent={
-          <iconSet.PlusIcon className="absolute left-3 top-3 w-8" />
-        }
+        buttonContent={<iconSet.Plus className="absolute left-3 top-3 w-8" />}
       >
         <PopoverList>
           <PopoverList.Item
-            icon="DocumentAddIcon"
+            icon="FilePlus"
             title="Add new file to current folder"
           >
             {/* FIXME: resolve bug around icon not being clickable */}
@@ -47,7 +45,7 @@ export const Buttons: VFC = () => {
             </button>
           </PopoverList.Item>
           <PopoverList.Item
-            icon="FolderAddIcon"
+            icon="FolderPlus"
             onClick={() => updateValue('showNewFolderCreator', true)}
             title="Add new folder to current folder"
           >

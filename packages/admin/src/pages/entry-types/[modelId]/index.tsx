@@ -3,8 +3,6 @@ import { PageLayout } from '@layouts'
 import { useEffect, useMemo, useState, VFC } from 'react'
 import { TableView, TableViewCol } from '@components/TableView'
 import { Button } from '@components/Button'
-import Input from '@components/form/Input'
-import { useForm } from 'react-hook-form'
 import { useModelItems } from '@hooks/useModelItems'
 import useCurrentModel from '@hooks/useCurrentModel'
 import { formatApiModelResultToTableView, modelIsCustom } from '@utils'
@@ -17,7 +15,6 @@ import { useTranslation } from 'react-i18next'
 
 const EntryTypeUnderpage: VFC = ({}) => {
   const { push } = useRouter()
-  const { register, handleSubmit } = useForm()
   const [currentPage, setCurrentPage] = useState(1)
   const model = useCurrentModel()
   const {
@@ -86,7 +83,7 @@ const EntryTypeUnderpage: VFC = ({}) => {
             onClick={onCreateRequest}
           >
             <span className="hidden md:block">{t('Add new entry')}</span>
-            <iconSet.PlusIcon className="inline-block h-5 w-5 md:ml-3" />{' '}
+            <iconSet.Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
           </Button>
         </div>
       </div>

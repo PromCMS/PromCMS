@@ -1,4 +1,4 @@
-import { QuestionMarkCircleIcon } from '@heroicons/react/outline'
+import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { DetailedHTMLProps, HTMLAttributes, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -22,7 +22,7 @@ const ItemsMissingMessage: VFC<ItemsMissingMessageProps> = ({
       )}
       {...rest}
     >
-      <QuestionMarkCircleIcon className="mx-auto w-10" />
+      <iconSet.QuestionMark size={10} className="mx-auto" />
       <p>{t('No items available...')}</p>
     </div>
   )

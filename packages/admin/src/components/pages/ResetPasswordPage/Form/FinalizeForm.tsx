@@ -1,6 +1,5 @@
 import { Button } from '@components/Button'
 import Input from '@components/form/Input'
-import { CheckIcon, XIcon } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNotifications } from '@mantine/notifications'
 import axios from 'axios'
@@ -11,6 +10,7 @@ import Link from 'next/link'
 
 import { finalizeResetPasswordFormSchema } from './schema'
 import { useTranslation } from 'react-i18next'
+import { iconSet } from '@prom-cms/icons'
 
 type FormValues = {
   new_password: string
@@ -102,9 +102,9 @@ export const FinalizeForm: VFC<{ token?: string }> = ({ token }) => {
               <>
                 <div className="text-center">
                   {tokenFailed ? (
-                    <XIcon className="mx-auto aspect-square w-16 text-red-400" />
+                    <iconSet.X className="mx-auto aspect-square w-16 text-red-400" />
                   ) : (
-                    <CheckIcon className="mx-auto aspect-square w-16 text-green-400" />
+                    <iconSet.Check className="mx-auto aspect-square w-16 text-green-400" />
                   )}
                   <p className="mt-3 text-xl">
                     {t(

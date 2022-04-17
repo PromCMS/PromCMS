@@ -1,4 +1,4 @@
-import { CheckIcon, PencilIcon } from '@heroicons/react/outline'
+import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useEffect, useRef, useState, VFC } from 'react'
 import { useFormContext } from 'react-hook-form'
@@ -65,7 +65,7 @@ export const EditableTitle: VFC = () => {
             {editModeSubmitting ? (
               <span className="block aspect-square w-8 font-bold">...</span>
             ) : (
-              <CheckIcon className="w-8" />
+              <iconSet.Check className="h-10 w-10" />
             )}
           </button>
         ) : (
@@ -75,7 +75,7 @@ export const EditableTitle: VFC = () => {
             title={t('Edit title')}
             onClick={onEditClick}
           >
-            <PencilIcon className="w-8" />
+            <iconSet.Pencil className="h-10 w-10" />
           </button>
         ))}
     </div>

@@ -1,7 +1,5 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage'
 import Skeleton, { SkeltonProps } from '@components/Skeleton'
-import { TrashIcon } from '@heroicons/react/outline'
-import { PencilIcon } from '@heroicons/react/solid'
 import { ItemID, PagedResult } from '@prom-cms/shared'
 import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
@@ -125,7 +123,7 @@ const TableView: VFC<TableViewProps> = ({
                           title={t('Edit')}
                           className="hover:text-blue-600"
                         >
-                          <PencilIcon className="w-5" />{' '}
+                          <iconSet.Pencil className="w-5" />{' '}
                         </button>
                       )}
                       {onDeleteAction && (
@@ -134,7 +132,7 @@ const TableView: VFC<TableViewProps> = ({
                           title={t('Delete')}
                           className="text-red-500 hover:text-red-700"
                         >
-                          <TrashIcon className="w-5" />{' '}
+                          <iconSet.Trash className="w-5" />{' '}
                         </button>
                       )}
                     </td>
@@ -184,7 +182,7 @@ const TableView: VFC<TableViewProps> = ({
                 disabled={metadata.current_page === 1}
                 onClick={onPaginateClick('prev')}
               >
-                <iconSet.ChevronLeftIcon className="w-8" />
+                <iconSet.ChevronLeft className="w-8" />
               </Button>
               <Button
                 size="small"
@@ -193,7 +191,7 @@ const TableView: VFC<TableViewProps> = ({
                 disabled={metadata.current_page >= metadata.last_page}
                 onClick={onPaginateClick('next')}
               >
-                <iconSet.ChevronRightIcon className="w-8" />
+                <iconSet.ChevronRight className="w-8" />
               </Button>
             </div>
           </div>

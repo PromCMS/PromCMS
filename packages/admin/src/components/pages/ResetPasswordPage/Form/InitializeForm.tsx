@@ -1,6 +1,5 @@
 import { Button } from '@components/Button'
 import Input from '@components/form/Input'
-import { CheckIcon } from '@heroicons/react/solid'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNotifications } from '@mantine/notifications'
 import axios from 'axios'
@@ -11,6 +10,7 @@ import Link from 'next/link'
 
 import { initializeResetPasswordFormSchema } from './schema'
 import { Trans, useTranslation } from 'react-i18next'
+import { iconSet } from '@prom-cms/icons'
 
 type FormValues = {
   email: string
@@ -76,7 +76,7 @@ export const InitializeForm: VFC = () => {
             ) : (
               <>
                 <div className="text-center">
-                  <CheckIcon className="mx-auto aspect-square w-16 text-green-400" />
+                  <iconSet.Check className="mx-auto aspect-square w-16 text-green-400" />
                   <p className="mt-3 text-xl">
                     <Trans
                       i18nKey={

@@ -1,9 +1,9 @@
-import { HomeIcon } from '@heroicons/react/solid'
+import { Icon } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { VFC } from 'react'
 
 type ItemProps = {
-  icon: typeof HomeIcon
+  icon: Icon
   title?: string
   onClick: () => void
   isLast?: boolean

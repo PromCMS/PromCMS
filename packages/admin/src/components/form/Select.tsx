@@ -58,7 +58,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
               </option>
             ))}
           </select>
-          <iconSet.ChevronDownIcon className="pointer-events-none absolute top-2 right-2 aspect-square w-8" />
+          <iconSet.ChevronDown className="pointer-events-none absolute top-2 right-2 aspect-square w-8" />
         </div>
         {error && <small className="font-bold text-red-500">{error}</small>}
       </div>

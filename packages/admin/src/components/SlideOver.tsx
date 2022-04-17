@@ -58,7 +58,7 @@ const SlideOver: FC<SlideOverProps> = ({
               className="absolute left-0 top-4 flex h-[56px] -translate-x-full transform items-center !rounded-r-none text-xl font-semibold"
               onClick={onRequestClose}
             >
-              <iconSet.XIcon className="my-0.5 inline w-7" /> {t('Close')}
+              <iconSet.X className="my-0.5 inline w-7" /> {t('Close')}
             </Button>
             {title && (
               <Dialog.Title className="m-9 mb-0 text-2xl font-semibold">

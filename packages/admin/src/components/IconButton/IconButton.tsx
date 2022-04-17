@@ -1,13 +1,13 @@
-import { HomeIcon } from '@heroicons/react/outline'
+import { Icon } from '@prom-cms/icons'
 import clsx from 'clsx'
-import { ButtonHTMLAttributes, DetailedHTMLProps, FC, forwardRef } from 'react'
+import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react'
 
 export interface IconButtonProps
   extends DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  icon: typeof HomeIcon
+  icon: Icon
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(

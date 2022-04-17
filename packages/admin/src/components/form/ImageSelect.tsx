@@ -1,7 +1,7 @@
 import BackendImage from '@components/BackendImage'
 import { Button } from '@components/Button'
 import FilePickerModal from '@components/FilePickerModal'
-import { PhotographIcon } from '@heroicons/react/outline'
+import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
 import clsx from 'clsx'
 import {
@@ -81,7 +81,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                 />
               ) : (
                 <div className="absolute flex h-full w-full bg-gray-200">
-                  <PhotographIcon className="m-auto aspect-square w-10 stroke-slate-500" />
+                  <iconSet.Photo className="m-auto aspect-square w-10 stroke-slate-500" />
                 </div>
               )}
             </div>
@@ -89,7 +89,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
             <Button
               className="flex-none"
               color="ghost"
-              icon="PencilAltIcon"
+              icon="Pencil"
               onClick={() => setModalOpen(true)}
             >
               Change

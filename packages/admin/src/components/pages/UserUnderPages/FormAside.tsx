@@ -1,8 +1,6 @@
 import AsideItemWrap from '@components/AsideItemWrap'
 import { Button } from '@components/Button'
 import Skeleton, { SkeltonProps } from '@components/Skeleton'
-import { TrashIcon } from '@heroicons/react/outline'
-import { RefreshIcon } from '@heroicons/react/solid'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
 import { MESSAGES } from '@constants'
@@ -13,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import { getObjectDiff } from '@utils'
 import { useClassNames } from '../EntryUnderpage/useClassNames'
 import { useData } from './context'
+import { iconSet } from '@prom-cms/icons'
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
@@ -106,7 +105,7 @@ export const FormAside: VFC = () => {
                 '!pl-0 text-sm text-red-500'
               )}
             >
-              <TrashIcon className="mr-3 -mt-1 inline w-5" />
+              <iconSet.Trash className="mr-3 -mt-1 inline w-5" />
               {t('Delete')}
             </Button>
           ) : (
@@ -115,7 +114,7 @@ export const FormAside: VFC = () => {
           <div className="flex flex-row items-center justify-end gap-5">
             {isSubmitting && (
               <p className="animate-pulse text-lg font-semibold text-orange-500">
-                <RefreshIcon className="mr-1.5 inline w-5 animate-spin" />
+                <iconSet.Refresh className="mr-1.5 inline w-5 animate-spin" />
                 {t('Saving...')}
               </p>
             )}

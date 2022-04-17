@@ -21,6 +21,6 @@
     "url": "https://github.com/ondrej-langr/prom/issues"
   },
   "dependencies": {
-    "@heroicons/react": "1.0.5"
+    "tabler-icons-react": "1.45.0"
   }
 }

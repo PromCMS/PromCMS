@@ -6,6 +6,7 @@
     "noEmit": false,
     "target": "ESNEXT",
     "module": "esnext",
+    "isolatedModules": false
   },
   "include": [
     "src/**/*"
