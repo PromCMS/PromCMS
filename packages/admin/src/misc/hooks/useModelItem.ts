@@ -12,7 +12,7 @@ export const useModelItem = <T extends ApiResultItem>(
   const { models } = useGlobalContext()
 
   const shouldFetch = itemId !== undefined
-  const { data, error } = useSWR<T>(
+  const { data, error, ...rest } = useSWR<T>(
     shouldFetch && models
       ? EntryService.apiGetUrl(itemId, modelName as string)
       : null,
@@ -24,5 +24,6 @@ export const useModelItem = <T extends ApiResultItem>(
     isLoading: !error && !data,
     itemIsMissing: error,
     isError: error,
+    ...rest,
   }
 }

@@ -5,6 +5,7 @@ import { EntryService } from '@services'
 import { useRouter } from 'next/router'
 import { createContext, FC, useContext } from 'react'
 import { EntryTypeUrlActionType } from '@custom-types'
+import { KeyedMutator } from 'swr'
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType

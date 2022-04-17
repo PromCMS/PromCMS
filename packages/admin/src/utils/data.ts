@@ -29,7 +29,12 @@ export const getObjectDiff = (
   Object.keys(newObject).forEach((entryKey) => {
     const newValue = newObject[entryKey]
     const oldValue = originalObject[entryKey]
-    if (newValue !== oldValue) {
+    if (
+      (typeof newValue === 'string' &&
+        typeof oldValue === 'string' &&
+        newValue.localeCompare(oldValue)) ||
+      newValue !== oldValue
+    ) {
       diffedResult[entryKey] = newValue
     }
   })

@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import EditorJS, { EditorConfig } from '@editorjs/editorjs'
+import EditorJS, { EditorConfig, LogLevels } from '@editorjs/editorjs'
 import Table from '@editorjs/table'
 import Underline from '@editorjs/underline'
 import Marker from '@editorjs/marker'
@@ -45,6 +45,7 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
          * Create a holder for the Editor and pass its ID
          */
         holder: EDITOR_HOLDER_ID,
+        logLevel: 'ERROR' as LogLevels.ERROR,
         placeholder: t('Start typing here...') as string,
         tools: {
           header: {
@@ -151,7 +152,6 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
     useEffect(() => {
       if (
         innerRef.current &&
-        innerRef.current.isReady &&
         initialValue &&
         innerRef.current.render &&
         editorReady
