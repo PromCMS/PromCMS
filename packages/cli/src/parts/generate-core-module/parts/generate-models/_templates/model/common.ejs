@@ -1,9 +1,8 @@
 <?php
 
 use Illuminate\Database\Eloquent\Model;
-<% if (softDelete) { %>
-  use Illuminate\Database\Eloquent\SoftDeletes;
-<% } %>
+<% if (softDelete) { %>use Illuminate\Database\Eloquent\SoftDeletes;<% } %>
+<% if (events.beforeSave.slugify) { %>use Illuminate\Support\Str;<% } %>
 
 class <%- modelName %> extends Model
 {
@@ -27,8 +26,35 @@ class <%- modelName %> extends Model
     ];
   <% } %>
 
+  <% if (events.shouldInclude()) { %>
+    /**
+    * Takes care of events
+    */
+    public static function boot()
+    {
+      parent::boot();
 
-  protected $tableColumns = [
+      <% if (events.beforeSave.shouldInclude()) { %>
+        static::saving(function ($post) {
+          <% if (events.beforeSave.slugify) { %>
+            // Take care of slugs
+            foreach (
+              array_filter(self::$tableColumns, function ($col) {
+                return $col['type'] === 'slug';
+              })
+              as $colKey => $col
+            ) {
+              if ($post->{$col['of']}) {
+                $post->{$colKey} = Str::slug($post->{$col['of']});
+              }
+            }
+          <% } %>
+        });
+      <% } %>
+    }
+  <% } %>
+
+  protected static $tableColumns = [
     <% 
       Object.keys(formattedColumns).forEach(columnKey => { 
       const formattedColumnSettings = formattedColumns[columnKey];
@@ -61,7 +87,7 @@ class <%- modelName %> extends Model
 
   public function getSummary () {
       return (object)[
-        "columns" => $this->tableColumns,
+        "columns" => self::$tableColumns,
         "tableName" => $this->table,
         "icon" => $this->modelIcon,
         "hasTimestamps" => $this->timestamps,

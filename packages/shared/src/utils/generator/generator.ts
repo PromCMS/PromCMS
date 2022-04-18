@@ -117,6 +117,13 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
           title: 'Content',
           type: 'json',
         },
+        slug: {
+          title: 'Zkratka',
+          type: 'slug',
+          of: 'title',
+          required: false,
+          editable: false,
+        },
         ...restColumns,
       };
     }
@@ -141,6 +148,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
             unique: false,
             hide: false,
             ...(column.type === 'number' ? { autoIncrement: false } : {}),
+            ...(column.type === 'slug' ? { unique: true } : {}),
             ...column,
           },
         };

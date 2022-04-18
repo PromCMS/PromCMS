@@ -11,12 +11,18 @@ export const formatApiModelResultToTableView = (
     return {
       fieldName: columnKey,
       title: columnInfo.title,
-      show: !(columnInfo.hide ?? false),
-      ...(columnInfo.type === 'json' && {
-        formatter() {
-          return 'text'
+      show: !(
+        columnInfo.hide ||
+        columnInfo.type === 'slug' ||
+        columnInfo.type === 'json' ||
+        false
+      ),
+      // TODO make new formatter
+      /*...(columnInfo.type === 'json' && {
+        formatter(value) {
+          return JSON.stringify(value || {})
         },
-      }),
+      }),*/
     }
   })
 

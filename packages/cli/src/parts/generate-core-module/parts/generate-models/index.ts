@@ -51,6 +51,19 @@ const generateModels = async (
         .map(([key, { type }]) => {
           return [key, columnTypeToCast(type)];
         }),
+      events: {
+        shouldInclude() {
+          return !!Object.values(this.beforeSave).filter((value) => value);
+        },
+        beforeSave: {
+          shouldInclude() {
+            return !!Object.values(this.slugify).filter((value) => value);
+          },
+          slugify: !!Object.entries(currentModel.columns).find(
+            ([_colKey, col]) => col.type === 'slug'
+          ),
+        },
+      },
       formattedColumns: Object.keys(currentModel.columns).reduce(
         (finalTransformedColumns, currentColumnKey) => {
           const currentColumn = currentModel.columns[currentColumnKey];

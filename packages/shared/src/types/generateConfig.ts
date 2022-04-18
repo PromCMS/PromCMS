@@ -38,6 +38,14 @@ export type NumberColumnType = ColumnSettingsBase & {
   autoIncrement?: boolean;
 };
 
+export type SlugColumnType = ColumnSettingsBase & {
+  type: 'slug';
+  /**
+   * TODO: Must be one of columns
+   */
+  of: string;
+};
+
 export type NormalColumnType = ColumnSettingsBase & {
   type:
     | 'string'
@@ -49,7 +57,11 @@ export type NormalColumnType = ColumnSettingsBase & {
     | 'json';
 };
 
-export type ColumnType = EnumColumnType | NumberColumnType | NormalColumnType;
+export type ColumnType =
+  | EnumColumnType
+  | NumberColumnType
+  | NormalColumnType
+  | SlugColumnType;
 
 export type ModelColumnName = string;
 export type DatabaseTableName = string;

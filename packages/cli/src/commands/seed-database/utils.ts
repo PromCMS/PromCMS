@@ -30,8 +30,6 @@ export const specialStringFaker = (columnName: string) => {
     finalValue = faker.internet.avatar();
   } else if (columnName.includes('email')) {
     finalValue = faker.datatype.uuid() + faker.internet.email().toLowerCase();
-  } else if (columnName.includes('slug')) {
-    finalValue = faker.datatype.uuid();
   } else {
     finalValue = faker.lorem.word();
   }

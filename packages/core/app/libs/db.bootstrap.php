@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
 
 $capsule = new Capsule();
 
@@ -35,7 +36,7 @@ $capsule->addConnection([
 ]);
 
 $capsule->setAsGlobal();
-
+$capsule->setEventDispatcher(new Dispatcher());
 $capsule->bootEloquent();
 
 if ($isSqlite) {

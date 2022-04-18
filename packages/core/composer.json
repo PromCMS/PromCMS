@@ -31,6 +31,7 @@
     "paragonie/sodium_compat": "^1.17",
     "phpmailer/phpmailer": "^6.6",
     "twig/twig": "^3.0",
-    "symfony/dotenv": "^5.4"
+    "symfony/dotenv": "^5.4",
+    "illuminate/events": "^8.83"
   }
 }

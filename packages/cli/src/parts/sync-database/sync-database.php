@@ -50,7 +50,7 @@ try {
               if ($columnKey === 'id' && $column['autoIncrement']) {
                 $field = $table->increments('id');
               } else {
-                if ($type === 'password') {
+                if ($type === 'password' || $type === 'slug') {
                   $type = 'string';
                 } elseif ($type === 'number') {
                   $type = 'integer';

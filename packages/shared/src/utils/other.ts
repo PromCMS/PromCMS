@@ -17,6 +17,7 @@ export const convertColumnTypeToPrimitive = (
     case 'string':
     case 'enum':
     case 'password':
+    case 'slug':
       primitiveType = 'string';
       break;
     case 'number':

@@ -112,6 +112,9 @@ export class SeedDatabaseProgram extends Command {
             case 'password':
               finalValue = hashPassword('test123');
               break;
+            case 'slug':
+              finalValue = faker.datatype.uuid();
+              break;
             case 'json':
               // TODO: Needs implementation
               finalValue = '';
