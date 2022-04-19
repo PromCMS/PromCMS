@@ -19,12 +19,14 @@ export const FilePickerModal: VFC<FilePickerModalProps> = ({
 }) => {
   return (
     <Modal onClose={onClose} {...rest}>
-      <SmallFileList
-        triggerClose={onClose}
-        multiple={multiple}
-        pickedFiles={pickedFiles}
-        onChange={onChange}
-      />
+      <div className="p-5">
+        <SmallFileList
+          triggerClose={onClose}
+          multiple={multiple}
+          pickedFiles={pickedFiles}
+          onChange={onChange}
+        />
+      </div>
     </Modal>
   )
 }

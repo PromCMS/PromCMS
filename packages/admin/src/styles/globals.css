@@ -2,8 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@import "./editor.css";
-
 select {
   -webkit-appearance: none;
   -moz-appearance: none;

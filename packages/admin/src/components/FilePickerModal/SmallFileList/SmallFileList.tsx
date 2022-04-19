@@ -89,55 +89,53 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
 
   return (
     <SmallFileListContext.Provider value={contextValue}>
-      <div className="p-5">
-        <input {...getInputProps({ className: 'hidden' })} />
-        <div className="flex items-center justify-between">
-          <h1 className="text-4xl font-semibold">
-            {multiple ? 'Select files' : 'Select a file'}
-          </h1>
-          <div className="flex gap-2">
-            <Button
-              className="flex-none"
-              onClick={() => setSearchBarOpen(!searchBarOpen)}
-            >
-              <iconSet.Search className="!-mx-2 aspect-square w-8" />
-            </Button>
-            <Button color="success" className="flex-none" onClick={open}>
-              <iconSet.Plus className="!-mx-3 aspect-square w-8" />
-            </Button>
-          </div>
+      <input {...getInputProps({ className: 'hidden' })} />
+      <div className="flex items-center justify-between">
+        <h1 className="text-4xl font-semibold">
+          {multiple ? 'Select files' : 'Select a file'}
+        </h1>
+        <div className="flex gap-2">
+          <Button
+            className="flex-none"
+            onClick={() => setSearchBarOpen(!searchBarOpen)}
+          >
+            <iconSet.Search className="!-mx-2 aspect-square w-8 !fill-transparent" />
+          </Button>
+          <Button color="success" className="flex-none" onClick={open}>
+            <iconSet.Plus className="!-mx-3 aspect-square w-8" />
+          </Button>
         </div>
-        {searchBarOpen && <SearchBar />}
-        <hr className="my-5 mb-2 h-0.5 w-full border-none bg-gray-200" />
-        <List onDeleteClick={onDeleteClick} />
-        <div className="mt-5 flex items-center justify-between">
-          {triggerClose && (
-            <Button
-              onClick={triggerClose}
-              disabled={!pickedFiles.length}
-              color="success"
-            >
-              Accept
-            </Button>
-          )}
-          <div className="ml-auto flex items-center">
-            <Button
-              disabled={currentPage === 1 || isLoading}
-              onClick={changePage('prev')}
-              className=""
-            >
-              <iconSet.ChevronLeft className="h-6 w-6" />
-            </Button>
-            <div className="flex items-center justify-center rounded-lg bg-gray-100 py-2 px-4 font-semibold">
-              {currentPage}
-            </div>
-            <Button
-              disabled={data?.last_page === currentPage || isLoading}
-              onClick={changePage('next')}
-            >
-              <iconSet.ChevronRight className="h-6 w-6" />
-            </Button>
+      </div>
+      {searchBarOpen && <SearchBar />}
+      <hr className="my-5 mb-2 h-0.5 w-full border-none bg-gray-200" />
+      <List onDeleteClick={onDeleteClick} />
+      <div className="mt-5 flex items-center justify-between">
+        {triggerClose && (
+          <Button
+            onClick={triggerClose}
+            disabled={!pickedFiles.length}
+            color="success"
+          >
+            Accept
+          </Button>
+        )}
+        <div className="ml-auto flex items-center">
+          <Button
+            disabled={currentPage === 1 || isLoading}
+            onClick={changePage('prev')}
+            className=""
+          >
+            <iconSet.ChevronLeft className="h-6 w-6 !fill-transparent" />
+          </Button>
+          <div className="flex items-center justify-center rounded-lg bg-gray-100 py-2 px-4 font-semibold">
+            {currentPage}
           </div>
+          <Button
+            disabled={data?.last_page === currentPage || isLoading}
+            onClick={changePage('next')}
+          >
+            <iconSet.ChevronRight className="h-6 w-6 !fill-transparent" />
+          </Button>
         </div>
       </div>
     </SmallFileListContext.Provider>

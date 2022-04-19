@@ -63,7 +63,7 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
         >
           <iconSet.Check
             className={clsx(
-              'm-auto h-8 w-8',
+              'm-auto h-8 w-8 !fill-transparent',
               isPicked ? 'scale-100' : 'scale-80 '
             )}
           />

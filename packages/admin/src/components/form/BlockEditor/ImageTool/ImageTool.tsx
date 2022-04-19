@@ -5,6 +5,7 @@ import { ImageToolView } from './ImageToolView'
 
 export interface ImageToolData {
   fileId?: ItemID
+  label?: string
 }
 
 type Setting = {
@@ -45,6 +46,7 @@ class ImageTool implements BlockTool {
     this.blockIndex = this.api.blocks.getCurrentBlockIndex() + 1
     this.data = {
       fileId: data.fileId || '',
+      label: data.label,
     }
 
     this.CSS = {
@@ -84,9 +86,8 @@ class ImageTool implements BlockTool {
       // Also update input element
       if (this.nodes.inputElement) {
         this.nodes.inputElement.value = JSON.stringify(this.data)
-        this.nodes.inputElement.setAttribute('value', JSON.stringify(this.data))
+        this.nodes.inputElement.dispatchEvent(new Event('change'))
       }
-      this.api.saver.save()
     }
 
     // Render react controller

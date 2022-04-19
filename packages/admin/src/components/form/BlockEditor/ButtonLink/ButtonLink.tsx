@@ -1,12 +1,10 @@
 import { API, BlockTool } from '@editorjs/editorjs'
 import { iconSet } from '@prom-cms/icons'
-import { t } from 'i18next'
-import { HTMLAttributes } from 'react'
-import ReactDOM from 'react-dom'
-
-export interface ImageToolData {
+import ReactDom from 'react-dom'
+import { ButtonLinkView } from './ButtonLinkView'
+export interface ButtonLinkToolData {
   linkTo: string
-  text: string
+  label?: string
   icon?: keyof typeof iconSet
 }
 
@@ -16,11 +14,9 @@ type Setting = {
 }
 
 type Nodes = {
-  holder: any
-  linkToInput: any | HTMLInputElement
-  labelInput: any | HTMLInputElement
-  iconSelector: any | HTMLDivElement
-  readOnlyButton: any | HTMLButtonElement
+  holder: HTMLDivElement | null
+  reactElement: HTMLDivElement | null
+  inputElement: HTMLInputElement | null
 }
 
 /**
@@ -33,7 +29,7 @@ class ButtonLinkTool implements BlockTool {
   CSS: Record<string, string>
   nodes: Nodes
   settings: Setting[]
-  data: ImageToolData
+  data: ButtonLinkToolData
 
   static get isReadOnlySupported() {
     return true
@@ -42,7 +38,7 @@ class ButtonLinkTool implements BlockTool {
   static get toolbox() {
     return {
       title: 'Button Link',
-      icon: '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-hash" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="5" y1="9" x2="19" y2="9" /><line x1="5" y1="15" x2="19" y2="15" /><line x1="11" y1="4" x2="7" y2="20" /><line x1="17" y1="4" x2="13" y2="20" /></svg>',
+      icon: '<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-link" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 14a3.5 3.5 0 0 0 5 0l4 -4a3.5 3.5 0 0 0 -5 -5l-.5 .5" /><path d="M14 10a3.5 3.5 0 0 0 -5 0l-4 4a3.5 3.5 0 0 0 5 5l.5 -.5" /></svg>',
     }
   }
 
@@ -50,150 +46,75 @@ class ButtonLinkTool implements BlockTool {
     this.api = api
     this.readOnly = readOnly
     this.blockIndex = this.api.blocks.getCurrentBlockIndex() + 1
+
     this.data = {
-      linkTo: data.linkTo || '',
-      text: data.text || '',
-      icon: data.icon,
+      linkTo: '',
+      ...data,
     }
 
     this.CSS = {
       wrapper: 'button-link-tool',
-      linkToInput: 'button-link-tool__linkto-input',
-      labelInput: 'button-link-tool__label-input',
-      iconSelector: 'button-link-tool__icon-selector',
-      readOnlyButton: 'button-link-tool__readonly__button',
-      title: 'button-link-tool__title',
-      inputLabel: 'button-link-tool__input__label',
+      input: 'hidden',
     }
 
     this.nodes = {
       holder: null,
-      iconSelector: null,
-      labelInput: null,
-      linkToInput: null,
-      readOnlyButton: null,
+      inputElement: null,
+      reactElement: null,
     }
   }
 
   render() {
-    const title = this._createEl({
-      tagName: 'p',
-      classList: [this.CSS.title],
-      children: ['Button Link'],
-    })
+    const holder = document.createElement('div')
+    const inputElement = document.createElement('input')
+    const rootElement = document.createElement('div')
 
-    const finalChildren: HTMLElement[] = [title]
+    // Take care of css
+    holder.setAttribute('class', this.CSS.wrapper)
+    inputElement.setAttribute('class', this.CSS.input)
 
-    if (this.readOnly) {
-      const icon = this._createEl({
-        tagName: 'div',
-        classList: [],
-      })
-      if (this.data.icon) {
-        const ReactIcon = iconSet[this.data.icon]
-        ReactDOM.render(<ReactIcon />, icon)
+    // Attach elements
+    holder.appendChild(inputElement)
+    holder.appendChild(rootElement)
+
+    // Cache elements
+    this.nodes.inputElement = inputElement
+    this.nodes.reactElement = rootElement
+    this.nodes.holder = holder
+
+    // On data change from react
+    const onDataChange = async (newData) => {
+      if (this.readOnly) return
+      this.data = Object.assign(this.data, newData)
+      // Also update input element
+      if (this.nodes.inputElement) {
+        this.nodes.inputElement.value = JSON.stringify(this.data)
+        this.nodes.inputElement.dispatchEvent(new Event('change'))
       }
-
-      const readOnlyButton = this._createEl({
-        cacheKey: 'readOnlyButton',
-        tagName: 'div',
-        classList: [this.CSS.readOnlyButton],
-        children: [this.data.text || this.data.linkTo],
-      })
-
-      finalChildren.push(readOnlyButton)
-    } else {
-      const linkToInputLabel = this._createEl({
-        tagName: 'label',
-        classList: [this.CSS.inputLabel],
-        children: [t('Link to')],
-      })
-      const linkToInput = this._createEl({
-        cacheKey: 'linkToInput',
-        tagName: 'input',
-        classList: [this.CSS.linkToInput],
-        attributes: {
-          placeholder: t('Start typing here...'),
-        },
-      })
-
-      const labelInputLabel = this._createEl({
-        tagName: 'label',
-        classList: [this.CSS.inputLabel],
-        children: [t('Link text')],
-      })
-      const labelInput = this._createEl({
-        cacheKey: 'labelInput',
-        tagName: 'input',
-        classList: [this.CSS.labelInput],
-        attributes: {
-          placeholder: t('Start typing here...'),
-        },
-      })
-
-      finalChildren.push(
-        linkToInputLabel,
-        linkToInput,
-        labelInputLabel,
-        labelInput
-      )
     }
 
-    const holder = this._createEl({
-      cacheKey: 'holder',
-      tagName: 'div',
-      classList: [this.CSS.wrapper, this.readOnly && 'readOnly'].filter(
-        (className) => !!className
-      ) as string[],
-      children: finalChildren,
-    })
+    // Render react controller
+    ReactDom.render(
+      <ButtonLinkView
+        dataFromParent={this.data}
+        onDataChange={onDataChange}
+        readOnly={this.readOnly}
+      />,
+      this.nodes.reactElement
+    )
 
-    return holder
-  }
-
-  _createEl<T extends keyof HTMLElementTagNameMap>({
-    cacheKey,
-    tagName,
-    classList,
-    children,
-    attributes,
-  }: {
-    cacheKey?: keyof Nodes
-    tagName: T
-    classList: string[]
-    children?: (HTMLElementTagNameMap[keyof HTMLElementTagNameMap] | string)[]
-    attributes?: HTMLAttributes<HTMLElementTagNameMap[T]>
-  }) {
-    const item = document.createElement(tagName)
-
-    for (const attrKey in attributes) {
-      item.setAttribute(attrKey, (attributes as any)[attrKey])
-    }
-
-    for (const className of classList) {
-      item.classList.add(className)
-    }
-
-    if (children) {
-      item.append(...children)
-    }
-
-    if (cacheKey) {
-      this.nodes[cacheKey] = item
-    }
-
-    return item
+    return this.nodes.holder
   }
 
   validate() {
-    if (!this.data.linkTo || this.data.text) {
+    if (!this.data.linkTo || !/^((https|http):\/\/).*/.test(this.data.linkTo)) {
       return false
     }
 
     return true
   }
 
-  save(): ImageToolData {
+  save() {
     return { ...this.data }
   }
 }
