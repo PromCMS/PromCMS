@@ -1,6 +1,5 @@
 import {
   FC,
-  forwardRef,
   Ref,
   useEffect,
   useImperativeHandle,
@@ -23,6 +22,7 @@ import { useTranslation } from 'react-i18next'
 import { GalleryTool } from './GalleryTool'
 import Embed from '@editorjs/embed'
 import { ButtonLinkTool } from './ButtonLink'
+import { TagsTool } from './TagsTool'
 
 export const EDITOR_HOLDER_ID = 'editor-content'
 
@@ -71,6 +71,7 @@ export const LazyEditor: FC<LazyEditorProps> = ({
         buttonLink: {
           class: ButtonLinkTool,
         },
+        tags: TagsTool,
         image: {
           class: ImageTool,
           inlineToolbar: true,
