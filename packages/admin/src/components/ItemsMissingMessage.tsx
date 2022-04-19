@@ -22,7 +22,7 @@ const ItemsMissingMessage: VFC<ItemsMissingMessageProps> = ({
       )}
       {...rest}
     >
-      <iconSet.QuestionMark size={10} className="mx-auto" />
+      <iconSet.QuestionMark size={40} className="mx-auto" />
       <p>{t('No items available...')}</p>
     </div>
   )
