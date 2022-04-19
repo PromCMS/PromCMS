@@ -22,7 +22,7 @@ export const generateLayoutConfig = ({
       EditorJS,
       editorJSConfig,
       enableLayoutEditing: true,
-      enableLayoutSaving: false,
+      enableLayoutSaving: true,
       initialData: {
         itemContent: Object.fromEntries(
           iterativeArray.map((_, id) => [
