@@ -37,7 +37,9 @@ export const useOnSubmit = (): [
       disallowClose: true,
     })
 
-    if (editorRef.current && (await editorRef.current.isReady)) {
+    if (editorRef.current) {
+      await editorRef.current?.isReady
+
       values.content = JSON.stringify(await editorRef.current.save())
     }
 

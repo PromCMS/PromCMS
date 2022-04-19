@@ -1,4 +1,5 @@
 import {
+  FC,
   forwardRef,
   Ref,
   useEffect,
@@ -31,140 +32,145 @@ export interface LazyEditorProps
   editorRef?: Ref<EditorJS | undefined>
 }
 
-export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
-  function LazyEditor({ initialValue, editorRef, ...config }, ref) {
-    const innerRef = useRef<EditorJS>()
-    const [editorReady, setEditorReady] = useState(false)
-    const { t } = useTranslation()
+export const LazyEditor: FC<LazyEditorProps> = ({
+  initialValue,
+  editorRef,
+  ...config
+}) => {
+  const innerRef = useRef<EditorJS>()
+  const [editorReady, setEditorReady] = useState(false)
+  const { t } = useTranslation()
 
-    useImperativeHandle(editorRef, () => innerRef.current)
+  useImperativeHandle(editorRef, () => innerRef.current)
 
-    useEffect(() => {
-      const editorConfig: EditorConfig = {
-        /**
-         * Create a holder for the Editor and pass its ID
-         */
-        holder: EDITOR_HOLDER_ID,
-        logLevel: 'ERROR' as LogLevels.ERROR,
-        placeholder: t('Start typing here...') as string,
-        tools: {
-          header: {
-            class: Header,
-            config: {
-              placeholder: t('Start typing here...'),
-              levels: [2, 3, 4],
-              defaultLevel: 2,
-            },
+  useEffect(() => {
+    const editorConfig: EditorConfig = {
+      /**
+       * Create a holder for the Editor and pass its ID
+       */
+      holder: EDITOR_HOLDER_ID,
+      logLevel: 'ERROR' as LogLevels.ERROR,
+      placeholder: t('Start typing here...') as string,
+      tools: {
+        header: {
+          class: Header,
+          config: {
+            placeholder: t('Start typing here...'),
+            levels: [2, 3, 4],
+            defaultLevel: 2,
           },
-          table: Table,
-          underline: Underline,
-          Marker: {
-            class: Marker,
+        },
+        table: Table,
+        underline: Underline,
+        Marker: {
+          class: Marker,
+        },
+        embed: {
+          class: Embed,
+        },
+        buttonLink: {
+          class: ButtonLinkTool,
+        },
+        image: {
+          class: ImageTool,
+          inlineToolbar: true,
+        },
+        gallery: {
+          class: GalleryTool,
+          inlineToolbar: true,
+        },
+        list: {
+          class: List,
+          inlineToolbar: true,
+          config: {
+            defaultStyle: 'unordered',
           },
-          embed: {
-            class: Embed,
+        },
+        changeCase: {
+          class: ChangeCase,
+          config: {
+            showLocaleOption: true, // enable locale case options
+            locale: 'tr', // or ['tr', 'TR', 'tr-TR']
           },
-          buttonLink: {
-            class: ButtonLinkTool,
+        },
+        tooltip: {
+          class: Tooltip,
+          config: {
+            location: 'left',
+            highlightColor: '#FFEFD5',
+            underline: true,
+            backgroundColor: '#154360',
+            textColor: '#FDFEFE',
+            holder: EDITOR_HOLDER_ID,
           },
-          image: {
-            class: ImageTool,
-            inlineToolbar: true,
-          },
-          gallery: {
-            class: GalleryTool,
-            inlineToolbar: true,
-          },
-          list: {
-            class: List,
-            inlineToolbar: true,
-            config: {
-              defaultStyle: 'unordered',
-            },
-          },
-          changeCase: {
-            class: ChangeCase,
-            config: {
-              showLocaleOption: true, // enable locale case options
-              locale: 'tr', // or ['tr', 'TR', 'tr-TR']
-            },
-          },
-          tooltip: {
-            class: Tooltip,
-            config: {
-              location: 'left',
-              highlightColor: '#FFEFD5',
-              underline: true,
-              backgroundColor: '#154360',
-              textColor: '#FDFEFE',
-              holder: EDITOR_HOLDER_ID,
-            },
-          },
-          anyTuneName: {
-            class: AlignmentTool,
-            config: {
-              default: 'left',
-              blocks: {
-                header: 'left',
-                list: 'left',
-              },
-            },
-          },
-          paragraph: {
-            class: ParagraphTool,
-            inlineToolbar: true,
-            config: {
-              placeholder: t('Start typing here...'),
+        },
+        anyTuneName: {
+          class: AlignmentTool,
+          config: {
+            default: 'left',
+            blocks: {
+              header: 'left',
+              list: 'left',
             },
           },
         },
-        inlineToolbar: true,
-        onReady: () => {
-          if (config.onReady) config.onReady()
-          setEditorReady(true)
+        paragraph: {
+          class: ParagraphTool,
+          inlineToolbar: true,
+          config: {
+            placeholder: t('Start typing here...'),
+          },
         },
-        ...config,
+      },
+      inlineToolbar: true,
+      onReady: () => {
+        if (config.onReady) config.onReady()
+        setEditorReady(true)
+      },
+      ...config,
+    }
+
+    // Remove custom listeners that should be in main editor
+    const { onChange, onReady, ...layoutEditorConfig } = editorConfig
+
+    const editorConfigWithLayouts = {
+      ...editorConfig,
+      tools: {
+        ...editorConfig.tools,
+        columns: generateLayoutConfig({
+          numberOfCols: 4,
+          editorJSConfig: layoutEditorConfig,
+          t,
+        }),
+      },
+    }
+
+    const editorInstance = new EditorJS(editorConfigWithLayouts)
+
+    innerRef.current = editorInstance
+
+    return () => {
+      if (innerRef.current?.destroy) {
+        innerRef.current?.destroy()
       }
+    }
+  }, [t])
 
-      const editorConfigWithLayouts = {
-        ...editorConfig,
-        tools: {
-          ...editorConfig.tools,
-          columns: generateLayoutConfig({
-            numberOfCols: 4,
-            editorJSConfig: editorConfig,
-            t,
-          }),
-        },
-      }
+  useEffect(() => {
+    if (
+      innerRef.current &&
+      initialValue &&
+      innerRef.current.render &&
+      editorReady
+    ) {
+      const value =
+        typeof initialValue == 'string'
+          ? JSON.parse(initialValue)
+          : JSON.parse(JSON.stringify(initialValue || {}))
 
-      const editorInstance = new EditorJS(editorConfigWithLayouts)
+      innerRef.current.render(value)
+    }
+  }, [editorReady, initialValue])
 
-      innerRef.current = editorInstance
-
-      return () => {
-        if (innerRef.current?.destroy) {
-          innerRef.current?.destroy()
-        }
-      }
-    }, [t])
-
-    useEffect(() => {
-      if (
-        innerRef.current &&
-        initialValue &&
-        innerRef.current.render &&
-        editorReady
-      ) {
-        const value =
-          typeof initialValue == 'string'
-            ? JSON.parse(initialValue)
-            : JSON.parse(JSON.stringify(initialValue || {}))
-
-        innerRef.current.render(value)
-      }
-    }, [editorReady, initialValue])
-
-    return <div id={EDITOR_HOLDER_ID} />
-  }
-)
+  return <div id={EDITOR_HOLDER_ID} />
+}
