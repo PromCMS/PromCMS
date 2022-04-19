@@ -38,7 +38,7 @@ export const useOnSubmit = (): [
     })
 
     if (editorRef.current && (await editorRef.current.isReady)) {
-      values.content = await editorRef.current.saver.save()
+      values.content = JSON.stringify(await editorRef.current.save())
     }
 
     if (currentView === 'update') {

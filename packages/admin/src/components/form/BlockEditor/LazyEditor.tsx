@@ -159,9 +159,9 @@ export const LazyEditor = forwardRef<EditorJS | undefined, LazyEditorProps>(
         const value =
           typeof initialValue == 'string'
             ? JSON.parse(initialValue)
-            : initialValue
+            : JSON.parse(JSON.stringify(initialValue || {}))
 
-        innerRef.current.render(value || {})
+        innerRef.current.render(value)
       }
     }, [editorReady, initialValue])
 
