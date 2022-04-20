@@ -8,7 +8,7 @@ import {
 } from '@mantine/core'
 import { useInputState } from '@mantine/hooks'
 import { iconSet } from '@prom-cms/icons'
-import { useCallback, useEffect, useState, VFC } from 'react'
+import { KeyboardEventHandler, useEffect, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TagsToolData } from './TagsTool'
 
@@ -36,6 +36,10 @@ export const TagsToolView: VFC<{
     })
 
   const onAddClick = () => {
+    if (!inputValue) {
+      return
+    }
+
     setData({
       ...data,
       tags: [
@@ -44,6 +48,14 @@ export const TagsToolView: VFC<{
       ],
     })
     setInputValue('')
+  }
+
+  const onKeyDownInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key.toLowerCase() === 'enter') {
+      e.preventDefault()
+      e.stopPropagation()
+      onAddClick()
+    }
   }
 
   return (
@@ -59,9 +71,9 @@ export const TagsToolView: VFC<{
                 !readOnly && (
                   <ActionIcon
                     size="xs"
-                    color="blue"
+                    color="gray"
                     radius="xl"
-                    variant="transparent"
+                    variant="light"
                     onClick={onRemoveClick(tagContent)}
                   >
                     <iconSet.X size={10} />
@@ -85,12 +97,14 @@ export const TagsToolView: VFC<{
             className="w-full"
             value={inputValue}
             onInput={setInputValue}
+            onKeyDown={onKeyDownInput}
             rightSection={
               <ActionIcon
                 size="lg"
                 color="green"
                 variant="light"
                 className="flex-none"
+                disabled={!inputValue}
                 onClick={onAddClick}
               >
                 <iconSet.Send size={20} />
