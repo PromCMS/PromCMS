@@ -54,6 +54,25 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     },
   };
 
+  models['settings'] = {
+    admin: {
+      layout: 'simple',
+    },
+    icon: 'Settings',
+    columns: {
+      title: {
+        title: 'title',
+        type: 'string',
+        required: true,
+      },
+      content: {
+        title: 'content',
+        type: 'json',
+        required: true,
+      },
+    },
+  };
+
   // we need to make sure that we at least have default columns
   models['users'] = {
     admin: {

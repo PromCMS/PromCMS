@@ -8,6 +8,7 @@ import i18next from 'i18next'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { localizationConfig } from '@config'
+import { MantineProvider } from '@mantine/core'
 
 if (!i18next.isInitialized) {
   i18next
@@ -23,16 +24,37 @@ function MyApp({ Component, pageProps }: AppProps) {
     (Component as any).getLayout || ((page) => <SiteLayout>{page}</SiteLayout>)
 
   return (
-    <I18nextProvider i18n={i18next}>
-      <ContextProviders>
-        <NotificationsProvider position="top-right">
-          {getLayout(<Component {...pageProps} />)}
-          <div id="popover-root"></div>
-          <div id="modal-root"></div>
-          <div id="slide-over-root"></div>
-        </NotificationsProvider>
-      </ContextProviders>
-    </I18nextProvider>
+    <MantineProvider
+      withGlobalStyles
+      withNormalizeCSS
+      defaultProps={{
+        Input: {
+          size: 'sm',
+        },
+        Textarea: {
+          size: 'sm',
+        },
+        Select: {
+          size: 'sm',
+        },
+      }}
+      theme={{
+        /** Put your mantine theme override here */
+        colorScheme: 'light',
+        fontFamily: "'Open Sans', sans-serif",
+      }}
+    >
+      <I18nextProvider i18n={i18next}>
+        <ContextProviders>
+          <NotificationsProvider position="top-right">
+            {getLayout(<Component {...pageProps} />)}
+            <div id="popover-root"></div>
+            <div id="modal-root"></div>
+            <div id="slide-over-root"></div>
+          </NotificationsProvider>
+        </ContextProviders>
+      </I18nextProvider>
+    </MantineProvider>
   )
 }
 

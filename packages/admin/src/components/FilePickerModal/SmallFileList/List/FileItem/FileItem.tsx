@@ -53,7 +53,7 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
           </div>
         )}
       </div>
-      <h1 className={classNames.itemLabel}>{filename}</h1>
+      <h3 className={classNames.itemLabel}>{filename}</h3>
       <div className="absolute top-0 right-0 m-2.5">
         <div
           className={clsx(

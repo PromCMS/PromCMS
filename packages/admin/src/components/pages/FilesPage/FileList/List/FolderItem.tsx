@@ -58,12 +58,12 @@ export const FolderItem: VFC<FolderItemProps> = ({
       >
         <CustomFolderIcon className="m-auto block h-28 w-28 text-blue-500" />
       </div>
-      <h1
+      <h3
         className={clsx(classNames.itemLabel, 'cursor-pointer text-left')}
         onClick={onFolderClick}
       >
         {name}
-      </h1>
+      </h3>
       <div className="absolute top-0 right-0 m-2.5">
         <IconButton
           icon={iconSet.Trash}

@@ -1,4 +1,4 @@
-import { Select, SelectItem } from '@mantine/core'
+import { Select, SelectItem, Textarea, TextInput } from '@mantine/core'
 import {
   ApiResultModel,
   ModelColumnName,
@@ -9,8 +9,6 @@ import {
 import { useMemo, VFC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import Input from './form/Input'
-import Textarea from './form/Textarea'
 
 export interface FieldMapperProps {
   fields: (ColumnType & {
@@ -48,6 +46,7 @@ const CustomSelect: VFC<
             onChange={onChange}
             className="w-full"
             placeholder={t('Select an option')}
+            shadow="xl"
             error={error}
           />
         )}
@@ -82,17 +81,15 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
               const errorMessage = t(
                 formState.errors[columnName]?.message || ''
               )
-              const isTouched = formState.touchedFields[columnName]
 
               if (type === 'string' || type === 'number')
                 return (
-                  <Input
+                  <TextInput
                     key={columnName}
                     label={title}
                     type={type === 'string' ? 'text' : type}
                     className="w-full"
                     autoComplete="off"
-                    touched={isTouched}
                     error={errorMessage}
                     {...register(columnName)}
                   />
@@ -100,11 +97,11 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
               else if (type === 'longText') {
                 return (
                   <Textarea
-                    rows={8}
+                    autosize
+                    minRows={7}
                     key={columnName}
                     label={title}
                     className="w-full"
-                    touched={isTouched}
                     error={errorMessage}
                     {...register(columnName)}
                   />

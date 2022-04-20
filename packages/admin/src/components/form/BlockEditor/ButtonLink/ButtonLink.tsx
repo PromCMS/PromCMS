@@ -6,6 +6,8 @@ export interface ButtonLinkToolData {
   linkTo: string
   label?: string
   icon?: keyof typeof iconSet
+  type: 'custom' | 'lib'
+  isDownload?: boolean
 }
 
 type Setting = {

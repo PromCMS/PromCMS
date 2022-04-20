@@ -1,14 +1,12 @@
-import { Group, Select, Text, TextInput } from '@mantine/core'
+import { Button as CustomButton } from '@components/Button'
+import { Checkbox, Group, Text, TextInput } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import { capitalizeFirstLetter } from '@prom-cms/shared'
 import { forwardRef, useEffect, useMemo, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ButtonLinkToolData } from './ButtonLink'
 
-const selectData = Object.entries({
-  Download: iconSet['Download'],
-  AB: iconSet['AB'],
-}).map(([iconName, icon]) => ({
+const selectData = Object.entries(iconSet).map(([iconName, icon]) => ({
   icon,
   value: iconName,
   label: capitalizeFirstLetter(iconName),
@@ -64,9 +62,15 @@ export const ButtonLinkView: VFC<{
     [data.linkTo]
   )
 
-  return (
+  const IconComponent = useMemo(
+    () => (data.icon ? iconSet[data.icon] : undefined),
+    [data.icon]
+  )
+
+  return !readOnly ? (
     <div className="rounded-lg border-2 border-project-border bg-white p-5">
       <p className="text-xl font-semibold">{t('Button link')}</p>
+
       <div>
         <TextInput
           required
@@ -75,7 +79,6 @@ export const ButtonLinkView: VFC<{
           placeholder="https://google.com"
           error={isUrlValid ? undefined : t('Invalid url')}
           type="url"
-          disabled={readOnly}
           value={data.linkTo}
           onChange={(e) => onChange('linkTo', e.currentTarget.value)}
           rightSection={
@@ -86,32 +89,51 @@ export const ButtonLinkView: VFC<{
             )
           }
         />
+
         <Group className="mt-2" noWrap grow>
           <TextInput
             label={t('Label')}
             placeholder={t('Some text')}
-            disabled={readOnly}
             value={data.label}
             onChange={(e) => onChange('label', e.currentTarget.value)}
             rightSection={<iconSet.AB size={16} />}
           />
+
+          {/*
+          TODO think of way to inlcude icons on clien
           <Select
             searchable
             value={data.icon}
             label={t('Icon')}
-            placeholder={t('Pick one')}
+            placeholder={t('Enter name to find')}
             itemComponent={SelectItem}
             data={selectData}
-            maxDropdownHeight={100}
+            icon={IconComponent ? <IconComponent /> : undefined}
+            maxDropdownHeight={250}
+            limit={20}
             nothingFound={t('Icon not found')}
-            disabled={readOnly}
             onChange={(value) => onChange('icon', value)}
             filter={(value, item) =>
               !!item?.label?.toLowerCase().includes(value.toLowerCase().trim())
             }
-          />
+          />*/}
         </Group>
+        <Checkbox
+          mt="lg"
+          label={t('Download on button click')}
+          checked={data.isDownload}
+          onChange={(e) => onChange('isDownload', e.currentTarget.checked)}
+        />
       </div>
     </div>
+  ) : (
+    <CustomButton
+      color="success"
+      size="large"
+      className="flex gap-5 !rounded-none"
+    >
+      {IconComponent && <IconComponent />}
+      {data.label || data.linkTo} sdfds
+    </CustomButton>
   )
 }

@@ -1,5 +1,4 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage'
-import { AnimatePresence } from 'framer-motion'
 import { FileService, FolderService } from '@services'
 import { useCallback, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -10,6 +9,7 @@ import { FolderItem, FolderItemProps } from './FolderItem'
 import { NewFolderCreator } from './NewFolderCreator'
 import axios from 'axios'
 import { useNotifications } from '@mantine/notifications'
+import { Transition } from '@mantine/core'
 
 export const List: VFC = () => {
   const {
@@ -138,9 +138,14 @@ export const List: VFC = () => {
                   {...fileInfo}
                 />
               ))}
-            <AnimatePresence>
-              {showNewFolderCreator && <NewFolderCreator />}
-            </AnimatePresence>
+            <Transition
+              mounted={showNewFolderCreator}
+              transition="pop-top-left"
+              duration={200}
+              timingFunction="ease"
+            >
+              {(styles) => <NewFolderCreator styles={styles} />}
+            </Transition>
           </>
         </div>
       ) : (

@@ -28,7 +28,9 @@ export const Buttons: VFC = () => {
         buttonClassName="h-full aspect-square flex"
         offset={[0, 10]}
         placement="bottom-end"
-        buttonContent={<iconSet.Plus className="absolute left-3 top-3 w-8" />}
+        buttonContent={
+          <iconSet.Plus size={32} className="absolute left-3 top-3" />
+        }
       >
         <PopoverList>
           <PopoverList.Item

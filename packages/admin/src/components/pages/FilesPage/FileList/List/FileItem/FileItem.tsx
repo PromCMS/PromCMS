@@ -60,7 +60,7 @@ export const FileItem: VFC<FileItemProps> = ({
             </div>
           )}
         </div>
-        <h1 className={classNames.itemLabel}>{filename}</h1>
+        <h3 className={classNames.itemLabel}>{filename}</h3>
       </LinkItem>
       <div className="absolute top-0 right-0 m-2.5">
         <IconButton
