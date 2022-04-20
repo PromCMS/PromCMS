@@ -35,7 +35,7 @@ export const ImageToolView: VFC<{
   return (
     <div
       className={clsx(
-        'relative mt-3 mb-5 min-h-[200px] w-full rounded-lg bg-white p-5',
+        'relative min-h-[200px] w-full rounded-lg bg-white p-5',
         !readOnly && 'border-2 border-project-border shadow-md'
       )}
     >

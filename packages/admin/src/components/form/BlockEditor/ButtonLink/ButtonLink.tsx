@@ -53,7 +53,7 @@ class ButtonLinkTool implements BlockTool {
     }
 
     this.CSS = {
-      wrapper: 'button-link-tool pt-5',
+      wrapper: 'button-link-tool my-5',
       input: 'hidden',
     }
 

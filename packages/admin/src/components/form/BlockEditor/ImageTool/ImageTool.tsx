@@ -50,7 +50,7 @@ class ImageTool implements BlockTool {
     }
 
     this.CSS = {
-      wrapper: 'image-tool pt-5',
+      wrapper: 'image-tool my-5',
       input: 'hidden',
     }
 

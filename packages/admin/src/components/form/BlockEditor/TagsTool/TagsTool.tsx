@@ -54,7 +54,7 @@ class TagsTool implements BlockTool {
     }
 
     this.CSS = {
-      wrapper: 'tags-tool pt-5',
+      wrapper: 'tags-tool my-5',
       input: 'hidden',
     }
 

@@ -50,7 +50,7 @@ class GalleryTool implements BlockTool {
     }
 
     this.CSS = {
-      wrapper: 'image-tool',
+      wrapper: 'image-tool my-5',
       input: 'hidden',
     }
 
