@@ -3,6 +3,7 @@ import { Popover as HeadlessPopover } from '@headlessui/react'
 import { usePopper } from 'react-popper'
 import { Placement } from '@popperjs/core'
 import { createPortal } from 'react-dom'
+import clsx from 'clsx'
 
 export interface PopoverProps {
   buttonContent: ReactElement<any, any>
@@ -54,7 +55,7 @@ const Popover: FC<PopoverProps> = ({
       <HeadlessPopover.Button
         as={buttonComponent}
         disabled={disabled}
-        className={buttonClassName}
+        className={clsx(buttonClassName, 'cursor-pointer border-0 bg-white')}
         ref={setReferenceElement}
       >
         {buttonContent}

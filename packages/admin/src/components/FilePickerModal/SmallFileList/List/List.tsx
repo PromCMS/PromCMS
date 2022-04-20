@@ -10,7 +10,7 @@ export interface ListProps {
 
 export const List: VFC<ListProps> = ({ onDeleteClick }) => {
   const classNames = useClassNames()
-  const { files, isLoading } = useSmallFileList()
+  const { files, isLoading, isUploading } = useSmallFileList()
 
   return (
     <div className={classNames.itemsWrap}>
@@ -32,6 +32,7 @@ export const List: VFC<ListProps> = ({ onDeleteClick }) => {
           <FileItemSkeleton />
         </>
       )}
+      {isUploading && <FileItemSkeleton />}
     </div>
   )
 }

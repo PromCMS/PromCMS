@@ -42,6 +42,7 @@ export const ImageToolView: VFC<{
       {!readOnly ? (
         <>
           <SmallFileList
+            filter={[['mimeType', 'regexp', `^image/.*$`]]}
             multiple={false}
             pickedFiles={pickedFiles}
             onChange={onChange}

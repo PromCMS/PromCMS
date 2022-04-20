@@ -1,6 +1,8 @@
 import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder'
+import { useNotifications } from '@mantine/notifications'
 import { File as FileType } from '@prom-cms/shared'
 import { FileService } from '@services'
+import { t } from 'i18next'
 import { useRouter } from 'next/router'
 import {
   createContext,
@@ -101,6 +103,7 @@ function reducer<T extends keyof IFileListContextValues>(
 export const FileListContextProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState)
   const { push, query } = useRouter()
+  const notifications = useNotifications()
   const currentPath = useMemo(
     () => ((query.folder as string) || '/').replaceAll('//', '/'),
     [query]
@@ -143,12 +146,20 @@ export const FileListContextProvider: FC = ({ children }) => {
           await FileService.create(entry.file, { root: currentPath })
         } catch {
           isError = true
+          notifications.showNotification({
+            message: t('Error'),
+            title: t('An error happened'),
+            color: 'red',
+            autoClose: 2000,
+          })
         }
 
-        updateValue(`uploadingFiles.${filePath}`, {
-          error: isError,
-          uploaded: true,
-        } as any)
+        updateValue(
+          `uploadingFiles`,
+          Object.fromEntries(
+            Object.entries(files).filter(([key]) => key !== filePath)
+          ) as UploadingFilesRecord
+        )
 
         mutateFiles()
       }

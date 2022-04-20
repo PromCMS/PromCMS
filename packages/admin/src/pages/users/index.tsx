@@ -1,5 +1,3 @@
-import { Button } from '@components/Button'
-import Input from '@components/form/Input'
 import { TableView, TableViewCol } from '@components/TableView'
 import { useModelInfo } from '@hooks/useModelInfo'
 import { useModelItems } from '@hooks/useModelItems'
@@ -10,18 +8,20 @@ import { MESSAGES } from '@constants'
 import { EntryService } from '@services'
 import { useRouter } from 'next/router'
 import { useMemo, useState, VFC } from 'react'
-import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { formatApiModelResultToTableView } from '@utils'
+import { useGlobalContext } from '@contexts/GlobalContext'
+import { usePagination } from '@mantine/hooks'
+import { Button, Pagination } from '@mantine/core'
 
 const UsersListPage: VFC = () => {
   const { push } = useRouter()
   const { t } = useTranslation()
+  const [page, setPage] = useState(1)
+  const { currentUser } = useGlobalContext()
   const model = useModelInfo<ApiResultModel>('users')
-  const { register, handleSubmit } = useForm()
-  const [currentPage, setCurrentPage] = useState(1)
   const { data, isLoading, isError } = useModelItems('users', {
-    page: currentPage,
+    page,
   })
 
   // Models metadata
@@ -31,6 +31,12 @@ const UsersListPage: VFC = () => {
 
     return metadata
   }, [data])
+
+  const filteredUsers = useMemo(
+    () =>
+      data?.data ? data.data.filter((user) => user.id !== currentUser?.id) : [],
+    [data, currentUser]
+  )
 
   // Take care of user creation
   const onCreateRequest = () => push(`/users/create`)
@@ -45,10 +51,6 @@ const UsersListPage: VFC = () => {
     }
   }
 
-  // Take care of pagination
-  const onPaginateClick = (direction: 'next' | 'prev') => () =>
-    setCurrentPage(direction === 'next' ? currentPage + 1 : currentPage - 1)
-
   // Table columns need to be formated
   const tableViewColumns = useMemo<TableViewCol[] | undefined>(() => {
     if (!model) return
@@ -61,7 +63,7 @@ const UsersListPage: VFC = () => {
       <PageLayout>
         <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
           <h1 className="text-3xl font-semibold capitalize">{t('Users')}</h1>
-          <div className="flex gap-5">
+          <div className="flex items-center gap-5">
             {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
               <Input
                 placeholder="input..."
@@ -71,8 +73,9 @@ const UsersListPage: VFC = () => {
               />
             </form>*/}
             <Button
-              color="success"
-              className="flex flex-none items-center font-semibold uppercase"
+              color="green"
+              className=" items-center font-semibold uppercase"
+              size="md"
               onClick={onCreateRequest}
             >
               <span className="hidden md:block">{t('Add new user')}</span>
@@ -82,13 +85,18 @@ const UsersListPage: VFC = () => {
         </div>
         <TableView
           isLoading={isLoading || isError}
-          items={data?.data || []}
+          items={filteredUsers}
           columns={tableViewColumns || []}
           metadata={metadata || undefined}
-          onNextPage={onPaginateClick('next')}
-          onPrevPage={onPaginateClick('prev')}
           onEditAction={onEditRequest}
           onDeleteAction={onItemDeleteRequest}
+          pagination={
+            <Pagination
+              total={data?.last_page || 1}
+              page={page}
+              onChange={setPage}
+            />
+          }
         />
       </PageLayout>
     </>

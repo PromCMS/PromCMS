@@ -2,7 +2,6 @@ import { iconSet } from '@prom-cms/icons'
 import { PageLayout } from '@layouts'
 import { useEffect, useMemo, useState, VFC } from 'react'
 import { TableView, TableViewCol } from '@components/TableView'
-import { Button } from '@components/Button'
 import { useModelItems } from '@hooks/useModelItems'
 import useCurrentModel from '@hooks/useCurrentModel'
 import { formatApiModelResultToTableView, modelIsCustom } from '@utils'
@@ -12,16 +11,17 @@ import { EntryService } from '@services'
 import { MESSAGES } from '@constants'
 import NotFoundPage from '@pages/404'
 import { useTranslation } from 'react-i18next'
+import { Button, Pagination } from '@mantine/core'
 
 const EntryTypeUnderpage: VFC = ({}) => {
   const { push } = useRouter()
-  const [currentPage, setCurrentPage] = useState(1)
+  const [page, setPage] = useState(1)
   const model = useCurrentModel()
   const {
     query: { modelId: routerModelId },
   } = useRouter()
   const { data, isLoading, isError } = useModelItems(model?.name, {
-    page: currentPage,
+    page: page,
   })
   const { t } = useTranslation()
 
@@ -55,20 +55,17 @@ const EntryTypeUnderpage: VFC = ({}) => {
     push(EntryService.getUrl(id, model?.name as string))
 
   // This resets a pager to start, because this page component maintains internal state across pages
-  useEffect(() => setCurrentPage(1), [routerModelId])
+  useEffect(() => setPage(1), [routerModelId])
 
   // TODO: Show better 404 page
   if (!model || !tableViewColumns || modelIsCustom(model.name))
     return <NotFoundPage text={t('This model with this id does not exist.')} />
 
-  const onPaginateClick = (direction: 'next' | 'prev') => () =>
-    setCurrentPage(direction === 'next' ? currentPage + 1 : currentPage - 1)
-
   return (
     <PageLayout>
       <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
         <h1 className="text-3xl font-semibold capitalize">{t(model.name)}</h1>
-        <div className="flex gap-5">
+        <div className="flex items-center gap-5">
           {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
             <Input
               placeholder="input..."
@@ -78,12 +75,13 @@ const EntryTypeUnderpage: VFC = ({}) => {
             />
   </form>*/}
           <Button
-            color="success"
-            className="flex flex-none items-center font-semibold uppercase"
+            color="green"
+            className=" items-center font-semibold uppercase"
+            size="md"
             onClick={onCreateRequest}
           >
             <span className="hidden md:block">{t('Add new entry')}</span>
-            <iconSet.Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
+            <iconSet.UserPlus className="inline-block h-5 w-5 md:ml-3" />{' '}
           </Button>
         </div>
       </div>
@@ -92,10 +90,15 @@ const EntryTypeUnderpage: VFC = ({}) => {
         items={data?.data || []}
         columns={tableViewColumns}
         metadata={metadata || undefined}
-        onNextPage={onPaginateClick('next')}
-        onPrevPage={onPaginateClick('prev')}
         onEditAction={onEditRequest}
         onDeleteAction={onItemDeleteRequest}
+        pagination={
+          <Pagination
+            total={data?.last_page || 1}
+            page={page}
+            onChange={setPage}
+          />
+        }
       />
     </PageLayout>
   )

@@ -1,4 +1,3 @@
-import { Button } from '@components/Button'
 import { useGlobalContext } from '@contexts/GlobalContext'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ProfileService } from '@services'
@@ -9,6 +8,7 @@ import { FirstStep } from '.'
 import { loginFormSchema } from './schema'
 import Link from 'next/link'
 import { Trans, useTranslation } from 'react-i18next'
+import { Button, Paper, Title } from '@mantine/core'
 
 interface LoginFormValues {
   email: string
@@ -63,32 +63,25 @@ export const Form: VFC = () => {
     <FormProvider {...formMethods}>
       <div className="flex min-h-screen w-full">
         <div className="m-auto w-full max-w-lg">
-          <h1 className="mb-3 ml-5 text-2xl font-semibold">
+          <Title className="mb-3 ml-5 text-2xl font-semibold">
             <Trans i18nKey="Log in (step ...)" humanStep={humanStep}>
               Log in (step <strong>{{ humanStep }}</strong>).
             </Trans>
-          </h1>
-          <form
-            onSubmit={handleSubmit(onSubmitCallback)}
-            className="w-full rounded-lg border-2 border-project-border bg-white p-5 shadow-xl shadow-blue-100"
-          >
-            {step === 0 && <FirstStep />}
-            <Button
-              disabled={formState.isSubmitting}
-              type="submit"
-              color="success"
-              className="mt-7"
-            >
-              {t(formState.isSubmitting ? 'Working...' : 'Log in')}
-            </Button>
+          </Title>
+          <form onSubmit={handleSubmit(onSubmitCallback)}>
+            <Paper shadow="xl" p="md" withBorder className="w-full">
+              {step === 0 && <FirstStep />}
+              <Button
+                loading={formState.isSubmitting}
+                type="submit"
+                color="green"
+                size="md"
+                className="mt-7"
+              >
+                {t(formState.isSubmitting ? 'Working...' : 'Log in')}
+              </Button>
+            </Paper>
           </form>
-          <div className="mt-3 text-center">
-            <Link href="/reset-password">
-              <a className="font-semibold hover:underline">
-                {t('Forgot password?')}
-              </a>
-            </Link>
-          </div>
         </div>
       </div>
     </FormProvider>

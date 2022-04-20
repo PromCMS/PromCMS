@@ -1,8 +1,9 @@
 import { useClassNames } from '../../useClassNames'
 import { VFC } from 'react'
+import { Skeleton } from '@mantine/core'
 
 export const FileItemSkeleton: VFC = () => {
   const classNames = useClassNames()
 
-  return <div className={classNames.itemSquare(false)} />
+  return <Skeleton className={classNames.itemSquare(false)} />
 }

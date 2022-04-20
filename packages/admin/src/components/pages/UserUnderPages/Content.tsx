@@ -1,5 +1,5 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { updateUserSchema } from '@schemas'
+import { createUserSchema, updateUserSchema } from '@schemas'
 import { FC, useEffect, VFC } from 'react'
 import { FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { useData } from './context'
@@ -31,7 +31,10 @@ export const Content: VFC = () => {
     defaultValues: user || {},
     reValidateMode: 'onBlur',
     mode: 'onTouched',
-    resolver: updateUserSchema && yupResolver(updateUserSchema),
+    resolver:
+      view === 'create'
+        ? yupResolver(createUserSchema)
+        : yupResolver(updateUserSchema),
   })
   const { reset } = formMethods
 

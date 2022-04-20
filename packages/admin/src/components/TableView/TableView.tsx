@@ -6,7 +6,8 @@ import clsx from 'clsx'
 import { useCallback, useMemo, VFC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { createIterativeArray } from '@utils'
-import { Button } from '../Button'
+import { ActionIcon, Group, Pagination } from '@mantine/core'
+import { ReactNode } from 'react'
 
 export type TableViewItem = { id: string | number; [x: string]: any }
 
@@ -25,8 +26,7 @@ export interface TableViewProps {
   items: Array<TableViewItem>
   isLoading?: boolean
   metadata?: Omit<PagedResult<any>, 'data'>
-  onNextPage?: (nextPage: number) => void
-  onPrevPage?: (nextPage: number) => void
+  pagination?: ReactNode
   onDeleteAction?: (id: ItemID) => void
   onEditAction?: (id: ItemID) => void
 }
@@ -42,22 +42,11 @@ const TableView: VFC<TableViewProps> = ({
   items,
   metadata,
   isLoading,
-  onNextPage,
-  onPrevPage,
+  pagination,
   onDeleteAction,
   onEditAction,
 }) => {
   const { t } = useTranslation()
-  const onPaginateClick = useCallback(
-    (direction: 'next' | 'prev') => (e) => {
-      if (!metadata) return
-
-      if (direction === 'next' && onNextPage)
-        onNextPage(metadata.current_page + 1)
-      else if (onPrevPage) onPrevPage(metadata.current_page - 1)
-    },
-    [metadata, onNextPage, onPrevPage]
-  )
 
   const onActionClick = useCallback(
     (actionType: 'delete' | 'edit', id: ItemID) => () => {
@@ -77,7 +66,7 @@ const TableView: VFC<TableViewProps> = ({
     <>
       <div className="inline-block w-full min-w-full overflow-hidden overflow-x-auto rounded-prom border-2 border-project-border bg-white px-7">
         <table className="min-w-full leading-normal">
-          <thead className="">
+          <thead>
             <tr>
               {filteredCols.map(({ fieldName, title, show }) => (
                 <th
@@ -116,25 +105,27 @@ const TableView: VFC<TableViewProps> = ({
                     </td>
                   ))}
                   {hasActions && (
-                    <td className="flex w-[100px] justify-end gap-3 border-b border-gray-200 bg-white px-5 py-5 text-sm group-last:border-opacity-0">
-                      {onEditAction && (
-                        <button
-                          onClick={onActionClick('edit', itemData.id)}
-                          title={t('Edit')}
-                          className="hover:text-blue-600"
-                        >
-                          <iconSet.Pencil className="w-5" />{' '}
-                        </button>
-                      )}
-                      {onDeleteAction && (
-                        <button
-                          onClick={onActionClick('delete', itemData.id)}
-                          title={t('Delete')}
-                          className="text-red-500 hover:text-red-700"
-                        >
-                          <iconSet.Trash className="w-5" />{' '}
-                        </button>
-                      )}
+                    <td className="w-[100px] justify-end border-b border-gray-200 bg-white px-5 py-5 group-last:border-opacity-0">
+                      <Group spacing="sm" noWrap>
+                        {onEditAction && (
+                          <ActionIcon
+                            onClick={onActionClick('edit', itemData.id)}
+                            title={t('Edit')}
+                            color={'blue'}
+                          >
+                            <iconSet.Pencil className="w-5" />{' '}
+                          </ActionIcon>
+                        )}
+                        {onDeleteAction && (
+                          <ActionIcon
+                            onClick={onActionClick('delete', itemData.id)}
+                            title={t('Delete')}
+                            color={'red'}
+                          >
+                            <iconSet.Trash className="w-5" />{' '}
+                          </ActionIcon>
+                        )}
+                      </Group>
                     </td>
                   )}
                 </tr>
@@ -174,26 +165,7 @@ const TableView: VFC<TableViewProps> = ({
                 {{ total: metadata.total }} entries
               </Trans>
             </div>
-            <div className="inline-flex gap-2 text-gray-500">
-              <Button
-                size="small"
-                className="!px-0"
-                title={t('Prev')}
-                disabled={metadata.current_page === 1}
-                onClick={onPaginateClick('prev')}
-              >
-                <iconSet.ChevronLeft className="w-8" />
-              </Button>
-              <Button
-                size="small"
-                className="!px-0"
-                title={t('Next')}
-                disabled={metadata.current_page >= metadata.last_page}
-                onClick={onPaginateClick('next')}
-              >
-                <iconSet.ChevronRight className="w-8" />
-              </Button>
-            </div>
+            <div className="inline-flex gap-2 text-gray-500">{pagination}</div>
           </div>
         </>
       )}

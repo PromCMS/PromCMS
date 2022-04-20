@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use DI\Container;
+use GuzzleHttp\Psr7\MimeType;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -74,11 +75,9 @@ class Files
 
     $response->getBody()->write(
       json_encode([
-        'data' => \Files::where(
-          'filepath',
-          'regexp',
-          '^' . $finalPart . '[^\/]*(\.).*$',
-        )->get(),
+        'data' => \Files::where([
+          ['filepath', 'regexp', '^' . $finalPart . '[^\/]*(\.).*$'],
+        ])->get(),
       ]),
     );
 
@@ -90,9 +89,38 @@ class Files
     ResponseInterface $response
   ): ResponseInterface {
     $queryParams = $request->getQueryParams();
-    $page = isset($queryParams["page"]) ? $queryParams["page"] : 0;
+    $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
 
-    $dataPaginated = json_decode(\Files::paginate(15, ['*'], 'page', $page)->toJson());
+    $whereQuery = [];
+
+    if (isset($queryParams['where'])) {
+      $whereParam = $queryParams['where'];
+      $paramsToExtract = [];
+
+      if (is_array($whereParam)) {
+        $paramsToExtract = $whereParam;
+      } else {
+        $paramsToExtract[] = $whereParam;
+      }
+
+      foreach ($paramsToExtract as $param) {
+        $result = json_decode($param);
+
+        if (isset($result[0]) && isset($result[1]) && isset($result[2])) {
+          $whereQuery[] = [
+            $result[0],
+            $result[1],
+            str_replace('/', '\/', $result[2]),
+          ];
+        }
+      }
+    }
+
+    $dataPaginated = json_decode(
+      \Files::where($whereQuery)
+        ->paginate(15, ['*'], 'page', $page)
+        ->toJson(),
+    );
     // Unset some things as they are not useful or active
     unset($dataPaginated->links);
     unset($dataPaginated->first_page_url);
@@ -139,7 +167,6 @@ class Files
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
-    $parsedBody = $request->getParsedBody();
     $queryParams = $request->getQueryParams();
     $files = $request->getUploadedFiles();
 
@@ -158,7 +185,9 @@ class Files
 
     // If theres an error on upload
     if ($file->getError() !== UPLOAD_ERR_OK) {
-      return $response->withStatus(500);
+      return $response
+        ->withStatus(500)
+        ->withHeader('Content-Description', 'Upload failed');
     }
 
     if (!isset($data['root'])) {
@@ -174,6 +203,7 @@ class Files
     $newFilename = sprintf('%s.%0.8s', $newBasename, $extension);
 
     $filepath = trim(($fileRoot === '/' ? '' : $fileRoot) . '/' . $newFilename);
+    $mimeType = MimeType::fromFilename($newFilename);
 
     try {
       DB::beginTransaction();
@@ -181,6 +211,7 @@ class Files
       $fileArgs = [
         'filepath' => $filepath,
         'filename' => $oldFilename,
+        'mimeType' => $mimeType,
       ];
 
       if (isset($data['description'])) {
@@ -208,7 +239,9 @@ class Files
 
       DB::rollback();
 
-      return $response->withStatus(500);
+      return $response
+        ->withStatus(500)
+        ->withHeader('Content-Description', $e->getMessage());
     }
 
     return $response->withStatus(200);

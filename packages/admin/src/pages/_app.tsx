@@ -29,19 +29,38 @@ function MyApp({ Component, pageProps }: AppProps) {
       withNormalizeCSS
       defaultProps={{
         Input: {
-          size: 'sm',
+          size: 'md',
+        },
+        TextInput: {
+          size: 'md',
+        },
+        PasswordInput: {
+          size: 'md',
+          radius: 'md',
         },
         Textarea: {
-          size: 'sm',
+          size: 'md',
         },
         Select: {
-          size: 'sm',
+          size: 'md',
         },
+      }}
+      styles={{
+        Divider: (theme) => ({
+          root: {
+            opacity: '70%',
+            borderTopColor: `${theme.colors.blue[3]}!important`,
+          },
+        }),
       }}
       theme={{
         /** Put your mantine theme override here */
         colorScheme: 'light',
         fontFamily: "'Open Sans', sans-serif",
+        defaultRadius: 'md',
+        shadows: {
+          smallBlue: '0 10px 15px -3px #dbeafe, 0 4px 6px -4px #dbeafe',
+        },
       }}
     >
       <I18nextProvider i18n={i18next}>

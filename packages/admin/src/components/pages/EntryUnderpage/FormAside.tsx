@@ -1,5 +1,4 @@
 import AsideItemWrap from '@components/AsideItemWrap'
-import { Button } from '@components/Button'
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper'
 import Skeleton, { SkeltonProps } from '@components/Skeleton'
 import useCurrentModel from '@hooks/useCurrentModel'
@@ -15,6 +14,7 @@ import { getObjectDiff } from '@utils'
 import { useEntryUnderpageContext } from './context'
 import { useClassNames } from './useClassNames'
 import { iconSet } from '@prom-cms/icons'
+import { ActionIcon, Button, Group } from '@mantine/core'
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
@@ -105,42 +105,40 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-5 border-t-2 border-project-border px-4 py-4">
+        <Group
+          sx={(theme) => ({ borderTop: `2px solid ${theme.colors.gray[2]}` })}
+          position="apart"
+          className="items-center gap-5 px-4 py-4"
+        >
           {currentView === 'update' ? (
-            <Button
-              size="large"
+            <ActionIcon
+              size="lg"
               type="button"
-              disabled={isSubmitting}
+              loading={isSubmitting}
               onClick={onItemDeleteRequest}
+              color="red"
+              variant="light"
               className={clsx(
                 isSubmitting && '!cursor-progress',
-                '!pl-0 text-sm text-red-500'
+                'text-sm text-red-500'
               )}
             >
-              <iconSet.Trash className="mr-3 -mt-1 inline w-5" />
-              {t('Delete')}
-            </Button>
+              <iconSet.Trash className="aspect-square w-5" />
+            </ActionIcon>
           ) : (
             <span></span>
           )}
-          <div className="flex flex-row items-center justify-end gap-5">
-            {isSubmitting && (
-              <p className="animate-pulse text-lg font-semibold text-orange-500">
-                <iconSet.Refresh className="mr-1.5 inline w-5 animate-spin" />
-                {t('Saving...')}
-              </p>
-            )}
-            <Button
-              size="large"
-              color="success"
-              type="submit"
-              disabled={isSubmitting || !isEdited}
-              className={clsx(isSubmitting && '!cursor-progress')}
-            >
-              {t('Uložit')}
-            </Button>
-          </div>
-        </div>
+          <Button
+            size="lg"
+            color="green"
+            type="submit"
+            disabled={!isEdited}
+            loading={isSubmitting}
+            className={clsx(isSubmitting && '!cursor-progress')}
+          >
+            {t(isSubmitting ? 'Saving...' : 'Save')}
+          </Button>
+        </Group>
       </AsideItemWrap>
       {currentModel?.admin?.layout === 'post-like' &&
         groupedFields &&

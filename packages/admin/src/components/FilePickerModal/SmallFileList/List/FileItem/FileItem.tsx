@@ -5,6 +5,7 @@ import { useSmallFileList } from '../../context'
 import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { FileService } from '@services'
+import { UnstyledButton } from '@mantine/core'
 
 const classNames = getClassnames()
 
@@ -13,7 +14,7 @@ export interface FileItemProps extends File {
 }
 
 export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
-  const { multiple, selectedFiles, updateValue } = useSmallFileList()
+  const { selectedFiles, updateValue } = useSmallFileList()
   const extension = filename.split('.').at(-1) || 'unknown'
   const isImage =
     extension.includes('png') ||
@@ -33,7 +34,7 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
   )
 
   return (
-    <button
+    <UnstyledButton
       className={clsx(classNames.itemRoot, 'group')}
       onClick={onPick}
       type="button"
@@ -69,6 +70,6 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
           />
         </div>
       </div>
-    </button>
+    </UnstyledButton>
   )
 }

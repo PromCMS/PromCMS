@@ -18,6 +18,7 @@ export const List: VFC = () => {
     files,
     showNewFolderCreator,
     updateValue,
+    uploadingFiles,
     workingFolders,
     mutateFiles,
     mutateFolders,
@@ -146,6 +147,9 @@ export const List: VFC = () => {
             >
               {(styles) => <NewFolderCreator styles={styles} />}
             </Transition>
+            {Object.entries(uploadingFiles).map(([key]) => (
+              <FileItemSkeleton key={key} />
+            ))}
           </>
         </div>
       ) : (

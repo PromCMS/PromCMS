@@ -44,7 +44,7 @@ export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
   }
 
   return (
-    <button
+    <div
       className={clsx(
         classNames.itemRoot,
         'text-left',
@@ -57,7 +57,7 @@ export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="relative">
         <input
-          className="mt-1 w-full border-b-4 border-blue-500 bg-transparent text-lg font-medium outline-0 disabled:opacity-50"
+          className="mt-1 w-full !border-b-4 !border-blue-500 bg-transparent text-lg font-medium outline-0 disabled:opacity-50"
           disabled={formState.isSubmitting || formState.isSubmitSuccessful}
           autoComplete="off"
           {...register('name', { onBlur })}
@@ -68,6 +68,6 @@ export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
           </small>
         )}
       </form>
-    </button>
+    </div>
   )
 }

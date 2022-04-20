@@ -1,3 +1,4 @@
+import { UnstyledButton } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { VFC } from 'react'
@@ -18,7 +19,7 @@ export const Item: VFC<ItemProps> = ({
   label,
 }) => (
   <>
-    <button
+    <UnstyledButton
       onClick={onClick}
       className={clsx(
         'flex flex-none items-center',
@@ -34,7 +35,7 @@ export const Item: VFC<ItemProps> = ({
           {title}
         </span>
       )}
-    </button>
+    </UnstyledButton>
     {!isLast && (
       <span className="mx-2 flex-none text-2xl font-semibold text-gray-300">
         /

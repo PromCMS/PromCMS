@@ -11,6 +11,7 @@ import { FileService } from '@services'
 import { useClassNames as getClassnames } from '../../useClassNames'
 import IconButton from '@components/IconButton'
 import { iconSet } from '@prom-cms/icons'
+import { ActionIcon } from '@mantine/core'
 
 const classNames = getClassnames()
 
@@ -63,11 +64,14 @@ export const FileItem: VFC<FileItemProps> = ({
         <h3 className={classNames.itemLabel}>{filename}</h3>
       </LinkItem>
       <div className="absolute top-0 right-0 m-2.5">
-        <IconButton
-          icon={iconSet.Trash}
+        <ActionIcon
           onClick={onDelete}
-          className="border-2 border-project-border shadow-lg duration-200 hover:border-red-500 hover:bg-red-500 hover:text-white disabled:opacity-50"
-        />
+          size={45}
+          color={'red'}
+          className="border-2 border-project-border bg-white"
+        >
+          <iconSet.Trash size={25} />
+        </ActionIcon>
       </div>
     </article>
   )

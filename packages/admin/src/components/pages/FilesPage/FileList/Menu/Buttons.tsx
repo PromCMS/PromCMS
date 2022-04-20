@@ -36,15 +36,9 @@ export const Buttons: VFC = () => {
           <PopoverList.Item
             icon="FilePlus"
             title="Add new file to current folder"
+            onClick={openFilePicker}
           >
-            {/* FIXME: resolve bug around icon not being clickable */}
-            <button
-              type="button"
-              onClick={openFilePicker}
-              className="-mx-4 -my-1.5 px-4 py-1.5"
-            >
-              {t('Add new file')}
-            </button>
+            {t('Add new file')}
           </PopoverList.Item>
           <PopoverList.Item
             icon="FolderPlus"

@@ -13,12 +13,14 @@ export interface IGlobalContext {
     key: T,
     value?: IGlobalContext[T]
   ): void
+  currentUserIsAdmin: boolean
   isBooting: boolean
   isLoggedIn: boolean
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
   updateValue: () => {},
+  currentUserIsAdmin: false,
   isBooting: true,
   isLoggedIn: false,
 })
@@ -139,6 +141,9 @@ export const GlobalContextProvider: FC = ({ children }) => {
         currentUser,
         updateValue,
         isBooting: isBooting || !i18n.isInitialized,
+        currentUserIsAdmin: !!(
+          currentUser?.role && currentUser.role.toLowerCase() === 'admin'
+        ),
         isLoggedIn: !!currentUser,
       }}
     >

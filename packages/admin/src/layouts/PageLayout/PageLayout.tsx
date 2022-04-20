@@ -64,9 +64,9 @@ const PageLayoutWithAside: FC<PageLayoutProps> = ({ children, leftAside }) => {
   const classNames = useClassNames()
 
   return (
-    <div className="flex flex-col justify-between lg:min-h-screen lg:flex-row">
+    <div className="flex flex-col justify-center lg:min-h-screen lg:flex-row">
       <div className={classNames.aside}>{leftAside}</div>
-      <div className="container mx-auto w-full">{children}</div>
+      <div className="container w-full">{children}</div>
       <div className={clsx(classNames.aside, 'hidden 2xl:block')} />
     </div>
   )

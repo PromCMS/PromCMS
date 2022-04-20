@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { iconSet } from '@prom-cms/icons'
+import { Button } from '@mantine/core'
 
 const items = [
   { title: 'Profile', url: '/settings/profile', Icon: iconSet.UserCircle },
@@ -18,20 +19,24 @@ const LeftAside: VFC = () => {
 
   return (
     <div className="h-full px-5 pt-6">
-      <p className="text-4xl font-semibold">{t('Menu')}</p>
-      <hr className="mt-4 h-0 border-t-4 border-gray-200" />
-      <nav className="mt-5 flex flex-none gap-3 overflow-auto lg:flex-col">
+      <nav className="mt-24 flex flex-none gap-3 lg:flex-col">
         {items.map(({ url, title, Icon }) => (
-          <Link key={url} href={url}>
-            <a
+          <Link key={url} href={url} passHref>
+            <Button
+              component="a"
+              size="lg"
+              variant="subtle"
+              color={pathname === url ? 'green' : 'blue'}
               className={clsx(
-                'block flex-none rounded-lg border-2 bg-white py-2 pr-6 font-semibold text-gray-600 transition-all duration-200',
-                pathname === url ? 'border-blue-200' : 'border-project-border'
+                pathname === url
+                  ? 'border-green-300 underline'
+                  : 'border-blue-200',
+                'border-2'
               )}
+              leftIcon={<Icon className="mr-auto aspect-square w-6" />}
             >
-              <Icon className="relative -top-0.5 mr-3 ml-3 inline-block aspect-square w-6 text-gray-400" />
               {t(title)}
-            </a>
+            </Button>
           </Link>
         ))}
       </nav>

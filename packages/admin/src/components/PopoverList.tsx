@@ -1,5 +1,7 @@
+import { Button, UnstyledButton } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
+import { MouseEventHandler } from 'react'
 import { DetailedHTMLProps, FC, HTMLAttributes } from 'react'
 
 export interface PopoverListProps
@@ -9,30 +11,36 @@ export interface PopoverListProps
   > {}
 
 export interface PopoverListItemProps
-  extends DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement> {
+  extends Omit<
+    DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement>,
+    'onClick'
+  > {
   icon?: keyof typeof iconSet
+  onClick?: MouseEventHandler<HTMLButtonElement>
 }
 
 const PopoverListItem: FC<PopoverListItemProps> = ({
   className,
   icon,
   children,
+  onClick,
   ...rest
 }) => {
   const Icon = icon ? iconSet[icon] : null
 
   return (
-    <li
-      className={clsx(
-        'rounded-lg px-4 py-1.5 text-lg',
-        rest.onClick ? 'cursor-pointer' : 'cursor-default',
-        className?.includes('red') ? 'hover:bg-red-50' : 'hover:bg-blue-50',
-        className
-      )}
-      {...rest}
-    >
-      {Icon && <Icon className="mr-2.5 -mt-1 inline-block w-5" />}
-      {children}
+    <li {...rest}>
+      <UnstyledButton
+        className={clsx(
+          'flex w-full items-center rounded-lg px-4 py-1.5 text-lg font-semibold',
+          className?.includes('red') ? 'hover:bg-red-50' : 'hover:bg-blue-50',
+          className
+        )}
+        onClick={onClick}
+      >
+        {Icon && <Icon className="mr-2.5 inline-block w-5" />}
+        {children}
+      </UnstyledButton>
     </li>
   )
 }

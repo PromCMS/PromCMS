@@ -1,5 +1,4 @@
 import AsideItemWrap from '@components/AsideItemWrap'
-import { Button } from '@components/Button'
 import Skeleton, { SkeltonProps } from '@components/Skeleton'
 import clsx from 'clsx'
 import dayjs from 'dayjs'
@@ -12,6 +11,7 @@ import { getObjectDiff } from '@utils'
 import { useClassNames } from '../EntryUnderpage/useClassNames'
 import { useData } from './context'
 import { iconSet } from '@prom-cms/icons'
+import { ActionIcon, Button } from '@mantine/core'
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
@@ -49,8 +49,6 @@ export const FormAside: VFC = () => {
       })
     }
   }
-
-  // TODO: Delete action
 
   return (
     <aside className={clsx(classes.aside, 'sticky top-0')}>
@@ -95,39 +93,33 @@ export const FormAside: VFC = () => {
 
         <div className="flex items-center justify-between gap-5 border-t-2 border-project-border px-4 py-4">
           {view === 'update' ? (
-            <Button
-              size="large"
+            <ActionIcon
+              size="lg"
               type="button"
-              disabled={isSubmitting}
+              loading={isSubmitting}
               onClick={onItemDeleteRequest}
+              color="red"
+              variant="light"
               className={clsx(
                 isSubmitting && '!cursor-progress',
-                '!pl-0 text-sm text-red-500'
+                'text-sm text-red-500'
               )}
             >
-              <iconSet.Trash className="mr-3 -mt-1 inline w-5" />
-              {t('Delete')}
-            </Button>
+              <iconSet.Trash className="aspect-square w-5" />
+            </ActionIcon>
           ) : (
             <span></span>
           )}
-          <div className="flex flex-row items-center justify-end gap-5">
-            {isSubmitting && (
-              <p className="animate-pulse text-lg font-semibold text-orange-500">
-                <iconSet.Refresh className="mr-1.5 inline w-5 animate-spin" />
-                {t('Saving...')}
-              </p>
-            )}
-            <Button
-              size="large"
-              color="success"
-              type="submit"
-              disabled={isSubmitting || !isEdited}
-              className={clsx(isSubmitting && '!cursor-progress')}
-            >
-              {t('Uložit')}
-            </Button>
-          </div>
+          <Button
+            size="lg"
+            color="green"
+            type="submit"
+            disabled={isSubmitting || !isEdited}
+            loading={isSubmitting}
+            className={clsx(isSubmitting && '!cursor-progress')}
+          >
+            {t(isSubmitting ? 'Saving...' : 'Save')}
+          </Button>
         </div>
       </AsideItemWrap>
     </aside>

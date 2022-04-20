@@ -1,4 +1,5 @@
 import IconButton from '@components/IconButton'
+import { ActionIcon } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useCallback, useMemo, useState, VFC } from 'react'
@@ -65,15 +66,18 @@ export const FolderItem: VFC<FolderItemProps> = ({
         {name}
       </h3>
       <div className="absolute top-0 right-0 m-2.5">
-        <IconButton
-          icon={iconSet.Trash}
+        <ActionIcon
           onClick={onFolderDeleteClick}
-          className="border-2 border-project-border shadow-lg duration-200 hover:border-red-500 hover:bg-red-500 hover:text-white disabled:opacity-50"
+          size={45}
+          color={'red'}
+          className="border-2 border-project-border bg-white"
           disabled={
             workingFolders[folderPath]?.type === 'deleting' ||
             workingFolders[folderPath]?.type === 'uploading'
           }
-        />
+        >
+          <iconSet.Trash size={25} />
+        </ActionIcon>
       </div>
     </div>
   )

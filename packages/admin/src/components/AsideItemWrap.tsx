@@ -1,23 +1,32 @@
+import { Paper, Title } from '@mantine/core'
 import clsx from 'clsx'
 import { DetailedHTMLProps, FC, HTMLAttributes } from 'react'
 
 const AsideItemWrap: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ children, className, title, ...rest }) => (
-  <div
+> = ({ children, className, title, ref, ...rest }) => (
+  <Paper
     className={clsx(
-      'rounded-lg shadow-lg shadow-blue-100 border-2 border-project-border',
+      'rounded-lg border-2 border-project-border shadow-lg shadow-blue-100',
       className
     )}
+    shadow="smallBlue"
+    withBorder
     {...rest}
   >
     {title && (
-      <div className=" bg-white w-full rounded-t-lg px-4 py-4 border-b-2 border-project-border text-2xl font-semibold">
+      <Title
+        order={5}
+        sx={(theme) => ({
+          borderBottom: `2px solid ${theme.colors.gray[2]}`,
+        })}
+        className="w-full px-4 py-4 text-2xl font-semibold"
+      >
         {title}
-      </div>
+      </Title>
     )}
     {children}
-  </div>
+  </Paper>
 )
 
 export default AsideItemWrap

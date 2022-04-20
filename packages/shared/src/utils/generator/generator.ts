@@ -51,6 +51,12 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Is private',
         type: 'boolean',
       },
+      mimeType: {
+        title: 'Mime type',
+        editable: false,
+        required: true,
+        type: 'string',
+      },
     },
   };
 
@@ -60,8 +66,14 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     },
     icon: 'Settings',
     columns: {
-      title: {
-        title: 'title',
+      name: {
+        title: 'Name',
+        type: 'string',
+        required: true,
+        unique: true,
+      },
+      label: {
+        title: 'Label',
         type: 'string',
         required: true,
       },
@@ -153,6 +165,11 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         type: 'number',
         editable: false,
         autoIncrement: true,
+      },
+      permissions: {
+        title: 'permissions',
+        editable: false,
+        type: 'json',
       },
       // Iterate over all of columns that user provided
       ...Object.keys(model.columns).reduce((finalColumns, currentColumnKey) => {
