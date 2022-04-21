@@ -169,7 +169,9 @@ export const LazyEditor: FC<LazyEditorProps> = ({
           ? JSON.parse(initialValue)
           : JSON.parse(JSON.stringify(initialValue || {}))
 
-      innerRef.current.render(value)
+      if (value.blocks && !!value.blocks.length) {
+        innerRef.current.render(value)
+      }
     }
   }, [editorReady, initialValue])
 
