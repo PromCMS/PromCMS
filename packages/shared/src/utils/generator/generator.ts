@@ -29,6 +29,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     tableName: 'files',
     timestamp: true,
     ignoreSeeding: true,
+    permissions: false,
     columns: {
       filename: {
         title: 'Filename',
@@ -90,6 +91,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     admin: {
       layout: 'simple',
     },
+    permissions: false,
     icon: 'Users',
     columns: {
       // TODO: Do not make these values overridable
@@ -159,20 +161,51 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       };
     }
 
+    if (model.draftable) {
+      model.columns.is_published = {
+        title: 'Is published',
+        type: 'boolean',
+        unique: false,
+        required: false,
+      };
+    }
+
+    if (model.sorting) {
+      model.columns.order = {
+        title: 'Order',
+        type: 'number',
+        unique: false,
+        autoIncrement: true,
+        editable: false,
+        required: false,
+        adminHidden: true,
+      };
+    }
+
+    if (model.permissions === undefined || model.permissions) {
+      model.columns.permissions = {
+        title: 'permissions',
+        editable: false,
+        required: false,
+        type: 'json',
+      };
+    }
+
     model.columns = {
       id: {
         title: 'ID',
         type: 'number',
         editable: false,
         autoIncrement: true,
+        unique: true,
+        required: false,
       },
-      permissions: {
-        title: 'permissions',
-        editable: false,
-        type: 'json',
-      },
-      // Iterate over all of columns that user provided
-      ...Object.keys(model.columns).reduce((finalColumns, currentColumnKey) => {
+      ...model.columns,
+    };
+
+    // Iterate over all of columns that user provided
+    model.columns = Object.keys(model.columns).reduce(
+      (finalColumns, currentColumnKey) => {
         const column = model.columns[currentColumnKey];
 
         // set default values
@@ -188,7 +221,18 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
             ...column,
           },
         };
-      }, {} as typeof model.columns),
+      },
+      {} as typeof model.columns
+    );
+
+    models[modelKey] = {
+      softDelete: false,
+      timestamp: false,
+      sorting: false,
+      permissions: true,
+      draftable: false,
+      tableName: modelKey.toLocaleLowerCase(),
+      ...model,
     };
   });
 

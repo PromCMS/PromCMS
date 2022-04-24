@@ -5,6 +5,7 @@ namespace App\Controllers;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class EntryType
 {
@@ -32,8 +33,8 @@ class EntryType
         }, $this->loadedModels),
         function ($modelName) {
           return !in_array($modelName, ['files']);
-        },
-      ),
+        }
+      )
     );
     if ($modelIndex === false) {
       return false;
@@ -59,8 +60,65 @@ class EntryType
     $response->getBody()->write(
       json_encode([
         'data' => $classInstance->getSummary(),
-      ]),
+      ])
     );
+
+    return $response;
+  }
+
+  public function reorderEntries(
+    ServerRequestInterface $request,
+    ResponseInterface $response,
+    array $args
+  ): ResponseInterface {
+    $modelInstancePath = $this->getModelFromArg($args['modelId']);
+    $classInstance = new $modelInstancePath();
+    $parsedBody = $request->getParsedBody();
+    $data = $parsedBody['data'];
+
+    if (
+      !$classInstance->getSummary()->hasOrdering ||
+      !isset($data['fromId']) ||
+      !isset($data['toId'])
+    ) {
+      return $response->withStatus(400);
+    }
+
+    try {
+      $fromEntry = $modelInstancePath
+        ::where('id', $data['fromId'])
+        ->get()
+        ->firstOrFail();
+      $toEntry = $modelInstancePath
+        ::where('id', $data['toId'])
+        ->get()
+        ->firstOrFail();
+
+      DB::beginTransaction();
+
+      $savedOrderId = $toEntry->order;
+      $toEntry->order = $fromEntry->order;
+      $fromEntry->order = $savedOrderId;
+
+      $fromEntry->save();
+      $toEntry->save();
+
+      DB::commit();
+
+      $response->getBody()->write(
+        json_encode([
+          'data' => 1,
+        ])
+      );
+    } catch (\Exception $e) {
+      echo $e->getMessage();
+
+      DB::rollback();
+
+      return $response
+        ->withStatus(500)
+        ->withHeader('Content-Description', $e->getMessage());
+    }
 
     return $response;
   }
@@ -77,9 +135,18 @@ class EntryType
 
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
+    $classInstance = new $modelInstancePath();
+
+    if ($classInstance->getSummary()->hasOrdering) {
+      $query = $modelInstancePath
+        ::orderBy('order', 'ASC')
+        ->orderBy('id', 'ASC');
+    } else {
+      $query = $modelInstancePath::orderBy('id', 'ASC');
+    }
 
     $dataPaginated = json_decode(
-      $modelInstancePath::paginate(15, ['*'], 'page', $page)->toJson(),
+      $query->paginate(15, ['*'], 'page', $page)->toJson()
     );
     // Unset some things as they are not useful or active
     unset($dataPaginated->links);
@@ -111,7 +178,7 @@ class EntryType
         'data' => $modelInstancePath
           ::find($args['itemId'])
           ->update($parsedBody['data']),
-      ]),
+      ])
     );
 
     return $response;
@@ -134,7 +201,7 @@ class EntryType
             ::where('id', $args['itemId'])
             ->get()
             ->firstOrFail(),
-        ]),
+        ])
       );
 
       return $response;
@@ -155,13 +222,21 @@ class EntryType
 
     $parsedBody = $request->getParsedBody();
 
-    $response->getBody()->write(
-      json_encode([
-        'data' => $modelInstancePath::create($parsedBody['data']),
-      ]),
-    );
-
-    return $response;
+    try {
+      $response->getBody()->write(
+        json_encode([
+          'data' => $modelInstancePath::create($parsedBody['data']),
+        ])
+      );
+  
+      return $response;
+    } catch (\Illuminate\Database\QueryException $ex) {
+      if ($ex->getCode() === 23000) {
+        return $response->withStatus(400);
+      } else {
+        return $response->withStatus(500);
+      }
+    }
   }
 
   public function deleteEntry(
@@ -177,7 +252,7 @@ class EntryType
     $response->getBody()->write(
       json_encode([
         'data' => $modelInstancePath::where('id', $args['itemId'])->delete(),
-      ]),
+      ])
     );
 
     return $response;

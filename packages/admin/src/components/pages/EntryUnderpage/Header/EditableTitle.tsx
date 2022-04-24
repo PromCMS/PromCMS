@@ -1,4 +1,4 @@
-import { UnstyledButton } from '@mantine/core'
+import { ActionIcon, Button, UnstyledButton } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useEffect, useRef, useState, VFC } from 'react'
@@ -57,27 +57,28 @@ export const EditableTitle: VFC = () => {
       </div>
       {currentView === 'update' &&
         (editingMode ? (
-          <UnstyledButton
+          <ActionIcon
             type="button"
-            className="ml-5 rounded-full bg-white p-1 text-green-500 shadow-md hover:scale-110"
+            variant="light"
+            className="ml-5 bg-white text-green-500 hover:scale-110"
             title={t('Save changes')}
+            size={50}
+            loading={editModeSubmitting}
             onClick={onEditEndClick}
           >
-            {editModeSubmitting ? (
-              <span className="block aspect-square w-10 font-bold">...</span>
-            ) : (
-              <iconSet.Check className="h-10 w-10" />
-            )}
-          </UnstyledButton>
+            <iconSet.Check size={40} className="h-10 w-10" />
+          </ActionIcon>
         ) : (
-          <UnstyledButton
+          <ActionIcon
             type="button"
+            variant="light"
             className="ml-5 text-gray-300 hover:scale-110"
             title={t('Edit title')}
+            size={50}
             onClick={onEditClick}
           >
-            <iconSet.Pencil className="h-10 w-10" />
-          </UnstyledButton>
+            <iconSet.Pencil size={40} className="h-10 w-10" />
+          </ActionIcon>
         ))}
     </div>
   )

@@ -11,12 +11,8 @@ import { getCarbonTime, hashPassword, specialStringFaker } from './utils';
 import { faker } from '@faker-js/faker';
 import { Logger } from '@utils';
 import Database from 'better-sqlite3';
-import {
-  CORE_ROOT,
-  PROJECT_ROOT,
-} from '@prom-cms/shared/src/generator-constants';
+import { CORE_ROOT } from '@prom-cms/shared/src/generator-constants';
 import path from 'path';
-import fs from 'fs-extra';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);

@@ -118,7 +118,15 @@ export const FormAside: VFC = () => {
             loading={isSubmitting}
             className={clsx(isSubmitting && '!cursor-progress')}
           >
-            {t(isSubmitting ? 'Saving...' : 'Save')}
+            {t(
+              isSubmitting
+                ? view === 'create'
+                  ? 'Creating...'
+                  : 'Updating...'
+                : view === 'create'
+                ? 'Create'
+                : 'Update'
+            )}
           </Button>
         </div>
       </AsideItemWrap>

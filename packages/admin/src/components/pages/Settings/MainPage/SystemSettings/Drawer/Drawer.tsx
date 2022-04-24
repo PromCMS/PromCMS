@@ -3,11 +3,9 @@ import {
   Button,
   Drawer as MantineDrawer,
   DrawerProps as MantineDrawerProps,
-  Group,
   Paper,
   Select,
   SimpleGrid,
-  Textarea,
   TextInput,
   Title,
 } from '@mantine/core'
@@ -18,6 +16,7 @@ import { useGlobalContext } from '@contexts/GlobalContext'
 import { List } from './contentTypes/List'
 import { t } from 'i18next'
 import { SettingsService } from '@services'
+import { Textarea } from './contentTypes/Textarea'
 
 export const Drawer: VFC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
@@ -65,19 +64,17 @@ export const Drawer: VFC<
         position="right"
         size={700}
         padding="xl"
+        className=" overflow-auto"
         title={
           <Title order={4}>
             {!!optionToEdit ? 'Update an option' : 'Create an option'}
           </Title>
         }
       >
-        <form
-          className="h-full overflow-auto"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
           <SimpleGrid cols={1} spacing="md">
             {currentUserIsAdmin && (
-              <Paper withBorder shadow="lg" radius="md" p="xs">
+              <Paper withBorder shadow="lg" mb="lg" radius="md" p="xs">
                 <TextInput label="Slug" {...register('name')} />
 
                 <Controller
@@ -106,19 +103,11 @@ export const Drawer: VFC<
             )}
             <TextInput label="Label" {...register('label')} />
             {content?.type === 'list' && <List />}
-            {content?.type === 'textArea' && (
-              <Textarea
-                label={t('Value')}
-                autosize
-                minRows={4}
-                {...register('content.data')}
-              />
-            )}
+            {content?.type === 'textArea' && <Textarea />}
           </SimpleGrid>
-          <div className="sticky bottom-7 left-0 w-full">
+          <div className="right-0 mt-8 rounded-lg pb-4">
             <Button
-              className="ml-auto block"
-              mt="xl"
+              className="mr-auto block"
               type="submit"
               loading={formState.isSubmitting}
               loaderPosition="right"

@@ -5,19 +5,24 @@ import {
   ActionIcon,
   Button,
   createStyles,
+  Divider,
+  Grid,
   Group,
   Pagination,
-  ScrollArea,
-  Table,
+  Paper,
   Textarea,
 } from '@mantine/core'
+import { useClipboard } from '@mantine/hooks'
 import { useNotifications } from '@mantine/notifications'
 import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
 import { SettingsService } from '@services'
-import { useCallback, useMemo, useState, VFC } from 'react'
+import clsx from 'clsx'
+import { Fragment } from 'react'
+import { useCallback, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Drawer } from './Drawer'
+import { CopyName } from './Table'
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -79,45 +84,13 @@ export const SystemSettings: VFC = () => {
     [t, notifications, mutate]
   )
 
-  const rows = useMemo(
-    () =>
-      data?.data &&
-      data.data.map((row) => {
-        return (
-          <tr key={row.id}>
-            {currentUserIsAdmin && <td style={{ maxWidth: 50 }}>{row.name}</td>}
-            <td>{row.label}</td>
-            <td>
-              {row.content?.type === 'textArea' ? (
-                <Textarea autosize disabled value={row.content.data} />
-              ) : row.content?.type === 'list' ? (
-                <ul>
-                  {Object.values<{ id: string; value: string }>(
-                    row.content?.data || {}
-                  ).map(({ id, value }) => (
-                    <li key={id} dangerouslySetInnerHTML={{ __html: value }} />
-                  ))}
-                </ul>
-              ) : (
-                'none'
-              )}
-            </td>
-            <td style={{ maxWidth: 5 }}>
-              <Group className="ml-auto" position="right" spacing="xs" noWrap>
-                <ActionIcon onClick={onEditClick(row.id)} color="blue">
-                  <iconSet.Edit />
-                </ActionIcon>
-                {currentUserIsAdmin && (
-                  <ActionIcon onClick={onDeleteClick(row.id)} color="red">
-                    <iconSet.Trash />
-                  </ActionIcon>
-                )}
-              </Group>
-            </td>
-          </tr>
-        )
-      }),
-    [data?.data, currentUserIsAdmin, onEditClick, onDeleteClick]
+  const smallColSize = 2
+  const maxCols = 12
+  const largeColSize = currentUserIsAdmin ? 6 : 8
+  const colDivider = (
+    <Grid.Col span={maxCols}>
+      <Divider />
+    </Grid.Col>
   )
 
   return (
@@ -127,38 +100,83 @@ export const SystemSettings: VFC = () => {
           {t('Add new')}
         </Button>
       )}
-      <ScrollArea className="mt-5 min-h-[400px]">
-        <Table
-          sx={{ minWidth: 800 }}
-          verticalSpacing="xs"
-          className={classes.root}
-        >
-          <thead>
-            <tr>
+      <Grid
+        sx={{ minWidth: 800 }}
+        className={clsx(classes.root, 'mt-5 min-h-[400px]')}
+        columns={maxCols}
+      >
+        {currentUserIsAdmin && (
+          <Grid.Col span={smallColSize} className="font-semibold uppercase">
+            {t('Slug')}
+          </Grid.Col>
+        )}
+        <Grid.Col span={smallColSize} className="font-semibold uppercase">
+          {t('Title')}
+        </Grid.Col>
+        <Grid.Col span={largeColSize} className="font-semibold uppercase">
+          {t('Value')}
+        </Grid.Col>
+        <Grid.Col span={smallColSize}>
+          <span className="hidden">{t('Tools')}</span>
+        </Grid.Col>
+        <Grid.Col span={maxCols}>
+          <Divider size="sm" />
+        </Grid.Col>
+        {data?.data ? (
+          data.data.map((row, index) => (
+            <Fragment key={row.id}>
+              {index !== 0 && colDivider}
               {currentUserIsAdmin && (
-                <th style={{ maxWidth: 50 }}>{t('Slug')}</th>
+                <Grid.Col span={smallColSize}>
+                  <Group>
+                    <CopyName name={row.name} />
+                    {row.name}
+                  </Group>
+                </Grid.Col>
               )}
-              <th>{t('Title')}</th>
-              <th>{t('Value')}</th>
-              <th style={{ maxWidth: 5 }}>
-                <span className="hidden">{t('Tools')}</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows?.length ? (
-              rows
-            ) : (
-              <tr>
-                <td colSpan={currentUserIsAdmin ? 4 : 3}>
-                  {' '}
-                  <ItemsMissingMessage />
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-      </ScrollArea>
+              <Grid.Col span={smallColSize}>{row.label}</Grid.Col>
+              <Grid.Col span={largeColSize}>
+                {row.content?.type === 'textArea' ? (
+                  <Textarea autosize readOnly value={row.content.data} />
+                ) : row.content?.type === 'list' ? (
+                  <Paper
+                    sx={(theme) => ({ borderColor: theme.colors.gray[4] })}
+                    withBorder
+                    p="sm"
+                  >
+                    <ul className="list-disc pl-5">
+                      {row.content?.data.map(({ id, value }) => (
+                        <li
+                          key={id}
+                          dangerouslySetInnerHTML={{ __html: value }}
+                        />
+                      ))}
+                    </ul>
+                  </Paper>
+                ) : (
+                  'none'
+                )}
+              </Grid.Col>
+              <Grid.Col span={smallColSize}>
+                <Group className="ml-auto" position="right" spacing="xs" noWrap>
+                  <ActionIcon onClick={onEditClick(row.id)} color="blue">
+                    <iconSet.Edit />
+                  </ActionIcon>
+                  {currentUserIsAdmin && (
+                    <ActionIcon onClick={onDeleteClick(row.id)} color="red">
+                      <iconSet.Trash />
+                    </ActionIcon>
+                  )}
+                </Group>
+              </Grid.Col>
+            </Fragment>
+          ))
+        ) : (
+          <Grid.Col span={12}>
+            <ItemsMissingMessage />
+          </Grid.Col>
+        )}
+      </Grid>
       {data && (
         <Group position="center" my="xl">
           <Pagination

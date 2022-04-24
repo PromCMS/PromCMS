@@ -11,14 +11,13 @@ import { useMemo, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatApiModelResultToTableView } from '@utils'
 import { useGlobalContext } from '@contexts/GlobalContext'
-import { usePagination } from '@mantine/hooks'
 import { Button, Pagination } from '@mantine/core'
 
 const UsersListPage: VFC = () => {
   const { push } = useRouter()
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
-  const { currentUser } = useGlobalContext()
+  const { currentUser, currentUserIsAdmin } = useGlobalContext()
   const model = useModelInfo<ApiResultModel>('users')
   const { data, isLoading, isError } = useModelItems('users', {
     page,
@@ -38,18 +37,24 @@ const UsersListPage: VFC = () => {
     [data, currentUser]
   )
 
+  const userCanEdit = currentUserIsAdmin
+
   // Take care of user creation
   const onCreateRequest = () => push(`/users/create`)
 
   // Take care of edit requests
-  const onEditRequest = (id: ItemID) => push(`/users/${id}`)
+  const onEditRequest = userCanEdit
+    ? (id: ItemID) => push(`/users/${id}`)
+    : undefined
 
-  //
-  const onItemDeleteRequest = (id: ItemID) => {
-    if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-      EntryService.delete({ id, model: 'users' })
-    }
-  }
+  // Take care of delete item request
+  const onItemDeleteRequest = userCanEdit
+    ? (id: ItemID) => {
+        if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
+          EntryService.delete({ id, model: 'users' })
+        }
+      }
+    : undefined
 
   // Table columns need to be formated
   const tableViewColumns = useMemo<TableViewCol[] | undefined>(() => {

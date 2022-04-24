@@ -48,7 +48,7 @@ try {
               $field = null;
 
               if ($columnKey === 'id' && $column['autoIncrement']) {
-                $field = $table->increments('id');
+                $field = $table->bigIncrements('id');
               } else {
                 if ($type === 'password' || $type === 'slug') {
                   $type = 'string';
@@ -71,6 +71,10 @@ try {
 
               if ($column['unique']) {
                 $field->unique();
+              }
+
+              if ($type === 'integer') {
+                $field->integer()->default(0);
               }
 
               if (!$column['required']) {

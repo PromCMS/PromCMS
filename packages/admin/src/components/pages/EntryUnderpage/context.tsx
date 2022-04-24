@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { createContext, FC, useContext } from 'react'
 import { EntryTypeUrlActionType } from '@custom-types'
 import { KeyedMutator } from 'swr'
+import { useMemo } from 'react'
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType
@@ -38,6 +39,17 @@ export const EntryUnderpageContextProvider: FC<{
     itemIsMissing,
   } = useCurrentModelItem()
 
+  // Unset id because of duplication
+  // TODO we should handle this better via third viewType
+  const updatedItemData = useMemo(() => {
+    if (itemData && viewType === 'create') {
+      const { id, ...restItemData } = itemData
+      return restItemData
+    }
+
+    return itemData
+  }, [itemData, viewType])
+
   return (
     <EntryUnderpageContext.Provider
       value={{
@@ -45,7 +57,7 @@ export const EntryUnderpageContextProvider: FC<{
         exitView: () => {
           push(EntryService.getListUrl(currentModel?.name as string))
         },
-        itemData,
+        itemData: updatedItemData as ApiResultItem,
         itemIsError,
         itemIsLoading,
         itemIsMissing,

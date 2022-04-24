@@ -5,9 +5,18 @@ import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useCallback, useMemo, VFC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { createIterativeArray } from '@utils'
-import { ActionIcon, Group, Pagination } from '@mantine/core'
+import { createIterativeArray, generateUuid } from '@utils'
+import { ActionIcon, Group, Paper } from '@mantine/core'
 import { ReactNode } from 'react'
+import {
+  DragDropContext,
+  DragDropContextProps,
+  Draggable,
+  Droppable,
+} from 'react-beautiful-dnd'
+import { useClassNames } from './useClassNames'
+import { FC } from 'react'
+import { useState } from 'react'
 
 export type TableViewItem = { id: string | number; [x: string]: any }
 
@@ -29,6 +38,10 @@ export interface TableViewProps {
   pagination?: ReactNode
   onDeleteAction?: (id: ItemID) => void
   onEditAction?: (id: ItemID) => void
+  onDuplicateAction?: (id: ItemID) => void
+  ordering?: boolean
+  onDragEnd?: DragDropContextProps['onDragEnd']
+  disabled?: boolean
 }
 
 const TableSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
@@ -36,6 +49,40 @@ const TableSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
 )
 
 const iterativeSkeletonArray = createIterativeArray(5)
+
+const DynamicDraggable: FC<{ index: number; id: ItemID; toggled: boolean }> = ({
+  children,
+  index,
+  id,
+  toggled,
+}) => {
+  const classNames = useClassNames()
+
+  if (!toggled) {
+    return <tr className={classNames.tableRow}>{children}</tr>
+  }
+
+  return (
+    <Draggable index={index} draggableId={String(id)}>
+      {(provided, snapshot) => (
+        <tr
+          className={clsx(classNames.tableRow, snapshot.isDragging && 'table')}
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+        >
+          <td style={{ width: 40 }}>
+            <div {...provided.dragHandleProps}>
+              <iconSet.GripVertical size={18} />
+            </div>
+          </td>
+          {children}
+        </tr>
+      )}
+    </Draggable>
+  )
+}
+
+type ActionType = 'delete' | 'edit' | 'duplicate'
 
 const TableView: VFC<TableViewProps> = ({
   columns,
@@ -45,15 +92,35 @@ const TableView: VFC<TableViewProps> = ({
   pagination,
   onDeleteAction,
   onEditAction,
+  onDuplicateAction,
+  onDragEnd = () => {},
+  ordering,
+  disabled,
 }) => {
   const { t } = useTranslation()
+  const classNames = useClassNames()
+  const [activeActions, setActiveActions] =
+    useState<Record<string, { id: ItemID; type: ActionType }>>()
 
   const onActionClick = useCallback(
-    (actionType: 'delete' | 'edit', id: ItemID) => () => {
-      if (actionType === 'delete' && onDeleteAction) onDeleteAction(id)
-      else if (actionType === 'edit' && onEditAction) onEditAction(id)
+    (actionType: ActionType, id: ItemID) => async () => {
+      let actionFunction
+
+      if (actionType === 'delete' && onDeleteAction)
+        actionFunction = onDeleteAction
+      else if (actionType === 'edit' && onEditAction)
+        actionFunction = onEditAction
+      else if (actionType === 'duplicate' && onDuplicateAction)
+        actionFunction = onDuplicateAction
+
+      if (actionFunction.then) {
+        // TODO: indicate which action on which item is working
+        await actionFunction(id)
+      } else {
+        actionFunction(id)
+      }
     },
-    [onEditAction, onDeleteAction]
+    [onEditAction, onDeleteAction, onDuplicateAction]
   )
 
   const filteredCols = useMemo(() => {
@@ -61,95 +128,172 @@ const TableView: VFC<TableViewProps> = ({
   }, [columns])
 
   const hasActions = onEditAction || onDeleteAction
+  const normalCellsWidth = useMemo(() => {
+    const normalCellsCount = filteredCols.filter(
+      ({ fieldName }) => fieldName !== 'id'
+    ).length
+
+    return `calc(${100 / normalCellsCount}% - ${
+      ((ordering ? 100 : 0) + (hasActions ? 150 : 0)) / normalCellsCount
+    }px)`
+  }, [filteredCols, hasActions, ordering])
 
   return (
     <>
-      <div className="inline-block w-full min-w-full overflow-hidden overflow-x-auto rounded-prom border-2 border-project-border bg-white px-7">
-        <table className="min-w-full leading-normal">
-          <thead>
-            <tr>
-              {filteredCols.map(({ fieldName, title, show }) => (
-                <th
-                  key={fieldName}
-                  className="border-b-2 border-gray-100 px-5 py-5 text-left text-xs font-semibold uppercase tracking-wider text-gray-600"
-                >
-                  {t(title)}
-                </th>
-              ))}
-              {hasActions && (
-                <th className="w-[100px] border-b-2 border-gray-100 px-5 py-5 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 text-opacity-0">
-                  {t('Actions')}
-                </th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {items.length && !isLoading ? (
-              items.map((itemData) => (
-                <tr key={itemData.id} className="group">
-                  {filteredCols.map(({ formatter, title, fieldName }) => (
-                    <td
-                      key={fieldName}
-                      className="border-b border-gray-200 bg-white px-5 py-5 text-sm group-last:border-opacity-0"
-                    >
-                      {formatter ? (
-                        formatter(itemData, { title, fieldName })
-                      ) : (
-                        <p
-                          className="w-full max-w-[350px] overflow-hidden truncate text-gray-900"
-                          title={itemData[fieldName]}
-                        >
-                          {itemData[fieldName]}
-                        </p>
-                      )}
-                    </td>
-                  ))}
-                  {hasActions && (
-                    <td className="w-[100px] justify-end border-b border-gray-200 bg-white px-5 py-5 group-last:border-opacity-0">
-                      <Group spacing="sm" noWrap>
-                        {onEditAction && (
-                          <ActionIcon
-                            onClick={onActionClick('edit', itemData.id)}
-                            title={t('Edit')}
-                            color={'blue'}
-                          >
-                            <iconSet.Pencil className="w-5" />{' '}
-                          </ActionIcon>
-                        )}
-                        {onDeleteAction && (
-                          <ActionIcon
-                            onClick={onActionClick('delete', itemData.id)}
-                            title={t('Delete')}
-                            color={'red'}
-                          >
-                            <iconSet.Trash className="w-5" />{' '}
-                          </ActionIcon>
-                        )}
-                      </Group>
-                    </td>
-                  )}
-                </tr>
-              ))
-            ) : !isLoading ? (
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Paper
+          withBorder
+          shadow="smallBlue"
+          className={classNames.tableWrapper}
+        >
+          <table className="min-w-full leading-normal">
+            <thead>
               <tr>
-                <td colSpan={filteredCols.length + (hasActions ? 1 : 0)}>
-                  <ItemsMissingMessage />
-                </td>
+                {ordering && <th style={{ width: 40 }} />}
+                {filteredCols.map(({ fieldName, title }) => (
+                  <th
+                    key={fieldName}
+                    style={{
+                      width: fieldName === 'id' ? 100 : normalCellsWidth,
+                    }}
+                    className={classNames.tableHead}
+                  >
+                    {t(title)}
+                  </th>
+                ))}
+                {hasActions && (
+                  <th
+                    style={{ width: 150 }}
+                    className={clsx(classNames.tableHead, 'text-opacity-0')}
+                  >
+                    {t('Actions')}
+                  </th>
+                )}
               </tr>
-            ) : (
-              iterativeSkeletonArray.map((index) => (
-                <tr key={index}>
-                  {filteredCols.map(({ fieldName }) => (
-                    <td key={fieldName} className="py-3 px-5">
-                      <TableSkeleton />
-                    </td>
-                  ))}
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <Droppable
+              droppableId="dnd-table-view"
+              direction="vertical"
+              isDropDisabled={!ordering}
+            >
+              {(provided) => (
+                <tbody {...provided.droppableProps} ref={provided.innerRef}>
+                  {/* Items  */}
+                  {!!items.length &&
+                    !isLoading &&
+                    items.map((itemData, index) => (
+                      <DynamicDraggable
+                        key={itemData.id}
+                        index={index}
+                        id={itemData.id}
+                        toggled={!!ordering}
+                      >
+                        {filteredCols.map(({ formatter, title, fieldName }) => (
+                          <td
+                            style={{
+                              width:
+                                fieldName === 'id' ? 100 : normalCellsWidth,
+                            }}
+                            key={fieldName}
+                            className={classNames.tableData}
+                          >
+                            {formatter ? (
+                              formatter(itemData, { title, fieldName })
+                            ) : (
+                              <p
+                                className={classNames.tableDataParagraph}
+                                title={itemData[fieldName]}
+                              >
+                                {itemData[fieldName]}
+                              </p>
+                            )}
+                          </td>
+                        ))}
+                        {hasActions && (
+                          <td
+                            style={{ width: 150 }}
+                            className={classNames.tableData}
+                          >
+                            <Group spacing={5} position="right" noWrap>
+                              {onDuplicateAction && (
+                                <ActionIcon
+                                  onClick={onActionClick(
+                                    'duplicate',
+                                    itemData.id
+                                  )}
+                                  title={t('Duplicate')}
+                                  color={'blue'}
+                                >
+                                  <iconSet.Copy className="w-5" />{' '}
+                                </ActionIcon>
+                              )}
+                              {onEditAction && (
+                                <ActionIcon
+                                  onClick={onActionClick('edit', itemData.id)}
+                                  title={t('Edit')}
+                                  color={'blue'}
+                                >
+                                  <iconSet.Pencil className="w-5" />{' '}
+                                </ActionIcon>
+                              )}
+                              {onDeleteAction && (
+                                <ActionIcon
+                                  onClick={onActionClick('delete', itemData.id)}
+                                  title={t('Delete')}
+                                  color={'red'}
+                                >
+                                  <iconSet.Trash className="w-5" />{' '}
+                                </ActionIcon>
+                              )}
+                            </Group>
+                          </td>
+                        )}
+                      </DynamicDraggable>
+                    ))}
+
+                  {/* Items missing placeholders */}
+                  {!items.length && !isLoading && (
+                    <tr>
+                      <td
+                        colSpan={
+                          filteredCols.length +
+                          (hasActions ? 1 : 0) +
+                          (ordering ? 1 : 0)
+                        }
+                      >
+                        <ItemsMissingMessage />
+                      </td>
+                    </tr>
+                  )}
+
+                  {/* Loading placeholders */}
+                  {isLoading &&
+                    iterativeSkeletonArray.map((index) => (
+                      <tr key={index}>
+                        {(
+                          [
+                            ordering && { fieldName: 'ordering_drag' },
+                            ...filteredCols,
+                          ].filter((field) => !!field) as
+                            | (TableViewCol | { fieldName: string })[]
+                        ).map(({ fieldName }) => (
+                          <td key={fieldName} className="py-3 px-5">
+                            <TableSkeleton />
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+
+                  {provided.placeholder}
+                </tbody>
+              )}
+            </Droppable>
+          </table>
+          {disabled && (
+            <div className="absolute inset-0 bg-gray-100 opacity-70" />
+          )}
+        </Paper>
+      </DragDropContext>
 
       {metadata && (
         <>

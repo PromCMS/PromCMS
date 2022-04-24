@@ -34,8 +34,17 @@ class <%- modelName %> extends Model
     {
       parent::boot();
 
+      <% if (events.afterCreated.shouldInclude()) { %>
+        static::created(function ($entry) {
+          <% if (events.afterCreated.ordering) { %>
+            $entry->order = $entry->id;
+            $entry->save();
+          <% } %>
+        });
+      <% } %>
+
       <% if (events.beforeSave.shouldInclude()) { %>
-        static::saving(function ($post) {
+        static::saving(function ($entry) {
           <% if (events.beforeSave.slugify) { %>
             // Take care of slugs
             foreach (
@@ -44,8 +53,8 @@ class <%- modelName %> extends Model
               })
               as $colKey => $col
             ) {
-              if ($post->{$col['of']}) {
-                $post->{$colKey} = Str::slug($post->{$col['of']});
+              if ($entry->{$col['of']}) {
+                $entry->{$colKey} = Str::slug($entry->{$col['of']});
               }
             }
           <% } %>
@@ -92,7 +101,10 @@ class <%- modelName %> extends Model
         "icon" => $this->modelIcon,
         "hasTimestamps" => $this->timestamps,
         "hasSoftDelete" => $this->hasSoftDeletes,
-        "admin" => $this->adminSettings
+        "hasOrdering" => <% if (sorting) { %> true <% } else { %> false <% } %>,
+        "isDraftable" => <% if (draftable) { %> true <% } else { %> false <% } %>,
+        "hasPermissions" => <% if (permissions) { %> true <% } else { %> false <% } %>,
+        "admin" => $this->adminSettings,
       ];
   }
 }

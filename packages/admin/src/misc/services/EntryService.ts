@@ -15,6 +15,10 @@ export class EntryService {
     return `${this.getListUrl(entryId)}/entries/${id}`
   }
 
+  static getDuplicateUrl(id: ItemID, entryId: string) {
+    return `${this.getListUrl(entryId)}/entries/duplicate/${id}`
+  }
+
   static apiGetUrl(id: ItemID, entryId: string) {
     return `${API_ENTRY_TYPES_URL}/${(
       entryId as string
@@ -23,6 +27,10 @@ export class EntryService {
 
   static apiGetListUrl(entryId: string) {
     return `${this.getListUrl((entryId as string).toLowerCase())}/items`
+  }
+
+  static apiGetListReorderUrl(entryId: string) {
+    return `${this.apiGetListUrl(entryId)}/reorder`
   }
 
   static apiGetCreateUrl(entryId: string) {
@@ -41,10 +49,9 @@ export class EntryService {
     if (!Object.keys(payload).length) return
 
     try {
-      const result = apiClient.patch(
-        `${API_ENTRY_TYPES_URL}/${info.model}/items/${info.id}`,
-        { data: payload }
-      )
+      const result = apiClient.patch(this.apiGetUrl(info.id, info.model), {
+        data: payload,
+      })
       return result
     } catch (e) {
       // TODO: Toast this message
@@ -54,9 +61,7 @@ export class EntryService {
 
   static async delete(info: { id: ItemID; model: DatabaseTableName }) {
     try {
-      const result = apiClient.delete(
-        `${API_ENTRY_TYPES_URL}/${info.model}/items/${info.id}`
-      )
+      const result = apiClient.delete(this.apiGetUrl(info.id, info.model))
       return result
     } catch (e) {
       // TODO: Toast this message
@@ -78,5 +83,12 @@ export class EntryService {
       // TODO: Toast this message
       console.error(`An error happened during a item create call`, e)
     }
+  }
+
+  static async reorder(
+    model: DatabaseTableName,
+    payload: { fromId: ItemID; toId: ItemID }
+  ) {
+    return apiClient.post(this.apiGetListReorderUrl(model), { data: payload })
   }
 }

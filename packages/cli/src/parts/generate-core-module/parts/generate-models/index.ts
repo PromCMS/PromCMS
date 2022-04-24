@@ -19,6 +19,9 @@ const columnTypeToCast = (type: ColumnType['type']) => {
     case 'json':
       finalType = 'array';
       break;
+    case 'boolean':
+      finalType = 'boolean';
+      break;
     default:
       break;
   }
@@ -41,27 +44,34 @@ const generateModels = async (
     const currentModel = configModels[modelKey];
 
     const info = {
-      softDelete: false,
-      timestamp: false,
-      tableName: modelKey.toLocaleLowerCase(),
       modelName: capitalizedModelName,
       ...currentModel,
       columnCasts: Object.entries(currentModel.columns)
-        .filter(([_, { type }]) => type === 'json')
+        .filter(([_, { type }]) => type === 'json' || type === 'boolean')
         .map(([key, { type }]) => {
           return [key, columnTypeToCast(type)];
         }),
       events: {
         shouldInclude() {
-          return !!Object.values(this.beforeSave).filter((value) => value);
+          return (
+            this.beforeSave.shouldInclude() || this.afterCreated.shouldInclude()
+          );
         },
         beforeSave: {
           shouldInclude() {
-            return !!Object.values(this.slugify).filter((value) => value);
+            return this.slugify;
           },
+
           slugify: !!Object.entries(currentModel.columns).find(
             ([_colKey, col]) => col.type === 'slug'
           ),
+        },
+        afterCreated: {
+          shouldInclude() {
+            return this.ordering;
+          },
+
+          ordering: currentModel.sorting,
         },
       },
       formattedColumns: Object.keys(currentModel.columns).reduce(

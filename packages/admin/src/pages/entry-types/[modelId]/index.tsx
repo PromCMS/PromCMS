@@ -1,29 +1,38 @@
 import { iconSet } from '@prom-cms/icons'
 import { PageLayout } from '@layouts'
 import { useEffect, useMemo, useState, VFC } from 'react'
-import { TableView, TableViewCol } from '@components/TableView'
+import { TableView, TableViewCol, TableViewProps } from '@components/TableView'
 import { useModelItems } from '@hooks/useModelItems'
 import useCurrentModel from '@hooks/useCurrentModel'
 import { formatApiModelResultToTableView, modelIsCustom } from '@utils'
-import { ItemID } from '@prom-cms/shared'
+import { ApiResultItem, ItemID, PagedResult } from '@prom-cms/shared'
 import { useRouter } from 'next/router'
 import { EntryService } from '@services'
 import { MESSAGES } from '@constants'
 import NotFoundPage from '@pages/404'
 import { useTranslation } from 'react-i18next'
 import { Button, Pagination } from '@mantine/core'
+import { useListState } from '@mantine/hooks'
 
 const EntryTypeUnderpage: VFC = ({}) => {
   const { push } = useRouter()
   const [page, setPage] = useState(1)
   const model = useCurrentModel()
+  const [apiWorking, setApiWorking] = useState(false)
   const {
     query: { modelId: routerModelId },
   } = useRouter()
-  const { data, isLoading, isError } = useModelItems(model?.name, {
+  const { data, isLoading, isError, mutate } = useModelItems(model?.name, {
     page: page,
   })
   const { t } = useTranslation()
+  const [listItems, handlers] = useListState<ApiResultItem>(data?.data)
+
+  useEffect(() => {
+    if (data?.data) {
+      handlers.setState(data?.data)
+    }
+  }, [data])
 
   // metadata from model items/entries
   const metadata = useMemo(() => {
@@ -33,6 +42,27 @@ const EntryTypeUnderpage: VFC = ({}) => {
     return metadata
   }, [data])
 
+  const onDragEnd: TableViewProps['onDragEnd'] = async ({
+    source,
+    destination,
+  }) => {
+    if (destination?.index === undefined) return
+
+    setApiWorking(true)
+
+    const fromId = listItems[source.index].id
+    const toId = listItems[destination.index].id
+
+    handlers.reorder({ from: source.index, to: destination.index })
+
+    await EntryService.reorder(model!.name, {
+      fromId,
+      toId,
+    })
+
+    setApiWorking(false)
+  }
+
   // format model result from api to table
   const tableViewColumns = useMemo<TableViewCol[] | undefined>(() => {
     if (!model) return
@@ -40,14 +70,20 @@ const EntryTypeUnderpage: VFC = ({}) => {
     return formatApiModelResultToTableView(model)
   }, [model])
 
-  // take care of action if user requests entry edit
-
   // take care of action if user requests entry delete
-  const onItemDeleteRequest = (id: ItemID) => {
+  const onItemDeleteRequest = async (id: ItemID) => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-      EntryService.delete({ id, model: model?.name as string })
+      await EntryService.delete({ id, model: model?.name as string })
+      mutate()
     }
   }
+
+  const onItemDuplicateRequest = async (id: ItemID) => {
+    if (confirm(t(MESSAGES.ENTRY_ITEM_DUPLICATE))) {
+      push(EntryService.getDuplicateUrl(id, model?.name as string))
+    }
+  }
+
   const onCreateRequest = () =>
     push(EntryService.getCreateUrl(model?.name as string))
 
@@ -81,17 +117,21 @@ const EntryTypeUnderpage: VFC = ({}) => {
             onClick={onCreateRequest}
           >
             <span className="hidden md:block">{t('Add new entry')}</span>
-            <iconSet.UserPlus className="inline-block h-5 w-5 md:ml-3" />{' '}
+            <iconSet.Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
           </Button>
         </div>
       </div>
       <TableView
         isLoading={isLoading || isError}
-        items={data?.data || []}
+        items={listItems}
         columns={tableViewColumns}
         metadata={metadata || undefined}
         onEditAction={onEditRequest}
         onDeleteAction={onItemDeleteRequest}
+        onDuplicateAction={onItemDuplicateRequest}
+        ordering={model.hasOrdering}
+        onDragEnd={onDragEnd}
+        disabled={apiWorking}
         pagination={
           <Pagination
             total={data?.last_page || 1}

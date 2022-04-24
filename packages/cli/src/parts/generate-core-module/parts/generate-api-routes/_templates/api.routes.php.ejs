@@ -121,6 +121,10 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
       // get many entries for type
       $innerRouter->get('', '\App\Controllers\EntryType:getManyEntries');
 
+      $innerRouter
+        ->post('/reorder', '\App\Controllers\EntryType:reorderEntries')
+        ->add($auth);
+
       // create a entry-type entry
       $innerRouter
         ->post('/create', '\App\Controllers\EntryType:createEntry')
@@ -134,6 +138,7 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
         $innerRouter
           ->patch('', '\App\Controllers\EntryType:updateEntry')
           ->add($auth);
+        // Delete
         $innerRouter
           ->delete('', '\App\Controllers\EntryType:deleteEntry')
           ->add($auth);

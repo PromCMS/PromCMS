@@ -18,9 +18,15 @@ export type ApiFileInputData = Pick<FileInfo, 'private' | 'description'> & {
 };
 
 export interface ApiResultModel
-  extends Omit<DatabaseConfigModel, 'timestamp' | 'softDelete'> {
+  extends Omit<
+    DatabaseConfigModel,
+    'timestamp' | 'softDelete' | 'sorting' | 'draftable' | 'permissions'
+  > {
   hasTimestamps: DatabaseConfigModel['timestamp'];
   hasSoftDelete: DatabaseConfigModel['softDelete'];
+  hasOrdering: DatabaseConfigModel['sorting'];
+  isDraftable: DatabaseConfigModel['draftable'];
+  hasPermissions?: DatabaseConfigModel['permissions'];
 }
 
 export type ApiResultModels = Record<DatabaseTableName, ApiResultModel>;

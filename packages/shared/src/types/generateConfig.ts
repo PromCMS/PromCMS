@@ -26,6 +26,10 @@ type ColumnSettingsBase = {
    * @default true
    */
   editable?: boolean;
+  /**
+   * If column is hidden in admin ui
+   */
+  adminHidden?: boolean;
 };
 
 export type EnumColumnType = ColumnSettingsBase & {
@@ -92,6 +96,19 @@ export interface DatabaseConfigModel extends DatabaseConfigItemBase {
    * If generated table have entries with soft-delete
    */
   softDelete?: boolean;
+  /**
+   * Enable drafting of items
+   */
+  draftable?: boolean;
+  /**
+   * Enable sorting for entries by drag and drop
+   */
+  sorting?: boolean;
+  /**
+   * Enable permission system for entries
+   *  @default true
+   */
+  permissions?: boolean;
   /**
    * Admin config
    */

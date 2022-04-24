@@ -7,4 +7,5 @@ export enum MESSAGES {
   PLEASE_ENTER_EMAIL = 'Please enter email',
   PLEASE_ENTER_MFA_TOKEN = 'Please enter your token',
   MFA_TOKEN_SHORT = 'Your token is too short',
+  ENTRY_ITEM_DUPLICATE = 'Are you sure you want to duplicate this item?',
 }

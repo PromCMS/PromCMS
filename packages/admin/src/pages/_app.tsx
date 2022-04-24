@@ -48,8 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       styles={{
         Divider: (theme) => ({
           root: {
-            opacity: '70%',
-            borderTopColor: `${theme.colors.blue[3]}!important`,
+            borderTopColor: `#e5e7eb!important`,
           },
         }),
       }}

@@ -26,7 +26,7 @@ const FilePage: NextPage = () => {
       title={
         <Title order={4}>
           {isLoading ? (
-            'Loading...'
+            t('Loading...')
           ) : (
             <>
               File info of &apos;
@@ -41,7 +41,7 @@ const FilePage: NextPage = () => {
         <>
           <Divider mb="lg" mt="sm" size="sm" />
           <Tooltip
-            label="Link copied!"
+            label={t('Link copied!')}
             gutter={5}
             placement="center"
             position="bottom"

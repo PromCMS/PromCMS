@@ -1,6 +1,7 @@
 import { TableViewCol } from '@components/TableView'
 import { DatabaseConfigModel } from '@prom-cms/shared'
 import { CUSTOM_MODELS } from '@constants'
+import { iconSet } from '@prom-cms/icons'
 
 export const formatApiModelResultToTableView = (
   model: DatabaseConfigModel
@@ -15,6 +16,7 @@ export const formatApiModelResultToTableView = (
         columnInfo.hide ||
         columnInfo.type === 'slug' ||
         columnInfo.type === 'json' ||
+        columnInfo.adminHidden ||
         false
       ),
       // TODO make new formatter
@@ -23,6 +25,11 @@ export const formatApiModelResultToTableView = (
           return JSON.stringify(value || {})
         },
       }),*/
+      ...(columnInfo.type === 'boolean' && {
+        formatter({ is_published }) {
+          return is_published ? 'yes' : 'no'
+        },
+      }),
     }
   })
 
@@ -50,3 +57,6 @@ export const getObjectDiff = (
 
 export const modelIsCustom = (modelName: string) =>
   CUSTOM_MODELS.includes(modelName.toLowerCase())
+
+export const generateUuid = () =>
+  Date.now().toString(36) + Math.random().toString(36).substring(2)

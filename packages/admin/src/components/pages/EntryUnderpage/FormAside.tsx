@@ -29,7 +29,7 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
   const { itemData, itemIsLoading, currentView, exitView } =
     useEntryUnderpageContext()
   const currentModel = useCurrentModel()
-  const { watch } = useFormContext()
+  const { watch, setValue } = useFormContext()
   const formValues = watch()
   const classes = useClassNames()
   const { t } = useTranslation()
@@ -62,7 +62,58 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
     return prepareFieldsForMapper({ ...currentModel, columns })
   }, [currentModel])
 
-  // TODO: Delete action
+  const saveButtonText = useMemo(() => {
+    let text = ''
+
+    if (currentView === 'create') {
+      if (isSubmitting) {
+        text = 'Publishing'
+      } else {
+        text = 'Publish'
+      }
+    } else if (currentView === 'update') {
+      if (isSubmitting) {
+        text = 'Updating'
+      } else {
+        text = 'Update'
+      }
+    }
+
+    return t(text)
+  }, [currentView, isSubmitting, t])
+
+  const publishButtonText = useMemo(() => {
+    let text = ''
+
+    // We dont have to compute more so we end prematurely
+    if (!currentModel?.isDraftable) return text
+
+    if (currentView === 'create') {
+      if (isSubmitting) {
+        text = 'Saving'
+      } else {
+        text = 'Save as concept'
+      }
+    } else if (currentView === 'update') {
+      if (itemData!.is_published) {
+        text = 'Unpublish'
+      } else {
+        text = 'Publish'
+      }
+    }
+
+    return t(text)
+  }, [currentView, isSubmitting, currentModel, itemData, t])
+
+  const handlePublishButtonClick = () => {
+    setValue('is_published', itemData ? !itemData.is_published : false)
+  }
+
+  const handleSaveButtonClick = () => {
+    if (currentView === 'create') {
+      setValue('is_published', true)
+    }
+  }
 
   return (
     <aside className={clsx(classes.aside, 'sticky top-0 pr-5')}>
@@ -128,15 +179,29 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
           ) : (
             <span></span>
           )}
+          {currentModel?.isDraftable && (
+            <Button
+              size="sm"
+              variant="white"
+              type="submit"
+              disabled={isSubmitting}
+              className="ml-auto"
+              onClick={handlePublishButtonClick}
+              px={'sm'}
+            >
+              {publishButtonText}
+            </Button>
+          )}
+
           <Button
             size="lg"
             color="green"
             type="submit"
             disabled={!isEdited}
             loading={isSubmitting}
-            className={clsx(isSubmitting && '!cursor-progress')}
+            onClick={handleSaveButtonClick}
           >
-            {t(isSubmitting ? 'Saving...' : 'Save')}
+            {saveButtonText}
           </Button>
         </Group>
       </AsideItemWrap>
