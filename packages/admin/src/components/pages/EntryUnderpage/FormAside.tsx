@@ -95,7 +95,9 @@ export const FormAside: VFC<{ isSubmitting: boolean }> = ({ isSubmitting }) => {
         text = 'Save as concept'
       }
     } else if (currentView === 'update') {
-      if (itemData!.is_published) {
+      if (!itemData) return text
+
+      if (itemData.is_published) {
         text = 'Unpublish'
       } else {
         text = 'Publish'
