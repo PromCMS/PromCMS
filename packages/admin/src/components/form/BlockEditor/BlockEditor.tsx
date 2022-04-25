@@ -27,11 +27,12 @@ export const BlockEditor = forwardRef<EditorJS, BlockEditorProps>(
       <Controller
         control={control}
         name="content"
-        render={({ field: { onChange } }) => (
+        render={({ field: { onChange, name }, formState: { errors } }) => (
           <LazyEditor
             editorRef={editorRef}
             onChange={onEditorChange(onChange)}
             placeholder={t('Start typing here...') as string}
+            error={errors?.[name]?.message}
             {...props}
           />
         )}

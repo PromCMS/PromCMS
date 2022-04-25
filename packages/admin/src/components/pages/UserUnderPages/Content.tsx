@@ -62,7 +62,7 @@ export const Content: VFC = () => {
                       <Skeleton className="h-4 w-16" />
                     ) : (
                       <p className="text-green-500 underline">
-                        {view == 'update' ? user?.id : 'Create'}
+                        {view == 'update' ? user?.id : 'Send invite'}
                       </p>
                     ),
                   },

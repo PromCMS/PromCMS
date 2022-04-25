@@ -42,7 +42,6 @@ const generateModels = async (
   for (const modelKey in configModels) {
     const capitalizedModelName = capitalizeFirstLetter(modelKey);
     const currentModel = configModels[modelKey];
-
     const info = {
       modelName: capitalizedModelName,
       ...currentModel,

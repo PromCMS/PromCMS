@@ -8,6 +8,8 @@ export const CopyName: VFC<{ name: string }> = ({ name }) => {
   const clipboard = useClipboard()
   const { t } = useTranslation()
 
+  const onCopyClick = () => clipboard.copy(name)
+
   return (
     <Tooltip
       label={t('Copied!')}
@@ -19,7 +21,7 @@ export const CopyName: VFC<{ name: string }> = ({ name }) => {
       transitionDuration={150}
       opened={clipboard.copied}
     >
-      <ActionIcon color="blue" onClick={() => clipboard.copy(name)} size={20}>
+      <ActionIcon color="blue" onClick={onCopyClick} size={20}>
         <iconSet.Paperclip size={20} />
       </ActionIcon>
     </Tooltip>

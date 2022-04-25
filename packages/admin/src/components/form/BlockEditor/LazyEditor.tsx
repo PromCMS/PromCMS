@@ -30,11 +30,13 @@ export interface LazyEditorProps
   extends Omit<EditorConfig, 'holder' | 'tools'> {
   initialValue?: EditorConfig['data']
   editorRef?: Ref<EditorJS | undefined>
+  error?: string
 }
 
 export const LazyEditor: FC<LazyEditorProps> = ({
   initialValue,
   editorRef,
+  error,
   ...config
 }) => {
   const innerRef = useRef<EditorJS>()
@@ -175,5 +177,10 @@ export const LazyEditor: FC<LazyEditorProps> = ({
     }
   }, [editorReady, initialValue])
 
-  return <div id={EDITOR_HOLDER_ID} />
+  return (
+    <div>
+      {error && <small className="font-bold text-red-500">{error}</small>}
+      <div id={EDITOR_HOLDER_ID} />
+    </div>
+  )
 }

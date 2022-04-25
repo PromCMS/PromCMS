@@ -11,7 +11,7 @@
     
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
     "generate:cms": "yarn workspace @prom-cms/cli run generate:cms",
-    "regenerate:cms": "yarn workspace @prom-cms/cli run regenerate:cms",
+    "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
 
     "build:library": "turbo run build --scope=\"@prom-cms/cli\" --scope=\"@prom-cms/icons\" --scope=\"@prom-cms/shared\" --no-deps",
     "build:admin": "turbo run build --scope=\"@prom-cms/admin\" --no-deps",

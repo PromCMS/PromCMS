@@ -77,6 +77,7 @@ export class GenerateDevelopProgram extends Command {
       },
       {
         title: 'Sync database',
+        skip: this.regenerate,
         job: syncDatabase,
       },
     ];

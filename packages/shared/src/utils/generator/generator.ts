@@ -122,6 +122,12 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         type: 'enum',
         enum: ['Admin', 'Maintainer', 'Editor'],
       },
+      state: {
+        title: 'State',
+        type: 'enum',
+        editable: false,
+        enum: ['active', 'invited', 'blocked', 'password-reset'],
+      },
       ...((models['users'] || {}).columns || {}),
     },
   };

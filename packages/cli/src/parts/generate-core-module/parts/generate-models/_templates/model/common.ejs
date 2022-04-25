@@ -63,6 +63,13 @@ class <%- modelName %> extends Model
     }
   <% } %>
 
+  <% if (draftable) { %>
+    public function scopeOnlyPublished($query)
+    {
+        return $query->where('is_published', 1);
+    }
+  <% } %>
+
   protected static $tableColumns = [
     <% 
       Object.keys(formattedColumns).forEach(columnKey => { 

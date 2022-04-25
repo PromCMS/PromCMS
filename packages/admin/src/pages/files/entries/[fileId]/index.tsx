@@ -15,6 +15,12 @@ const FilePage: NextPage = () => {
   const clipboard = useClipboard()
   const { data, isLoading } = useModelItem('files', query.fileId as string)
 
+  // TODO: Get base url from server settings
+  const onCopyClick = () =>
+    clipboard.copy(
+      new URL(FileService.getApiRawUrl(data!.id), window.location.origin)
+    )
+
   return (
     <Drawer
       size="xl"
@@ -60,7 +66,7 @@ const FilePage: NextPage = () => {
                 root: { paddingRight: 15, height: 40 },
                 rightIcon: { marginLeft: 15 },
               }}
-              onClick={() => clipboard.copy(FileService.getApiRawUrl(data.id))}
+              onClick={onCopyClick}
             >
               {t('Copy link to clipboard')}
             </Button>

@@ -14,7 +14,6 @@ import {
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Label } from './Label'
 
 export interface ImageSelectProps
   extends Omit<

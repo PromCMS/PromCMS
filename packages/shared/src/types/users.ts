@@ -5,6 +5,13 @@ export enum UserRoles {
   Admin = 'Admin',
 }
 
+export enum UserStates {
+  active = 'active',
+  blocked = 'blocked',
+  invited = 'invited',
+  passwordReset = 'password-reset',
+}
+
 export interface User {
   id: ItemID;
   name: string;
@@ -13,6 +20,7 @@ export interface User {
   role: UserRoles;
   /** Avatar url */
   avatar: string;
+  state: UserStates;
   [x: string]: any;
 }
 

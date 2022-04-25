@@ -11,7 +11,9 @@ import { getObjectDiff } from '@utils'
 import { useClassNames } from '../EntryUnderpage/useClassNames'
 import { useData } from './context'
 import { iconSet } from '@prom-cms/icons'
-import { ActionIcon, Button } from '@mantine/core'
+import { ActionIcon, Button, SimpleGrid } from '@mantine/core'
+import { useGlobalContext } from '@contexts/GlobalContext'
+import { UserStates } from '@prom-cms/shared'
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
@@ -28,6 +30,7 @@ export const FormAside: VFC = () => {
     watch,
     formState: { isSubmitting },
   } = useFormContext()
+  const { currentUserIsAdmin } = useGlobalContext()
   const formValues = watch()
   const classes = useClassNames()
   const { t } = useTranslation()
@@ -51,7 +54,7 @@ export const FormAside: VFC = () => {
   }
 
   return (
-    <aside className={clsx(classes.aside, 'sticky top-0')}>
+    <aside className={clsx(classes.aside, 'sticky top-0 grid gap-5')}>
       <AsideItemWrap className="!pt-0" title="Apply changes">
         {view === 'update' && (
           <div
@@ -130,6 +133,29 @@ export const FormAside: VFC = () => {
           </Button>
         </div>
       </AsideItemWrap>
+      {view === 'update' && currentUserIsAdmin && false && (
+        <AsideItemWrap title={t('Actions')}>
+          <SimpleGrid cols={1} className="p-5">
+            <Button disabled={!user || user?.state === UserStates.blocked}>
+              {t(
+                user?.state === UserStates.passwordReset
+                  ? 'Resend password reset'
+                  : 'Send password reset'
+              )}
+            </Button>
+            <Button
+              disabled={!user || user?.state === UserStates.passwordReset}
+              color="red"
+            >
+              {t(
+                user?.state === UserStates.blocked
+                  ? 'Unblock user'
+                  : 'Block user'
+              )}
+            </Button>
+          </SimpleGrid>
+        </AsideItemWrap>
+      )}
     </aside>
   )
 }

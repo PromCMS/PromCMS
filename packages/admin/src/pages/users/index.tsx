@@ -40,7 +40,7 @@ const UsersListPage: VFC = () => {
   const userCanEdit = currentUserIsAdmin
 
   // Take care of user creation
-  const onCreateRequest = () => push(`/users/create`)
+  const onCreateRequest = () => push(`/users/invite`)
 
   // Take care of edit requests
   const onEditRequest = userCanEdit

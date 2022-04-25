@@ -15,6 +15,7 @@ export interface IEntryUnderpageContext {
   itemIsLoading: boolean
   itemData?: ApiResultItem | undefined
   itemIsMissing: boolean
+  mutateItem: KeyedMutator<ApiResultItem>
 }
 
 export const EntryUnderpageContext = createContext<IEntryUnderpageContext>({
@@ -23,6 +24,7 @@ export const EntryUnderpageContext = createContext<IEntryUnderpageContext>({
   itemIsMissing: false,
   itemIsLoading: true,
   itemIsError: false,
+  mutateItem: async () => undefined,
 })
 
 export const useEntryUnderpageContext = () => useContext(EntryUnderpageContext)
@@ -37,6 +39,7 @@ export const EntryUnderpageContextProvider: FC<{
     isError: itemIsError,
     isLoading: itemIsLoading,
     itemIsMissing,
+    mutate,
   } = useCurrentModelItem()
 
   // Unset id because of duplication
@@ -61,6 +64,7 @@ export const EntryUnderpageContextProvider: FC<{
         itemIsError,
         itemIsLoading,
         itemIsMissing,
+        mutateItem: mutate,
       }}
     >
       {children}
