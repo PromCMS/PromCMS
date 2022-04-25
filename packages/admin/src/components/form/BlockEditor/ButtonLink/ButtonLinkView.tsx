@@ -133,7 +133,7 @@ export const ButtonLinkView: VFC<{
       className="flex gap-5 !rounded-none"
     >
       {IconComponent && <IconComponent />}
-      {data.label || data.linkTo} sdfds
+      {data.label || data.linkTo}
     </CustomButton>
   )
 }
