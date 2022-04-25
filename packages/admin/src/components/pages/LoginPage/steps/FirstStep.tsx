@@ -1,5 +1,4 @@
-import Input from '@components/form/Input'
-import { Anchor, Group, PasswordInput, Text, TextInput } from '@mantine/core'
+import { Anchor, Group, PasswordInput, TextInput } from '@mantine/core'
 import Link from 'next/link'
 import { VFC } from 'react'
 import { useFormContext } from 'react-hook-form'
