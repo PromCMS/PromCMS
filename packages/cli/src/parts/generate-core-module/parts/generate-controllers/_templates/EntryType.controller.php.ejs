@@ -228,13 +228,15 @@ class EntryType
           'data' => $modelInstancePath::create($parsedBody['data']),
         ])
       );
-  
+
       return $response;
-    } catch (\Illuminate\Database\QueryException $ex) {
+    } catch (\Exception $ex) {
       if ($ex->getCode() === 23000) {
         return $response->withStatus(400);
       } else {
-        return $response->withStatus(500);
+        return $response
+          ->withStatus(500)
+          ->withHeader('Content-Description', $ex->getMessage());
       }
     }
   }
