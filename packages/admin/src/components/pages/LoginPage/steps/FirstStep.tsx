@@ -39,7 +39,6 @@ export const FirstStep: VFC = () => {
       </Group>
       <PasswordInput
         label={t('Password')}
-        type="password"
         error={t(errors?.password?.message)}
         className="w-full"
         {...register('password')}
