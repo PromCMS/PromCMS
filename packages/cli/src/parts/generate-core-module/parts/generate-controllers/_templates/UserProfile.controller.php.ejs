@@ -239,6 +239,7 @@ class UserProfile
     }
 
     $user->password = $passwordService->generate($newPassword);
+    $user->state = 'active';
     $user->save();
 
     return $response;
