@@ -17,7 +17,7 @@ export const UserUnderpageForm: VFC = () => {
 
     if (
       newModel.columns.role &&
-      (!currentUserIsAdmin || currentUser?.role !== UserRoles.Maintainer)
+      !(currentUserIsAdmin || currentUser?.role === UserRoles.Maintainer)
     ) {
       unset(newModel, 'columns.role')
     }
