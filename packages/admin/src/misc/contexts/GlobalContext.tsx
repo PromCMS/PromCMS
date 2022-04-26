@@ -88,7 +88,8 @@ export const GlobalContextProvider: FC = ({ children }) => {
             // User is not logged in so kick him to login page
             if (
               !pathname.includes('/login') &&
-              !pathname.includes('/reset-password')
+              !pathname.includes('/reset-password') &&
+              !pathname.includes('/finalize-registration')
             )
               await push('/login')
           } else {
