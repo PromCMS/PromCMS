@@ -1,3 +1,4 @@
+import { apiClient } from '@api'
 import { ApiResultItem, ItemID } from '@prom-cms/shared'
 import { EntryService } from '.'
 
@@ -12,6 +13,18 @@ export class UserService {
     return `${this.getListUrl()}/${id}`
   }
 
+  static apiGetBlockUrl(id: ItemID) {
+    return `${EntryService.apiGetUrl(id, 'users')}/block`
+  }
+
+  static apiGetUnblockUrl(id: ItemID) {
+    return `${EntryService.apiGetUrl(id, 'users')}/unblock`
+  }
+
+  static apiGetRequestPasswordResetUrl(id: ItemID) {
+    return `${EntryService.apiGetUrl(id, 'users')}/request-password-reset`
+  }
+
   static async create(payload: ApiResultItem) {
     return EntryService.create({ model: 'users' }, payload)
   }
@@ -22,5 +35,21 @@ export class UserService {
 
   static async delete(id: ItemID) {
     return EntryService.delete({ model: 'users', id })
+  }
+
+  static async block(userId: ItemID) {
+    return apiClient.get(this.apiGetBlockUrl(userId))
+  }
+
+  static async unblock(userId: ItemID) {
+    return apiClient.get(this.apiGetUnblockUrl(userId))
+  }
+
+  static async requestPasswordReset(userId: ItemID) {
+    return apiClient.get(this.apiGetRequestPasswordResetUrl(userId))
+  }
+
+  static toggleBlock(userId: ItemID, isBlocked: boolean) {
+    return isBlocked ? this.unblock(userId) : this.block(userId)
   }
 }

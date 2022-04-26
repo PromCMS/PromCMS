@@ -1,7 +1,11 @@
 import { DatabaseConfigModel, DatabaseTableName } from './generateConfig';
-import { File as FileInfo } from './users';
+import { File as FileInfo, UserStates } from './users';
 
 export type PrimitiveTypes = 'number' | 'string' | 'boolean' | 'date';
+
+export type LoginFailedResponseCodes =
+  | 'invalid-credentials'
+  | `user-state-${UserStates}`;
 
 export type ItemID = number | string;
 

@@ -9,7 +9,7 @@ import { capitalizeFirstLetter } from '@prom-cms/shared'
 import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu'
 import Skeleton from '@components/Skeleton'
 import { FormAside } from './FormAside'
-import { useOnSubmitCallback } from './useOnSubmitCallback'
+import { useOnSubmitCallback } from './hooks'
 import { useTranslation } from 'react-i18next'
 
 const FormWrapper: FC = ({ children }) => {

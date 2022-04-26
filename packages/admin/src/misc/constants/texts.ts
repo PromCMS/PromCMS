@@ -1,5 +1,6 @@
 export enum MESSAGES {
   ON_DELETE_REQUEST_PROMPT = 'Are you sure you want to delete this item?',
+  ERROR_BASIC = 'An error happened',
   CHANGE_PASSWORD = 'Change password',
   NEW_PASSWORD = 'New password',
   OLD_PASSWORD = 'Old password',
@@ -8,4 +9,9 @@ export enum MESSAGES {
   PLEASE_ENTER_MFA_TOKEN = 'Please enter your token',
   MFA_TOKEN_SHORT = 'Your token is too short',
   ENTRY_ITEM_DUPLICATE = 'Are you sure you want to duplicate this item?',
+  LOGIN_INVALID_CREDENTIALS = 'Wrong email or password',
+  LOGIN_USER_BLOCKED = 'Looks like your account is blocked',
+  LOGIN_USER_INVITED = 'Looks like you did not finish registration. Please check your inbox.',
+  LOGIN_USER_PASSWORD_RESET = 'Looks like you did not finish password reset. Please check your inbox.',
+  DUPLICATE_USER = 'User with this email already exists',
 }

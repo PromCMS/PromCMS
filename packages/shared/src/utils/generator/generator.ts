@@ -120,7 +120,9 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       role: {
         title: 'Role',
         type: 'enum',
-        enum: ['Admin', 'Maintainer', 'Editor'],
+        enum: ['admin', 'maintainer', 'editor'],
+        unique: false,
+        required: true,
       },
       state: {
         title: 'State',

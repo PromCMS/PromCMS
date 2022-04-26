@@ -12,11 +12,11 @@ import { EntryService } from '@services'
 import { ApiResultItem, capitalizeFirstLetter } from '@prom-cms/shared'
 import Skeleton from '@components/Skeleton'
 import { useTranslation } from 'react-i18next'
-import { useNotifications } from '@mantine/notifications'
 import { getObjectDiff } from '@utils'
 import EditorJS from '@editorjs/editorjs'
 import { useRouter } from 'next/router'
 import axios from 'axios'
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 
 const Content: VFC = () => {
   const { currentView, itemData, itemIsLoading, mutateItem } =
@@ -24,7 +24,6 @@ const Content: VFC = () => {
   const editorRef = useRef<EditorJS>(null)
   // We make copy out of ref that came from useOnSubmit hook and make an object that contains refs
   const formContentRefs = useRef({ editorRef })
-  const notifications = useNotifications()
   const model = useCurrentModel()
   const { push } = useRouter()
   const { t } = useTranslation()
@@ -39,6 +38,7 @@ const Content: VFC = () => {
     resolver: schema && yupResolver(schema),
   })
   const { setError } = formMethods
+  const reqNotification = useRequestWithNotifications()
 
   useEffect(
     () => itemData && formMethods.reset(itemData),
@@ -47,18 +47,6 @@ const Content: VFC = () => {
 
   const onSubmit = async (values) => {
     const modelName = (model as NonNullable<typeof model>).name
-    const id = notifications.showNotification({
-      id: currentView === 'update' ? 'on-update-entry' : 'on-create-entry',
-      loading: true,
-      title: currentView === 'update' ? 'Updating' : 'Creating',
-      message: t(
-        currentView === 'update'
-          ? 'Updating your entry, please wait...'
-          : 'Creating new entry, please wait...'
-      ),
-      autoClose: false,
-      disallowClose: true,
-    })
 
     if (editorRef.current) {
       await editorRef.current?.isReady
@@ -67,47 +55,58 @@ const Content: VFC = () => {
     }
 
     try {
-      if (currentView === 'update') {
-        const finalValues = getObjectDiff(itemData, values) as ApiResultItem
-        const itemId = (itemData as NonNullable<typeof itemData>).id
+      await reqNotification(
+        {
+          title: currentView === 'update' ? 'Updating' : 'Creating',
+          message: t(
+            currentView === 'update'
+              ? 'Updating your entry, please wait...'
+              : 'Creating new entry, please wait...'
+          ),
+          successMessage:
+            currentView === 'create'
+              ? t('Your entry is created!')
+              : t('Your entry is updated!'),
+        },
+        async () => {
+          if (currentView === 'update') {
+            const finalValues = getObjectDiff(itemData, values) as ApiResultItem
+            const itemId = (itemData as NonNullable<typeof itemData>).id
 
-        await EntryService.update(
-          {
-            id: itemId,
-            model: modelName,
-          },
-          finalValues
-        )
+            await EntryService.update(
+              {
+                id: itemId,
+                model: modelName,
+              },
+              finalValues
+            )
 
-        await mutateItem((prevData) => {
-          if (prevData?.id) {
-            return {
-              ...(prevData || {}),
-              finalValues,
+            await mutateItem((prevData) => {
+              if (prevData?.id) {
+                return {
+                  ...(prevData || {}),
+                  finalValues,
+                }
+              } else {
+                return prevData
+              }
+            })
+          } else if (currentView === 'create') {
+            const result = await EntryService.create(
+              {
+                model: modelName,
+              },
+              values
+            )
+
+            if (!result?.data) {
+              throw new Error('No data has been received')
             }
-          } else {
-            return prevData
+
+            push(EntryService.getListUrl(model?.name as string))
           }
-        })
-
-        notifications.updateNotification(id, {
-          message: t('Your entry is updated!'),
-          autoClose: 2000,
-        })
-      } else if (currentView === 'create') {
-        const result = await EntryService.create(
-          {
-            model: modelName,
-          },
-          values
-        )
-
-        if (!result?.data) {
-          throw new Error('No data has been received')
         }
-
-        push(EntryService.getListUrl(model?.name as string))
-      }
+      )
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.data?.code === 23000) {
         const fieldNames = e.response.data.data
@@ -121,12 +120,6 @@ const Content: VFC = () => {
           }
         }
       }
-
-      notifications.updateNotification(id, {
-        color: 'red',
-        message: t('An error happened'),
-        autoClose: 2000,
-      })
     }
   }
 

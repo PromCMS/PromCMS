@@ -2,7 +2,7 @@ import { TableView, TableViewCol } from '@components/TableView'
 import { useModelInfo } from '@hooks/useModelInfo'
 import { useModelItems } from '@hooks/useModelItems'
 import { PageLayout } from '@layouts'
-import { ApiResultModel, ItemID } from '@prom-cms/shared'
+import { ApiResultModel, ItemID, UserRoles } from '@prom-cms/shared'
 import { iconSet } from '@prom-cms/icons'
 import { MESSAGES } from '@constants'
 import { EntryService } from '@services'
@@ -19,7 +19,7 @@ const UsersListPage: VFC = () => {
   const [page, setPage] = useState(1)
   const { currentUser, currentUserIsAdmin } = useGlobalContext()
   const model = useModelInfo<ApiResultModel>('users')
-  const { data, isLoading, isError } = useModelItems('users', {
+  const { data, isLoading, isError, mutate } = useModelItems('users', {
     page,
   })
 
@@ -37,7 +37,8 @@ const UsersListPage: VFC = () => {
     [data, currentUser]
   )
 
-  const userCanEdit = currentUserIsAdmin
+  const userCanEdit =
+    currentUserIsAdmin || currentUser?.role === UserRoles.Maintainer
 
   // Take care of user creation
   const onCreateRequest = () => push(`/users/invite`)
@@ -49,9 +50,10 @@ const UsersListPage: VFC = () => {
 
   // Take care of delete item request
   const onItemDeleteRequest = userCanEdit
-    ? (id: ItemID) => {
+    ? async (id: ItemID) => {
         if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-          EntryService.delete({ id, model: 'users' })
+          await EntryService.delete({ id, model: 'users' })
+          mutate()
         }
       }
     : undefined

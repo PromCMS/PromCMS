@@ -48,15 +48,9 @@ export class EntryService {
   ) {
     if (!Object.keys(payload).length) return
 
-    try {
-      const result = apiClient.patch(this.apiGetUrl(info.id, info.model), {
-        data: payload,
-      })
-      return result
-    } catch (e) {
-      // TODO: Toast this message
-      console.error(`An error happened during a item update call`, e)
-    }
+    return apiClient.patch(this.apiGetUrl(info.id, info.model), {
+      data: payload,
+    })
   }
 
   static async delete(info: { id: ItemID; model: DatabaseTableName }) {

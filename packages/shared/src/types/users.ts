@@ -1,8 +1,9 @@
 import { ItemID } from './api';
 
 export enum UserRoles {
-  Editor = 'Editor',
-  Admin = 'Admin',
+  Editor = 'editor',
+  Maintainer = 'maintainer',
+  Admin = 'admin',
 }
 
 export enum UserStates {

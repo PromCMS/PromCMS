@@ -1,18 +1,29 @@
-import { User } from '@prom-cms/shared'
+import { User, UserRoles } from '@prom-cms/shared'
 import { useMemo, VFC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useData } from './context'
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper'
+import { useGlobalContext } from '@contexts/GlobalContext'
+import unset from 'lodash/unset'
 
 export const UserUnderpageForm: VFC = () => {
   const { model } = useData()
+  const { currentUserIsAdmin, currentUser } = useGlobalContext()
   const { formState } = useFormContext<User>()
 
   const groupedFields = useMemo(() => {
     if (!model) return
+    const newModel = { ...model, columns: { ...model.columns } }
 
-    return prepareFieldsForMapper(model)
-  }, [model])
+    if (
+      newModel.columns.role &&
+      (!currentUserIsAdmin || currentUser?.role !== UserRoles.Maintainer)
+    ) {
+      unset(newModel, 'columns.role')
+    }
+
+    return prepareFieldsForMapper(newModel)
+  }, [model, currentUserIsAdmin, currentUser])
 
   return (
     <>

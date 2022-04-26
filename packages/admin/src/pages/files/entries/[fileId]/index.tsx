@@ -18,7 +18,10 @@ const FilePage: NextPage = () => {
   // TODO: Get base url from server settings
   const onCopyClick = () =>
     clipboard.copy(
-      new URL(FileService.getApiRawUrl(data!.id), window.location.origin)
+      new URL(
+        '/api' + FileService.getApiRawUrl(data!.id),
+        window.location.origin
+      )
     )
 
   return (

@@ -152,7 +152,7 @@ export class SeedDatabaseProgram extends Command {
           ...(modelKey.toLowerCase() === 'users' && i === 0
             ? {
                 email: 'test@example.com',
-                role: 'Admin',
+                role: 'admin',
               }
             : {}),
           ...(model.timestamp

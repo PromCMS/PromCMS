@@ -93,7 +93,7 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
 
       // create a entry-type entry
       $innerRouter
-        ->post('/create', '\App\Controllers\Users:createEntry')
+        ->post('/create', '\App\Controllers\Users:create')
         ->add($auth);
 
       // entry-type entry group
@@ -101,12 +101,19 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth) {
         $auth
       ) {
         $innerRouter->get('', '\App\Controllers\Users:getEntry');
+
         $innerRouter
           ->patch('', '\App\Controllers\Users:updateEntry')
           ->add($auth);
+
         $innerRouter
           ->delete('', '\App\Controllers\Users:deleteEntry')
           ->add($auth);
+
+        // Utils
+        $innerRouter->get('/block', '\App\Controllers\Users:block')->add($auth);
+        $innerRouter->get('/unblock', '\App\Controllers\Users:unblock')->add($auth);
+        $innerRouter->get('/request-password-reset', '\App\Controllers\Users:requestPasswordReset')->add($auth);
       });
     });
   });

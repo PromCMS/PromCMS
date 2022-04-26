@@ -6,9 +6,11 @@ import { VFC } from 'react'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { FirstStep } from '.'
 import { loginFormSchema } from './schema'
-import Link from 'next/link'
+import { LoginFailedResponseCodes } from '@prom-cms/shared'
 import { Trans, useTranslation } from 'react-i18next'
 import { Button, Paper, Title } from '@mantine/core'
+import { MESSAGES } from '@constants'
+import axios from 'axios'
 
 interface LoginFormValues {
   email: string
@@ -49,13 +51,31 @@ export const Form: VFC = () => {
 
           // push user to main page
           push('/')
-        } catch {
-          setError('password', { message: 'Wrong email or password' })
+        } catch (e) {
+          let message = MESSAGES.LOGIN_INVALID_CREDENTIALS
+          if (axios.isAxiosError(e) && e.response?.data?.code) {
+            const code: LoginFailedResponseCodes = e.response.data.code
+
+            switch (code) {
+              case 'user-state-blocked':
+                message = MESSAGES.LOGIN_USER_BLOCKED
+                break
+              case 'user-state-invited':
+                message = MESSAGES.LOGIN_USER_INVITED
+                break
+              case 'user-state-password-reset':
+                message = MESSAGES.LOGIN_USER_PASSWORD_RESET
+                break
+              default:
+                break
+            }
+          }
+          setError('password', { message: t(message) })
           setError('email', { message: ' ' })
         }
         break
       default:
-        console.error(`There are not implemented that much steps... (${step})`)
+        console.error(`There are not implemented that many steps... (${step})`)
     }
   }
 
