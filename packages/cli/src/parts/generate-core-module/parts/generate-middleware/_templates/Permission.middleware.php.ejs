@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use GuzzleHttp\Psr7\Response;
 
-class Auth
+class Permission
 {
   private $container;
 
@@ -23,7 +23,7 @@ class Auth
   }
 
   /**
-   * Auth middleware class, it interacts with session and gets if in session theres a user_id or throws 401
+   * Permission middleware class, it interacts with session and gets if in session theres a sufficient user role for provided route
    *
    * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
    * @param  \Psr\Http\Message\ResponseInterface      $response PSR7 response
@@ -33,27 +33,19 @@ class Auth
    */
   public function __invoke(Request $request, RequestHandler $handler): Response
   {
-    $userId = $this->container->get('session')->get('user_id', false);
+    $user = $this->container->get('session')->get('user', false);
     
-    if (!$userId) {
+    // TODO accept roles from upper scope
+    if (!($user->role === 'maintainer' || $user->role === 'admin')) {
       $response = new Response();
+
+      prepareJsonResponse($response, [], 'Your user role is not sufficient', 'role-not-sufficient');
+
       return $response
         ->withStatus(401)
-        ->withHeader('Content-Description', 'user logged off');
-    } else {
-      try {
-        $this->container->get('session')->set('user', \Users::findOrFail($userId));
-      } catch (\Exception $e) {
-        $response = new Response();
-        // User does not exist hence the session destroy
-        $this->container->get('session')::destroy();
-
-        return $response
-          ->withStatus(500)
-          ->withHeader('Content-Description', 'logged in user does not exist');
-      }
+        ->withHeader('Content-Description', 'role not sufficient');
     }
-
+    
     return $handler->handle($request);
   }
 }

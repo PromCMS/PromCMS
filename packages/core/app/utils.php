@@ -1,10 +1,12 @@
 <?php
-
 /**
  * DO NOT DELETE OR EDIT THIS FILE.
- * THIS FILE IS PART OF COCKPIT CMS.
+ * THIS FILE IS PART OF COCKPIT CMS
+ * AND ANY MODIFICATION MAY BREAK OR BE
+ * OVERRIDDEN IN NEXT UPDATE.
  *
  */
+use Psr\Http\Message\ResponseInterface;
 
 include_once __DIR__ . '/libs/env.bootstrap.php';
 
@@ -124,4 +126,27 @@ class BootstrapUtils
       ),
     );
   }
+}
+
+function prepareJsonResponse(
+  ResponseInterface $response,
+  array $data,
+  string $message = '',
+  $code = false
+) {
+  return $response->getBody()->write(
+    json_encode([
+      'data' => $data,
+      'message' => $message,
+      'code' => $code,
+    ]),
+  );
+}
+
+function verifyPostInput()
+{
+}
+
+function verifyQueryInput()
+{
 }

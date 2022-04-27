@@ -8,12 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class EntryTypes
 {
-    private $container;
     private $loadedModelNames;
 
     public function __construct(Container $container)
     {
-        $this->container = $container;
         $this->loadedModelNames = $container->get('sysinfo')["loadedModels"];
     }
 
