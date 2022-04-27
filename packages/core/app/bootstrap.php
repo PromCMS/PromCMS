@@ -72,6 +72,8 @@ function bootstrap()
         'name' => 'prom_session',
         'autorefresh' => true,
         'lifetime' => '1 hour',
+        'httponly' => !PROM_IS_DEV,
+        'secure' => !PROM_IS_DEV,
       ]),
     );
 
