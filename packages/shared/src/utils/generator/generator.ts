@@ -153,6 +153,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: {
           title: 'Title',
           type: 'string',
+          unique: true,
         },
         content: {
           title: 'Content',
