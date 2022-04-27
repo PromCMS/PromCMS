@@ -150,3 +150,8 @@ function verifyPostInput()
 function verifyQueryInput()
 {
 }
+
+function str_includes($haystack, $needle)
+{
+  return strpos($haystack, $needle) !== false;
+}
