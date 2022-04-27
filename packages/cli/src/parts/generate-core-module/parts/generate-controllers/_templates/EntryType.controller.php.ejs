@@ -197,7 +197,7 @@ class EntryType
       
       prepareJsonResponse(
         $response,
-        $item,
+        $item->toArray()
       );
 
       return $response;
@@ -229,7 +229,7 @@ class EntryType
     try {
       prepareJsonResponse(
         $response,
-        $modelInstancePath::findOrFail($args['itemId'])
+        $modelInstancePath::findOrFail($args['itemId'])->toArray()
       );
 
       return $response;
@@ -253,7 +253,7 @@ class EntryType
     try {
       prepareJsonResponse(
         $response,
-        $modelInstancePath::create($parsedBody['data'])
+        $modelInstancePath::create($parsedBody['data'])->toArray()
       );
 
       return $response;
@@ -284,7 +284,7 @@ class EntryType
 
     prepareJsonResponse( 
       $response,
-      $modelInstancePath::where('id', $args['itemId'])->delete()
+      $modelInstancePath::where('id', $args['itemId'])->delete()->toArray()
     );
 
     return $response;

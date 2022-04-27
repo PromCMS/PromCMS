@@ -11,9 +11,10 @@ import { getInitials } from '@utils'
 import { useConstructedMenuItems } from './utils'
 import { useTranslation } from 'react-i18next'
 import BackendImage from '@components/BackendImage'
+import { UserRoles } from '@prom-cms/shared'
 
 const Header: VFC = () => {
-  const { isBooting, currentUser } = useGlobalContext()
+  const { isBooting, currentUser, currentUserIsAdmin } = useGlobalContext()
   const { asPath, push } = useRouter()
   // TODO remove this and other loading stuff
   const [hasError, setError] = useState(false)
@@ -77,16 +78,19 @@ const Header: VFC = () => {
               >
                 {t('Profile')}
               </PopoverList.Item>
-              <PopoverList.Item
-                icon={'Users'}
-                className="text-blue-500"
-                onClick={() => {
-                  close()
-                  push('/users')
-                }}
-              >
-                {t('Users')}
-              </PopoverList.Item>
+              {(currentUser?.role === UserRoles.Maintainer ||
+                currentUserIsAdmin) && (
+                <PopoverList.Item
+                  icon={'Users'}
+                  className="text-blue-500"
+                  onClick={() => {
+                    close()
+                    push('/users')
+                  }}
+                >
+                  {t('Users')}
+                </PopoverList.Item>
+              )}
               <PopoverList.Item
                 icon={'Settings'}
                 className="text-blue-500"

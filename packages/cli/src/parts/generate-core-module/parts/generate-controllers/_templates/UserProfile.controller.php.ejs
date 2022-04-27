@@ -132,9 +132,11 @@ class UserProfile
       unset($data['state']);
     }
 
+    $user->update($data);
+
     prepareJsonResponse(
       $response, 
-      $user->update($data)
+      $user->toArray()
     );
 
     return $response;
