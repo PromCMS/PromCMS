@@ -59,6 +59,12 @@ if (!defined('PROM_IS_DEV')) {
 if (!defined('PROM_URL_BASE')) {
   define('PROM_URL_BASE', $PROM_URL_BASE);
 }
+if (!defined('PROM_SESSION_LIFETIME')) {
+  define('PROM_SESSION_LIFETIME', $_ENV['SECURITY_SESSION_LIFETIME'] ?? 3600);
+}
+if (!defined('PROM_TOKEN_LIFETIME')) {
+  define('PROM_TOKEN_LIFETIME', $_ENV['SECURITY_TOKEN_LIFETIME'] ?? 86400);
+}
 if (!defined('PROM_CORE_DIR')) {
   define(
     'PROM_CORE_DIR',

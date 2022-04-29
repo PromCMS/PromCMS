@@ -2,14 +2,23 @@
 
 namespace App\Services;
 
+use DateTime;
 use Firebase\JWT\JWT as JWTWorker;
 use Firebase\JWT\Key;
 
 class JWT 
 {
-  public function generate($payload)
+  public function generate($payload, $expiration = PROM_TOKEN_LIFETIME)
   {
-    return JWTWorker::encode($payload, $_ENV['SECURITY_SECRET'], 'HS256');
+    $now = time();
+
+    return JWTWorker::encode(array_merge(
+      [
+        'iat' => $now,
+        'exp' => $now + $expiration
+      ],
+      $payload
+    ), $_ENV['SECURITY_SECRET'], 'HS256');
   }
 
   public function validate(string $jwt)
