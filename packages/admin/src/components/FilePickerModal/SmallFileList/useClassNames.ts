@@ -11,6 +11,6 @@ export const useClassNames = () => ({
       isInteractible ? 'group-hover:shadow-lg duration-200' : 'cursor-default'
     ),
   itemLabel: clsx(
-    'mt-2 overflow-hidden text-ellipsis font-semibold group-hover:underline text-left'
+    'mt-2 overflow-hidden text-ellipsis font-semibold group-hover:underline text-left mb-0 leading-8'
   ),
 })

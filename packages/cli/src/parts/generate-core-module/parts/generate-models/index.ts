@@ -2,6 +2,8 @@ import {
   capitalizeFirstLetter,
   ColumnType,
   ExportConfig,
+  FileColumnType,
+  ColumnSettingsBase,
 } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
@@ -29,6 +31,16 @@ const columnTypeToCast = (type: ColumnType['type']) => {
   return finalType;
 };
 
+const virtualByModel = {
+  files: [
+    {
+      name: 'path',
+      accessKey: 'Path',
+      content: `return (PROM_URL_BASE ?? '') . "/api/entry-types/files/items/{$this->id}/raw";`,
+    },
+  ],
+};
+
 /**
  * Creates a models by provided config
  */
@@ -45,11 +57,20 @@ const generateModels = async (
     const info = {
       modelName: capitalizedModelName,
       ...currentModel,
+      relationships: (
+        Object.entries(currentModel.columns).filter(
+          ([_key, { type }]) => type === 'file'
+        ) as [string, ColumnSettingsBase & FileColumnType][]
+      ).map(([key, { multiple }]) => [
+        key,
+        {
+          type: multiple ? 'oneToMany' : 'oneToOne',
+          target: '\\Files::class',
+        },
+      ]),
       columnCasts: Object.entries(currentModel.columns)
         .filter(([_, { type }]) => type === 'json' || type === 'boolean')
-        .map(([key, { type }]) => {
-          return [key, columnTypeToCast(type)];
-        }),
+        .map(([key, { type }]) => [key, columnTypeToCast(type)]),
       events: {
         shouldInclude() {
           return (
@@ -73,6 +94,7 @@ const generateModels = async (
           ordering: currentModel.sorting,
         },
       },
+      virtuals: virtualByModel[modelKey.toLowerCase()] ?? [],
       formattedColumns: Object.keys(currentModel.columns).reduce(
         (finalTransformedColumns, currentColumnKey) => {
           const currentColumn = currentModel.columns[currentColumnKey];

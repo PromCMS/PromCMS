@@ -50,7 +50,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
 
     const onChangeCallback = useCallback(
       (ids: ItemID[]) => {
-        onChange(multiple ? ids[0] || null : ids)
+        onChange(!multiple ? ids[0] || null : ids)
       },
       [onChange, multiple]
     )
@@ -62,7 +62,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
 
     const modalPickedFiles = useMemo(
       () =>
-        selected === null
+        selected === null || selected === undefined
           ? []
           : Array.isArray(selected)
           ? selected
@@ -73,7 +73,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
     return (
       <>
         <div className={clsx(wrapperClassName, className)}>
-          <InputWrapper label={label} error={error}>
+          <InputWrapper size="md" label={label} error={error}>
             <div className="mt-1 flex items-center">
               <div className="relative mr-6 aspect-square w-20 overflow-hidden rounded-full">
                 {modalPickedFiles.length ? (
@@ -102,9 +102,10 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
         </div>
         <FilePickerModal
           title={t('Choose an image')}
+          size="xl"
           filter={[['mimeType', 'regexp', `^image/.*$`]]}
           multiple={multiple}
-          isOpen={modalOpen}
+          opened={modalOpen}
           onClose={onClose}
           pickedFiles={modalPickedFiles}
           onChange={onChangeCallback}

@@ -54,6 +54,8 @@ try {
                 $type = 'string';
               } elseif ($type === 'number') {
                 $type = 'integer';
+              } elseif ($type === 'file' || $type === 'ref') {
+                $type = 'bigInteger';
               }
 
               switch ($type) {
@@ -79,6 +81,11 @@ try {
 
             if (!$column['required']) {
               $field->nullable();
+            }
+
+            if (isset($column['default'])) {
+              $value = $column['default'];
+              $field->default($type === 'integer' ? intval($value) : $value);
             }
           }
 

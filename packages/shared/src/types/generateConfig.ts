@@ -1,6 +1,6 @@
 import { iconSet } from '@prom-cms/icons';
 
-type ColumnSettingsBase = {
+export type ColumnSettingsBase = {
   /**
    * Human readable title. Defaults to the column key of this object
    * @default string {keyOfThisObject}
@@ -35,11 +35,13 @@ type ColumnSettingsBase = {
 export type EnumColumnType = ColumnSettingsBase & {
   type: 'enum';
   enum: string[];
+  default?: string;
 };
 
 export type NumberColumnType = ColumnSettingsBase & {
   type: 'number';
   autoIncrement?: boolean;
+  default?: number;
 };
 
 export type SlugColumnType = ColumnSettingsBase & {
@@ -48,6 +50,22 @@ export type SlugColumnType = ColumnSettingsBase & {
    * TODO: Must be one of columns
    */
   of: string;
+};
+
+export type FileColumnType = ColumnSettingsBase & {
+  // TODO add option to foreign - it has advantage
+  // https://stackoverflow.com/questions/13541057/laravel-relationships-in-migrations
+  type: 'file';
+
+  /**
+   * If user can select multiple files
+   */
+  multiple?: boolean;
+
+  /**
+   * MimeType type part filter
+   */
+  typeFilter?: string;
 };
 
 export type NormalColumnType = ColumnSettingsBase & {
@@ -59,13 +77,18 @@ export type NormalColumnType = ColumnSettingsBase & {
     | 'dateTime'
     | 'longText'
     | 'json';
+  /**
+   * Set default value
+   */
+  default?: string;
 };
 
 export type ColumnType =
   | EnumColumnType
   | NumberColumnType
   | NormalColumnType
-  | SlugColumnType;
+  | SlugColumnType
+  | FileColumnType;
 
 export type ModelColumnName = string;
 export type DatabaseTableName = string;

@@ -1,19 +1,21 @@
-import Modal, { ModalProps } from '@components/Modal'
+import { Modal, ModalProps } from '@mantine/core'
 import { VFC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFileListContext } from '../context'
 
-export type UploadFilesModalProps = Pick<ModalProps, 'onClose' | 'isOpen'>
+export type UploadFilesModalProps = Pick<ModalProps, 'onClose'> & {
+  isOpen: boolean
+}
 
 export const UploadFilesModal: VFC<UploadFilesModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { getDropZoneInputProps, getDropZoneRootProps } = useFileListContext()
+  const { getDropZoneRootProps } = useFileListContext()
   const { t } = useTranslation()
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="normal">
+    <Modal opened={isOpen} onClose={onClose}>
       <div
         {...getDropZoneRootProps({
           className:

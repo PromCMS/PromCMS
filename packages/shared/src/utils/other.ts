@@ -21,6 +21,7 @@ export const convertColumnTypeToPrimitive = (
       primitiveType = 'string';
       break;
     case 'number':
+    case 'file':
       primitiveType = 'number';
       break;
   }

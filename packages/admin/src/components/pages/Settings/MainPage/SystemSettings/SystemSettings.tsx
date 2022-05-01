@@ -1,6 +1,8 @@
+import BackendImage from '@components/BackendImage'
 import ItemsMissingMessage from '@components/ItemsMissingMessage'
 import { useGlobalContext } from '@contexts/GlobalContext'
 import { useModelItems } from '@hooks/useModelItems'
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import {
   ActionIcon,
   Button,
@@ -8,6 +10,7 @@ import {
   Divider,
   Grid,
   Group,
+  Image,
   Pagination,
   Paper,
   Textarea,
@@ -40,7 +43,7 @@ export const SystemSettings: VFC = () => {
   const { data, mutate } = useModelItems('settings', { page: currentPage })
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>()
   const [creationAction, setCreationMode] = useState(false)
-  const notifications = useNotifications()
+  const reqNotification = useRequestWithNotifications()
 
   const onModalClose = () => {
     mutate()
@@ -57,31 +60,21 @@ export const SystemSettings: VFC = () => {
 
   const onDeleteClick = useCallback(
     (id: ItemID) => async () => {
-      const notifiactionId = notifications.showNotification({
-        id: 'on-delete-option',
-        loading: true,
-        title: 'Deleting',
-        message: t('Deleting selected option, please wait...'),
-        autoClose: false,
-        disallowClose: true,
-      })
-
       try {
-        await SettingsService.delete(id)
-        await mutate()
-        notifications.updateNotification(notifiactionId, {
-          message: t('Option deleted!'),
-          autoClose: 2000,
-        })
-      } catch (e) {
-        notifications.updateNotification(notifiactionId, {
-          color: 'red',
-          message: t('An error happened'),
-          autoClose: 2000,
-        })
-      }
+        reqNotification(
+          {
+            title: 'Deleting',
+            message: t('Deleting selected option, please wait...'),
+            successMessage: t('Option deleted!'),
+          },
+          async () => {
+            await SettingsService.delete(id)
+            await mutate()
+          }
+        )
+      } catch {}
     },
-    [t, notifications, mutate]
+    [t, reqNotification, mutate]
   )
 
   const smallColSize = 2
@@ -153,6 +146,11 @@ export const SystemSettings: VFC = () => {
                       ))}
                     </ul>
                   </Paper>
+                ) : row.content?.type === 'image' ? (
+                  <BackendImage
+                    className="h-20 w-auto"
+                    imageId={row.content?.data}
+                  />
                 ) : (
                   'none'
                 )}

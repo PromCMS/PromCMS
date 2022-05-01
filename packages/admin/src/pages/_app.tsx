@@ -8,7 +8,7 @@ import i18next from 'i18next'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { localizationConfig } from '@config'
-import { MantineProvider } from '@mantine/core'
+import ThemeProvider from '@components/ThemeProvider'
 
 if (!i18next.isInitialized) {
   i18next
@@ -24,44 +24,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     (Component as any).getLayout || ((page) => <SiteLayout>{page}</SiteLayout>)
 
   return (
-    <MantineProvider
-      withGlobalStyles
-      withNormalizeCSS
-      defaultProps={{
-        Input: {
-          size: 'md',
-        },
-        TextInput: {
-          size: 'md',
-        },
-        PasswordInput: {
-          size: 'md',
-          radius: 'md',
-        },
-        Textarea: {
-          size: 'md',
-        },
-        Select: {
-          size: 'md',
-        },
-      }}
-      styles={{
-        Divider: (theme) => ({
-          root: {
-            borderTopColor: `#e5e7eb!important`,
-          },
-        }),
-      }}
-      theme={{
-        /** Put your mantine theme override here */
-        colorScheme: 'light',
-        fontFamily: "'Open Sans', sans-serif",
-        defaultRadius: 'md',
-        shadows: {
-          smallBlue: '0 10px 15px -3px #dbeafe, 0 4px 6px -4px #dbeafe',
-        },
-      }}
-    >
+    <ThemeProvider>
       <I18nextProvider i18n={i18next}>
         <ContextProviders>
           <NotificationsProvider position="top-right">
@@ -72,7 +35,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           </NotificationsProvider>
         </ContextProviders>
       </I18nextProvider>
-    </MantineProvider>
+    </ThemeProvider>
   )
 }
 

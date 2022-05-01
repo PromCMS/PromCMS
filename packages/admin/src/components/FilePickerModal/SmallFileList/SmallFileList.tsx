@@ -33,7 +33,6 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   filter,
 }) => {
   const { t } = useTranslation()
-  const [searchBarOpen, setSearchBarOpen] = useState(false)
   const [state, updateValue] = useSmallFileListContextReducer()
   const [page, setPage] = useState(1)
   const { data, isError, isLoading, mutate } = useFileList({
@@ -101,46 +100,39 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
     <SmallFileListContext.Provider value={contextValue}>
       <input {...getInputProps({ className: 'hidden' })} />
       <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-semibold">
-          {title || t(multiple ? 'Select files' : 'Select a file')}
-        </h1>
-        <div className="flex gap-2">
-          <ActionIcon
-            className="flex-none"
-            size={40}
-            onClick={() => setSearchBarOpen(!searchBarOpen)}
-          >
-            <iconSet.Search className="!-mx-2 aspect-square w-8 !fill-transparent" />
-          </ActionIcon>
-          <ActionIcon
-            color="green"
-            size={40}
-            variant="filled"
-            className="flex-none"
-            onClick={open}
-          >
-            <iconSet.Plus className="!-mx-3 aspect-square w-8" />
-          </ActionIcon>
-        </div>
+        <SearchBar />
+        <ActionIcon
+          color="blue"
+          size={42}
+          variant="filled"
+          className="flex-none"
+          title={t('Add new')}
+          ml="xl"
+          onClick={open}
+        >
+          <iconSet.Plus className="!-mx-3 aspect-square w-6" />
+        </ActionIcon>
       </div>
-      {searchBarOpen && <SearchBar />}
-      <hr className="my-5 mt-0 mb-2 h-0.5 w-full border-none bg-gray-200" />
       <List onDeleteClick={onDeleteClick} />
       <div className="flex items-center justify-between">
-        {triggerClose && (
-          <Button
-            onClick={triggerClose}
-            disabled={!pickedFiles.length}
-            color="green"
-          >
-            Accept
-          </Button>
-        )}
         <Pagination
           total={data?.last_page || 1}
           onChange={setPage}
-          className="mx-auto items-center"
+          className="items-center"
         />
+        <div className="flex items-center gap-2">
+          {triggerClose && (
+            <Button
+              onClick={triggerClose}
+              disabled={!pickedFiles.length}
+              size="md"
+              color="green"
+              ml="xl"
+            >
+              Accept
+            </Button>
+          )}
+        </div>
       </div>
     </SmallFileListContext.Provider>
   )

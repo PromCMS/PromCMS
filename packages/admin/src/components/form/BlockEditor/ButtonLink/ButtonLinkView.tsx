@@ -1,4 +1,5 @@
 import { Button as CustomButton } from '@components/Button'
+import ThemeProvider from '@components/ThemeProvider'
 import { Checkbox, Group, Text, TextInput } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import { capitalizeFirstLetter } from '@prom-cms/shared'
@@ -67,39 +68,42 @@ export const ButtonLinkView: VFC<{
     [data.icon]
   )
 
-  return !readOnly ? (
-    <div className="rounded-lg border-2 border-project-border bg-white p-5">
-      <p className="text-xl font-semibold">{t('Button link')}</p>
+  return (
+    <ThemeProvider>
+      {' '}
+      {!readOnly ? (
+        <div className="rounded-lg border-2 border-project-border bg-white p-5">
+          <p className="text-xl font-semibold">{t('Button link')}</p>
 
-      <div>
-        <TextInput
-          required
-          className="mt-2"
-          label={t('Link')}
-          placeholder="https://google.com"
-          error={isUrlValid ? undefined : t('Invalid url')}
-          type="url"
-          value={data.linkTo}
-          onChange={(e) => onChange('linkTo', e.currentTarget.value)}
-          rightSection={
-            isUrlValid ? (
-              <iconSet.Check size={16} color="green" />
-            ) : (
-              <iconSet.Link size={16} />
-            )
-          }
-        />
+          <div>
+            <TextInput
+              required
+              className="mt-2"
+              label={t('Link')}
+              placeholder="https://google.com"
+              error={isUrlValid ? undefined : t('Invalid url')}
+              type="url"
+              value={data.linkTo}
+              onChange={(e) => onChange('linkTo', e.currentTarget.value)}
+              rightSection={
+                isUrlValid ? (
+                  <iconSet.Check size={16} color="green" />
+                ) : (
+                  <iconSet.Link size={16} />
+                )
+              }
+            />
 
-        <Group className="mt-2" noWrap grow>
-          <TextInput
-            label={t('Label')}
-            placeholder={t('Some text')}
-            value={data.label}
-            onChange={(e) => onChange('label', e.currentTarget.value)}
-            rightSection={<iconSet.AB size={16} />}
-          />
+            <Group className="mt-2" noWrap grow>
+              <TextInput
+                label={t('Label')}
+                placeholder={t('Some text')}
+                value={data.label}
+                onChange={(e) => onChange('label', e.currentTarget.value)}
+                rightSection={<iconSet.AB size={16} />}
+              />
 
-          {/*
+              {/*
           TODO think of way to inlcude icons on clien
           <Select
             searchable
@@ -117,23 +121,25 @@ export const ButtonLinkView: VFC<{
               !!item?.label?.toLowerCase().includes(value.toLowerCase().trim())
             }
           />*/}
-        </Group>
-        <Checkbox
-          mt="lg"
-          label={t('Download on button click')}
-          checked={data.isDownload}
-          onChange={(e) => onChange('isDownload', e.currentTarget.checked)}
-        />
-      </div>
-    </div>
-  ) : (
-    <CustomButton
-      color="success"
-      size="large"
-      className="flex gap-5 !rounded-none"
-    >
-      {IconComponent && <IconComponent />}
-      {data.label || data.linkTo}
-    </CustomButton>
+            </Group>
+            <Checkbox
+              mt="lg"
+              label={t('Download on button click')}
+              checked={data.isDownload}
+              onChange={(e) => onChange('isDownload', e.currentTarget.checked)}
+            />
+          </div>
+        </div>
+      ) : (
+        <CustomButton
+          color="success"
+          size="large"
+          className="flex gap-5 !rounded-none"
+        >
+          {IconComponent && <IconComponent />}
+          {data.label || data.linkTo}
+        </CustomButton>
+      )}{' '}
+    </ThemeProvider>
   )
 }

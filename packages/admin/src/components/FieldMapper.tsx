@@ -9,6 +9,7 @@ import {
 import { useMemo, VFC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import ImageSelect from './form/ImageSelect'
 
 export interface FieldMapperProps {
   fields: (ColumnType & {
@@ -68,7 +69,7 @@ export const prepareFieldsForMapper = (model: ApiResultModel) =>
     )
 
 const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
-  const { formState, register } = useFormContext()
+  const { formState, register, control } = useFormContext()
   const { t } = useTranslation()
 
   return (
@@ -112,6 +113,23 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     key={columnName}
                     error={errorMessage}
                     {...values}
+                  />
+                )
+              } else if (type === 'file') {
+                return (
+                  <Controller
+                    control={control}
+                    name={columnName}
+                    render={({ field: { onChange, value } }) => (
+                      <ImageSelect
+                        onChange={onChange}
+                        selected={value}
+                        key={columnName}
+                        error={errorMessage}
+                        label={values.title}
+                        {...values}
+                      />
+                    )}
                   />
                 )
               }

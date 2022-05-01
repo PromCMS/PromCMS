@@ -1,3 +1,4 @@
+import ThemeProvider from '@components/ThemeProvider'
 import {
   ActionIcon,
   Badge,
@@ -60,47 +61,55 @@ export const TagsToolView: VFC<{
   }
 
   return (
-    <div className={clsx('rounded-lg border-2 border-project-border bg-white')}>
-      <p className="text-xl font-semibold">{t('Tags')}</p>
-      <Group className="my-5">
-        {data.tags.length ? (
-          data.tags.map((tagContent, index) => (
-            <Badge
-              variant="outline"
-              rightSection={
-                !readOnly && (
-                  <ActionIcon
-                    size="xs"
-                    color="gray"
-                    radius="xl"
-                    variant="light"
-                    onClick={onRemoveClick(tagContent)}
-                  >
-                    <iconSet.X size={10} />
-                  </ActionIcon>
-                )
-              }
-              key={tagContent}
-            >
-              {tagContent}
-            </Badge>
-          ))
-        ) : (
-          <p className="text-gray-400">{t('No tags, start by adding some')}</p>
+    <ThemeProvider>
+      <div
+        className={clsx(
+          'rounded-lg border-2 border-project-border bg-white p-5'
         )}
-      </Group>
-      {!readOnly && (
-        <Group noWrap>
-          <TextInput
-            icon={<iconSet.Tag size={20} />}
-            placeholder={t('New badge name')}
-            className="w-full"
-            value={inputValue}
-            onInput={setInputValue}
-            onKeyDown={onKeyDownInput}
-          />
+      >
+        <p className="text-xl font-semibold">{t('Tags')}</p>
+        <Group className="my-5">
+          {data.tags.length ? (
+            data.tags.map((tagContent, index) => (
+              <Badge
+                variant="outline"
+                rightSection={
+                  !readOnly && (
+                    <ActionIcon
+                      size="xs"
+                      color="gray"
+                      radius="xl"
+                      variant="light"
+                      onClick={onRemoveClick(tagContent)}
+                    >
+                      <iconSet.X size={10} />
+                    </ActionIcon>
+                  )
+                }
+                key={tagContent}
+              >
+                {tagContent}
+              </Badge>
+            ))
+          ) : (
+            <p className="text-gray-400">
+              {t('No tags, start by adding some')}
+            </p>
+          )}
         </Group>
-      )}
-    </div>
+        {!readOnly && (
+          <Group noWrap>
+            <TextInput
+              icon={<iconSet.Tag size={20} />}
+              placeholder={t('New badge name')}
+              className="w-full"
+              value={inputValue}
+              onInput={setInputValue}
+              onKeyDown={onKeyDownInput}
+            />
+          </Group>
+        )}
+      </div>
+    </ThemeProvider>
   )
 }

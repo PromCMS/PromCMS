@@ -17,12 +17,17 @@ import { List } from './contentTypes/List'
 import { t } from 'i18next'
 import { SettingsService } from '@services'
 import { Textarea } from './contentTypes/Textarea'
+import { Image } from './contentTypes/Image'
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
+import { useTranslation } from 'react-i18next'
 
 export const Drawer: VFC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
 > = ({ opened, onClose, optionToEdit }) => {
   const { currentUserIsAdmin } = useGlobalContext()
-  const { data, isLoading } = useModelItem('settings', optionToEdit)
+  const { data } = useModelItem('settings', optionToEdit)
+  const { t } = useTranslation()
+  const reqNotification = useRequestWithNotifications()
   const formMethods = useForm({
     defaultValues: {} as any,
   })
@@ -43,17 +48,27 @@ export const Drawer: VFC<
 
   const onSubmit = async (values) => {
     try {
-      if (optionToEdit) {
-        const { id, ...newOptionDataset } = values
-        await SettingsService.update(optionToEdit, newOptionDataset)
-      } else {
-        await SettingsService.create(values)
-      }
-      onClose()
-    } catch (e) {
-      // TODO
-      alert('An error happened')
-    }
+      reqNotification(
+        {
+          title: t(optionToEdit ? 'Updating option' : 'Creating option'),
+          message: t('Please wait...'),
+          successMessage: t(
+            optionToEdit
+              ? 'Option successfully updated'
+              : 'Option has been created'
+          ),
+        },
+        async () => {
+          if (optionToEdit) {
+            const { id, ...newOptionDataset } = values
+            await SettingsService.update(optionToEdit, newOptionDataset)
+          } else {
+            await SettingsService.create(values)
+          }
+          onClose()
+        }
+      )
+    } catch (e) {}
   }
 
   return (
@@ -95,6 +110,7 @@ export const Drawer: VFC<
                       data={[
                         { value: 'list', label: 'List' },
                         { value: 'textArea', label: 'Long text' },
+                        { value: 'image', label: 'Image' },
                       ]}
                     />
                   )}
@@ -104,6 +120,7 @@ export const Drawer: VFC<
             <TextInput label="Label" {...register('label')} />
             {content?.type === 'list' && <List />}
             {content?.type === 'textArea' && <Textarea />}
+            {content?.type === 'image' && <Image />}
           </SimpleGrid>
           <div className="right-0 mt-8 rounded-lg pb-4">
             <Button

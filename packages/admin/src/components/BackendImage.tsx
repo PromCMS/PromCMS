@@ -8,7 +8,7 @@ export interface BackendImageProps
     DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
     'src'
   > {
-  imageId: ItemID
+  imageId: ItemID | Record<string, string>
 }
 
 const BackendImage: VFC<BackendImageProps> = ({
@@ -17,11 +17,18 @@ const BackendImage: VFC<BackendImageProps> = ({
   ...rest
 }) => {
   const imageSrc = useMemo(
-    () => '/api' + FileService.getApiRawUrl(imageId),
+    () =>
+      imageId
+        ? typeof imageId === 'number' || typeof imageId === 'string'
+          ? '/api' + FileService.getApiRawUrl(imageId)
+          : imageId.path
+        : undefined,
     [imageId]
   )
 
-  return <img src={imageSrc} className={clsx(className)} {...rest} />
+  return imageId ? (
+    <img src={imageSrc} className={clsx(className)} {...rest} />
+  ) : null
 }
 
 export default BackendImage

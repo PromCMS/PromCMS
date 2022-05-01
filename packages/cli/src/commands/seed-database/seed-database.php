@@ -57,6 +57,9 @@ try {
 
     $modelInstance = new $modelName();
     $modelSummary = $modelInstance->getSummary();
+    if ($modelSummary->ignoreSeeding) {
+      continue;
+    }
 
     for ($i = 0; $i < 10; $i++) {
       $creationPayload = [];
@@ -104,7 +107,8 @@ try {
             break;
           case 'json':
             // TODO: Needs implementation
-            $inputValue = '{}';
+            $inputValue = '';
+            break;
           case 'longText':
             $value = $faker->paragraphs(3);
 
@@ -112,6 +116,7 @@ try {
             break;
           default:
             echo "Unknown value \"$fieldType\" supplied as a column type in mock generator";
+            continue 2;
             break;
         }
 

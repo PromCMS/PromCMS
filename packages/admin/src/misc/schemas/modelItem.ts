@@ -18,16 +18,27 @@ export const getModelItemSchema = (
     .filter((columnKey) => !columns[columnKey].hide)
     .reduce((shape, columnKey) => {
       const column = columns[columnKey]
+      let columnShape
 
-      let columnShape =
-        column.type === 'enum'
-          ? yup.mixed().oneOf(column.enum)
-          : yup[convertColumnTypeToPrimitive(column.type)]()
-
-      if (column.required && !ignoreRequired) {
-        columnShape = columnShape.required('This is a required field.')
+      if (column.type === 'file') {
+        columnShape = yup[
+          convertColumnTypeToPrimitive(column.type)
+        ]().transform((value, originalValue) => {
+          return typeof originalValue === 'object'
+            ? Number(originalValue.id)
+            : Number(originalValue)
+        })
       } else {
-        columnShape = columnShape.nullable().notRequired()
+        columnShape =
+          column.type === 'enum'
+            ? yup.mixed().oneOf(column.enum)
+            : yup[convertColumnTypeToPrimitive(column.type)]()
+
+        if (column.required && !ignoreRequired) {
+          columnShape = columnShape.required('This is a required field.')
+        } else {
+          columnShape = columnShape.nullable().notRequired()
+        }
       }
 
       shape[columnKey] = columnShape

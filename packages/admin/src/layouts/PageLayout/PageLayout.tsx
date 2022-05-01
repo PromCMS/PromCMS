@@ -52,7 +52,7 @@ export const PageLayout: FC<PageLayoutProps> & {
   return withAside ? (
     <PageLayoutWithAside {...rest}>{children}</PageLayoutWithAside>
   ) : (
-    <div className="container mx-auto">{children}</div>
+    <div className="container mx-auto mb-10">{children}</div>
   )
 }
 
