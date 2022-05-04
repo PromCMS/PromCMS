@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa0e127472b75700c4974f130ccaa294",
+    "content-hash": "83f5fa20c5b70f441ca0758c0d3c16ea",
     "packages": [
         {
             "name": "bryanjhv/slim-session",
@@ -1074,16 +1074,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "2.0.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "88ab4780a5cc573fb943c8a6987da880b3ec0474"
+                "reference": "a3c694de9f7e844b76f9d1b61296ebf6e8d89d74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/88ab4780a5cc573fb943c8a6987da880b3ec0474",
-                "reference": "88ab4780a5cc573fb943c8a6987da880b3ec0474",
+                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a3c694de9f7e844b76f9d1b61296ebf6e8d89d74",
+                "reference": "a3c694de9f7e844b76f9d1b61296ebf6e8d89d74",
                 "shasum": ""
             },
             "require": {
@@ -1104,7 +1104,8 @@
                 "google/cloud-storage": "^1.23",
                 "phpseclib/phpseclib": "^2.0",
                 "phpstan/phpstan": "^0.12.26",
-                "phpunit/phpunit": "^8.5 || ^9.4"
+                "phpunit/phpunit": "^8.5 || ^9.4",
+                "sabre/dav": "^4.1"
             },
             "type": "library",
             "autoload": {
@@ -1138,7 +1139,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem/issues",
-                "source": "https://github.com/thephpleague/flysystem/tree/2.0.0"
+                "source": "https://github.com/thephpleague/flysystem/tree/2.1.1"
             },
             "funding": [
                 {
@@ -1154,20 +1155,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-24T14:30:57+00:00"
+            "time": "2021-06-23T22:07:10+00:00"
         },
         {
             "name": "league/mime-type-detection",
-            "version": "1.9.0",
+            "version": "1.11.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/mime-type-detection.git",
-                "reference": "aa70e813a6ad3d1558fc927863d47309b4c23e69"
+                "reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/aa70e813a6ad3d1558fc927863d47309b4c23e69",
-                "reference": "aa70e813a6ad3d1558fc927863d47309b4c23e69",
+                "url": "https://api.github.com/repos/thephpleague/mime-type-detection/zipball/ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
+                "reference": "ff6248ea87a9f116e78edd6002e39e5128a0d4dd",
                 "shasum": ""
             },
             "require": {
@@ -1198,7 +1199,7 @@
             "description": "Mime-type detection for Flysystem",
             "support": {
                 "issues": "https://github.com/thephpleague/mime-type-detection/issues",
-                "source": "https://github.com/thephpleague/mime-type-detection/tree/1.9.0"
+                "source": "https://github.com/thephpleague/mime-type-detection/tree/1.11.0"
             },
             "funding": [
                 {
@@ -1210,7 +1211,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-21T11:48:40+00:00"
+            "time": "2022-04-17T13:12:02+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -3796,5 +3797,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }
