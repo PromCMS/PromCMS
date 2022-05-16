@@ -11,7 +11,8 @@ import { getInitials } from '@utils'
 import { useConstructedMenuItems } from './utils'
 import { useTranslation } from 'react-i18next'
 import BackendImage from '@components/BackendImage'
-import { UserRoles } from '@prom-cms/shared'
+import { capitalizeFirstLetter, UserRoles } from '@prom-cms/shared'
+import { Tooltip } from '@mantine/core'
 
 const Header: VFC = () => {
   const { isBooting, currentUser, currentUserIsAdmin } = useGlobalContext()
@@ -28,19 +29,26 @@ const Header: VFC = () => {
       </div>
       <div className="grid gap-5 py-10">
         {menuItems.map((item) => (
-          <Link href={item.href} key={item.href}>
-            <a
-              className={s.item}
-              title={item.label}
-              data-is-active={
-                item.href === '/'
-                  ? asPath === '/'
-                  : asPath.startsWith(item.href)
-              }
-            >
-              <item.icon className="mr-auto h-8 w-8" />
-            </a>
-          </Link>
+          <Tooltip
+            withArrow
+            key={item.href}
+            label={t(capitalizeFirstLetter(item.label))}
+            position="right"
+            color="gray"
+          >
+            <Link href={item.href}>
+              <a
+                className={s.item}
+                data-is-active={
+                  item.href === '/'
+                    ? asPath === '/'
+                    : asPath.startsWith(item.href)
+                }
+              >
+                <item.icon className="mr-auto h-8 w-8" />
+              </a>
+            </Link>
+          </Tooltip>
         ))}
       </div>
       <div className={s.bottom}>
@@ -69,7 +77,7 @@ const Header: VFC = () => {
           {({ close }) => (
             <PopoverList>
               <PopoverList.Item
-                icon={'User'}
+                icon={t('User')}
                 className="text-blue-500"
                 onClick={() => {
                   close()
@@ -81,7 +89,7 @@ const Header: VFC = () => {
               {(currentUser?.role === UserRoles.Maintainer ||
                 currentUserIsAdmin) && (
                 <PopoverList.Item
-                  icon={'Users'}
+                  icon={t('Users')}
                   className="text-blue-500"
                   onClick={() => {
                     close()
@@ -92,7 +100,7 @@ const Header: VFC = () => {
                 </PopoverList.Item>
               )}
               <PopoverList.Item
-                icon={'Settings'}
+                icon={t('Settings')}
                 className="text-blue-500"
                 onClick={() => {
                   close()
