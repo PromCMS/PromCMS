@@ -75,6 +75,22 @@ $router->group('/entry-types', function (Router $innerRouter) use ($auth, $permi
     });
   })->add($permissionMiddleware)->add($auth);
 
+  // User roles
+  $innerRouter->group('/{route:user-roles|userroles}', function (Router $innerRouter) {
+    $innerRouter->get('', '\App\Controllers\UserRoles:getInfo');
+
+    $innerRouter->group('/items', function (Router $innerRouter) {
+      $innerRouter-> get('', '\App\Controllers\UserRoles:getMany');
+      $innerRouter->post('/create', '\App\Controllers\UserRoles:create');
+
+      $innerRouter->group('/{itemId}', function (Router $innerRouter) {
+        $innerRouter-> patch('', '\App\Controllers\UserRoles:update');
+        $innerRouter->delete('', '\App\Controllers\UserRoles:delete');
+      });
+    });
+  })->add($permissionMiddleware)->add($auth);
+  $innerRouter->get('/{route:user-roles|userroles}/items/{itemId}', '\App\Controllers\UserRoles:getOne')->add($auth);
+
   // Other 
   $innerRouter->group('/{modelId}', function (Router $innerRouter) use ($auth) {
     $innerRouter->get('', '\App\Controllers\EntryType:getInfo')->add($auth);

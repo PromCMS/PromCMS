@@ -1,7 +1,6 @@
 import { TableViewCol } from '@components/TableView'
 import { DatabaseConfigModel } from '@prom-cms/shared'
 import { CUSTOM_MODELS } from '@constants'
-import { iconSet } from '@prom-cms/icons'
 
 export const formatApiModelResultToTableView = (
   model: DatabaseConfigModel
@@ -56,7 +55,7 @@ export const getObjectDiff = (
 }
 
 export const modelIsCustom = (modelName: string) =>
-  CUSTOM_MODELS.includes(modelName.toLowerCase())
+  CUSTOM_MODELS.includes(modelName)
 
 export const generateUuid = () =>
   Date.now().toString(36) + Math.random().toString(36).substring(2)

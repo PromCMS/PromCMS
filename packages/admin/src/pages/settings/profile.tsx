@@ -1,5 +1,5 @@
 import ImageSelect from '@components/form/ImageSelect'
-import { ProfileLayout } from '@components/pages/UserProfile'
+import { ProfileLayout } from '@layouts'
 import { useGlobalContext } from '@contexts/GlobalContext'
 import clsx from 'clsx'
 import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react'

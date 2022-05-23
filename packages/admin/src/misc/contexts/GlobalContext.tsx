@@ -1,13 +1,14 @@
-import { ApiResultModels, User } from '@prom-cms/shared'
+import { ApiResultModels, User, UserRole } from '@prom-cms/shared'
 import axios from 'axios'
 import { apiClient } from '@api'
 import { API_CURRENT_USER_URL, API_ENTRY_TYPES_URL } from '@constants'
 import { useRouter } from 'next/router'
 import { createContext, FC, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { UserRolesService } from '@services'
 
 export interface IGlobalContext {
-  currentUser?: User
+  currentUser?: Omit<User, 'role'> & { role: UserRole }
   models?: ApiResultModels
   updateValue<T extends keyof Omit<IGlobalContext, 'updateValue'>>(
     key: T,
@@ -28,7 +29,9 @@ export const GlobalContext = createContext<IGlobalContext>({
 export const GlobalContextProvider: FC = ({ children }) => {
   const { push, pathname } = useRouter()
   const { t, i18n } = useTranslation()
-  const [currentUser, setCurrentUser] = useState<User>()
+  const [currentUser, setCurrentUser] = useState<
+    Omit<User, 'role'> & { role: UserRole }
+  >()
   const [models, setModels] = useState()
   const [isBooting, setIsBooting] = useState(true)
   const [isNotOnline, setIsNotOnline] = useState(false)
@@ -78,7 +81,19 @@ export const GlobalContextProvider: FC = ({ children }) => {
           cancelToken: cancelToken.token,
         })
 
-        setCurrentUser(currentUserQuery.data.data)
+        const currentUser = currentUserQuery.data.data as User
+
+        const currentUserRoleQuery = await apiClient.get<{ data: UserRole }>(
+          UserRolesService.apiGetUrl(currentUser.role as number),
+          {
+            cancelToken: cancelToken.token,
+          }
+        )
+
+        setCurrentUser({
+          ...currentUser,
+          role: currentUserRoleQuery.data.data,
+        })
 
         setIsBooting(false)
       } catch (e) {
@@ -142,9 +157,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
         currentUser,
         updateValue,
         isBooting: isBooting || !i18n.isInitialized,
-        currentUserIsAdmin: !!(
-          currentUser?.role && currentUser.role.toLowerCase() === 'admin'
-        ),
+        currentUserIsAdmin: !!(currentUser?.role && currentUser.role.id === 0),
         isLoggedIn: !!currentUser,
       }}
     >

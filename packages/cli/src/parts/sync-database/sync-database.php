@@ -54,7 +54,7 @@ try {
                 $type = 'string';
               } elseif ($type === 'number') {
                 $type = 'integer';
-              } elseif ($type === 'file' || $type === 'ref') {
+              } elseif ($type === 'file' || $type === 'relationship') {
                 $type = 'bigInteger';
               }
 

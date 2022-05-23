@@ -1,6 +1,6 @@
 import { SystemSettings } from '@components/pages/Settings/MainPage'
-import { ProfileLayout } from '@components/pages/UserProfile'
 import { NextPage } from '@custom-types'
+import { ProfileLayout } from '@layouts'
 
 const UserProfileMainPage: NextPage = () => {
   return (

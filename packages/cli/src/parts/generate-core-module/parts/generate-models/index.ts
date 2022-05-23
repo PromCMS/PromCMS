@@ -4,6 +4,7 @@ import {
   ExportConfig,
   FileColumnType,
   ColumnSettingsBase,
+  RelationshipColumnType,
 } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
@@ -52,21 +53,33 @@ const generateModels = async (
   const templatesRoot = path.join(__dirname, '_templates');
 
   for (const modelKey in configModels) {
-    const capitalizedModelName = capitalizeFirstLetter(modelKey);
+    const capitalizedModelName = capitalizeFirstLetter(modelKey, false);
     const currentModel = configModels[modelKey];
     const info = {
       modelName: capitalizedModelName,
       ...currentModel,
       relationships: (
         Object.entries(currentModel.columns).filter(
-          ([_key, { type }]) => type === 'file'
-        ) as [string, ColumnSettingsBase & FileColumnType][]
-      ).map(([key, { multiple }]) => [
+          ([_key, { type }]) => type === 'file' || type === 'relationship'
+        ) as [string, FileColumnType | RelationshipColumnType][]
+      ).map(([key, props]) => [
         key,
-        {
-          type: multiple ? 'oneToMany' : 'oneToOne',
-          target: '\\Files::class',
-        },
+        props.type === 'file'
+          ? {
+              type: props.multiple ? 'oneToMany' : 'oneToOne',
+              fill: true,
+              target: '\\Files::class',
+              foreignKey: 'id',
+            }
+          : {
+              type: props.multiple ? 'oneToMany' : 'oneToOne',
+              fill: props.fill,
+              target: `\\${capitalizeFirstLetter(
+                props.targetModel,
+                false
+              )}::class`,
+              foreignKey: props.foreignKey,
+            },
       ]),
       columnCasts: Object.entries(currentModel.columns)
         .filter(([_, { type }]) => type === 'json' || type === 'boolean')

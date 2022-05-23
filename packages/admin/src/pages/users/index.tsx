@@ -2,7 +2,7 @@ import { TableView, TableViewCol } from '@components/TableView'
 import { useModelInfo } from '@hooks/useModelInfo'
 import { useModelItems } from '@hooks/useModelItems'
 import { PageLayout } from '@layouts'
-import { ApiResultModel, ItemID, UserRoles } from '@prom-cms/shared'
+import { ApiResultModel, ItemID } from '@prom-cms/shared'
 import { iconSet } from '@prom-cms/icons'
 import { MESSAGES } from '@constants'
 import { EntryService } from '@services'
@@ -10,14 +10,14 @@ import { useRouter } from 'next/router'
 import { useMemo, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatApiModelResultToTableView } from '@utils'
-import { useGlobalContext } from '@contexts/GlobalContext'
 import { Button, Pagination } from '@mantine/core'
+import { useCurrentUser } from '@hooks/useCurrentUser'
 
 const UsersListPage: VFC = () => {
   const { push } = useRouter()
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
-  const { currentUser, currentUserIsAdmin } = useGlobalContext()
+  const currentUser = useCurrentUser()
   const model = useModelInfo<ApiResultModel>('users')
   const { data, isLoading, isError, mutate } = useModelItems('users', {
     page,
@@ -37,8 +37,10 @@ const UsersListPage: VFC = () => {
     [data, currentUser]
   )
 
-  const userCanEdit =
-    currentUserIsAdmin || currentUser?.role === UserRoles.Maintainer
+  const userCanEdit = currentUser?.can({
+    action: 'update',
+    targetModel: 'users',
+  })
 
   // Take care of user creation
   const onCreateRequest = () => push(`/users/invite`)

@@ -87,6 +87,38 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     },
   };
 
+  models['userRoles'] = {
+    admin: {
+      layout: 'simple',
+    },
+    icon: 'UserExclamation',
+    columns: {
+      label: {
+        title: 'Label',
+        type: 'string',
+        required: true,
+      },
+      slug: {
+        title: 'Slug',
+        type: 'slug',
+        of: 'label',
+        required: false,
+        editable: false,
+      },
+      description: {
+        type: 'longText',
+        title: 'Popisek',
+        required: false,
+      },
+      permissions: {
+        title: 'Permissions',
+        type: 'json',
+        required: false,
+        default: '',
+      },
+    },
+  };
+
   // we need to make sure that we at least have default columns
   models['users'] = {
     admin: {
@@ -118,18 +150,20 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         type: 'string',
         required: false,
       },
-      role: {
-        title: 'Role',
-        type: 'enum',
-        enum: ['admin', 'maintainer', 'editor'],
-        unique: false,
-        required: true,
-      },
       state: {
         title: 'State',
         type: 'enum',
         editable: false,
         enum: ['active', 'invited', 'blocked', 'password-reset'],
+      },
+      role: {
+        type: 'relationship',
+        targetModel: 'userRoles',
+        title: 'Role',
+        adminHidden: true,
+        fill: false,
+        required: true,
+        labelConstructor: 'label',
       },
       ...((models['users'] || {}).columns || {}),
     },
@@ -230,6 +264,9 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
             hide: false,
             ...(column.type === 'number' ? { autoIncrement: false } : {}),
             ...(column.type === 'slug' ? { unique: true } : {}),
+            ...(column.type === 'relationship'
+              ? { multiple: false, foreignKey: 'id', fill: true }
+              : {}),
             ...column,
           },
         };
@@ -248,6 +285,37 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       ...model,
     };
   });
+
+  const roles = config.project.security?.roles;
+  if (roles) {
+    if (!config.project.security) {
+      config.project.security = {};
+    }
+
+    // Set default values of roles
+    config.project.security.roles = roles.map(
+      ({ modelPermissions, ...rest }) => {
+        const updatedPerms = Object.entries(modelPermissions).map(
+          ([key, values]) => [
+            key,
+            {
+              c: false,
+              r: false,
+              u: false,
+              d: false,
+              ...values,
+            },
+          ]
+        );
+
+        return {
+          hasAccessToAdmin: true,
+          ...rest,
+          modelPermissions: Object.fromEntries(updatedPerms),
+        };
+      }
+    );
+  }
 
   return { ...config, database: { ...databaseConfig, models } };
 };

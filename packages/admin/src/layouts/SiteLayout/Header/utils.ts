@@ -18,10 +18,7 @@ export const useConstructedMenuItems = () => {
       finalValue = [
         ...finalValue,
         ...Object.keys(models)
-          .filter(
-            (modelKey) =>
-              !modelIsCustom(models[modelKey].tableName?.toLowerCase() || '')
-          )
+          .filter((modelKey) => !modelIsCustom(modelKey || ''))
           .map((modelKey) => ({
             href: EntryService.getListUrl(modelKey),
             icon: iconSet[models[modelKey].icon],

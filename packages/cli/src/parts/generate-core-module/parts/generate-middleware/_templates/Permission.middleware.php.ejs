@@ -34,10 +34,10 @@ class Permission
   public function __invoke(Request $request, RequestHandler $handler): Response
   {
     $user = $this->container->get('session')->get('user', false);
-    $role = strtolower($user->role);
+    $role = intval($user->role);
 
     // TODO accept roles from upper scope
-    if ($role !== 'maintainer' && $role !== 'admin') {
+    if ($role !== 0) {
       $response = new Response();
 
       prepareJsonResponse($response, [], 'Your user role is not sufficient', 'role-not-sufficient');

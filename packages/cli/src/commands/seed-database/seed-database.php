@@ -109,6 +109,10 @@ try {
             // TODO: Needs implementation
             $inputValue = '';
             break;
+          case 'relationship':
+            // TODO: Needs implementation
+            $inputValue = 0;
+            break;
           case 'longText':
             $value = $faker->paragraphs(3);
 
@@ -127,7 +131,7 @@ try {
       if (strtolower($modelName) === 'users' && $i === 0) {
         try {
           $creationPayload['email'] = 'test@example.com';
-          $creationPayload['role'] = 'admin';
+          $creationPayload['role'] = 0;
           $creationPayload['state'] = 'active';
 
           $modelInstance::create($creationPayload);

@@ -20,22 +20,7 @@ class EntryType
 
   private function handleDuplicate($response, $exception)
   {
-    $errorText = str_replace(
-      ['UNIQUE constraint failed: ', ' '],
-      '',
-      $exception->errorInfo[2],
-    );
-
-    prepareJsonResponse(
-      $response,
-      array_map(function ($item) {
-        return strpos($item, '.') !== false
-          ? explode('.', $item)[1]
-          : explode('_', $item)[1];
-      }, explode(',', $errorText)),
-      'Duplicate entries',
-      intval($exception->getCode())
-    );
+    handleDuplicateEntriesError($response, $exception);
   }
 
   /**
@@ -52,7 +37,7 @@ class EntryType
           return strtolower($modelName);
         }, $this->loadedModels),
         function ($modelName) {
-          return !in_array($modelName, ['files', 'users']);
+          return !in_array($modelName, ['files', 'users', 'userroles']);
         },
       ),
     );

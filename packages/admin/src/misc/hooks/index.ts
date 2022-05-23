@@ -1,6 +1,7 @@
 export * from './useRouterQuery'
 export * from './useActionRoute'
 export * from './useModelInfo'
+export * from './useCurrentUser'
 export * from './useModelItems'
 export * from './useCurrentModel'
 export * from './useModelItem'

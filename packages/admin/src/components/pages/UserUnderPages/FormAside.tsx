@@ -11,10 +11,10 @@ import { useClassNames } from '../EntryUnderpage/useClassNames'
 import { useData } from './context'
 import { iconSet } from '@prom-cms/icons'
 import { ActionIcon, Button, SimpleGrid } from '@mantine/core'
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { UserRoles, UserStates } from '@prom-cms/shared'
+import { UserStates } from '@prom-cms/shared'
 import { useSetState } from '@mantine/hooks'
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
+import { useCurrentUser } from '@hooks/useCurrentUser'
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
@@ -24,12 +24,12 @@ const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
 )
 
 export const FormAside: VFC = () => {
-  const { isLoading, view, user, exitView, model, mutateUser } = useData()
+  const { isLoading, view, user, exitView, mutateUser } = useData()
   const {
     watch,
     formState: { isSubmitting },
   } = useFormContext()
-  const { currentUserIsAdmin, currentUser } = useGlobalContext()
+  const currentUser = useCurrentUser()
   const formValues = watch()
   const classes = useClassNames()
   const { t } = useTranslation()
@@ -177,7 +177,10 @@ export const FormAside: VFC = () => {
         </div>
       </AsideItemWrap>
       {view === 'update' &&
-        (currentUserIsAdmin || currentUser?.role === UserRoles.Maintainer) && (
+        currentUser?.can({
+          action: 'update',
+          targetModel: 'users',
+        }) && (
           <AsideItemWrap title={t('Actions')}>
             <SimpleGrid cols={1} className="p-5">
               <Button

@@ -11,6 +11,11 @@ const items = [
   { title: 'Profile', url: '/settings/profile', Icon: iconSet.UserCircle },
   { title: 'System', url: '/settings', Icon: iconSet.Settings },
   { title: 'Authentication', url: '/settings/password', Icon: iconSet.Lock },
+  {
+    title: 'User Roles',
+    url: '/settings/user-roles',
+    Icon: iconSet.UserExclamation,
+  },
 ]
 
 const LeftAside: VFC = () => {
@@ -33,6 +38,11 @@ const LeftAside: VFC = () => {
                   : 'border-blue-200',
                 'border-2'
               )}
+              styles={() => ({
+                inner: {
+                  justifyContent: 'space-between',
+                },
+              })}
               leftIcon={<Icon className="mr-auto aspect-square w-6" />}
             >
               {t(title)}

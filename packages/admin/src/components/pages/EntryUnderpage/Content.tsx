@@ -90,7 +90,7 @@ const Content: VFC = () => {
               } else {
                 return prevData
               }
-            })
+            }, {})
           } else if (currentView === 'create') {
             const result = await EntryService.create(
               {
@@ -156,7 +156,7 @@ const Content: VFC = () => {
             {/* We pass multiple refs */}
             <FormContent ref={formContentRefs} />
           </div>
-          <FormAside isSubmitting={formMethods.formState.isSubmitting} />
+          <FormAside />
         </div>
       </form>
     </FormProvider>
