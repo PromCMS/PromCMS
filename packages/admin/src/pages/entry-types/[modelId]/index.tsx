@@ -13,11 +13,13 @@ import NotFoundPage from '@pages/404'
 import { useTranslation } from 'react-i18next'
 import { Button, Pagination } from '@mantine/core'
 import { useListState } from '@mantine/hooks'
+import { useCurrentUser } from '@hooks/useCurrentUser'
 
 const EntryTypeUnderpage: VFC = ({}) => {
   const { push } = useRouter()
   const [page, setPage] = useState(1)
   const model = useCurrentModel()
+  const currentUser = useCurrentUser()
   const [apiWorking, setApiWorking] = useState(false)
   const {
     query: { modelId: routerModelId },
@@ -71,18 +73,32 @@ const EntryTypeUnderpage: VFC = ({}) => {
   }, [model])
 
   // take care of action if user requests entry delete
-  const onItemDeleteRequest = async (id: ItemID) => {
-    if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-      await EntryService.delete({ id, model: model?.name as string })
-      mutate()
-    }
-  }
+  const onItemDeleteRequest =
+    model &&
+    currentUser?.can({
+      action: 'delete',
+      targetModel: model?.name,
+    })
+      ? async (id: ItemID) => {
+          if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
+            await EntryService.delete({ id, model: model?.name as string })
+            mutate()
+          }
+        }
+      : undefined
 
-  const onItemDuplicateRequest = async (id: ItemID) => {
-    if (confirm(t(MESSAGES.ENTRY_ITEM_DUPLICATE))) {
-      push(EntryService.getDuplicateUrl(id, model?.name as string))
-    }
-  }
+  const onItemDuplicateRequest =
+    model &&
+    currentUser?.can({
+      action: 'create',
+      targetModel: model?.name,
+    })
+      ? async (id: ItemID) => {
+          if (confirm(t(MESSAGES.ENTRY_ITEM_DUPLICATE))) {
+            push(EntryService.getDuplicateUrl(id, model?.name as string))
+          }
+        }
+      : undefined
 
   const onCreateRequest = () =>
     push(EntryService.getCreateUrl(model?.name as string))
@@ -110,15 +126,20 @@ const EntryTypeUnderpage: VFC = ({}) => {
               {...register('query')}
             />
   </form>*/}
-          <Button
-            color="green"
-            className=" items-center font-semibold uppercase"
-            size="md"
-            onClick={onCreateRequest}
-          >
-            <span className="hidden md:block">{t('Add new entry')}</span>
-            <iconSet.Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
-          </Button>
+          {currentUser?.can({
+            action: 'create',
+            targetModel: model.name,
+          }) && (
+            <Button
+              color="green"
+              className=" items-center font-semibold uppercase"
+              size="md"
+              onClick={onCreateRequest}
+            >
+              <span className="hidden md:block">{t('Add new entry')}</span>
+              <iconSet.Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
+            </Button>
+          )}
         </div>
       </div>
       <TableView

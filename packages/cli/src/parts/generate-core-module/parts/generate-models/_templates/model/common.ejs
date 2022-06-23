@@ -137,7 +137,8 @@ class <%- modelName %> extends Model
         "hasSoftDelete" => $this->hasSoftDeletes,
         "hasOrdering" => <% if (sorting) { %> true <% } else { %> false <% } %>,
         "isDraftable" => <% if (draftable) { %> true <% } else { %> false <% } %>,
-        "hasPermissions" => <% if (permissions) { %> true <% } else { %> false <% } %>,
+        "isSharable" => <% if (sharable) { %> true <% } else { %> false <% } %>,
+        "ownable" => <% if (ownable) { %> true <% } else { %> false <% } %>,
         "admin" => $this->adminSettings,
       ];
   }

@@ -42,7 +42,7 @@ export const UserRoles: VFC = () => {
   const { t } = useTranslation()
   const { currentUserIsAdmin } = useGlobalContext()
   const [currentPage, setCurrentPage] = useState(1)
-  const { data, mutate } = useModelItems('user-roles', { page: currentPage })
+  const { data, mutate } = useModelItems('userroles', { page: currentPage })
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>()
   const [creationAction, setCreationMode] = useState(false)
   const reqNotification = useRequestWithNotifications()

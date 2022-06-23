@@ -15,7 +15,7 @@ export function canUser<T extends ActionType | ActionType[]>({
 }: CanUserOptions<T>) {
   const isAdmin = userRole.id === 0
   const accessPermissionValue = (key: string): boolean =>
-    isAdmin || (userRole.permissions?.models[targetModel][key] ?? false)
+    isAdmin || (userRole.permissions?.models?.[targetModel]?.[key] ?? false)
 
   if (Array.isArray(action)) {
     return Object.fromEntries(

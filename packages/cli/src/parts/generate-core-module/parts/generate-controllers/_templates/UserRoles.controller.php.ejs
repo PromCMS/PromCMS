@@ -8,11 +8,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class UserRoles
 {
-  private $container;
-
   public function __construct(Container $container)
   {
-    $this->container = $container;
     $this->passwordService = $container->get('password-service');
   }
 
@@ -22,32 +19,29 @@ class UserRoles
   ): ResponseInterface {
     $instance = new \UserRoles();
 
-    prepareJsonResponse(
-      $response,
-      (array) $instance->getSummary(),
-    );
+    prepareJsonResponse($response, (array) $instance->getSummary());
 
     return $response;
   }
 
   public function getMany(
     ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
+    ResponseInterface $response
   ): ResponseInterface {
     $queryParams = $request->getQueryParams();
     $page = intval(isset($queryParams['page']) ? $queryParams['page'] : 1);
     $classInstance = new \UserRoles();
 
     if ($classInstance->getSummary()->hasOrdering) {
-      $query = \UserRoles::orderBy('order', 'ASC')
-        ->orderBy('id', 'ASC');
+      $query = \UserRoles::orderBy('order', 'ASC')->orderBy('id', 'ASC');
     } else {
       $query = \UserRoles::orderBy('id', 'ASC');
     }
 
     $dataPaginated = json_decode(
-      $query->paginate($queryParams['limit'] ?? 15, ['*'], 'page', $page)->toJson(),
+      $query
+        ->paginate($queryParams['limit'] ?? 15, ['*'], 'page', $page)
+        ->toJson(),
     );
     // Unset some things as they are not useful or active
     unset($dataPaginated->links);
@@ -58,7 +52,17 @@ class UserRoles
     unset($dataPaginated->path);
 
     if ($page === 1) {
-      $dataPaginated->data = array_merge([[ 'id' => 0, 'label' => 'Admin', 'slug' => 'admin', 'description' => 'Main user role provided by PROM CMS Core module' ]], $dataPaginated->data);
+      $dataPaginated->data = array_merge(
+        [
+          [
+            'id' => 0,
+            'label' => 'Admin',
+            'slug' => 'admin',
+            'description' => 'Main user role provided by PROM CMS Core module',
+          ],
+        ],
+        $dataPaginated->data,
+      );
     }
 
     $response->getBody()->write(json_encode($dataPaginated));
@@ -76,11 +80,8 @@ class UserRoles
     try {
       $item = \UserRoles::findOrFail($args['itemId']);
       $item->update($parsedBody['data']);
-      
-      prepareJsonResponse(
-        $response,
-        $item->toArray()
-      );
+
+      prepareJsonResponse($response, $item->toArray());
 
       return $response;
     } catch (\Exception $ex) {
@@ -110,7 +111,7 @@ class UserRoles
       prepareJsonResponse($response, [
         'id' => 0,
         'label' => 'Admin',
-        'slug' => 'admin'
+        'slug' => 'admin',
       ]);
 
       return $response;
@@ -119,7 +120,7 @@ class UserRoles
     try {
       prepareJsonResponse(
         $response,
-        \UserRoles::findOrFail($itemId)->toArray()
+        \UserRoles::findOrFail($itemId)->toArray(),
       );
 
       return $response;
@@ -130,15 +131,14 @@ class UserRoles
 
   public function create(
     ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
+    ResponseInterface $response
   ): ResponseInterface {
     $parsedBody = $request->getParsedBody();
 
     try {
       prepareJsonResponse(
         $response,
-        \UserRoles::create($parsedBody['data'])->toArray()
+        \UserRoles::create($parsedBody['data'])->toArray(),
       );
 
       return $response;
@@ -162,9 +162,11 @@ class UserRoles
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    prepareJsonResponse( 
+    prepareJsonResponse(
       $response,
-      \UserRoles::where('id', $args['itemId'])->delete()->toArray()
+      \UserRoles::where('id', $args['itemId'])
+        ->delete()
+        ->toArray(),
     );
 
     return $response;

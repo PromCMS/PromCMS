@@ -171,10 +171,15 @@ export interface DatabaseConfigModel extends DatabaseConfigItemBase {
    */
   sorting?: boolean;
   /**
-   * Enable permission system for entries
-   *  @default true
+   * If user can share its entry and define permissions for other users to access
+   * @default true
    */
-  permissions?: boolean;
+  sharable?: boolean;
+  /**
+   * Determines if every entry should keep info about who changed|created entry
+   * @default true
+   */
+  ownable?: boolean;
   /**
    * Admin config
    */
@@ -199,6 +204,8 @@ export interface DatabaseConfig {
   models: Record<DatabaseTableName, DatabaseConfigModel>;
 }
 
+export type SecurityOptionOptions = 'allow-everything' | 'allow-own' | false;
+
 /**
  * Roles for each model by crud logic
  */
@@ -207,25 +214,25 @@ export interface ProjectSecurityRoleModelPermission {
    * Create
    * @default false;
    */
-  c?: boolean;
+  c?: SecurityOptionOptions;
 
   /**
    * Read
    * @default false;
    */
-  r?: boolean;
+  r?: SecurityOptionOptions;
 
   /**
    * Update
    * @default false;
    */
-  u?: boolean;
+  u?: SecurityOptionOptions;
 
   /**
    * Delete
    * @default false;
    */
-  d?: boolean;
+  d?: SecurityOptionOptions;
 }
 
 export type ModelUserPermissions = Record<

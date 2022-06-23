@@ -1,6 +1,6 @@
 import BackendImage from '@components/BackendImage'
-import FilePickerModal from '@components/FilePickerModal'
-import { Button, InputWrapper } from '@mantine/core'
+import { SmallFileList } from '@components/FilePickerModal/SmallFileList'
+import { Button, InputWrapper, Popover } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
 import clsx from 'clsx'
@@ -26,7 +26,7 @@ export interface ImageSelectProps
   touched?: boolean
   multiple?: boolean
   wrapperClassName?: string
-  selected: ItemID | ItemID[] | null
+  selected: ItemID | ItemID[] | undefined | null
   onChange: (newValue: ItemID | ItemID[] | null) => void
   onBlur?: () => void
 }
@@ -78,38 +78,52 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
               <div className="relative mr-6 aspect-square w-20 overflow-hidden rounded-full">
                 {modalPickedFiles.length ? (
                   <BackendImage
+                    width={80}
+                    quality={40}
                     imageId={modalPickedFiles[0]}
                     className="absolute h-full w-full object-cover object-center"
                   />
                 ) : (
                   <div className="absolute flex h-full w-full bg-gray-200">
-                    <iconSet.Photo className="m-auto aspect-square w-10 stroke-slate-500" />
+                    <iconSet.Photo
+                      size={40}
+                      className="icon icon-tabler icon-tabler-photo m-auto"
+                    />
                   </div>
                 )}
               </div>
 
-              <Button
-                className="flex-none"
-                color="ghost"
-                leftIcon={<iconSet.Pencil size={20} />}
-                size="md"
-                onClick={() => setModalOpen(true)}
+              <Popover
+                withArrow
+                opened={modalOpen}
+                onClose={onClose}
+                withinPortal={false}
+                target={
+                  <Button
+                    className="flex-none"
+                    color="ghost"
+                    leftIcon={<iconSet.Pencil size={20} />}
+                    size="md"
+                    onClick={() => setModalOpen(true)}
+                  >
+                    {t('Change')}
+                  </Button>
+                }
+                width={590}
+                position="bottom"
               >
-                {t('Change')}
-              </Button>
+                <SmallFileList
+                  filter={[['mimeType', 'regexp', `^image/.*$`]]}
+                  title={t('Choose an image')}
+                  triggerClose={onClose}
+                  multiple={multiple}
+                  pickedFiles={modalPickedFiles}
+                  onChange={onChangeCallback}
+                />
+              </Popover>
             </div>
           </InputWrapper>
         </div>
-        <FilePickerModal
-          title={t('Choose an image')}
-          size="xl"
-          filter={[['mimeType', 'regexp', `^image/.*$`]]}
-          multiple={multiple}
-          opened={modalOpen}
-          onClose={onClose}
-          pickedFiles={modalPickedFiles}
-          onChange={onChangeCallback}
-        />
       </>
     )
   }

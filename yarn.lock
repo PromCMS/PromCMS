@@ -2172,7 +2172,16 @@
   dependencies:
     "@cspotcode/source-map-consumer" "0.8.0"
 
-"@editorjs/editorjs@2.23.2", "@editorjs/editorjs@^2.19.1":
+"@editorjs/editorjs@2.24.3":
+  version "2.24.3"
+  resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.24.3.tgz#60ee6dd37d57b870ef29754355d77f9c61f30e79"
+  integrity sha512-VzrWaQ7mggNUAPTDGcqXJNIlBZH3S2IqsIUGA43UM2Q9VFaeS5KuVFVOTrFJvAzF7G+vZTO52ocm+hrDhTwvyw==
+  dependencies:
+    codex-notifier "^1.1.2"
+    codex-tooltip "^1.0.5"
+    nanoid "^3.1.22"
+
+"@editorjs/editorjs@^2.19.1":
   version "2.23.2"
   resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.23.2.tgz#a4d3e60de8052602233750eda353596c09131a90"
   integrity sha512-SXWQjxE/ZO6zWvo83U+gfkM9LVJzYOtNkttyXkdfyYALVWiENyxtlej/Jmd1TZ4yWpKwQEICPXz0ceGkzKnJyQ==
@@ -2191,10 +2200,10 @@
   resolved "https://registry.yarnpkg.com/@editorjs/header/-/header-2.6.2.tgz#523b6dda72ff882e53f64325840ee7bfc68ee6b7"
   integrity sha512-U1dnT+KGjwFmpWneEEyR2Nqp42hn9iKwQDgRHWQM+y6qx82pg+eAyuIf0QWt2Mluu9uPD2CzNfvJ+pxIuwX8Lw==
 
-"@editorjs/link@2.4.0":
-  version "2.4.0"
-  resolved "https://registry.yarnpkg.com/@editorjs/link/-/link-2.4.0.tgz#f54e41854e2453116999da985b745a182db14069"
-  integrity sha512-Dk5n4HkiXtZvhDIEBu7uiXhkPl2lhmMFW8FaUnOiERZHJzIZGQf/qe6GdFN6Bo51j/wVADVyq6m8ZylKwIiCVA==
+"@editorjs/link@2.4.1":
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/@editorjs/link/-/link-2.4.1.tgz#0fb500b8591068b6deb859dcfff4ec47b02f2dba"
+  integrity sha512-AqudulnZT/E5RO7itgentDedX25PGGvNmkbkdUXn8SuMKeYzfZ0hWAcgKLNNQHHCHm59F6AQz7JcXwfQuYhxyg==
   dependencies:
     "@babel/runtime" "^7.10.2"
 
@@ -2213,10 +2222,10 @@
   resolved "https://registry.yarnpkg.com/@editorjs/paragraph/-/paragraph-2.8.0.tgz#11cc381fcafaf8b9160517ce65d59eee93fc4af9"
   integrity sha512-z6w5ZR0ru3p/IjxJW/tb7OcSnVttkZukQMIsnBMX1FIKc1BNdr7NwM1YoCyTl4OnC90YfL0xgES6/20/W267pw==
 
-"@editorjs/table@2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@editorjs/table/-/table-2.0.1.tgz#ec7726b7b662ed4ddbcd023e9a4644fbb6ea73b8"
-  integrity sha512-PB8VM+GPRwGy7IlF+WrEQw2A2c36xEXBnYIvf2VGNJo8A7PjYHtuWrlyHHCnGpY4lHXYnavZ/U8pKAfXv86XjA==
+"@editorjs/table@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@editorjs/table/-/table-2.0.2.tgz#eb4aa3a7428bb23c95fa6bb3251a4aaa44ab3fb9"
+  integrity sha512-Ws5c9kmYsbWTBJ1WKSZRN+ATrqFFzjf/zggVu8AI/mVcNvSYUiEVqibLtbh5RLHiDGkELRZ9Bw5PQfVCg7yuBw==
 
 "@editorjs/underline@1.0.0":
   version "1.0.0"
@@ -3814,6 +3823,21 @@ chardet@^0.7.0:
   optionalDependencies:
     fsevents "~2.3.2"
 
+chokidar@^3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/chokidar/-/chokidar-3.5.3.tgz#1cf37c8707b932bd1af1ae22c0432e2acd1903bd"
+  integrity sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==
+  dependencies:
+    anymatch "~3.1.2"
+    braces "~3.0.2"
+    glob-parent "~5.1.2"
+    is-binary-path "~2.1.0"
+    is-glob "~4.0.1"
+    normalize-path "~3.0.0"
+    readdirp "~3.6.0"
+  optionalDependencies:
+    fsevents "~2.3.2"
+
 chownr@^1.1.1:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b"
@@ -3895,7 +3919,7 @@ codex-notifier@^1.1.2:
   resolved "https://registry.yarnpkg.com/codex-notifier/-/codex-notifier-1.1.2.tgz#a733079185f4c927fa296f1d71eb8753fe080895"
   integrity sha512-DCp6xe/LGueJ1N5sXEwcBc3r3PyVkEEDNWCVigfvywAkeXcZMk9K41a31tkEFBW0Ptlwji6/JlAb49E3Yrxbtg==
 
-codex-tooltip@^1.0.4:
+codex-tooltip@^1.0.4, codex-tooltip@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/codex-tooltip/-/codex-tooltip-1.0.5.tgz#ba25fd5b3a58ba2f73fd667c2b46987ffd1edef2"
   integrity sha512-IuA8LeyLU5p1B+HyhOsqR6oxyFQ11k3i9e9aXw40CrHFTRO2Y1npNBVU3W1SvhKAbUU7R/YikUBdcYFP0RcJag==
@@ -4910,6 +4934,21 @@ execa@6.0.0:
     npm-run-path "^5.0.1"
     onetime "^6.0.0"
     signal-exit "^3.0.5"
+    strip-final-newline "^3.0.0"
+
+execa@6.1.0:
+  version "6.1.0"
+  resolved "https://registry.yarnpkg.com/execa/-/execa-6.1.0.tgz#cea16dee211ff011246556388effa0818394fb20"
+  integrity sha512-QVWlX2e50heYJcCPG0iWtf8r0xjEYfz/OYLGDYH+IyjWezzPNxz63qNFOu0l4YftGWuizFVZHHs8PrLU5p2IDA==
+  dependencies:
+    cross-spawn "^7.0.3"
+    get-stream "^6.0.1"
+    human-signals "^3.0.1"
+    is-stream "^3.0.0"
+    merge-stream "^2.0.0"
+    npm-run-path "^5.1.0"
+    onetime "^6.0.0"
+    signal-exit "^3.0.7"
     strip-final-newline "^3.0.0"
 
 execa@^4.0.0:
@@ -6688,6 +6727,13 @@ npm-run-path@^5.0.1:
   dependencies:
     path-key "^4.0.0"
 
+npm-run-path@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/npm-run-path/-/npm-run-path-5.1.0.tgz#bc62f7f3f6952d9894bd08944ba011a6ee7b7e00"
+  integrity sha512-sJOdmRGrY2sjNTRMbSvluQqg+8X7ZK61yvzBEIDhz4f8z1TZFYABsqjjCBd/0PUNE9M6QDgHJXQkGUEm7Q+l9Q==
+  dependencies:
+    path-key "^4.0.0"
+
 npmlog@^4.0.1:
   version "4.1.2"
   resolved "https://registry.yarnpkg.com/npmlog/-/npmlog-4.1.2.tgz#08a7f2a8bf734604779a9efa4ad5cc717abb954b"
@@ -8421,7 +8467,7 @@ signal-exit@^3.0.0, signal-exit@^3.0.2, signal-exit@^3.0.5:
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.6.tgz#24e630c4b0f03fea446a2bd299e62b4a6ca8d0af"
   integrity sha512-sDl4qMFpijcGw22U5w63KmD3cZJfBuFlVNbVMKje2keoKML7X2UzWbc4XrmEbDwg0NXJc3yv4/ox7b+JWb57kQ==
 
-signal-exit@^3.0.3:
+signal-exit@^3.0.3, signal-exit@^3.0.7:
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.7.tgz#a9a1767f8af84155114eaabd73f99273c8f59ad9"
   integrity sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==

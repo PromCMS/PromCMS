@@ -12,7 +12,7 @@ export class UserRolesService {
   }
 
   static apiGetInfoUrl() {
-    return `${API_ENTRY_TYPES_URL}/user-roles`
+    return `${API_ENTRY_TYPES_URL}/userroles`
   }
 
   static apiGetUrl(id: ItemID) {
@@ -24,14 +24,14 @@ export class UserRolesService {
   }
 
   static async create(payload: ApiResultItem) {
-    return EntryService.create({ model: 'user-roles' }, payload)
+    return EntryService.create({ model: 'userroles' }, payload)
   }
 
   static async update(id: ItemID, payload: ApiResultItem) {
-    return EntryService.update({ model: 'user-roles', id }, payload)
+    return EntryService.update({ model: 'userroles', id }, payload)
   }
 
   static async delete(id: ItemID) {
-    return EntryService.delete({ model: 'user-roles', id })
+    return EntryService.delete({ model: 'userroles', id })
   }
 }

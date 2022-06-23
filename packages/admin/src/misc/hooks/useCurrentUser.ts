@@ -16,7 +16,7 @@ export const useCurrentUser = () => {
         can: (payload: Omit<CanUserOptions, 'userRole'>) =>
           currentUser?.role
             ? canUser({
-                userRole: currentUser?.role as UserRole,
+                userRole: currentUser.role as UserRole,
                 ...payload,
               })
             : false,

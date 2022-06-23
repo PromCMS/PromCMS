@@ -4,9 +4,6 @@ import {
   Button,
   Drawer as MantineDrawer,
   DrawerProps as MantineDrawerProps,
-  Grid,
-  Input,
-  InputWrapper,
   SimpleGrid,
   Textarea,
   TextInput,
@@ -21,13 +18,14 @@ import { Fragment } from 'react'
 import { ModelPermissionToggles } from './ModelPermissionToggles'
 import { useEffect } from 'react'
 import { useModelItem } from '@hooks/useModelItem'
+import { useMemo } from 'react'
 
 export const Drawer: FC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
 > = ({ opened, onClose, optionToEdit }) => {
   const formMethods = useForm()
   const { t } = useTranslation()
-  const { data } = useModelItem('user-roles', optionToEdit)
+  const { data } = useModelItem('userroles', optionToEdit)
   const reqWithNotification = useRequestWithNotifications()
   const { models } = useGlobalContext()
   const { handleSubmit, formState, register, reset } = formMethods
@@ -42,12 +40,7 @@ export const Drawer: FC<
     }
   }, [data, reset, optionToEdit, opened])
 
-  console.log({ data })
-
   const onSubmit = async (values) => {
-    console.log({ values })
-
-    return
     try {
       reqWithNotification(
         {
@@ -72,14 +65,22 @@ export const Drawer: FC<
     } catch (e) {}
   }
 
+  const filteredModelEntries = useMemo(() => {
+    if (models) {
+      return Object.entries(models).filter(
+        ([modelKey]) => !['userRoles', 'users', 'settings'].includes(modelKey)
+      )
+    }
+  }, [models])
+
   return (
     <FormProvider {...formMethods}>
       <MantineDrawer
         opened={opened}
         onClose={onClose}
         position="right"
-        size={700}
-        padding="xl"
+        padding={32}
+        size={500}
         className=" overflow-auto"
         title={
           <Title order={4}>
@@ -89,7 +90,7 @@ export const Drawer: FC<
       >
         <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
           <SimpleGrid cols={1} spacing="md">
-            <TextInput label="Label" {...register('label')} />
+            <TextInput label="Name" {...register('label')} />
             <Textarea
               autosize
               label={t('Description')}
@@ -99,9 +100,9 @@ export const Drawer: FC<
             <Title mt="lg" order={4}>
               Permissions by models
             </Title>
-            <SimpleGrid cols={2} className="gap-10">
-              {models &&
-                Object.entries(models).map(([modelName, modelValue]) => (
+            <SimpleGrid cols={1} className="gap-10">
+              {filteredModelEntries &&
+                filteredModelEntries.map(([modelName, modelValue]) => (
                   <Fragment key={modelName}>
                     <ModelPermissionToggles
                       modelInfo={modelValue}
@@ -111,7 +112,7 @@ export const Drawer: FC<
                 ))}
             </SimpleGrid>
           </SimpleGrid>
-          <div className="right-0 mt-8 rounded-lg pb-4">
+          <div className="sticky right-0 -bottom-8 rounded-lg bg-white pt-5 pb-4">
             <Button
               className="mr-auto block"
               type="submit"

@@ -66,6 +66,8 @@ const Header: VFC = () => {
                 <BackendImage
                   imageId={currentUser.avatar}
                   alt=""
+                  width={60}
+                  quality={40}
                   onError={() => setError(true)}
                 />
               ) : (
@@ -108,7 +110,7 @@ const Header: VFC = () => {
                 className="text-blue-500"
                 onClick={() => {
                   close()
-                  push('/settings')
+                  push('/settings/profile')
                 }}
               >
                 {t('Settings')}

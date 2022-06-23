@@ -31,7 +31,7 @@ export const PostLikeFields: FC = () => {
   }
 
   return (
-    <AsideItemWrap title={t('Other info')} className="mt-10">
+    <AsideItemWrap title={t('Other info')}>
       <div className="grid gap-5 p-4">
         <FieldMapper fields={groupedFields} />
       </div>

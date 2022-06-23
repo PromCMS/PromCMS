@@ -52,7 +52,10 @@ const SettingsPage: NextPage = () => {
     try {
       await ProfileService.save(diffedUser)
 
-      updateValue('currentUser', { ...currentUser, ...diffedUser })
+      updateValue('currentUser', {
+        ...currentUser,
+        ...diffedUser,
+      } as typeof currentUser)
 
       notifications.updateNotification(id, {
         message: t('Update done!'),
@@ -115,7 +118,7 @@ const SettingsPage: NextPage = () => {
                   className="w-full"
                   selected={value}
                   multiple={false}
-                  onChange={(value) => value && onChange(value[0])}
+                  onChange={(value) => value && onChange(value)}
                   onBlur={onBlur}
                 />
               )}

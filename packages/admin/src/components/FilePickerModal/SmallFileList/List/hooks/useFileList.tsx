@@ -1,4 +1,4 @@
-import { ApiResultItem, File, PagedResult } from '@prom-cms/shared'
+import { File, PagedResult } from '@prom-cms/shared'
 import { apiClient } from '@api'
 import { EntryService } from '@services'
 import useSWR from 'swr'

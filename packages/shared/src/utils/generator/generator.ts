@@ -29,7 +29,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     tableName: 'files',
     timestamp: true,
     ignoreSeeding: true,
-    permissions: false,
+    sharable: false,
     columns: {
       filename: {
         title: 'Filename',
@@ -91,6 +91,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     admin: {
       layout: 'simple',
     },
+    ownable: false,
     icon: 'UserExclamation',
     columns: {
       label: {
@@ -124,7 +125,8 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     admin: {
       layout: 'simple',
     },
-    permissions: false,
+    sharable: false,
+    ownable: false,
     icon: 'Users',
     columns: {
       // TODO: Do not make these values overridable
@@ -227,13 +229,36 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       };
     }
 
-    if (model.permissions === undefined || model.permissions) {
-      model.columns.permissions = {
-        title: 'permissions',
-        editable: false,
+    if (model.sharable || model.sharable === undefined) {
+      model.columns.coeditors = {
+        title: 'Coeditors',
         required: false,
         type: 'json',
         default: '',
+      };
+    }
+
+    if (model.ownable || model.ownable === undefined) {
+      model.columns.created_by = {
+        title: 'Created by',
+        editable: false,
+        required: false,
+        type: 'relationship',
+        targetModel: 'user',
+        labelConstructor: 'name',
+        fill: false,
+        adminHidden: true,
+      };
+
+      model.columns.updated_by = {
+        title: 'Updated by',
+        editable: false,
+        required: false,
+        type: 'relationship',
+        targetModel: 'user',
+        labelConstructor: 'name',
+        fill: false,
+        adminHidden: true,
       };
     }
 
@@ -278,9 +303,10 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       softDelete: false,
       timestamp: false,
       sorting: false,
-      permissions: true,
+      sharable: true,
       draftable: false,
       ignoreSeeding: false,
+      ownable: true,
       tableName: modelKey.toLocaleLowerCase(),
       ...model,
     };

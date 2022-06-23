@@ -21,6 +21,11 @@ include_once __DIR__ . '/libs/twig.bootstrap.php';
 function bootstrap()
 {
   static $app;
+  global $filesystem;
+  global $localesFilesystem;
+  global $fileCacheFilesystem;
+  global $mailer;
+  global $twig;
   $utils = new Utils();
 
   if (!$app) {
@@ -79,6 +84,24 @@ function bootstrap()
 
     $filePathsToApiRoutes = [];
     $filePathsToFrontRoutes = [];
+    $modulesToInject = [
+      // Set filesystem module and attach it to container
+      ['filesystem', $filesystem],
+      // TODO: Do not create this much fs instance - we need to create one and think about different solution
+      // Set locales filesystem module and attach it to container
+      ['locales-filesystem', $localesFilesystem],
+      // File cache filesystem
+      ['file-cache-filesystem', $fileCacheFilesystem],
+      // Set mailer module and attach it to container
+      ['email', $mailer],
+      // Set twig module and attach it to container
+      ['twig', $twig],
+    ];
+
+    // Inject core php modules dynamically before any prom module loads
+    foreach ($modulesToInject as $value) {
+      $container->set($value[0], $value[1]);
+    }
 
     // Make sure that 'Core' module is loaded first
     $moduleNames = BootstrapUtils::getValidModuleNames();
@@ -86,7 +109,7 @@ function bootstrap()
     // array of loaded model names (names of classes)
     $loadedModels = [];
 
-    // Simple load module hack
+    // Simple load module logic
     foreach ($moduleNames as $dirname) {
       $moduleRoot = BootstrapUtils::getModuleRoot($dirname);
       // Make sure that plugin has valid info file
@@ -125,36 +148,9 @@ function bootstrap()
     }
 
     // Set some info to memory so modules can access those
-    $container->set('sysinfo', function () use ($loadedModels) {
-      return [
-        'loadedModels' => $loadedModels,
-      ];
-    });
-
-    // Set filesystem module and attach it to container
-    $container->set('filesystem', function () {
-      global $filesystem;
-      return $filesystem;
-    });
-
-    // TODO: Do not create this much fs instance - we need to create one and think about different solution
-    // Set locales filesystem module and attach it to container
-    $container->set('locales-filesystem', function () {
-      global $localesFilesystem;
-      return $localesFilesystem;
-    });
-
-    // Set mailer module and attach it to container
-    $container->set('email', function () {
-      global $mailer;
-      return $mailer;
-    });
-
-    // Set twig module and attach it to container
-    $container->set('twig', function () {
-      global $twig;
-      return $twig;
-    });
+    $container->set('sysinfo', [
+      'loadedModels' => $loadedModels,
+    ]);
 
     // Every module should have been bootstrapped by now so we can continue to including custom routes
     $app->group(PROM_URL_BASE ? '/' . PROM_URL_BASE : '', function (

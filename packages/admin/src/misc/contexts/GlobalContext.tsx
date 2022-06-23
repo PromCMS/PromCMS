@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import { createContext, FC, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { UserRolesService } from '@services'
+import { useMemo } from 'react'
 
 export interface IGlobalContext {
   currentUser?: Omit<User, 'role'> & { role: UserRole }
@@ -76,22 +77,23 @@ export const GlobalContextProvider: FC = ({ children }) => {
     const cancelToken = axios.CancelToken.source()
 
     const getUser = async () => {
+      setIsBooting(true)
       try {
-        const currentUserQuery = await apiClient.get(API_CURRENT_USER_URL, {
+        const loggedInUserQuery = await apiClient.get(API_CURRENT_USER_URL, {
           cancelToken: cancelToken.token,
         })
 
-        const currentUser = currentUserQuery.data.data as User
+        const loggedInUser = loggedInUserQuery.data.data as User
 
         const currentUserRoleQuery = await apiClient.get<{ data: UserRole }>(
-          UserRolesService.apiGetUrl(currentUser.role as number),
+          UserRolesService.apiGetUrl(loggedInUser.role as number),
           {
             cancelToken: cancelToken.token,
           }
         )
 
         setCurrentUser({
-          ...currentUser,
+          ...loggedInUser,
           role: currentUserRoleQuery.data.data,
         })
 
@@ -150,17 +152,20 @@ export const GlobalContextProvider: FC = ({ children }) => {
     }
   }, [setCurrentUser, currentUser])
 
+  const contextValue = useMemo(
+    () => ({
+      models,
+      currentUser,
+      updateValue,
+      isBooting: isBooting || !i18n.isInitialized,
+      currentUserIsAdmin: !!(currentUser?.role && currentUser.role.id === 0),
+      isLoggedIn: !!currentUser,
+    }),
+    [currentUser, i18n.isInitialized, isBooting, models]
+  )
+
   return (
-    <GlobalContext.Provider
-      value={{
-        models,
-        currentUser,
-        updateValue,
-        isBooting: isBooting || !i18n.isInitialized,
-        currentUserIsAdmin: !!(currentUser?.role && currentUser.role.id === 0),
-        isLoggedIn: !!currentUser,
-      }}
-    >
+    <GlobalContext.Provider value={contextValue}>
       {children}
       {isNotOnline && (
         <div className="absolute inset-0 bg-white">

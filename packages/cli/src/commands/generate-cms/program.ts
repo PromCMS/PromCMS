@@ -155,7 +155,7 @@ export class GenerateCMSProgram extends Command {
           // Core already exists - we delete it first to not to have some ghost files
           const existingCoreModulePath = path.join(exportModulesRoot, 'Core');
           if (await fs.pathExists(existingCoreModulePath)) {
-            fs.remove(existingCoreModulePath);
+            await fs.remove(existingCoreModulePath);
           }
 
           await generateCoreModule(

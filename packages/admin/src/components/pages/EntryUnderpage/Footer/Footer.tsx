@@ -1,40 +1,26 @@
-import AsideItemWrap from '@components/AsideItemWrap'
 import { MESSAGES } from '@constants'
 import useCurrentModel from '@hooks/useCurrentModel'
-import {
-  ActionIcon,
-  Button,
-  Group,
-  Skeleton,
-  SkeletonProps,
-} from '@mantine/core'
+import { useCurrentUser } from '@hooks/useCurrentUser'
+import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import { EntryService } from '@services'
 import { getObjectDiff } from '@utils'
 import clsx from 'clsx'
-import dayjs from 'dayjs'
 import { useMemo } from 'react'
 import { FC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useEntryUnderpageContext } from '../../context'
+import { useEntryUnderpageContext } from '../context'
 
-const TextSkeleton: FC<SkeletonProps> = ({ className, ...rest }) => (
-  <Skeleton
-    className={clsx('relative top-0.5 inline-block h-4', className)}
-    {...rest}
-  />
-)
-
-const dateFormat = 'D.M. YYYY @ HH:mm'
-
-export const PublishInfo: FC = () => {
-  const { itemData, itemIsLoading, currentView, exitView } =
-    useEntryUnderpageContext()
-  const { t } = useTranslation()
-  const currentModel = useCurrentModel()
-  const { watch, setValue, formState } = useFormContext()
+export const Footer: FC<{}> = () => {
+  const { watch } = useFormContext()
   const formValues = watch()
+  const { t } = useTranslation()
+  const { itemData, currentView, setAsideOpen, asideOpen, exitView } =
+    useEntryUnderpageContext()
+  const currentModel = useCurrentModel()
+  const currentUser = useCurrentUser()
+  const { setValue, formState } = useFormContext()
 
   const isEdited = useMemo(
     () =>
@@ -51,6 +37,12 @@ export const PublishInfo: FC = () => {
         id: itemData?.id as string,
         model: currentModel?.name as string,
       })
+    }
+  }
+
+  const handleSaveButtonClick = () => {
+    if (currentView === 'create') {
+      setValue('is_published', true)
     }
   }
 
@@ -103,75 +95,41 @@ export const PublishInfo: FC = () => {
     setValue('is_published', itemData ? !itemData.is_published : false)
   }
 
-  const handleSaveButtonClick = () => {
-    if (currentView === 'create') {
-      setValue('is_published', true)
-    }
-  }
-
   return (
-    <AsideItemWrap className="!pt-0" title="Publish">
-      {currentView === 'update' && (
-        <div
-          className={clsx(
-            'w-full bg-white',
-            (itemData?.updated_at || itemData?.created_at) && 'px-4 py-5'
-          )}
-        >
-          {currentModel?.hasTimestamps && (
-            <ul className="flex list-disc flex-col gap-2 pl-5">
-              {!!itemData?.updated_at && (
-                <li>
-                  {t('Updated at:')}{' '}
-                  {itemIsLoading ? (
-                    <TextSkeleton className="w-full max-w-[6rem]" />
-                  ) : (
-                    <span className="font-semibold text-blue-600">
-                      {dayjs(itemData?.updated_at).format(dateFormat)}
-                    </span>
-                  )}
-                </li>
-              )}
-              {!!itemData?.created_at && (
-                <li>
-                  {t('Created at:')}{' '}
-                  {itemIsLoading ? (
-                    <TextSkeleton className="w-full max-w-[6rem]" />
-                  ) : (
-                    <span className="font-semibold text-blue-600">
-                      {dayjs(itemData?.created_at).format(dateFormat)}
-                    </span>
-                  )}
-                </li>
-              )}
-            </ul>
-          )}
-        </div>
-      )}
-
-      <Group
-        sx={(theme) => ({ borderTop: `2px solid ${theme.colors.gray[2]}` })}
-        position="apart"
-        className="items-center gap-5 px-4 py-4"
-      >
-        {currentView === 'update' ? (
+    <Paper
+      shadow="lg"
+      component="footer"
+      className="align-center container sticky bottom-5 left-0 z-10 mx-auto flex max-h-20 items-center justify-between border-2 border-project-border p-3"
+    >
+      {currentView === 'update' &&
+      currentModel &&
+      currentUser?.can({
+        action: 'create',
+        targetModel: currentModel?.name,
+      }) ? (
+        <Tooltip withArrow label={t('Delete')} position="top" color="gray">
           <ActionIcon
-            size="lg"
+            size="xl"
             type="button"
             loading={formState.isSubmitting}
             onClick={onItemDeleteRequest}
             color="red"
             variant="light"
-            className={clsx(
-              formState.isSubmitting && '!cursor-progress',
-              'text-sm text-red-500'
-            )}
+            styles={{
+              root: {
+                width: 50,
+                height: 50,
+              },
+            }}
+            className={clsx(formState.isSubmitting && '!cursor-progress')}
           >
-            <iconSet.Trash className="aspect-square w-5" />
+            <iconSet.Trash className="aspect-square w-10" />
           </ActionIcon>
-        ) : (
-          <span></span>
-        )}
+        </Tooltip>
+      ) : (
+        <span></span>
+      )}
+      <div className="flex items-center gap-3">
         {currentModel?.isDraftable && (
           <Button
             size="sm"
@@ -196,7 +154,35 @@ export const PublishInfo: FC = () => {
         >
           {saveButtonText}
         </Button>
-      </Group>
-    </AsideItemWrap>
+        <Tooltip
+          withArrow
+          label={t('Toggle more options')}
+          position="top"
+          color="gray"
+        >
+          <ActionIcon
+            size="xl"
+            color="blue"
+            variant="light"
+            type="button"
+            className={clsx(formState.isSubmitting && '!cursor-progress')}
+            styles={{
+              root: {
+                width: 50,
+                height: 50,
+              },
+            }}
+            onClick={() => setAsideOpen((prev) => !prev)}
+          >
+            <iconSet.ChevronLeft
+              className={clsx(
+                'aspect-square w-20 duration-150',
+                asideOpen && 'rotate-180'
+              )}
+            />
+          </ActionIcon>
+        </Tooltip>
+      </div>
+    </Paper>
   )
 }

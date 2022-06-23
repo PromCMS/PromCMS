@@ -12,7 +12,7 @@ export const FormContent = forwardRef<{ editorRef: RefObject<EditorJS> }, {}>(
   function FormContent(_, refs) {
     // We recieve multiple refs and destructure them
     const { editorRef } =
-      (refs as MutableRefObject<{ editorRef: RefObject<EditorJS> }>).current ||
+      (refs as MutableRefObject<{ editorRef: RefObject<EditorJS> }>)?.current ||
       {}
     const { currentView, itemData } = useEntryUnderpageContext()
     const { formState } = useFormContext<ItemFormValues>()
@@ -29,7 +29,7 @@ export const FormContent = forwardRef<{ editorRef: RefObject<EditorJS> }, {}>(
     if (!groupedFields) return null
 
     return (
-      <>
+      <div className="flex min-h-screen flex-col gap-5">
         {model?.admin?.layout === 'simple' ? (
           groupedFields && <FieldMapper fields={groupedFields} />
         ) : (
@@ -42,7 +42,7 @@ export const FormContent = forwardRef<{ editorRef: RefObject<EditorJS> }, {}>(
         {formState.isSubmitting && (
           <div className="absolute inset-0 cursor-progress bg-white/20 backdrop-blur-[2px]" />
         )}
-      </>
+      </div>
     )
   }
 )

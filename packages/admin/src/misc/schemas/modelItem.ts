@@ -20,6 +20,10 @@ export const getModelItemSchema = (
       const column = columns[columnKey]
       let columnShape
 
+      if (column.editable === false) {
+        return shape
+      }
+
       if (column.type === 'file') {
         columnShape = yup[
           convertColumnTypeToPrimitive(column.type)
@@ -30,7 +34,7 @@ export const getModelItemSchema = (
             ? Number(originalValue.id)
             : Number(originalValue)
         )
-      } else if (columnKey === 'permissions' && column.type === 'json') {
+      } else if (columnKey === 'coeditors' && column.type === 'json') {
         columnShape = yup
           .object()
           .transform((_, originalValue) =>

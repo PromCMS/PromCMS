@@ -1,6 +1,7 @@
 import { Button as CustomButton } from '@components/Button'
+import ImageSelect from '@components/form/ImageSelect'
 import ThemeProvider from '@components/ThemeProvider'
-import { Checkbox, Group, Text, TextInput } from '@mantine/core'
+import { Checkbox, Group, Text, TextInput, Title } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import { capitalizeFirstLetter } from '@prom-cms/shared'
 import { forwardRef, useEffect, useMemo, useState, VFC } from 'react'
@@ -70,15 +71,13 @@ export const ButtonLinkView: VFC<{
 
   return (
     <ThemeProvider>
-      {' '}
       {!readOnly ? (
         <div className="rounded-lg border-2 border-project-border bg-white p-5">
-          <p className="text-xl font-semibold">{t('Button link')}</p>
+          <Title order={3}>{t('Button link')}</Title>
 
-          <div>
+          <Group className="mt-4" noWrap grow>
             <TextInput
               required
-              className="mt-2"
               label={t('Link')}
               placeholder="https://google.com"
               error={isUrlValid ? undefined : t('Invalid url')}
@@ -93,42 +92,39 @@ export const ButtonLinkView: VFC<{
                 )
               }
             />
-
-            <Group className="mt-2" noWrap grow>
-              <TextInput
-                label={t('Label')}
-                placeholder={t('Some text')}
-                value={data.label}
-                onChange={(e) => onChange('label', e.currentTarget.value)}
-                rightSection={<iconSet.AB size={16} />}
-              />
-
-              {/*
-          TODO think of way to inlcude icons on clien
-          <Select
-            searchable
-            value={data.icon}
-            label={t('Icon')}
-            placeholder={t('Enter name to find')}
-            itemComponent={SelectItem}
-            data={selectData}
-            icon={IconComponent ? <IconComponent /> : undefined}
-            maxDropdownHeight={250}
-            limit={20}
-            nothingFound={t('Icon not found')}
-            onChange={(value) => onChange('icon', value)}
-            filter={(value, item) =>
-              !!item?.label?.toLowerCase().includes(value.toLowerCase().trim())
-            }
-          />*/}
-            </Group>
-            <Checkbox
-              mt="lg"
-              label={t('Download on button click')}
-              checked={data.isDownload}
-              onChange={(e) => onChange('isDownload', e.currentTarget.checked)}
+            <TextInput
+              label={t('Label')}
+              placeholder={t('Some text')}
+              value={data.label}
+              onChange={(e) => onChange('label', e.currentTarget.value)}
+              rightSection={<iconSet.AB size={16} />}
             />
-          </div>
+          </Group>
+
+          <Group className="mt-4 items-start" noWrap grow>
+            <div>
+              <Checkbox
+                label={t('Download on button click')}
+                checked={data.isDownload}
+                onChange={(e) =>
+                  onChange('isDownload', e.currentTarget.checked)
+                }
+              />
+              <Checkbox
+                mt="md"
+                label={t('Open on new tab')}
+                checked={data.openOnNewTab}
+                onChange={(e) =>
+                  onChange('openOnNewTab', e.currentTarget.checked)
+                }
+              />
+            </div>
+            <ImageSelect
+              label={t('Placeholder Image')}
+              selected={data.placeholderImage || null}
+              onChange={(value) => onChange('placeholderImage', value)}
+            />
+          </Group>
         </div>
       ) : (
         <CustomButton
@@ -139,7 +135,7 @@ export const ButtonLinkView: VFC<{
           {IconComponent && <IconComponent />}
           {data.label || data.linkTo}
         </CustomButton>
-      )}{' '}
+      )}
     </ThemeProvider>
   )
 }

@@ -18,7 +18,7 @@ function adminRouting(
   if (count($pieces) === 1) {
     if (file_exists($adminPath . '/' . $pieces[0] . '/index.html')) {
       $content = file_get_contents(
-        $adminPath . '/' . $pieces[0] . '/index.html'
+        $adminPath . '/' . $pieces[0] . '/index.html',
       );
     }
   } elseif (count($pieces) > 1) {
@@ -27,7 +27,7 @@ function adminRouting(
       file_exists($adminPath . '/' . $pieces[0] . '/index.html')
     ) {
       $content = file_get_contents(
-        $adminPath . '/' . $pieces[0] . '/index.html'
+        $adminPath . '/' . $pieces[0] . '/index.html',
       );
     } elseif (file_exists($adminPath . '/index.html')) {
       $content = file_get_contents($adminPath . '/index.html');

@@ -65,6 +65,10 @@ try {
       $creationPayload = [];
 
       foreach ((array) $modelSummary->columns as $columnKey => $column) {
+        if ($columnKey === 'id') {
+          continue;
+        }
+
         [
           'required' => $fieldIsRequired,
           'editable' => $fieldIsEditable,

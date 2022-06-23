@@ -6,6 +6,7 @@ import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { FileService } from '@services'
 import { UnstyledButton } from '@mantine/core'
+import BackendImage from '@components/BackendImage'
 
 const classNames = getClassnames()
 
@@ -38,13 +39,15 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
       className={clsx(classNames.itemRoot, 'group')}
       onClick={onPick}
       type="button"
+      title={filename}
     >
       <div className={classNames.itemSquare()}>
         {isImage ? (
-          <img
+          <BackendImage
             alt="uploaded file"
+            imageId={id}
             className="absolute top-0 left-0 h-full w-full object-cover"
-            src={`/api${FileService.getApiRawUrl(id)}`}
+            width={270}
           />
         ) : (
           <div className="flex h-full w-full">
