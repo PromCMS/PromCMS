@@ -36,8 +36,8 @@ class EntryType
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
-    // TODO - should we try and check that those items are owned by current user or not?
     $instancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
     $instance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
     $data = $parsedBody['data'];
@@ -51,14 +51,19 @@ class EntryType
     }
 
     try {
-      $fromEntry = $instancePath
-        ::where('id', $data['fromId'])
-        ->get()
-        ->firstOrFail();
-      $toEntry = $instancePath
-        ::where('id', $data['toId'])
-        ->get()
-        ->firstOrFail();
+      $ownableQueryFilter = onlyOwnersOrEditors(
+        $this->currentUser->id,
+        $classInstance,
+      );
+
+      $fromEntryQuery = $instancePath::where('id', $data['fromId']);
+      $toEntryQuery = $instancePath::where('id', $data['toId']);
+
+      $fromEntryQuery->where($ownableQueryFilter);
+      $toEntryQuery->where($ownableQueryFilter);
+
+      $fromEntry = $fromEntryQuery->firstOrFail();
+      $toEntry = $toEntryQuery->firstOrFail();
 
       DB::beginTransaction();
 
@@ -90,8 +95,7 @@ class EntryType
 
   public function getMany(
     ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
+    ResponseInterface $response
   ): ResponseInterface {
     $modelInstancePath = $request->getAttribute('model-instance-path');
     $classInstance = $request->getAttribute('model-instance');
@@ -107,23 +111,15 @@ class EntryType
     }
 
     if ($request->getAttribute('permission-only-own', false) === true) {
-      $query->where(function ($query) use ($classInstance) {
-        $currentUserId = $this->currentUser->id;
-        $where = $query->where('created_by', '=', $currentUserId);
-
-        if ($classInstance->getSummary()->isSharable) {
-          $where->orWhere(
-            'coeditors',
-            'like',
-            '%"' . $currentUserId . '":true%',
-          );
-        }
-      });
+      $query->where(
+        onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+      );
     }
 
     $dataPaginated = json_decode(
       $query->paginate(15, ['*'], 'page', $page)->toJson(),
     );
+
     // Unset some things as they are not useful or active
     unset($dataPaginated->links);
     unset($dataPaginated->first_page_url);
@@ -147,10 +143,20 @@ class EntryType
     $parsedBody = $request->getParsedBody();
 
     try {
-      $item = $modelInstancePath::findOrFail($args['itemId']);
+      $query = $modelInstancePath::where('id', $args['itemId']);
+
+      if ($request->getAttribute('permission-only-own', false) === true) {
+        $query->where(
+          onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+        );
+      }
+
+      $item = $query::firstOrFail();
+
       if ($classInstance->getSummary()->ownable && $this->currentUser) {
         $parsedBody['data']['updated_by'] = $this->currentUser->id;
       }
+
       $item->update($parsedBody['data']);
 
       prepareJsonResponse($response, $item->toArray());
@@ -177,16 +183,26 @@ class EntryType
     array $args
   ): ResponseInterface {
     $modelInstancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
 
     try {
-      prepareJsonResponse(
-        $response,
-        $modelInstancePath::findOrFail($args['itemId'])->toArray(),
-      );
+      $query = $modelInstancePath::where('id', $args['itemId']);
+
+      if ($request->getAttribute('permission-only-own', false) === true) {
+        $query->where(
+          onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+        );
+      }
+
+      $item = $query::firstOrFail();
+
+      prepareJsonResponse($response, $item->toArray());
 
       return $response;
-    } catch (\Exception $e) {
-      return $response->withStatus(404);
+    } catch (\Exception $error) {
+      return $response
+        ->withStatus(404)
+        ->withHeader('Content-Description', $error->getMessage());
     }
   }
 
@@ -230,8 +246,17 @@ class EntryType
     array $args
   ): ResponseInterface {
     $modelInstancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
 
-    if (!$modelInstancePath::where('id', $args['itemId'])->delete()) {
+    $query = $modelInstancePath::where('id', $args['itemId']);
+
+    if ($request->getAttribute('permission-only-own', false) === true) {
+      $query->where(
+        onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+      );
+    }
+
+    if (!$query->delete()) {
       prepareJsonResponse($response, [], 'Failed to delete');
 
       return $response

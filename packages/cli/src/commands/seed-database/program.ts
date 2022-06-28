@@ -1,5 +1,5 @@
 import { Command, Config } from '@boost/cli';
-import { getGeneratorConfig } from '@prom-cms/shared';
+import { findGeneratorConfig } from '@prom-cms/shared';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -50,8 +50,8 @@ export class SeedDatabaseProgram extends Command {
     // const PROVIDED_ROOT = path.join(PROJECT_ROOT, ...root.split('/'));
     // await loadRootEnv(PROVIDED_ROOT);
 
-    //const GENERATOR_CONFIG = await getGeneratorConfig(PROVIDED_ROOT);
-    const GENERATOR_CONFIG = await getGeneratorConfig();
+    //const GENERATOR_CONFIG = await findGeneratorConfig(PROVIDED_ROOT);
+    const GENERATOR_CONFIG = await findGeneratorConfig();
     let messages = '';
 
     if (!GENERATOR_CONFIG) {

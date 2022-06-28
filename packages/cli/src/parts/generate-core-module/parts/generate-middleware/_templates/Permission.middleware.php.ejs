@@ -18,9 +18,11 @@ class Permission
 {
   private $container;
   private $loadedModels;
+  private $adminOnlyModels;
 
   public function __construct($container)
   {
+    $this->adminOnlyModels = ['files', 'users', 'userroles', 'settings'];
     $this->container = $container;
     $this->loadedModels = $container->get('sysinfo')['loadedModels'];
   }
@@ -73,7 +75,15 @@ class Permission
     }
 
     // Handle any other than admin
-    if ($roleId !== 0 && $modelFromUrl !== 'files') {
+    if ($roleId !== 0) {
+      if (in_array(strtolower($modelFromUrl), $this->adminOnlyModels)) {
+        $response = new Response();
+
+        return $response
+          ->withStatus(401)
+          ->withHeader('Content-Description', 'Role not sufficient');
+      }
+
       $response = new Response();
       $role = \UserRoles::where('id', $roleId)
         ->first()
@@ -110,6 +120,7 @@ class Permission
         );
       }
 
+      // If there is not yet set permission then we assume that user does not have access to this
       if ($requestPermissionValue === false) {
         prepareJsonResponse(
           $response,

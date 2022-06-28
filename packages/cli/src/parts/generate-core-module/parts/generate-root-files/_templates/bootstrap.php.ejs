@@ -29,6 +29,20 @@ class Path
   }
 }
 
+/**
+ * This generates mysql search params
+ */
+function onlyOwnersOrEditors(int $ownerId, $classInstance)
+{
+  return function ($query) use ($classInstance, $ownerId) {
+    $where = $query->where('created_by', '=', $ownerId);
+
+    if ($classInstance->getSummary()->isSharable) {
+      $where->orWhere('coeditors', 'like', '%"' . $ownerId . '":true%');
+    }
+  };
+}
+
 $container->set('password-service', new \App\Services\Password());
 $container->set('jwt-service', new \App\Services\JWT());
 $container->set('image-service', new \App\Services\ImageService($container));
