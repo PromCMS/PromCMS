@@ -51,8 +51,23 @@ const simplifyProjectName = (name: string) =>
 
 @Config('generate:cms', 'Controls a cms generator', {})
 export class GenerateCMSProgram extends Command {
-  @Arg.Flag('To specify prom config path', {
+  @Arg.String('To specify prom config path', {
     short: 'c',
+    validate(value) {
+      if (!value) {
+        throw new Error('Prom config path not defined in -c value');
+      }
+
+      if (!fs.pathExistsSync(path.join(process.cwd(), value))) {
+        throw new Error('Defined PROM config path does not exist');
+      }
+
+      if (!(value.endsWith('.js') || value.endsWith('.cjs'))) {
+        throw new Error(
+          'Defined PROM config path must be valid Node.js module file'
+        );
+      }
+    },
   })
   configPath: string;
 
@@ -94,9 +109,9 @@ export class GenerateCMSProgram extends Command {
   async run(root) {
     // TODO: when in release take path from process.cwd() and attach path parameter from cli
     const currentRoot = PROJECT_ROOT;
-    const generatorConfig: ExportConfig | undefined = await import(
-      this.configPath
-    );
+    const generatorConfig: ExportConfig | undefined = (
+      await import('file:/' + path.join(process.cwd(), this.configPath))
+    ).default;
 
     // means final path to a project, is relative to cwd
     const FINAL_PATH = path.join(currentRoot, ...root.split('/'));
