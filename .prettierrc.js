@@ -30,7 +30,7 @@ module.exports = {
     },
 
     {
-      "files": ["*.php"],
+      "files": ["*.php", "*.php.ejs"],
       "options": {
         "parser": "php",
         "phpVersion": "7.3",

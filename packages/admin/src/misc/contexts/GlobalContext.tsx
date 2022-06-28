@@ -1,13 +1,15 @@
-import { ApiResultModels, User } from '@prom-cms/shared'
+import { ApiResultModels, User, UserRole } from '@prom-cms/shared'
 import axios from 'axios'
 import { apiClient } from '@api'
 import { API_CURRENT_USER_URL, API_ENTRY_TYPES_URL } from '@constants'
 import { useRouter } from 'next/router'
 import { createContext, FC, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { UserRolesService } from '@services'
+import { useMemo } from 'react'
 
 export interface IGlobalContext {
-  currentUser?: User
+  currentUser?: Omit<User, 'role'> & { role: UserRole }
   models?: ApiResultModels
   updateValue<T extends keyof Omit<IGlobalContext, 'updateValue'>>(
     key: T,
@@ -28,7 +30,9 @@ export const GlobalContext = createContext<IGlobalContext>({
 export const GlobalContextProvider: FC = ({ children }) => {
   const { push, pathname } = useRouter()
   const { t, i18n } = useTranslation()
-  const [currentUser, setCurrentUser] = useState<User>()
+  const [currentUser, setCurrentUser] = useState<
+    Omit<User, 'role'> & { role: UserRole }
+  >()
   const [models, setModels] = useState()
   const [isBooting, setIsBooting] = useState(true)
   const [isNotOnline, setIsNotOnline] = useState(false)
@@ -73,12 +77,25 @@ export const GlobalContextProvider: FC = ({ children }) => {
     const cancelToken = axios.CancelToken.source()
 
     const getUser = async () => {
+      setIsBooting(true)
       try {
-        const currentUserQuery = await apiClient.get(API_CURRENT_USER_URL, {
+        const loggedInUserQuery = await apiClient.get(API_CURRENT_USER_URL, {
           cancelToken: cancelToken.token,
         })
 
-        setCurrentUser(currentUserQuery.data.data)
+        const loggedInUser = loggedInUserQuery.data.data as User
+
+        const currentUserRoleQuery = await apiClient.get<{ data: UserRole }>(
+          UserRolesService.apiGetUrl(loggedInUser.role as number),
+          {
+            cancelToken: cancelToken.token,
+          }
+        )
+
+        setCurrentUser({
+          ...loggedInUser,
+          role: currentUserRoleQuery.data.data,
+        })
 
         setIsBooting(false)
       } catch (e) {
@@ -135,19 +152,20 @@ export const GlobalContextProvider: FC = ({ children }) => {
     }
   }, [setCurrentUser, currentUser])
 
+  const contextValue = useMemo(
+    () => ({
+      models,
+      currentUser,
+      updateValue,
+      isBooting: isBooting || !i18n.isInitialized,
+      currentUserIsAdmin: !!(currentUser?.role && currentUser.role.id === 0),
+      isLoggedIn: !!currentUser,
+    }),
+    [currentUser, i18n.isInitialized, isBooting, models]
+  )
+
   return (
-    <GlobalContext.Provider
-      value={{
-        models,
-        currentUser,
-        updateValue,
-        isBooting: isBooting || !i18n.isInitialized,
-        currentUserIsAdmin: !!(
-          currentUser?.role && currentUser.role.toLowerCase() === 'admin'
-        ),
-        isLoggedIn: !!currentUser,
-      }}
-    >
+    <GlobalContext.Provider value={contextValue}>
       {children}
       {isNotOnline && (
         <div className="absolute inset-0 bg-white">

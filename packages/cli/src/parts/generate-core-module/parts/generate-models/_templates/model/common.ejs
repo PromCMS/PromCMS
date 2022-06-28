@@ -90,16 +90,17 @@ class <%- modelName %> extends Model
     '<%- fillableKeys %>'
   ];
 
-  <% if (relationships.length) { %>
+  <% const relationshipsToFill = relationships.filter(([_, {fill}]) => fill); %>
+  <% if (relationshipsToFill.length) { %>
     protected $with = [
-      '<%- relationships.map(([columnKey]) => columnKey).join("','")  %>'
+      '<%- relationshipsToFill.map(([columnKey]) => columnKey).join("','")  %>'
     ];
   <% } %>
 
-  <% relationships.forEach(([columnKey, {type, target}]) => { %>
+  <% relationships.forEach(([columnKey, {type, target, foreignKey}]) => { %>
     public function <%- columnKey %>()
     {
-        return $this-><% if (type === "oneToOne") { %>belongsTo<% } else { %>belongsToMany<% } %>(<%- target %>, '<%- columnKey %>', 'id');
+        return $this-><% if (type === "oneToOne") { %>belongsTo<% } else { %>belongsToMany<% } %>(<%- target %>, '<%- columnKey %>', '<%- foreignKey %>');
     }
   <%  }) %> 
 
@@ -136,7 +137,8 @@ class <%- modelName %> extends Model
         "hasSoftDelete" => $this->hasSoftDeletes,
         "hasOrdering" => <% if (sorting) { %> true <% } else { %> false <% } %>,
         "isDraftable" => <% if (draftable) { %> true <% } else { %> false <% } %>,
-        "hasPermissions" => <% if (permissions) { %> true <% } else { %> false <% } %>,
+        "isSharable" => <% if (sharable) { %> true <% } else { %> false <% } %>,
+        "ownable" => <% if (ownable) { %> true <% } else { %> false <% } %>,
         "admin" => $this->adminSettings,
       ];
   }

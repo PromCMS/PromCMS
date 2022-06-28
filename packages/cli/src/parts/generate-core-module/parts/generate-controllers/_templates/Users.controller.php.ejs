@@ -9,11 +9,13 @@ use Psr\Http\Message\ServerRequestInterface;
 class Users
 {
   private $container;
+  private $currentUser;
 
   public function __construct(Container $container)
   {
     $this->container = $container;
     $this->passwordService = $container->get('password-service');
+    $this->currentUser = $container->get('session')->get('user', false);
   }
 
   public function getInfo(
@@ -22,10 +24,7 @@ class Users
   ): ResponseInterface {
     $instance = new \Users();
 
-    prepareJsonResponse(
-      $response,
-      (array) $instance->getSummary(),
-    );
+    prepareJsonResponse($response, (array) $instance->getSummary());
 
     return $response;
   }
@@ -36,10 +35,25 @@ class Users
   ): ResponseInterface {
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
+    $where = [];
+    $whereIn = [];
 
-    $dataPaginated = json_decode(
-      \Users::paginate(15, ['*'], 'page', $page)->toJson()
-    );
+    if (isset($queryParams['where'])) {
+      [$where, $whereIn] = normalizeWhereQueryParam($queryParams['where']);
+    }
+
+    //echo json_encode($whereIn);
+
+    $query = \Users::where($where);
+    if (count($whereIn)) {
+      foreach ($whereIn as $whereInItem) {
+        $query->whereIn($whereInItem[0], $whereInItem[1]);
+      }
+    }
+
+    $result = $query->paginate(15, ['*'], 'page', $page);
+    $dataPaginated = json_decode($result->toJson());
+
     // Unset some things as they are not useful or active
     unset($dataPaginated->links);
     unset($dataPaginated->first_page_url);
@@ -75,10 +89,7 @@ class Users
       $user = \Users::findOrFail($args['itemId']);
       $user->update($parsedBody['data']);
 
-      prepareJsonResponse(
-        $response,
-        $user->toArray()
-      );
+      prepareJsonResponse($response, $user->toArray());
 
       return $response;
     } catch (\Exception $ex) {
@@ -92,18 +103,18 @@ class Users
         prepareJsonResponse(
           $response,
           array_map(function ($item) {
-              return strpos($item, '.') !== false
-                ? explode('.', $item)[1]
-                : explode('_', $item)[1];
+            return strpos($item, '.') !== false
+              ? explode('.', $item)[1]
+              : explode('_', $item)[1];
           }, explode(',', $errorText)),
-          'Duplicate entries', 
-          intval($ex->getCode())
+          'Duplicate entries',
+          intval($ex->getCode()),
         );
 
         return $response
           ->withStatus(400)
           ->withHeader('Content-Description', $ex->getMessage());
-      } 
+      }
 
       return $response
         ->withStatus(500)
@@ -117,10 +128,14 @@ class Users
     array $args
   ): ResponseInterface {
     try {
-      prepareJsonResponse(
-        $response,
-        \Users::findOrFail( $args['itemId'])->toArray()
-      );
+      // If is not admin then we will return just id and name for safety reasons
+      if (strval($this->currentUser->role) === '0') {
+        $item = \Users::findOrFail($args['itemId']);
+      } else {
+        $item = \Users::select('id', 'name')->findOrFail($args['itemId']);
+      }
+
+      prepareJsonResponse($response, $item->toArray());
 
       return $response;
     } catch (\Exception $e) {
@@ -142,16 +157,15 @@ class Users
     }
     $parsedBody['data']['state'] = 'invited';
 
-
     // Generate random password, because user will choose their password by themselves
     $parsedBody['data']['password'] = $this->passwordService->generate(
-      base64_encode(random_bytes(10))
+      base64_encode(random_bytes(10)),
     );
-  
+
     try {
       $user = \Users::create($parsedBody['data'])->toArray();
     } catch (\Exception $ex) {
-      if ($ex->getCode() === '23000') { 
+      if ($ex->getCode() === '23000') {
         return $response
           ->withStatus(409)
           ->withHeader('Content-Description', $ex->getMessage());
@@ -164,14 +178,11 @@ class Users
 
     $generatedJwt = $jwtService->generate(['id' => $user['id']]);
 
-    prepareJsonResponse(
-      $response,
-      $user,
-    );
+    prepareJsonResponse($response, $user);
 
     $themePayload = array_merge($user, [
-       'token' => $generatedJwt,
-       'app_url' => $_ENV['APP_URL'],
+      'token' => $generatedJwt,
+      'app_url' => $_ENV['APP_URL'],
     ]);
 
     try {
@@ -190,7 +201,7 @@ class Users
     }
 
     $emailService->isHtml();
-    $emailService->addAddress($user["email"], $user["name"]);
+    $emailService->addAddress($user['email'], $user['name']);
     $emailService->Subject = 'Finalize registration';
     $emailService->Body = $generatedEmailContent;
     $emailService->send();
@@ -205,7 +216,9 @@ class Users
   ): ResponseInterface {
     prepareJsonResponse(
       $response,
-      \Users::findOrFail($args['itemId'])->delete()->toArray(),
+      \Users::findOrFail($args['itemId'])
+        ->delete()
+        ->toArray(),
     );
 
     return $response;
@@ -218,13 +231,10 @@ class Users
   ) {
     $user = \Users::findOrFail($args['itemId']);
 
-    $user->state = "blocked";
+    $user->state = 'blocked';
     $user->save();
 
-    prepareJsonResponse(
-      $response,
-      (array) $user,
-    );
+    prepareJsonResponse($response, $user->toArray());
 
     return $response;
   }
@@ -236,17 +246,14 @@ class Users
   ) {
     $user = \Users::findOrFail($args['itemId']);
 
-    if ($user->state !== "blocked") {
+    if ($user->state !== 'blocked') {
       return $response->withStatus(400);
     }
 
-    $user->state = "active";
+    $user->state = 'active';
     $user->save();
 
-    prepareJsonResponse(
-      $response,
-      (array) $user,
-    );
+    prepareJsonResponse($response, $user->toArray());
 
     return $response;
   }
@@ -294,19 +301,16 @@ class Users
     $emailService->addAddress($user->email, $user->name);
     $emailService->Subject = 'Password reset';
     $emailService->Body = $generatedEmailContent;
-    
-    // If user is invited the this whole function is for resending whole token 
+
+    // If user is invited the this whole function is for resending whole token
     if ($user->state !== 'invited') {
-      $user->state = "password-reset";
+      $user->state = 'password-reset';
     }
-    
+
     $user->save();
     $emailService->send();
 
-    prepareJsonResponse(
-      $response,
-      (array) $user,
-    );
+    prepareJsonResponse($response, $user->toArray());
 
     return $response;
   }

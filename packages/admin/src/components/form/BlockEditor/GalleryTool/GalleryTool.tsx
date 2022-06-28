@@ -3,8 +3,14 @@ import { ItemID } from '@prom-cms/shared'
 import ReactDom from 'react-dom'
 import { ImageToolView } from './GalleryToolView'
 
+export interface ImageInfo {
+  id: ItemID
+  title?: string
+  description?: string
+}
+
 export interface GalleryToolData {
-  fileIds?: ItemID[]
+  fileIds?: ImageInfo[]
   label?: string
 }
 

@@ -3,8 +3,8 @@ import { apiClient } from '@api'
 import { API_ENTRY_TYPES_URL } from '@constants'
 
 export class EntryService {
-  static getListUrl(entryId: string) {
-    return `${API_ENTRY_TYPES_URL}/${(entryId as string).toLowerCase()}`
+  static getListUrl(entryId?: string) {
+    return `${API_ENTRY_TYPES_URL}/${entryId?.toLowerCase()}`
   }
 
   static getCreateUrl(entryId: string) {
@@ -83,6 +83,6 @@ export class EntryService {
     model: DatabaseTableName,
     payload: { fromId: ItemID; toId: ItemID }
   ) {
-    return apiClient.post(this.apiGetListReorderUrl(model), { data: payload })
+    return apiClient.patch(this.apiGetListReorderUrl(model), { data: payload })
   }
 }

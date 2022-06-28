@@ -10,13 +10,10 @@ import {
   Divider,
   Grid,
   Group,
-  Image,
   Pagination,
   Paper,
   Textarea,
 } from '@mantine/core'
-import { useClipboard } from '@mantine/hooks'
-import { useNotifications } from '@mantine/notifications'
 import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
 import { SettingsService } from '@services'
@@ -27,13 +24,21 @@ import { useTranslation } from 'react-i18next'
 import { Drawer } from './Drawer'
 import { CopyName } from './Table'
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   root: {
     td: {
       verticalAlign: 'baseline',
     },
   },
 }))
+
+const smallColSize = 2
+const maxCols = 12
+const colDivider = (
+  <Grid.Col span={maxCols}>
+    <Divider />
+  </Grid.Col>
+)
 
 export const SystemSettings: VFC = () => {
   const { classes } = useStyles()
@@ -44,6 +49,7 @@ export const SystemSettings: VFC = () => {
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>()
   const [creationAction, setCreationMode] = useState(false)
   const reqNotification = useRequestWithNotifications()
+  const largeColSize = currentUserIsAdmin ? 6 : 8
 
   const onModalClose = () => {
     mutate()
@@ -75,15 +81,6 @@ export const SystemSettings: VFC = () => {
       } catch {}
     },
     [t, reqNotification, mutate]
-  )
-
-  const smallColSize = 2
-  const maxCols = 12
-  const largeColSize = currentUserIsAdmin ? 6 : 8
-  const colDivider = (
-    <Grid.Col span={maxCols}>
-      <Divider />
-    </Grid.Col>
   )
 
   return (

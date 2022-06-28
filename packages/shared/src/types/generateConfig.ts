@@ -1,5 +1,10 @@
 import { iconSet } from '@prom-cms/icons';
 
+/**
+ * PROM predefines some models
+ */
+export type PredefinedModelKeys = 'users' | 'userRoles' | 'files';
+
 export type ColumnSettingsBase = {
   /**
    * Human readable title. Defaults to the column key of this object
@@ -48,8 +53,45 @@ export type SlugColumnType = ColumnSettingsBase & {
   type: 'slug';
   /**
    * TODO: Must be one of columns
+   * Target column name. Target column must be of type string.
    */
   of: string;
+};
+
+export type RelationshipColumnType = ColumnSettingsBase & {
+  type: 'relationship';
+
+  /**
+   * Specify target model
+   */
+  targetModel: string;
+
+  // TODO -- in the future we want some logic behind this to collect multiple keys and attach them in multiple string
+  /**
+   *
+   */
+  labelConstructor: string;
+
+  /**
+   * If we target many entries
+   *
+   * @default boolean false
+   */
+  multiple?: boolean;
+
+  /**
+   * Specifies that the column will be filled with data if has connection to real target
+   *
+   * @default boolean true
+   */
+  fill?: boolean;
+
+  /**
+   * Specify a field name that the target model has to hook on to
+   *
+   * @default string 'id'
+   */
+  foreignKey?: string;
 };
 
 export type FileColumnType = ColumnSettingsBase & {
@@ -88,7 +130,8 @@ export type ColumnType =
   | NumberColumnType
   | NormalColumnType
   | SlugColumnType
-  | FileColumnType;
+  | FileColumnType
+  | RelationshipColumnType;
 
 export type ModelColumnName = string;
 export type DatabaseTableName = string;
@@ -128,10 +171,15 @@ export interface DatabaseConfigModel extends DatabaseConfigItemBase {
    */
   sorting?: boolean;
   /**
-   * Enable permission system for entries
-   *  @default true
+   * If user can share its entry and define permissions for other users to access
+   * @default true
    */
-  permissions?: boolean;
+  sharable?: boolean;
+  /**
+   * Determines if every entry should keep info about who changed|created entry
+   * @default true
+   */
+  ownable?: boolean;
   /**
    * Admin config
    */
@@ -156,8 +204,67 @@ export interface DatabaseConfig {
   models: Record<DatabaseTableName, DatabaseConfigModel>;
 }
 
+export type SecurityOptionOptions = 'allow-everything' | 'allow-own' | false;
+
+/**
+ * Roles for each model by crud logic
+ */
+export interface ProjectSecurityRoleModelPermission {
+  /**
+   * Create
+   * @default false;
+   */
+  c?: SecurityOptionOptions;
+
+  /**
+   * Read
+   * @default false;
+   */
+  r?: SecurityOptionOptions;
+
+  /**
+   * Update
+   * @default false;
+   */
+  u?: SecurityOptionOptions;
+
+  /**
+   * Delete
+   * @default false;
+   */
+  d?: SecurityOptionOptions;
+}
+
+export type ModelUserPermissions = Record<
+  PredefinedModelKeys | string,
+  ProjectSecurityRoleModelPermission
+>;
+
+export interface ProjectSecurityRole {
+  /**
+   * Role name
+   */
+  name: string;
+
+  /**
+   * Model permissions
+   */
+  modelPermissions: ModelUserPermissions;
+
+  /**
+   * If user can use admin - this does not mean user cant log in
+   *
+   * @default true
+   */
+  hasAccessToAdmin?: boolean;
+}
+
 export interface ProjectSecurityConfig {
   secret?: string;
+  /**
+   * Project security roles
+   */
+  roles?: ProjectSecurityRole[];
 }
 
 export interface ProjectConfig {

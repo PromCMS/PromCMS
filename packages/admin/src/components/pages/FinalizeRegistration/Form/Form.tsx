@@ -34,7 +34,6 @@ export const Form: VFC<{ token?: string }> = ({ token }) => {
     confirmed_new_password,
     ...values
   }) => {
-    console.log({ values })
     try {
       await ProfileService.finalizePasswordReset(values)
     } catch (e) {

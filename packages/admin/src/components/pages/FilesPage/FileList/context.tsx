@@ -82,22 +82,7 @@ function reducer<T extends keyof IFileListContextValues>(
     value,
   }: { name: T | `uploadingFiles.${string}`; value: IFileListContextValues[T] }
 ): IFileListContextValues {
-  if (name.startsWith('uploadingFiles.')) {
-    const filePath = name.split('.')[1]
-
-    return {
-      ...state,
-      uploadingFiles: {
-        ...state.uploadingFiles,
-        [filePath]: {
-          ...(state.uploadingFiles[filePath] || {}),
-          ...(value as unknown as UploadingFile),
-        },
-      } as UploadingFilesRecord,
-    }
-  } else {
-    return { ...state, [name]: value }
-  }
+  return { ...state, [name]: value }
 }
 
 export const FileListContextProvider: FC = ({ children }) => {
@@ -136,7 +121,15 @@ export const FileListContextProvider: FC = ({ children }) => {
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const files = formatDroppedFiles(currentPath, acceptedFiles)
+
       updateValue('uploadingFiles', files)
+
+      const notificationId = notifications.showNotification({
+        message: t('Working'),
+        title: t('Uploading files...'),
+        color: 'blue',
+        autoClose: false,
+      })
 
       for (const filePath in files) {
         let isError = false
@@ -146,7 +139,7 @@ export const FileListContextProvider: FC = ({ children }) => {
           await FileService.create(entry.file, { root: currentPath })
         } catch {
           isError = true
-          notifications.showNotification({
+          notifications.updateNotification(notificationId, {
             message: t('Error'),
             title: t('An error happened'),
             color: 'red',
@@ -161,10 +154,17 @@ export const FileListContextProvider: FC = ({ children }) => {
           ) as UploadingFilesRecord
         )
 
-        mutateFiles()
+        await mutateFiles()
+
+        notifications.updateNotification(notificationId, {
+          message: t('Success'),
+          title: t('All files has been uploaded'),
+          color: 'green',
+          autoClose: 2000,
+        })
       }
     },
-    [updateValue, currentPath, mutateFiles]
+    [updateValue, currentPath, mutateFiles, notifications]
   )
 
   const {

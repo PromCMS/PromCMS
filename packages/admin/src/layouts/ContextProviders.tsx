@@ -7,7 +7,10 @@ const ContextProviders: FC = ({ children }) => {
   return (
     <SWRConfig
       value={{
-        fetcher: (url) => apiClient.get(url).then((res) => res.data.data),
+        fetcher: (url, params = {}) =>
+          apiClient
+            .get(url, Object.keys(params).length ? { params } : {})
+            .then((res) => res.data.data),
       }}
     >
       <GlobalContextProvider>{children}</GlobalContextProvider>

@@ -19,7 +19,7 @@ const generateModule = async (
   _pluginName: string,
   { description, author }: { description?: string; author?: string } = {}
 ) => {
-  const pluginName = capitalizeFirstLetter(_pluginName);
+  const pluginName = capitalizeFirstLetter(_pluginName, false);
   const pluginRoot = path.join(pluginsRoot, pluginName);
 
   await fs.emptyDir(pluginRoot);

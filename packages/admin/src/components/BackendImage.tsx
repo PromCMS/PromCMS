@@ -8,26 +8,50 @@ export interface BackendImageProps
     DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
     'src'
   > {
-  imageId: ItemID | Record<string, string>
+  imageId: ItemID | Record<string, string> | undefined
+  /**
+   * @defaultValue 60
+   */
+  quality?: number
 }
 
 const BackendImage: VFC<BackendImageProps> = ({
   imageId,
   className,
+  quality = 60,
+  width,
+  height,
   ...rest
 }) => {
   const imageSrc = useMemo(
     () =>
       imageId
         ? typeof imageId === 'number' || typeof imageId === 'string'
-          ? '/api' + FileService.getApiRawUrl(imageId)
+          ? String(imageId).startsWith('http')
+            ? String(imageId)
+            : FileService.getApiRawUrl(
+                imageId,
+                Object.fromEntries(
+                  Object.entries({ w: width, h: height, q: quality })
+                    .filter(([_, value]) => !!value)
+                    .map(([key, value]) => [key, String(value)])
+                ),
+                true
+              )
           : imageId.path
         : undefined,
-    [imageId]
+    [imageId, width, height, quality]
   )
 
   return imageId ? (
-    <img src={imageSrc} className={clsx(className)} {...rest} />
+    <img
+      src={imageSrc}
+      className={clsx(className)}
+      width={width}
+      height={height}
+      alt=""
+      {...rest}
+    />
   ) : null
 }
 

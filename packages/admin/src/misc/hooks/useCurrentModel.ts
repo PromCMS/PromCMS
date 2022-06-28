@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useModelInfo, useRouterQuery } from '.'
 
 /**
@@ -6,11 +7,16 @@ import { useModelInfo, useRouterQuery } from '.'
  */
 const useCurrentModel = () => {
   const modelName = useRouterQuery('modelId')
-  const formattedModelName = String(modelName).toLowerCase()
+  const formattedModelName = useMemo(
+    () => String(modelName).toLowerCase(),
+    [modelName]
+  )
   const modelInfo = useModelInfo(formattedModelName)
-  if (!modelInfo) return undefined
 
-  return { ...modelInfo, name: formattedModelName }
+  return useMemo(
+    () => (modelInfo ? { ...modelInfo, name: formattedModelName } : undefined),
+    [formattedModelName, modelInfo]
+  )
 }
 
 export default useCurrentModel

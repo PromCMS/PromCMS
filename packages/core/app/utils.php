@@ -143,6 +143,26 @@ function prepareJsonResponse(
   );
 }
 
+function handleDuplicateEntriesError($response, $exception)
+{
+  $errorText = str_replace(
+    ['UNIQUE constraint failed: ', ' '],
+    '',
+    $exception->errorInfo[2],
+  );
+
+  prepareJsonResponse(
+    $response,
+    array_map(function ($item) {
+      return strpos($item, '.') !== false
+        ? explode('.', $item)[1]
+        : explode('_', $item)[1];
+    }, explode(',', $errorText)),
+    'Duplicate entries',
+    intval($exception->getCode()),
+  );
+}
+
 function verifyPostInput()
 {
 }
@@ -154,4 +174,42 @@ function verifyQueryInput()
 function str_includes($haystack, $needle)
 {
   return strpos($haystack, $needle) !== false;
+}
+
+/**
+ * Takes string and normalizes to array which is ready to eloquent model where
+ *
+ * Accepts string: some_field,some_manipulator,value;some_field,some_manipulator,value;...
+ */
+function normalizeWhereQueryParam(string $filterParam)
+{
+  $whereQuery = [];
+  $whereInQuery = [];
+  $PART_SEPARATOR = ';';
+  $PIECE_SEPARATOR = '.';
+  $stringToExtract = $filterParam;
+
+  // If there is an array instead of string, happens when it was defined like this in url
+  if (is_array($filterParam)) {
+    $stringToExtract = implode($PART_SEPARATOR, $filterParam);
+  }
+
+  // Split by separator and attach each process
+  foreach (explode($PART_SEPARATOR, $stringToExtract) as $part) {
+    $pieces = explode($PIECE_SEPARATOR, $part);
+
+    if (isset($pieces[0]) && isset($pieces[1]) && isset($pieces[2])) {
+      if ($pieces[1] === 'IN') {
+        $whereInQuery[] = [$pieces[0], json_decode("[$pieces[2]]")];
+      } else {
+        $whereQuery[] = [
+          $pieces[0],
+          $pieces[1],
+          str_replace('/', '\/', $pieces[2]),
+        ];
+      }
+    }
+  }
+
+  return [$whereQuery, $whereInQuery];
 }

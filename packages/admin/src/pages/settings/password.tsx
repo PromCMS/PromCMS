@@ -1,9 +1,9 @@
-import { ProfileLayout } from '@components/pages/UserProfile'
 import { MESSAGES } from '@constants'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { NextPage } from '@custom-types'
 import { Button, PasswordInput } from '@mantine/core'
+import { ProfileLayout } from '@layouts'
 
 interface FormValues {
   newPassword: string

@@ -10,18 +10,29 @@ import fs from 'fs-extra';
 import { execa } from 'execa';
 import { generateByTemplates, loggedJobWorker, LoggedWorkerJob } from '@utils';
 import { generateCoreModule } from '@commands-parts/generate-core-module';
-import { formatGeneratorConfig, getGeneratorConfig } from '@prom-cms/shared';
+import { formatGeneratorConfig, ExportConfig } from '@prom-cms/shared';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 
 const copyCoreOptions = {
-  overwrite: true,
-  expand: true,
-  dot: true,
-  junk: false,
-  filter: new RegExp(
-    /^(?!(.temp|uploads|modules|.env|.gitignore|README.md|templates))/g
-  ),
+  regenerate: {
+    overwrite: true,
+    expand: true,
+    dot: true,
+    junk: false,
+    filter: new RegExp(
+      /^(?!(.temp|cache|uploads|vendor|locales|modules|.env|.gitignore|README.md|templates|composer.(lock|json)))/g
+    ),
+  },
+  initialize: {
+    overwrite: true,
+    expand: true,
+    dot: true,
+    junk: false,
+    filter: new RegExp(
+      /^(?!(.temp|cache|uploads|vendor|locales|modules|.env|.gitignore|README.md|templates))/g
+    ),
+  },
 };
 
 const copyAdminOptions = {
@@ -40,6 +51,11 @@ const simplifyProjectName = (name: string) =>
 
 @Config('generate:cms', 'Controls a cms generator', {})
 export class GenerateCMSProgram extends Command {
+  @Arg.Flag('To specify prom config path', {
+    short: 'c',
+  })
+  configPath: string;
+
   @Arg.Flag('To override contents of target folder', {
     short: 'o',
   })
@@ -78,8 +94,12 @@ export class GenerateCMSProgram extends Command {
   async run(root) {
     // TODO: when in release take path from process.cwd() and attach path parameter from cli
     const currentRoot = PROJECT_ROOT;
-    const generatorConfig = await getGeneratorConfig(currentRoot);
-    const FINAL_PATH = path.join(PROJECT_ROOT, ...root.split('/'));
+    const generatorConfig: ExportConfig | undefined = await import(
+      this.configPath
+    );
+
+    // means final path to a project, is relative to cwd
+    const FINAL_PATH = path.join(currentRoot, ...root.split('/'));
 
     if (!generatorConfig)
       throw new Error(
@@ -105,10 +125,14 @@ export class GenerateCMSProgram extends Command {
       // Copying core to export
       {
         title: 'Copy core files',
-        async job() {
+        job: async () => {
           await fs.ensureDir(FINAL_PATH);
           try {
-            await recopy(CORE_ROOT, FINAL_PATH, copyCoreOptions);
+            await recopy(
+              CORE_ROOT,
+              FINAL_PATH,
+              copyCoreOptions[this.regenerate ? 'regenerate' : 'initialize']
+            );
           } catch (e) {
             console.log({ e });
           }
@@ -155,7 +179,7 @@ export class GenerateCMSProgram extends Command {
           // Core already exists - we delete it first to not to have some ghost files
           const existingCoreModulePath = path.join(exportModulesRoot, 'Core');
           if (await fs.pathExists(existingCoreModulePath)) {
-            fs.remove(existingCoreModulePath);
+            await fs.remove(existingCoreModulePath);
           }
 
           await generateCoreModule(

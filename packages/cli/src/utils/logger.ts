@@ -18,8 +18,11 @@ const doneText = (text: any) =>
   Logger.info(`${text}... ${chalk.bold.green('Done!')}`);
 
 export const removePrevLine = () => {
-  process.stdout.moveCursor(0, -1); // up one line
-  process.stdout.clearLine(1);
+  if (!process.stdout?.moveCursor || !process.stdout?.clearLine) {
+    return;
+  }
+  process.stdout?.moveCursor(0, -1); // up one line
+  process.stdout?.clearLine(1);
 };
 
 export type LoggedWorkerJob = {

@@ -15,8 +15,15 @@ export class FileService {
     return `${API_ENTRY_TYPES_URL}/files/items/${id}`
   }
 
-  static getApiRawUrl(id: ItemID) {
-    return `${API_ENTRY_TYPES_URL}/files/items/${id}/raw`
+  static getApiRawUrl(
+    id: ItemID,
+    searchParams: Record<string, string> = {},
+    withPrefix: boolean = false
+  ) {
+    const params = new URLSearchParams(searchParams).toString()
+    return `${
+      withPrefix ? '/api' : ''
+    }${API_ENTRY_TYPES_URL}/files/items/${id}/raw${params ? `?${params}` : ''}`
   }
 
   static async create(file: File, info?: ApiFileInputData) {

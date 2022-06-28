@@ -11,7 +11,6 @@ import Table from '@editorjs/table'
 import Underline from '@editorjs/underline'
 import Marker from '@editorjs/marker'
 import List from '@editorjs/list'
-import Tooltip from 'editorjs-tooltip'
 import ChangeCase from 'editorjs-change-case'
 import Header from '@editorjs/header'
 import AlignmentTool from 'editorjs-text-alignment-blocktune'
@@ -23,6 +22,7 @@ import { GalleryTool } from './GalleryTool'
 import Embed from '@editorjs/embed'
 import { ButtonLinkTool } from './ButtonLink'
 import { TagsTool } from './TagsTool'
+import { LinkInlineTool } from './LinkInlineTool'
 
 export const EDITOR_HOLDER_ID = 'editor-content'
 
@@ -56,32 +56,22 @@ export const LazyEditor: FC<LazyEditorProps> = ({
       tools: {
         header: {
           class: Header,
+          inlineToolbar: true,
           config: {
             placeholder: t('Start typing here...'),
             levels: [2, 3, 4],
             defaultLevel: 2,
           },
         },
-        table: Table,
+        link: { class: LinkInlineTool, inlineToolbar: true },
+        table: { class: Table, inlineToolbar: true },
         underline: Underline,
-        Marker: {
-          class: Marker,
-        },
-        embed: {
-          class: Embed,
-        },
-        buttonLink: {
-          class: ButtonLinkTool,
-        },
+        Marker: Marker,
+        embed: Embed,
+        buttonLink: ButtonLinkTool,
         tags: TagsTool,
-        image: {
-          class: ImageTool,
-          inlineToolbar: true,
-        },
-        gallery: {
-          class: GalleryTool,
-          inlineToolbar: true,
-        },
+        image: ImageTool,
+        gallery: GalleryTool,
         list: {
           class: List,
           inlineToolbar: true,
@@ -91,20 +81,10 @@ export const LazyEditor: FC<LazyEditorProps> = ({
         },
         changeCase: {
           class: ChangeCase,
+          inlineToolbar: true,
           config: {
             showLocaleOption: true, // enable locale case options
             locale: 'tr', // or ['tr', 'TR', 'tr-TR']
-          },
-        },
-        tooltip: {
-          class: Tooltip,
-          config: {
-            location: 'left',
-            highlightColor: '#FFEFD5',
-            underline: true,
-            backgroundColor: '#154360',
-            textColor: '#FDFEFE',
-            holder: EDITOR_HOLDER_ID,
           },
         },
         anyTuneName: {

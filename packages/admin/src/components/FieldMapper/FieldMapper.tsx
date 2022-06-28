@@ -1,72 +1,16 @@
-import { Select, SelectItem, Textarea, TextInput } from '@mantine/core'
-import {
-  ApiResultModel,
-  ModelColumnName,
-  ColumnType,
-  capitalizeFirstLetter,
-  EnumColumnType,
-} from '@prom-cms/shared'
-import { useMemo, VFC } from 'react'
+import { Textarea, TextInput } from '@mantine/core'
+import { ModelColumnName, ColumnType } from '@prom-cms/shared'
+import { VFC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import ImageSelect from './form/ImageSelect'
+import ImageSelect from '../form/ImageSelect'
+import { EnumSelect, RelationshipItemSelect } from './fields'
 
 export interface FieldMapperProps {
   fields: (ColumnType & {
     columnName: ModelColumnName
   })[][]
 }
-
-const CustomSelect: VFC<
-  EnumColumnType & {
-    columnName: ModelColumnName
-    error: string
-  }
-> = ({ columnName, title, error, enum: enumValue }) => {
-  const { t } = useTranslation()
-
-  const enumValues = useMemo<SelectItem[]>(
-    () =>
-      enumValue.map((enumKey) => ({
-        value: enumKey,
-        label: t(capitalizeFirstLetter(enumKey)),
-      })),
-    [enumValue, t]
-  )
-
-  return (
-    <>
-      <Controller
-        name={columnName}
-        render={({ field: { onChange, value } }) => (
-          <Select
-            data={enumValues}
-            key={columnName}
-            label={title}
-            value={value}
-            onChange={onChange}
-            className="w-full"
-            placeholder={t('Select an option')}
-            shadow="xl"
-            error={error}
-          />
-        )}
-      />
-    </>
-  )
-}
-
-export const prepareFieldsForMapper = (model: ApiResultModel) =>
-  Object.keys(model.columns)
-    .map((columnName: ModelColumnName) => [
-      {
-        ...model.columns[columnName],
-        columnName,
-      },
-    ])
-    .filter(
-      (items) => items.filter(({ hide, editable }) => !hide && editable).length
-    )
 
 const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
   const { formState, register, control } = useFormContext()
@@ -109,7 +53,15 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                 )
               } else if (type === 'enum') {
                 return (
-                  <CustomSelect
+                  <EnumSelect
+                    key={columnName}
+                    error={errorMessage}
+                    {...values}
+                  />
+                )
+              } else if (type === 'relationship') {
+                return (
+                  <RelationshipItemSelect
                     key={columnName}
                     error={errorMessage}
                     {...values}
@@ -118,13 +70,13 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
               } else if (type === 'file') {
                 return (
                   <Controller
+                    key={columnName}
                     control={control}
                     name={columnName}
                     render={({ field: { onChange, value } }) => (
                       <ImageSelect
                         onChange={onChange}
                         selected={value}
-                        key={columnName}
                         error={errorMessage}
                         label={values.title}
                         {...values}
