@@ -1,3 +1,4 @@
+import { WhereQueryParam } from '@custom-types'
 import { ActionIcon, Button, Pagination } from '@mantine/core'
 import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
@@ -21,7 +22,7 @@ export interface SmallFileListProps {
   pickedFiles: ItemID[]
   title?: string
   onChange: (newValue: ItemID[]) => void
-  filter?: [field: string, equasion: string, mustBe: string][]
+  where?: WhereQueryParam
 }
 
 export const SmallFileList: VFC<SmallFileListProps> = ({
@@ -30,21 +31,24 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   triggerClose,
   pickedFiles,
   onChange,
-  filter,
+  where,
 }) => {
   const { t } = useTranslation()
   const [state, updateValue] = useSmallFileListContextReducer()
   const [page, setPage] = useState(1)
   const { data, isError, isLoading, mutate } = useFileList({
     page,
-    ...(filter
-      ? Object.fromEntries(
-          filter.map(([field, equation, mustBe], index) => [
-            `where[${index}]`,
-            `["${field}","${equation}","${mustBe}"]`,
-          ])
-        )
-      : {}),
+    where: {
+      ...(state.searchValue
+        ? {
+            filename: {
+              manipulator: 'LIKE',
+              value: `%${state.searchValue}%`,
+            },
+          }
+        : {}),
+      ...(where ?? {}),
+    },
   })
 
   const onDeleteClick: ListProps['onDeleteClick'] = useCallback((id) => {}, [])

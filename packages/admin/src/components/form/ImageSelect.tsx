@@ -110,10 +110,13 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                   </Button>
                 }
                 width={590}
+                placement="end"
                 position="bottom"
               >
                 <SmallFileList
-                  filter={[['mimeType', 'regexp', `^image/.*$`]]}
+                  where={{
+                    mimeType: { manipulator: 'LIKE', value: '%image%' },
+                  }}
                   title={t('Choose an image')}
                   triggerClose={onClose}
                   multiple={multiple}

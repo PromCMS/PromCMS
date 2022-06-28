@@ -31,12 +31,14 @@ export interface LazyEditorProps
   initialValue?: EditorConfig['data']
   editorRef?: Ref<EditorJS | undefined>
   error?: string
+  className?: string
 }
 
 export const LazyEditor: FC<LazyEditorProps> = ({
   initialValue,
   editorRef,
   error,
+  className,
   ...config
 }) => {
   const innerRef = useRef<EditorJS>()
@@ -158,7 +160,7 @@ export const LazyEditor: FC<LazyEditorProps> = ({
   }, [editorReady, initialValue])
 
   return (
-    <div>
+    <div className={className}>
       {error && <small className="font-bold text-red-500">{error}</small>}
       <div id={EDITOR_HOLDER_ID} />
     </div>

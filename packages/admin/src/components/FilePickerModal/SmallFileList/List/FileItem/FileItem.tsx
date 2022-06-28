@@ -14,13 +14,11 @@ export interface FileItemProps extends File {
   onDeleteClick: (id: ItemID) => void
 }
 
-export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
+export const FileItem: VFC<FileItemProps> = ({ id, filename, mimeType }) => {
   const { selectedFiles, updateValue } = useSmallFileList()
   const extension = filename.split('.').at(-1) || 'unknown'
-  const isImage =
-    extension.includes('png') ||
-    extension.includes('jpg') ||
-    extension.includes('gif')
+  const type = mimeType?.split('/')?.[0] || 'unknown'
+  const isImage = type === 'image'
 
   const onPick = useCallback(() => {
     updateValue({

@@ -181,7 +181,7 @@ function str_includes($haystack, $needle)
  *
  * Accepts string: some_field,some_manipulator,value;some_field,some_manipulator,value;...
  */
-function normalizeWhereQueryParam(string $filterParam)
+function normalizeWhereQueryParam($filterParam)
 {
   $whereQuery = [];
   $whereInQuery = [];

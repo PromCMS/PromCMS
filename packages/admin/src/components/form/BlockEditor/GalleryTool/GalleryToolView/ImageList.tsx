@@ -26,8 +26,7 @@ export const ImageList: FC = () => {
           positionDependencies={[fileIds]}
           withinPortal={false}
           width={590}
-          position="bottom"
-          placement="center"
+          placement="start"
           target={
             <Button
               size="lg"
@@ -42,7 +41,9 @@ export const ImageList: FC = () => {
         >
           <SmallFileList
             multiple
-            filter={[['mimeType', 'regexp', `^image/.*$`]]}
+            where={{
+              mimeType: { manipulator: 'LIKE', value: '%image%' },
+            }}
             pickedFiles={fileIds?.map(({ id }) => id) || []}
             onChange={addFile}
             triggerClose={() => setPopoverOpen(false)}

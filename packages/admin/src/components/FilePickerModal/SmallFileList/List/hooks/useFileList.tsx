@@ -1,23 +1,12 @@
 import { File, PagedResult } from '@prom-cms/shared'
 import { apiClient } from '@api'
 import { EntryService } from '@services'
-import useSWR from 'swr'
+import { useQuery } from '@hooks/useQuery'
+import { QueryParams } from '@custom-types'
 
-const fetcher = (url, params = {}) =>
-  apiClient.get(url, { params }).then((res) => res.data)
-
-export function useFileList<T = PagedResult<File>>(
-  config?: { page?: number } & Record<string, string | number>
-) {
-  const { data, error, ...rest } = useSWR<T>(
-    [EntryService.getListUrl('files') + '/paged-items', config],
-    fetcher
+export function useFileList<T = PagedResult<File>>(queryParams?: QueryParams) {
+  return useQuery<T>(
+    EntryService.getListUrl('files') + '/paged-items',
+    queryParams
   )
-
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error,
-    ...rest,
-  }
 }

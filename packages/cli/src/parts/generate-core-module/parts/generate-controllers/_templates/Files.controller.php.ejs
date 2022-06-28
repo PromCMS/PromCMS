@@ -78,33 +78,12 @@ class Files
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
 
-    $whereQuery = [];
-
     if (isset($queryParams['where'])) {
-      $whereParam = $queryParams['where'];
-      $paramsToExtract = [];
-
-      if (is_array($whereParam)) {
-        $paramsToExtract = $whereParam;
-      } else {
-        $paramsToExtract[] = $whereParam;
-      }
-
-      foreach ($paramsToExtract as $param) {
-        $result = json_decode($param);
-
-        if (isset($result[0]) && isset($result[1]) && isset($result[2])) {
-          $whereQuery[] = [
-            $result[0],
-            $result[1],
-            str_replace('/', '\/', $result[2]),
-          ];
-        }
-      }
+      [$where] = normalizeWhereQueryParam($queryParams['where']);
     }
 
     $dataPaginated = json_decode(
-      \Files::where($whereQuery)
+      \Files::where($where ?? [])
         ->paginate(15, ['*'], 'page', $page)
         ->toJson(),
     );
@@ -182,7 +161,10 @@ class Files
     if ($file->getError() !== UPLOAD_ERR_OK) {
       return $response
         ->withStatus(500)
-        ->withHeader('Content-Description', 'Upload failed');
+        ->withHeader(
+          'Content-Description',
+          'Upload failed ' . $file->getError(),
+        );
     }
 
     if (!isset($data['root'])) {

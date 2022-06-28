@@ -79,6 +79,22 @@ const SettingsPage: NextPage = () => {
           autoComplete="off"
         >
           <Row>
+            <Controller
+              control={control}
+              name="avatar"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ImageSelect
+                  label={t('Avatar')}
+                  className="w-full"
+                  selected={value}
+                  multiple={false}
+                  onChange={(value) => value && onChange(value)}
+                  onBlur={onBlur}
+                />
+              )}
+            />
+          </Row>
+          <Row>
             <TextInput
               label={t('Full name')}
               className="w-full"
@@ -107,22 +123,6 @@ const SettingsPage: NextPage = () => {
           </Row>
           <Row className="items-end">
             <LanguageSelect />
-          </Row>
-          <Row>
-            <Controller
-              control={control}
-              name="avatar"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <ImageSelect
-                  label={t('Avatar')}
-                  className="w-full"
-                  selected={value}
-                  multiple={false}
-                  onChange={(value) => value && onChange(value)}
-                  onBlur={onBlur}
-                />
-              )}
-            />
           </Row>
           <Button
             className="mt-10 max-w-[150px]"

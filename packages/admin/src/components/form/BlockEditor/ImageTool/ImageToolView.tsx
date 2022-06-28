@@ -81,7 +81,9 @@ export const ImageToolView: VFC<{
                 }
               >
                 <SmallFileList
-                  filter={[['mimeType', 'regexp', `^image/.*$`]]}
+                  where={{
+                    mimeType: { manipulator: 'LIKE', value: '%image%' },
+                  }}
                   multiple={false}
                   pickedFiles={pickedFiles}
                   onChange={onChange}

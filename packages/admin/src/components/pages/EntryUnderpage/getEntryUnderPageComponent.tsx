@@ -27,8 +27,8 @@ export const getEntryUnderPageComponent = (
               <Footer />
             </EntryEditorLayout.Content>
             <EntryEditorLayout.Aside
+              open
               className="flex flex-col gap-5"
-              open={true}
               onClose={() => {}}
             >
               <Aside />

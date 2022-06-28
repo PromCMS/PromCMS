@@ -33,6 +33,7 @@ export const BlockEditor = forwardRef<EditorJS, BlockEditorProps>(
             onChange={onEditorChange(onChange)}
             placeholder={t('Start typing here...') as string}
             error={errors?.[name]?.message}
+            className="mb-20"
             {...props}
           />
         )}

@@ -151,7 +151,7 @@ class EntryType
         );
       }
 
-      $item = $query::firstOrFail();
+      $item = $query->firstOrFail();
 
       if ($classInstance->getSummary()->ownable && $this->currentUser) {
         $parsedBody['data']['updated_by'] = $this->currentUser->id;
@@ -194,7 +194,7 @@ class EntryType
         );
       }
 
-      $item = $query::firstOrFail();
+      $item = $query->firstOrFail();
 
       prepareJsonResponse($response, $item->toArray());
 

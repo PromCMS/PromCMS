@@ -99,7 +99,7 @@ export const Footer: FC<{}> = () => {
     <Paper
       shadow="lg"
       component="footer"
-      className="align-center container sticky bottom-5 left-0 z-10 mx-auto flex max-h-20 items-center justify-between border-2 border-project-border p-3"
+      className="align-center container sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-between border-2 border-project-border p-3"
     >
       {currentView === 'update' &&
       currentModel &&

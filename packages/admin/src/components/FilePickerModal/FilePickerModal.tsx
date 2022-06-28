@@ -10,7 +10,7 @@ export interface FilePickerModalProps
   pickedFiles: ItemID[]
   onChange: (itemId: ItemID[]) => void
   title?: SmallFileListProps['title']
-  filter?: SmallFileListProps['filter']
+  where?: SmallFileListProps['where']
 }
 
 export const FilePickerModal: VFC<FilePickerModalProps> = ({
@@ -19,13 +19,13 @@ export const FilePickerModal: VFC<FilePickerModalProps> = ({
   pickedFiles,
   onChange,
   title,
-  filter,
+  where,
   ...rest
 }) => {
   return (
     <Modal onClose={onClose} title={title} {...rest}>
       <SmallFileList
-        filter={filter}
+        where={where}
         title={title}
         triggerClose={onClose}
         multiple={multiple}
