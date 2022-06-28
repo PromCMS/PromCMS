@@ -78,7 +78,7 @@ EntryEditorLayout.Aside = function Aside({ children, className, ...rest }) {
   return (
     <aside
       className={clsx(
-        'sticky top-0 transition-[width] duration-300',
+        'sticky top-0 z-10 transition-[width] duration-300',
         asideOpen ? 'w-[500px]' : 'h-0 w-0 overflow-hidden'
       )}
     >
