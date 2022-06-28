@@ -1,5 +1,5 @@
 import { Arg, Command, Config } from '@boost/cli';
-import { getEnvFilepath, getGeneratorConfig } from '@prom-cms/shared';
+import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
 import {
   PROJECT_ROOT,
   CORE_ROOT,
@@ -19,7 +19,7 @@ export class GenerateDevelopProgram extends Command {
   regenerate: boolean = false;
 
   async run() {
-    const GENERATOR_CONFIG = await getGeneratorConfig();
+    const GENERATOR_CONFIG = await findGeneratorConfig();
     const envFilepath = await getEnvFilepath();
     const { DB_CONNECTION } = process.env as unknown as {
       DB_CONNECTION: string;

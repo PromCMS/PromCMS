@@ -1,6 +1,6 @@
 import type {
   formatGeneratorConfig as TypedFormatGeneratorConfig,
-  getGeneratorConfig as TypedGetGeneratorConfig,
+  findGeneratorConfig as TypedFindGeneratorConfig,
 } from './generator';
 
 const getImport = () => import(/* webpackIgnore: true */ './generator');
@@ -13,10 +13,10 @@ export const formatGeneratorConfig = async (
   return ref(...params);
 };
 
-export const getGeneratorConfig = async (
-  ...params: Parameters<typeof TypedGetGeneratorConfig>
+export const findGeneratorConfig = async (
+  ...params: Parameters<typeof TypedFindGeneratorConfig>
 ) => {
-  const ref = (await getImport()).getGeneratorConfig;
+  const ref = (await getImport()).findGeneratorConfig;
 
   return ref(...params);
 };

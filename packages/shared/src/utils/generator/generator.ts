@@ -4,7 +4,7 @@ import findConfig from 'find-config';
 
 // TODO: Create generator config validator
 
-export const getGeneratorConfig = (
+export const findGeneratorConfig = (
   root?: string
 ): Promise<undefined | ExportConfig> =>
   findConfig.require(GENERATOR_FILENAME, {
