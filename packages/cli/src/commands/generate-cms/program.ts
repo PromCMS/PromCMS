@@ -57,9 +57,9 @@ export class GenerateCMSProgram extends Command {
       if (!value) {
         throw new Error('Prom config path not defined in -c value');
       }
-
-      if (!fs.pathExistsSync(path.join(process.cwd(), value))) {
-        throw new Error('Defined PROM config path does not exist');
+      const requestedPath = path.join(process.cwd(), value);
+      if (!fs.pathExistsSync(requestedPath)) {
+        throw new Error(`PROM config path "${requestedPath}" does not exist`);
       }
 
       if (!(value.endsWith('.js') || value.endsWith('.cjs'))) {
