@@ -10,13 +10,6 @@ import { useCurrentUser } from '@hooks/useCurrentUser'
 
 const items = [
   { title: 'Profile', url: '/settings/profile', Icon: iconSet.UserCircle },
-  {
-    title: 'System',
-    url: '/settings/system',
-    Icon: iconSet.Settings,
-    canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
-      currentUser?.role.id === 0,
-  },
   { title: 'Authentication', url: '/settings/password', Icon: iconSet.Lock },
   {
     title: 'User Roles',
@@ -24,6 +17,16 @@ const items = [
     Icon: iconSet.UserExclamation,
     canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
       currentUser?.role.id === 0,
+  },
+  {
+    title: 'System settings',
+    url: '/settings/system',
+    Icon: iconSet.Settings,
+    canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
+      currentUser?.can({
+        action: 'read',
+        targetModel: 'settings',
+      }),
   },
 ]
 

@@ -1,6 +1,6 @@
 import BackendImage from '@components/BackendImage'
 import ItemsMissingMessage from '@components/ItemsMissingMessage'
-import { useGlobalContext } from '@contexts/GlobalContext'
+import { useCurrentUser } from '@hooks/useCurrentUser'
 import { useModelItems } from '@hooks/useModelItems'
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import {
@@ -43,13 +43,26 @@ const colDivider = (
 export const SystemSettings: VFC = () => {
   const { classes } = useStyles()
   const { t } = useTranslation()
-  const { currentUserIsAdmin } = useGlobalContext()
+  const currentUser = useCurrentUser()
   const [currentPage, setCurrentPage] = useState(1)
   const { data, mutate } = useModelItems('settings', { page: currentPage })
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>()
   const [creationAction, setCreationMode] = useState(false)
   const reqNotification = useRequestWithNotifications()
-  const largeColSize = currentUserIsAdmin ? 6 : 8
+  const largeColSize = currentUser?.isAdmin ? 6 : 8
+
+  const currentUserCanCreate = currentUser?.can({
+    action: 'create',
+    targetModel: 'settings',
+  })
+  const currentUserCanEdit = currentUser?.can({
+    action: 'update',
+    targetModel: 'settings',
+  })
+  const currentUserCanDelete = currentUser?.can({
+    action: 'delete',
+    targetModel: 'settings',
+  })
 
   const onModalClose = () => {
     mutate()
@@ -85,8 +98,13 @@ export const SystemSettings: VFC = () => {
 
   return (
     <>
-      {currentUserIsAdmin && (
-        <Button color={'green'} mt="lg" onClick={() => setCreationMode(true)}>
+      {currentUserCanCreate && (
+        <Button
+          color={'green'}
+          mt="lg"
+          leftIcon={<iconSet.Plus />}
+          onClick={() => setCreationMode(true)}
+        >
           {t('Add new')}
         </Button>
       )}
@@ -95,7 +113,7 @@ export const SystemSettings: VFC = () => {
         className={clsx(classes.root, 'mt-5 min-h-[400px]')}
         columns={maxCols}
       >
-        {currentUserIsAdmin && (
+        {currentUserCanCreate && (
           <Grid.Col span={smallColSize} className="font-semibold uppercase">
             {t('Slug')}
           </Grid.Col>
@@ -116,7 +134,7 @@ export const SystemSettings: VFC = () => {
           data.data.map((row, index) => (
             <Fragment key={row.id}>
               {index !== 0 && colDivider}
-              {currentUserIsAdmin && (
+              {currentUserCanCreate && (
                 <Grid.Col span={smallColSize}>
                   <Group>
                     <CopyName name={row.name} />
@@ -154,10 +172,12 @@ export const SystemSettings: VFC = () => {
               </Grid.Col>
               <Grid.Col span={smallColSize}>
                 <Group className="ml-auto" position="right" spacing="xs" noWrap>
-                  <ActionIcon onClick={onEditClick(row.id)} color="blue">
-                    <iconSet.Edit />
-                  </ActionIcon>
-                  {currentUserIsAdmin && (
+                  {currentUserCanEdit && (
+                    <ActionIcon onClick={onEditClick(row.id)} color="blue">
+                      <iconSet.Edit />
+                    </ActionIcon>
+                  )}
+                  {currentUserCanDelete && (
                     <ActionIcon onClick={onDeleteClick(row.id)} color="red">
                       <iconSet.Trash />
                     </ActionIcon>

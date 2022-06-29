@@ -19,11 +19,12 @@ import { Textarea } from './contentTypes/Textarea'
 import { Image } from './contentTypes/Image'
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import { useTranslation } from 'react-i18next'
+import { useCurrentUser } from '@hooks/useCurrentUser'
 
 export const Drawer: VFC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
 > = ({ opened, onClose, optionToEdit }) => {
-  const { currentUserIsAdmin } = useGlobalContext()
+  const currentUser = useCurrentUser()
   const { data } = useModelItem('settings', optionToEdit)
   const { t } = useTranslation()
   const reqNotification = useRequestWithNotifications()
@@ -32,6 +33,11 @@ export const Drawer: VFC<
   })
   const { register, watch, reset, control, handleSubmit, setValue, formState } =
     formMethods
+
+  const currentUserCanCreate = currentUser?.can({
+    action: 'create',
+    targetModel: 'settings',
+  })
 
   useEffect(() => {
     if (optionToEdit) {
@@ -87,7 +93,7 @@ export const Drawer: VFC<
       >
         <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
           <SimpleGrid cols={1} spacing="md">
-            {currentUserIsAdmin && (
+            {currentUserCanCreate && (
               <Paper withBorder shadow="lg" mb="lg" radius="md" p="xs">
                 <TextInput label="Slug" {...register('name')} />
 

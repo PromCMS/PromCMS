@@ -91,7 +91,7 @@ const Header: VFC = () => {
                 {t('Profile')}
               </PopoverList.Item>
               {currentUser?.can({
-                action: 'update',
+                action: 'read',
                 targetModel: 'users',
               }) && (
                 <PopoverList.Item
@@ -105,16 +105,21 @@ const Header: VFC = () => {
                   {t('Users')}
                 </PopoverList.Item>
               )}
-              <PopoverList.Item
-                icon={t('Settings')}
-                className="text-blue-500"
-                onClick={() => {
-                  close()
-                  push('/settings/profile')
-                }}
-              >
-                {t('Settings')}
-              </PopoverList.Item>
+              {currentUser?.can({
+                action: 'read',
+                targetModel: 'settings',
+              }) && (
+                <PopoverList.Item
+                  icon={t('Settings')}
+                  className="text-blue-500"
+                  onClick={() => {
+                    close()
+                    push('/settings/system')
+                  }}
+                >
+                  {t('Settings')}
+                </PopoverList.Item>
+              )}
               <PopoverList.Item
                 icon={'Logout'}
                 className="text-red-500"
