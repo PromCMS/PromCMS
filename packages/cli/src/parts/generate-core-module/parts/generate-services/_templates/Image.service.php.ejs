@@ -65,7 +65,7 @@ class ImageService
       ]);
       $fileBasenameWithArgs = "$fileNameWithArgs.jpeg";
 
-      if (!$this->fs->fileExists($fileBasenameWithArgs)) {
+      if (!$this->cacheFs->fileExists($fileBasenameWithArgs)) {
         $gdImageSource = \imagecreatefromstring(stream_get_contents($file));
 
         if (isset($args['w']) && !isset($args['h'])) {
