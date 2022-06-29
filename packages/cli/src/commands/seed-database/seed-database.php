@@ -123,7 +123,8 @@ try {
             $inputValue = is_string($value) ? $value : implode(' ', $value);
             break;
           default:
-            echo "Unknown value \"$fieldType\" supplied as a column type in mock generator";
+            echo "Unknown value \"$fieldType\" supplied as a column type in mock generator" .
+              PHP_EOL;
             continue 2;
             break;
         }
