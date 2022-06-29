@@ -1,1 +1,7 @@
-export const CUSTOM_MODELS = ['users', 'files', 'settings', 'userRoles']
+export const CUSTOM_MODELS = [
+  'users',
+  'files',
+  'userRoles',
+  'settings',
+  'userroles',
+]

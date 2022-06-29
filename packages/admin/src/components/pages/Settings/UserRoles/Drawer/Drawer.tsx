@@ -19,6 +19,7 @@ import { ModelPermissionToggles } from './ModelPermissionToggles'
 import { useEffect } from 'react'
 import { useModelItem } from '@hooks/useModelItem'
 import { useMemo } from 'react'
+import { CUSTOM_MODELS } from '@constants'
 
 export const Drawer: FC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
@@ -68,7 +69,10 @@ export const Drawer: FC<
   const filteredModelEntries = useMemo(() => {
     if (models) {
       return Object.entries(models).filter(
-        ([modelKey]) => !['userRoles', 'users', 'settings'].includes(modelKey)
+        // Remove all custom models because they cannot be assigned to auth directly
+        // We leave out settings because they can be assigned auth
+        ([modelKey]) =>
+          !CUSTOM_MODELS.filter((val) => val === 'settings').includes(modelKey)
       )
     }
   }, [models])

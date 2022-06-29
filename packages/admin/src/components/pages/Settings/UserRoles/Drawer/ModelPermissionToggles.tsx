@@ -36,7 +36,7 @@ export const ModelPermissionToggles: FC<{
               )
             }
           />
-          {!isSimple && (
+          {!isSimple && modelName !== 'settings' && (
             <Collapse in={!!value}>
               <RadioGroup
                 required
