@@ -41,11 +41,14 @@ export const generateByTemplates = async (
 
     let result = ejs.render(rawString, pickedTemplateData);
 
-    try {
-      result = await formatCodeString(result, finalFilename);
-    } catch (e) {
-      console.log(`An error happened during formating of ${finalFilename}`);
-      throw e;
+    // TODO: get why dockerfile is not rendered
+    if (finalFilename !== 'Dockerfile') {
+      try {
+        result = await formatCodeString(result, finalFilename);
+      } catch (e) {
+        console.log(`An error happened during formating of ${finalFilename}`);
+        throw e;
+      }
     }
 
     const filepath = path.join(endFolderPath, finalFilename);

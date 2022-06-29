@@ -6,15 +6,9 @@ module.exports = {
   "semi": true,
   "singleQuote": true,
   "jsxSingleQuote": false,
+  "parser": "babel",
 
   "overrides": [
-    {
-      "files": ["*.js", "*.cjs", "*.mjs"],
-      "options": {
-        "parser": "javascript"
-      }
-    },
-
     {
       "files": "*.ts",
       "options": {
