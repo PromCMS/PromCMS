@@ -21,7 +21,6 @@ export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
   onDataChange,
 }) => {
   const [data, setData] = useState<DynamicBlockToolData>(dataFromParent)
-  const [inputValue, setInputValue] = useInputState('')
   const { t } = useTranslation()
 
   useEffect(() => {
@@ -43,7 +42,6 @@ export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
     const value: string = e.currentTarget.value
     const formattedValue = value.replaceAll(' ', '-').toLocaleLowerCase()
 
-    setInputValue(formattedValue)
     setData((prevData) => ({
       ...prevData,
       blockId: formattedValue,
@@ -63,7 +61,7 @@ export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
           disabled={readOnly}
           placeholder={t('Dynamic block identifier')}
           className="mt-5 w-full"
-          value={inputValue}
+          value={data.blockId || ''}
           onInput={onInput}
           onKeyDown={onKeyDownInput}
         />
