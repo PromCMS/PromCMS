@@ -41,8 +41,13 @@ export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
 
   const onInput = (e) => {
     const value: string = e.currentTarget.value
+    const formattedValue = value.replaceAll(' ', '-').toLocaleLowerCase()
 
-    setInputValue(value.replaceAll(' ', '-').toLocaleLowerCase())
+    setInputValue(formattedValue)
+    setData((prevData) => ({
+      ...prevData,
+      blockId: formattedValue,
+    }))
   }
 
   return (
