@@ -1,4 +1,4 @@
-import { Textarea, TextInput } from '@mantine/core'
+import { Checkbox, InputWrapper, Textarea, TextInput } from '@mantine/core'
 import { ModelColumnName, ColumnType } from '@prom-cms/shared'
 import { VFC } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -81,6 +81,31 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                         label={values.title}
                         {...values}
                       />
+                    )}
+                  />
+                )
+              } else if (type === 'boolean') {
+                return (
+                  <Controller
+                    key={columnName}
+                    control={control}
+                    name={columnName}
+                    render={({ field: { onChange, value } }) => (
+                      <InputWrapper
+                        size="md"
+                        label={title}
+                        error={errorMessage}
+                      >
+                        <Checkbox
+                          checked={value}
+                          size={'md'}
+                          onChange={(event) =>
+                            onChange(event.currentTarget.checked)
+                          }
+                          label={t(value ? 'Yes' : 'No')}
+                          className="mt-1"
+                        />
+                      </InputWrapper>
                     )}
                   />
                 )

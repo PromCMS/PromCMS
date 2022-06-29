@@ -11,3 +11,4 @@ export const prepareFieldsForMapper = (model: ApiResultModel) =>
     .filter(
       (items) => items.filter(({ hide, editable }) => !hide && editable).length
     )
+    .map((items) => items.filter((item) => item.columnName !== 'is_published'))
