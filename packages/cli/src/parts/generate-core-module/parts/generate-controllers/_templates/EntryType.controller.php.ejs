@@ -51,10 +51,10 @@ class EntryType
     }
 
     try {
-      $ownableQueryFilter = onlyOwnersOrEditors(
-        $this->currentUser->id,
-        $classInstance,
-      );
+      $ownableQueryFilter =
+        $request->getAttribute('permission-only-own', false) === true
+          ? onlyOwnersOrEditors($this->currentUser->id, $classInstance)
+          : [];
 
       $fromEntryQuery = $instancePath::where('id', $data['fromId']);
       $toEntryQuery = $instancePath::where('id', $data['toId']);
