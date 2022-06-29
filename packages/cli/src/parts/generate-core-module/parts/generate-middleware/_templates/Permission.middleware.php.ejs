@@ -74,6 +74,7 @@ class Permission
         ->withHeader('Content-Description', 'model does not exist');
     }
 
+    // TODO we should allow setting permission on files too so it makes sense
     // Handle any other than admin and allow manipulate files on any user
     if ($roleId !== 0 && strtolower($modelFromUrl) !== 'files') {
       if (in_array(strtolower($modelFromUrl), $this->adminOnlyModels)) {
