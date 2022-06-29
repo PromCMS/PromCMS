@@ -23,6 +23,7 @@ import Embed from '@editorjs/embed'
 import { ButtonLinkTool } from './ButtonLink'
 import { TagsTool } from './TagsTool'
 import { LinkInlineTool } from './LinkInlineTool'
+import { DynamicBlockTool } from './DynamicBlockTool'
 
 export const EDITOR_HOLDER_ID = 'editor-content'
 
@@ -99,6 +100,7 @@ export const LazyEditor: FC<LazyEditorProps> = ({
             },
           },
         },
+        dynamicBlock: DynamicBlockTool,
         paragraph: {
           class: ParagraphTool,
           inlineToolbar: true,
