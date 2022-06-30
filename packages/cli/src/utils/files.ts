@@ -39,14 +39,26 @@ export const generateByTemplates = async (
       ? templateData[finalFilename] || templateData['*']
       : undefined;
 
-    let result = ejs.render(rawString, pickedTemplateData);
+    let result: string = '';
+    try {
+      result = ejs.render(rawString, pickedTemplateData);
+    } catch (e) {
+      console.log(
+        `An error happened during template build - ${(e as Error).message}`
+      );
+      throw e;
+    }
 
-    // TODO: get why dockerfile is not rendered
-    if (finalFilename !== 'Dockerfile') {
+    // TODO: get why dockerfile is not rendered, fix twig formatting
+    if (finalFilename !== 'Dockerfile' && !finalFilename.includes('twig')) {
       try {
         result = await formatCodeString(result, finalFilename);
       } catch (e) {
-        console.log(`An error happened during formating of ${finalFilename}`);
+        console.log(
+          `An error happened during formating of ${finalFilename}: ${
+            e as Error
+          }`
+        );
         throw e;
       }
     }
@@ -59,7 +71,8 @@ export const generateByTemplates = async (
   for (const folderName of folders) {
     await generateByTemplates(
       path.join(templateFolderPath, folderName),
-      path.join(endFolderPath, folderName)
+      path.join(endFolderPath, folderName),
+      templateData
     );
   }
 };

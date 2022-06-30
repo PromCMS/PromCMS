@@ -1,0 +1,226 @@
+<div class="block-renderer"> 
+  {% if blocks %}
+        {% for block in blocks %}
+          {% if block.type == 'header' %}
+            <h{{ block.data.level|default(2) }}>
+              {{ block.data.text|raw }}
+            </h{{ block.data.level|default(2) }}>
+          {% elseif block.type == 'table' %}
+            <table class="table"> 
+              {% if block.data.withHeadings %}
+                <thead> 
+                  <tr> 
+                    {% for cell in block.data.content[0] %}
+                      <th scope="col">{{cell|raw}}</td> 
+                    {% endfor %}
+                  </tr>
+                </thead>
+              {% endif %}
+              <tbody>
+                {% if block.data.withHeadings %}
+                  {% for row in block.data.content[1:] %}
+                    <tr> 
+                        {% for cell in row %}
+                          <td>{{cell|raw}}</td> 
+                        {% endfor %}
+                    </tr>
+                  {% endfor %}
+                {% else %}
+                  {% for row in block.data.content %}
+                    <tr> 
+                        {% for cell in row %}
+                          <td>{{cell|raw}}</td> 
+                        {% endfor %}
+                    </tr>
+                  {% endfor %}
+                {% endif %}
+              </tbody>
+            </table>
+          {% elseif block.type == 'paragraph' %}
+            <p>
+              {{ block.data.text }}
+            </p>
+          {% elseif block.type == 'image' %}
+            {% set fullImage = image(block.data.fileId, 1240) %}
+            {% set thumbnail = image(block.data.fileId, 1240, null, 85) %}
+            <div class="big-image w-full gallery-photoswipe">
+              <a class="w-full" href="{{ fullImage.src }}" data-pswp-width="{{fullImage.width}}" data-pswp-height="{{fullImage.height}}">
+                  <img src="{{thumbnail.src}}" width="{{thumbnail.width}}" height="{{thumbnail.height}}" alt="{{ block.data.label }}" />
+                  <div class="d-none hidden-caption-content">
+                    {% if block.data.label %}
+                        <p class="heading">{{block.data.label}}</p>
+                    {% endif %}
+                    {% if block.data.description %}
+                        <p class="description">{{block.data.description}}</p>
+                    {% endif %}
+                  </div>
+              </a>
+            </div>
+          {% elseif block.type == 'big-gallery' %}
+             <div class="tabs">
+              {% for gallery in block.data %}
+                <input type="radio"
+                  name="tabs"
+                  id="tab{{ loop.index }}"
+                  checked="checked" />
+                <label for="tab{{ loop.index }}">
+                  {% if gallery.data.label %}
+                    {{ gallery.data.label }}
+                  {% else %}
+                    Žádný popisek
+                  {% endif %}
+                </label>
+                <div class="tab gallery-photoswipe portfolio-gallery">
+                  {% for file in gallery.data.fileIds %}
+                    {% set fullImage = image(file.id, 1240) %}
+                    {% set thumbnail = image(file.id, 400, null, 60) %}
+                    <a href="{{ fullImage.src }}"
+                      class="gallery-item"
+                      data-pswp-width="{{ fullImage.width }}"
+                      data-pswp-height="{{ fullImage.height }}">
+                      <img src="{{ thumbnail.src }}"
+                        width="{{ thumbnail.width }}"
+                        alt="{{ file.title }}" />
+                      <div class="d-none hidden-caption-content">
+                        {% if file.title %}
+                          <p class="heading">
+                            {{ file.title }}
+                          </p>
+                        {% endif %}
+                        {% if file.description %}
+                          <p class="description">
+                            {{ file.description }}
+                          </p>
+                        {% endif %}
+                      </div>
+                    </a>
+                  {% endfor %}
+                </div>
+              {% endfor %}
+            </div>
+          {% elseif block.type == 'gallery' %}
+            <div class="gallery gallery-photoswipe">
+              {% for file in block.data.fileIds %}
+                {% set fullImage = image(file.id, 1240) %}
+                {% set thumbnail = image(file.id, 400, null, 60) %}
+                <a href="{{ fullImage.src }}"
+                  data-pswp-width="{{ fullImage.width }}"
+                  data-pswp-height="{{ fullImage.height }}">
+                  <img src="{{ thumbnail.src }}"
+                    width="{{ thumbnail.width }}"
+                    alt="{{ file.title }}" />
+                  <div class="d-none hidden-caption-content">
+                    {% if file.title %}
+                      <p class="heading">
+                        {{ file.title }}
+                      </p>
+                    {% endif %}
+                    {% if file.description %}
+                      <p class="description">
+                        {{ file.description }}
+                      </p>
+                    {% endif %}
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          {% elseif block.type == 'list' %}
+            <ul>
+              {% for listItem in block.data.items %}
+                <li>{{ listItem|raw }}</li>
+              {% endfor %}
+            </ul>
+          {% elseif block.type == 'dynamicBlock' %}
+            {{ getDynamicBlock(block.data.blockId, data)|raw }}
+          {% elseif block.type == 'tags' %}
+            <ul class="badges">
+              {% for tag in block.data.tags %}
+                <li>{{ tag|raw }}</li>
+              {% endfor %}
+            </ul>
+          {% elseif block.type == 'buttonLink' %}
+            <div class="btn-box {% if block.data.placeholderImage %}is-image{% endif %}">
+              <a href="{{block.data.linkTo}}?q=90&w=1240" title="{{block.data.label}}" {% if block.data.openOnNewTab %} target="_blank" {% endif %} {% if block.data.isDownload %} download {% endif %}>
+                {% if block.data.placeholderImage %}
+                  <img class="big-image w-100" src="/api/entry-types/files/items/{{ block.data.placeholderImage }}/raw?q=70&w=400" />
+                {% else %}
+                  {% if block.data.isDownload %}
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                      x="0px"
+                      y="0px"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 172 172"
+                      style=" fill:#000000;">
+                      <g fill="none"
+                        fill-rule="nonzero"
+                        stroke="none"
+                        stroke-width="1"
+                        stroke-linecap="butt"
+                        stroke-linejoin="miter"
+                        stroke-miterlimit="10"
+                        stroke-dasharray=""
+                        stroke-dashoffset="0"
+                        font-family="none"
+                        font-weight="none"
+                        font-size="none"
+                        text-anchor="none"
+                        style="mix-blend-mode: normal">
+                        <path d="M0,172v-172h172v172z" fill="none"></path>
+                        <g fill="#fff">
+                          <path d="M78.83333,14.33333c-3.956,0 -7.16667,3.21067 -7.16667,7.16667v57.33333h-25.08333c-1.97902,0 -3.58333,1.60431 -3.58333,3.58333c0.00014,0.95031 0.37777,1.86164 1.0498,2.53353c0.07162,0.07315 0.14634,0.1432 0.22396,0.20995l36.58919,34.50359l0.23795,0.22396c1.32656,1.24737 3.07819,1.94302 4.89909,1.94564c1.8209,-0.00261 3.57253,-0.69826 4.89909,-1.94564l0.09798,-0.08399c0.02354,-0.02782 0.04687,-0.05581 0.06998,-0.08399l36.5752,-34.48958c0.07258,-0.06249 0.14262,-0.12786 0.20996,-0.19597l0.05599,-0.04199c0.01411,-0.01388 0.02811,-0.02788 0.042,-0.04199c0.67204,-0.6719 1.04966,-1.58323 1.0498,-2.53353c0,-1.97902 -1.60431,-3.58333 -3.58333,-3.58333h-25.08333v-57.33333c0,-3.956 -3.21067,-7.16667 -7.16667,-7.16667h-7.16667zM21.5,143.33333c-2.58456,-0.03655 -4.98858,1.32136 -6.29153,3.55376c-1.30295,2.2324 -1.30295,4.99342 0,7.22582c1.30295,2.2324 3.70697,3.59031 6.29153,3.55376h129c2.58456,0.03655 4.98858,-1.32136 6.29153,-3.55376c1.30295,-2.2324 1.30295,-4.99342 0,-7.22582c-1.30295,-2.2324 -3.70697,-3.59031 -6.29153,-3.55376z"></path>
+                        </g>
+                      </g>
+                    </svg>
+                  {% endif %}
+                  {% if block.data.label %}
+                    {{ block.data.label|raw }}
+                  {% else %}
+                    {{block.data.linkTo}}
+                  {% endif %}
+                {% endif %}
+              </a>
+            </div>
+          {% elseif block.type == 'columns' %}
+            {% set filteredCols = block.data.itemContent|filter( v => v.blocks|length > 0 ) %}
+            {% set size = filteredCols|length %}
+
+            {% if size is same as(1) %}
+              {% set colsWrapperClassNames = "col-12" %}
+            {% elseif size is same as(2) %}
+              {% set colsWrapperClassNames = "col-12 col-sm-6" %}
+            {% elseif size is same as(3) %}
+              {% set colsWrapperClassNames = "col-12 col-md-4" %}
+            {% else %}
+              {% set colsWrapperClassNames = "col-12 col-sm-6 col-md-3" %}
+            {% endif %}
+
+            {% if size is same as(1) %}
+              {% set gutterClassName = "gx-0 gy-0" %}
+            {% elseif size is same as(2) %}
+              {% set gutterClassName = "gx-5 gy-0" %}
+            {% else %}
+              {% set gutterClassName = "gx-5 gy-0" %}
+            {% endif %}
+             
+            <div class="row {{gutterClassName}}">
+              {% for col in filteredCols %}
+                <div class="{{colsWrapperClassNames}}">
+                  {% include 'components/BlocksRenderer.twig' with {blocks: col.blocks} %}
+                </div>
+              {% endfor %}
+            </div>
+          {% elseif block.type == 'embed' %}
+            {% if block.data.service == 'youtube' %}
+              <iframe width="100%"
+                height="515"
+                src="{{ block.data.embed }}"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+</div>
