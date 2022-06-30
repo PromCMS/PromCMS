@@ -26,8 +26,8 @@ export const formatApiModelResultToTableView = (
         },
       }),*/
       ...(columnInfo.type === 'boolean' && {
-        formatter({ is_published }) {
-          return is_published ? 'yes' : 'no'
+        formatter(values) {
+          return values[columnKey] ? 'yes' : 'no'
         },
       }),
     }
