@@ -82,7 +82,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'content',
         type: 'json',
         required: true,
-        default: '',
+        default: '{}',
       },
     },
   };
@@ -115,7 +115,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Permissions',
         type: 'json',
         required: false,
-        default: '',
+        default: '{}',
       },
     },
   };
@@ -195,7 +195,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         content: {
           title: 'Content',
           type: 'json',
-          default: '',
+          default: '{}',
         },
         slug: {
           title: 'Zkratka',
@@ -234,7 +234,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Coeditors',
         required: false,
         type: 'json',
-        default: '',
+        default: '{}',
       };
     }
 
