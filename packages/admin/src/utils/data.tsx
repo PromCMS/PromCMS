@@ -2,6 +2,7 @@ import { TableViewCol } from '@components/TableView'
 import { DatabaseConfigModel } from '@prom-cms/shared'
 import { CUSTOM_MODELS } from '@constants'
 import isEqual from 'lodash/isEqual'
+import { iconSet } from '@prom-cms/icons'
 
 export const formatApiModelResultToTableView = (
   model: DatabaseConfigModel
@@ -27,7 +28,11 @@ export const formatApiModelResultToTableView = (
       }),*/
       ...(columnInfo.type === 'boolean' && {
         formatter(values) {
-          return values[columnKey] ? 'yes' : 'no'
+          return values[columnKey] ? (
+            <iconSet.Check className="text-green-400" />
+          ) : (
+            <iconSet.X className="text-red-400" />
+          )
         },
       }),
     }
