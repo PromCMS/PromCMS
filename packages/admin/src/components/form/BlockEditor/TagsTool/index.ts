@@ -1,2 +1,2 @@
-export * from './TagsTool'
-export { default as TagsTool } from './TagsTool'
+export * from './TagsTool';
+export { default as TagsTool } from './TagsTool';

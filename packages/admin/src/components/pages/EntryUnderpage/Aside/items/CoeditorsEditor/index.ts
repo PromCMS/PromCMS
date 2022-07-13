@@ -1,1 +1,1 @@
-export * from './CoeditorsEditor'
+export * from './CoeditorsEditor';

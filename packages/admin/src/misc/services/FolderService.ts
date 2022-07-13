@@ -1,10 +1,10 @@
-import { ApiResultItem, ItemID } from '@prom-cms/shared'
-import { apiClient } from '@api'
-import { API_ENTRY_TYPES_URL } from '@constants'
+import { ApiResultItem, ItemID } from '@prom-cms/shared';
+import { apiClient } from '@api';
+import { API_ENTRY_TYPES_URL } from '@constants';
 
 export class FolderService {
   static apiGetListUrl(path: string) {
-    return `${API_ENTRY_TYPES_URL}/folders?path=${path}`
+    return `${API_ENTRY_TYPES_URL}/folders?path=${path}`;
   }
 
   static async create(path: string) {
@@ -12,7 +12,7 @@ export class FolderService {
       data: {
         path: path.replaceAll(' ', '_'),
       },
-    })
+    });
   }
 
   static async update(id: ItemID, payload: ApiResultItem) {
@@ -24,8 +24,8 @@ export class FolderService {
       params: {
         path,
       },
-    })
+    });
 
-    return
+    return;
   }
 }

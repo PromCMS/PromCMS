@@ -1,1 +1,1 @@
-export * from './canUser'
+export * from './canUser';

@@ -1,1 +1,1 @@
-export { default as ButtonLinkTool } from './ButtonLink'
+export { default as ButtonLinkTool } from './ButtonLink';

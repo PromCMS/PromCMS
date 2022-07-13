@@ -7,7 +7,6 @@ module.exports = {
   singleQuote: true,
   jsxSingleQuote: false,
   parser: "babel",
-  tailwindConfig: "./tailwind.config.js",
 
   overrides: [
     {

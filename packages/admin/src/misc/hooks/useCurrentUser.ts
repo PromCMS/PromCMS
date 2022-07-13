@@ -1,16 +1,16 @@
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { User, UserRole } from '@prom-cms/shared'
-import { canUser, CanUserOptions } from '@utils'
-import { useMemo } from 'react'
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { User, UserRole } from '@prom-cms/shared';
+import { canUser, CanUserOptions } from '@utils';
+import { useMemo } from 'react';
 
 export const useCurrentUser = () => {
-  const { currentUserIsAdmin, currentUser } = useGlobalContext()
+  const { currentUserIsAdmin, currentUser } = useGlobalContext();
 
   return useMemo(
     () =>
       currentUser && {
         ...(currentUser as User & {
-          role: UserRole
+          role: UserRole;
         }),
         isAdmin: !!currentUserIsAdmin,
         can: (payload: Omit<CanUserOptions, 'userRole'>) =>
@@ -22,5 +22,5 @@ export const useCurrentUser = () => {
             : false,
       },
     [currentUser, currentUserIsAdmin]
-  )
-}
+  );
+};

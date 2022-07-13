@@ -5,7 +5,6 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/api-client/README.md",
   "license": "MIT",
-  "type": "module",
   "main": "dist/prom-cms-api-client.cjs.js",
   "module": "dist/prom-cms-api-client.esm.js",
   "typings": "dist/prom-cms-api-client.d.ts",

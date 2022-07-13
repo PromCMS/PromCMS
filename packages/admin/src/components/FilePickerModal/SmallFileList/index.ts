@@ -1,1 +1,1 @@
-export * from './SmallFileList'
+export * from './SmallFileList';

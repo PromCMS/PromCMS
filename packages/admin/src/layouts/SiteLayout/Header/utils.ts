@@ -1,21 +1,21 @@
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { iconSet } from '@prom-cms/icons'
-import { EntryService } from '@services'
-import { useMemo } from 'react'
-import { modelIsCustom } from '@utils'
-import { useCurrentUser } from '@hooks/useCurrentUser'
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { iconSet } from '@prom-cms/icons';
+import { EntryService } from '@services';
+import { useMemo } from 'react';
+import { modelIsCustom } from '@utils';
+import { useCurrentUser } from '@hooks/useCurrentUser';
 
 const menuItems = [
   { label: 'Domů', href: '/', icon: iconSet.Home },
   { label: 'Files', href: '/files', icon: iconSet.Photo },
-]
+];
 
 export const useConstructedMenuItems = () => {
-  const { models } = useGlobalContext()
-  const currentUser = useCurrentUser()
+  const { models } = useGlobalContext();
+  const currentUser = useCurrentUser();
 
   const finalMenuItems = useMemo(() => {
-    let finalValue = menuItems
+    let finalValue = menuItems;
     if (models && currentUser) {
       finalValue = [
         ...finalValue,
@@ -29,10 +29,10 @@ export const useConstructedMenuItems = () => {
             icon: iconSet[icon],
             label: modelKey.toUpperCase(),
           })),
-      ].filter((item) => !!item.icon)
+      ].filter((item) => !!item.icon);
     }
-    return finalValue
-  }, [models, currentUser])
+    return finalValue;
+  }, [models, currentUser]);
 
-  return finalMenuItems
-}
+  return finalMenuItems;
+};

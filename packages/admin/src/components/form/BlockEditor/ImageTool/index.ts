@@ -1,1 +1,1 @@
-export { default as ImageTool } from './ImageTool'
+export { default as ImageTool } from './ImageTool';

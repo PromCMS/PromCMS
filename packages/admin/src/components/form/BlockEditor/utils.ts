@@ -1,20 +1,20 @@
-import type { EditorConfig } from '@editorjs/editorjs'
-import { LayoutBlockTool } from 'editorjs-layout'
-import { TFunction } from 'react-i18next'
-import EditorJS from '@editorjs/editorjs'
+import type { EditorConfig } from '@editorjs/editorjs';
+import { LayoutBlockTool } from 'editorjs-layout';
+import { TFunction } from 'react-i18next';
+import EditorJS from '@editorjs/editorjs';
 
 type GenerateLayoutConfigProps = {
-  numberOfCols: number
-  editorJSConfig: EditorConfig
-  t: TFunction<'translation', undefined>
-}
+  numberOfCols: number;
+  editorJSConfig: EditorConfig;
+  t: TFunction<'translation', undefined>;
+};
 
 export const generateLayoutConfig = ({
   numberOfCols,
   editorJSConfig,
   t,
 }: GenerateLayoutConfigProps) => {
-  const iterativeArray = new Array(numberOfCols).fill(true)
+  const iterativeArray = new Array(numberOfCols).fill(true);
 
   return {
     class: LayoutBlockTool as any,
@@ -58,5 +58,5 @@ export const generateLayoutConfig = ({
               `,
       title: `${iterativeArray.length} ${t('Columns')}`,
     },
-  }
-}
+  };
+};

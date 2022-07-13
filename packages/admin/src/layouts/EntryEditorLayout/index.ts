@@ -1,1 +1,1 @@
-export * from './EntryEditorLayout'
+export * from './EntryEditorLayout';

@@ -1,10 +1,10 @@
-import { File } from '@prom-cms/shared'
-import { useFolders } from './useFolders'
-import { useModelItems } from './useModelItems'
+import { File } from '@prom-cms/shared';
+import { useFolders } from './useFolders';
+import { useModelItems } from './useModelItems';
 
 export interface UseFileFolderData {
-  files?: File[]
-  folders?: string[]
+  files?: File[];
+  folders?: string[];
 }
 
 export const useFileFolder = (currentPath: string) => {
@@ -13,13 +13,13 @@ export const useFileFolder = (currentPath: string) => {
     isError,
     isLoading,
     mutate: mutateFiles,
-  } = useModelItems<{ data: File[] }>('files', { path: currentPath })
+  } = useModelItems<{ data: File[] }>('files', { path: currentPath });
 
   const {
     data: foldersRes,
     error,
     mutate: mutateFolders,
-  } = useFolders(currentPath)
+  } = useFolders(currentPath);
 
   return {
     data:
@@ -33,5 +33,5 @@ export const useFileFolder = (currentPath: string) => {
     isLoading: isLoading || (!error && !foldersRes),
     mutateFiles,
     mutateFolders,
-  }
-}
+  };
+};

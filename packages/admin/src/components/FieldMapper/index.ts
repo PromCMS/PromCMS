@@ -1,2 +1,2 @@
-export { default } from './FieldMapper'
-export * from './utils'
+export { default } from './FieldMapper';
+export * from './utils';

@@ -1,1 +1,1 @@
-export { default as DynamicBlockTool } from './DynamicBlockTool'
+export { default as DynamicBlockTool } from './DynamicBlockTool';
