@@ -4,11 +4,11 @@
  * @returns Initials, a string of max length of 2
  */
 export const getInitials = (name: string) => {
-  const humanNamePieces = name.split(' ')
+  const humanNamePieces = name.split(' ');
 
-  if (humanNamePieces.length === 0) return ''
+  if (humanNamePieces.length === 0) return '';
 
   return `${humanNamePieces[0].charAt(0)}${(
     humanNamePieces.pop() as string
-  ).charAt(0)}`
-}
+  ).charAt(0)}`;
+};

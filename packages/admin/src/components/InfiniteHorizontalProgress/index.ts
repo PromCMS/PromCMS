@@ -1,1 +1,1 @@
-export { default } from './InfiniteHorizontalProgress'
+export { default } from './InfiniteHorizontalProgress';

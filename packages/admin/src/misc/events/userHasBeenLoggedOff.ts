@@ -1,5 +1,5 @@
-export let userHasBeenLoggedOff
+export let userHasBeenLoggedOff;
 
 if (typeof window !== 'undefined') {
-  userHasBeenLoggedOff = new CustomEvent('userHasBeenLoggedOff')
+  userHasBeenLoggedOff = new CustomEvent('userHasBeenLoggedOff');
 }

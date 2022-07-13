@@ -10,4 +10,4 @@ export const formatDroppedFiles = (currentPath: string, files: File[]) =>
       },
     }),
     {}
-  )
+  );

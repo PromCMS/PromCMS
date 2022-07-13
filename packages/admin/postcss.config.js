@@ -1,4 +1,4 @@
-require('dotenv').config(require('find-config')('.env'))
+require('dotenv').config(require('find-config')('.env'));
 
 module.exports = {
   plugins: {
@@ -6,4 +6,4 @@ module.exports = {
     autoprefixer: {},
     ...(process.env.NODE_ENV === 'production' ? { cssnano: {} } : {}),
   },
-}
+};

@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import clsx from 'clsx';
 
 export const useClassNames = () => ({
   itemsWrap: clsx(
@@ -13,4 +13,4 @@ export const useClassNames = () => ({
   itemLabel: clsx(
     'mt-2 overflow-hidden text-ellipsis font-semibold group-hover:underline text-left mb-0 leading-8 block whitespace-nowrap'
   ),
-})
+});

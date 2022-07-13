@@ -21,11 +21,8 @@
       "@hooks/*": ["./misc/hooks/*"],
       "@layouts": ["./layouts"]
     },
-    "jsx": "preserve",
+    "jsx": "preserve"
   },
-  "include": [
-    "next-env.d.ts",
-    "src",
-  ],
+  "include": ["next-env.d.ts", "src"],
   "exclude": ["node_modules"]
 }

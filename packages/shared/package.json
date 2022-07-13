@@ -5,7 +5,6 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/shared/README.md",
-  "type": "module",
   "main": "dist/prom-cms-shared.cjs.js",
   "module": "dist/prom-cms-shared.esm.js",
   "typings": "dist/prom-cms-shared.cjs.d.ts",

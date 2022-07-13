@@ -5,7 +5,6 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",
-  "type": "module",
   "main": "dist/prom-cms-icons.cjs.js",
   "module": "dist/prom-cms-icons.esm.js",
   "typings": "dist/prom-cms-icons.d.js",

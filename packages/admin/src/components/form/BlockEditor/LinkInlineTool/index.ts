@@ -1,1 +1,1 @@
-export * from './LinkInlineTool'
+export * from './LinkInlineTool';

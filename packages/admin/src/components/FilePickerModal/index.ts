@@ -1,1 +1,1 @@
-export { FilePickerModal as default } from './FilePickerModal'
+export { FilePickerModal as default } from './FilePickerModal';

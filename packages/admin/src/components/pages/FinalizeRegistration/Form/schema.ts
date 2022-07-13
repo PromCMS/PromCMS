@@ -1,4 +1,4 @@
-import { object, string, ref } from 'yup'
+import { object, string, ref } from 'yup';
 
 export const finalizeRegistrationFormSchema = object()
   .shape({
@@ -8,4 +8,4 @@ export const finalizeRegistrationFormSchema = object()
       .oneOf([ref('new_password'), null], 'Passwords must match'),
     token: string().required('Dont forget to include this value'),
   })
-  .noUnknown()
+  .noUnknown();

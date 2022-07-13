@@ -1,1 +1,1 @@
-export * from './UploadFilesModal'
+export * from './UploadFilesModal';

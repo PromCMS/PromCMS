@@ -1,1 +1,1 @@
-export { default as GalleryTool } from './GalleryTool'
+export { default as GalleryTool } from './GalleryTool';

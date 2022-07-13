@@ -18,4 +18,4 @@
  * ```
  */
 export const createIterativeArray = (length: number) =>
-  Array.from({ length }).map((val, index) => index)
+  Array.from({ length }).map((val, index) => index);

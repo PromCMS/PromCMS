@@ -1,20 +1,20 @@
-import { ApiResultItem } from '@prom-cms/shared'
-import { UserService } from '@services'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
-import { getObjectDiff } from '@utils'
-import { useData } from '../context'
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
-import axios from 'axios'
-import { useFormContext } from 'react-hook-form'
-import { MESSAGES } from '@constants'
+import { ApiResultItem } from '@prom-cms/shared';
+import { UserService } from '@services';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+import { getObjectDiff } from '@utils';
+import { useData } from '../context';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import axios from 'axios';
+import { useFormContext } from 'react-hook-form';
+import { MESSAGES } from '@constants';
 
 export const useOnSubmitCallback = () => {
-  const { push } = useRouter()
-  const { view, user, mutateUser } = useData()
-  const reqNotification = useRequestWithNotifications()
-  const { t } = useTranslation()
-  const { setError } = useFormContext()
+  const { push } = useRouter();
+  const { view, user, mutateUser } = useData();
+  const reqNotification = useRequestWithNotifications();
+  const { t } = useTranslation();
+  const { setError } = useFormContext();
 
   const callback = async (values) => {
     try {
@@ -33,9 +33,9 @@ export const useOnSubmitCallback = () => {
           ),
           errorMessage: (e) => {
             if (axios.isAxiosError(e) && e.response?.status === 409) {
-              return t(MESSAGES.DUPLICATE_USER)
+              return t(MESSAGES.DUPLICATE_USER);
             } else {
-              return t(MESSAGES.ERROR_BASIC)
+              return t(MESSAGES.ERROR_BASIC);
             }
           },
         },
@@ -44,33 +44,33 @@ export const useOnSubmitCallback = () => {
             const result = await UserService.update(
               user?.id as number,
               getObjectDiff(user, values) as ApiResultItem
-            )
+            );
 
             await mutateUser(
               (prev) => {
                 if (prev && result?.data?.data) {
-                  return { ...prev, ...result.data.data }
+                  return { ...prev, ...result.data.data };
                 }
               },
               { revalidate: false }
-            )
+            );
           } else if (view === 'create') {
             const result = await UserService.create(
               getObjectDiff(user || {}, values) as ApiResultItem
-            )
+            );
 
             if (result?.data) {
-              push(UserService.getListUrl())
+              push(UserService.getListUrl());
             }
           }
         }
-      )
+      );
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 409) {
-        setError('email', { message: t(MESSAGES.DUPLICATE_USER) })
+        setError('email', { message: t(MESSAGES.DUPLICATE_USER) });
       }
     }
-  }
+  };
 
-  return callback
-}
+  return callback;
+};

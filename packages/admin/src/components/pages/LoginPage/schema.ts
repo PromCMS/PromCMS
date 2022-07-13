@@ -1,5 +1,5 @@
-import { MESSAGES } from '@constants'
-import { number, object, string } from 'yup'
+import { MESSAGES } from '@constants';
+import { number, object, string } from 'yup';
 
 export const loginFormSchema = object()
   .shape({
@@ -21,4 +21,4 @@ export const loginFormSchema = object()
         .length(6, MESSAGES.MFA_TOKEN_SHORT),
     }),
   })
-  .noUnknown()
+  .noUnknown();
