@@ -7,6 +7,7 @@
     "noEmit": false,
     "target": "ESNEXT",
     "module": "esnext",
+    "esModuleInterop": true,
     "experimentalDecorators": true
   },
   "include": [
@@ -15,5 +16,5 @@
   "exclude": [
     "node_modules", 
     "dist"
-  ],
+  ]
 }
