@@ -2,7 +2,7 @@
   "name": "@prom-cms/icons",
   "version": "1.0.0",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
-  "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",
   "type": "module",
   "main": "src/index.ts",
   "source": "src/index.ts",
@@ -15,10 +15,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ondrej-langr/prom.git"
+    "url": "git+https://github.com/PromCMS/PromCMS.git"
   },
   "bugs": {
-    "url": "https://github.com/ondrej-langr/prom/issues"
+    "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
     "tabler-icons-react": "1.45.0"

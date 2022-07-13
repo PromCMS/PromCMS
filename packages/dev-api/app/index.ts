@@ -5,10 +5,11 @@ import { loadRootEnv } from '@prom-cms/shared';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { Logger } from './utils';
-import { CLI_ROOT } from '@prom-cms/shared/src/generator-constants';
-import path from 'path/posix';
+import path from 'path';
 
 await loadRootEnv();
+
+export const CLI_ROOT = path.join('..', '..', 'cli');
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const { PORT: FRONT_PORT = 3000 } = process.env;

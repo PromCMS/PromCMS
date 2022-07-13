@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
-  "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
   "license": "MIT",
   "type": "module",
   "main": "src/index.ts",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ondrej-langr/prom.git"
+    "url": "git+https://github.com/PromCMS/PromCMS.git"
   },
   "scripts": {
     "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
@@ -29,7 +29,7 @@
     "build": "tsc --build"
   },
   "bugs": {
-    "url": "https://github.com/ondrej-langr/prom/issues"
+    "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
     "recursive-copy": "2.0.14",

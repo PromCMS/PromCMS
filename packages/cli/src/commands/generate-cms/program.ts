@@ -1,11 +1,7 @@
 import { Arg, Command, Config } from '@boost/cli';
 import recopy from 'recursive-copy';
 import path, { dirname } from 'path';
-import {
-  CORE_ROOT,
-  PROJECT_ROOT,
-  GENERATOR_FILENAME__JSON,
-} from '@prom-cms/shared/src/generator-constants';
+import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared/src/generator-constants';
 import fs from 'fs-extra';
 import { execa } from 'execa';
 import { generateByTemplates, loggedJobWorker, LoggedWorkerJob } from '@utils';
@@ -13,6 +9,7 @@ import { generateCoreModule } from '@commands-parts/generate-core-module';
 import { formatGeneratorConfig, ExportConfig } from '@prom-cms/shared';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
+import { PROJECT_ROOT, CORE_ROOT } from '../../constants';
 
 const copyCoreOptions = {
   regenerate: {

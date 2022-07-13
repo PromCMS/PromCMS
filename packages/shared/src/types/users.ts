@@ -1,4 +1,4 @@
-import { ModelUserPermissions } from '.';
+import { ModelUserPermissions } from './generateConfig';
 import { ItemID } from './api';
 
 export type UserRole = {

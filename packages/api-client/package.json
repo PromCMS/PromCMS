@@ -1,9 +1,9 @@
 {
   "name": "@prom-cms/api-client",
-  "description": "A api client for prom cms sites",
+  "description": "An api client for prom cms sites",
   "version": "0.0.3",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
-  "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/api-client/README.md",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
@@ -19,10 +19,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ondrej-langr/prom.git"
+    "url": "git+https://github.com/PromCMS/PromCMS.git"
   },
   "bugs": {
-    "url": "https://github.com/ondrej-langr/prom/issues"
+    "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
     "@prom-cms/shared": "*"

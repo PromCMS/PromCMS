@@ -1,15 +1,12 @@
 import { Arg, Command, Config } from '@boost/cli';
 import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
-import {
-  PROJECT_ROOT,
-  CORE_ROOT,
-} from '@prom-cms/shared/src/generator-constants';
 import fs from 'fs-extra';
 import path from 'path';
 import { loggedJobWorker, LoggedWorkerJob, Logger } from '@utils';
 import syncDatabase from '@commands-parts/sync-database';
 import { generateCoreModule } from '@commands-parts/generate-core-module';
 import { formatGeneratorConfig } from '@prom-cms/shared';
+import { PROJECT_ROOT, CORE_ROOT } from '../../constants';
 
 @Config('generate:develop', 'Controls a develop cms generator', {})
 export class GenerateDevelopProgram extends Command {
