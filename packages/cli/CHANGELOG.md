@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.1.2
+
+### Patch Changes
+
+- 78b000d: Fix cli by renaming the bin file extension from js to cjs and renaming the imported esm file.
+
 ## 0.1.1
 
 ### Patch Changes
