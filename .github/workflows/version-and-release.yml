@@ -22,7 +22,7 @@ jobs:
         run: yarn
 
       - name: Build
-        run: yarn build
+        run: yarn build:library
 
       - name: Create Release Pull Request or Publish to npm
         # https://github.com/changesets/action
