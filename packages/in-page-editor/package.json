@@ -1,14 +1,14 @@
 {
-  "name": "@prom-cms/api-client",
-  "description": "An api client for prom cms sites",
-  "version": "0.0.3",
+  "name": "@prom-cms/in-page-edit",
+  "description": "A PromCMS in page editor",
+  "version": "0.0.1",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
-  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/api-client/README.md",
   "license": "MIT",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",
   "type": "module",
-  "main": "dist/prom-cms-api-client.cjs.js",
-  "module": "dist/prom-cms-api-client.esm.js",
-  "typings": "dist/prom-cms-api-client.d.ts",
+  "main": "dist/prom-cms-in-page-edit.cjs.js",
+  "module": "dist/prom-cms-in-page-edit.esm.js",
+  "typings": "dist/prom-cms-in-page-edit.d.ts",
   "source": "src/index.ts",
   "files": [
     "dist"
@@ -26,13 +26,11 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "@prom-cms/shared": "*"
+    "tabler-icons-react": "^1.52.0"
   },
   "devDependencies": {
-    "typescript": "^4.7.4",
-    "@prom-cms/config": "*"
-  },
-  "peerDependencies": {
-    "axios": "^0.27.2"
+    "@types/find-config": "1.0.1",
+    "@prom-cms/config": "*",
+    "typescript": "^4.7.4"
   }
 }

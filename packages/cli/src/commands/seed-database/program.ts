@@ -3,7 +3,7 @@ import { findGeneratorConfig } from '@prom-cms/shared';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
-import { Logger } from '@utils';
+import { Logger } from '../../utils';
 import child_process from 'child_process';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';

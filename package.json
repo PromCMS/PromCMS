@@ -4,21 +4,17 @@
   "private": true,
   "description": "",
   "scripts": {
+    "build:library": "yarn preconstruct build",
+    "postinstall": "yarn preconstruct dev",
+    "release": "yarn build && changeset publish",
     "clean": "del **/dist/** && del **/.next/**",
-
     "dev": "turbo run dev --parallel",
     "dev:api": "turbo run dev --scope=\"@prom-cms/dev-api\" --parallel",
-    
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
     "generate:cms": "yarn workspace @prom-cms/cli run generate:cms",
     "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
     "regenerate:cms": "yarn workspace @prom-cms/cli run regenerate:cms",
-
-    "build:library": "turbo run build --scope=\"@prom-cms/cli\" --scope=\"@prom-cms/icons\" --scope=\"@prom-cms/shared\" --no-deps",
-    "build:admin": "turbo run build --scope=\"@prom-cms/admin\" --no-deps",
-
-    "version-packages": "changeset version && yarn prettier",
-    "release": "yarn build:library && changeset publish"
+    "version-packages": "changeset version && yarn prettier"
   },
   "license": "MIT",
   "workspaces": [
@@ -32,16 +28,28 @@
     "Ondřej Langr <hi@ondrejlangr.cz>"
   ],
   "devDependencies": {
+    "@preconstruct/cli": "2.2.0",
     "@prettier/plugin-php": "0.17.6",
-    "prettier": "2.6.2",
     "@swc/core": "1.2.120",
     "@types/node": "16.11.10",
-    "rimraf": "3.0.2",
-    "turbo": "^1.1.10",
     "del-cli": "4.0.1",
+    "prettier": "2.6.2",
+    "@babel/core": "^7.18.6",
+    "@babel/plugin-proposal-decorators": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@changesets/cli": "^2.22.0",
     "typescript": "4.5.2"
   },
   "dependencies": {
-    "@changesets/cli": "^2.22.0"
+    "rimraf": "3.0.2"
+  },
+  "preconstruct": {
+    "packages": [
+      "packages/*",
+      "!packages/admin",
+      "!packages/config",
+      "!packages/dev-api"
+    ]
   }
 }

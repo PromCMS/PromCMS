@@ -3,7 +3,6 @@ import {
   ColumnType,
   ExportConfig,
   FileColumnType,
-  ColumnSettingsBase,
   RelationshipColumnType,
 } from '@prom-cms/shared';
 import fs from 'fs-extra';
@@ -11,7 +10,7 @@ import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import ejs from 'ejs';
-import { formatCodeString } from '@utils';
+import { formatCodeString } from '../../../../utils';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

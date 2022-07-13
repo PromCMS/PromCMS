@@ -6,10 +6,11 @@
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "dist/prom-cms-icons.cjs.js",
+  "module": "dist/prom-cms-icons.esm.js",
+  "typings": "dist/prom-cms-icons.d.js",
   "source": "src/index.ts",
-  "types": "dist/index.d.ts",
-  "files":[
+  "files": [
     "dist"
   ],
   "scripts": {
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@types/find-config": "1.0.1",
+    "@prom-cms/config": "*",
     "typescript": "^4.7.4"
   }
 }
