@@ -1,8 +1,8 @@
 import { Command, Config } from '@boost/cli';
 import { findGeneratorConfig } from '@prom-cms/shared';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 import { Logger } from '../../utils';
 import child_process from 'child_process';
 import path, { dirname } from 'path';
