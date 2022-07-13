@@ -1,4 +1,4 @@
-import { Arg, Command, Config } from '@boost/cli';
+import { Arg, Command, Config, GlobalOptions, Options } from '@boost/cli';
 import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
@@ -8,14 +8,30 @@ import { generateCoreModule } from '../../parts/generate-core-module';
 import { formatGeneratorConfig } from '@prom-cms/shared';
 import { PROJECT_ROOT, CORE_ROOT } from '../../constants';
 
-@Config('generate:develop', 'Controls a develop cms generator', {})
+interface CustomOptions extends GlobalOptions {
+  regenerate: boolean;
+}
+
 export class GenerateDevelopProgram extends Command {
-  @Arg.Flag('To just only regenerate key files', {
-    short: 'o',
-  })
+  static path: string = 'generate:develop';
+  static description: string = 'Controls a develop cms generator';
+
+  // FLAGS
   regenerate: boolean = false;
+  static options: Options<CustomOptions> = {
+    regenerate: {
+      description: 'To just only regenerate key files',
+      type: 'boolean',
+      short: 'o',
+      default: false,
+    },
+  };
 
   async run() {
+    Logger.success(
+      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
+    );
+
     const GENERATOR_CONFIG = await findGeneratorConfig();
     const envFilepath = await getEnvFilepath();
     const { DB_CONNECTION } = process.env as unknown as {

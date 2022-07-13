@@ -1,8 +1,8 @@
 import { Command, Config } from '@boost/cli';
 import { findGeneratorConfig } from '@prom-cms/shared';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc.js';
+import timezone from 'dayjs/plugin/timezone.js';
 import { Logger } from '../../utils';
 import child_process from 'child_process';
 import path, { dirname } from 'path';
@@ -15,8 +15,10 @@ type CustomParams = [string];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-@Config('seed-database', 'Sync database with provided config', {})
 export class SeedDatabaseProgram extends Command {
+  static path: string = 'seed-database';
+  static description: string = 'Sync database with provided config';
+
   /*@Arg.Params<CustomParams>({
     label: 'root',
     description: 'Root of your final project',

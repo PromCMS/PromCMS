@@ -1,10 +1,22 @@
-import { Arg, Command, Config } from '@boost/cli';
+import {
+  Arg,
+  Command,
+  Config,
+  GlobalOptions,
+  Options,
+  Params,
+} from '@boost/cli';
 import recopy from 'recursive-copy';
 import path, { dirname } from 'path';
-import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared/src/generator-constants';
+import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import { execa } from 'execa';
-import { generateByTemplates, loggedJobWorker, LoggedWorkerJob } from '../../utils';
+import {
+  generateByTemplates,
+  loggedJobWorker,
+  LoggedWorkerJob,
+  Logger,
+} from '../../utils';
 import { generateCoreModule } from '../../parts/generate-core-module';
 import { formatGeneratorConfig, ExportConfig } from '@prom-cms/shared';
 import { fileURLToPath } from 'url';
@@ -46,64 +58,87 @@ type CustomParams = [string];
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
 
-@Config('generate:cms', 'Controls a cms generator', {})
-export class GenerateCMSProgram extends Command {
-  @Arg.String('To specify prom config path', {
-    short: 'c',
-    validate(value) {
-      if (!value) {
-        throw new Error('Prom config path not defined in -c value');
-      }
-      const requestedPath = path.join(process.cwd(), value);
-      if (!fs.pathExistsSync(requestedPath)) {
-        throw new Error(`PROM config path "${requestedPath}" does not exist`);
-      }
-
-      if (!(value.endsWith('.js') || value.endsWith('.cjs'))) {
-        throw new Error(
-          'Defined PROM config path must be valid Node.js module file'
-        );
-      }
-    },
-  })
+interface CustomOptions extends GlobalOptions {
   configPath: string;
+  override: boolean;
+  regenerate: boolean;
+}
 
-  @Arg.Flag('To override contents of target folder', {
-    short: 'o',
-  })
+export class GenerateCMSProgram extends Command {
+  static path: string = 'generate-cms';
+  static description: string = 'Controls a cms generator';
+
+  // FLAGS
+  configPath: string;
   override: boolean = false;
-
-  @Arg.Flag('To just only regenerate admin and Core', {
-    short: 'r',
-  })
   regenerate: boolean = false;
+  static options: Options<CustomOptions> = {
+    configPath: {
+      type: 'string',
+      description: 'To specify prom config path',
+      short: 'c',
+      validate(value) {
+        if (!value) {
+          throw new Error('Prom config path not defined in -c value');
+        }
+        const requestedPath = path.join(process.cwd(), value);
+        if (!fs.pathExistsSync(requestedPath)) {
+          throw new Error(`PROM config path "${requestedPath}" does not exist`);
+        }
 
-  @Arg.Params<CustomParams>({
-    label: 'root',
-    description: 'Root of your final project',
-    required: true,
-    type: 'string',
-
-    validate(value) {
-      if (
-        !/^((\.)|((\.|\.\.)\/((?!\/).*(\/)?){1,})|((?!\/).*(\/)))$/g.test(value)
-      ) {
-        throw new Error(
-          'Folder path must be valid path, eq: ".", "../somefolder", "./somefolder"'
-        );
-      }
-
-      const referenceFolder = path.join(PROJECT_ROOT, value);
-
-      if (
-        fs.existsSync(referenceFolder) &&
-        fs.lstatSync(referenceFolder).isFile()
-      ) {
-        throw new Error('Root folder cannot be file');
-      }
+        if (!(value.endsWith('.js') || value.endsWith('.cjs'))) {
+          throw new Error(
+            'Defined PROM config path must be valid Node.js module file'
+          );
+        }
+      },
     },
-  })
-  async run(root) {
+    override: {
+      type: 'boolean',
+      description: 'To override contents of target folder',
+      short: 'o',
+    },
+    regenerate: {
+      type: 'boolean',
+      description: 'To just only regenerate admin and Core',
+      short: 'r',
+    },
+  };
+
+  static params: Params<CustomParams> = [
+    {
+      label: 'Root',
+      description: 'Root of your final project',
+      required: true,
+      type: 'string',
+      validate(value) {
+        if (
+          !/^((\.)|((\.|\.\.)\/((?!\/).*(\/)?){1,})|((?!\/).*(\/)))$/g.test(
+            value
+          )
+        ) {
+          throw new Error(
+            'Folder path must be valid path, eq: ".", "../somefolder", "./somefolder"'
+          );
+        }
+
+        const referenceFolder = path.join(PROJECT_ROOT, value);
+
+        if (
+          fs.existsSync(referenceFolder) &&
+          fs.lstatSync(referenceFolder).isFile()
+        ) {
+          throw new Error('Root folder cannot be file');
+        }
+      },
+    },
+  ];
+
+  async run(root: string) {
+    Logger.success(
+      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
+    );
+
     // TODO: when in release take path from process.cwd() and attach path parameter from cli
     const currentRoot = PROJECT_ROOT;
     const generatorConfig: ExportConfig | undefined = (
