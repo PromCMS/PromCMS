@@ -4,13 +4,13 @@
   "version": "0.0.1",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "license": "ISC",
   "type": "module",
   "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
   "scripts": {
     "build": "tsc",

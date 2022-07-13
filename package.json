@@ -24,6 +24,13 @@
   "workspaces": [
     "./packages/*"
   ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "contributors": [
+    "Ondřej Langr <hi@ondrejlangr.cz>"
+  ],
   "devDependencies": {
     "@prettier/plugin-php": "0.17.6",
     "prettier": "2.6.2",
