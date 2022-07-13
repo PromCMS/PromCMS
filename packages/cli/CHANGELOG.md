@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.1.3
+
+### Patch Changes
+
+- 27725c3: Add missing type:module
+
 ## 0.1.2
 
 ### Patch Changes
