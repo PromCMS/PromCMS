@@ -1,7 +1,7 @@
 {
   "name": "prom-cms",
   "version": "0.0.0",
-  "private": true,
+  "private": false,
   "description": "",
   "scripts": {
     "build:library": "yarn preconstruct build",
