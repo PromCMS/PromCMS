@@ -12,24 +12,24 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 (async () => {
   Logger.success('Booting...');
   await loadRootEnv();
-  
+
   const programIsAsModule = __dirname.includes('/node_modules/');
-  
+
   const program = new Program({
-    bin: 'prom-cms-cli',
+    bin: '@prom-cms/cli',
     name: 'PROM CLI',
     version: '1.0.0',
   });
-  
+
   Logger.success(
     '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
   );
-  
+
   program.register(new GenerateDevelopProgram());
-  
+
   if (!programIsAsModule) {
     program.register(new GenerateCMSProgram());
   }
-  
+
   program.register(new SeedDatabaseProgram()).runAndExit(process.argv);
-})()
+})();

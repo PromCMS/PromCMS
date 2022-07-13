@@ -1,10 +1,14 @@
 import { Arg, Command, Config } from '@boost/cli';
 import recopy from 'recursive-copy';
 import path, { dirname } from 'path';
-import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared/src/generator-constants';
+import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import { execa } from 'execa';
-import { generateByTemplates, loggedJobWorker, LoggedWorkerJob } from '../../utils';
+import {
+  generateByTemplates,
+  loggedJobWorker,
+  LoggedWorkerJob,
+} from '../../utils';
 import { generateCoreModule } from '../../parts/generate-core-module';
 import { formatGeneratorConfig, ExportConfig } from '@prom-cms/shared';
 import { fileURLToPath } from 'url';
