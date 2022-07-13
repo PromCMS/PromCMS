@@ -1,0 +1,36 @@
+{
+  "name": "@prom-cms/api-client",
+  "description": "A api client for prom cms sites",
+  "version": "0.0.1",
+  "author": "Ondřej Langr <hi@ondrejlangr.cz>",
+  "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "type": "module",
+  "main": "dist/index.js",
+  "source": "src/index.ts",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ondrej-langr/prom.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ondrej-langr/prom/issues"
+  },
+  "dependencies": {
+    "@prom-cms/shared": "*"
+  },
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "axios": "^0.27.2"
+  }
+}
