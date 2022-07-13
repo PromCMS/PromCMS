@@ -2,6 +2,7 @@
   "name": "@prom-cms/dev-api",
   "version": "0.0.0",
   "type": "module",
+  "private": true,
   "scripts": {
     "start": "node --experimental-specifier-resolution=node --loader ./loader.mjs app/index.ts",
     "dev": "npm run start"
