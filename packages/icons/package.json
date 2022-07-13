@@ -1,17 +1,21 @@
 {
   "name": "@prom-cms/icons",
-  "version": "1.0.0",
+  "description": "A PromCMS icon package",
+  "version": "0.0.1",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
+  "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/index.js",
   "source": "src/index.ts",
-  "types": "src/index.ts",
+  "types": "dist/index.d.ts",
   "files":[
-    "dist/**"
+    "dist"
   ],
   "scripts": {
-    "build": "tsc --build --clean"
+    "build": "tsc",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
@@ -21,6 +25,10 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "tabler-icons-react": "1.45.0"
+    "tabler-icons-react": "^1.52.0"
+  },
+  "devDependencies": {
+    "@types/find-config": "1.0.1",
+    "typescript": "^4.7.4"
   }
 }
