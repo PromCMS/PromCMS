@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('../dist/prom-cms-cli.esm.js');
+import('../dist/prom-cms-cli.esm.js');
