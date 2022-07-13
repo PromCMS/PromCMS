@@ -14,6 +14,7 @@
     "generate:cms": "yarn workspace @prom-cms/cli run generate:cms",
     "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
     "regenerate:cms": "yarn workspace @prom-cms/cli run regenerate:cms",
+    "prettier": "prettier --write \"packages/*/{*.{ts,js,scss,css},!{_next, dist}/**/*}\"",
     "version-packages": "changeset version && yarn prettier"
   },
   "license": "MIT",
