@@ -8,6 +8,7 @@ import {
   generateByTemplates,
   loggedJobWorker,
   LoggedWorkerJob,
+  Logger,
 } from '../../utils';
 import { generateCoreModule } from '../../parts/generate-core-module';
 import { formatGeneratorConfig, ExportConfig } from '@prom-cms/shared';
@@ -50,7 +51,7 @@ type CustomParams = [string];
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
 
-@Config('generate:cms', 'Controls a cms generator', {})
+@Config('generate-cms', 'Controls a cms generator', {})
 export class GenerateCMSProgram extends Command {
   @Arg.String('To specify prom config path', {
     short: 'c',
@@ -108,6 +109,10 @@ export class GenerateCMSProgram extends Command {
     },
   })
   async run(root) {
+    Logger.success(
+      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
+    );
+
     // TODO: when in release take path from process.cwd() and attach path parameter from cli
     const currentRoot = PROJECT_ROOT;
     const generatorConfig: ExportConfig | undefined = (

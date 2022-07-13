@@ -16,6 +16,10 @@ export class GenerateDevelopProgram extends Command {
   regenerate: boolean = false;
 
   async run() {
+    Logger.success(
+      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
+    );
+
     const GENERATOR_CONFIG = await findGeneratorConfig();
     const envFilepath = await getEnvFilepath();
     const { DB_CONNECTION } = process.env as unknown as {
