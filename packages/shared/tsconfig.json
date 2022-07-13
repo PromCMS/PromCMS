@@ -1,5 +1,5 @@
 {
-  "extends": "../../tsconfig.options.json",
+  "extends": "@prom-cms/config/tsconfig.default.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
