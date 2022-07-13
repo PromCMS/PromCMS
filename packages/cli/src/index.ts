@@ -3,14 +3,22 @@ import { loadRootEnv } from '@prom-cms/shared';
 import { SeedDatabaseProgram } from './commands/seed-database';
 import { GenerateCMSProgram } from './commands/generate-cms';
 import { GenerateDevelopProgram } from './commands/generate-develop';
+import fs from 'fs-extra';
+import path, { dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 (async () => {
+  const { version } = await fs.readJson(
+    path.join(__dirname, '..', 'package.json')
+  );
   await loadRootEnv();
 
   const program = new Program({
     bin: 'prom-cms-cli',
     name: 'PROM CLI',
-    version: '1.0.0',
+    version,
   });
 
   await program

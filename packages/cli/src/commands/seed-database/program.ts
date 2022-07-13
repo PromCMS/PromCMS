@@ -15,8 +15,10 @@ type CustomParams = [string];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-@Config('seed-database', 'Sync database with provided config', {})
 export class SeedDatabaseProgram extends Command {
+  static path: string = 'seed-database';
+  static description: string = 'Sync database with provided config';
+
   /*@Arg.Params<CustomParams>({
     label: 'root',
     description: 'Root of your final project',
