@@ -33,7 +33,7 @@ jobs:
           node-version: 16
 
       - name: Install Dependencies
-        run: yarn
+        run: yarn --frozen-lockfile
 
       - name: Build
         run: yarn build:library
