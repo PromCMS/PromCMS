@@ -8,3 +8,6 @@ export type EntryTypeUrlActionType = 'create' | 'update'
 export type NextPage = DefaultNextPage & {
   getLayout?: (page?: ReactElement) => ReactElement<any, any> | null
 }
+
+export * from './QueryParams'
+export * from './WhereQueryParam'

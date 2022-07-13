@@ -1,10 +1,16 @@
+import { ModelUserPermissions } from './generateConfig';
 import { ItemID } from './api';
 
-export enum UserRoles {
-  Editor = 'editor',
-  Maintainer = 'maintainer',
-  Admin = 'admin',
-}
+export type UserRole = {
+  id: ItemID;
+  slug: string;
+  label: string;
+  description?: string;
+  permissions?: {
+    hasAccessToAdmin: boolean;
+    models: ModelUserPermissions;
+  };
+};
 
 export enum UserStates {
   active = 'active',
@@ -18,7 +24,7 @@ export interface User {
   name: string;
   password: string;
   email: string;
-  role: UserRoles;
+  role: number | UserRole;
   /** Avatar url */
   avatar: string;
   state: UserStates;
@@ -32,6 +38,7 @@ export interface File {
   created_at: string;
   updated_at: string;
   description?: string;
+  mimeType?: string;
   private?: '0' | '1';
 }
 

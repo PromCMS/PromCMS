@@ -9,94 +9,41 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class EntryType
 {
-  private $container;
-  private $loadedModels;
+  private $currentUser;
 
   public function __construct(Container $container)
   {
-    $this->container = $container;
-    $this->loadedModels = $container->get('sysinfo')['loadedModels'];
+    $this->currentUser = $container->get('session')->get('user', false);
   }
 
   private function handleDuplicate($response, $exception)
   {
-    $errorText = str_replace(
-      ['UNIQUE constraint failed: ', ' '],
-      '',
-      $exception->errorInfo[2],
-    );
-
-    prepareJsonResponse(
-      $response,
-      array_map(function ($item) {
-        return strpos($item, '.') !== false
-          ? explode('.', $item)[1]
-          : explode('_', $item)[1];
-      }, explode(',', $errorText)),
-      'Duplicate entries',
-      intval($exception->getCode())
-    );
-  }
-
-  /**
-   * Checks if model is loaded/exists and returns the real, usable model name
-   */
-  private function getModelFromArg(string $modelName)
-  {
-    $modelIndex = array_search(
-      strtolower($modelName),
-      // filter out those files we wanted to opt out
-      array_filter(
-        // format all model names to be all in lowercase
-        array_map(function ($modelName) {
-          return strtolower($modelName);
-        }, $this->loadedModels),
-        function ($modelName) {
-          return !in_array($modelName, ['files', 'users']);
-        },
-      ),
-    );
-    if ($modelIndex === false) {
-      return false;
-    }
-
-    $modelName = $this->loadedModels[$modelIndex];
-
-    return "\\$modelName";
+    handleDuplicateEntriesError($response, $exception);
   }
 
   public function getInfo(
     ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
+    ResponseInterface $response
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
+    $instance = $request->getAttribute('model-instance');
 
-    $classInstance = new $modelInstancePath();
-
-    prepareJsonResponse(
-      $response,
-      $classInstance->getSummary()
-    );
+    prepareJsonResponse($response, $instance->getSummary());
 
     return $response;
   }
 
   public function swapTwo(
     ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
+    ResponseInterface $response
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    $classInstance = new $modelInstancePath();
+    $instancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
+    $instance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
     $data = $parsedBody['data'];
 
     if (
-      !$classInstance->getSummary()->hasOrdering ||
+      !$instance->getSummary()->hasOrdering ||
       !isset($data['fromId']) ||
       !isset($data['toId'])
     ) {
@@ -104,14 +51,19 @@ class EntryType
     }
 
     try {
-      $fromEntry = $modelInstancePath
-        ::where('id', $data['fromId'])
-        ->get()
-        ->firstOrFail();
-      $toEntry = $modelInstancePath
-        ::where('id', $data['toId'])
-        ->get()
-        ->firstOrFail();
+      $ownableQueryFilter =
+        $request->getAttribute('permission-only-own', false) === true
+          ? onlyOwnersOrEditors($this->currentUser->id, $classInstance)
+          : [];
+
+      $fromEntryQuery = $instancePath::where('id', $data['fromId']);
+      $toEntryQuery = $instancePath::where('id', $data['toId']);
+
+      $fromEntryQuery->where($ownableQueryFilter);
+      $toEntryQuery->where($ownableQueryFilter);
+
+      $fromEntry = $fromEntryQuery->firstOrFail();
+      $toEntry = $toEntryQuery->firstOrFail();
 
       DB::beginTransaction();
 
@@ -119,17 +71,17 @@ class EntryType
       $toEntry->order = $fromEntry->order;
       $fromEntry->order = $savedOrderId;
 
+      if ($instance->getSummary()->ownable && $this->currentUser) {
+        $fromEntry->updated_by = $this->currentUser->id;
+        $toEntry->updated_by = $this->currentUser->id;
+      }
+
       $fromEntry->save();
       $toEntry->save();
 
       DB::commit();
 
-      prepareJsonResponse(
-        $response,
-        [],
-        '',
-        'success'
-      );
+      prepareJsonResponse($response, [], '', 'success');
     } catch (\Exception $e) {
       DB::rollback();
 
@@ -143,17 +95,12 @@ class EntryType
 
   public function getMany(
     ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
+    ResponseInterface $response
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
+    $modelInstancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
-    $classInstance = new $modelInstancePath();
 
     if ($classInstance->getSummary()->hasOrdering) {
       $query = $modelInstancePath
@@ -163,9 +110,16 @@ class EntryType
       $query = $modelInstancePath::orderBy('id', 'ASC');
     }
 
+    if ($request->getAttribute('permission-only-own', false) === true) {
+      $query->where(
+        onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+      );
+    }
+
     $dataPaginated = json_decode(
       $query->paginate(15, ['*'], 'page', $page)->toJson(),
     );
+
     // Unset some things as they are not useful or active
     unset($dataPaginated->links);
     unset($dataPaginated->first_page_url);
@@ -184,21 +138,28 @@ class EntryType
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
+    $modelInstancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
 
     try {
-      $item = $modelInstancePath::findOrFail($args['itemId']);
+      $query = $modelInstancePath::where('id', $args['itemId']);
+
+      if ($request->getAttribute('permission-only-own', false) === true) {
+        $query->where(
+          onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+        );
+      }
+
+      $item = $query->firstOrFail();
+
+      if ($classInstance->getSummary()->ownable && $this->currentUser) {
+        $parsedBody['data']['updated_by'] = $this->currentUser->id;
+      }
+
       $item->update($parsedBody['data']);
-      
-      prepareJsonResponse(
-        $response,
-        $item->toArray()
-      );
+
+      prepareJsonResponse($response, $item->toArray());
 
       return $response;
     } catch (\Exception $ex) {
@@ -221,39 +182,46 @@ class EntryType
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
+    $modelInstancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
 
     try {
-      prepareJsonResponse(
-        $response,
-        $modelInstancePath::findOrFail($args['itemId'])->toArray()
-      );
+      $query = $modelInstancePath::where('id', $args['itemId']);
+
+      if ($request->getAttribute('permission-only-own', false) === true) {
+        $query->where(
+          onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+        );
+      }
+
+      $item = $query->firstOrFail();
+
+      prepareJsonResponse($response, $item->toArray());
 
       return $response;
-    } catch (\Exception $e) {
-      return $response->withStatus(404);
+    } catch (\Exception $error) {
+      return $response
+        ->withStatus(404)
+        ->withHeader('Content-Description', $error->getMessage());
     }
   }
 
   public function create(
     ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
+    ResponseInterface $response
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
-    }
-
+    $modelInstancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
 
     try {
+      if ($classInstance->getSummary()->ownable && $this->currentUser) {
+        $parsedBody['data']['created_by'] = $this->currentUser->id;
+      }
+
       prepareJsonResponse(
         $response,
-        $modelInstancePath::create($parsedBody['data'])->toArray()
+        $modelInstancePath::create($parsedBody['data'])->toArray(),
       );
 
       return $response;
@@ -277,15 +245,26 @@ class EntryType
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $this->getModelFromArg($args['modelId']);
-    if ($modelInstancePath === false) {
-      return $response->withStatus(404);
+    $modelInstancePath = $request->getAttribute('model-instance-path');
+    $classInstance = $request->getAttribute('model-instance');
+
+    $query = $modelInstancePath::where('id', $args['itemId']);
+
+    if ($request->getAttribute('permission-only-own', false) === true) {
+      $query->where(
+        onlyOwnersOrEditors($this->currentUser->id, $classInstance),
+      );
     }
 
-    prepareJsonResponse( 
-      $response,
-      $modelInstancePath::where('id', $args['itemId'])->delete()->toArray()
-    );
+    if (!$query->delete()) {
+      prepareJsonResponse($response, [], 'Failed to delete');
+
+      return $response
+        ->withStatus(500)
+        ->withHeader('Content-Description', 'Failed to delete');
+    }
+
+    prepareJsonResponse($response, [], 'Item deleted');
 
     return $response;
   }

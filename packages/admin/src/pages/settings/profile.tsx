@@ -1,5 +1,5 @@
 import ImageSelect from '@components/form/ImageSelect'
-import { ProfileLayout } from '@components/pages/UserProfile'
+import { ProfileLayout } from '@layouts'
 import { useGlobalContext } from '@contexts/GlobalContext'
 import clsx from 'clsx'
 import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react'
@@ -52,7 +52,10 @@ const SettingsPage: NextPage = () => {
     try {
       await ProfileService.save(diffedUser)
 
-      updateValue('currentUser', { ...currentUser, ...diffedUser })
+      updateValue('currentUser', {
+        ...currentUser,
+        ...diffedUser,
+      } as typeof currentUser)
 
       notifications.updateNotification(id, {
         message: t('Update done!'),
@@ -75,6 +78,22 @@ const SettingsPage: NextPage = () => {
           className="mt-6 grid w-full max-w-6xl gap-4 pb-5"
           autoComplete="off"
         >
+          <Row>
+            <Controller
+              control={control}
+              name="avatar"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <ImageSelect
+                  label={t('Avatar')}
+                  className="w-full"
+                  selected={value}
+                  multiple={false}
+                  onChange={(value) => value && onChange(value)}
+                  onBlur={onBlur}
+                />
+              )}
+            />
+          </Row>
           <Row>
             <TextInput
               label={t('Full name')}
@@ -104,22 +123,6 @@ const SettingsPage: NextPage = () => {
           </Row>
           <Row className="items-end">
             <LanguageSelect />
-          </Row>
-          <Row>
-            <Controller
-              control={control}
-              name="avatar"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <ImageSelect
-                  label={t('Avatar')}
-                  className="w-full"
-                  selected={value}
-                  multiple={false}
-                  onChange={(value) => value && onChange(value[0])}
-                  onBlur={onBlur}
-                />
-              )}
-            />
           </Row>
           <Button
             className="mt-10 max-w-[150px]"

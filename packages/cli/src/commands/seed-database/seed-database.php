@@ -65,6 +65,10 @@ try {
       $creationPayload = [];
 
       foreach ((array) $modelSummary->columns as $columnKey => $column) {
+        if ($columnKey === 'id') {
+          continue;
+        }
+
         [
           'required' => $fieldIsRequired,
           'editable' => $fieldIsEditable,
@@ -109,13 +113,18 @@ try {
             // TODO: Needs implementation
             $inputValue = '';
             break;
+          case 'relationship':
+            // TODO: Needs implementation
+            $inputValue = 0;
+            break;
           case 'longText':
             $value = $faker->paragraphs(3);
 
             $inputValue = is_string($value) ? $value : implode(' ', $value);
             break;
           default:
-            echo "Unknown value \"$fieldType\" supplied as a column type in mock generator";
+            echo "Unknown value \"$fieldType\" supplied as a column type in mock generator" .
+              PHP_EOL;
             continue 2;
             break;
         }
@@ -127,7 +136,7 @@ try {
       if (strtolower($modelName) === 'users' && $i === 0) {
         try {
           $creationPayload['email'] = 'test@example.com';
-          $creationPayload['role'] = 'admin';
+          $creationPayload['role'] = 0;
           $creationPayload['state'] = 'active';
 
           $modelInstance::create($creationPayload);

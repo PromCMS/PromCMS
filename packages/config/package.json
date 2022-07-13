@@ -1,0 +1,6 @@
+{
+  "name": "@prom-cms/config",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.js"
+}

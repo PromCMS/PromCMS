@@ -1,0 +1,18 @@
+{
+  "extends": "@prom-cms/config/tsconfig.default.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "noEmit": false,
+    "target": "ESNEXT",
+    "module": "esnext",
+    "isolatedModules": false
+  },
+  "include": [
+    "src/**/*"
+  ], 
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

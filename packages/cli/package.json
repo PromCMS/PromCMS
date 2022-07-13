@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "> TODO: description",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
-  "homepage": "https://github.com/ondrej-langr/prom#readme",
-  "license": "ISC",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
+  "license": "MIT",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/prom-cms-cli.cjs.js",
+  "module": "dist/prom-cms-cli.esm.js",
+  "typings": "dist/prom-cms-cli.d.ts",
   "source": "src/index.ts",
-  "types": "src/index.ts",
-  "files":[
+  "files": [
     "dist/**"
   ],
   "bin": {
@@ -17,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ondrej-langr/prom.git"
+    "url": "git+https://github.com/PromCMS/PromCMS.git"
   },
   "scripts": {
     "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
@@ -29,7 +30,7 @@
     "build": "tsc --build"
   },
   "bugs": {
-    "url": "https://github.com/ondrej-langr/prom/issues"
+    "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
     "recursive-copy": "2.0.14",
@@ -52,6 +53,7 @@
     "microbundle": "0.14.2",
     "@types/better-sqlite3": "7.4.2",
     "@types/prettier": "2.4.2",
+    "@prom-cms/config": "*",
     "@types/ejs": "3.1.0",
     "ts-node": "10.4.0",
     "tsconfig-paths": "3.12.0",

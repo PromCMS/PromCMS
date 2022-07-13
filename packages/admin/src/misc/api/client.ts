@@ -7,7 +7,12 @@ export const apiClient = axios.create({
 })
 
 apiClient.interceptors.response.use(undefined, (error) => {
-  if (window) {
+  if (
+    window &&
+    axios.isAxiosError(error) &&
+    error.response?.status === 401 &&
+    error.response?.data?.code === 'not-logged-in'
+  ) {
     window.dispatchEvent(userHasBeenLoggedOff)
   }
 

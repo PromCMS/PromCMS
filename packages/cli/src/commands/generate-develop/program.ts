@@ -1,15 +1,12 @@
 import { Arg, Command, Config } from '@boost/cli';
-import { getEnvFilepath, getGeneratorConfig } from '@prom-cms/shared';
-import {
-  PROJECT_ROOT,
-  CORE_ROOT,
-} from '@prom-cms/shared/src/generator-constants';
+import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
-import { loggedJobWorker, LoggedWorkerJob, Logger } from '@utils';
-import syncDatabase from '@commands-parts/sync-database';
-import { generateCoreModule } from '@commands-parts/generate-core-module';
+import { loggedJobWorker, LoggedWorkerJob, Logger } from '../../utils';
+import syncDatabase from '../../parts/sync-database';
+import { generateCoreModule } from '../../parts/generate-core-module';
 import { formatGeneratorConfig } from '@prom-cms/shared';
+import { PROJECT_ROOT, CORE_ROOT } from '../../constants';
 
 @Config('generate:develop', 'Controls a develop cms generator', {})
 export class GenerateDevelopProgram extends Command {
@@ -19,7 +16,7 @@ export class GenerateDevelopProgram extends Command {
   regenerate: boolean = false;
 
   async run() {
-    const GENERATOR_CONFIG = await getGeneratorConfig();
+    const GENERATOR_CONFIG = await findGeneratorConfig();
     const envFilepath = await getEnvFilepath();
     const { DB_CONNECTION } = process.env as unknown as {
       DB_CONNECTION: string;

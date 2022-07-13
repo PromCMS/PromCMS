@@ -11,11 +11,13 @@ import { getInitials } from '@utils'
 import { useConstructedMenuItems } from './utils'
 import { useTranslation } from 'react-i18next'
 import BackendImage from '@components/BackendImage'
-import { capitalizeFirstLetter, UserRoles } from '@prom-cms/shared'
+import { capitalizeFirstLetter } from '@prom-cms/shared'
 import { Tooltip } from '@mantine/core'
+import { useCurrentUser } from '@hooks/useCurrentUser'
 
 const Header: VFC = () => {
-  const { isBooting, currentUser, currentUserIsAdmin } = useGlobalContext()
+  const { isBooting } = useGlobalContext()
+  const currentUser = useCurrentUser()
   const { asPath, push } = useRouter()
   // TODO remove this and other loading stuff
   const [hasError, setError] = useState(false)
@@ -32,7 +34,7 @@ const Header: VFC = () => {
           <Tooltip
             withArrow
             key={item.href}
-            label={t(capitalizeFirstLetter(item.label))}
+            label={t(capitalizeFirstLetter(item.label, true))}
             position="right"
             color="gray"
           >
@@ -64,6 +66,8 @@ const Header: VFC = () => {
                 <BackendImage
                   imageId={currentUser.avatar}
                   alt=""
+                  width={60}
+                  quality={40}
                   onError={() => setError(true)}
                 />
               ) : (
@@ -86,8 +90,10 @@ const Header: VFC = () => {
               >
                 {t('Profile')}
               </PopoverList.Item>
-              {(currentUser?.role === UserRoles.Maintainer ||
-                currentUserIsAdmin) && (
+              {currentUser?.can({
+                action: 'read',
+                targetModel: 'users',
+              }) && (
                 <PopoverList.Item
                   icon={t('Users')}
                   className="text-blue-500"
@@ -99,16 +105,21 @@ const Header: VFC = () => {
                   {t('Users')}
                 </PopoverList.Item>
               )}
-              <PopoverList.Item
-                icon={t('Settings')}
-                className="text-blue-500"
-                onClick={() => {
-                  close()
-                  push('/settings')
-                }}
-              >
-                {t('Settings')}
-              </PopoverList.Item>
+              {currentUser?.can({
+                action: 'read',
+                targetModel: 'settings',
+              }) && (
+                <PopoverList.Item
+                  icon={t('Settings')}
+                  className="text-blue-500"
+                  onClick={() => {
+                    close()
+                    push('/settings/system')
+                  }}
+                >
+                  {t('Settings')}
+                </PopoverList.Item>
+              )}
               <PopoverList.Item
                 icon={'Logout'}
                 className="text-red-500"

@@ -1,4 +1,4 @@
-import generateModule from '@commands-parts/generate-module';
+import generateModule from '../../parts/generate-module';
 import type { ExportConfig } from '@prom-cms/shared';
 import path from 'path';
 import generateApiRoutes from './parts/generate-api-routes';

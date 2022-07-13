@@ -14,6 +14,10 @@ $mailer->Port = $_ENV['MAIL_PORT'];
 
 // We only talk authorized
 $mailer->SMTPAuth = true;
+$mailer->SMTPSecure = 'ssl';
+
+// UTF-8 only
+$mailer->CharSet = 'UTF-8';
 
 // Set login info
 $mailer->Username = $_ENV['MAIL_USER'];

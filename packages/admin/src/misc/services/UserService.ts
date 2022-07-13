@@ -38,15 +38,15 @@ export class UserService {
   }
 
   static async block(userId: ItemID) {
-    return apiClient.get(this.apiGetBlockUrl(userId))
+    return apiClient.patch(this.apiGetBlockUrl(userId))
   }
 
   static async unblock(userId: ItemID) {
-    return apiClient.get(this.apiGetUnblockUrl(userId))
+    return apiClient.patch(this.apiGetUnblockUrl(userId))
   }
 
   static async requestPasswordReset(userId: ItemID) {
-    return apiClient.get(this.apiGetRequestPasswordResetUrl(userId))
+    return apiClient.patch(this.apiGetRequestPasswordResetUrl(userId))
   }
 
   static toggleBlock(userId: ItemID, isBlocked: boolean) {

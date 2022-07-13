@@ -4,7 +4,7 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 $templatesPath = $PROM_ROOT_FOLDER . '/templates';
-$cachePath = $PROM_ROOT_FOLDER . '/cache';
+$cachePath = $PROM_ROOT_FOLDER . '/cache/twig';
 
 if (!file_exists($templatesPath)) {
   if (!mkdir($templatesPath, 0777)) {

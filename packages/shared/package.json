@@ -1,29 +1,37 @@
 {
   "name": "@prom-cms/shared",
-  "version": "1.0.0",
+  "description": "Shared package for prom cms packages",
+  "version": "0.0.3",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
-  "homepage": "https://github.com/ondrej-langr/prom#readme",
+  "license": "MIT",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/shared/README.md",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "dist/prom-cms-shared.cjs.js",
+  "module": "dist/prom-cms-shared.esm.js",
+  "typings": "dist/prom-cms-shared.cjs.d.ts",
   "source": "src/index.ts",
-  "types": "src/index.ts",
-  "files":[
-    "dist/**"
+  "files": [
+    "dist"
   ],
   "scripts": {
-    "build": "tsc --build --clean"
+    "build": "tsc",
+    "version": "git add -A src",
+    "postversion": "git push && git push --tags"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ondrej-langr/prom.git"
+    "url": "git+https://github.com/PromCMS/PromCMS.git",
+    "directory": "packages/shared"
   },
   "bugs": {
-    "url": "https://github.com/ondrej-langr/prom/issues"
+    "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "devDependencies": {
-    "@types/find-config": "1.0.1"
+    "@types/find-config": "1.0.1",
+    "typescript": "^4.7.4",
+    "@prom-cms/config": "*"
   },
-  "dependencies": {
+  "peerDependencies": {
     "find-config": "1.0.0",
     "@prom-cms/icons": "*",
     "chalk": "5.0.0",

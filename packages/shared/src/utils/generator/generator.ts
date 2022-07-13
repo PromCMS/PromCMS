@@ -4,7 +4,7 @@ import findConfig from 'find-config';
 
 // TODO: Create generator config validator
 
-export const getGeneratorConfig = (
+export const findGeneratorConfig = (
   root?: string
 ): Promise<undefined | ExportConfig> =>
   findConfig.require(GENERATOR_FILENAME, {
@@ -29,7 +29,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     tableName: 'files',
     timestamp: true,
     ignoreSeeding: true,
-    permissions: false,
+    sharable: false,
     columns: {
       filename: {
         title: 'Filename',
@@ -82,7 +82,40 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'content',
         type: 'json',
         required: true,
-        default: '',
+        default: '{}',
+      },
+    },
+  };
+
+  models['userRoles'] = {
+    admin: {
+      layout: 'simple',
+    },
+    ownable: false,
+    icon: 'UserExclamation',
+    columns: {
+      label: {
+        title: 'Label',
+        type: 'string',
+        required: true,
+      },
+      slug: {
+        title: 'Slug',
+        type: 'slug',
+        of: 'label',
+        required: false,
+        editable: false,
+      },
+      description: {
+        type: 'longText',
+        title: 'Popisek',
+        required: false,
+      },
+      permissions: {
+        title: 'Permissions',
+        type: 'json',
+        required: false,
+        default: '{}',
       },
     },
   };
@@ -92,7 +125,8 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     admin: {
       layout: 'simple',
     },
-    permissions: false,
+    sharable: false,
+    ownable: false,
     icon: 'Users',
     columns: {
       // TODO: Do not make these values overridable
@@ -118,18 +152,20 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         type: 'string',
         required: false,
       },
-      role: {
-        title: 'Role',
-        type: 'enum',
-        enum: ['admin', 'maintainer', 'editor'],
-        unique: false,
-        required: true,
-      },
       state: {
         title: 'State',
         type: 'enum',
         editable: false,
         enum: ['active', 'invited', 'blocked', 'password-reset'],
+      },
+      role: {
+        type: 'relationship',
+        targetModel: 'userRoles',
+        title: 'Role',
+        adminHidden: true,
+        fill: false,
+        required: true,
+        labelConstructor: 'label',
       },
       ...((models['users'] || {}).columns || {}),
     },
@@ -159,7 +195,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         content: {
           title: 'Content',
           type: 'json',
-          default: '',
+          default: '{}',
         },
         slug: {
           title: 'Zkratka',
@@ -193,13 +229,36 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       };
     }
 
-    if (model.permissions === undefined || model.permissions) {
-      model.columns.permissions = {
-        title: 'permissions',
-        editable: false,
+    if (model.sharable || model.sharable === undefined) {
+      model.columns.coeditors = {
+        title: 'Coeditors',
         required: false,
         type: 'json',
-        default: '',
+        default: '{}',
+      };
+    }
+
+    if (model.ownable || model.ownable === undefined) {
+      model.columns.created_by = {
+        title: 'Created by',
+        editable: false,
+        required: false,
+        type: 'relationship',
+        targetModel: 'user',
+        labelConstructor: 'name',
+        fill: false,
+        adminHidden: true,
+      };
+
+      model.columns.updated_by = {
+        title: 'Updated by',
+        editable: false,
+        required: false,
+        type: 'relationship',
+        targetModel: 'user',
+        labelConstructor: 'name',
+        fill: false,
+        adminHidden: true,
       };
     }
 
@@ -230,6 +289,9 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
             hide: false,
             ...(column.type === 'number' ? { autoIncrement: false } : {}),
             ...(column.type === 'slug' ? { unique: true } : {}),
+            ...(column.type === 'relationship'
+              ? { multiple: false, foreignKey: 'id', fill: true }
+              : {}),
             ...column,
           },
         };
@@ -241,13 +303,45 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       softDelete: false,
       timestamp: false,
       sorting: false,
-      permissions: true,
+      sharable: true,
       draftable: false,
       ignoreSeeding: false,
+      ownable: true,
       tableName: modelKey.toLocaleLowerCase(),
       ...model,
     };
   });
+
+  const roles = config.project.security?.roles;
+  if (roles) {
+    if (!config.project.security) {
+      config.project.security = {};
+    }
+
+    // Set default values of roles
+    config.project.security.roles = roles.map(
+      ({ modelPermissions, ...rest }) => {
+        const updatedPerms = Object.entries(modelPermissions).map(
+          ([key, values]) => [
+            key,
+            {
+              c: false,
+              r: false,
+              u: false,
+              d: false,
+              ...values,
+            },
+          ]
+        );
+
+        return {
+          hasAccessToAdmin: true,
+          ...rest,
+          modelPermissions: Object.fromEntries(updatedPerms),
+        };
+      }
+    );
+  }
 
   return { ...config, database: { ...databaseConfig, models } };
 };

@@ -6,6 +6,7 @@ import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { FileService } from '@services'
 import { UnstyledButton } from '@mantine/core'
+import BackendImage from '@components/BackendImage'
 
 const classNames = getClassnames()
 
@@ -13,13 +14,11 @@ export interface FileItemProps extends File {
   onDeleteClick: (id: ItemID) => void
 }
 
-export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
+export const FileItem: VFC<FileItemProps> = ({ id, filename, mimeType }) => {
   const { selectedFiles, updateValue } = useSmallFileList()
   const extension = filename.split('.').at(-1) || 'unknown'
-  const isImage =
-    extension.includes('png') ||
-    extension.includes('jpg') ||
-    extension.includes('gif')
+  const type = mimeType?.split('/')?.[0] || 'unknown'
+  const isImage = type === 'image'
 
   const onPick = useCallback(() => {
     updateValue({
@@ -38,13 +37,15 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename }) => {
       className={clsx(classNames.itemRoot, 'group')}
       onClick={onPick}
       type="button"
+      title={filename}
     >
       <div className={classNames.itemSquare()}>
         {isImage ? (
-          <img
+          <BackendImage
             alt="uploaded file"
+            imageId={id}
             className="absolute top-0 left-0 h-full w-full object-cover"
-            src={`/api${FileService.getApiRawUrl(id)}`}
+            width={270}
           />
         ) : (
           <div className="flex h-full w-full">

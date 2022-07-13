@@ -1,27 +1,18 @@
 import { ApiResultItem, PagedResult } from '@prom-cms/shared'
-import { apiClient } from '@api'
 import { EntryService } from '@services'
-import useSWR from 'swr'
-
-const fetcher = (url, params = {}) =>
-  apiClient.get(url, { params }).then((res) => res.data)
+import { BareFetcher } from 'swr'
+import { PublicConfiguration } from 'swr/dist/types'
+import { useQuery } from '.'
+import { QueryParams } from '@custom-types'
 
 export function useModelItems<T = PagedResult<ApiResultItem>>(
   modelName: string | undefined,
-  config?: { page?: number } & Record<string, string | number>
+  queryParams?: QueryParams,
+  config?: Partial<PublicConfiguration<T, any, BareFetcher<T>>>
 ) {
-  const { data, error, ...rest } = useSWR<T>(
-    [EntryService.apiGetListUrl((modelName as string) || ''), config],
-    fetcher,
-    {
-      isPaused: () => !modelName,
-    }
+  return useQuery<T>(
+    EntryService.apiGetListUrl((modelName as string) || ''),
+    queryParams,
+    { isPaused: () => !modelName, ...config }
   )
-
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error,
-    ...rest,
-  }
 }

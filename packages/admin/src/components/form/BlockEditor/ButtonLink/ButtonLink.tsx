@@ -1,13 +1,15 @@
 import { API, BlockTool } from '@editorjs/editorjs'
 import { iconSet } from '@prom-cms/icons'
+import { ItemID } from '@prom-cms/shared'
 import ReactDom from 'react-dom'
 import { ButtonLinkView } from './ButtonLinkView'
 export interface ButtonLinkToolData {
   linkTo: string
   label?: string
   icon?: keyof typeof iconSet
-  type: 'custom' | 'lib'
   isDownload?: boolean
+  openOnNewTab?: boolean
+  placeholderImage?: ItemID
 }
 
 type Setting = {

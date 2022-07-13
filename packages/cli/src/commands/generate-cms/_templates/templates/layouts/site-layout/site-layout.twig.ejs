@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+    {# Info #}
+    <title>
+      {{ block('title') }} - <%= project.name %>
+    </title>
+
+    {# SEO #}
+    <meta name="description" content="<%= project.name %>" />
+
+    {# Bundle files #}
+    <link rel="stylesheet" href="bundle/root.css" />
+    <script defer src="bundle/index.js"></script>
+  </head>
+  <body>
+    {% include 'layouts/site-layout/header.twig' %}
+    <main>
+      {{ block('content') }}
+    </main>
+    {% include 'layouts/site-layout/footer.twig' %}
+  </body>
+</html>

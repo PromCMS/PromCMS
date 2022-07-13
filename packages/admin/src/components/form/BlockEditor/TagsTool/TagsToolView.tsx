@@ -70,9 +70,10 @@ export const TagsToolView: VFC<{
         <p className="text-xl font-semibold">{t('Tags')}</p>
         <Group className="my-5">
           {data.tags.length ? (
-            data.tags.map((tagContent, index) => (
+            data.tags.map((tagContent) => (
               <Badge
                 variant="outline"
+                size="xl"
                 rightSection={
                   !readOnly && (
                     <ActionIcon

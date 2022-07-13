@@ -4,7 +4,15 @@ import {
   SmallFileListProps,
 } from '@components/FilePickerModal/SmallFileList'
 import ThemeProvider from '@components/ThemeProvider'
-import { TextInput, Title } from '@mantine/core'
+import {
+  Button,
+  Popover,
+  Textarea,
+  TextInput,
+  Title,
+  UnstyledButton,
+} from '@mantine/core'
+import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useEffect, useMemo, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,6 +23,8 @@ export const ImageToolView: VFC<{
   onDataChange: (data: Partial<ImageToolData>) => void
   readOnly?: boolean
 }> = ({ data, onDataChange, readOnly }) => {
+  const [imagePopoverOpen, setImagePopoverOpen] = useState(false)
+  const [textPopoverOpen, setTextPopoverOpen] = useState(false)
   const [state, setState] = useState({ ...data })
   const { t } = useTranslation()
 
@@ -33,39 +43,95 @@ export const ImageToolView: VFC<{
   const onTextInput = (e) =>
     setState({ ...state, label: e.currentTarget.value })
 
+  const onDescriptionInput = (e) =>
+    setState({ ...state, description: e.currentTarget.value })
+
   return (
     <ThemeProvider>
       <div
-        className={clsx(
-          'relative min-h-[200px] w-full rounded-lg bg-white p-5',
-          !readOnly && 'border-2 border-project-border shadow-md'
-        )}
+        className={clsx('relative aspect-[3/1] w-full rounded-lg bg-white p-5')}
       >
-        {!readOnly ? (
+        <BackendImage
+          width={1500}
+          imageId={state.fileId}
+          className="absolute top-0 left-0 h-full w-full rounded-lg object-cover"
+        />
+        {!readOnly && (
           <>
-            <Title order={3}>{t('Choose an image')}</Title>
-            <TextInput
-              label={t('Label')}
-              value={state.label || ''}
-              placeholder={t('Some text')}
-              onChange={onTextInput}
-              className="mt-2"
-            />
-            <hr className="mb-8 mt-4 h-0.5 w-full border-none bg-gray-200" />
-            <SmallFileList
-              filter={[['mimeType', 'regexp', `^image/.*$`]]}
-              multiple={false}
-              pickedFiles={pickedFiles}
-              onChange={onChange}
-            />
+            <div className="absolute left-0 bottom-0 m-5 flex flex-col gap-5">
+              <Popover
+                withArrow
+                width={590}
+                position="top"
+                placement="start"
+                withinPortal={false}
+                opened={imagePopoverOpen}
+                onClose={() => setImagePopoverOpen(false)}
+                target={
+                  <Button
+                    className="relative flex-none"
+                    radius="xl"
+                    size="lg"
+                    variant="white"
+                    leftIcon={<iconSet.Pencil size={30} />}
+                    onClick={() => setImagePopoverOpen((s) => !s)}
+                  >
+                    {t('Change image')}
+                  </Button>
+                }
+              >
+                <SmallFileList
+                  where={{
+                    mimeType: { manipulator: 'LIKE', value: '%image%' },
+                  }}
+                  multiple={false}
+                  pickedFiles={pickedFiles}
+                  onChange={onChange}
+                  triggerClose={() => setImagePopoverOpen(false)}
+                />
+              </Popover>
+              <Popover
+                withArrow
+                width={590}
+                position="top"
+                placement="start"
+                withinPortal={false}
+                opened={textPopoverOpen}
+                onClose={() => setTextPopoverOpen(false)}
+                target={
+                  <Button
+                    className="relative flex-none"
+                    radius="xl"
+                    size="lg"
+                    leftIcon={<iconSet.Settings size={30} />}
+                    onClick={() => setTextPopoverOpen((s) => !s)}
+                  >
+                    {t('Change metadata')}
+                  </Button>
+                }
+              >
+                <TextInput
+                  label={t('Label')}
+                  value={state.label || ''}
+                  placeholder={t('Some text')}
+                  onChange={onTextInput}
+                />
+                <Textarea
+                  label={t('Description')}
+                  mt="sm"
+                  value={state.description || ''}
+                  placeholder={t('Some text')}
+                  onChange={onDescriptionInput}
+                />
+                <Button
+                  onClick={() => setTextPopoverOpen(false)}
+                  className="mt-5"
+                >
+                  Ok
+                </Button>
+              </Popover>
+            </div>
           </>
-        ) : state.fileId ? (
-          <BackendImage
-            imageId={state.fileId}
-            className="absolute top-0 left-0 h-full w-full rounded-lg object-cover"
-          />
-        ) : (
-          ''
         )}
       </div>
     </ThemeProvider>

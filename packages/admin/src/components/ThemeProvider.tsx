@@ -28,6 +28,10 @@ const ThemeProvider: FC = ({ children }) => (
         transition: 'slide-up',
         centered: 'true',
       },
+      Popover: {
+        shadow: 'lg',
+        radius: 'lg',
+      },
     }}
     styles={{
       Divider: (theme) => ({

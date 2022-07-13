@@ -9,7 +9,6 @@ import {
 import Link from 'next/link'
 import { FileService } from '@services'
 import { useClassNames as getClassnames } from '../../useClassNames'
-import IconButton from '@components/IconButton'
 import { iconSet } from '@prom-cms/icons'
 import { ActionIcon } from '@mantine/core'
 
@@ -33,13 +32,12 @@ export interface FileItemProps extends File {
 export const FileItem: VFC<FileItemProps> = ({
   id,
   filename,
+  mimeType,
   onDeleteClick,
 }) => {
   const extension = filename.split('.').at(-1) || 'unknown'
-  const isImage =
-    extension.includes('png') ||
-    extension.includes('jpg') ||
-    extension.includes('gif')
+  const type = mimeType?.split('/')?.[0] || 'unknown'
+  const isImage = type === 'image'
 
   const onDelete = useCallback(() => onDeleteClick(id), [id, onDeleteClick])
 
@@ -51,7 +49,7 @@ export const FileItem: VFC<FileItemProps> = ({
             <img
               alt="uploaded file"
               className="absolute top-0 left-0 h-full w-full object-cover"
-              src={`/api${FileService.getApiRawUrl(id)}`}
+              src={FileService.getApiRawUrl(id, { w: '250', q: '60' }, true)}
             />
           ) : (
             <div className="flex h-full w-full">

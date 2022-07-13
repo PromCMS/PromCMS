@@ -6,6 +6,7 @@ import { ImageToolView } from './ImageToolView'
 export interface ImageToolData {
   fileId?: ItemID
   label?: string
+  description?: string
 }
 
 type Setting = {

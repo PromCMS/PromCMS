@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require('../dist/index.js');
+require('../dist/prom-cms-cli.cjs');
