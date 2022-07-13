@@ -4,7 +4,7 @@
   "description": "> TODO: description",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/ondrej-langr/prom#readme",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "main": "src/index.ts",
   "source": "src/index.ts",

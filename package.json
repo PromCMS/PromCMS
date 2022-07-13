@@ -20,7 +20,7 @@
     "version-packages": "changeset version && yarn prettier",
     "release": "yarn build:library && changeset publish"
   },
-  "license": "ISC",
+  "license": "MIT",
   "workspaces": [
     "./packages/*"
   ],

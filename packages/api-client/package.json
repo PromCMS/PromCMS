@@ -1,10 +1,10 @@
 {
   "name": "@prom-cms/api-client",
   "description": "A api client for prom cms sites",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/ondrej-langr/prom#readme",
-  "license": "ISC",
+  "license": "MIT",
   "type": "module",
   "main": "dist/index.js",
   "source": "src/index.ts",
