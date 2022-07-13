@@ -13,7 +13,7 @@
     "dist/**"
   ],
   "bin": {
-    "prom-cli": "./bin/cli.js"
+    "prom-cli": "./bin/cli.cjs"
   },
   "repository": {
     "type": "git",
