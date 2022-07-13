@@ -34,6 +34,7 @@ jobs:
         with:
           publish: yarn release
           version: yarn version-packages
+          createGithubReleases: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
