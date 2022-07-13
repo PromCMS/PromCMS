@@ -6,7 +6,7 @@
   "scripts": {
     "build:library": "yarn preconstruct build",
     "postinstall": "yarn preconstruct dev",
-    "release": "yarn build && changeset publish",
+    "release": "yarn build:library && changeset publish",
     "clean": "del **/dist/** && del **/.next/**",
     "dev": "turbo run dev --parallel",
     "dev:api": "turbo run dev --scope=\"@prom-cms/dev-api\" --parallel",
