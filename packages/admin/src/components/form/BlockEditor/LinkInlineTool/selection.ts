@@ -12,38 +12,38 @@
  * @typedef {SelectionUtils} SelectionUtils
  */
 export default class SelectionUtils {
-  public instance: Selection
+  public instance: Selection;
 
-  public selection: Selection
+  public selection: Selection;
 
   /**
    * This property can store SelectionUtils's range for restoring later
    * @type {Range|null}
    */
-  public savedSelectionRange: Range | null
+  public savedSelectionRange: Range | null;
 
   /**
    * Fake background is active
    *
    * @return {boolean}
    */
-  public isFakeBackgroundEnabled = false
+  public isFakeBackgroundEnabled = false;
 
   /**
    * Native Document's commands for fake background
    */
-  private readonly commandBackground: string = 'backColor'
+  private readonly commandBackground: string = 'backColor';
 
-  private readonly commandRemoveFormat: string = 'removeFormat'
+  private readonly commandRemoveFormat: string = 'removeFormat';
 
   /**
    * Return first range
    * @return {Range|null}
    */
   static get range(): Range | null {
-    const selection = window.getSelection()
+    const selection = window.getSelection();
 
-    return selection && selection.rangeCount ? selection.getRangeAt(0) : null
+    return selection && selection.rangeCount ? selection.getRangeAt(0) : null;
   }
 
   /**
@@ -51,7 +51,7 @@ export default class SelectionUtils {
    * @returns {string}
    */
   static get text(): string {
-    return window.getSelection()?.toString() ?? ''
+    return window.getSelection()?.toString() ?? '';
   }
 
   /**
@@ -60,7 +60,7 @@ export default class SelectionUtils {
    * @return {Selection}
    */
   public static get(): Selection | null {
-    return window.getSelection()
+    return window.getSelection();
   }
 
   /**
@@ -68,26 +68,26 @@ export default class SelectionUtils {
    */
   public removeFakeBackground() {
     if (!this.isFakeBackgroundEnabled) {
-      return
+      return;
     }
 
-    this.isFakeBackgroundEnabled = false
-    document.execCommand(this.commandRemoveFormat)
+    this.isFakeBackgroundEnabled = false;
+    document.execCommand(this.commandRemoveFormat);
   }
 
   /**
    * Sets fake background
    */
   public setFakeBackground() {
-    document.execCommand(this.commandBackground, false, '#a8d6ff')
-    this.isFakeBackgroundEnabled = true
+    document.execCommand(this.commandBackground, false, '#a8d6ff');
+    this.isFakeBackgroundEnabled = true;
   }
 
   /**
    * Save SelectionUtils's range
    */
   public save(): void {
-    this.savedSelectionRange = SelectionUtils.range
+    this.savedSelectionRange = SelectionUtils.range;
   }
 
   /**
@@ -95,34 +95,34 @@ export default class SelectionUtils {
    */
   public restore(): void {
     if (!this.savedSelectionRange) {
-      return
+      return;
     }
 
-    const sel = window.getSelection() as Selection
+    const sel = window.getSelection() as Selection;
 
-    sel.removeAllRanges()
-    sel.addRange(this.savedSelectionRange)
+    sel.removeAllRanges();
+    sel.addRange(this.savedSelectionRange);
   }
 
   /**
    * Clears saved selection
    */
   public clearSaved(): void {
-    this.savedSelectionRange = null
+    this.savedSelectionRange = null;
   }
 
   /**
    * Collapse current selection
    */
   public collapseToEnd(): void {
-    const sel = window.getSelection()
-    const range = document.createRange()
+    const sel = window.getSelection();
+    const range = document.createRange();
 
     if (sel) {
-      range.selectNodeContents(sel.focusNode as Node)
-      range.collapse(false)
-      sel.removeAllRanges()
-      sel.addRange(range)
+      range.selectNodeContents(sel.focusNode as Node);
+      range.collapse(false);
+      sel.removeAllRanges();
+      sel.addRange(range);
     }
   }
 }

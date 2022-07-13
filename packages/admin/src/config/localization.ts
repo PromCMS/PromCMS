@@ -2,8 +2,8 @@ import {
   localizationCookieStorageKey,
   localizationLocalStorageKey,
   localizationSessionStorageKey,
-} from '@constants'
-import { InitOptions } from 'i18next'
+} from '@constants';
+import { InitOptions } from 'i18next';
 
 export const localizationConfig: InitOptions = {
   backend: {
@@ -29,4 +29,4 @@ export const localizationConfig: InitOptions = {
   react: {
     useSuspense: false,
   },
-}
+};

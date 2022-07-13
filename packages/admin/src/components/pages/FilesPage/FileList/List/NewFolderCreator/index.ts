@@ -1,1 +1,1 @@
-export * from './NewFolderCreator'
+export * from './NewFolderCreator';

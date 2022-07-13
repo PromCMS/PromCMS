@@ -1,1 +1,1 @@
-export * from './userHasBeenLoggedOff'
+export * from './userHasBeenLoggedOff';

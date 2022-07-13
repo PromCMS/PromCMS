@@ -1,1 +1,1 @@
-export * from './prepareFieldsForMapper'
+export * from './prepareFieldsForMapper';

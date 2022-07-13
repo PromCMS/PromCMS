@@ -1,34 +1,34 @@
-import SelectionUtils from './selection'
+import SelectionUtils from './selection';
 
 interface IContainers {
-  inputContainer: HTMLDivElement
-  titleContainer: HTMLDivElement
-  targetContainer: HTMLDivElement
+  inputContainer: HTMLDivElement;
+  titleContainer: HTMLDivElement;
+  targetContainer: HTMLDivElement;
 }
 
 interface IInputs {
-  input: HTMLInputElement
-  title: HTMLInputElement
-  target: HTMLInputElement
+  input: HTMLInputElement;
+  title: HTMLInputElement;
+  target: HTMLInputElement;
 }
 
 interface INodes extends IContainers, IInputs {
-  button: HTMLButtonElement
-  buttonSubmit: HTMLButtonElement
-  actionContainer: HTMLDivElement
+  button: HTMLButtonElement;
+  buttonSubmit: HTMLButtonElement;
+  actionContainer: HTMLDivElement;
 }
 
-type AllowedNodes = keyof IInputs
+type AllowedNodes = keyof IInputs;
 
 const ELEMENTS: {
-  type: 'input'
-  name: AllowedNodes
-  label: string
-  description?: string
+  type: 'input';
+  name: AllowedNodes;
+  label: string;
+  description?: string;
   props: {
-    placeholder?: string
-    type?: string
-  }
+    placeholder?: string;
+    type?: string;
+  };
 }[] = [
   {
     type: 'input',
@@ -55,7 +55,7 @@ const ELEMENTS: {
       type: 'checkbox',
     },
   },
-]
+];
 
 /**
  * Link Tool (Inline Toolbar Tool), wraps selected text with <a> tag
@@ -71,18 +71,18 @@ export class LinkInlineTool implements EditorJS.InlineTool {
    *
    * @return {boolean}
    */
-  public static isInline = true
+  public static isInline = true;
 
   /**
    * Title for hover-tooltip
    */
-  public static title = 'Link'
+  public static title = 'Link';
 
   /**
    * Set a shortcut
    */
   public get shortcut(): string {
-    return 'CMD+K'
+    return 'CMD+K';
   }
 
   /**
@@ -98,31 +98,31 @@ export class LinkInlineTool implements EditorJS.InlineTool {
         target: '_blank',
         title: true,
       },
-    }
+    };
   }
 
   /**
    * Native Document's commands for insertHTML and unlink
    * @see https://stackoverflow.com/a/23891233/1238150
    */
-  private readonly commandLink: string = 'insertHTML'
+  private readonly commandLink: string = 'insertHTML';
 
-  private readonly commandUnlink: string = 'unlink'
+  private readonly commandUnlink: string = 'unlink';
 
   /**
    * Enter key code
    */
-  private readonly ENTER_KEY = 13 as const
+  private readonly ENTER_KEY = 13 as const;
 
   /**
    * Styles
    */
   private CSS: {
-    button: string
-    buttonActive: string
-    input: string
-    inputShowed: string
-  }
+    button: string;
+    buttonActive: string;
+    input: string;
+    inputShowed: string;
+  };
 
   /**
    * Elements
@@ -137,44 +137,44 @@ export class LinkInlineTool implements EditorJS.InlineTool {
     titleContainer: null,
     target: null,
     targetContainer: null,
-  } as any
+  } as any;
 
   /**
    * SelectionUtils instance
    */
-  private selection: SelectionUtils
+  private selection: SelectionUtils;
 
-  private apiSelection: EditorJS.API['selection']
+  private apiSelection: EditorJS.API['selection'];
 
   /**
    * Input opening state
    */
-  private inputOpened = false
+  private inputOpened = false;
 
   /**
    * Available Toolbar methods (open/close)
    */
-  private toolbar: any
+  private toolbar: any;
 
   /**
    * Available inline toolbar methods (open/close)
    */
-  private inlineToolbar: any
+  private inlineToolbar: any;
 
   /**
    * Notifier API methods
    */
-  private notifier: any
+  private notifier: any;
 
   /**
    * @param {{api: API}} - Editor.js API
    */
   constructor({ api }: { api: EditorJS.API }) {
-    this.toolbar = api.toolbar
-    this.inlineToolbar = api.inlineToolbar
-    this.notifier = api.notifier
-    this.apiSelection = api.selection
-    this.selection = new SelectionUtils()
+    this.toolbar = api.toolbar;
+    this.inlineToolbar = api.inlineToolbar;
+    this.notifier = api.notifier;
+    this.apiSelection = api.selection;
+    this.selection = new SelectionUtils();
 
     /**
      * CSS classes
@@ -184,18 +184,18 @@ export class LinkInlineTool implements EditorJS.InlineTool {
       buttonActive: api.styles.inlineToolButtonActive,
       input: 'ce-inline-tool-input',
       inputShowed: 'ce-inline-tool-input--showed',
-    }
+    };
   }
 
   /**
    * Create button for Inline Toolbar
    */
   public render(): HTMLElement {
-    this.nodes.button = document.createElement('button') as HTMLButtonElement
-    this.nodes.button.type = 'button'
-    this.nodes.button.classList.add(this.CSS.button)
-    this.nodes.button.innerHTML = `<svg class="icon icon--link" width="14px" height="10px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#link"></use></svg>`
-    return this.nodes.button
+    this.nodes.button = document.createElement('button') as HTMLButtonElement;
+    this.nodes.button.type = 'button';
+    this.nodes.button.classList.add(this.CSS.button);
+    this.nodes.button.innerHTML = `<svg class="icon icon--link" width="14px" height="10px"><use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#link"></use></svg>`;
+    return this.nodes.button;
   }
 
   /**
@@ -219,33 +219,33 @@ export class LinkInlineTool implements EditorJS.InlineTool {
    */
   public renderActions(): HTMLElement {
     // Container holds all elements of the Inline Tool Actions
-    this.nodes.actionContainer = document.createElement('div')
-    this.nodes.actionContainer.classList.add('ce-inline-link-tool')
-    this.nodes.actionContainer.classList.add(this.CSS.input)
+    this.nodes.actionContainer = document.createElement('div');
+    this.nodes.actionContainer.classList.add('ce-inline-link-tool');
+    this.nodes.actionContainer.classList.add(this.CSS.input);
 
     // the submit button applies the inline-tool styling to the selected text
-    this.nodes.buttonSubmit = document.createElement('button')
-    this.nodes.buttonSubmit.innerText = 'OK'
-    this.nodes.buttonSubmit.onclick = this.dataEntered.bind(this)
+    this.nodes.buttonSubmit = document.createElement('button');
+    this.nodes.buttonSubmit.innerText = 'OK';
+    this.nodes.buttonSubmit.onclick = this.dataEntered.bind(this);
 
     // renders each input container (eg. url, href, target)
     ELEMENTS.forEach((element) => {
       // wrap each element with a container and a label for better UI/UX
-      const containerName = `${element.name}Container` as keyof IContainers
-      this.nodes[containerName] = document.createElement('div')
-      this.nodes[containerName].classList.add('ce-inline-tool-container')
-      const label = document.createElement('label')
-      label.innerHTML = `<span>${element.label}</span>`
+      const containerName = `${element.name}Container` as keyof IContainers;
+      this.nodes[containerName] = document.createElement('div');
+      this.nodes[containerName].classList.add('ce-inline-tool-container');
+      const label = document.createElement('label');
+      label.innerHTML = `<span>${element.label}</span>`;
 
       // the element itself, with special treatment of checkbox elements
-      this.nodes[element.name] = document.createElement(element.type)
+      this.nodes[element.name] = document.createElement(element.type);
       Object.keys(element.props).forEach((key) => {
-        this.nodes[element.name][key] = element.props[key]
+        this.nodes[element.name][key] = element.props[key];
 
         if (element.props.type === 'checkbox') {
-          this.nodes[element.name].checked = true
+          this.nodes[element.name].checked = true;
         }
-      })
+      });
 
       this.nodes[element.name].addEventListener(
         'keydown',
@@ -253,26 +253,26 @@ export class LinkInlineTool implements EditorJS.InlineTool {
           // prevent the default action of the ENTER_KEY or the inline-tool will
           // close
           if (event.keyCode === this.ENTER_KEY) {
-            event.preventDefault()
+            event.preventDefault();
           }
         }
-      )
+      );
 
       // DOM: Container -> Label -> Input (+ Description)
-      label.appendChild(this.nodes[element.name])
+      label.appendChild(this.nodes[element.name]);
 
       if (element.description) {
-        const description = document.createElement('span')
-        description.innerText = element.description
-        label.appendChild(description)
+        const description = document.createElement('span');
+        description.innerText = element.description;
+        label.appendChild(description);
       }
 
-      this.nodes[containerName].appendChild(label)
-      this.nodes.actionContainer.appendChild(this.nodes[containerName])
-    })
+      this.nodes[containerName].appendChild(label);
+      this.nodes.actionContainer.appendChild(this.nodes[containerName]);
+    });
 
-    this.nodes.actionContainer.appendChild(this.nodes.buttonSubmit)
-    return this.nodes.actionContainer
+    this.nodes.actionContainer.appendChild(this.nodes.buttonSubmit);
+    return this.nodes.actionContainer;
   }
 
   /**
@@ -289,28 +289,28 @@ export class LinkInlineTool implements EditorJS.InlineTool {
        */
       if (!this.inputOpened) {
         /** Create blue background instead of selection */
-        this.selection.setFakeBackground()
-        this.selection.save()
+        this.selection.setFakeBackground();
+        this.selection.save();
       } else {
-        this.selection.restore()
-        this.selection.removeFakeBackground()
+        this.selection.restore();
+        this.selection.removeFakeBackground();
       }
-      const parentAnchor = this.apiSelection.findParentTag('A')
+      const parentAnchor = this.apiSelection.findParentTag('A');
 
       /**
        * Unlink icon pressed
        */
       if (parentAnchor) {
-        this.apiSelection.expandToTag(parentAnchor)
-        this.unlink()
-        this.closeActions()
-        this.checkState()
-        this.toolbar.close()
-        return
+        this.apiSelection.expandToTag(parentAnchor);
+        this.unlink();
+        this.closeActions();
+        this.checkState();
+        this.toolbar.close();
+        return;
       }
     }
 
-    this.toggleActions()
+    this.toggleActions();
   }
 
   /**
@@ -318,44 +318,44 @@ export class LinkInlineTool implements EditorJS.InlineTool {
    * @param {Selection} selection
    */
   public checkState(): boolean {
-    const anchorTag = this.apiSelection.findParentTag('A')
+    const anchorTag = this.apiSelection.findParentTag('A');
 
     if (anchorTag) {
-      this.nodes.button.classList.add(this.CSS.buttonActive)
-      this.openActions()
+      this.nodes.button.classList.add(this.CSS.buttonActive);
+      this.openActions();
 
       /**
        * Fill input values
        */
-      const hrefAttr = anchorTag.getAttribute('href')
-      const titleAttr = anchorTag.getAttribute('title')
-      const targetAttr = anchorTag.getAttribute('target')
-      this.nodes.input.value = hrefAttr || ''
-      this.nodes.title.value = titleAttr || ''
-      this.nodes.target.checked = targetAttr === '_blank'
+      const hrefAttr = anchorTag.getAttribute('href');
+      const titleAttr = anchorTag.getAttribute('title');
+      const targetAttr = anchorTag.getAttribute('target');
+      this.nodes.input.value = hrefAttr || '';
+      this.nodes.title.value = titleAttr || '';
+      this.nodes.target.checked = targetAttr === '_blank';
 
       // save the current selection, because the editor will loose its selection
       // during editing links. The selection will be restored later again.
-      this.selection.save()
+      this.selection.save();
     } else {
-      this.nodes.button.classList.remove(this.CSS.buttonActive)
+      this.nodes.button.classList.remove(this.CSS.buttonActive);
     }
 
-    return !!anchorTag
+    return !!anchorTag;
   }
 
   /**
    * Function called with Inline Toolbar closing
    */
   public clear(): void {
-    this.closeActions()
+    this.closeActions();
   }
 
   private toggleActions(): void {
     if (!this.inputOpened) {
-      this.openActions(true)
+      this.openActions(true);
     } else {
-      this.closeActions(false)
+      this.closeActions(false);
     }
   }
 
@@ -363,11 +363,11 @@ export class LinkInlineTool implements EditorJS.InlineTool {
    * @param {boolean} needFocus - on link creation we need to focus input. On editing - nope.
    */
   private openActions(needFocus = false): void {
-    this.nodes.actionContainer.classList.add(this.CSS.inputShowed)
+    this.nodes.actionContainer.classList.add(this.CSS.inputShowed);
     if (needFocus) {
-      this.nodes.input.focus()
+      this.nodes.input.focus();
     }
-    this.inputOpened = true
+    this.inputOpened = true;
   }
 
   /**
@@ -378,63 +378,63 @@ export class LinkInlineTool implements EditorJS.InlineTool {
   private closeActions(clearSavedSelection = true): void {
     if (this.selection.isFakeBackgroundEnabled) {
       // if actions is broken by other selection We need to save new selection
-      const currentSelection = new SelectionUtils()
-      currentSelection.save()
+      const currentSelection = new SelectionUtils();
+      currentSelection.save();
 
-      this.selection.restore()
-      this.selection.removeFakeBackground()
+      this.selection.restore();
+      this.selection.removeFakeBackground();
 
       // and recover new selection after removing fake background
-      currentSelection.restore()
+      currentSelection.restore();
     }
 
     // reset stylings and values
-    this.nodes.actionContainer.classList.remove(this.CSS.inputShowed)
-    this.nodes.input.value = ''
-    this.nodes.title.value = ''
-    this.nodes.target.checked = true
+    this.nodes.actionContainer.classList.remove(this.CSS.inputShowed);
+    this.nodes.input.value = '';
+    this.nodes.title.value = '';
+    this.nodes.target.checked = true;
     if (clearSavedSelection) {
-      this.selection.clearSaved()
+      this.selection.clearSaved();
     }
-    this.inputOpened = false
+    this.inputOpened = false;
   }
 
   /**
    * Submit button pressed
    */
   private dataEntered(event: MouseEvent): void {
-    let value = this.nodes.input.value || ''
+    let value = this.nodes.input.value || '';
 
     if (!value.trim()) {
-      this.selection.restore()
-      this.unlink()
-      event.preventDefault()
-      this.closeActions()
+      this.selection.restore();
+      this.unlink();
+      event.preventDefault();
+      this.closeActions();
     }
 
     if (!this.validateURL(value)) {
       this.notifier.show({
         message: 'Pasted link is not valid.',
         style: 'error',
-      })
-      return
+      });
+      return;
     }
 
-    value = this.prepareLink(value)
+    value = this.prepareLink(value);
 
-    this.selection.restore()
-    this.selection.removeFakeBackground()
+    this.selection.restore();
+    this.selection.removeFakeBackground();
 
-    this.insertLink(value)
+    this.insertLink(value);
 
     /**
      * Preventing events that will be able to happen
      */
-    event.preventDefault()
-    event.stopPropagation()
-    event.stopImmediatePropagation()
-    this.selection.collapseToEnd()
-    this.inlineToolbar.close()
+    event.preventDefault();
+    event.stopPropagation();
+    event.stopImmediatePropagation();
+    this.selection.collapseToEnd();
+    this.inlineToolbar.close();
   }
 
   /**
@@ -446,7 +446,7 @@ export class LinkInlineTool implements EditorJS.InlineTool {
     /**
      * Don't allow spaces
      */
-    return !/\s/.test(str)
+    return !/\s/.test(str);
   }
 
   /**
@@ -456,10 +456,10 @@ export class LinkInlineTool implements EditorJS.InlineTool {
    * @param {string} link - raw user input
    */
   private prepareLink(link: string): string {
-    let newLink = link
-    newLink = newLink.trim()
-    newLink = this.addProtocol(newLink)
-    return newLink
+    let newLink = link;
+    newLink = newLink.trim();
+    newLink = this.addProtocol(newLink);
+    return newLink;
   }
 
   /**
@@ -467,13 +467,13 @@ export class LinkInlineTool implements EditorJS.InlineTool {
    * @param {String} link
    */
   private addProtocol(link: string): string {
-    let newLink = link
+    let newLink = link;
 
     /**
      * If protocol already exists, do nothing
      */
     if (/^(\w+):(\/\/)?/.test(newLink)) {
-      return newLink
+      return newLink;
     }
 
     /**
@@ -482,15 +482,15 @@ export class LinkInlineTool implements EditorJS.InlineTool {
      *     2) Anchors looks like "#results"
      *     3) Protocol-relative URLs like "//google.com"
      */
-    const isInternal = /^\/[^/\s]/.test(newLink)
-    const isAnchor = newLink.substring(0, 1) === '#'
-    const isProtocolRelative = /^\/\/[^/\s]/.test(newLink)
+    const isInternal = /^\/[^/\s]/.test(newLink);
+    const isAnchor = newLink.substring(0, 1) === '#';
+    const isProtocolRelative = /^\/\/[^/\s]/.test(newLink);
 
     if (!isInternal && !isAnchor && !isProtocolRelative) {
-      newLink = `http://${newLink}`
+      newLink = `http://${newLink}`;
     }
 
-    return newLink
+    return newLink;
   }
 
   /**
@@ -501,27 +501,27 @@ export class LinkInlineTool implements EditorJS.InlineTool {
     /**
      * Edit all link, not selected part
      */
-    const anchorTag = this.apiSelection.findParentTag('A')
+    const anchorTag = this.apiSelection.findParentTag('A');
 
     if (anchorTag) {
-      this.apiSelection.expandToTag(anchorTag)
+      this.apiSelection.expandToTag(anchorTag);
     }
 
-    const target = this.nodes.target.checked ? 'target="_blank"' : ''
+    const target = this.nodes.target.checked ? 'target="_blank"' : '';
     const title =
-      this.nodes.title.value !== '' ? `title="${this.nodes.title.value}"` : ''
+      this.nodes.title.value !== '' ? `title="${this.nodes.title.value}"` : '';
 
     document.execCommand(
       this.commandLink,
       false,
       `<a href="${link}" ${target} ${title}>${SelectionUtils.text}</a>`
-    )
+    );
   }
 
   /**
    * Removes <a> tag
    */
   private unlink(): void {
-    document.execCommand(this.commandUnlink)
+    document.execCommand(this.commandUnlink);
   }
 }

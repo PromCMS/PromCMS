@@ -1,11 +1,11 @@
-import { UserRole } from '@prom-cms/shared'
+import { UserRole } from '@prom-cms/shared';
 
-type ActionType = 'create' | 'read' | 'update' | 'delete'
+type ActionType = 'create' | 'read' | 'update' | 'delete';
 
 export interface CanUserOptions<T = ActionType | ActionType[]> {
-  userRole: UserRole
-  action: T
-  targetModel: string
+  userRole: UserRole;
+  action: T;
+  targetModel: string;
 }
 
 export function canUser<T extends ActionType | ActionType[]>({
@@ -13,9 +13,9 @@ export function canUser<T extends ActionType | ActionType[]>({
   action,
   targetModel,
 }: CanUserOptions<T>) {
-  const isAdmin = userRole.id === 0
+  const isAdmin = userRole.id === 0;
   const accessPermissionValue = (key: string): boolean =>
-    isAdmin || (userRole.permissions?.models?.[targetModel]?.[key] ?? false)
+    isAdmin || (userRole.permissions?.models?.[targetModel]?.[key] ?? false);
 
   if (Array.isArray(action)) {
     return Object.fromEntries(
@@ -23,8 +23,8 @@ export function canUser<T extends ActionType | ActionType[]>({
         actionKey,
         accessPermissionValue(actionKey.at(0) as string),
       ])
-    ) as Record<ActionType, boolean>
+    ) as Record<ActionType, boolean>;
   } else {
-    return accessPermissionValue(action.at(0) as string)
+    return accessPermissionValue(action.at(0) as string);
   }
 }

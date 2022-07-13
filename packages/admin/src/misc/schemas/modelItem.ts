@@ -1,6 +1,6 @@
-import type { ApiResultModel } from '@prom-cms/shared'
-import { convertColumnTypeToPrimitive } from '@prom-cms/shared'
-import * as yup from 'yup'
+import type { ApiResultModel } from '@prom-cms/shared';
+import { convertColumnTypeToPrimitive } from '@prom-cms/shared';
+import * as yup from 'yup';
 
 export const getModelItemSchema = (
   /**
@@ -12,16 +12,16 @@ export const getModelItemSchema = (
    */
   ignoreRequired?: boolean
 ) => {
-  const { columns } = config
+  const { columns } = config;
 
   const yupShape = Object.keys(columns)
     .filter((columnKey) => !columns[columnKey].hide)
     .reduce((shape, columnKey) => {
-      const column = columns[columnKey]
-      let columnShape
+      const column = columns[columnKey];
+      let columnShape;
 
       if (column.editable === false) {
-        return shape
+        return shape;
       }
 
       if (column.type === 'file') {
@@ -33,7 +33,7 @@ export const getModelItemSchema = (
             : typeof originalValue === 'object'
             ? Number(originalValue.id)
             : Number(originalValue)
-        )
+        );
       } else if (columnKey === 'coeditors' && column.type === 'json') {
         columnShape = yup
           .object()
@@ -47,24 +47,24 @@ export const getModelItemSchema = (
                     )
                   )
               : null
-          )
+          );
       } else {
         columnShape =
           column.type === 'enum'
             ? yup.mixed().oneOf(column.enum)
-            : yup[convertColumnTypeToPrimitive(column.type)]()
+            : yup[convertColumnTypeToPrimitive(column.type)]();
       }
 
       if (column.required && !ignoreRequired) {
-        columnShape = columnShape.required('This is a required field.')
+        columnShape = columnShape.required('This is a required field.');
       } else {
-        columnShape = columnShape.nullable().notRequired()
+        columnShape = columnShape.nullable().notRequired();
       }
 
-      shape[columnKey] = columnShape
+      shape[columnKey] = columnShape;
 
-      return shape
-    }, {} as Record<string, any>)
+      return shape;
+    }, {} as Record<string, any>);
 
-  return yup.object(yupShape).noUnknown()
-}
+  return yup.object(yupShape).noUnknown();
+};

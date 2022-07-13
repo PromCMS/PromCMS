@@ -1,1 +1,1 @@
-export * from './GalleryToolView'
+export * from './GalleryToolView';

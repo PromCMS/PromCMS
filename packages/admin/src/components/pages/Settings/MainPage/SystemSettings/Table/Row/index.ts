@@ -1,1 +1,1 @@
-export * from './CopyName'
+export * from './CopyName';

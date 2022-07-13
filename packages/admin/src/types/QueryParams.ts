@@ -1,8 +1,8 @@
-import { WhereQueryParam } from './WhereQueryParam'
+import { WhereQueryParam } from './WhereQueryParam';
 
 export type QueryParams =
   | {
-      page?: number
-      where?: WhereQueryParam
+      page?: number;
+      where?: WhereQueryParam;
     }
-  | Record<string, string | number>
+  | Record<string, string | number>;

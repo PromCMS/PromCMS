@@ -1,4 +1,4 @@
-import clsx from 'clsx'
+import clsx from 'clsx';
 
 export const useClassNames = () => ({
   tableHead: clsx(
@@ -14,4 +14,4 @@ export const useClassNames = () => ({
     'inline-block w-full min-w-full overflow-hidden overflow-x-auto bg-white px-7 relative'
   ),
   tableRow: clsx('bg-white rounded-lg group'),
-})
+});

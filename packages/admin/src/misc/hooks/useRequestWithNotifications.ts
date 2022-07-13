@@ -1,18 +1,18 @@
-import { useId } from '@mantine/hooks'
-import { useNotifications } from '@mantine/notifications'
-import { useTranslation } from 'react-i18next'
+import { useId } from '@mantine/hooks';
+import { useNotifications } from '@mantine/notifications';
+import { useTranslation } from 'react-i18next';
 
 export interface NotificationConfig {
-  message: string
-  title: string
-  successMessage?: string
-  errorMessage?: string | ((e: unknown) => string)
+  message: string;
+  title: string;
+  successMessage?: string;
+  errorMessage?: string | ((e: unknown) => string);
 }
-const autocloseInterval = 4000
+const autocloseInterval = 4000;
 export const useRequestWithNotifications = () => {
-  const notifications = useNotifications()
-  const notifId = useId()
-  const { t } = useTranslation()
+  const notifications = useNotifications();
+  const notifId = useId();
+  const { t } = useTranslation();
 
   return async <T extends () => Promise<any>>(
     config: NotificationConfig,
@@ -25,17 +25,17 @@ export const useRequestWithNotifications = () => {
       message: config.message,
       autoClose: false,
       disallowClose: true,
-    })
+    });
 
     try {
-      const fcRes = await fc()
+      const fcRes = await fc();
 
       notifications.updateNotification(notificationId, {
         message: config.successMessage || t('Task completed successfully'),
         autoClose: autocloseInterval,
-      })
+      });
 
-      return fcRes
+      return fcRes;
     } catch (e) {
       notifications.updateNotification(notificationId, {
         color: 'red',
@@ -45,8 +45,8 @@ export const useRequestWithNotifications = () => {
             : config.errorMessage
           : t('An error happened'),
         autoClose: autocloseInterval,
-      })
-      throw e
+      });
+      throw e;
     }
-  }
-}
+  };
+};
