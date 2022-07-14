@@ -3,10 +3,10 @@ import { loadRootEnv } from '@prom-cms/shared';
 import { SeedDatabaseProgram } from './commands/seed-database';
 import { GenerateCMSProgram } from './commands/generate-cms';
 import { GenerateDevelopProgram } from './commands/generate-develop';
+import { SyncDatabaseProgram } from './commands/sync-database';
 import fs from 'fs-extra';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { SyncDatabaseProgram } from 'commands/sync-database';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
