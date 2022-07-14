@@ -2,7 +2,7 @@
 
 use App\Services\Password as PasswordService;
 
-$PHP_APP_ROOT = __DIR__ . '/../../../../core';
+$PHP_APP_ROOT = $argv[1];
 
 include_once $PHP_APP_ROOT . '/modules/Core/Services/Password.service.php';
 include_once $PHP_APP_ROOT . '/vendor/autoload.php';
@@ -52,8 +52,7 @@ try {
   }
 
   foreach ($availableModels as $modelName) {
-    echo "🔧 Founded model by the name of: '$modelName', trying to create table..." .
-      PHP_EOL;
+    echo "🔧 Founded model by the name of: '$modelName', trying to create table...";
 
     $modelInstance = new $modelName();
     $modelSummary = $modelInstance->getSummary();
@@ -123,8 +122,7 @@ try {
             $inputValue = is_string($value) ? $value : implode(' ', $value);
             break;
           default:
-            echo "Unknown value \"$fieldType\" supplied as a column type in mock generator" .
-              PHP_EOL;
+            echo "❗Unknown value \"$fieldType\" supplied as a column type in mock generator";
             continue 2;
             break;
         }
@@ -149,10 +147,9 @@ try {
     }
   }
 
-  echo '✅ Done! Goodbye.' . PHP_EOL;
   exit(0);
 } catch (Exception $e) {
   $message = $e->getMessage();
-  echo "⛔️ An error happened: $message" . PHP_EOL;
+  echo "⛔️ An error happened: $message";
   exit(1);
 }
