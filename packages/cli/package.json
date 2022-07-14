@@ -22,11 +22,12 @@
   },
   "scripts": {
     "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
-    "generate:dev": "npm run starter-commands -- generate:develop && npm run seed-database",
+    "generate:dev": "npm run starter-commands -- generate:develop && npm run sync-database ../core && npm run seed-database ../core",
     "generate:cms": "npm run starter-commands -- generate-cms",
     "regenerate:dev": "npm run starter-commands -- generate:develop --regenerate",
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
     "seed-database": "npm run starter-commands -- seed-database",
+    "sync-database": "npm run starter-commands -- sync-database",
     "build": "tsc --build"
   },
   "bugs": {

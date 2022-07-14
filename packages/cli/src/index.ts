@@ -6,6 +6,7 @@ import { GenerateDevelopProgram } from './commands/generate-develop';
 import fs from 'fs-extra';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { SyncDatabaseProgram } from 'commands/sync-database';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -24,6 +25,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
   await program
     .register(new GenerateDevelopProgram())
     .register(new GenerateCMSProgram())
+    .register(new SyncDatabaseProgram())
     .register(new SeedDatabaseProgram())
     .runAndExit(process.argv);
 })();
