@@ -1,11 +1,4 @@
-import {
-  Arg,
-  Command,
-  Config,
-  GlobalOptions,
-  Options,
-  Params,
-} from '@boost/cli';
+import { Command, GlobalOptions, Options, Params } from '@boost/cli';
 import recopy from 'recursive-copy';
 import path, { dirname } from 'path';
 import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared';
@@ -16,6 +9,9 @@ import {
   loggedJobWorker,
   LoggedWorkerJob,
   Logger,
+  pathInputToRelative,
+  validateConfigPathInput,
+  getAppRootInputValidator,
 } from '../../utils';
 import { generateCoreModule } from '../../parts/generate-core-module';
 import { formatGeneratorConfig, ExportConfig } from '@prom-cms/shared';
@@ -77,21 +73,8 @@ export class GenerateCMSProgram extends Command {
       type: 'string',
       description: 'To specify prom config path',
       short: 'c',
-      validate(value) {
-        if (!value) {
-          throw new Error('Prom config path not defined in -c value');
-        }
-        const requestedPath = path.join(process.cwd(), value);
-        if (!fs.pathExistsSync(requestedPath)) {
-          throw new Error(`PROM config path "${requestedPath}" does not exist`);
-        }
-
-        if (!(value.endsWith('.js') || value.endsWith('.cjs'))) {
-          throw new Error(
-            'Defined PROM config path must be valid Node.js module file'
-          );
-        }
-      },
+      validate: validateConfigPathInput,
+      format: pathInputToRelative,
     },
     override: {
       type: 'boolean',
@@ -111,26 +94,8 @@ export class GenerateCMSProgram extends Command {
       description: 'Root of your final project',
       required: true,
       type: 'string',
-      validate(value) {
-        if (
-          !/^((\.)|((\.|\.\.)\/((?!\/).*(\/)?){1,})|((?!\/).*(\/)))$/g.test(
-            value
-          )
-        ) {
-          throw new Error(
-            'Folder path must be valid path, eq: ".", "../somefolder", "./somefolder"'
-          );
-        }
-
-        const referenceFolder = path.join(PROJECT_ROOT, value);
-
-        if (
-          fs.existsSync(referenceFolder) &&
-          fs.lstatSync(referenceFolder).isFile()
-        ) {
-          throw new Error('Root folder cannot be file');
-        }
-      },
+      validate: getAppRootInputValidator(),
+      format: pathInputToRelative,
     },
   ];
 
@@ -139,19 +104,10 @@ export class GenerateCMSProgram extends Command {
       '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
     );
 
-    // TODO: when in release take path from process.cwd() and attach path parameter from cli
-    const currentRoot = PROJECT_ROOT;
-    const generatorConfig: ExportConfig | undefined = (
-      await import('file:/' + path.join(process.cwd(), this.configPath))
-    ).default;
-
-    // means final path to a project, is relative to cwd
-    const FINAL_PATH = path.join(currentRoot, ...root.split('/'));
-
-    if (!generatorConfig)
-      throw new Error(
-        '⛔️ No generator config provided, please provide a config.'
-      );
+    const FINAL_PATH = root;
+    const generatorConfig: ExportConfig = this.configPath.endsWith('.json')
+      ? await fs.readJson(this.configPath)
+      : (await import('file:/' + this.configPath)).default;
 
     const { database: databaseConfig, project } = await formatGeneratorConfig(
       generatorConfig
@@ -290,11 +246,6 @@ export class GenerateCMSProgram extends Command {
           });
         },
       },
-      // TODO
-      // {
-      //  title: 'Sync database',
-      //  job: syncDatabase,
-      //},
     ];
 
     await loggedJobWorker(jobs);
