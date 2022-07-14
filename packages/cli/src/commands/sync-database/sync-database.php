@@ -6,14 +6,14 @@ use Illuminate\Database\Capsule\Manager as Capsule;
  * This files goes through all of models, creates db schemas from info about it and applies to db
  */
 try {
-  $PHP_APP_ROOT = __DIR__ . '/../../../../core/';
+  $PHP_APP_ROOT = $argv[1];
 
   include_once $PHP_APP_ROOT . '/app/libs/env.bootstrap.php';
   include_once $PHP_APP_ROOT . '/app/utils.php';
   include_once $PHP_APP_ROOT . '/app/libs/db.bootstrap.php';
 
-  echo '👋 Hello! Welcome to schema syncing to your database! ' . PHP_EOL;
-  echo '🔧 Trying to find some schemas in modules...' . PHP_EOL;
+  echo '👋 Hello! Welcome to schema syncing to your database! ';
+  echo '🔧 Trying to find some schemas in modules...';
 
   $moduleNames = BootstrapUtils::getValidModuleNames();
   $utils = new Utils();
@@ -28,8 +28,7 @@ try {
       $modelNames = $utils->autoloadModels($moduleRoot);
 
       foreach ($modelNames as $modelName) {
-        echo "🔧 Model has been found by the name of: '$modelName', trying to create table..." .
-          PHP_EOL;
+        echo "🔧 Model has been found by the name of: '$modelName', trying to create table...";
 
         $modelInstance = new $modelName();
 
@@ -101,10 +100,9 @@ try {
     }
   }
 
-  echo '✅ Done! Goodbye.' . PHP_EOL;
   exit(0);
 } catch (Exception $e) {
   $message = $e->getMessage();
-  echo "⛔️ An error happened: $message" . PHP_EOL;
+  echo "⛔️ An error happened: $message";
   exit(1);
 }

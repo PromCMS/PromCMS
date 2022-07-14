@@ -1,9 +1,8 @@
-import { Arg, Command, Config, GlobalOptions, Options } from '@boost/cli';
+import { Command, GlobalOptions, Options, Params } from '@boost/cli';
 import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 import { loggedJobWorker, LoggedWorkerJob, Logger } from '../../utils';
-import syncDatabase from '../../parts/sync-database';
 import { generateCoreModule } from '../../parts/generate-core-module';
 import { formatGeneratorConfig } from '@prom-cms/shared';
 import { PROJECT_ROOT, CORE_ROOT } from '../../constants';
@@ -87,11 +86,6 @@ export class GenerateDevelopProgram extends Command {
           }
           await fs.createSymlink(envFilepath, CORE_ENV_PATH, 'file');
         },
-      },
-      {
-        title: 'Sync database',
-        skip: this.regenerate,
-        job: syncDatabase,
       },
     ];
 

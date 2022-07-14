@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.3.0
+
+### Minor Changes
+
+- 8606ad2: Add new command sync-database to make tables by eloquent and allow passing project root to each command that cli provides. Add support for json PromCMS config file.
+
 ## 0.2.0
 
 ### Minor Changes
