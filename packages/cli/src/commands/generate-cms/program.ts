@@ -113,7 +113,7 @@ export class GenerateCMSProgram extends Command {
       generatorConfig
     );
     const projectNameSimplified = simplifyProjectName(project.name);
-    const ADMIN_ROOT = path.join(PROJECT_ROOT, 'packages', 'admin');
+    const ADMIN_ROOT = path.join(PROJECT_ROOT, 'apps', 'admin');
 
     if (
       !this.override &&

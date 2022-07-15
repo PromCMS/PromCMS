@@ -1,4 +1,4 @@
-import { Command, GlobalOptions, Options, Params } from '@boost/cli';
+import { Command, GlobalOptions, Options } from '@boost/cli';
 import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
@@ -42,7 +42,7 @@ export class GenerateDevelopProgram extends Command {
     if (DB_CONNECTION !== 'sqlite')
       throw '⛔️ At the moment we dont provide a way to seed database other than SQLITE.';
 
-    const DEV_API_ROOT = path.join(PROJECT_ROOT, 'packages', 'dev-api');
+    const DEV_API_ROOT = path.join(PROJECT_ROOT, 'apps', 'dev-api');
     const CORE_MODULES_ROOT = path.join(CORE_ROOT, 'modules');
     const DEV_API_MODULES_ROOT = path.join(DEV_API_ROOT, '.temp', 'modules');
     const { database: databaseConfig } = await formatGeneratorConfig(
