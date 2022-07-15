@@ -1,6 +1,6 @@
-import { iconSet } from '@prom-cms/icons'
+import * as iconSet from 'tabler-icons-react'
 import clsx from 'clsx'
-import { ButtonHTMLAttributes, DetailedHTMLProps, FC, forwardRef } from 'react'
+import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react'
 import styles from './button.module.scss'
 
 export interface ButtonProps

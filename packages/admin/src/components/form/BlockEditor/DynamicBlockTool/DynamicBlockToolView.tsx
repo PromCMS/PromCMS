@@ -1,12 +1,11 @@
 import ThemeProvider from '@components/ThemeProvider'
-import { Group, TextInput } from '@mantine/core'
-import { useInputState } from '@mantine/hooks'
-import { iconSet } from '@prom-cms/icons'
+import { TextInput } from '@mantine/core'
 import clsx from 'clsx'
 import { useEffect } from 'react'
 import { KeyboardEventHandler } from 'react'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Brackets } from "tabler-icons-react"
 import { DynamicBlockToolData } from './DynamicBlockTool'
 
 export interface DynamicBlockToolViewProps {
@@ -57,7 +56,7 @@ export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
       >
         <p className="text-xl font-semibold">{t('Dynamic block')}</p>
         <TextInput
-          icon={<iconSet.Brackets size={20} />}
+          icon={<Brackets size={20} />}
           disabled={readOnly}
           placeholder={t('Dynamic block identifier')}
           className="mt-5 w-full"

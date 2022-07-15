@@ -8,8 +8,8 @@ import Link from 'next/link'
 
 import { finalizeRegistrationFormSchema } from './schema'
 import { useTranslation } from 'react-i18next'
-import { iconSet } from '@prom-cms/icons'
 import { Button, Paper, PasswordInput } from '@mantine/core'
+import { Check, X } from "tabler-icons-react"
 
 type FormValues = {
   new_password: string
@@ -100,9 +100,9 @@ export const Form: VFC<{ token?: string }> = ({ token }) => {
                 <>
                   <div className="text-center">
                     {tokenFailed ? (
-                      <iconSet.X className="mx-auto aspect-square w-16 text-red-400" />
+                      <X className="mx-auto aspect-square w-16 text-red-400" />
                     ) : (
-                      <iconSet.Check className="mx-auto aspect-square w-16 text-green-400" />
+                      <Check className="mx-auto aspect-square w-16 text-green-400" />
                     )}
                     <p className="mt-3 text-xl">
                       {t(

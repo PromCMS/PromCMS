@@ -1,11 +1,10 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage'
 import Skeleton, { SkeltonProps } from '@components/Skeleton'
 import { ItemID, PagedResult } from '@prom-cms/shared'
-import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useCallback, useMemo, VFC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import { createIterativeArray, generateUuid } from '@utils'
+import { createIterativeArray } from '@utils'
 import { ActionIcon, Group, Paper } from '@mantine/core'
 import { ReactNode } from 'react'
 import {
@@ -17,6 +16,7 @@ import {
 import { useClassNames } from './useClassNames'
 import { FC } from 'react'
 import { useState } from 'react'
+import { Copy, GripVertical, Pencil, Trash } from "tabler-icons-react"
 
 export type TableViewItem = { id: string | number; [x: string]: any }
 
@@ -72,7 +72,7 @@ const DynamicDraggable: FC<{ index: number; id: ItemID; toggled: boolean }> = ({
         >
           <td style={{ width: 40 }}>
             <div {...provided.dragHandleProps}>
-              <iconSet.GripVertical size={18} />
+              <GripVertical size={18} />
             </div>
           </td>
           {children}
@@ -224,7 +224,7 @@ const TableView: VFC<TableViewProps> = ({
                                   title={t('Duplicate')}
                                   color={'blue'}
                                 >
-                                  <iconSet.Copy className="w-5" />{' '}
+                                  <Copy className="w-5" />{' '}
                                 </ActionIcon>
                               )}
                               {onEditAction && (
@@ -233,7 +233,7 @@ const TableView: VFC<TableViewProps> = ({
                                   title={t('Edit')}
                                   color={'blue'}
                                 >
-                                  <iconSet.Pencil className="w-5" />{' '}
+                                  <Pencil className="w-5" />{' '}
                                 </ActionIcon>
                               )}
                               {onDeleteAction && (
@@ -242,7 +242,7 @@ const TableView: VFC<TableViewProps> = ({
                                   title={t('Delete')}
                                   color={'red'}
                                 >
-                                  <iconSet.Trash className="w-5" />{' '}
+                                  <Trash className="w-5" />{' '}
                                 </ActionIcon>
                               )}
                             </Group>

@@ -5,7 +5,6 @@ const isDev = process.env.NODE_ENV == 'development';
 
 const withNextTranspileModules = require('next-transpile-modules')(
   ['@prom-cms/shared'],
-  ['@prom-cms/icons'],
   {
     resolveSymlinks: true,
     debug: false,

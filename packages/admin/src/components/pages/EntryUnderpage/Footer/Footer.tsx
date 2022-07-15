@@ -2,7 +2,6 @@ import { MESSAGES } from '@constants'
 import useCurrentModel from '@hooks/useCurrentModel'
 import { useCurrentUser } from '@hooks/useCurrentUser'
 import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import { EntryService } from '@services'
 import { getObjectDiff } from '@utils'
 import clsx from 'clsx'
@@ -10,6 +9,7 @@ import { useMemo } from 'react'
 import { FC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { ChevronLeft, Trash } from "tabler-icons-react"
 import { useEntryUnderpageContext } from '../context'
 
 export const Footer: FC<{}> = () => {
@@ -123,7 +123,7 @@ export const Footer: FC<{}> = () => {
             }}
             className={clsx(formState.isSubmitting && '!cursor-progress')}
           >
-            <iconSet.Trash className="aspect-square w-10" />
+            <Trash className="aspect-square w-10" />
           </ActionIcon>
         </Tooltip>
       ) : (
@@ -174,7 +174,7 @@ export const Footer: FC<{}> = () => {
             }}
             onClick={() => setAsideOpen((prev) => !prev)}
           >
-            <iconSet.ChevronLeft
+            <ChevronLeft
               className={clsx(
                 'aspect-square w-20 duration-150',
                 asideOpen && 'rotate-180'

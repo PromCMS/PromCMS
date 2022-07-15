@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { useSWRConfig } from 'swr'
 import { useFileListContext } from '../../context'
 import { useClassNames } from '../../useClassNames'
-import { iconSet } from '@prom-cms/icons'
+import { FolderPlus } from "tabler-icons-react"
 
 export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
   const { updateValue, currentPath } = useFileListContext()
@@ -53,7 +53,7 @@ export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
       style={styles}
     >
       <div className={clsx(classNames.itemSquare(false), 'flex')}>
-        <iconSet.FolderPlus className="m-auto h-28 w-28 text-blue-500" />
+        <FolderPlus className="m-auto h-28 w-28 text-blue-500" />
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="relative">
         <input

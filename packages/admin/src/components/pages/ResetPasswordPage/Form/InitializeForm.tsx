@@ -1,36 +1,39 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useNotifications } from '@mantine/notifications'
-import axios from 'axios'
-import { ProfileService } from '@services'
-import { VFC } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import Link from 'next/link'
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useNotifications } from '@mantine/notifications';
+import axios from 'axios';
+import { ProfileService } from '@services';
+import { VFC } from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import Link from 'next/link';
 
-import { initializeResetPasswordFormSchema } from './schema'
-import { Trans, useTranslation } from 'react-i18next'
-import { iconSet } from '@prom-cms/icons'
-import { Button, Paper, TextInput } from '@mantine/core'
+import { initializeResetPasswordFormSchema } from './schema';
+import { Trans, useTranslation } from 'react-i18next';
+import { Button, Paper, TextInput } from '@mantine/core';
+import { Check } from 'tabler-icons-react';
 
 type FormValues = {
-  email: string
-}
+  email: string,
+};
 
 export const InitializeForm: VFC = () => {
-  const { t } = useTranslation()
-  const notifications = useNotifications()
-  const formMethods = useForm<FormValues>({
-    resolver: yupResolver(initializeResetPasswordFormSchema),
-    defaultValues: {
-      email: '',
-    },
-  })
-  const { register, formState, handleSubmit, watch } = formMethods
+  const { t } = useTranslation();
+  const notifications = useNotifications();
+  const formMethods =
+    useForm <
+    FormValues >
+    {
+      resolver: yupResolver(initializeResetPasswordFormSchema),
+      defaultValues: {
+        email: '',
+      },
+    };
+  const { register, formState, handleSubmit, watch } = formMethods;
 
-  const providedEmail = watch('email')
+  const providedEmail = watch('email');
 
   const onSubmitCallback: SubmitHandler<FormValues> = async ({ email }) => {
     try {
-      await ProfileService.requestPasswordReset({ email })
+      await ProfileService.requestPasswordReset({ email });
     } catch (e) {
       if (axios.isAxiosError(e)) {
         notifications.showNotification({
@@ -38,11 +41,11 @@ export const InitializeForm: VFC = () => {
           color: 'red',
           title: 'An error happened',
           message: 'An error happened during request. Please try again...',
-        })
-        throw e
+        });
+        throw e;
       }
     }
-  }
+  };
 
   return (
     <FormProvider {...formMethods}>
@@ -75,7 +78,7 @@ export const InitializeForm: VFC = () => {
               ) : (
                 <>
                   <div className="text-center">
-                    <iconSet.Check className="mx-auto aspect-square w-16 text-green-400" />
+                    <Check className="mx-auto aspect-square w-16 text-green-400" />
                     <p className="mt-3 text-xl">
                       <Trans
                         i18nKey={
@@ -100,5 +103,5 @@ export const InitializeForm: VFC = () => {
         </div>
       </div>
     </FormProvider>
-  )
-}
+  );
+};

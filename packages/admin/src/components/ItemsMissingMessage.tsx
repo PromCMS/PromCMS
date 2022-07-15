@@ -1,18 +1,18 @@
-import { iconSet } from '@prom-cms/icons'
-import clsx from 'clsx'
-import { DetailedHTMLProps, HTMLAttributes, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { QuestionMark } from 'tabler-icons-react';
+import clsx from 'clsx';
+import { DetailedHTMLProps, HTMLAttributes, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type ItemsMissingMessageProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
->
+>;
 
 const ItemsMissingMessage: VFC<ItemsMissingMessageProps> = ({
   className,
   ...rest
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <div
@@ -22,10 +22,10 @@ const ItemsMissingMessage: VFC<ItemsMissingMessageProps> = ({
       )}
       {...rest}
     >
-      <iconSet.QuestionMark size={40} className="mx-auto" />
+      <QuestionMark size={40} className="mx-auto" />
       <p>{t('No items available...')}</p>
     </div>
-  )
-}
+  );
+};
 
-export default ItemsMissingMessage
+export default ItemsMissingMessage;

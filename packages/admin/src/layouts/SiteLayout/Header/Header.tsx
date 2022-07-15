@@ -1,33 +1,33 @@
-import { useState, VFC } from 'react'
-import { iconSet } from '@prom-cms/icons'
-import { useGlobalContext } from '@contexts/GlobalContext'
-import s from './header.module.scss'
-import Skeleton from '@components/Skeleton'
-import Popover from '@components/Popover'
-import PopoverList from '@components/PopoverList'
-import { useRouter } from 'next/router'
-import Link from 'next/link'
-import { getInitials } from '@utils'
-import { useConstructedMenuItems } from './utils'
-import { useTranslation } from 'react-i18next'
-import BackendImage from '@components/BackendImage'
-import { capitalizeFirstLetter } from '@prom-cms/shared'
-import { Tooltip } from '@mantine/core'
-import { useCurrentUser } from '@hooks/useCurrentUser'
+import { useState, VFC } from 'react';
+import { useGlobalContext } from '@contexts/GlobalContext';
+import s from './header.module.scss';
+import Skeleton from '@components/Skeleton';
+import Popover from '@components/Popover';
+import PopoverList from '@components/PopoverList';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { getInitials } from '@utils';
+import { useConstructedMenuItems } from './utils';
+import { useTranslation } from 'react-i18next';
+import BackendImage from '@components/BackendImage';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { Tooltip } from '@mantine/core';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { Briefcase } from 'tabler-icons-react';
 
 const Header: VFC = () => {
-  const { isBooting } = useGlobalContext()
-  const currentUser = useCurrentUser()
-  const { asPath, push } = useRouter()
+  const { isBooting } = useGlobalContext();
+  const currentUser = useCurrentUser();
+  const { asPath, push } = useRouter();
   // TODO remove this and other loading stuff
-  const [hasError, setError] = useState(false)
-  const menuItems = useConstructedMenuItems()
-  const { t } = useTranslation()
+  const [hasError, setError] = useState(false);
+  const menuItems = useConstructedMenuItems();
+  const { t } = useTranslation();
 
   return (
     <header className={s.root}>
       <div className={s.top}>
-        <iconSet.Briefcase className="mx-auto h-8 w-8" />
+        <Briefcase className="mx-auto h-8 w-8" />
       </div>
       <div className="grid gap-5 py-10">
         {menuItems.map((item) => (
@@ -84,8 +84,8 @@ const Header: VFC = () => {
                 icon={t('User')}
                 className="text-blue-500"
                 onClick={() => {
-                  close()
-                  push('/settings/profile')
+                  close();
+                  push('/settings/profile');
                 }}
               >
                 {t('Profile')}
@@ -98,8 +98,8 @@ const Header: VFC = () => {
                   icon={t('Users')}
                   className="text-blue-500"
                   onClick={() => {
-                    close()
-                    push('/users')
+                    close();
+                    push('/users');
                   }}
                 >
                   {t('Users')}
@@ -113,8 +113,8 @@ const Header: VFC = () => {
                   icon={t('Settings')}
                   className="text-blue-500"
                   onClick={() => {
-                    close()
-                    push('/settings/system')
+                    close();
+                    push('/settings/system');
                   }}
                 >
                   {t('Settings')}
@@ -124,8 +124,8 @@ const Header: VFC = () => {
                 icon={'Logout'}
                 className="text-red-500"
                 onClick={() => {
-                  close()
-                  push('/logout')
+                  close();
+                  push('/logout');
                 }}
               >
                 {t('Log off')}
@@ -135,7 +135,7 @@ const Header: VFC = () => {
         </Popover>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

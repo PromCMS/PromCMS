@@ -1,7 +1,6 @@
 import BackendImage from '@components/BackendImage'
 import { SmallFileList } from '@components/FilePickerModal/SmallFileList'
 import { Button, InputWrapper, Popover } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
 import clsx from 'clsx'
 import {
@@ -14,6 +13,7 @@ import {
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pencil, Photo } from "tabler-icons-react"
 
 export interface ImageSelectProps
   extends Omit<
@@ -85,7 +85,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                   />
                 ) : (
                   <div className="absolute flex h-full w-full bg-gray-200">
-                    <iconSet.Photo
+                    <Photo
                       size={40}
                       className="icon icon-tabler icon-tabler-photo m-auto"
                     />
@@ -102,7 +102,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                   <Button
                     className="flex-none"
                     color="ghost"
-                    leftIcon={<iconSet.Pencil size={20} />}
+                    leftIcon={<Pencil size={20} />}
                     size="md"
                     onClick={() => setModalOpen(true)}
                   >

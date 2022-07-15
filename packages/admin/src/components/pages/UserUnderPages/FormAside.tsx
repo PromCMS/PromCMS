@@ -9,12 +9,12 @@ import { useTranslation } from 'react-i18next'
 import { getObjectDiff } from '@utils'
 import { useClassNames } from '../EntryUnderpage/useClassNames'
 import { useData } from './context'
-import { iconSet } from '@prom-cms/icons'
 import { ActionIcon, Button, SimpleGrid } from '@mantine/core'
 import { UserStates } from '@prom-cms/shared'
 import { useSetState } from '@mantine/hooks'
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import { useCurrentUser } from '@hooks/useCurrentUser'
+import { Trash } from "tabler-icons-react"
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
@@ -151,7 +151,7 @@ export const FormAside: VFC = () => {
                 'text-sm text-red-500'
               )}
             >
-              <iconSet.Trash className="aspect-square w-5" />
+              <Trash className="aspect-square w-5" />
             </ActionIcon>
           ) : (
             <span></span>

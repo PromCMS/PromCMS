@@ -1,5 +1,5 @@
 import { API, BlockTool } from '@editorjs/editorjs'
-import { iconSet } from '@prom-cms/icons'
+import * as iconSet from 'tabler-icons-react'
 import { ItemID } from '@prom-cms/shared'
 import ReactDom from 'react-dom'
 import { ButtonLinkView } from './ButtonLinkView'

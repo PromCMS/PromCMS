@@ -1,5 +1,5 @@
-import { Button, UnstyledButton } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
+import { UnstyledButton } from '@mantine/core'
+import * as iconSet from 'tabler-icons-react';
 import clsx from 'clsx'
 import { MouseEventHandler } from 'react'
 import { DetailedHTMLProps, FC, HTMLAttributes } from 'react'

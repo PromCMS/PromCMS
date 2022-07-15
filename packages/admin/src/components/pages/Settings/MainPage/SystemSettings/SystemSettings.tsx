@@ -14,13 +14,13 @@ import {
   Paper,
   Textarea,
 } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
 import { SettingsService } from '@services'
 import clsx from 'clsx'
 import { Fragment } from 'react'
 import { useCallback, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Edit, Plus, Trash } from "tabler-icons-react"
 import { Drawer } from './Drawer'
 import { CopyName } from './Table'
 
@@ -102,7 +102,7 @@ export const SystemSettings: VFC = () => {
         <Button
           color={'green'}
           mt="lg"
-          leftIcon={<iconSet.Plus />}
+          leftIcon={<Plus />}
           onClick={() => setCreationMode(true)}
         >
           {t('Add new')}
@@ -174,12 +174,12 @@ export const SystemSettings: VFC = () => {
                 <Group className="ml-auto" position="right" spacing="xs" noWrap>
                   {currentUserCanEdit && (
                     <ActionIcon onClick={onEditClick(row.id)} color="blue">
-                      <iconSet.Edit />
+                      <Edit />
                     </ActionIcon>
                   )}
                   {currentUserCanDelete && (
                     <ActionIcon onClick={onDeleteClick(row.id)} color="red">
-                      <iconSet.Trash />
+                      <Trash />
                     </ActionIcon>
                   )}
                 </Group>

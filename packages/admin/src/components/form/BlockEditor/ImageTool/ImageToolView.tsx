@@ -9,13 +9,11 @@ import {
   Popover,
   Textarea,
   TextInput,
-  Title,
-  UnstyledButton,
 } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useEffect, useMemo, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Pencil, Settings } from "tabler-icons-react"
 import { ImageToolData } from './ImageTool'
 
 export const ImageToolView: VFC<{
@@ -73,7 +71,7 @@ export const ImageToolView: VFC<{
                     radius="xl"
                     size="lg"
                     variant="white"
-                    leftIcon={<iconSet.Pencil size={30} />}
+                    leftIcon={<Pencil size={30} />}
                     onClick={() => setImagePopoverOpen((s) => !s)}
                   >
                     {t('Change image')}
@@ -103,7 +101,7 @@ export const ImageToolView: VFC<{
                     className="relative flex-none"
                     radius="xl"
                     size="lg"
-                    leftIcon={<iconSet.Settings size={30} />}
+                    leftIcon={<Settings size={30} />}
                     onClick={() => setTextPopoverOpen((s) => !s)}
                   >
                     {t('Change metadata')}

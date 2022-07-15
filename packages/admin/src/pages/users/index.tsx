@@ -3,7 +3,7 @@ import { useModelInfo } from '@hooks/useModelInfo'
 import { useModelItems } from '@hooks/useModelItems'
 import { PageLayout } from '@layouts'
 import { ApiResultModel, ItemID } from '@prom-cms/shared'
-import { iconSet } from '@prom-cms/icons'
+import { UserPlus } from 'tabler-icons-react';
 import { MESSAGES } from '@constants'
 import { EntryService } from '@services'
 import { useRouter } from 'next/router'
@@ -88,7 +88,7 @@ const UsersListPage: VFC = () => {
               onClick={onCreateRequest}
             >
               <span className="hidden md:block">{t('Add new user')}</span>
-              <iconSet.UserPlus className="inline-block h-5 w-5 md:ml-3" />{' '}
+              <UserPlus className="inline-block h-5 w-5 md:ml-3" />{' '}
             </Button>
           </div>
         </div>
