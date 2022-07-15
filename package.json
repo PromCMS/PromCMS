@@ -9,7 +9,7 @@
     "release": "yarn build:library && changeset publish",
     "clean": "del **/dist/** && del **/.next/**",
     "dev": "turbo run dev --parallel",
-    "dev:api": "turbo run dev --scope=\"@prom-cms/dev-api\" --parallel",
+    "dev:api": "yarn workspace @prom-cms/dev-api run dev",
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
     "generate:cms": "yarn workspace @prom-cms/cli run generate:cms",
     "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
@@ -19,7 +19,8 @@
   },
   "license": "MIT",
   "workspaces": [
-    "./packages/*"
+    "./packages/*",
+    "./apps/*"
   ],
   "publishConfig": {
     "access": "restricted",
@@ -48,9 +49,7 @@
   "preconstruct": {
     "packages": [
       "packages/*",
-      "!packages/admin",
-      "!packages/config",
-      "!packages/dev-api"
+      "!packages/config"
     ]
   }
 }
