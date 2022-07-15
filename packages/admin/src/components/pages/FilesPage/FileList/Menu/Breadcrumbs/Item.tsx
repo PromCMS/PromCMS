@@ -1,10 +1,10 @@
 import { UnstyledButton } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { VFC } from 'react'
+import { Icon } from "tabler-icons-react"
 
 type ItemProps = {
-  icon: typeof iconSet.AB
+  icon: Icon
   title?: string
   onClick: () => void
   isLast?: boolean

@@ -2,14 +2,13 @@ import AsideItemWrap from '@components/AsideItemWrap'
 import { UserSelect, UserSelectProps } from '@components/form/UserSelect'
 import { useCurrentUser } from '@hooks/useCurrentUser'
 import { Anchor, Button, Group, Popover } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import { useCallback, useState } from 'react'
 import { FC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { Plus } from "tabler-icons-react"
 import { useEntryUnderpageContext } from '../../../context'
 import { CoeditorsList } from './CoeditorList'
-import { loadingPlaceholder } from './constants'
 
 /**
  * Should be updated to dynamic sharable permission editor
@@ -71,7 +70,7 @@ export const CoeditorsEditor: FC = () => {
             target={
               <Button
                 className="w-full"
-                leftIcon={<iconSet.Plus className="h-7 w-7" />}
+                leftIcon={<Plus className="h-7 w-7" />}
                 variant="light"
                 type="button"
                 onClick={() => setPopoverOpen((o) => !o)}
@@ -97,7 +96,7 @@ export const CoeditorsEditor: FC = () => {
                 disabled={isAddingUser}
                 onClick={() => setPopoverOpen(false)}
               >
-                Cancel
+                {t('Cancel')}
               </Anchor>
             </Group>
           </Popover>

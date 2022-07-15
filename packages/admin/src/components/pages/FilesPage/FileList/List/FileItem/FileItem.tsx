@@ -1,18 +1,18 @@
-import { File, ItemID } from '@prom-cms/shared'
+import { File, ItemID } from '@prom-cms/shared';
 import {
   AnchorHTMLAttributes,
   DetailedHTMLProps,
   FC,
   useCallback,
   VFC,
-} from 'react'
-import Link from 'next/link'
-import { FileService } from '@services'
-import { useClassNames as getClassnames } from '../../useClassNames'
-import { iconSet } from '@prom-cms/icons'
-import { ActionIcon } from '@mantine/core'
+} from 'react';
+import Link from 'next/link';
+import { FileService } from '@services';
+import { useClassNames as getClassnames } from '../../useClassNames';
+import { ActionIcon } from '@mantine/core';
+import { Trash } from 'tabler-icons-react';
 
-const classNames = getClassnames()
+const classNames = getClassnames();
 
 const LinkItem: FC<
   { itemId: ItemID } & DetailedHTMLProps<
@@ -23,10 +23,10 @@ const LinkItem: FC<
   <Link href={FileService.getUrl(itemId)}>
     <a {...rest}>{children}</a>
   </Link>
-)
+);
 
 export interface FileItemProps extends File {
-  onDeleteClick: (id: ItemID) => void
+  onDeleteClick: (id: ItemID) => void;
 }
 
 export const FileItem: VFC<FileItemProps> = ({
@@ -35,11 +35,11 @@ export const FileItem: VFC<FileItemProps> = ({
   mimeType,
   onDeleteClick,
 }) => {
-  const extension = filename.split('.').at(-1) || 'unknown'
-  const type = mimeType?.split('/')?.[0] || 'unknown'
-  const isImage = type === 'image'
+  const extension = filename.split('.').at(-1) || 'unknown';
+  const type = mimeType?.split('/')?.[0] || 'unknown';
+  const isImage = type === 'image';
 
-  const onDelete = useCallback(() => onDeleteClick(id), [id, onDeleteClick])
+  const onDelete = useCallback(() => onDeleteClick(id), [id, onDeleteClick]);
 
   return (
     <article className={classNames.itemRoot}>
@@ -68,9 +68,9 @@ export const FileItem: VFC<FileItemProps> = ({
           color={'red'}
           className="border-2 border-project-border bg-white"
         >
-          <iconSet.Trash size={25} />
+          <Trash size={25} />
         </ActionIcon>
       </div>
     </article>
-  )
-}
+  );
+};

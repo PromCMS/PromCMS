@@ -3,15 +3,13 @@ import {
   ActionIcon,
   Badge,
   Group,
-  MultiSelect,
-  Text,
   TextInput,
 } from '@mantine/core'
 import { useInputState } from '@mantine/hooks'
-import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { KeyboardEventHandler, useEffect, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Tag, X } from "tabler-icons-react"
 import { TagsToolData } from './TagsTool'
 
 export const TagsToolView: VFC<{
@@ -83,7 +81,7 @@ export const TagsToolView: VFC<{
                       variant="light"
                       onClick={onRemoveClick(tagContent)}
                     >
-                      <iconSet.X size={10} />
+                      <X size={10} />
                     </ActionIcon>
                   )
                 }
@@ -101,7 +99,7 @@ export const TagsToolView: VFC<{
         {!readOnly && (
           <Group noWrap>
             <TextInput
-              icon={<iconSet.Tag size={20} />}
+              icon={<Tag size={20} />}
               placeholder={t('New badge name')}
               className="w-full"
               value={inputValue}

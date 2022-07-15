@@ -1,16 +1,16 @@
-import { SmallFileList } from '@components/FilePickerModal/SmallFileList'
-import { Button, Popover } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
-import { useState } from 'react'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useGalleryToolViewContext } from './context'
-import { ImageItem } from './ImageItem'
+import { SmallFileList } from '@components/FilePickerModal/SmallFileList';
+import { Button, Popover } from '@mantine/core';
+import { useState } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Plus } from 'tabler-icons-react';
+import { useGalleryToolViewContext } from './context';
+import { ImageItem } from './ImageItem';
 
 export const ImageList: FC = () => {
-  const { t } = useTranslation()
-  const [popoverOpen, setPopoverOpen] = useState(false)
-  const { fileIds, addFile, readOnly } = useGalleryToolViewContext()
+  const { t } = useTranslation();
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const { fileIds, addFile, readOnly } = useGalleryToolViewContext();
 
   return (
     <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
@@ -35,7 +35,7 @@ export const ImageList: FC = () => {
               className="flex aspect-square h-full w-full items-center justify-center"
               onClick={() => setPopoverOpen((s) => !s)}
             >
-              <iconSet.Plus size={50} />
+              <Plus size={50} />
             </Button>
           }
         >
@@ -51,5 +51,5 @@ export const ImageList: FC = () => {
         </Popover>
       )}
     </div>
-  )
-}
+  );
+};

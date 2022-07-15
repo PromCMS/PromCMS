@@ -12,7 +12,7 @@ import { User } from '@prom-cms/shared'
 import { useNotifications } from '@mantine/notifications'
 import { Button, TextInput } from '@mantine/core'
 import { LanguageSelect } from '@components/pages/Settings/Profile'
-import { iconSet } from '@prom-cms/icons'
+import { At } from 'tabler-icons-react';
 
 const Row: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
@@ -114,7 +114,7 @@ const SettingsPage: NextPage = () => {
                 <Button
                   className="flex-none"
                   color="ghost"
-                  leftIcon={<iconSet.At />}
+                  leftIcon={<At />}
                 >
                   {t('Change email')}
                 </Button>

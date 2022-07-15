@@ -1,11 +1,10 @@
-import { iconSet } from '@prom-cms/icons'
 import { PageLayout } from '@layouts'
 import { useEffect, useMemo, useState, VFC } from 'react'
 import { TableView, TableViewCol, TableViewProps } from '@components/TableView'
 import { useModelItems } from '@hooks/useModelItems'
 import useCurrentModel from '@hooks/useCurrentModel'
 import { formatApiModelResultToTableView, modelIsCustom } from '@utils'
-import { ApiResultItem, ItemID, PagedResult } from '@prom-cms/shared'
+import { ApiResultItem, ItemID } from '@prom-cms/shared'
 import { useRouter } from 'next/router'
 import { EntryService } from '@services'
 import { MESSAGES } from '@constants'
@@ -14,6 +13,7 @@ import { useTranslation } from 'react-i18next'
 import { Button, Pagination } from '@mantine/core'
 import { useListState } from '@mantine/hooks'
 import { useCurrentUser } from '@hooks/useCurrentUser'
+import { Plus } from "tabler-icons-react"
 
 const EntryTypeUnderpage: VFC = ({}) => {
   const { push } = useRouter()
@@ -137,7 +137,7 @@ const EntryTypeUnderpage: VFC = ({}) => {
               onClick={onCreateRequest}
             >
               <span className="hidden md:block">{t('Add new entry')}</span>
-              <iconSet.Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
+              <Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
             </Button>
           )}
         </div>

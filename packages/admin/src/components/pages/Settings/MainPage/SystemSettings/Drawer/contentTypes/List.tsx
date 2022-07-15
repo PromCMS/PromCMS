@@ -7,10 +7,10 @@ import {
   TextInput,
 } from '@mantine/core'
 import { useInputState } from '@mantine/hooks'
-import { iconSet } from '@prom-cms/icons'
 import { VFC } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import { ChevronDown, ChevronUp, Plus, Trash } from "tabler-icons-react"
 
 interface DndListHandleProps {
   data: {
@@ -64,7 +64,7 @@ export const List: VFC = () => {
           value={stringValue}
           label={t('Add new entry')}
           placeholder={t('Some text')}
-          icon={<iconSet.Plus size={20} />}
+          icon={<Plus size={20} />}
           onChange={setStringValue}
           onKeyDown={(e) => {
             if (e.key.toLowerCase() === 'enter') {
@@ -84,13 +84,13 @@ export const List: VFC = () => {
                       disabled={index === 0}
                       onClick={onChangePlace('up', item.id)}
                     >
-                      <iconSet.ChevronUp size={18} />
+                      <ChevronUp size={18} />
                     </ActionIcon>
                     <ActionIcon
                       disabled={(data || []).length - 1 === index}
                       onClick={onChangePlace('down', item.id)}
                     >
-                      <iconSet.ChevronDown size={18} />
+                      <ChevronDown size={18} />
                     </ActionIcon>
                   </div>
                   <TextInput
@@ -102,7 +102,7 @@ export const List: VFC = () => {
                     color="red"
                     onClick={onDeleteClick(item.id)}
                   >
-                    <iconSet.Trash />
+                    <Trash />
                   </ActionIcon>
                 </div>
               ))

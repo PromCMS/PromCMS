@@ -1,10 +1,10 @@
 import { Checkbox, Collapse, Radio, RadioGroup, Title } from '@mantine/core'
 import { randomId } from '@mantine/hooks'
-import { iconSet } from '@prom-cms/icons'
 import { ApiResultModel, SecurityOptionOptions } from '@prom-cms/shared'
 import { FC } from 'react'
 import { Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
+import * as iconSet from "tabler-icons-react"
 
 const options = [
   { label: 'Create', isSimple: true, key: randomId() },

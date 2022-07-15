@@ -1,8 +1,7 @@
-import IconButton from '@components/IconButton'
 import { ActionIcon } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { useCallback, useMemo, useState, VFC } from 'react'
+import { Folder, Folders, Trash } from "tabler-icons-react"
 import { useFileListContext } from '../context'
 import { useClassNames } from '../useClassNames'
 
@@ -32,7 +31,7 @@ export const FolderItem: VFC<FolderItemProps> = ({
 
   const toggleHover = () => setIsHovering(!isHovering)
   const CustomFolderIcon = useMemo(
-    () => (isHovering ? iconSet.Folders : iconSet.Folder),
+    () => (isHovering ? Folders : Folder),
     [isHovering]
   )
 
@@ -76,7 +75,7 @@ export const FolderItem: VFC<FolderItemProps> = ({
             workingFolders[folderPath]?.type === 'uploading'
           }
         >
-          <iconSet.Trash size={25} />
+          <Trash size={25} />
         </ActionIcon>
       </div>
     </div>

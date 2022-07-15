@@ -2,11 +2,10 @@ import { File, ItemID } from '@prom-cms/shared'
 import { useCallback, useMemo, VFC } from 'react'
 import { useClassNames as getClassnames } from '../../useClassNames'
 import { useSmallFileList } from '../../context'
-import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
-import { FileService } from '@services'
 import { UnstyledButton } from '@mantine/core'
 import BackendImage from '@components/BackendImage'
+import { Check } from "tabler-icons-react"
 
 const classNames = getClassnames()
 
@@ -63,7 +62,7 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename, mimeType }) => {
             isPicked ? 'text-green-600' : 'text-white group-hover:text-blue-200'
           )}
         >
-          <iconSet.Check
+          <Check
             className={clsx(
               'm-auto h-8 w-8 !fill-transparent',
               isPicked ? 'scale-100' : 'scale-80 '

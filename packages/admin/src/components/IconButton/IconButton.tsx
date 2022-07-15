@@ -1,13 +1,13 @@
-import { iconSet } from '@prom-cms/icons'
 import clsx from 'clsx'
 import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react'
+import { Icon } from "tabler-icons-react"
 
 export interface IconButtonProps
   extends DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  icon: typeof iconSet.AB
+  icon: Icon
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(

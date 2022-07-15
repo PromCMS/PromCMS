@@ -1,13 +1,14 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { iconSet } from '@prom-cms/icons';
 import { EntryService } from '@services';
 import { useMemo } from 'react';
 import { modelIsCustom } from '@utils';
 import { useCurrentUser } from '@hooks/useCurrentUser';
+import { Home, Photo } from 'tabler-icons-react';
+import * as iconSet from 'tabler-icons-react';
 
 const menuItems = [
-  { label: 'Domů', href: '/', icon: iconSet.Home },
-  { label: 'Files', href: '/files', icon: iconSet.Photo },
+  { label: 'Domů', href: '/', icon: Home },
+  { label: 'Files', href: '/files', icon: Photo },
 ];
 
 export const useConstructedMenuItems = () => {

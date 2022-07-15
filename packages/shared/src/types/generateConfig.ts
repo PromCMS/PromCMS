@@ -1,4 +1,4 @@
-import { iconSet } from '@prom-cms/icons';
+import * as iconSet from 'tabler-icons-react';
 
 /**
  * PROM predefines some models

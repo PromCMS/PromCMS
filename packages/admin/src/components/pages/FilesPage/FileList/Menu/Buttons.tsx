@@ -1,25 +1,25 @@
-import { Button } from '@components/Button'
-import Popover from '@components/Popover'
-import PopoverList from '@components/PopoverList'
-import { iconSet } from '@prom-cms/icons'
-import { forwardRef, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useFileListContext } from '../context'
+import { Button } from '@components/Button';
+import Popover from '@components/Popover';
+import PopoverList from '@components/PopoverList';
+import { forwardRef, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Plus } from 'tabler-icons-react';
+import { useFileListContext } from '../context';
 
-const GreenButton = forwardRef<HTMLButtonElement>(function GreenButton(
-  { children, ...rest },
-  ref
-) {
-  return (
-    <Button ref={ref} color="success" {...rest}>
-      {children}
-    </Button>
-  )
-})
+const GreenButton =
+  forwardRef <
+  HTMLButtonElement >
+  function GreenButton({ children, ...rest }, ref) {
+    return (
+      <Button ref={ref} color="success" {...rest}>
+        {children}
+      </Button>
+    );
+  };
 
 export const Buttons: VFC = () => {
-  const { updateValue, openFilePicker } = useFileListContext()
-  const { t } = useTranslation()
+  const { updateValue, openFilePicker } = useFileListContext();
+  const { t } = useTranslation();
 
   return (
     <div className="ml-3 grid aspect-square h-full flex-none">
@@ -28,9 +28,7 @@ export const Buttons: VFC = () => {
         buttonClassName="h-full aspect-square flex"
         offset={[0, 10]}
         placement="bottom-end"
-        buttonContent={
-          <iconSet.Plus size={32} className="absolute left-3 top-3" />
-        }
+        buttonContent={<Plus size={32} className="absolute left-3 top-3" />}
       >
         <PopoverList>
           <PopoverList.Item
@@ -50,5 +48,5 @@ export const Buttons: VFC = () => {
         </PopoverList>
       </Popover>
     </div>
-  )
-}
+  );
+};

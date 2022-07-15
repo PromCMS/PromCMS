@@ -1,39 +1,44 @@
-import { PageLayout } from '@layouts'
-import { FC, useMemo, VFC } from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
-import clsx from 'clsx'
-import { useTranslation } from 'react-i18next'
-import { iconSet } from '@prom-cms/icons'
-import { Button } from '@mantine/core'
-import { useCurrentUser } from '@hooks/useCurrentUser'
+import { PageLayout } from '@layouts';
+import { FC, useMemo, VFC } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@mantine/core';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import {
+  Lock,
+  Settings,
+  UserCircle,
+  UserExclamation,
+} from 'tabler-icons-react';
 
 const items = [
-  { title: 'Profile', url: '/settings/profile', Icon: iconSet.UserCircle },
-  { title: 'Authentication', url: '/settings/password', Icon: iconSet.Lock },
+  { title: 'Profile', url: '/settings/profile', Icon: UserCircle },
+  { title: 'Authentication', url: '/settings/password', Icon: Lock },
   {
     title: 'User Roles',
     url: '/settings/user-roles',
-    Icon: iconSet.UserExclamation,
+    Icon: UserExclamation,
     canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
       currentUser?.role.id === 0,
   },
   {
     title: 'System settings',
     url: '/settings/system',
-    Icon: iconSet.Settings,
+    Icon: Settings,
     canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
       currentUser?.can({
         action: 'read',
         targetModel: 'settings',
       }),
   },
-]
+];
 
 const LeftAside: VFC = () => {
-  const { pathname } = useRouter()
-  const { t } = useTranslation()
-  const currentUser = useCurrentUser()
+  const { pathname } = useRouter();
+  const { t } = useTranslation();
+  const currentUser = useCurrentUser();
 
   const filteredItems = useMemo(
     () =>
@@ -42,7 +47,7 @@ const LeftAside: VFC = () => {
         canBeShown ? canBeShown(currentUser) : true
       ),
     [currentUser]
-  )
+  );
 
   return (
     <div className="h-full px-5 pt-6">
@@ -74,11 +79,11 @@ const LeftAside: VFC = () => {
           ))}
       </nav>
     </div>
-  )
-}
+  );
+};
 
 export const ProfileLayout: FC = ({ children }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <PageLayout withAside leftAside={<LeftAside />}>
@@ -88,5 +93,5 @@ export const ProfileLayout: FC = ({ children }) => {
         <div className="w-full">{children}</div>
       </PageLayout.Section>
     </PageLayout>
-  )
-}
+  );
+};

@@ -1,11 +1,11 @@
 import { WhereQueryParam } from '@custom-types'
 import { ActionIcon, Button, Pagination } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import { ItemID } from '@prom-cms/shared'
 import { FileService } from '@services'
 import { useCallback, useMemo, useState, VFC } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useTranslation } from 'react-i18next'
+import { Plus } from "tabler-icons-react"
 import { FilePickerModalProps } from '../FilePickerModal'
 import {
   ISmallFileListContext,
@@ -114,7 +114,7 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
           ml="xl"
           onClick={open}
         >
-          <iconSet.Plus className="!-mx-3 aspect-square w-6" />
+          <Plus className="!-mx-3 aspect-square w-6" />
         </ActionIcon>
       </div>
       <List onDeleteClick={onDeleteClick} />

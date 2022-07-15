@@ -2,10 +2,11 @@ import { Button as CustomButton } from '@components/Button'
 import ImageSelect from '@components/form/ImageSelect'
 import ThemeProvider from '@components/ThemeProvider'
 import { Checkbox, Group, Text, TextInput, Title } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
 import { capitalizeFirstLetter } from '@prom-cms/shared'
 import { forwardRef, useEffect, useMemo, useState, VFC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Icon } from "tabler-icons-react"
+import * as iconSet from "tabler-icons-react"
 import { ButtonLinkToolData } from './ButtonLink'
 
 const selectData = Object.entries(iconSet).map(([iconName, icon]) => ({
@@ -16,7 +17,7 @@ const selectData = Object.entries(iconSet).map(([iconName, icon]) => ({
 
 const SelectItem = forwardRef<
   HTMLDivElement,
-  { icon: typeof iconSet.AB; label: string }
+  { icon: Icon; label: string }
 >(function SelectItem({ icon: Icon, label, ...rest }, ref) {
   return (
     <div ref={ref} {...rest}>

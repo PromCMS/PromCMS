@@ -1,16 +1,22 @@
-import BackendImage from '@components/BackendImage'
-import { ActionIcon, Button, Popover, Textarea, TextInput } from '@mantine/core'
-import { iconSet } from '@prom-cms/icons'
-import { useState } from 'react'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { ImageInfo } from '../GalleryTool'
-import { useGalleryToolViewContext } from './context'
+import BackendImage from '@components/BackendImage';
+import {
+  ActionIcon,
+  Button,
+  Popover,
+  Textarea,
+  TextInput,
+} from '@mantine/core';
+import { useState } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Settings, Trash } from 'tabler-icons-react';
+import { ImageInfo } from '../GalleryTool';
+import { useGalleryToolViewContext } from './context';
 
 export const ImageItem: FC<ImageInfo> = ({ id, description, title }) => {
-  const [popoverOpen, setPopoverOpen] = useState(false)
-  const { readOnly, removeFile, changeMetadata } = useGalleryToolViewContext()
-  const { t } = useTranslation()
+  const [popoverOpen, setPopoverOpen] = useState(false);
+  const { readOnly, removeFile, changeMetadata } = useGalleryToolViewContext();
+  const { t } = useTranslation();
 
   return (
     <div className="relative aspect-square w-full">
@@ -39,7 +45,7 @@ export const ImageItem: FC<ImageInfo> = ({ id, description, title }) => {
                 className="aspect-square w-full"
                 onClick={() => setPopoverOpen((s) => !s)}
               >
-                <iconSet.Settings size={30} />
+                <Settings size={30} />
               </ActionIcon>
             }
           >
@@ -70,10 +76,10 @@ export const ImageItem: FC<ImageInfo> = ({ id, description, title }) => {
             variant="filled"
             onClick={() => removeFile(id)}
           >
-            <iconSet.Trash size={30} />
+            <Trash size={30} />
           </ActionIcon>
         </div>
       )}
     </div>
-  )
-}
+  );
+};

@@ -1,8 +1,8 @@
 import { useModelItem } from '@hooks/useModelItem'
 import { SiteLayout } from '@layouts'
-import { Button, Divider, Drawer, Mark, Title, Tooltip } from '@mantine/core'
+import { Button, Divider, Drawer, Title, Tooltip } from '@mantine/core'
 import { useClipboard } from '@mantine/hooks'
-import { iconSet } from '@prom-cms/icons'
+import { ClipboardCheck } from 'tabler-icons-react';
 import { FileService } from '@services'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
@@ -62,7 +62,7 @@ const FilePage: NextPage = () => {
             <Button
               className="bg-blue-100"
               variant="light"
-              rightIcon={<iconSet.ClipboardCheck className="h-5 w-5" />}
+              rightIcon={<ClipboardCheck className="h-5 w-5" />}
               radius="xl"
               size="md"
               styles={{
