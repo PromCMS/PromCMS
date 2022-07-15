@@ -1,5 +1,4 @@
 ---
-"@prom-cms/admin": minor
 "@prom-cms/shared": minor
 ---
 
