@@ -3,16 +3,13 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    "baseUrl": "src",
     "noEmit": false,
     "target": "ESNEXT",
     "module": "esnext",
-    "isolatedModules": false
+    "isolatedModules": false,
+    "jsx": "preserve"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src", "dev"],
+  "exclude": ["node_modules", "dist"]
 }

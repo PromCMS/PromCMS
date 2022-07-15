@@ -1,0 +1,57 @@
+*[data-prom-ipe] {
+  position: relative;
+}
+
+body.ipe-edit-active *[data-prom-ipe]:not(.ipe-item-edit-active) > button {
+  opacity: 0.3;
+}
+
+*[data-prom-ipe].ipe-item-edit-active {
+  box-shadow: 0 0 0 3px white, 0 0 20px 0px #34d39999;
+  border-radius: 6px;
+}
+
+*[data-prom-ipe] > button {
+  background-color: rgba(96,165,250,1);
+}
+
+*[data-prom-ipe]:not(.ipe-item-edit-active) > button .icon-tabler-check {
+  display: none;
+}
+
+*[data-prom-ipe].ipe-item-edit-active > button .icon-tabler-pencil {
+  display: none;
+}
+
+*[data-prom-ipe].ipe-item-edit-active > button {
+  background-color: rgba(52,211,153,1);
+}
+
+*[data-popper-escaped] {
+  pointer-events: all!important;
+}
+
+.ql-align-right {
+  text-align: right;
+}
+
+.ql-align-left {
+  text-align: left;
+}
+
+.ql-align-center {
+  text-align: center;
+}
+
+:root {
+  --ck-spacing-standard: 0;
+  --ck-spacing-large: 0;
+}
+
+.ck-content {
+  box-shadow: none!important;
+}
+
+.ck-content  {
+  border: none!important;
+}

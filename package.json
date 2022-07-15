@@ -31,6 +31,7 @@
   "devDependencies": {
     "@preconstruct/cli": "2.2.0",
     "@prettier/plugin-php": "0.17.6",
+    "@babel/preset-react": "^7.18.6",
     "@swc/core": "1.2.120",
     "@types/node": "16.11.10",
     "del-cli": "4.0.1",
