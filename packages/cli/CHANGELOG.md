@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.4.1
+
+### Patch Changes
+
+- 2ca5919: Fix cli options. Move configPath formatter to command body.
+
 ## 0.4.0
 
 ### Minor Changes
