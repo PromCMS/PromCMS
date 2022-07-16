@@ -59,7 +59,6 @@ export class GenerateCMSProgram extends Command {
       description: 'To specify prom config path',
       short: 'c',
       validate: validateConfigPathInput,
-      format: pathInputToRelative,
     },
     override: {
       type: 'boolean',
@@ -88,6 +87,9 @@ export class GenerateCMSProgram extends Command {
     Logger.success(
       '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
     );
+
+    // Apply formatters
+    this.configPath = pathInputToRelative(this.configPath);
 
     const FINAL_PATH = root;
     const generatorConfig: ExportConfig = this.configPath.endsWith('.json')
