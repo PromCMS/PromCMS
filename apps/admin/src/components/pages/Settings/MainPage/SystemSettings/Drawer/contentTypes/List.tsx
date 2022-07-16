@@ -97,13 +97,13 @@ export const List: VFC = () => {
                     className="w-full"
                     {...register(`content.data[${index}].value`)}
                   />
-                  <ActionIcon
+                  {/*<ActionIcon
                     ml="md"
                     color="red"
                     onClick={onDeleteClick(item.id)}
                   >
                     <Trash />
-                  </ActionIcon>
+              </ActionIcon>*/}
                 </div>
               ))
             ) : (

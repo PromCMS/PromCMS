@@ -2,10 +2,13 @@ import { Command, GlobalOptions, Options } from '@boost/cli';
 import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
+import { formatGeneratorConfig } from '@prom-cms/shared';
+
+import { PROJECT_ROOT } from '../../constants';
 import { loggedJobWorker, LoggedWorkerJob, Logger } from '../../utils';
 import { generateCoreModule } from '../../parts/generate-core-module';
-import { formatGeneratorConfig } from '@prom-cms/shared';
-import { PROJECT_ROOT, CORE_ROOT } from '../../constants';
+import generateCore from "../../parts/generate-core-files";
+import { installPHPDeps } from "../../parts/install-php-deps";
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
@@ -43,44 +46,46 @@ export class GenerateDevelopProgram extends Command {
       throw '⛔️ At the moment we dont provide a way to seed database other than SQLITE.';
 
     const DEV_API_ROOT = path.join(PROJECT_ROOT, 'apps', 'dev-api');
-    const CORE_MODULES_ROOT = path.join(CORE_ROOT, 'modules');
-    const DEV_API_MODULES_ROOT = path.join(DEV_API_ROOT, '.temp', 'modules');
+    const TEMP_CORE_ROOT = path.join(DEV_API_ROOT, '.temp');
+    const MODULES_ROOT = path.join(TEMP_CORE_ROOT, 'modules');
     const { database: databaseConfig } = await formatGeneratorConfig(
       GENERATOR_CONFIG
     );
 
     const jobs: LoggedWorkerJob[] = [
       {
-        title: 'Generate development module into core',
-        async job() {
-          await generateCoreModule(DEV_API_MODULES_ROOT, databaseConfig.models);
-        },
-      },
-      {
-        title: 'Make symlink of development module into core as a module',
+        title: 'Remove old core',
         skip: this.regenerate,
         async job() {
-          const modules = fs.readdirSync(DEV_API_MODULES_ROOT);
-          for (const moduleName of modules) {
-            const symlinkedRoot = path.join(CORE_MODULES_ROOT, moduleName);
-
-            if (await fs.pathExists(symlinkedRoot)) {
-              await fs.remove(symlinkedRoot);
-            }
-
-            await fs.createSymlink(
-              path.join(DEV_API_MODULES_ROOT, moduleName),
-              symlinkedRoot,
-              'dir'
-            );
+          if (await fs.pathExists(TEMP_CORE_ROOT)) {
+            await fs.remove(TEMP_CORE_ROOT);
           }
+        }
+      },
+      {
+        title: 'Generate new core',
+        job: async () => {
+          await generateCore(TEMP_CORE_ROOT, this.regenerate);
+        }
+      },
+      {
+        title: 'Install PHP deps',
+        skip: this.regenerate,
+        async job() {
+          await installPHPDeps(TEMP_CORE_ROOT);
+        }
+      },
+      {
+        title: 'Generate development module into core',
+        async job() {
+          await generateCoreModule(MODULES_ROOT, databaseConfig.models);
         },
       },
       {
         title: 'Make symlink of .env variable file from project root',
         skip: this.regenerate,
         async job() {
-          const CORE_ENV_PATH = path.join(CORE_ROOT, '.env');
+          const CORE_ENV_PATH = path.join(TEMP_CORE_ROOT, '.env');
           if (await fs.pathExists(CORE_ENV_PATH)) {
             await fs.remove(CORE_ENV_PATH);
           }

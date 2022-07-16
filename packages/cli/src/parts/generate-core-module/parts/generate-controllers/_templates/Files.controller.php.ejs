@@ -19,6 +19,7 @@ class Files
   private Filesystem $fs;
   private FileService $fileService;
   private ImageService $imageService;
+  private $config;
 
   public function __construct(Container $container)
   {
@@ -26,6 +27,7 @@ class Files
     $this->fs = $container->get('filesystem');
     $this->fileService = $container->get('file-service');
     $this->imageService = $container->get('image-service');
+    $this->config = $container->get('config');
   }
 
   public function getInfo(
@@ -202,7 +204,7 @@ class Files
       }
 
       $createdFile = \Files::create($fileArgs);
-      $file->moveTo(PROM_UPLOADS_ROOT . $filepath);
+      $file->moveTo($this->config['fs']['uploadsPath'] . $filepath);
 
       DB::commit();
 

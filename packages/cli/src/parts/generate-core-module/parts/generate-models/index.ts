@@ -36,7 +36,7 @@ const virtualByModel = {
     {
       name: 'path',
       accessKey: 'Path',
-      content: `return (PROM_URL_BASE ?? '') . "/api/entry-types/files/items/{$this->id}/raw";`,
+      content: `return $config['app']['baseUrl'] . "/api/entry-types/files/items/{$this->id}/raw";`,
     },
   ],
 };

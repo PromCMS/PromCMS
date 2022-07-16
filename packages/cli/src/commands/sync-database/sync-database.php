@@ -1,26 +1,34 @@
 <?php
-
+use DI\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
+$PHP_APP_ROOT = $argv[1];
+$LIBS_ROOT = $PHP_APP_ROOT . '/app/libs';
+include_once $PHP_APP_ROOT . '/vendor/autoload.php';
+include_once $PHP_APP_ROOT . '/app/utils.php';
+
+$container = new Container();
+$configBootstrap = require_once $LIBS_ROOT . '/config.bootstrap.php';
+$utilsBootstrap = require_once $LIBS_ROOT . '/utils.bootstrap.php';
+$dbBootstrap = require_once $LIBS_ROOT . '/db.bootstrap.php';
+$configBootstrap($container);
+$dbBootstrap($container);
+$utilsBootstrap($container);
+$utils = $container->get('utils');
 
 /**
  * This files goes through all of models, creates db schemas from info about it and applies to db
  */
 try {
-  $PHP_APP_ROOT = $argv[1];
-
-  include_once $PHP_APP_ROOT . '/app/libs/env.bootstrap.php';
-  include_once $PHP_APP_ROOT . '/app/utils.php';
-  include_once $PHP_APP_ROOT . '/app/libs/db.bootstrap.php';
-
-  echo '👋 Hello! Welcome to schema syncing to your database! ';
+  echo '👋 Hello! Welcome to schema syncing to your database!';
   echo '🔧 Trying to find some schemas in modules...';
 
   $moduleNames = BootstrapUtils::getValidModuleNames();
-  $utils = new Utils();
 
   foreach ($moduleNames as $moduleName) {
     $moduleRoot = BootstrapUtils::getModuleRoot($moduleName);
-    $modelsFolderName = $PROM_OPINIONATED_SETTINGS->modules['modelsFolderName'];
+    $modelsFolderName = $container->get('config')['system']['modules'][
+      'modelsFolderName'
+    ];
     $modelsRoot = "$moduleRoot/$modelsFolderName";
 
     // if models folder exists in

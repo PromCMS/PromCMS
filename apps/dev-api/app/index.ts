@@ -9,9 +9,9 @@ import path from 'path';
 
 await loadRootEnv();
 
-export const CLI_ROOT = path.join('..', '..', 'cli');
-
 const __dirname = dirname(fileURLToPath(import.meta.url));
+export const CLI_ROOT = path.join(__dirname, '..', '..', '..', 'packages', 'cli');
+
 const { PORT: FRONT_PORT = 3000 } = process.env;
 const SERVER_PORT = Number(FRONT_PORT) + 1;
 let abortController: AbortController | undefined;
@@ -28,8 +28,8 @@ const serverProcess = execa('php', [
   '-S',
   `127.0.0.1:${SERVER_PORT}`,
   '-t',
-  '../core/public',
-  '../core/public/index.php',
+  './.temp/public',
+  './.temp/public/index.php',
 ]);
 if (!serverProcess.stderr) {
   throw Error('Stderr not found');
@@ -44,7 +44,7 @@ Logger.success(
 );
 
 // Initialize watcher
-const watcher = chokidar.watch('../../cli/**/*', {
+const watcher = chokidar.watch('../../../packages/cli/**/*', {
   persistent: true,
   ignored: path.join('..', '..', 'core', 'modules'),
   cwd: __dirname,

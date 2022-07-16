@@ -49,18 +49,15 @@ export const generateByTemplates = async (
       throw e;
     }
 
-    // TODO: get why dockerfile is not rendered, fix twig formatting
-    if (finalFilename !== 'Dockerfile' && !finalFilename.includes('twig')) {
-      try {
-        result = await formatCodeString(result, finalFilename);
-      } catch (e) {
-        console.log(
+    try {
+      result = await formatCodeString(result, finalFilename);
+    } catch (e) {
+      console.log(
           `An error happened during formating of ${finalFilename}: ${
             e as Error
           }`
-        );
-        throw e;
-      }
+      );
+      throw e;
     }
 
     const filepath = path.join(endFolderPath, finalFilename);

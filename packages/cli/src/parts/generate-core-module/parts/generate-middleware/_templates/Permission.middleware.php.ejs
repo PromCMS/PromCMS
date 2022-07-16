@@ -117,7 +117,7 @@ class Permission
 
         $request = $request->withAttribute(
           'permission-only-own',
-          $requestPermissionValue === PROM_PERMISSIONS_ALLOW_OWN_KEY,
+          $requestPermissionValue === 'allow-own',
         );
       }
 
