@@ -24,6 +24,13 @@ module.exports = {
     },
 
     {
+      files: ["*.ts"],
+      options: {
+        parser: "typescript",
+      },
+    },
+
+    {
       files: ["*.php", "*.php.ejs"],
       options: {
         parser: "php",

@@ -1,0 +1,88 @@
+<?php
+
+/**
+ * DO NOT DELETE OR EDIT THIS FILE.
+ * THIS FILE IS PART OF COCKPIT CMS.
+ *
+ */
+
+use DI\Container;
+use Symfony\Component\Dotenv\Dotenv;
+
+// Autoload vendor libs if they are not included already
+include_once __DIR__ . '/../../vendor/autoload.php';
+
+function joinPath(...$inp)
+{
+  return implode(DIRECTORY_SEPARATOR, $inp);
+}
+
+$PROM_ROOT_FOLDER = joinPath(__DIR__, '..', '..');
+$dotenv = new Dotenv();
+$dotenv->load($PROM_ROOT_FOLDER . '/.env');
+
+return function (Container $container) {
+  global $PROM_ROOT_FOLDER;
+
+  $PROM_UPLOADS_ROOT = joinPath($PROM_ROOT_FOLDER, 'uploads');
+  $PROM_LOCALES_ROOT = joinPath($PROM_ROOT_FOLDER, 'locales');
+  $PROM_FILE_CACHE_ROOT = joinPath($PROM_ROOT_FOLDER, 'cache', 'files');
+
+  $APP_PREFIX = $_ENV['APP_PREFIX'] ? '/' . $_ENV['APP_PREFIX'] : '';
+  $APP_ENV = $_ENV['APP_ENV'] ?? 'development';
+  $dbIsSqlite = $_ENV['DB_CONNECTION'] === 'sqlite';
+
+  $config = [
+    'app' => [
+      'name' => $_ENV['APP_NAME'] ?? 'PromCMS Project',
+      'root' => $PROM_ROOT_FOLDER,
+      'url' => $_ENV['APP_URL'],
+      'prefix' => $APP_PREFIX,
+      'baseUrl' => $_ENV['APP_PREFIX']
+        ? $_ENV['APP_URL'] . $APP_PREFIX
+        : $_ENV['APP_URL'],
+    ],
+    'security' => [
+      'session' => [
+        'lifetime' => $_ENV['SECURITY_SESSION_LIFETIME'] ?? 3600,
+      ],
+      'token' => [
+        'lifetime' => $_ENV['SECURITY_TOKEN_LIFETIME'] ?? 86400,
+      ],
+    ],
+    'db' => [
+      'driver' => $_ENV['DB_CONNECTION'],
+      'host' => $_ENV['DB_HOST'],
+      'database' =>
+        // If database is SQLite then we need to go to root since database is basically
+        // a path to db file
+        ($dbIsSqlite ? __DIR__ . '/../../' : '') . $_ENV['DB_DATABASE'],
+      'username' => $_ENV['DB_USERNAME'],
+      'password' => $_ENV['DB_PASSWORD'],
+      'collation' => $_ENV['DB_COLLATION'] ?? 'utf8_unicode_ci',
+      'charset' => $_ENV['DB_CHARSET'] ?? 'utf8',
+      'prefix' => $_ENV['DB_TABLE_PREFIX'] ?? '',
+    ],
+    'env' => [
+      'development' => $APP_ENV === 'development',
+      'debug' => $_ENV['APP_DEBUG'],
+      'env' => $APP_ENV,
+    ],
+    'fs' => [
+      'cachePath' => $PROM_FILE_CACHE_ROOT,
+      'localesPath' => $PROM_LOCALES_ROOT,
+      'uploadsPath' => $PROM_UPLOADS_ROOT,
+    ],
+    'i18n' => [
+      'language' => 'en',
+    ],
+    'system' => [
+      'modules' => [
+        'modelsFolderName' => 'Models',
+        'controllersFolderName' => 'Controllers',
+      ],
+    ],
+  ];
+
+  $container->set('config', $config);
+};

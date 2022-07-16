@@ -1,0 +1,45 @@
+<?php
+
+use DI\Container;
+use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Events\Dispatcher;
+
+return function (Container $container) {
+  $config = $container->get('config');
+  $dbConfig = $config['db'];
+  $capsule = new Capsule();
+  $isSqlite = $dbConfig['driver'] === 'sqlite';
+
+  if ($isSqlite) {
+    $dbFilePath = $dbConfig['database'];
+    if (!file_exists($dbFilePath)) {
+      echo '⚠️ Seems like you are trying to use sqlite but the db file is not present, creating it...';
+
+      mkdir(dirname($dbFilePath));
+
+      $file = fopen($dbFilePath, 'w');
+
+      fwrite($file, '');
+
+      fclose($file);
+    }
+  }
+
+  $capsule->addConnection($dbConfig);
+  $capsule->setAsGlobal();
+  $capsule->setEventDispatcher(new Dispatcher());
+  $capsule->bootEloquent();
+
+  // Just in case we use regexp in our queries
+  if ($isSqlite) {
+    $capsule
+      ->connection()
+      ->getPdo()
+      ->sqliteCreateFunction('REGEXP', function ($pattern, $value) {
+        mb_regex_encoding('UTF-8');
+        return preg_match("/$pattern/m", $value);
+      });
+  }
+
+  $container->set('capsule', $capsule);
+};

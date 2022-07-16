@@ -1,9 +1,16 @@
 import { Command, GlobalOptions, Options, Params } from '@boost/cli';
 import recopy from 'recursive-copy';
 import path, { dirname } from 'path';
-import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import { execa } from 'execa';
+import {
+  formatGeneratorConfig,
+  ExportConfig,
+  GENERATOR_FILENAME__JSON,
+} from '@prom-cms/shared';
+import { fileURLToPath } from 'url';
+import crypto from 'crypto';
+
 import {
   generateByTemplates,
   loggedJobWorker,
@@ -13,32 +20,10 @@ import {
   validateConfigPathInput,
   getAppRootInputValidator,
 } from '../../utils';
+import { PROJECT_ROOT } from '../../constants';
 import { generateCoreModule } from '../../parts/generate-core-module';
-import { formatGeneratorConfig, ExportConfig } from '@prom-cms/shared';
-import { fileURLToPath } from 'url';
-import crypto from 'crypto';
-import { PROJECT_ROOT, CORE_ROOT } from '../../constants';
-
-const copyCoreOptions = {
-  regenerate: {
-    overwrite: true,
-    expand: true,
-    dot: true,
-    junk: false,
-    filter: new RegExp(
-      /^(?!(.temp|cache|uploads|vendor|locales|modules|.env|.gitignore|README.md|templates|composer.(lock|json)))/g
-    ),
-  },
-  initialize: {
-    overwrite: true,
-    expand: true,
-    dot: true,
-    junk: false,
-    filter: new RegExp(
-      /^(?!(.temp|cache|uploads|vendor|locales|modules|.env|.gitignore|README.md|templates))/g
-    ),
-  },
-};
+import generateCore from '../../parts/generate-core-files';
+import { installPHPDeps } from '../../parts/install-php-deps';
 
 const copyAdminOptions = {
   overwrite: true,
@@ -121,24 +106,17 @@ export class GenerateCMSProgram extends Command {
       fs.existsSync(FINAL_PATH) &&
       fs.readdirSync(FINAL_PATH).length !== 0
     ) {
-      throw new Error(`⛔️ Your path to project "${FINAL_PATH}" must be empty`);
+      throw new Error(
+        `⛔️ Your path to project "${FINAL_PATH}" already exists`
+      );
     }
 
     const jobs: LoggedWorkerJob[] = [
-      // Copying core to export
       {
-        title: 'Copy core files',
+        title: 'Generate new core',
+        skip: this.regenerate,
         job: async () => {
-          await fs.ensureDir(FINAL_PATH);
-          try {
-            await recopy(
-              CORE_ROOT,
-              FINAL_PATH,
-              copyCoreOptions[this.regenerate ? 'regenerate' : 'initialize']
-            );
-          } catch (e) {
-            console.log({ e });
-          }
+          await generateCore(FINAL_PATH, this.regenerate);
         },
       },
       {
@@ -163,6 +141,12 @@ export class GenerateCMSProgram extends Command {
               },
             }
           );
+        },
+      },
+      {
+        title: 'Install PHP dependencies',
+        async job() {
+          await installPHPDeps(FINAL_PATH);
         },
       },
       {

@@ -12,10 +12,12 @@ class ImageService
 {
   private Filesystem $cacheFs;
   private Filesystem $fs;
+  private array $config;
 
   public function __construct(Container $container)
   {
     $this->fs = $container->get('filesystem');
+    $this->config = $container->get('config');
     $this->cacheFs = $container->get('file-cache-filesystem');
   }
 
@@ -76,7 +78,7 @@ class ImageService
 
         $imageConverted = \imagejpeg(
           $gdImageSource,
-          Path::join(PROM_FILE_CACHE_ROOT, $fileBasenameWithArgs),
+          Path::join($this->config['fs']['cachePath'], $fileBasenameWithArgs),
           $args['q'] ?? 90,
         );
 
@@ -102,7 +104,8 @@ class ImageService
     return [
       'resource' => $fileStream,
       'src' =>
-        PROM_URL . "/api/entry-types/files/items/$fileInfo->id/raw?$joinedArgs",
+        $this->config['app']['baseUrl'] .
+        "/api/entry-types/files/items/$fileInfo->id/raw?$joinedArgs",
       'width' => $imageWidth,
       'height' => $imageHeight,
     ];
