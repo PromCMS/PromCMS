@@ -16,4 +16,4 @@ This will boost your performance a lot and you can focus on what really matters 
 4. You can also see that there are no tables in your database - for that you have to run `npx @prom-cms/cli sync-database` from the root of your app to generate them
 5. You can now go to [http://localhost:3001](http://localhost:3001) 🤯
  
-> You may also find useful to seed your database with random data with `npx @prom-cms/cli sync-database` 😳
+> You may also find useful to seed your database with random data with `npx @prom-cms/cli seed-database` 😳
