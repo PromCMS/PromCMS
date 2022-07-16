@@ -17,13 +17,6 @@ module.exports = {
     },
 
     {
-      files: "*.ts",
-      options: {
-        parser: "typescript",
-      },
-    },
-
-    {
       files: ["*.json", "*.jsonc", ".babelrc", ".prettierrc"],
       options: {
         parser: "json",
