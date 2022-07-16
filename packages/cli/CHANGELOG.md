@@ -1,5 +1,15 @@
 # @prom-cms/cli
 
+## 0.4.0
+
+### Minor Changes
+
+- e046c42: Remove core from apps and make cli create core from templates
+
+### Patch Changes
+
+- a0ffe17: Move apps to apps folder
+
 ## 0.3.0
 
 ### Minor Changes
