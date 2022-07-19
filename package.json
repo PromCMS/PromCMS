@@ -4,18 +4,13 @@
   "private": true,
   "description": "",
   "scripts": {
-    "build:library": "yarn preconstruct build",
-    "postinstall": "yarn preconstruct dev",
+    "build:library": "turbo run build --filter=./packages/*",
     "release": "yarn build:library && changeset publish",
     "clean": "del **/dist/** && del **/.next/**",
-    "dev": "npx concurrently \"npm run dev:api\" \"npm run dev:admin\"",
-    "dev:admin": "yarn workspace @prom-cms/admin run dev",
-    "dev:api": "yarn workspace @prom-cms/dev-api run dev",
+    "dev": "turbo run dev --no-cache --parallel --continue --filter=./apps/*",
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
-    "generate:cms": "yarn workspace @prom-cms/cli run generate:cms",
     "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
-    "regenerate:cms": "yarn workspace @prom-cms/cli run regenerate:cms",
-    "prettier": "prettier --write \"{packages,apps}/*/{*.{ts,php},!{_next, dist}/**/*!/**/{_next, dist}/**/*}\"",
+    "prettier": "prettier --write \"**/*.{ts,tsx,md,php}\"",
     "version-packages": "changeset version && yarn prettier"
   },
   "license": "MIT",
@@ -31,14 +26,15 @@
     "Ondřej Langr <hi@ondrejlangr.cz>"
   ],
   "devDependencies": {
-    "concurrently": "^7.2.2",
-    "@preconstruct/cli": "2.2.0",
+    "tsup": "^6.1.3",
+    "turbo": "^1.3.1",
     "@prettier/plugin-php": "0.17.6",
     "@swc/core": "1.2.120",
     "@types/node": "16.11.10",
     "del-cli": "4.0.1",
     "prettier": "2.6.2",
     "@babel/core": "^7.18.6",
+    "@babel/cli": "^7.18.6",
     "@babel/plugin-proposal-decorators": "^7.18.6",
     "@babel/preset-env": "^7.18.6",
     "@babel/preset-typescript": "^7.18.6",
@@ -47,11 +43,5 @@
   },
   "dependencies": {
     "rimraf": "3.0.2"
-  },
-  "preconstruct": {
-    "packages": [
-      "packages/*",
-      "!packages/config"
-    ]
   }
 }
