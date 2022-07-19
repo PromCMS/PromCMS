@@ -24,7 +24,7 @@ module.exports = {
     },
 
     {
-      files: ["*.ts"],
+      files: ["*.ts(x)?"],
       options: {
         parser: "typescript",
       },
