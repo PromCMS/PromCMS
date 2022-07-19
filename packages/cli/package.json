@@ -6,9 +6,8 @@
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
   "license": "MIT",
   "type": "module",
-  "main": "dist/prom-cms-cli.cjs.js",
-  "module": "dist/prom-cms-cli.esm.js",
-  "typings": "dist/prom-cms-cli.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "source": "src/index.ts",
   "files": [
     "dist/**"
@@ -16,19 +15,22 @@
   "bin": {
     "prom-cli": "./bin/cli.cjs"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/PromCMS/PromCMS.git"
-  },
   "scripts": {
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:source": "npx babel src --out-dir dist --extensions .ts,.tsx,.js,.jsx --source-maps --copy-files",
+    "build": "npm run build:types && npm run build:source",
     "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
     "generate:dev": "npm run starter-commands -- generate:develop && npm run sync-database ../../apps/dev-api/.temp && npm run seed-database ../../apps/dev-api/.temp",
     "generate:cms": "npm run starter-commands -- generate-cms",
     "regenerate:dev": "npm run starter-commands -- generate:develop --regenerate",
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
     "seed-database": "npm run starter-commands -- seed-database",
-    "sync-database": "npm run starter-commands -- sync-database",
-    "build": "tsc --build"
+    "sync-database": "npm run starter-commands -- sync-database"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PromCMS/PromCMS.git",
+    "directory": "packages/cli"
   },
   "bugs": {
     "url": "https://github.com/PromCMS/PromCMS/issues"
