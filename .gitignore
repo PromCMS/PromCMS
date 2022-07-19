@@ -12,6 +12,7 @@ dist-ssr
 export
 dev
 .temp
+.turbo
 
 # testing
 coverage
