@@ -27,7 +27,6 @@
   },
   "ts-node": {
     "transpileOnly": true,
-    "transpiler": "ts-node/transpilers/swc-experimental",
     "require": ["tsconfig-paths/register"]
   }
  }

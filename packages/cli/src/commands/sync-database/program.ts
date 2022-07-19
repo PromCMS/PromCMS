@@ -3,7 +3,7 @@ import {
   getAppRootInputValidator,
   Logger,
   pathInputToRelative,
-} from '../../utils';
+} from '../../utils/index.js';
 import child_process from 'child_process';
 import path from 'path';
 import { fileURLToPath } from 'url';

@@ -1,14 +1,11 @@
 import { Program } from '@boost/cli';
 import { loadRootEnv } from '@prom-cms/shared';
-import { SeedDatabaseProgram } from './commands/seed-database';
-import { GenerateCMSProgram } from './commands/generate-cms';
-import { GenerateDevelopProgram } from './commands/generate-develop';
-import { SyncDatabaseProgram } from './commands/sync-database';
+import { SeedDatabaseProgram } from './commands/seed-database/index.js';
+import { GenerateCMSProgram } from './commands/generate-cms/index.js';
+import { GenerateDevelopProgram } from './commands/generate-develop/index.js';
+import { SyncDatabaseProgram } from './commands/sync-database/index.js';
 import fs from 'fs-extra';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import path from 'path';
 
 (async () => {
   const { version } = await fs.readJson(

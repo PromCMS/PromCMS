@@ -1,12 +1,12 @@
-import generateModule from '../../parts/generate-module';
+import generateModule from '../../parts/generate-module/index.js';
 import type { ExportConfig } from '@prom-cms/shared';
 import path from 'path';
-import generateApiRoutes from './parts/generate-api-routes';
-import generateControllers from './parts/generate-controllers';
-import generateMiddleware from './parts/generate-middleware';
-import generateModels from './parts/generate-models';
-import generateRootFiles from './parts/generate-root-files';
-import generateServices from './parts/generate-services';
+import generateApiRoutes from './parts/generate-api-routes/index.js';
+import generateControllers from './parts/generate-controllers/index.js';
+import generateMiddleware from './parts/generate-middleware/index.js';
+import generateModels from './parts/generate-models/index.js';
+import generateRootFiles from './parts/generate-root-files/index.js';
+import generateServices from './parts/generate-services/index.js';
 
 /**
  * Generates a core module as a whole

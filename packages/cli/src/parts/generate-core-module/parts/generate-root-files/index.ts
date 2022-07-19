@@ -1,5 +1,5 @@
 import path, { dirname } from 'path';
-import { generateByTemplates } from '../../../../utils';
+import { generateByTemplates } from '../../../../utils/index.js';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));

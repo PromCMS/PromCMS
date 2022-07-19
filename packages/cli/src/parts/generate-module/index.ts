@@ -1,12 +1,11 @@
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { formatCodeString } from '../../utils';
+import { formatCodeString } from '../../utils/index.js';
+import { fileURLToPath } from 'url';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Creates a PROM CMS module to specified directory with bootstrapped content.

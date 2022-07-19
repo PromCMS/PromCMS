@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { formatCodeString } from '../utils';
+import { formatCodeString } from '../utils/index.js';
 
 export const generateByTemplates = async (
   /**

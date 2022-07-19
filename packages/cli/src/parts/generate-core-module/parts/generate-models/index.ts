@@ -10,7 +10,7 @@ import path from 'path';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import ejs from 'ejs';
-import { formatCodeString } from '../../../../utils';
+import { formatCodeString } from '../../../../utils/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

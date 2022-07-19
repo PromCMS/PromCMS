@@ -26,20 +26,15 @@
     "Ondřej Langr <hi@ondrejlangr.cz>"
   ],
   "devDependencies": {
-    "tsup": "^6.1.3",
-    "turbo": "^1.3.1",
+    "@changesets/cli": "^2.22.0",
     "@prettier/plugin-php": "0.17.6",
     "@swc/core": "1.2.120",
     "@types/node": "16.11.10",
     "del-cli": "4.0.1",
     "prettier": "2.6.2",
-    "@babel/core": "^7.18.6",
-    "@babel/cli": "^7.18.6",
-    "@babel/plugin-proposal-decorators": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
-    "@babel/preset-typescript": "^7.18.6",
-    "@changesets/cli": "^2.22.0",
-    "typescript": "4.5.2"
+    "tsup": "^6.1.3",
+    "turbo": "^1.3.1",
+    "typescript": "^4.8.0-dev.20220719"
   },
   "dependencies": {
     "rimraf": "3.0.2"

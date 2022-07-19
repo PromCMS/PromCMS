@@ -1,6 +1,6 @@
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { generateByTemplates } from '../../../../utils';
+import { generateByTemplates } from '../../../../utils/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 

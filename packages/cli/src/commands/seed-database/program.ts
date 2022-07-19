@@ -3,14 +3,14 @@ import {
   Logger,
   pathInputToRelative,
   getAppRootInputValidator,
-} from '../../utils';
+} from '../../utils/index.js';
 import child_process from 'child_process';
-import path, { dirname } from 'path';
+import path from 'path';
 import { fileURLToPath } from 'url';
 
 type CustomParams = [string];
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export class SeedDatabaseProgram extends Command {
   static path: string = 'seed-database';

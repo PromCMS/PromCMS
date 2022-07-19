@@ -1,8 +1,8 @@
-import path, { dirname } from 'path';
-import { generateByTemplates } from '../../../../utils';
+import path from 'path';
 import { fileURLToPath } from 'url';
+import { generateByTemplates } from '../../../../utils/index.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Generates a core services

@@ -16,9 +16,7 @@
     "prom-cli": "./bin/cli.cjs"
   },
   "scripts": {
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:source": "npx babel src --out-dir dist --extensions .ts,.tsx,.js,.jsx --source-maps --copy-files",
-    "build": "npm run build:types && npm run build:source",
+    "build": "tsc",
     "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
     "generate:dev": "npm run starter-commands -- generate:develop && npm run sync-database ../../apps/dev-api/.temp && npm run seed-database ../../apps/dev-api/.temp",
     "generate:cms": "npm run starter-commands -- generate-cms",
@@ -36,7 +34,6 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "recursive-copy": "2.0.14",
     "ink": "3.2.0",
     "@prom-cms/shared": "*",
     "better-sqlite3": "7.4.6",
