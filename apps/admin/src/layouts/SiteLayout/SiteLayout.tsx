@@ -1,11 +1,11 @@
-import { FC } from 'react'
-import { Header } from './Header'
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { Loader } from '../../components/SiteLoader'
-import { SiteLayoutHead } from '.'
+import { FC } from 'react';
+import { Header } from './Header';
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { Loader } from '../../components/SiteLoader';
+import { SiteLayoutHead } from '.';
 
 const SiteLayout: FC = ({ children }) => {
-  const { isBooting } = useGlobalContext()
+  const { isBooting } = useGlobalContext();
 
   return (
     <>
@@ -24,7 +24,7 @@ const SiteLayout: FC = ({ children }) => {
 
       {/*<Footer />*/}
     </>
-  )
-}
+  );
+};
 
-export default SiteLayout
+export default SiteLayout;

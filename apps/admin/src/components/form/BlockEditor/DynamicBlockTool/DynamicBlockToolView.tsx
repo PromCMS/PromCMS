@@ -1,17 +1,17 @@
-import ThemeProvider from '@components/ThemeProvider'
-import { TextInput } from '@mantine/core'
-import clsx from 'clsx'
-import { useEffect } from 'react'
-import { KeyboardEventHandler } from 'react'
-import { FC, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Brackets } from "tabler-icons-react"
-import { DynamicBlockToolData } from './DynamicBlockTool'
+import ThemeProvider from '@components/ThemeProvider';
+import { TextInput } from '@mantine/core';
+import clsx from 'clsx';
+import { useEffect } from 'react';
+import { KeyboardEventHandler } from 'react';
+import { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Brackets } from 'tabler-icons-react';
+import { DynamicBlockToolData } from './DynamicBlockTool';
 
 export interface DynamicBlockToolViewProps {
-  data: DynamicBlockToolData
-  onDataChange: (data: DynamicBlockToolData) => void
-  readOnly: boolean
+  data: DynamicBlockToolData;
+  onDataChange: (data: DynamicBlockToolData) => void;
+  readOnly: boolean;
 }
 
 export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
@@ -19,33 +19,33 @@ export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
   data: dataFromParent,
   onDataChange,
 }) => {
-  const [data, setData] = useState<DynamicBlockToolData>(dataFromParent)
-  const { t } = useTranslation()
+  const [data, setData] = useState<DynamicBlockToolData>(dataFromParent);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    setData(dataFromParent)
-  }, [dataFromParent])
+    setData(dataFromParent);
+  }, [dataFromParent]);
 
   useEffect(() => {
-    onDataChange(data)
-  }, [data, onDataChange])
+    onDataChange(data);
+  }, [data, onDataChange]);
 
   const onKeyDownInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key.toLowerCase() === 'enter') {
-      e.preventDefault()
-      e.stopPropagation()
+      e.preventDefault();
+      e.stopPropagation();
     }
-  }
+  };
 
   const onInput = (e) => {
-    const value: string = e.currentTarget.value
-    const formattedValue = value.replaceAll(' ', '-').toLocaleLowerCase()
+    const value: string = e.currentTarget.value;
+    const formattedValue = value.replaceAll(' ', '-').toLocaleLowerCase();
 
     setData((prevData) => ({
       ...prevData,
       blockId: formattedValue,
-    }))
-  }
+    }));
+  };
 
   return (
     <ThemeProvider>
@@ -66,5 +66,5 @@ export const DynamicBlockToolView: FC<DynamicBlockToolViewProps> = ({
         />
       </div>
     </ThemeProvider>
-  )
-}
+  );
+};

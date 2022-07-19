@@ -1,47 +1,47 @@
-import { getUseFoldersRoute } from '@hooks/useFolders'
-import axios from 'axios'
-import clsx from 'clsx'
-import { FolderService } from '@services'
-import { useEffect, VFC } from 'react'
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useSWRConfig } from 'swr'
-import { useFileListContext } from '../../context'
-import { useClassNames } from '../../useClassNames'
-import { FolderPlus } from "tabler-icons-react"
+import { getUseFoldersRoute } from '@hooks/useFolders';
+import axios from 'axios';
+import clsx from 'clsx';
+import { FolderService } from '@services';
+import { useEffect, VFC } from 'react';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useSWRConfig } from 'swr';
+import { useFileListContext } from '../../context';
+import { useClassNames } from '../../useClassNames';
+import { FolderPlus } from 'tabler-icons-react';
 
 export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
-  const { updateValue, currentPath } = useFileListContext()
-  const { mutate } = useSWRConfig()
-  const classNames = useClassNames()
-  const { t } = useTranslation()
+  const { updateValue, currentPath } = useFileListContext();
+  const { mutate } = useSWRConfig();
+  const classNames = useClassNames();
+  const { t } = useTranslation();
   const { register, handleSubmit, setFocus, formState, setError } = useForm<{
-    name: string
-  }>()
+    name: string;
+  }>();
 
   useEffect(() => {
-    setFocus('name')
-  }, [setFocus])
+    setFocus('name');
+  }, [setFocus]);
 
   const onSubmit = async ({ name }) => {
     try {
-      await FolderService.create(`${currentPath}/${name}`)
-      await mutate(getUseFoldersRoute(currentPath))
-      updateValue('showNewFolderCreator', false)
+      await FolderService.create(`${currentPath}/${name}`);
+      await mutate(getUseFoldersRoute(currentPath));
+      updateValue('showNewFolderCreator', false);
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 409) {
-        setError('name', { message: 'This folder already exists' })
-        return false
+        setError('name', { message: 'This folder already exists' });
+        return false;
       }
-      throw e
+      throw e;
     }
-  }
+  };
 
   const onBlur = () => {
     if (!formState.isSubmitting) {
-      updateValue('showNewFolderCreator', false)
+      updateValue('showNewFolderCreator', false);
     }
-  }
+  };
 
   return (
     <div
@@ -69,5 +69,5 @@ export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
         )}
       </form>
     </div>
-  )
-}
+  );
+};

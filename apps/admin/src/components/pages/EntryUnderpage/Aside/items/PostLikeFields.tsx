@@ -1,24 +1,24 @@
-import AsideItemWrap from '@components/AsideItemWrap'
-import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper'
-import useCurrentModel from '@hooks/useCurrentModel'
-import { ColumnType, ModelColumnName } from '@prom-cms/shared'
-import { useMemo } from 'react'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import AsideItemWrap from '@components/AsideItemWrap';
+import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
+import useCurrentModel from '@hooks/useCurrentModel';
+import { ColumnType, ModelColumnName } from '@prom-cms/shared';
+import { useMemo } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const PostLikeFields: FC = () => {
-  const { t } = useTranslation()
-  const currentModel = useCurrentModel()
+  const { t } = useTranslation();
+  const currentModel = useCurrentModel();
 
   const groupedFields = useMemo<
     Array<ColumnType & { columnName: ModelColumnName }>[] | undefined
   >(() => {
-    if (!currentModel) return
+    if (!currentModel) return;
 
-    const { title, content, ...columns } = currentModel.columns
+    const { title, content, ...columns } = currentModel.columns;
 
-    return prepareFieldsForMapper({ ...currentModel, columns })
-  }, [currentModel])
+    return prepareFieldsForMapper({ ...currentModel, columns });
+  }, [currentModel]);
 
   if (
     !(
@@ -27,7 +27,7 @@ export const PostLikeFields: FC = () => {
       groupedFields.length
     )
   ) {
-    return null
+    return null;
   }
 
   return (
@@ -36,5 +36,5 @@ export const PostLikeFields: FC = () => {
         <FieldMapper fields={groupedFields} />
       </div>
     </AsideItemWrap>
-  )
-}
+  );
+};

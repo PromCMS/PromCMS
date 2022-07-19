@@ -1,17 +1,17 @@
-import ImageSelect from '@components/form/ImageSelect'
-import { ProfileLayout } from '@layouts'
-import { useGlobalContext } from '@contexts/GlobalContext'
-import clsx from 'clsx'
-import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react'
-import { Controller, FormProvider, useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { NextPage } from '@custom-types'
-import { ProfileService } from '@services'
-import { getObjectDiff } from '@utils'
-import { User } from '@prom-cms/shared'
-import { useNotifications } from '@mantine/notifications'
-import { Button, TextInput } from '@mantine/core'
-import { LanguageSelect } from '@components/pages/Settings/Profile'
+import ImageSelect from '@components/form/ImageSelect';
+import { ProfileLayout } from '@layouts';
+import { useGlobalContext } from '@contexts/GlobalContext';
+import clsx from 'clsx';
+import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { NextPage } from '@custom-types';
+import { ProfileService } from '@services';
+import { getObjectDiff } from '@utils';
+import { User } from '@prom-cms/shared';
+import { useNotifications } from '@mantine/notifications';
+import { Button, TextInput } from '@mantine/core';
+import { LanguageSelect } from '@components/pages/Settings/Profile';
 import { At } from 'tabler-icons-react';
 
 const Row: FC<
@@ -20,22 +20,22 @@ const Row: FC<
   <div className={clsx('grid grid-cols-2 gap-6', className)} {...rest}>
     {children}
   </div>
-)
+);
 
 const SettingsPage: NextPage = () => {
-  const { currentUser, updateValue } = useGlobalContext()
-  const { t } = useTranslation()
-  const notifications = useNotifications()
+  const { currentUser, updateValue } = useGlobalContext();
+  const { t } = useTranslation();
+  const notifications = useNotifications();
   const formMethods = useForm({
     defaultValues: currentUser,
-  })
-  const { register, control, handleSubmit, watch } = formMethods
+  });
+  const { register, control, handleSubmit, watch } = formMethods;
 
-  const values = watch()
+  const values = watch();
 
   const canSubmit = useMemo(() => {
-    return !!Object.keys(getObjectDiff(currentUser, values)).length
-  }, [currentUser, values])
+    return !!Object.keys(getObjectDiff(currentUser, values)).length;
+  }, [currentUser, values]);
 
   const onSubmit = async (values) => {
     const id = notifications.showNotification({
@@ -45,30 +45,30 @@ const SettingsPage: NextPage = () => {
       message: t('Updating your data, please wait...'),
       autoClose: false,
       disallowClose: true,
-    })
+    });
 
-    const diffedUser = getObjectDiff(currentUser, values) as User
+    const diffedUser = getObjectDiff(currentUser, values) as User;
 
     try {
-      await ProfileService.save(diffedUser)
+      await ProfileService.save(diffedUser);
 
       updateValue('currentUser', {
         ...currentUser,
         ...diffedUser,
-      } as typeof currentUser)
+      } as typeof currentUser);
 
       notifications.updateNotification(id, {
         message: t('Update done!'),
         autoClose: 2000,
-      })
+      });
     } catch (e) {
       notifications.updateNotification(id, {
         color: 'red',
         message: t('An error happened'),
         autoClose: 2000,
-      })
+      });
     }
-  }
+  };
 
   return (
     <ProfileLayout>
@@ -111,11 +111,7 @@ const SettingsPage: NextPage = () => {
             {/* TODO */}
             {false && (
               <div className="w-full">
-                <Button
-                  className="flex-none"
-                  color="ghost"
-                  leftIcon={<At />}
-                >
+                <Button className="flex-none" color="ghost" leftIcon={<At />}>
                   {t('Change email')}
                 </Button>
               </div>
@@ -137,7 +133,7 @@ const SettingsPage: NextPage = () => {
         </form>
       </FormProvider>
     </ProfileLayout>
-  )
-}
+  );
+};
 
-export default SettingsPage
+export default SettingsPage;

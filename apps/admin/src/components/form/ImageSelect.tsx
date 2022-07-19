@@ -1,8 +1,8 @@
-import BackendImage from '@components/BackendImage'
-import { SmallFileList } from '@components/FilePickerModal/SmallFileList'
-import { Button, InputWrapper, Popover } from '@mantine/core'
-import { ItemID } from '@prom-cms/shared'
-import clsx from 'clsx'
+import BackendImage from '@components/BackendImage';
+import { SmallFileList } from '@components/FilePickerModal/SmallFileList';
+import { Button, InputWrapper, Popover } from '@mantine/core';
+import { ItemID } from '@prom-cms/shared';
+import clsx from 'clsx';
 import {
   DetailedHTMLProps,
   forwardRef,
@@ -11,24 +11,24 @@ import {
   useCallback,
   useMemo,
   useState,
-} from 'react'
-import { useTranslation } from 'react-i18next'
-import { Pencil, Photo } from "tabler-icons-react"
+} from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pencil, Photo } from 'tabler-icons-react';
 
 export interface ImageSelectProps
   extends Omit<
     DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
     'value' | 'onChange' | 'multiple' | 'onBlur'
   > {
-  label?: string
-  prefixIcon?: ReactElement
-  error?: string
-  touched?: boolean
-  multiple?: boolean
-  wrapperClassName?: string
-  selected: ItemID | ItemID[] | undefined | null
-  onChange: (newValue: ItemID | ItemID[] | null) => void
-  onBlur?: () => void
+  label?: string;
+  prefixIcon?: ReactElement;
+  error?: string;
+  touched?: boolean;
+  multiple?: boolean;
+  wrapperClassName?: string;
+  selected: ItemID | ItemID[] | undefined | null;
+  onChange: (newValue: ItemID | ItemID[] | null) => void;
+  onBlur?: () => void;
 }
 
 const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
@@ -45,20 +45,20 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
     },
     ref
   ) {
-    const [modalOpen, setModalOpen] = useState(false)
-    const { t } = useTranslation()
+    const [modalOpen, setModalOpen] = useState(false);
+    const { t } = useTranslation();
 
     const onChangeCallback = useCallback(
       (ids: ItemID[]) => {
-        onChange(!multiple ? ids[0] || null : ids)
+        onChange(!multiple ? ids[0] || null : ids);
       },
       [onChange, multiple]
-    )
+    );
 
     const onClose = useCallback(() => {
-      setModalOpen(false)
-      if (onBlur) onBlur()
-    }, [onBlur, setModalOpen])
+      setModalOpen(false);
+      if (onBlur) onBlur();
+    }, [onBlur, setModalOpen]);
 
     const modalPickedFiles = useMemo(
       () =>
@@ -68,7 +68,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
           ? selected
           : [selected],
       [selected]
-    )
+    );
 
     return (
       <>
@@ -128,8 +128,8 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
           </InputWrapper>
         </div>
       </>
-    )
+    );
   }
-)
+);
 
-export default ImageSelect
+export default ImageSelect;

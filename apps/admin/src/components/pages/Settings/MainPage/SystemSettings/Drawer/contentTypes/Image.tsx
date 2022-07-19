@@ -1,9 +1,9 @@
-import ImageSelect from '@components/form/ImageSelect'
-import { VFC } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
+import ImageSelect from '@components/form/ImageSelect';
+import { VFC } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 
 export const Image: VFC = () => {
-  const { control } = useFormContext()
+  const { control } = useFormContext();
 
   return (
     <>
@@ -15,5 +15,5 @@ export const Image: VFC = () => {
         )}
       />
     </>
-  )
-}
+  );
+};

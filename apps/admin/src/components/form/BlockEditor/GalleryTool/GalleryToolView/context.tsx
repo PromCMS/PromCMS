@@ -1,21 +1,21 @@
-import { SmallFileListProps } from '@components/FilePickerModal/SmallFileList'
-import { ItemID } from '@prom-cms/shared'
-import { useCallback, useEffect, useReducer } from 'react'
-import { FC, useContext } from 'react'
-import { createContext } from 'react'
-import { GalleryToolData } from '../GalleryTool'
+import { SmallFileListProps } from '@components/FilePickerModal/SmallFileList';
+import { ItemID } from '@prom-cms/shared';
+import { useCallback, useEffect, useReducer } from 'react';
+import { FC, useContext } from 'react';
+import { createContext } from 'react';
+import { GalleryToolData } from '../GalleryTool';
 
 type ContextData = GalleryToolData & {
-  removeFile: (id: ItemID) => void
+  removeFile: (id: ItemID) => void;
   changeMetadata: (
     type: 'title' | 'description',
     id: ItemID,
     value: string
-  ) => void
-  readOnly: boolean
-  addFile: SmallFileListProps['onChange']
-  changeLabel: (value: string) => void
-}
+  ) => void;
+  readOnly: boolean;
+  addFile: SmallFileListProps['onChange'];
+  changeLabel: (value: string) => void;
+};
 
 const GalleryToolViewContext = createContext<ContextData>({
   fileIds: [],
@@ -25,10 +25,10 @@ const GalleryToolViewContext = createContext<ContextData>({
   addFile: () => {},
   changeLabel: () => {},
   readOnly: false,
-})
+});
 
 export const useGalleryToolViewContext = () =>
-  useContext(GalleryToolViewContext)
+  useContext(GalleryToolViewContext);
 
 const reducer = (
   prevState: GalleryToolData,
@@ -38,35 +38,35 @@ const reducer = (
 ) => ({
   ...prevState,
   ...(typeof change === 'function' ? change(prevState) : change),
-})
+});
 
 export const GalleryToolViewContextProvider: FC<{
-  initialData: GalleryToolData
-  onDataChange: (data: Partial<GalleryToolData>) => void
-  readOnly: boolean
+  initialData: GalleryToolData;
+  onDataChange: (data: Partial<GalleryToolData>) => void;
+  readOnly: boolean;
 }> = ({ children, initialData, onDataChange, readOnly }) => {
-  const [state, setState] = useReducer(reducer, { ...initialData })
+  const [state, setState] = useReducer(reducer, { ...initialData });
 
-  useEffect(() => setState({ ...initialData }), [initialData, readOnly])
-  useEffect(() => onDataChange(state), [state, onDataChange])
+  useEffect(() => setState({ ...initialData }), [initialData, readOnly]);
+  useEffect(() => onDataChange(state), [state, onDataChange]);
 
   const addFile = useCallback<SmallFileListProps['onChange']>(
     (itemIds) =>
       setState(({ fileIds = [], ...restState }) => {
-        const stateFileIds = fileIds.map(({ id }) => id)
+        const stateFileIds = fileIds.map(({ id }) => id);
 
-        fileIds = fileIds.filter(({ id }) => itemIds.includes(id))
+        fileIds = fileIds.filter(({ id }) => itemIds.includes(id));
 
         // If they are already selected then there is no point in adding them again
         const newItemIds = itemIds.filter(
           (currentId) => !stateFileIds.includes(currentId)
-        )
-        fileIds.push(...newItemIds.map((id) => ({ id })))
+        );
+        fileIds.push(...newItemIds.map((id) => ({ id })));
 
-        return { ...restState, fileIds }
+        return { ...restState, fileIds };
       }),
     []
-  )
+  );
 
   const removeFile = useCallback(
     (imageIdToRemove: ItemID) =>
@@ -75,12 +75,12 @@ export const GalleryToolViewContextProvider: FC<{
         fileIds: fileIds.filter(({ id }) => imageIdToRemove !== id),
       })),
     []
-  )
+  );
 
   const onTextInput = useCallback(
     (value) => setState((prevState) => ({ ...prevState, label: value })),
     []
-  )
+  );
 
   const changeMetadata = useCallback(
     (type: 'title' | 'description', id: ItemID, value: string) =>
@@ -88,12 +88,12 @@ export const GalleryToolViewContextProvider: FC<{
         // we surely know that files does have some values
         fileIds[fileIds.findIndex(({ id: currentId }) => id === currentId)][
           type
-        ] = value
+        ] = value;
 
-        return { fileIds, ...restState }
+        return { fileIds, ...restState };
       }),
     []
-  )
+  );
 
   return (
     <GalleryToolViewContext.Provider
@@ -108,5 +108,5 @@ export const GalleryToolViewContextProvider: FC<{
     >
       {children}
     </GalleryToolViewContext.Provider>
-  )
-}
+  );
+};

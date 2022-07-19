@@ -1,5 +1,5 @@
-import { MantineProvider } from '@mantine/core'
-import { FC } from 'react'
+import { MantineProvider } from '@mantine/core';
+import { FC } from 'react';
 
 const ThemeProvider: FC = ({ children }) => (
   <MantineProvider
@@ -52,6 +52,6 @@ const ThemeProvider: FC = ({ children }) => (
   >
     {children}
   </MantineProvider>
-)
+);
 
-export default ThemeProvider
+export default ThemeProvider;

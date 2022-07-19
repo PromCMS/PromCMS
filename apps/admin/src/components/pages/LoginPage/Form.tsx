@@ -1,28 +1,28 @@
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { ProfileService } from '@services'
-import { useRouter } from 'next/router'
-import { VFC } from 'react'
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { FirstStep } from '.'
-import { loginFormSchema } from './schema'
-import { LoginFailedResponseCodes } from '@prom-cms/shared'
-import { Trans, useTranslation } from 'react-i18next'
-import { Button, Paper, Title } from '@mantine/core'
-import { MESSAGES } from '@constants'
-import axios from 'axios'
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ProfileService } from '@services';
+import { useRouter } from 'next/router';
+import { VFC } from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { FirstStep } from '.';
+import { loginFormSchema } from './schema';
+import { LoginFailedResponseCodes } from '@prom-cms/shared';
+import { Trans, useTranslation } from 'react-i18next';
+import { Button, Paper, Title } from '@mantine/core';
+import { MESSAGES } from '@constants';
+import axios from 'axios';
 
 interface LoginFormValues {
-  email: string
-  step: number
-  password: string
-  mfaImageUrl?: string
+  email: string;
+  step: number;
+  password: string;
+  mfaImageUrl?: string;
 }
 
 export const Form: VFC = () => {
-  const { push } = useRouter()
-  const { t } = useTranslation()
-  const { updateValue } = useGlobalContext()
+  const { push } = useRouter();
+  const { t } = useTranslation();
+  const { updateValue } = useGlobalContext();
   const formMethods = useForm<LoginFormValues>({
     resolver: yupResolver(loginFormSchema),
     defaultValues: {
@@ -31,11 +31,11 @@ export const Form: VFC = () => {
       password: '',
       mfaImageUrl: '',
     },
-  })
+  });
 
-  const { watch, handleSubmit, formState, setError } = formMethods
-  const step = watch('step')
-  const humanStep = step + 1
+  const { watch, handleSubmit, formState, setError } = formMethods;
+  const step = watch('step');
+  const humanStep = step + 1;
 
   const onSubmitCallback: SubmitHandler<LoginFormValues> = async ({
     password,
@@ -45,39 +45,39 @@ export const Form: VFC = () => {
     switch (step) {
       case 0:
         try {
-          const { data } = await ProfileService.login({ password, email })
+          const { data } = await ProfileService.login({ password, email });
           // set current user since we are logged in
-          updateValue('currentUser', data.data)
+          updateValue('currentUser', data.data);
 
           // push user to main page
-          push('/')
+          push('/');
         } catch (e) {
-          let message = MESSAGES.LOGIN_INVALID_CREDENTIALS
+          let message = MESSAGES.LOGIN_INVALID_CREDENTIALS;
           if (axios.isAxiosError(e) && e.response?.data?.code) {
-            const code: LoginFailedResponseCodes = e.response.data.code
+            const code: LoginFailedResponseCodes = e.response.data.code;
 
             switch (code) {
               case 'user-state-blocked':
-                message = MESSAGES.LOGIN_USER_BLOCKED
-                break
+                message = MESSAGES.LOGIN_USER_BLOCKED;
+                break;
               case 'user-state-invited':
-                message = MESSAGES.LOGIN_USER_INVITED
-                break
+                message = MESSAGES.LOGIN_USER_INVITED;
+                break;
               case 'user-state-password-reset':
-                message = MESSAGES.LOGIN_USER_PASSWORD_RESET
-                break
+                message = MESSAGES.LOGIN_USER_PASSWORD_RESET;
+                break;
               default:
-                break
+                break;
             }
           }
-          setError('password', { message: t(message) })
-          setError('email', { message: ' ' })
+          setError('password', { message: t(message) });
+          setError('email', { message: ' ' });
         }
-        break
+        break;
       default:
-        console.error(`There are not implemented that many steps... (${step})`)
+        console.error(`There are not implemented that many steps... (${step})`);
     }
-  }
+  };
 
   return (
     <FormProvider {...formMethods}>
@@ -105,5 +105,5 @@ export const Form: VFC = () => {
         </div>
       </div>
     </FormProvider>
-  )
-}
+  );
+};

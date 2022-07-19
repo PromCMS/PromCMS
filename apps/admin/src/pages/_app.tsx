@@ -1,27 +1,27 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
-import { SiteLayout } from '@layouts'
-import ContextProviders from '../layouts/ContextProviders'
-import { NotificationsProvider } from '@mantine/notifications'
-import Backend from 'i18next-http-backend'
-import i18next from 'i18next'
-import { I18nextProvider, initReactI18next } from 'react-i18next'
-import LanguageDetector from 'i18next-browser-languagedetector'
-import { localizationConfig } from '@config'
-import ThemeProvider from '@components/ThemeProvider'
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+import { SiteLayout } from '@layouts';
+import ContextProviders from '../layouts/ContextProviders';
+import { NotificationsProvider } from '@mantine/notifications';
+import Backend from 'i18next-http-backend';
+import i18next from 'i18next';
+import { I18nextProvider, initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import { localizationConfig } from '@config';
+import ThemeProvider from '@components/ThemeProvider';
 
 if (!i18next.isInitialized) {
   i18next
     .use(Backend)
     .use(initReactI18next)
     .use(LanguageDetector)
-    .init(localizationConfig)
+    .init(localizationConfig);
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
   // Use the layout defined at the page level, if available
   const getLayout =
-    (Component as any).getLayout || ((page) => <SiteLayout>{page}</SiteLayout>)
+    (Component as any).getLayout || ((page) => <SiteLayout>{page}</SiteLayout>);
 
   return (
     <ThemeProvider>
@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         </ContextProviders>
       </I18nextProvider>
     </ThemeProvider>
-  )
+  );
 }
 
-export default MyApp
+export default MyApp;

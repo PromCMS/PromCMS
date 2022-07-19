@@ -1,19 +1,19 @@
-import { useModelItem } from '@hooks/useModelItem'
-import { SiteLayout } from '@layouts'
-import { Button, Divider, Drawer, Title, Tooltip } from '@mantine/core'
-import { useClipboard } from '@mantine/hooks'
+import { useModelItem } from '@hooks/useModelItem';
+import { SiteLayout } from '@layouts';
+import { Button, Divider, Drawer, Title, Tooltip } from '@mantine/core';
+import { useClipboard } from '@mantine/hooks';
 import { ClipboardCheck } from 'tabler-icons-react';
-import { FileService } from '@services'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
-import { NextPage } from '../../../../types'
-import FilesPage from '../../index'
+import { FileService } from '@services';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+import { NextPage } from '../../../../types';
+import FilesPage from '../../index';
 
 const FilePage: NextPage = () => {
-  const { t } = useTranslation()
-  const { back, query } = useRouter()
-  const clipboard = useClipboard()
-  const { data, isLoading } = useModelItem('files', query.fileId as string)
+  const { t } = useTranslation();
+  const { back, query } = useRouter();
+  const clipboard = useClipboard();
+  const { data, isLoading } = useModelItem('files', query.fileId as string);
 
   // TODO: Get base url from server settings
   const onCopyClick = () =>
@@ -22,7 +22,7 @@ const FilePage: NextPage = () => {
         '/api' + FileService.getApiRawUrl(data!.id),
         window.location.origin
       )
-    )
+    );
 
   return (
     <Drawer
@@ -77,8 +77,8 @@ const FilePage: NextPage = () => {
         </>
       )}
     </Drawer>
-  )
-}
+  );
+};
 
 FilePage.getLayout = function getLayout(page) {
   return (
@@ -86,7 +86,7 @@ FilePage.getLayout = function getLayout(page) {
       <FilesPage />
       {page}
     </SiteLayout>
-  )
-}
+  );
+};
 
-export default FilePage
+export default FilePage;

@@ -11,7 +11,7 @@ import { Home } from 'tabler-icons-react';
 
 export interface UnderPageBreadcrumbsMenuProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLElement>, HTMLElement> {
-  items: { content: string | ReactChild | ReactChild[], isLinkTo?: string }[];
+  items: { content: string | ReactChild | ReactChild[]; isLinkTo?: string }[];
 }
 
 const CustomChevronRight: VFC = () => (

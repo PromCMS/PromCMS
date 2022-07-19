@@ -1,26 +1,26 @@
-import { MESSAGES } from '@constants'
-import useCurrentModel from '@hooks/useCurrentModel'
-import { useCurrentUser } from '@hooks/useCurrentUser'
-import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core'
-import { EntryService } from '@services'
-import { getObjectDiff } from '@utils'
-import clsx from 'clsx'
-import { useMemo } from 'react'
-import { FC } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { ChevronLeft, Trash } from "tabler-icons-react"
-import { useEntryUnderpageContext } from '../context'
+import { MESSAGES } from '@constants';
+import useCurrentModel from '@hooks/useCurrentModel';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core';
+import { EntryService } from '@services';
+import { getObjectDiff } from '@utils';
+import clsx from 'clsx';
+import { useMemo } from 'react';
+import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { ChevronLeft, Trash } from 'tabler-icons-react';
+import { useEntryUnderpageContext } from '../context';
 
 export const Footer: FC<{}> = () => {
-  const { watch } = useFormContext()
-  const formValues = watch()
-  const { t } = useTranslation()
+  const { watch } = useFormContext();
+  const formValues = watch();
+  const { t } = useTranslation();
   const { itemData, currentView, setAsideOpen, asideOpen, exitView } =
-    useEntryUnderpageContext()
-  const currentModel = useCurrentModel()
-  const currentUser = useCurrentUser()
-  const { setValue, formState } = useFormContext()
+    useEntryUnderpageContext();
+  const currentModel = useCurrentModel();
+  const currentUser = useCurrentUser();
+  const { setValue, formState } = useFormContext();
 
   const isEdited = useMemo(
     () =>
@@ -28,72 +28,72 @@ export const Footer: FC<{}> = () => {
         ? !!Object.keys(getObjectDiff(itemData || {}, formValues)).length
         : true,
     [formValues, currentView, itemData]
-  )
+  );
 
   const onItemDeleteRequest = async () => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-      exitView()
+      exitView();
       await EntryService.delete({
         id: itemData?.id as string,
         model: currentModel?.name as string,
-      })
+      });
     }
-  }
+  };
 
   const handleSaveButtonClick = () => {
     if (currentView === 'create') {
-      setValue('is_published', true)
+      setValue('is_published', true);
     }
-  }
+  };
 
   const saveButtonText = useMemo(() => {
-    let text = ''
+    let text = '';
 
     if (currentView === 'create') {
       if (formState.isSubmitting) {
-        text = 'Publishing'
+        text = 'Publishing';
       } else {
-        text = 'Publish'
+        text = 'Publish';
       }
     } else if (currentView === 'update') {
       if (formState.isSubmitting) {
-        text = 'Updating'
+        text = 'Updating';
       } else {
-        text = 'Update'
+        text = 'Update';
       }
     }
 
-    return t(text)
-  }, [currentView, formState.isSubmitting, t])
+    return t(text);
+  }, [currentView, formState.isSubmitting, t]);
 
   const publishButtonText = useMemo(() => {
-    let text = ''
+    let text = '';
 
     // We dont have to compute more so we end prematurely
-    if (!currentModel?.isDraftable) return text
+    if (!currentModel?.isDraftable) return text;
 
     if (currentView === 'create') {
       if (formState.isSubmitting) {
-        text = 'Saving'
+        text = 'Saving';
       } else {
-        text = 'Save as concept'
+        text = 'Save as concept';
       }
     } else if (currentView === 'update') {
-      if (!itemData) return text
+      if (!itemData) return text;
 
       if (itemData.is_published) {
-        text = 'Unpublish'
+        text = 'Unpublish';
       } else {
-        text = 'Publish'
+        text = 'Publish';
       }
     }
 
-    return t(text)
-  }, [currentView, formState.isSubmitting, currentModel, itemData, t])
+    return t(text);
+  }, [currentView, formState.isSubmitting, currentModel, itemData, t]);
 
   const handlePublishButtonClick = () => {
-    setValue('is_published', itemData ? !itemData.is_published : false)
-  }
+    setValue('is_published', itemData ? !itemData.is_published : false);
+  };
 
   return (
     <Paper
@@ -184,5 +184,5 @@ export const Footer: FC<{}> = () => {
         </Tooltip>
       </div>
     </Paper>
-  )
-}
+  );
+};

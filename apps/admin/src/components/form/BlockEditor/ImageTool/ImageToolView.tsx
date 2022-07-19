@@ -1,48 +1,43 @@
-import BackendImage from '@components/BackendImage'
+import BackendImage from '@components/BackendImage';
 import {
   SmallFileList,
   SmallFileListProps,
-} from '@components/FilePickerModal/SmallFileList'
-import ThemeProvider from '@components/ThemeProvider'
-import {
-  Button,
-  Popover,
-  Textarea,
-  TextInput,
-} from '@mantine/core'
-import clsx from 'clsx'
-import { useEffect, useMemo, useState, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Pencil, Settings } from "tabler-icons-react"
-import { ImageToolData } from './ImageTool'
+} from '@components/FilePickerModal/SmallFileList';
+import ThemeProvider from '@components/ThemeProvider';
+import { Button, Popover, Textarea, TextInput } from '@mantine/core';
+import clsx from 'clsx';
+import { useEffect, useMemo, useState, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Pencil, Settings } from 'tabler-icons-react';
+import { ImageToolData } from './ImageTool';
 
 export const ImageToolView: VFC<{
-  data: ImageToolData
-  onDataChange: (data: Partial<ImageToolData>) => void
-  readOnly?: boolean
+  data: ImageToolData;
+  onDataChange: (data: Partial<ImageToolData>) => void;
+  readOnly?: boolean;
 }> = ({ data, onDataChange, readOnly }) => {
-  const [imagePopoverOpen, setImagePopoverOpen] = useState(false)
-  const [textPopoverOpen, setTextPopoverOpen] = useState(false)
-  const [state, setState] = useState({ ...data })
-  const { t } = useTranslation()
+  const [imagePopoverOpen, setImagePopoverOpen] = useState(false);
+  const [textPopoverOpen, setTextPopoverOpen] = useState(false);
+  const [state, setState] = useState({ ...data });
+  const { t } = useTranslation();
 
-  useEffect(() => setState({ ...data }), [data])
-  useEffect(() => onDataChange(state), [state, onDataChange])
+  useEffect(() => setState({ ...data }), [data]);
+  useEffect(() => onDataChange(state), [state, onDataChange]);
 
   const pickedFiles = useMemo(
     () => (state.fileId ? [state.fileId] : []),
     [state.fileId]
-  )
+  );
 
   const onChange: SmallFileListProps['onChange'] = (itemId) => {
-    setState({ ...state, fileId: itemId[0] || '' })
-  }
+    setState({ ...state, fileId: itemId[0] || '' });
+  };
 
   const onTextInput = (e) =>
-    setState({ ...state, label: e.currentTarget.value })
+    setState({ ...state, label: e.currentTarget.value });
 
   const onDescriptionInput = (e) =>
-    setState({ ...state, description: e.currentTarget.value })
+    setState({ ...state, description: e.currentTarget.value });
 
   return (
     <ThemeProvider>
@@ -133,5 +128,5 @@ export const ImageToolView: VFC<{
         )}
       </div>
     </ThemeProvider>
-  )
-}
+  );
+};

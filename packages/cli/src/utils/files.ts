@@ -53,9 +53,7 @@ export const generateByTemplates = async (
       result = await formatCodeString(result, finalFilename);
     } catch (e) {
       console.log(
-          `An error happened during formating of ${finalFilename}: ${
-            e as Error
-          }`
+        `An error happened during formating of ${finalFilename}: ${e as Error}`
       );
       throw e;
     }

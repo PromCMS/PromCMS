@@ -1,54 +1,54 @@
-import ItemsMissingMessage from '@components/ItemsMissingMessage'
-import Skeleton, { SkeltonProps } from '@components/Skeleton'
-import { ItemID, PagedResult } from '@prom-cms/shared'
-import clsx from 'clsx'
-import { useCallback, useMemo, VFC } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
-import { createIterativeArray } from '@utils'
-import { ActionIcon, Group, Paper } from '@mantine/core'
-import { ReactNode } from 'react'
+import ItemsMissingMessage from '@components/ItemsMissingMessage';
+import Skeleton, { SkeltonProps } from '@components/Skeleton';
+import { ItemID, PagedResult } from '@prom-cms/shared';
+import clsx from 'clsx';
+import { useCallback, useMemo, VFC } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+import { createIterativeArray } from '@utils';
+import { ActionIcon, Group, Paper } from '@mantine/core';
+import { ReactNode } from 'react';
 import {
   DragDropContext,
   DragDropContextProps,
   Draggable,
   Droppable,
-} from 'react-beautiful-dnd'
-import { useClassNames } from './useClassNames'
-import { FC } from 'react'
-import { useState } from 'react'
-import { Copy, GripVertical, Pencil, Trash } from "tabler-icons-react"
+} from 'react-beautiful-dnd';
+import { useClassNames } from './useClassNames';
+import { FC } from 'react';
+import { useState } from 'react';
+import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
 
-export type TableViewItem = { id: string | number; [x: string]: any }
+export type TableViewItem = { id: string | number; [x: string]: any };
 
 export type TableViewCol = {
-  title: string
-  fieldName: string
-  show?: boolean
+  title: string;
+  fieldName: string;
+  show?: boolean;
   formatter?: <T extends TableViewItem>(
     data: T,
     columnInfo: Omit<TableViewCol, 'formatter'>
-  ) => any
-}
+  ) => any;
+};
 
 export interface TableViewProps {
-  columns: TableViewCol[]
-  items: Array<TableViewItem>
-  isLoading?: boolean
-  metadata?: Omit<PagedResult<any>, 'data'>
-  pagination?: ReactNode
-  onDeleteAction?: (id: ItemID) => void
-  onEditAction?: (id: ItemID) => void
-  onDuplicateAction?: (id: ItemID) => void
-  ordering?: boolean
-  onDragEnd?: DragDropContextProps['onDragEnd']
-  disabled?: boolean
+  columns: TableViewCol[];
+  items: Array<TableViewItem>;
+  isLoading?: boolean;
+  metadata?: Omit<PagedResult<any>, 'data'>;
+  pagination?: ReactNode;
+  onDeleteAction?: (id: ItemID) => void;
+  onEditAction?: (id: ItemID) => void;
+  onDuplicateAction?: (id: ItemID) => void;
+  ordering?: boolean;
+  onDragEnd?: DragDropContextProps['onDragEnd'];
+  disabled?: boolean;
 }
 
 const TableSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton className={clsx(className, 'h-7 w-full')} {...rest} />
-)
+);
 
-const iterativeSkeletonArray = createIterativeArray(5)
+const iterativeSkeletonArray = createIterativeArray(5);
 
 const DynamicDraggable: FC<{ index: number; id: ItemID; toggled: boolean }> = ({
   children,
@@ -56,10 +56,10 @@ const DynamicDraggable: FC<{ index: number; id: ItemID; toggled: boolean }> = ({
   id,
   toggled,
 }) => {
-  const classNames = useClassNames()
+  const classNames = useClassNames();
 
   if (!toggled) {
-    return <tr className={classNames.tableRow}>{children}</tr>
+    return <tr className={classNames.tableRow}>{children}</tr>;
   }
 
   return (
@@ -79,10 +79,10 @@ const DynamicDraggable: FC<{ index: number; id: ItemID; toggled: boolean }> = ({
         </tr>
       )}
     </Draggable>
-  )
-}
+  );
+};
 
-type ActionType = 'delete' | 'edit' | 'duplicate'
+type ActionType = 'delete' | 'edit' | 'duplicate';
 
 const TableView: VFC<TableViewProps> = ({
   columns,
@@ -97,46 +97,46 @@ const TableView: VFC<TableViewProps> = ({
   ordering,
   disabled,
 }) => {
-  const { t } = useTranslation()
-  const classNames = useClassNames()
+  const { t } = useTranslation();
+  const classNames = useClassNames();
   const [activeActions, setActiveActions] =
-    useState<Record<string, { id: ItemID; type: ActionType }>>()
+    useState<Record<string, { id: ItemID; type: ActionType }>>();
 
   const onActionClick = useCallback(
     (actionType: ActionType, id: ItemID) => async () => {
-      let actionFunction
+      let actionFunction;
 
       if (actionType === 'delete' && onDeleteAction)
-        actionFunction = onDeleteAction
+        actionFunction = onDeleteAction;
       else if (actionType === 'edit' && onEditAction)
-        actionFunction = onEditAction
+        actionFunction = onEditAction;
       else if (actionType === 'duplicate' && onDuplicateAction)
-        actionFunction = onDuplicateAction
+        actionFunction = onDuplicateAction;
 
       if (actionFunction.then) {
         // TODO: indicate which action on which item is working
-        await actionFunction(id)
+        await actionFunction(id);
       } else {
-        actionFunction(id)
+        actionFunction(id);
       }
     },
     [onEditAction, onDeleteAction, onDuplicateAction]
-  )
+  );
 
   const filteredCols = useMemo(() => {
-    return columns.filter(({ show }) => show === undefined || show)
-  }, [columns])
+    return columns.filter(({ show }) => show === undefined || show);
+  }, [columns]);
 
-  const hasActions = onEditAction || onDeleteAction
+  const hasActions = onEditAction || onDeleteAction;
   const normalCellsWidth = useMemo(() => {
     const normalCellsCount = filteredCols.filter(
       ({ fieldName }) => fieldName !== 'id'
-    ).length
+    ).length;
 
     return `calc(${100 / normalCellsCount}% - ${
       ((ordering ? 100 : 0) + (hasActions ? 150 : 0)) / normalCellsCount
-    }px)`
-  }, [filteredCols, hasActions, ordering])
+    }px)`;
+  }, [filteredCols, hasActions, ordering]);
 
   return (
     <>
@@ -314,7 +314,7 @@ const TableView: VFC<TableViewProps> = ({
         </>
       )}
     </>
-  )
-}
+  );
+};
 
-export default TableView
+export default TableView;

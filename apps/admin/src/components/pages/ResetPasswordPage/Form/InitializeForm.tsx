@@ -12,7 +12,7 @@ import { Button, Paper, TextInput } from '@mantine/core';
 import { Check } from 'tabler-icons-react';
 
 type FormValues = {
-  email: string,
+  email: string;
 };
 
 export const InitializeForm: VFC = () => {

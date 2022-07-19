@@ -25,21 +25,19 @@ export const CoeditorsList: FC = () => {
   const { watch, setValue, getValues } = useFormContext();
   const sharedWithItems = watch('coeditors');
   const hasNoItems = !Object.keys(sharedWithItems || {}).length;
-  const { data: coeditors, isLoading } =
-    useModelItems <
-    PagedResult <
-    User >>
-      ('users',
-      {
-        limit: 999,
-        where: {
-          id: {
-            manipulator: 'IN',
-            value: Object.keys(sharedWithItems || {}),
-          },
+  const { data: coeditors, isLoading } = useModelItems<PagedResult<User>>(
+    'users',
+    {
+      limit: 999,
+      where: {
+        id: {
+          manipulator: 'IN',
+          value: Object.keys(sharedWithItems || {}),
         },
       },
-      { isPaused: () => hasNoItems });
+    },
+    { isPaused: () => hasNoItems }
+  );
 
   const onItemDelete = useCallback(
     (itemId) => {

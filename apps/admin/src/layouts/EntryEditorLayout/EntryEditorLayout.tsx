@@ -1,43 +1,43 @@
-import { useEntryUnderpageContext } from '@components/pages/EntryUnderpage'
-import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu'
-import useCurrentModel from '@hooks/useCurrentModel'
-import { Skeleton } from '@mantine/core'
-import { capitalizeFirstLetter } from '@prom-cms/shared'
-import { EntryService } from '@services'
-import clsx from 'clsx'
-import { HTMLAttributes } from 'react'
-import { DetailedHTMLProps } from 'react'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useEntryUnderpageContext } from '@components/pages/EntryUnderpage';
+import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
+import useCurrentModel from '@hooks/useCurrentModel';
+import { Skeleton } from '@mantine/core';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { EntryService } from '@services';
+import clsx from 'clsx';
+import { HTMLAttributes } from 'react';
+import { DetailedHTMLProps } from 'react';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface EntryEditorLayoutAsideProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  open: boolean
-  onClose: () => void
+  open: boolean;
+  onClose: () => void;
 }
 export interface EntryEditorLayoutContentProps {}
 export interface EntryEditorLayoutProps {}
 
 export interface EntryEditorLayoutParts {
-  Aside: FC<EntryEditorLayoutAsideProps>
-  Content: FC<EntryEditorLayoutContentProps>
+  Aside: FC<EntryEditorLayoutAsideProps>;
+  Content: FC<EntryEditorLayoutContentProps>;
 }
 
 export const EntryEditorLayout: FC<EntryEditorLayoutProps> &
   EntryEditorLayoutParts = ({ children }) => {
-  const { onSubmit } = useEntryUnderpageContext()
+  const { onSubmit } = useEntryUnderpageContext();
 
   return (
     <form autoComplete="off" onSubmit={onSubmit} className="flex">
       {children}
     </form>
-  )
-}
+  );
+};
 
 EntryEditorLayout.Content = function Content({ children }) {
-  const model = useCurrentModel()
-  const { currentView, itemIsLoading, itemData } = useEntryUnderpageContext()
-  const { t } = useTranslation()
+  const model = useCurrentModel();
+  const { currentView, itemIsLoading, itemData } = useEntryUnderpageContext();
+  const { t } = useTranslation();
 
   // TODO: Rewrite page layout and use it here
   return (
@@ -69,11 +69,11 @@ EntryEditorLayout.Content = function Content({ children }) {
         <div className="relative w-full">{children}</div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 EntryEditorLayout.Aside = function Aside({ children, className, ...rest }) {
-  const { asideOpen } = useEntryUnderpageContext()
+  const { asideOpen } = useEntryUnderpageContext();
 
   return (
     <aside
@@ -86,5 +86,5 @@ EntryEditorLayout.Aside = function Aside({ children, className, ...rest }) {
         {children}
       </div>
     </aside>
-  )
-}
+  );
+};

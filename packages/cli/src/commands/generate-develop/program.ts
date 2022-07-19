@@ -7,8 +7,8 @@ import { formatGeneratorConfig } from '@prom-cms/shared';
 import { PROJECT_ROOT } from '../../constants';
 import { loggedJobWorker, LoggedWorkerJob, Logger } from '../../utils';
 import { generateCoreModule } from '../../parts/generate-core-module';
-import generateCore from "../../parts/generate-core-files";
-import { installPHPDeps } from "../../parts/install-php-deps";
+import generateCore from '../../parts/generate-core-files';
+import { installPHPDeps } from '../../parts/install-php-deps';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
@@ -60,20 +60,20 @@ export class GenerateDevelopProgram extends Command {
           if (await fs.pathExists(TEMP_CORE_ROOT)) {
             await fs.remove(TEMP_CORE_ROOT);
           }
-        }
+        },
       },
       {
         title: 'Generate new core',
         job: async () => {
           await generateCore(TEMP_CORE_ROOT, this.regenerate);
-        }
+        },
       },
       {
         title: 'Install PHP deps',
         skip: this.regenerate,
         async job() {
           await installPHPDeps(TEMP_CORE_ROOT);
-        }
+        },
       },
       {
         title: 'Generate development module into core',

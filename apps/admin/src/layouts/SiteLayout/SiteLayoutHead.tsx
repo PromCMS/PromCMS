@@ -1,5 +1,5 @@
-import Head from 'next/head'
-import { VFC } from 'react'
+import Head from 'next/head';
+import { VFC } from 'react';
 
 export const SiteLayoutHead: VFC = () => {
   return (
@@ -8,5 +8,5 @@ export const SiteLayoutHead: VFC = () => {
       <meta name="description" content="Another PROM CMS project" />
       <meta name="robots" content="nofollow,noindex" />
     </Head>
-  )
-}
+  );
+};

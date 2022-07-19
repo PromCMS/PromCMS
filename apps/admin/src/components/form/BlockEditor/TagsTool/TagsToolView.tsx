@@ -1,43 +1,38 @@
-import ThemeProvider from '@components/ThemeProvider'
-import {
-  ActionIcon,
-  Badge,
-  Group,
-  TextInput,
-} from '@mantine/core'
-import { useInputState } from '@mantine/hooks'
-import clsx from 'clsx'
-import { KeyboardEventHandler, useEffect, useState, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Tag, X } from "tabler-icons-react"
-import { TagsToolData } from './TagsTool'
+import ThemeProvider from '@components/ThemeProvider';
+import { ActionIcon, Badge, Group, TextInput } from '@mantine/core';
+import { useInputState } from '@mantine/hooks';
+import clsx from 'clsx';
+import { KeyboardEventHandler, useEffect, useState, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Tag, X } from 'tabler-icons-react';
+import { TagsToolData } from './TagsTool';
 
 export const TagsToolView: VFC<{
-  dataFromParent: TagsToolData
-  onDataChange: (data: TagsToolData) => void
-  readOnly: boolean
+  dataFromParent: TagsToolData;
+  onDataChange: (data: TagsToolData) => void;
+  readOnly: boolean;
 }> = ({ readOnly, dataFromParent, onDataChange }) => {
-  const [data, setData] = useState<TagsToolData>(dataFromParent)
-  const [inputValue, setInputValue] = useInputState('')
-  const { t } = useTranslation()
+  const [data, setData] = useState<TagsToolData>(dataFromParent);
+  const [inputValue, setInputValue] = useInputState('');
+  const { t } = useTranslation();
 
   useEffect(() => {
-    setData(dataFromParent)
-  }, [dataFromParent])
+    setData(dataFromParent);
+  }, [dataFromParent]);
 
   useEffect(() => {
-    onDataChange(data)
-  }, [data, onDataChange])
+    onDataChange(data);
+  }, [data, onDataChange]);
 
   const onRemoveClick = (tagContent) => () =>
     setData({
       ...data,
       tags: data.tags.filter((tagValue) => tagValue !== tagContent),
-    })
+    });
 
   const onAddClick = () => {
     if (!inputValue) {
-      return
+      return;
     }
 
     setData({
@@ -46,17 +41,17 @@ export const TagsToolView: VFC<{
         ...data.tags.filter((tagValue) => tagValue !== inputValue),
         inputValue,
       ],
-    })
-    setInputValue('')
-  }
+    });
+    setInputValue('');
+  };
 
   const onKeyDownInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key.toLowerCase() === 'enter') {
-      e.preventDefault()
-      e.stopPropagation()
-      onAddClick()
+      e.preventDefault();
+      e.stopPropagation();
+      onAddClick();
     }
-  }
+  };
 
   return (
     <ThemeProvider>
@@ -110,5 +105,5 @@ export const TagsToolView: VFC<{
         )}
       </div>
     </ThemeProvider>
-  )
-}
+  );
+};

@@ -1,31 +1,31 @@
-import AsideItemWrap from '@components/AsideItemWrap'
-import useCurrentModel from '@hooks/useCurrentModel'
-import { useCurrentUser } from '@hooks/useCurrentUser'
-import { useUser } from '@hooks/useUser'
-import { Skeleton, SkeletonProps } from '@mantine/core'
-import { ItemID } from '@prom-cms/shared'
-import { UserService } from '@services'
-import clsx from 'clsx'
-import dayjs from 'dayjs'
-import Link from 'next/link'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useEntryUnderpageContext } from '../../context'
+import AsideItemWrap from '@components/AsideItemWrap';
+import useCurrentModel from '@hooks/useCurrentModel';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { useUser } from '@hooks/useUser';
+import { Skeleton, SkeletonProps } from '@mantine/core';
+import { ItemID } from '@prom-cms/shared';
+import { UserService } from '@services';
+import clsx from 'clsx';
+import dayjs from 'dayjs';
+import Link from 'next/link';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useEntryUnderpageContext } from '../../context';
 
 const TextSkeleton: FC<SkeletonProps> = ({ className, ...rest }) => (
   <Skeleton
     className={clsx('relative top-0.5 inline-block h-4', className)}
     {...rest}
   />
-)
+);
 
 const UserName: FC<{ userId?: ItemID }> = ({ userId }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { data, isLoading } = useUser(userId, {
     isPaused: () => !userId,
-  })
-  const currentUser = useCurrentUser()
-  const userIsCurrentUser = Number(userId) === Number(currentUser?.id)
+  });
+  const currentUser = useCurrentUser();
+  const userIsCurrentUser = Number(userId) === Number(currentUser?.id);
 
   return isLoading || !data || !userId ? (
     <TextSkeleton className="inline-block" />
@@ -39,18 +39,18 @@ const UserName: FC<{ userId?: ItemID }> = ({ userId }) => {
         {userIsCurrentUser ? t('Me') : data.name}
       </a>
     </Link>
-  )
-}
+  );
+};
 
-const dateFormat = 'D.M. YYYY @ HH:mm'
+const dateFormat = 'D.M. YYYY @ HH:mm';
 
 export const PublishInfo: FC = () => {
-  const { itemData, itemIsLoading, currentView } = useEntryUnderpageContext()
-  const { t } = useTranslation()
-  const currentModel = useCurrentModel()
+  const { itemData, itemIsLoading, currentView } = useEntryUnderpageContext();
+  const { t } = useTranslation();
+  const currentModel = useCurrentModel();
 
   if (!currentModel?.hasTimestamps && !currentModel?.ownable) {
-    return null
+    return null;
   }
 
   return (
@@ -110,5 +110,5 @@ export const PublishInfo: FC = () => {
         </div>
       )}
     </AsideItemWrap>
-  )
-}
+  );
+};

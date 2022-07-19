@@ -1,39 +1,40 @@
-import { useCallback, useState, VFC } from 'react'
-import { Menu } from './Menu'
-import { FileListContextProvider } from './context'
-import { UploadFilesModal } from './UploadFilesModal'
-import { List } from './List'
+import { useCallback, useState, VFC } from 'react';
+import { Menu } from './Menu';
+import { FileListContextProvider } from './context';
+import { UploadFilesModal } from './UploadFilesModal';
+import { List } from './List';
 
 export const FileList: VFC = () => {
-  const [uploadFileModalOpen, setUploadFileModalOpen] = useState<boolean>(false)
+  const [uploadFileModalOpen, setUploadFileModalOpen] =
+    useState<boolean>(false);
 
   const onDragOver = useCallback(
     (event) => {
-      event.preventDefault()
+      event.preventDefault();
       if (
         !uploadFileModalOpen &&
         (event?.dataTransfer?.types || []).join('') === 'Files'
       ) {
-        setUploadFileModalOpen(true)
+        setUploadFileModalOpen(true);
       }
     },
     [uploadFileModalOpen, setUploadFileModalOpen]
-  )
+  );
 
   const onDrop = useCallback(
     (event) => {
-      event.preventDefault()
+      event.preventDefault();
       if (uploadFileModalOpen) {
-        setUploadFileModalOpen(false)
+        setUploadFileModalOpen(false);
       }
     },
     [uploadFileModalOpen, setUploadFileModalOpen]
-  )
+  );
 
   const closeModal = useCallback(
     () => setUploadFileModalOpen(false),
     [setUploadFileModalOpen]
-  )
+  );
 
   return (
     <FileListContextProvider>
@@ -43,5 +44,5 @@ export const FileList: VFC = () => {
         <UploadFilesModal isOpen={uploadFileModalOpen} onClose={closeModal} />
       </div>
     </FileListContextProvider>
-  )
-}
+  );
+};

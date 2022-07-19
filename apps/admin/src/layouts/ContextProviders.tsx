@@ -1,7 +1,7 @@
-import { GlobalContextProvider } from '@contexts/GlobalContext'
-import { apiClient } from '@api'
-import { FC } from 'react'
-import { SWRConfig } from 'swr'
+import { GlobalContextProvider } from '@contexts/GlobalContext';
+import { apiClient } from '@api';
+import { FC } from 'react';
+import { SWRConfig } from 'swr';
 
 const ContextProviders: FC = ({ children }) => {
   return (
@@ -15,7 +15,7 @@ const ContextProviders: FC = ({ children }) => {
     >
       <GlobalContextProvider>{children}</GlobalContextProvider>
     </SWRConfig>
-  )
-}
+  );
+};
 
-export default ContextProviders
+export default ContextProviders;

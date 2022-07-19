@@ -1,31 +1,31 @@
-import { yupResolver } from '@hookform/resolvers/yup'
-import { createUserSchema, updateUserSchema } from '@schemas'
-import { FC, useEffect, VFC } from 'react'
-import { FormProvider, useForm, useFormContext } from 'react-hook-form'
-import { useData } from './context'
-import { UserUnderpageForm } from './Form'
-import { Header } from './Header'
-import { capitalizeFirstLetter } from '@prom-cms/shared'
-import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu'
-import Skeleton from '@components/Skeleton'
-import { FormAside } from './FormAside'
-import { useOnSubmitCallback } from './hooks'
-import { useTranslation } from 'react-i18next'
+import { yupResolver } from '@hookform/resolvers/yup';
+import { createUserSchema, updateUserSchema } from '@schemas';
+import { FC, useEffect, VFC } from 'react';
+import { FormProvider, useForm, useFormContext } from 'react-hook-form';
+import { useData } from './context';
+import { UserUnderpageForm } from './Form';
+import { Header } from './Header';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
+import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
+import Skeleton from '@components/Skeleton';
+import { FormAside } from './FormAside';
+import { useOnSubmitCallback } from './hooks';
+import { useTranslation } from 'react-i18next';
 
 const FormWrapper: FC = ({ children }) => {
-  const { handleSubmit } = useFormContext()
-  const onSubmitCallback = useOnSubmitCallback()
+  const { handleSubmit } = useFormContext();
+  const onSubmitCallback = useOnSubmitCallback();
 
   return (
     <form onSubmit={handleSubmit(onSubmitCallback)} autoComplete="off">
       {children}
     </form>
-  )
-}
+  );
+};
 
 export const Content: VFC = () => {
-  const { user, model, isLoading, view } = useData()
-  const { t } = useTranslation()
+  const { user, model, isLoading, view } = useData();
+  const { t } = useTranslation();
 
   const formMethods = useForm({
     defaultValues: user || {},
@@ -35,14 +35,14 @@ export const Content: VFC = () => {
       view === 'create'
         ? yupResolver(createUserSchema)
         : yupResolver(updateUserSchema),
-  })
-  const { reset } = formMethods
+  });
+  const { reset } = formMethods;
 
   useEffect(() => {
     if (user) {
-      reset(user)
+      reset(user);
     }
-  }, [user, reset])
+  }, [user, reset]);
 
   return (
     <FormProvider {...formMethods}>
@@ -79,5 +79,5 @@ export const Content: VFC = () => {
         </div>
       </FormWrapper>
     </FormProvider>
-  )
-}
+  );
+};

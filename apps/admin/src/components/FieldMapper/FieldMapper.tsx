@@ -1,20 +1,20 @@
-import { Checkbox, InputWrapper, Textarea, TextInput } from '@mantine/core'
-import { ModelColumnName, ColumnType } from '@prom-cms/shared'
-import { VFC } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import ImageSelect from '../form/ImageSelect'
-import { EnumSelect, RelationshipItemSelect } from './fields'
+import { Checkbox, InputWrapper, Textarea, TextInput } from '@mantine/core';
+import { ModelColumnName, ColumnType } from '@prom-cms/shared';
+import { VFC } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import ImageSelect from '../form/ImageSelect';
+import { EnumSelect, RelationshipItemSelect } from './fields';
 
 export interface FieldMapperProps {
   fields: (ColumnType & {
-    columnName: ModelColumnName
-  })[][]
+    columnName: ModelColumnName;
+  })[][];
 }
 
 const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
-  const { formState, register, control } = useFormContext()
-  const { t } = useTranslation()
+  const { formState, register, control } = useFormContext();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -22,10 +22,10 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
         rowItems.length ? (
           <div key={rowIndex} className="grid w-full gap-5">
             {rowItems.map((values) => {
-              const { title, type, columnName } = values
+              const { title, type, columnName } = values;
               const errorMessage = t(
                 formState.errors[columnName]?.message || ''
-              )
+              );
 
               if (type === 'string' || type === 'number')
                 return (
@@ -38,7 +38,7 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     error={errorMessage}
                     {...register(columnName)}
                   />
-                )
+                );
               else if (type === 'longText') {
                 return (
                   <Textarea
@@ -50,7 +50,7 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     error={errorMessage}
                     {...register(columnName)}
                   />
-                )
+                );
               } else if (type === 'enum') {
                 return (
                   <EnumSelect
@@ -58,7 +58,7 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     error={errorMessage}
                     {...values}
                   />
-                )
+                );
               } else if (type === 'relationship') {
                 return (
                   <RelationshipItemSelect
@@ -66,7 +66,7 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     error={errorMessage}
                     {...values}
                   />
-                )
+                );
               } else if (type === 'file') {
                 return (
                   <Controller
@@ -83,7 +83,7 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                       />
                     )}
                   />
-                )
+                );
               } else if (type === 'boolean') {
                 return (
                   <Controller
@@ -108,14 +108,14 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                       </InputWrapper>
                     )}
                   />
-                )
+                );
               }
             })}
           </div>
         ) : null
       )}
     </>
-  )
-}
+  );
+};
 
-export default FieldMapper
+export default FieldMapper;

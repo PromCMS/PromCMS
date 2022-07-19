@@ -1,14 +1,14 @@
-import InfiniteHorizontalProgress from '@components/InfiniteHorizontalProgress'
-import { Transition } from '@headlessui/react'
-import { memo, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
+import InfiniteHorizontalProgress from '@components/InfiniteHorizontalProgress';
+import { Transition } from '@headlessui/react';
+import { memo, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export interface LoaderProps {
-  show?: boolean
+  show?: boolean;
 }
 
 export const Loader: VFC<LoaderProps> = memo(function Loader({ show = true }) {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   return (
     <Transition
@@ -27,5 +27,5 @@ export const Loader: VFC<LoaderProps> = memo(function Loader({ show = true }) {
         <InfiniteHorizontalProgress className="mx-auto mt-3 h-3 w-[400px]" />
       </div>
     </Transition>
-  )
-})
+  );
+});
