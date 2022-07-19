@@ -1,8 +1,8 @@
-import BackendImage from '@components/BackendImage'
-import ItemsMissingMessage from '@components/ItemsMissingMessage'
-import { useCurrentUser } from '@hooks/useCurrentUser'
-import { useModelItems } from '@hooks/useModelItems'
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
+import BackendImage from '@components/BackendImage';
+import ItemsMissingMessage from '@components/ItemsMissingMessage';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { useModelItems } from '@hooks/useModelItems';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import {
   ActionIcon,
   Button,
@@ -13,16 +13,16 @@ import {
   Pagination,
   Paper,
   Textarea,
-} from '@mantine/core'
-import { ItemID } from '@prom-cms/shared'
-import { SettingsService } from '@services'
-import clsx from 'clsx'
-import { Fragment } from 'react'
-import { useCallback, useState, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Edit, Plus, Trash } from "tabler-icons-react"
-import { Drawer } from './Drawer'
-import { CopyName } from './Table'
+} from '@mantine/core';
+import { ItemID } from '@prom-cms/shared';
+import { SettingsService } from '@services';
+import clsx from 'clsx';
+import { Fragment } from 'react';
+import { useCallback, useState, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Edit, Plus, Trash } from 'tabler-icons-react';
+import { Drawer } from './Drawer';
+import { CopyName } from './Table';
 
 const useStyles = createStyles(() => ({
   root: {
@@ -30,52 +30,52 @@ const useStyles = createStyles(() => ({
       verticalAlign: 'baseline',
     },
   },
-}))
+}));
 
-const smallColSize = 2
-const maxCols = 12
+const smallColSize = 2;
+const maxCols = 12;
 const colDivider = (
   <Grid.Col span={maxCols}>
     <Divider />
   </Grid.Col>
-)
+);
 
 export const SystemSettings: VFC = () => {
-  const { classes } = useStyles()
-  const { t } = useTranslation()
-  const currentUser = useCurrentUser()
-  const [currentPage, setCurrentPage] = useState(1)
-  const { data, mutate } = useModelItems('settings', { page: currentPage })
-  const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>()
-  const [creationAction, setCreationMode] = useState(false)
-  const reqNotification = useRequestWithNotifications()
-  const largeColSize = currentUser?.isAdmin ? 6 : 8
+  const { classes } = useStyles();
+  const { t } = useTranslation();
+  const currentUser = useCurrentUser();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, mutate } = useModelItems('settings', { page: currentPage });
+  const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
+  const [creationAction, setCreationMode] = useState(false);
+  const reqNotification = useRequestWithNotifications();
+  const largeColSize = currentUser?.isAdmin ? 6 : 8;
 
   const currentUserCanCreate = currentUser?.can({
     action: 'create',
     targetModel: 'settings',
-  })
+  });
   const currentUserCanEdit = currentUser?.can({
     action: 'update',
     targetModel: 'settings',
-  })
+  });
   const currentUserCanDelete = currentUser?.can({
     action: 'delete',
     targetModel: 'settings',
-  })
+  });
 
   const onModalClose = () => {
-    mutate()
-    setOptionToEdit(undefined)
-    setCreationMode(false)
-  }
+    mutate();
+    setOptionToEdit(undefined);
+    setCreationMode(false);
+  };
 
   const onEditClick = useCallback(
     (nextOption: ItemID | undefined) => () => {
-      setOptionToEdit(nextOption)
+      setOptionToEdit(nextOption);
     },
     []
-  )
+  );
 
   const onDeleteClick = useCallback(
     (id: ItemID) => async () => {
@@ -87,14 +87,14 @@ export const SystemSettings: VFC = () => {
             successMessage: t('Option deleted!'),
           },
           async () => {
-            await SettingsService.delete(id)
-            await mutate()
+            await SettingsService.delete(id);
+            await mutate();
           }
-        )
+        );
       } catch {}
     },
     [t, reqNotification, mutate]
-  )
+  );
 
   return (
     <>
@@ -208,5 +208,5 @@ export const SystemSettings: VFC = () => {
         onClose={onModalClose}
       />
     </>
-  )
-}
+  );
+};

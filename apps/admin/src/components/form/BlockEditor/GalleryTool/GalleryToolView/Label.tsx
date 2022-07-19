@@ -1,11 +1,11 @@
-import { TextInput, Title } from '@mantine/core'
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useGalleryToolViewContext } from './context'
+import { TextInput, Title } from '@mantine/core';
+import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useGalleryToolViewContext } from './context';
 
 export const Label: FC = () => {
-  const { t } = useTranslation()
-  const { label, changeLabel, readOnly } = useGalleryToolViewContext()
+  const { t } = useTranslation();
+  const { label, changeLabel, readOnly } = useGalleryToolViewContext();
 
   return readOnly ? (
     label ? (
@@ -20,5 +20,5 @@ export const Label: FC = () => {
       onChange={(e) => changeLabel(e.currentTarget.value)}
       className="mt-2"
     />
-  )
-}
+  );
+};

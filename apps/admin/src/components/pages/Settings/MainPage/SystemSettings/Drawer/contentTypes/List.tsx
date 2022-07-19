@@ -5,57 +5,58 @@ import {
   SimpleGrid,
   Text,
   TextInput,
-} from '@mantine/core'
-import { useInputState } from '@mantine/hooks'
-import { VFC } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { ChevronDown, ChevronUp, Plus, Trash } from "tabler-icons-react"
+} from '@mantine/core';
+import { useInputState } from '@mantine/hooks';
+import { VFC } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { ChevronDown, ChevronUp, Plus, Trash } from 'tabler-icons-react';
 
 interface DndListHandleProps {
   data: {
-    id: string
-    value: string
-  }[]
+    id: string;
+    value: string;
+  }[];
 }
 
 export const List: VFC = () => {
-  const { register, watch, setValue } = useFormContext()
-  const [stringValue, setStringValue] = useInputState('')
-  const data: DndListHandleProps['data'] = watch('content.data', [])
-  const { t } = useTranslation()
+  const { register, watch, setValue } = useFormContext();
+  const [stringValue, setStringValue] = useInputState('');
+  const data: DndListHandleProps['data'] = watch('content.data', []);
+  const { t } = useTranslation();
 
   const onDeleteClick = (id: string) => () => {
     setValue(
       'content.data',
       data.filter((item) => item.id !== id)
-    )
-  }
+    );
+  };
 
   const onAdd = () => {
     if (!stringValue) {
-      return
+      return;
     }
 
     // Generate unique id
-    const id = Date.now().toString(36) + Math.random().toString(36).substring(2)
+    const id =
+      Date.now().toString(36) + Math.random().toString(36).substring(2);
     setValue(`content.data[${(data || []).length}]`, {
       id,
       value: stringValue,
-    })
-    setStringValue('')
-  }
+    });
+    setStringValue('');
+  };
 
   const onChangePlace = (direction: 'up' | 'down', id: string) => () => {
-    const newData = [...data]
-    const index = newData.findIndex(({ id: key }) => key === id)
+    const newData = [...data];
+    const index = newData.findIndex(({ id: key }) => key === id);
 
-    const nextIndex = direction === 'up' ? index - 1 : index + 1
+    const nextIndex = direction === 'up' ? index - 1 : index + 1;
     // Swap entries
-    ;[newData[index], newData[nextIndex]] = [newData[nextIndex], newData[index]]
+    [newData[index], newData[nextIndex]] = [newData[nextIndex], newData[index]];
 
-    setValue('content.data', newData)
-  }
+    setValue('content.data', newData);
+  };
 
   return (
     <>
@@ -68,9 +69,9 @@ export const List: VFC = () => {
           onChange={setStringValue}
           onKeyDown={(e) => {
             if (e.key.toLowerCase() === 'enter') {
-              e.preventDefault()
-              e.stopPropagation()
-              onAdd()
+              e.preventDefault();
+              e.stopPropagation();
+              onAdd();
             }
           }}
         />
@@ -113,5 +114,5 @@ export const List: VFC = () => {
         </InputWrapper>
       </Paper>
     </>
-  )
-}
+  );
+};

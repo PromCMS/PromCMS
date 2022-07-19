@@ -1,23 +1,23 @@
-import { ApiResultModels, User, UserRole } from '@prom-cms/shared'
-import axios from 'axios'
-import { apiClient } from '@api'
-import { API_CURRENT_USER_URL, API_ENTRY_TYPES_URL } from '@constants'
-import { useRouter } from 'next/router'
-import { createContext, FC, useContext, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { UserRolesService } from '@services'
-import { useMemo } from 'react'
+import { ApiResultModels, User, UserRole } from '@prom-cms/shared';
+import axios from 'axios';
+import { apiClient } from '@api';
+import { API_CURRENT_USER_URL, API_ENTRY_TYPES_URL } from '@constants';
+import { useRouter } from 'next/router';
+import { createContext, FC, useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { UserRolesService } from '@services';
+import { useMemo } from 'react';
 
 export interface IGlobalContext {
-  currentUser?: Omit<User, 'role'> & { role: UserRole }
-  models?: ApiResultModels
+  currentUser?: Omit<User, 'role'> & { role: UserRole };
+  models?: ApiResultModels;
   updateValue<T extends keyof Omit<IGlobalContext, 'updateValue'>>(
     key: T,
     value?: IGlobalContext[T]
-  ): void
-  currentUserIsAdmin: boolean
-  isBooting: boolean
-  isLoggedIn: boolean
+  ): void;
+  currentUserIsAdmin: boolean;
+  isBooting: boolean;
+  isLoggedIn: boolean;
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -25,79 +25,79 @@ export const GlobalContext = createContext<IGlobalContext>({
   currentUserIsAdmin: false,
   isBooting: true,
   isLoggedIn: false,
-})
+});
 
 export const GlobalContextProvider: FC = ({ children }) => {
-  const { push, pathname } = useRouter()
-  const { t, i18n } = useTranslation()
+  const { push, pathname } = useRouter();
+  const { t, i18n } = useTranslation();
   const [currentUser, setCurrentUser] = useState<
     Omit<User, 'role'> & { role: UserRole }
-  >()
-  const [models, setModels] = useState()
-  const [isBooting, setIsBooting] = useState(true)
-  const [isNotOnline, setIsNotOnline] = useState(false)
+  >();
+  const [models, setModels] = useState();
+  const [isBooting, setIsBooting] = useState(true);
+  const [isNotOnline, setIsNotOnline] = useState(false);
 
   const updateValue: IGlobalContext['updateValue'] = (key, value) => {
     switch (key) {
       case 'currentUser':
         // @ts-ignore
-        setCurrentUser(value)
-        break
+        setCurrentUser(value);
+        break;
       case 'models':
         // @ts-ignore
-        setModels(value)
-        break
+        setModels(value);
+        break;
       default:
-        console.error(`Key ${key} does not exist in global context`)
-        break
+        console.error(`Key ${key} does not exist in global context`);
+        break;
     }
-  }
+  };
 
   useEffect(() => {
-    const cancelToken = axios.CancelToken.source()
+    const cancelToken = axios.CancelToken.source();
 
     const getModels = async () => {
-      setIsBooting(true)
+      setIsBooting(true);
       const modelsQuery = await apiClient.get(API_ENTRY_TYPES_URL, {
         cancelToken: cancelToken.token,
-      })
+      });
 
-      setModels(modelsQuery.data)
-      setIsBooting(false)
-    }
+      setModels(modelsQuery.data);
+      setIsBooting(false);
+    };
 
     if (!!currentUser && !models) {
-      getModels()
+      getModels();
     }
 
-    return () => cancelToken.cancel()
-  }, [currentUser, push, models])
+    return () => cancelToken.cancel();
+  }, [currentUser, push, models]);
 
   useEffect(() => {
-    const cancelToken = axios.CancelToken.source()
+    const cancelToken = axios.CancelToken.source();
 
     const getUser = async () => {
-      setIsBooting(true)
+      setIsBooting(true);
       try {
         const loggedInUserQuery = await apiClient.get(API_CURRENT_USER_URL, {
           cancelToken: cancelToken.token,
-        })
+        });
 
-        const loggedInUser = loggedInUserQuery.data.data as User
+        const loggedInUser = loggedInUserQuery.data.data as User;
 
         const currentUserRoleQuery = await apiClient.get<{ data: UserRole }>(
           UserRolesService.apiGetUrl(loggedInUser.role as number),
           {
             cancelToken: cancelToken.token,
           }
-        )
+        );
 
         setCurrentUser({
           ...loggedInUser,
           role: currentUserRoleQuery.data.data,
-        })
+        });
 
-        setIsBooting(false)
+        setIsBooting(false);
       } catch (e) {
         if (axios.isAxiosError(e)) {
           if (e.response?.status === 401) {
@@ -108,49 +108,49 @@ export const GlobalContextProvider: FC = ({ children }) => {
               !pathname.includes('/reset-password') &&
               !pathname.includes('/finalize-registration')
             )
-              await push('/login')
+              await push('/login');
           } else {
             // TODO: Make this a better message to some component/page
-            alert('Looks like API is not working, please tell your developer')
+            alert('Looks like API is not working, please tell your developer');
           }
-          setIsBooting(false)
+          setIsBooting(false);
         }
       }
-    }
+    };
 
     if (!currentUser) {
-      getUser()
+      getUser();
     }
 
-    return () => cancelToken.cancel()
-  }, [currentUser, push])
+    return () => cancelToken.cancel();
+  }, [currentUser, push]);
 
   useEffect(() => {
     // TODO
-    const onOnline = () => setIsNotOnline(false)
-    const onOffline = () => setIsNotOnline(true)
+    const onOnline = () => setIsNotOnline(false);
+    const onOffline = () => setIsNotOnline(true);
 
-    window.addEventListener('online', onOnline)
-    window.addEventListener('offline', onOffline)
+    window.addEventListener('online', onOnline);
+    window.addEventListener('offline', onOffline);
 
     return () => {
-      window.removeEventListener('online', onOnline)
-      window.removeEventListener('offline', onOffline)
-    }
-  }, [setIsNotOnline])
+      window.removeEventListener('online', onOnline);
+      window.removeEventListener('offline', onOffline);
+    };
+  }, [setIsNotOnline]);
 
   useEffect(() => {
     const listener = () => {
-      setCurrentUser(undefined)
-    }
+      setCurrentUser(undefined);
+    };
     if (currentUser) {
-      window.addEventListener('userHasBeenLoggedOff', listener)
+      window.addEventListener('userHasBeenLoggedOff', listener);
     }
 
     return () => {
-      window.removeEventListener('userHasBeenLoggedOff', listener)
-    }
-  }, [setCurrentUser, currentUser])
+      window.removeEventListener('userHasBeenLoggedOff', listener);
+    };
+  }, [setCurrentUser, currentUser]);
 
   const contextValue = useMemo(
     () => ({
@@ -162,7 +162,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
       isLoggedIn: !!currentUser,
     }),
     [currentUser, i18n.isInitialized, isBooting, models]
-  )
+  );
 
   return (
     <GlobalContext.Provider value={contextValue}>
@@ -175,7 +175,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
         </div>
       )}
     </GlobalContext.Provider>
-  )
-}
+  );
+};
 
-export const useGlobalContext = () => useContext(GlobalContext)
+export const useGlobalContext = () => useContext(GlobalContext);

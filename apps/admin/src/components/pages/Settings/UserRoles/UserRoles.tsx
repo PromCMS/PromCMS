@@ -1,7 +1,7 @@
-import ItemsMissingMessage from '@components/ItemsMissingMessage'
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { useModelItems } from '@hooks/useModelItems'
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
+import ItemsMissingMessage from '@components/ItemsMissingMessage';
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { useModelItems } from '@hooks/useModelItems';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import {
   ActionIcon,
   Button,
@@ -10,15 +10,15 @@ import {
   Grid,
   Group,
   Pagination,
-} from '@mantine/core'
-import { ItemID } from '@prom-cms/shared'
-import { UserRolesService } from '@services'
-import clsx from 'clsx'
-import { Fragment } from 'react'
-import { useCallback, useState, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Edit, Plus, Trash } from "tabler-icons-react"
-import { Drawer } from './Drawer'
+} from '@mantine/core';
+import { ItemID } from '@prom-cms/shared';
+import { UserRolesService } from '@services';
+import clsx from 'clsx';
+import { Fragment } from 'react';
+import { useCallback, useState, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Edit, Plus, Trash } from 'tabler-icons-react';
+import { Drawer } from './Drawer';
 
 const useStyles = createStyles(() => ({
   root: {
@@ -26,42 +26,42 @@ const useStyles = createStyles(() => ({
       verticalAlign: 'baseline',
     },
   },
-}))
+}));
 
-const smallColSize = 2
-const maxCols = 12
-const largeColSize = 8
+const smallColSize = 2;
+const maxCols = 12;
+const largeColSize = 8;
 const colDivider = (
   <Grid.Col span={maxCols}>
     <Divider />
   </Grid.Col>
-)
+);
 
 export const UserRoles: VFC = () => {
-  const { classes } = useStyles()
-  const { t } = useTranslation()
-  const { currentUserIsAdmin } = useGlobalContext()
-  const [currentPage, setCurrentPage] = useState(1)
-  const { data, mutate } = useModelItems('userroles', { page: currentPage })
-  const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>()
-  const [creationAction, setCreationMode] = useState(false)
-  const reqNotification = useRequestWithNotifications()
+  const { classes } = useStyles();
+  const { t } = useTranslation();
+  const { currentUserIsAdmin } = useGlobalContext();
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data, mutate } = useModelItems('userroles', { page: currentPage });
+  const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
+  const [creationAction, setCreationMode] = useState(false);
+  const reqNotification = useRequestWithNotifications();
 
-  const currentUserCanEdit = currentUserIsAdmin
-  const currentUserCanDelete = currentUserIsAdmin
+  const currentUserCanEdit = currentUserIsAdmin;
+  const currentUserCanDelete = currentUserIsAdmin;
 
   const onModalClose = () => {
-    mutate()
-    setOptionToEdit(undefined)
-    setCreationMode(false)
-  }
+    mutate();
+    setOptionToEdit(undefined);
+    setCreationMode(false);
+  };
 
   const onEditClick = useCallback(
     (nextOption: ItemID | undefined) => () => {
-      setOptionToEdit(nextOption)
+      setOptionToEdit(nextOption);
     },
     []
-  )
+  );
 
   const onDeleteClick = useCallback(
     (id: ItemID) => async () => {
@@ -73,14 +73,14 @@ export const UserRoles: VFC = () => {
             successMessage: t('User role deleted!'),
           },
           async () => {
-            await UserRolesService.delete(id)
-            await mutate()
+            await UserRolesService.delete(id);
+            await mutate();
           }
-        )
+        );
       } catch {}
     },
     [t, reqNotification, mutate]
-  )
+  );
 
   return (
     <>
@@ -164,5 +164,5 @@ export const UserRoles: VFC = () => {
         onClose={onModalClose}
       />
     </>
-  )
-}
+  );
+};

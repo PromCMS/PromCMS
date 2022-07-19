@@ -1,4 +1,4 @@
-import { useEffect, VFC } from 'react'
+import { useEffect, VFC } from 'react';
 import {
   Button,
   Drawer as MantineDrawer,
@@ -8,48 +8,48 @@ import {
   SimpleGrid,
   TextInput,
   Title,
-} from '@mantine/core'
-import { useModelItem } from '@hooks/useModelItem'
-import { ItemID } from '@prom-cms/shared'
-import { Controller, FormProvider, useForm } from 'react-hook-form'
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { List } from './contentTypes/List'
-import { SettingsService } from '@services'
-import { Textarea } from './contentTypes/Textarea'
-import { Image } from './contentTypes/Image'
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
-import { useTranslation } from 'react-i18next'
-import { useCurrentUser } from '@hooks/useCurrentUser'
+} from '@mantine/core';
+import { useModelItem } from '@hooks/useModelItem';
+import { ItemID } from '@prom-cms/shared';
+import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { List } from './contentTypes/List';
+import { SettingsService } from '@services';
+import { Textarea } from './contentTypes/Textarea';
+import { Image } from './contentTypes/Image';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { useTranslation } from 'react-i18next';
+import { useCurrentUser } from '@hooks/useCurrentUser';
 
 export const Drawer: VFC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
 > = ({ opened, onClose, optionToEdit }) => {
-  const currentUser = useCurrentUser()
-  const { data } = useModelItem('settings', optionToEdit)
-  const { t } = useTranslation()
-  const reqNotification = useRequestWithNotifications()
+  const currentUser = useCurrentUser();
+  const { data } = useModelItem('settings', optionToEdit);
+  const { t } = useTranslation();
+  const reqNotification = useRequestWithNotifications();
   const formMethods = useForm({
     defaultValues: {} as any,
-  })
+  });
   const { register, watch, reset, control, handleSubmit, setValue, formState } =
-    formMethods
+    formMethods;
 
   const currentUserCanCreate = currentUser?.can({
     action: 'create',
     targetModel: 'settings',
-  })
+  });
 
   useEffect(() => {
     if (optionToEdit) {
       if (data) {
-        reset(data)
+        reset(data);
       }
     } else {
-      reset({})
+      reset({});
     }
-  }, [data, reset, optionToEdit, opened])
+  }, [data, reset, optionToEdit, opened]);
 
-  const content = watch('content')
+  const content = watch('content');
 
   const onSubmit = async (values) => {
     try {
@@ -65,16 +65,16 @@ export const Drawer: VFC<
         },
         async () => {
           if (optionToEdit) {
-            const { id, ...newOptionDataset } = values
-            await SettingsService.update(optionToEdit, newOptionDataset)
+            const { id, ...newOptionDataset } = values;
+            await SettingsService.update(optionToEdit, newOptionDataset);
           } else {
-            await SettingsService.create(values)
+            await SettingsService.create(values);
           }
-          onClose()
+          onClose();
         }
-      )
+      );
     } catch (e) {}
-  }
+  };
 
   return (
     <FormProvider {...formMethods}>
@@ -105,8 +105,8 @@ export const Drawer: VFC<
                       placeholder="Select type"
                       name={name}
                       onChange={(value) => {
-                        onChange(value)
-                        setValue('content.data', undefined)
+                        onChange(value);
+                        setValue('content.data', undefined);
                       }}
                       onBlur={onBlur}
                       value={value}
@@ -140,5 +140,5 @@ export const Drawer: VFC<
         </form>
       </MantineDrawer>
     </FormProvider>
-  )
-}
+  );
+};

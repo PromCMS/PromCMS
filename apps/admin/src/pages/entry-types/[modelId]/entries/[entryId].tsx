@@ -1,5 +1,5 @@
-import { getEntryUnderPageComponent } from '@components/pages/EntryUnderpage'
+import { getEntryUnderPageComponent } from '@components/pages/EntryUnderpage';
 
-const EntryUnderPage = getEntryUnderPageComponent('update')
+const EntryUnderPage = getEntryUnderPageComponent('update');
 
-export default EntryUnderPage
+export default EntryUnderPage;

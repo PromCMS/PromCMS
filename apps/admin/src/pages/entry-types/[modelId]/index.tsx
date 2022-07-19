@@ -1,76 +1,76 @@
-import { PageLayout } from '@layouts'
-import { useEffect, useMemo, useState, VFC } from 'react'
-import { TableView, TableViewCol, TableViewProps } from '@components/TableView'
-import { useModelItems } from '@hooks/useModelItems'
-import useCurrentModel from '@hooks/useCurrentModel'
-import { formatApiModelResultToTableView, modelIsCustom } from '@utils'
-import { ApiResultItem, ItemID } from '@prom-cms/shared'
-import { useRouter } from 'next/router'
-import { EntryService } from '@services'
-import { MESSAGES } from '@constants'
-import NotFoundPage from '@pages/404'
-import { useTranslation } from 'react-i18next'
-import { Button, Pagination } from '@mantine/core'
-import { useListState } from '@mantine/hooks'
-import { useCurrentUser } from '@hooks/useCurrentUser'
-import { Plus } from "tabler-icons-react"
+import { PageLayout } from '@layouts';
+import { useEffect, useMemo, useState, VFC } from 'react';
+import { TableView, TableViewCol, TableViewProps } from '@components/TableView';
+import { useModelItems } from '@hooks/useModelItems';
+import useCurrentModel from '@hooks/useCurrentModel';
+import { formatApiModelResultToTableView, modelIsCustom } from '@utils';
+import { ApiResultItem, ItemID } from '@prom-cms/shared';
+import { useRouter } from 'next/router';
+import { EntryService } from '@services';
+import { MESSAGES } from '@constants';
+import NotFoundPage from '@pages/404';
+import { useTranslation } from 'react-i18next';
+import { Button, Pagination } from '@mantine/core';
+import { useListState } from '@mantine/hooks';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { Plus } from 'tabler-icons-react';
 
 const EntryTypeUnderpage: VFC = ({}) => {
-  const { push } = useRouter()
-  const [page, setPage] = useState(1)
-  const model = useCurrentModel()
-  const currentUser = useCurrentUser()
-  const [apiWorking, setApiWorking] = useState(false)
+  const { push } = useRouter();
+  const [page, setPage] = useState(1);
+  const model = useCurrentModel();
+  const currentUser = useCurrentUser();
+  const [apiWorking, setApiWorking] = useState(false);
   const {
     query: { modelId: routerModelId },
-  } = useRouter()
+  } = useRouter();
   const { data, isLoading, isError, mutate } = useModelItems(model?.name, {
     page: page,
-  })
-  const { t } = useTranslation()
-  const [listItems, handlers] = useListState<ApiResultItem>(data?.data)
+  });
+  const { t } = useTranslation();
+  const [listItems, handlers] = useListState<ApiResultItem>(data?.data);
 
   useEffect(() => {
     if (data?.data) {
-      handlers.setState(data?.data)
+      handlers.setState(data?.data);
     }
-  }, [data])
+  }, [data]);
 
   // metadata from model items/entries
   const metadata = useMemo(() => {
-    if (!data) return false
-    const { data: items, ...metadata } = data
+    if (!data) return false;
+    const { data: items, ...metadata } = data;
 
-    return metadata
-  }, [data])
+    return metadata;
+  }, [data]);
 
   const onDragEnd: TableViewProps['onDragEnd'] = async ({
     source,
     destination,
   }) => {
-    if (destination?.index === undefined) return
+    if (destination?.index === undefined) return;
 
-    setApiWorking(true)
+    setApiWorking(true);
 
-    const fromId = listItems[source.index].id
-    const toId = listItems[destination.index].id
+    const fromId = listItems[source.index].id;
+    const toId = listItems[destination.index].id;
 
-    handlers.reorder({ from: source.index, to: destination.index })
+    handlers.reorder({ from: source.index, to: destination.index });
 
     await EntryService.reorder(model!.name, {
       fromId,
       toId,
-    })
+    });
 
-    setApiWorking(false)
-  }
+    setApiWorking(false);
+  };
 
   // format model result from api to table
   const tableViewColumns = useMemo<TableViewCol[] | undefined>(() => {
-    if (!model) return
+    if (!model) return;
 
-    return formatApiModelResultToTableView(model)
-  }, [model])
+    return formatApiModelResultToTableView(model);
+  }, [model]);
 
   // take care of action if user requests entry delete
   const onItemDeleteRequest =
@@ -81,11 +81,11 @@ const EntryTypeUnderpage: VFC = ({}) => {
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-            await EntryService.delete({ id, model: model?.name as string })
-            mutate()
+            await EntryService.delete({ id, model: model?.name as string });
+            mutate();
           }
         }
-      : undefined
+      : undefined;
 
   const onItemDuplicateRequest =
     model &&
@@ -95,23 +95,23 @@ const EntryTypeUnderpage: VFC = ({}) => {
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ENTRY_ITEM_DUPLICATE))) {
-            push(EntryService.getDuplicateUrl(id, model?.name as string))
+            push(EntryService.getDuplicateUrl(id, model?.name as string));
           }
         }
-      : undefined
+      : undefined;
 
   const onCreateRequest = () =>
-    push(EntryService.getCreateUrl(model?.name as string))
+    push(EntryService.getCreateUrl(model?.name as string));
 
   const onEditRequest = (id: ItemID) =>
-    push(EntryService.getUrl(id, model?.name as string))
+    push(EntryService.getUrl(id, model?.name as string));
 
   // This resets a pager to start, because this page component maintains internal state across pages
-  useEffect(() => setPage(1), [routerModelId])
+  useEffect(() => setPage(1), [routerModelId]);
 
   // TODO: Show better 404 page
   if (!model || !tableViewColumns || modelIsCustom(model.name))
-    return <NotFoundPage text={t('This model with this id does not exist.')} />
+    return <NotFoundPage text={t('This model with this id does not exist.')} />;
 
   return (
     <PageLayout>
@@ -162,7 +162,7 @@ const EntryTypeUnderpage: VFC = ({}) => {
         }
       />
     </PageLayout>
-  )
-}
+  );
+};
 
-export default EntryTypeUnderpage
+export default EntryTypeUnderpage;

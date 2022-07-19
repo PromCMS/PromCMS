@@ -1,4 +1,4 @@
-import { VFC } from 'react'
+import { VFC } from 'react';
 
 const Footer: VFC = () => {
   return (
@@ -10,7 +10,7 @@ const Footer: VFC = () => {
         </span>
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

@@ -1,8 +1,8 @@
-import { VFC } from 'react'
+import { VFC } from 'react';
 
 export interface ProfileProps {
-  title?: string
-  image?: string
+  title?: string;
+  image?: string;
 }
 
 export const Profile: VFC<ProfileProps> = ({ title }) => {
@@ -13,5 +13,5 @@ export const Profile: VFC<ProfileProps> = ({ title }) => {
         <h1></h1>
       </div>
     </article>
-  )
-}
+  );
+};

@@ -1,59 +1,58 @@
-import { Button as CustomButton } from '@components/Button'
-import ImageSelect from '@components/form/ImageSelect'
-import ThemeProvider from '@components/ThemeProvider'
-import { Checkbox, Group, Text, TextInput, Title } from '@mantine/core'
-import { capitalizeFirstLetter } from '@prom-cms/shared'
-import { forwardRef, useEffect, useMemo, useState, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Icon } from "tabler-icons-react"
-import * as iconSet from "tabler-icons-react"
-import { ButtonLinkToolData } from './ButtonLink'
+import { Button as CustomButton } from '@components/Button';
+import ImageSelect from '@components/form/ImageSelect';
+import ThemeProvider from '@components/ThemeProvider';
+import { Checkbox, Group, Text, TextInput, Title } from '@mantine/core';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { forwardRef, useEffect, useMemo, useState, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Icon } from 'tabler-icons-react';
+import * as iconSet from 'tabler-icons-react';
+import { ButtonLinkToolData } from './ButtonLink';
 
 const selectData = Object.entries(iconSet).map(([iconName, icon]) => ({
   icon,
   value: iconName,
   label: capitalizeFirstLetter(iconName),
-}))
+}));
 
-const SelectItem = forwardRef<
-  HTMLDivElement,
-  { icon: Icon; label: string }
->(function SelectItem({ icon: Icon, label, ...rest }, ref) {
-  return (
-    <div ref={ref} {...rest}>
-      <Group noWrap>
-        <Icon />
+const SelectItem = forwardRef<HTMLDivElement, { icon: Icon; label: string }>(
+  function SelectItem({ icon: Icon, label, ...rest }, ref) {
+    return (
+      <div ref={ref} {...rest}>
+        <Group noWrap>
+          <Icon />
 
-        <div>
-          <Text size="sm">{label}</Text>
-        </div>
-      </Group>
-    </div>
-  )
-})
+          <div>
+            <Text size="sm">{label}</Text>
+          </div>
+        </Group>
+      </div>
+    );
+  }
+);
 
 export const ButtonLinkView: VFC<{
-  dataFromParent: ButtonLinkToolData
-  onDataChange: (data: ButtonLinkToolData) => void
-  readOnly: boolean
+  dataFromParent: ButtonLinkToolData;
+  onDataChange: (data: ButtonLinkToolData) => void;
+  readOnly: boolean;
 }> = ({ dataFromParent, readOnly, onDataChange }) => {
-  const [data, setData] = useState<ButtonLinkToolData>(dataFromParent)
-  const { t } = useTranslation()
+  const [data, setData] = useState<ButtonLinkToolData>(dataFromParent);
+  const { t } = useTranslation();
 
   useEffect(() => {
-    setData(dataFromParent)
-  }, [dataFromParent])
+    setData(dataFromParent);
+  }, [dataFromParent]);
 
   useEffect(() => {
-    onDataChange(data)
-  }, [data, onDataChange])
+    onDataChange(data);
+  }, [data, onDataChange]);
 
   const onChange = (key: keyof ButtonLinkToolData, value: any) => {
     setData({
       ...data,
       [key]: value,
-    })
-  }
+    });
+  };
 
   const isUrlValid = useMemo(
     () =>
@@ -63,12 +62,12 @@ export const ButtonLinkView: VFC<{
           : false
         : true,
     [data.linkTo]
-  )
+  );
 
   const IconComponent = useMemo(
     () => (data.icon ? iconSet[data.icon] : undefined),
     [data.icon]
-  )
+  );
 
   return (
     <ThemeProvider>
@@ -138,5 +137,5 @@ export const ButtonLinkView: VFC<{
         </CustomButton>
       )}
     </ThemeProvider>
-  )
-}
+  );
+};

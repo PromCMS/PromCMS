@@ -1,16 +1,16 @@
-import { SelectItem, Select } from '@mantine/core'
+import { SelectItem, Select } from '@mantine/core';
 import {
   EnumColumnType,
   ModelColumnName,
   capitalizeFirstLetter,
-} from '@prom-cms/shared'
-import { VFC, useMemo } from 'react'
-import { Controller } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+} from '@prom-cms/shared';
+import { VFC, useMemo } from 'react';
+import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 export interface EnumSelectProps extends EnumColumnType {
-  columnName: ModelColumnName
-  error: string
+  columnName: ModelColumnName;
+  error: string;
 }
 
 export const EnumSelect: VFC<EnumSelectProps> = ({
@@ -19,7 +19,7 @@ export const EnumSelect: VFC<EnumSelectProps> = ({
   error,
   enum: enumValue,
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const enumValues = useMemo<SelectItem[]>(
     () =>
@@ -28,7 +28,7 @@ export const EnumSelect: VFC<EnumSelectProps> = ({
         label: t(capitalizeFirstLetter(enumKey)),
       })),
     [enumValue, t]
-  )
+  );
 
   return (
     <Controller
@@ -47,5 +47,5 @@ export const EnumSelect: VFC<EnumSelectProps> = ({
         />
       )}
     />
-  )
-}
+  );
+};

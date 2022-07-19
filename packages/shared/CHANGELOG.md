@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 1.2.0
+
+### Minor Changes
+
+- 286655f: Change build process to turbo and babel with tsup
+
 ## 1.1.0
 
 ### Minor Changes

@@ -1,15 +1,15 @@
-import { UnstyledButton } from '@mantine/core'
-import clsx from 'clsx'
-import { VFC } from 'react'
-import { Icon } from "tabler-icons-react"
+import { UnstyledButton } from '@mantine/core';
+import clsx from 'clsx';
+import { VFC } from 'react';
+import { Icon } from 'tabler-icons-react';
 
 type ItemProps = {
-  icon: Icon
-  title?: string
-  onClick: () => void
-  isLast?: boolean
-  label?: string
-}
+  icon: Icon;
+  title?: string;
+  onClick: () => void;
+  isLast?: boolean;
+  label?: string;
+};
 
 export const Item: VFC<ItemProps> = ({
   isLast,
@@ -42,4 +42,4 @@ export const Item: VFC<ItemProps> = ({
       </span>
     )}
   </>
-)
+);

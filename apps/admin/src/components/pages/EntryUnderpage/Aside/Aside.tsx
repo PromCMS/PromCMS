@@ -1,9 +1,9 @@
-import { PostLikeFields, PublishInfo, CoeditorsEditor } from './items'
-import { FC } from 'react'
-import useCurrentModel from '@hooks/useCurrentModel'
+import { PostLikeFields, PublishInfo, CoeditorsEditor } from './items';
+import { FC } from 'react';
+import useCurrentModel from '@hooks/useCurrentModel';
 
 export const Aside: FC = () => {
-  const currentModel = useCurrentModel()
+  const currentModel = useCurrentModel();
 
   return (
     <>
@@ -11,5 +11,5 @@ export const Aside: FC = () => {
       <PostLikeFields />
       {currentModel && currentModel.isSharable && <CoeditorsEditor />}
     </>
-  )
-}
+  );
+};

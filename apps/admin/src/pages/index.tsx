@@ -1,28 +1,28 @@
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { PageLayout } from '@layouts'
-import { capitalizeFirstLetter } from '@prom-cms/shared'
-import dayjs from 'dayjs'
-import { useConstructedMenuItems } from '@layouts'
-import type { NextPage } from 'next'
-import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
-const dateFormat = 'dddd DD.MM. YYYY'
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { PageLayout } from '@layouts';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
+import dayjs from 'dayjs';
+import { useConstructedMenuItems } from '@layouts';
+import type { NextPage } from 'next';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
+const dateFormat = 'dddd DD.MM. YYYY';
 
 const Home: NextPage = () => {
-  const { currentUser } = useGlobalContext()
-  const menuItems = useConstructedMenuItems()
-  const { t } = useTranslation()
-  const [currentTime, setCurrentTime] = useState(dayjs().format(dateFormat))
+  const { currentUser } = useGlobalContext();
+  const menuItems = useConstructedMenuItems();
+  const { t } = useTranslation();
+  const [currentTime, setCurrentTime] = useState(dayjs().format(dateFormat));
 
   useEffect(() => {
     const time = window.setTimeout(
       () => setCurrentTime(dayjs().format(dateFormat)),
       60000
-    )
+    );
 
-    return () => window.clearTimeout(time)
-  }, [])
+    return () => window.clearTimeout(time);
+  }, []);
 
   return (
     <PageLayout>
@@ -50,7 +50,7 @@ const Home: NextPage = () => {
           ))}
       </div>
     </PageLayout>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

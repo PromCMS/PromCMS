@@ -1,9 +1,9 @@
-import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder'
-import { useNotifications } from '@mantine/notifications'
-import { File as FileType } from '@prom-cms/shared'
-import { FileService } from '@services'
-import { t } from 'i18next'
-import { useRouter } from 'next/router'
+import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder';
+import { useNotifications } from '@mantine/notifications';
+import { File as FileType } from '@prom-cms/shared';
+import { FileService } from '@services';
+import { t } from 'i18next';
+import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -11,11 +11,11 @@ import {
   useContext,
   useMemo,
   useReducer,
-} from 'react'
-import { DropzoneRootProps, useDropzone } from 'react-dropzone'
-import { KeyedMutator } from 'swr'
-import { UploadingFilesRecord, UploadingFile } from './types'
-import { formatDroppedFiles } from './utils'
+} from 'react';
+import { DropzoneRootProps, useDropzone } from 'react-dropzone';
+import { KeyedMutator } from 'swr';
+import { UploadingFilesRecord, UploadingFile } from './types';
+import { formatDroppedFiles } from './utils';
 
 type ReadonlyValues =
   | 'updateValue'
@@ -26,34 +26,34 @@ type ReadonlyValues =
   | 'isError'
   | 'files'
   | 'mutateFiles'
-  | 'mutateFolders'
+  | 'mutateFolders';
 
 export interface IFileListContext {
-  currentPath: string
-  uploadingFiles: UploadingFilesRecord
-  showNewFolderCreator: boolean
-  workingFolders: Record<string, { type: 'uploading' | 'deleting' | 'none' }>
-  isLoading: boolean
-  isError: boolean
-  files: UseFileFolderData | undefined
+  currentPath: string;
+  uploadingFiles: UploadingFilesRecord;
+  showNewFolderCreator: boolean;
+  workingFolders: Record<string, { type: 'uploading' | 'deleting' | 'none' }>;
+  isLoading: boolean;
+  isError: boolean;
+  files: UseFileFolderData | undefined;
   mutateFiles: KeyedMutator<{
-    data: FileType[]
-  }>
-  mutateFolders: KeyedMutator<string[]>
-  openFilePicker: () => void
+    data: FileType[];
+  }>;
+  mutateFolders: KeyedMutator<string[]>;
+  openFilePicker: () => void;
   getDropZoneRootProps: <T extends DropzoneRootProps>(
     config: T | undefined
-  ) => T | undefined
+  ) => T | undefined;
   getDropZoneInputProps: <T extends DropzoneRootProps>(
     config: T | undefined
-  ) => T | undefined
+  ) => T | undefined;
   updateValue: <T extends keyof Omit<IFileListContext, ReadonlyValues>>(
     name: T | `uploadingFiles.${string}`,
     value: IFileListContext[T]
-  ) => void
+  ) => void;
 }
 
-type IFileListContextValues = Omit<IFileListContext, ReadonlyValues>
+type IFileListContextValues = Omit<IFileListContext, ReadonlyValues>;
 
 const initialState: IFileListContext = {
   currentPath: '/',
@@ -69,11 +69,11 @@ const initialState: IFileListContext = {
   getDropZoneRootProps: () => undefined,
   openFilePicker: () => {},
   updateValue: () => {},
-}
+};
 
-export const FileListContext = createContext<IFileListContext>(initialState)
+export const FileListContext = createContext<IFileListContext>(initialState);
 
-export const useFileListContext = () => useContext(FileListContext)
+export const useFileListContext = () => useContext(FileListContext);
 
 function reducer<T extends keyof IFileListContextValues>(
   state: IFileListContextValues,
@@ -82,24 +82,24 @@ function reducer<T extends keyof IFileListContextValues>(
     value,
   }: { name: T | `uploadingFiles.${string}`; value: IFileListContextValues[T] }
 ): IFileListContextValues {
-  return { ...state, [name]: value }
+  return { ...state, [name]: value };
 }
 
 export const FileListContextProvider: FC = ({ children }) => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const { push, query } = useRouter()
-  const notifications = useNotifications()
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { push, query } = useRouter();
+  const notifications = useNotifications();
   const currentPath = useMemo(
     () => ((query.folder as string) || '/').replaceAll('//', '/'),
     [query]
-  )
+  );
   const {
     data: files,
     isError,
     isLoading,
     mutateFiles,
     mutateFolders,
-  } = useFileFolder(currentPath)
+  } = useFileFolder(currentPath);
 
   const updateValue: IFileListContext['updateValue'] = useCallback(
     (name, value) => {
@@ -108,43 +108,43 @@ export const FileListContextProvider: FC = ({ children }) => {
           query: {
             folder: value as string,
           },
-        })
+        });
 
-        return
+        return;
       }
 
-      dispatch({ name, value })
+      dispatch({ name, value });
     },
     [dispatch, push]
-  )
+  );
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      const files = formatDroppedFiles(currentPath, acceptedFiles)
+      const files = formatDroppedFiles(currentPath, acceptedFiles);
 
-      updateValue('uploadingFiles', files)
+      updateValue('uploadingFiles', files);
 
       const notificationId = notifications.showNotification({
         message: t('Working'),
         title: t('Uploading files...'),
         color: 'blue',
         autoClose: false,
-      })
+      });
 
       for (const filePath in files) {
-        let isError = false
-        const entry = files[filePath]
+        let isError = false;
+        const entry = files[filePath];
 
         try {
-          await FileService.create(entry.file, { root: currentPath })
+          await FileService.create(entry.file, { root: currentPath });
         } catch {
-          isError = true
+          isError = true;
           notifications.updateNotification(notificationId, {
             message: t('Error'),
             title: t('An error happened'),
             color: 'red',
             autoClose: 2000,
-          })
+          });
         }
 
         updateValue(
@@ -152,20 +152,20 @@ export const FileListContextProvider: FC = ({ children }) => {
           Object.fromEntries(
             Object.entries(files).filter(([key]) => key !== filePath)
           ) as UploadingFilesRecord
-        )
+        );
 
-        await mutateFiles()
+        await mutateFiles();
 
         notifications.updateNotification(notificationId, {
           message: t('Success'),
           title: t('All files has been uploaded'),
           color: 'green',
           autoClose: 2000,
-        })
+        });
       }
     },
     [updateValue, currentPath, mutateFiles, notifications]
-  )
+  );
 
   const {
     getInputProps: getDropZoneInputProps,
@@ -175,7 +175,7 @@ export const FileListContextProvider: FC = ({ children }) => {
     onDrop,
     noClick: true,
     noKeyboard: true,
-  })
+  });
 
   const contextValue = useMemo(
     () => ({
@@ -204,12 +204,12 @@ export const FileListContextProvider: FC = ({ children }) => {
       mutateFolders,
       state,
     ]
-  )
+  );
 
   return (
     <FileListContext.Provider value={contextValue}>
       <input {...getDropZoneInputProps({ className: 'hidden' })} />
       {children}
     </FileListContext.Provider>
-  )
-}
+  );
+};

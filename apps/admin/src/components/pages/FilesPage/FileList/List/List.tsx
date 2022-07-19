@@ -1,15 +1,15 @@
-import ItemsMissingMessage from '@components/ItemsMissingMessage'
-import { FileService, FolderService } from '@services'
-import { useCallback, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useFileListContext } from '../context'
-import { useClassNames } from '../useClassNames'
-import { FileItemSkeleton, FileItem, FileItemProps } from './FileItem'
-import { FolderItem, FolderItemProps } from './FolderItem'
-import { NewFolderCreator } from './NewFolderCreator'
-import axios from 'axios'
-import { useNotifications } from '@mantine/notifications'
-import { Transition } from '@mantine/core'
+import ItemsMissingMessage from '@components/ItemsMissingMessage';
+import { FileService, FolderService } from '@services';
+import { useCallback, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useFileListContext } from '../context';
+import { useClassNames } from '../useClassNames';
+import { FileItemSkeleton, FileItem, FileItemProps } from './FileItem';
+import { FolderItem, FolderItemProps } from './FolderItem';
+import { NewFolderCreator } from './NewFolderCreator';
+import axios from 'axios';
+import { useNotifications } from '@mantine/notifications';
+import { Transition } from '@mantine/core';
 
 export const List: VFC = () => {
   const {
@@ -22,17 +22,17 @@ export const List: VFC = () => {
     workingFolders,
     mutateFiles,
     mutateFolders,
-  } = useFileListContext()
-  const notifications = useNotifications()
-  const classNames = useClassNames()
-  const { t } = useTranslation()
+  } = useFileListContext();
+  const notifications = useNotifications();
+  const classNames = useClassNames();
+  const { t } = useTranslation();
 
   const onFolderClick: FolderItemProps['onClick'] = useCallback(
     (path) => {
-      updateValue('currentPath', path)
+      updateValue('currentPath', path);
     },
     [updateValue]
-  )
+  );
 
   const onFolderDeleteClick: FolderItemProps['onDeleteClick'] = useCallback(
     async (path) => {
@@ -43,66 +43,66 @@ export const List: VFC = () => {
         message: t('Deleting your folder...'),
         autoClose: false,
         disallowClose: true,
-      })
+      });
 
       if (confirm(t('Do you really want to delete this folder?'))) {
-        const folderName = path.split('/').at(-1)
+        const folderName = path.split('/').at(-1);
         updateValue('workingFolders', {
           ...workingFolders,
           path: { type: 'deleting' },
-        })
+        });
 
         try {
-          await FolderService.delete(path)
+          await FolderService.delete(path);
           await mutateFolders((folders) => {
-            return folders?.filter((folder) => folder !== folderName)
-          })
+            return folders?.filter((folder) => folder !== folderName);
+          });
 
           updateValue('workingFolders', {
             ...workingFolders,
             path: { type: 'none' },
-          })
+          });
 
           notifications.updateNotification(notificationId, {
             color: 'green',
             message: t('Your folder has been deleted'),
             autoClose: 2000,
-          })
+          });
         } catch (e) {
           if (axios.isAxiosError(e) && e.response?.status === 400) {
             notifications.updateNotification(notificationId, {
               color: 'red',
               message: t('This folder is not empty! Delete its contents first'),
               autoClose: 2000,
-            })
-            return
+            });
+            return;
           }
           notifications.updateNotification(notificationId, {
             color: 'red',
             message: t('An unexpected error happened'),
             autoClose: 2000,
-          })
+          });
         }
       }
     },
     [workingFolders, updateValue, mutateFolders, t, notifications]
-  )
+  );
 
   const onFileDeleteClick: FileItemProps['onDeleteClick'] = useCallback(
     async (id) => {
       if (confirm(t('Do you really want to delete this file?'))) {
-        await FileService.delete(id)
+        await FileService.delete(id);
         await mutateFiles((memory) => {
-          if (!memory) return memory
+          if (!memory) return memory;
 
           return {
             data: memory.data.filter((file) => file.id !== id),
-          }
-        })
+          };
+        });
       }
     },
     [mutateFiles, t]
-  )
+  );
 
   if (isLoading || isError) {
     return (
@@ -111,7 +111,7 @@ export const List: VFC = () => {
           <FileItemSkeleton key={index} />
         ))}
       </div>
-    )
+    );
   }
 
   return (
@@ -156,5 +156,5 @@ export const List: VFC = () => {
         <ItemsMissingMessage />
       )}
     </>
-  )
-}
+  );
+};

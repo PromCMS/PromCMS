@@ -1,23 +1,23 @@
-import { Checkbox, Collapse, Radio, RadioGroup, Title } from '@mantine/core'
-import { randomId } from '@mantine/hooks'
-import { ApiResultModel, SecurityOptionOptions } from '@prom-cms/shared'
-import { FC } from 'react'
-import { Controller } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import * as iconSet from "tabler-icons-react"
+import { Checkbox, Collapse, Radio, RadioGroup, Title } from '@mantine/core';
+import { randomId } from '@mantine/hooks';
+import { ApiResultModel, SecurityOptionOptions } from '@prom-cms/shared';
+import { FC } from 'react';
+import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import * as iconSet from 'tabler-icons-react';
 
 const options = [
   { label: 'Create', isSimple: true, key: randomId() },
   { label: 'Read', key: randomId() },
   { label: 'Update', key: randomId() },
   { label: 'Delete', key: randomId() },
-]
+];
 
 export const ModelPermissionToggles: FC<{
-  modelInfo: ApiResultModel
-  modelName: string
+  modelInfo: ApiResultModel;
+  modelName: string;
 }> = ({ modelInfo, modelName }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
 
   const items = options.map(({ label, key, isSimple }) => (
     <Controller
@@ -63,9 +63,9 @@ export const ModelPermissionToggles: FC<{
         </div>
       )}
     />
-  ))
+  ));
 
-  const Icon = iconSet[modelInfo.icon]
+  const Icon = iconSet[modelInfo.icon];
 
   return (
     <div>
@@ -76,5 +76,5 @@ export const ModelPermissionToggles: FC<{
 
       {items}
     </div>
-  )
-}
+  );
+};

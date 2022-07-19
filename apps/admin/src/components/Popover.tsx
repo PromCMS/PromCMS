@@ -1,21 +1,21 @@
-import { FC, ReactElement, useState } from 'react'
-import { Popover as HeadlessPopover } from '@headlessui/react'
-import { usePopper } from 'react-popper'
-import { Placement } from '@popperjs/core'
-import { createPortal } from 'react-dom'
-import clsx from 'clsx'
+import { FC, ReactElement, useState } from 'react';
+import { Popover as HeadlessPopover } from '@headlessui/react';
+import { usePopper } from 'react-popper';
+import { Placement } from '@popperjs/core';
+import { createPortal } from 'react-dom';
+import clsx from 'clsx';
 
 export interface PopoverProps {
-  buttonContent: ReactElement<any, any>
-  disabled?: boolean
-  placement?: Placement
-  offset?: [number, number]
-  buttonComponent?: React.ElementType<any>
-  buttonClassName?: string
+  buttonContent: ReactElement<any, any>;
+  disabled?: boolean;
+  placement?: Placement;
+  offset?: [number, number];
+  buttonComponent?: React.ElementType<any>;
+  buttonClassName?: string;
   children:
     | (({ open, close }: { open: boolean; close: () => void }) => ReactElement)
     | ReactElement[]
-    | ReactElement
+    | ReactElement;
 }
 
 const Popover: FC<PopoverProps> = ({
@@ -27,9 +27,9 @@ const Popover: FC<PopoverProps> = ({
   buttonClassName,
   offset = [0, 0],
 }) => {
-  let [referenceElement, setReferenceElement] = useState<any>()
-  let [arrowElement, setArrowElement] = useState<any>()
-  let [popperElement, setPopperElement] = useState<any>()
+  let [referenceElement, setReferenceElement] = useState<any>();
+  let [arrowElement, setArrowElement] = useState<any>();
+  let [popperElement, setPopperElement] = useState<any>();
   let { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement,
     modifiers: [
@@ -46,9 +46,9 @@ const Popover: FC<PopoverProps> = ({
         },
       },
     ],
-  })
+  });
 
-  if (typeof document === 'undefined') return null
+  if (typeof document === 'undefined') return null;
 
   return (
     <HeadlessPopover className="relative">
@@ -72,7 +72,7 @@ const Popover: FC<PopoverProps> = ({
         document.getElementById('popover-root') as Element
       )}
     </HeadlessPopover>
-  )
-}
+  );
+};
 
-export default Popover
+export default Popover;

@@ -1,5 +1,5 @@
-import { getEntryUnderPageComponent } from '@components/pages/EntryUnderpage'
+import { getEntryUnderPageComponent } from '@components/pages/EntryUnderpage';
 
-const EntryDuplicateUnderPage = getEntryUnderPageComponent('create')
+const EntryDuplicateUnderPage = getEntryUnderPageComponent('create');
 
-export default EntryDuplicateUnderPage
+export default EntryDuplicateUnderPage;

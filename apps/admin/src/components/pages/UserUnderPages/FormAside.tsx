@@ -1,43 +1,43 @@
-import AsideItemWrap from '@components/AsideItemWrap'
-import Skeleton, { SkeltonProps } from '@components/Skeleton'
-import clsx from 'clsx'
-import { MESSAGES } from '@constants'
-import { EntryService, UserService } from '@services'
-import { useMemo, VFC } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { getObjectDiff } from '@utils'
-import { useClassNames } from '../EntryUnderpage/useClassNames'
-import { useData } from './context'
-import { ActionIcon, Button, SimpleGrid } from '@mantine/core'
-import { UserStates } from '@prom-cms/shared'
-import { useSetState } from '@mantine/hooks'
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
-import { useCurrentUser } from '@hooks/useCurrentUser'
-import { Trash } from "tabler-icons-react"
+import AsideItemWrap from '@components/AsideItemWrap';
+import Skeleton, { SkeltonProps } from '@components/Skeleton';
+import clsx from 'clsx';
+import { MESSAGES } from '@constants';
+import { EntryService, UserService } from '@services';
+import { useMemo, VFC } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { getObjectDiff } from '@utils';
+import { useClassNames } from '../EntryUnderpage/useClassNames';
+import { useData } from './context';
+import { ActionIcon, Button, SimpleGrid } from '@mantine/core';
+import { UserStates } from '@prom-cms/shared';
+import { useSetState } from '@mantine/hooks';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { Trash } from 'tabler-icons-react';
 
 const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
     className={clsx('relative top-0.5 inline-block h-4', className)}
     {...rest}
   />
-)
+);
 
 export const FormAside: VFC = () => {
-  const { isLoading, view, user, exitView, mutateUser } = useData()
+  const { isLoading, view, user, exitView, mutateUser } = useData();
   const {
     watch,
     formState: { isSubmitting },
-  } = useFormContext()
-  const currentUser = useCurrentUser()
-  const formValues = watch()
-  const classes = useClassNames()
-  const { t } = useTranslation()
-  const reqNotification = useRequestWithNotifications()
+  } = useFormContext();
+  const currentUser = useCurrentUser();
+  const formValues = watch();
+  const classes = useClassNames();
+  const { t } = useTranslation();
+  const reqNotification = useRequestWithNotifications();
   const [workingState, setWorkingState] = useSetState({
     isSendingPasswordReset: false,
     isTogglingBlock: false,
-  })
+  });
 
   const isEdited = useMemo(
     () =>
@@ -45,21 +45,21 @@ export const FormAside: VFC = () => {
         ? !!Object.keys(getObjectDiff(user || {}, formValues)).length
         : true,
     [formValues, view, user]
-  )
+  );
 
   const onItemDeleteRequest = async () => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-      exitView()
+      exitView();
       await EntryService.delete({
         id: user?.id as number,
         model: 'users',
-      })
+      });
     }
-  }
+  };
 
   const onPasswordResetClick = async () => {
-    setWorkingState({ isSendingPasswordReset: true })
-    const thisIsResend = user?.state === UserStates.passwordReset
+    setWorkingState({ isSendingPasswordReset: true });
+    const thisIsResend = user?.state === UserStates.passwordReset;
     try {
       await reqNotification(
         {
@@ -72,25 +72,25 @@ export const FormAside: VFC = () => {
           successMessage: t('User can now follow instruction in their email'),
         },
         async () => {
-          const res = await UserService.requestPasswordReset(user!.id)
+          const res = await UserService.requestPasswordReset(user!.id);
 
           await mutateUser(
             (prev) => {
               if (prev && res.data?.data) {
-                return { ...prev, ...res.data.data }
+                return { ...prev, ...res.data.data };
               }
             },
             { revalidate: false }
-          )
+          );
         }
-      )
+      );
     } catch (e) {}
-    setWorkingState({ isSendingPasswordReset: false })
-  }
+    setWorkingState({ isSendingPasswordReset: false });
+  };
 
   const onToggleBlockClick = async () => {
-    setWorkingState({ isTogglingBlock: true })
-    const userIsNowBlocked = user!.state === UserStates.blocked
+    setWorkingState({ isTogglingBlock: true });
+    const userIsNowBlocked = user!.state === UserStates.blocked;
 
     try {
       await reqNotification(
@@ -102,20 +102,20 @@ export const FormAside: VFC = () => {
           ),
         },
         async () => {
-          const res = await UserService.toggleBlock(user!.id, userIsNowBlocked)
+          const res = await UserService.toggleBlock(user!.id, userIsNowBlocked);
           await mutateUser(
             (prev) => {
               if (prev && res.data?.data) {
-                return { ...prev, ...res.data.data }
+                return { ...prev, ...res.data.data };
               }
             },
             { revalidate: false }
-          )
+          );
         }
-      )
+      );
     } catch (e) {}
-    setWorkingState({ isTogglingBlock: false })
-  }
+    setWorkingState({ isTogglingBlock: false });
+  };
 
   return (
     <aside className={clsx(classes.aside, 'sticky top-0 grid gap-5')}>
@@ -210,5 +210,5 @@ export const FormAside: VFC = () => {
           </AsideItemWrap>
         )}
     </aside>
-  )
-}
+  );
+};

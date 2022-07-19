@@ -1,8 +1,8 @@
-import { UnstyledButton } from '@mantine/core'
+import { UnstyledButton } from '@mantine/core';
 import * as iconSet from 'tabler-icons-react';
-import clsx from 'clsx'
-import { MouseEventHandler } from 'react'
-import { DetailedHTMLProps, FC, HTMLAttributes } from 'react'
+import clsx from 'clsx';
+import { MouseEventHandler } from 'react';
+import { DetailedHTMLProps, FC, HTMLAttributes } from 'react';
 
 export interface PopoverListProps
   extends DetailedHTMLProps<
@@ -15,8 +15,8 @@ export interface PopoverListItemProps
     DetailedHTMLProps<HTMLAttributes<HTMLLIElement>, HTMLLIElement>,
     'onClick'
   > {
-  icon?: keyof typeof iconSet
-  onClick?: MouseEventHandler<HTMLButtonElement>
+  icon?: keyof typeof iconSet;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
 const PopoverListItem: FC<PopoverListItemProps> = ({
@@ -26,7 +26,7 @@ const PopoverListItem: FC<PopoverListItemProps> = ({
   onClick,
   ...rest
 }) => {
-  const Icon = icon ? iconSet[icon] : null
+  const Icon = icon ? iconSet[icon] : null;
 
   return (
     <li {...rest}>
@@ -42,8 +42,8 @@ const PopoverListItem: FC<PopoverListItemProps> = ({
         {children}
       </UnstyledButton>
     </li>
-  )
-}
+  );
+};
 
 const PopoverList: FC<PopoverListProps> & { Item: typeof PopoverListItem } = ({
   children,
@@ -56,8 +56,8 @@ const PopoverList: FC<PopoverListProps> & { Item: typeof PopoverListItem } = ({
   >
     {children}
   </ul>
-)
+);
 
-PopoverList.Item = PopoverListItem
+PopoverList.Item = PopoverListItem;
 
-export default PopoverList
+export default PopoverList;

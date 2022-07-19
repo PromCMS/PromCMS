@@ -1,13 +1,13 @@
-import clsx from 'clsx'
-import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react'
-import { Icon } from "tabler-icons-react"
+import clsx from 'clsx';
+import { ButtonHTMLAttributes, DetailedHTMLProps, forwardRef } from 'react';
+import { Icon } from 'tabler-icons-react';
 
 export interface IconButtonProps
   extends DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  icon: Icon
+  icon: Icon;
 }
 
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
@@ -21,6 +21,6 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
         <Icon className="aspect-square w-6" />
         {children}
       </button>
-    )
+    );
   }
-)
+);

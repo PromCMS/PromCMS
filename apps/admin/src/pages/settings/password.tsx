@@ -1,18 +1,18 @@
-import { MESSAGES } from '@constants'
-import { useForm } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { NextPage } from '@custom-types'
-import { Button, PasswordInput } from '@mantine/core'
-import { ProfileLayout } from '@layouts'
+import { MESSAGES } from '@constants';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { NextPage } from '@custom-types';
+import { Button, PasswordInput } from '@mantine/core';
+import { ProfileLayout } from '@layouts';
 
 interface FormValues {
-  newPassword: string
-  oldPassword: string
+  newPassword: string;
+  oldPassword: string;
 }
 
 const UserProfilePasswordPage: NextPage = () => {
-  const { register } = useForm<FormValues>()
-  const { t } = useTranslation()
+  const { register } = useForm<FormValues>();
+  const { t } = useTranslation();
 
   return (
     <ProfileLayout>
@@ -34,7 +34,7 @@ const UserProfilePasswordPage: NextPage = () => {
         </Button>
       </form>
     </ProfileLayout>
-  )
-}
+  );
+};
 
-export default UserProfilePasswordPage
+export default UserProfilePasswordPage;

@@ -1,19 +1,19 @@
-import { useModelItems } from '@hooks/useModelItems'
-import { Select, SelectItem } from '@mantine/core'
+import { useModelItems } from '@hooks/useModelItems';
+import { Select, SelectItem } from '@mantine/core';
 import {
   ModelColumnName,
   PagedResult,
   RelationshipColumnType,
   UserRole,
-} from '@prom-cms/shared'
-import { useMemo } from 'react'
-import { FC } from 'react'
-import { Controller } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+} from '@prom-cms/shared';
+import { useMemo } from 'react';
+import { FC } from 'react';
+import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 export interface RelationshipItemSelectProps extends RelationshipColumnType {
-  columnName: ModelColumnName
-  error: string
+  columnName: ModelColumnName;
+  error: string;
 }
 
 export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
@@ -23,11 +23,11 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
   targetModel,
   labelConstructor,
 }) => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const { data, isError, isLoading } = useModelItems<PagedResult<UserRole>>(
     targetModel,
     {}
-  )
+  );
 
   const values = useMemo<SelectItem[]>(
     () =>
@@ -37,7 +37,7 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
         label: t(rest[labelConstructor]),
       })),
     [data, t, labelConstructor]
-  )
+  );
 
   return (
     <Controller
@@ -57,5 +57,5 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
         />
       )}
     />
-  )
-}
+  );
+};

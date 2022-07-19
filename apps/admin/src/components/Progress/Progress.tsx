@@ -1,11 +1,11 @@
-import { DetailedHTMLProps, ProgressHTMLAttributes, VFC } from 'react'
+import { DetailedHTMLProps, ProgressHTMLAttributes, VFC } from 'react';
 
 export interface ProgressProps
   extends DetailedHTMLProps<
     ProgressHTMLAttributes<HTMLProgressElement>,
     HTMLProgressElement
   > {
-  loading?: boolean
+  loading?: boolean;
 }
 
 export const Progress: VFC<ProgressProps> = ({ className }) => {
@@ -13,5 +13,5 @@ export const Progress: VFC<ProgressProps> = ({ className }) => {
     <div>
       <span />
     </div>
-  )
-}
+  );
+};

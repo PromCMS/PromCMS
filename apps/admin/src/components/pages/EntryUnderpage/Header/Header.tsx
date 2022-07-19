@@ -1,14 +1,14 @@
-import useCurrentModel from '@hooks/useCurrentModel'
-import { Divider } from '@mantine/core'
-import { VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useEntryUnderpageContext } from '..'
-import { EditableTitle } from './EditableTitle'
+import useCurrentModel from '@hooks/useCurrentModel';
+import { Divider } from '@mantine/core';
+import { VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useEntryUnderpageContext } from '..';
+import { EditableTitle } from './EditableTitle';
 
 export const Header: VFC = () => {
-  const { currentView } = useEntryUnderpageContext()
-  const model = useCurrentModel()
-  const { t } = useTranslation()
+  const { currentView } = useEntryUnderpageContext();
+  const model = useCurrentModel();
+  const { t } = useTranslation();
 
   return (
     <header className="mr-9 w-full pb-5 xl:mr-0">
@@ -23,5 +23,5 @@ export const Header: VFC = () => {
         <EditableTitle />
       )}
     </header>
-  )
-}
+  );
+};

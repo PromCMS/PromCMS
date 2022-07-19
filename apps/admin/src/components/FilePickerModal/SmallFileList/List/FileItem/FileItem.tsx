@@ -1,35 +1,35 @@
-import { File, ItemID } from '@prom-cms/shared'
-import { useCallback, useMemo, VFC } from 'react'
-import { useClassNames as getClassnames } from '../../useClassNames'
-import { useSmallFileList } from '../../context'
-import clsx from 'clsx'
-import { UnstyledButton } from '@mantine/core'
-import BackendImage from '@components/BackendImage'
-import { Check } from "tabler-icons-react"
+import { File, ItemID } from '@prom-cms/shared';
+import { useCallback, useMemo, VFC } from 'react';
+import { useClassNames as getClassnames } from '../../useClassNames';
+import { useSmallFileList } from '../../context';
+import clsx from 'clsx';
+import { UnstyledButton } from '@mantine/core';
+import BackendImage from '@components/BackendImage';
+import { Check } from 'tabler-icons-react';
 
-const classNames = getClassnames()
+const classNames = getClassnames();
 
 export interface FileItemProps extends File {
-  onDeleteClick: (id: ItemID) => void
+  onDeleteClick: (id: ItemID) => void;
 }
 
 export const FileItem: VFC<FileItemProps> = ({ id, filename, mimeType }) => {
-  const { selectedFiles, updateValue } = useSmallFileList()
-  const extension = filename.split('.').at(-1) || 'unknown'
-  const type = mimeType?.split('/')?.[0] || 'unknown'
-  const isImage = type === 'image'
+  const { selectedFiles, updateValue } = useSmallFileList();
+  const extension = filename.split('.').at(-1) || 'unknown';
+  const type = mimeType?.split('/')?.[0] || 'unknown';
+  const isImage = type === 'image';
 
   const onPick = useCallback(() => {
     updateValue({
       name: 'selectedFiles',
       value: id as any,
-    })
-  }, [id, updateValue])
+    });
+  }, [id, updateValue]);
 
   const isPicked = useMemo(
     () => selectedFiles.includes(id),
     [selectedFiles, id]
-  )
+  );
 
   return (
     <UnstyledButton
@@ -71,5 +71,5 @@ export const FileItem: VFC<FileItemProps> = ({ id, filename, mimeType }) => {
         </div>
       </div>
     </UnstyledButton>
-  )
-}
+  );
+};

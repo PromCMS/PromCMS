@@ -1,17 +1,17 @@
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { SiteLayoutHead } from '@layouts'
-import { Loader } from '@components/SiteLoader'
-import { NextPage } from '@custom-types'
-import { Form } from '@components/pages/ResetPasswordPage'
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { SiteLayoutHead } from '@layouts';
+import { Loader } from '@components/SiteLoader';
+import { NextPage } from '@custom-types';
+import { Form } from '@components/pages/ResetPasswordPage';
 
 const ResetPasswordPage: NextPage = () => {
-  const { isBooting } = useGlobalContext()
+  const { isBooting } = useGlobalContext();
 
   // Take care of booting phase
-  if (isBooting) return <Loader show={isBooting} />
+  if (isBooting) return <Loader show={isBooting} />;
 
-  return <Form />
-}
+  return <Form />;
+};
 
 ResetPasswordPage.getLayout = (page) => {
   return (
@@ -19,7 +19,7 @@ ResetPasswordPage.getLayout = (page) => {
       <SiteLayoutHead />
       {page}
     </>
-  )
-}
+  );
+};
 
-export default ResetPasswordPage
+export default ResetPasswordPage;

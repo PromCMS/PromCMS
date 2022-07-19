@@ -1,16 +1,16 @@
-import { FileList } from '@components/pages/FilesPage'
-import { useModelInfo } from '@hooks/useModelInfo'
-import { PageLayout } from '@layouts'
-import { useTranslation } from 'react-i18next'
-import { NextPage } from '../../types'
-import NotFoundPage from '../404'
+import { FileList } from '@components/pages/FilesPage';
+import { useModelInfo } from '@hooks/useModelInfo';
+import { PageLayout } from '@layouts';
+import { useTranslation } from 'react-i18next';
+import { NextPage } from '../../types';
+import NotFoundPage from '../404';
 
 const FilesPage: NextPage = () => {
-  const { t } = useTranslation()
-  const model = useModelInfo('files')
+  const { t } = useTranslation();
+  const model = useModelInfo('files');
 
   if (!model)
-    return <NotFoundPage text={t('This model with this id does not exist.')} />
+    return <NotFoundPage text={t('This model with this id does not exist.')} />;
 
   return (
     <PageLayout>
@@ -21,7 +21,7 @@ const FilesPage: NextPage = () => {
       </div>
       <FileList />
     </PageLayout>
-  )
-}
+  );
+};
 
-export default FilesPage
+export default FilesPage;

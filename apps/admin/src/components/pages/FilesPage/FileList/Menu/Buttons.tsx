@@ -6,14 +6,16 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'tabler-icons-react';
 import { useFileListContext } from '../context';
 
-const GreenButton = forwardRef<HTMLButtonElement, {}>(
-  function GreenButton({ children, ...rest }, ref) {
-    return (
-      <Button ref={ref} color="success" {...rest}>
-        {children}
-      </Button>
-    );
-  });
+const GreenButton = forwardRef<HTMLButtonElement, {}>(function GreenButton(
+  { children, ...rest },
+  ref
+) {
+  return (
+    <Button ref={ref} color="success" {...rest}>
+      {children}
+    </Button>
+  );
+});
 
 export const Buttons: VFC = () => {
   const { updateValue, openFilePicker } = useFileListContext();

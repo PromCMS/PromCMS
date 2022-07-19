@@ -5,34 +5,34 @@ import {
   useImperativeHandle,
   useRef,
   useState,
-} from 'react'
-import EditorJS, { EditorConfig, LogLevels } from '@editorjs/editorjs'
-import Table from '@editorjs/table'
-import Underline from '@editorjs/underline'
-import Marker from '@editorjs/marker'
-import List from '@editorjs/list'
-import ChangeCase from 'editorjs-change-case'
-import Header from '@editorjs/header'
-import AlignmentTool from 'editorjs-text-alignment-blocktune'
-import ParagraphTool from '@editorjs/paragraph'
-import { ImageTool } from './ImageTool'
-import { generateLayoutConfig } from './utils'
-import { useTranslation } from 'react-i18next'
-import { GalleryTool } from './GalleryTool'
-import Embed from '@editorjs/embed'
-import { ButtonLinkTool } from './ButtonLink'
-import { TagsTool } from './TagsTool'
-import { LinkInlineTool } from './LinkInlineTool'
-import { DynamicBlockTool } from './DynamicBlockTool'
+} from 'react';
+import EditorJS, { EditorConfig, LogLevels } from '@editorjs/editorjs';
+import Table from '@editorjs/table';
+import Underline from '@editorjs/underline';
+import Marker from '@editorjs/marker';
+import List from '@editorjs/list';
+import ChangeCase from 'editorjs-change-case';
+import Header from '@editorjs/header';
+import AlignmentTool from 'editorjs-text-alignment-blocktune';
+import ParagraphTool from '@editorjs/paragraph';
+import { ImageTool } from './ImageTool';
+import { generateLayoutConfig } from './utils';
+import { useTranslation } from 'react-i18next';
+import { GalleryTool } from './GalleryTool';
+import Embed from '@editorjs/embed';
+import { ButtonLinkTool } from './ButtonLink';
+import { TagsTool } from './TagsTool';
+import { LinkInlineTool } from './LinkInlineTool';
+import { DynamicBlockTool } from './DynamicBlockTool';
 
-export const EDITOR_HOLDER_ID = 'editor-content'
+export const EDITOR_HOLDER_ID = 'editor-content';
 
 export interface LazyEditorProps
   extends Omit<EditorConfig, 'holder' | 'tools'> {
-  initialValue?: EditorConfig['data']
-  editorRef?: Ref<EditorJS | undefined>
-  error?: string
-  className?: string
+  initialValue?: EditorConfig['data'];
+  editorRef?: Ref<EditorJS | undefined>;
+  error?: string;
+  className?: string;
 }
 
 export const LazyEditor: FC<LazyEditorProps> = ({
@@ -42,11 +42,11 @@ export const LazyEditor: FC<LazyEditorProps> = ({
   className,
   ...config
 }) => {
-  const innerRef = useRef<EditorJS>()
-  const [editorReady, setEditorReady] = useState(false)
-  const { t } = useTranslation()
+  const innerRef = useRef<EditorJS>();
+  const [editorReady, setEditorReady] = useState(false);
+  const { t } = useTranslation();
 
-  useImperativeHandle(editorRef, () => innerRef.current)
+  useImperativeHandle(editorRef, () => innerRef.current);
 
   useEffect(() => {
     const editorConfig: EditorConfig = {
@@ -111,14 +111,14 @@ export const LazyEditor: FC<LazyEditorProps> = ({
       },
       inlineToolbar: true,
       onReady: () => {
-        if (config.onReady) config.onReady()
-        setEditorReady(true)
+        if (config.onReady) config.onReady();
+        setEditorReady(true);
       },
       ...config,
-    }
+    };
 
     // Remove custom listeners that should be in main editor
-    const { onChange, onReady, ...layoutEditorConfig } = editorConfig
+    const { onChange, onReady, ...layoutEditorConfig } = editorConfig;
 
     const editorConfigWithLayouts = {
       ...editorConfig,
@@ -130,18 +130,18 @@ export const LazyEditor: FC<LazyEditorProps> = ({
           t,
         }),
       },
-    }
+    };
 
-    const editorInstance = new EditorJS(editorConfigWithLayouts)
+    const editorInstance = new EditorJS(editorConfigWithLayouts);
 
-    innerRef.current = editorInstance
+    innerRef.current = editorInstance;
 
     return () => {
       if (innerRef.current?.destroy) {
-        innerRef.current?.destroy()
+        innerRef.current?.destroy();
       }
-    }
-  }, [t])
+    };
+  }, [t]);
 
   useEffect(() => {
     if (
@@ -153,18 +153,18 @@ export const LazyEditor: FC<LazyEditorProps> = ({
       const value =
         typeof initialValue == 'string'
           ? JSON.parse(initialValue)
-          : JSON.parse(JSON.stringify(initialValue || {}))
+          : JSON.parse(JSON.stringify(initialValue || {}));
 
       if (value.blocks && !!value.blocks.length) {
-        innerRef.current.render(value)
+        innerRef.current.render(value);
       }
     }
-  }, [editorReady, initialValue])
+  }, [editorReady, initialValue]);
 
   return (
     <div className={className}>
       {error && <small className="font-bold text-red-500">{error}</small>}
       <div id={EDITOR_HOLDER_ID} />
     </div>
-  )
-}
+  );
+};

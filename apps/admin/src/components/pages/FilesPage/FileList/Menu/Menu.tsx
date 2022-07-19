@@ -1,6 +1,6 @@
-import { VFC } from 'react'
-import { Breadcrumbs } from './Breadcrumbs'
-import { Buttons } from './Buttons'
+import { VFC } from 'react';
+import { Breadcrumbs } from './Breadcrumbs';
+import { Buttons } from './Buttons';
 
 export const Menu: VFC = () => {
   return (
@@ -8,5 +8,5 @@ export const Menu: VFC = () => {
       <Breadcrumbs />
       <Buttons />
     </section>
-  )
-}
+  );
+};

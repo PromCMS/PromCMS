@@ -1,18 +1,18 @@
-import { ItemID } from '@prom-cms/shared'
-import { FileService } from '@services'
-import clsx from 'clsx'
-import { DetailedHTMLProps, ImgHTMLAttributes, useMemo, VFC } from 'react'
+import { ItemID } from '@prom-cms/shared';
+import { FileService } from '@services';
+import clsx from 'clsx';
+import { DetailedHTMLProps, ImgHTMLAttributes, useMemo, VFC } from 'react';
 
 export interface BackendImageProps
   extends Omit<
     DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
     'src'
   > {
-  imageId: ItemID | Record<string, string> | undefined
+  imageId: ItemID | Record<string, string> | undefined;
   /**
    * @defaultValue 60
    */
-  quality?: number
+  quality?: number;
 }
 
 const BackendImage: VFC<BackendImageProps> = ({
@@ -41,7 +41,7 @@ const BackendImage: VFC<BackendImageProps> = ({
           : imageId.path
         : undefined,
     [imageId, width, height, quality]
-  )
+  );
 
   return imageId ? (
     <img
@@ -52,7 +52,7 @@ const BackendImage: VFC<BackendImageProps> = ({
       alt=""
       {...rest}
     />
-  ) : null
-}
+  ) : null;
+};
 
-export default BackendImage
+export default BackendImage;

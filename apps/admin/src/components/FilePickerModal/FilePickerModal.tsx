@@ -1,16 +1,16 @@
-import { Modal, ModalProps } from '@mantine/core'
-import { ItemID } from '@prom-cms/shared'
-import { VFC } from 'react'
-import { SmallFileList, SmallFileListProps } from './SmallFileList'
+import { Modal, ModalProps } from '@mantine/core';
+import { ItemID } from '@prom-cms/shared';
+import { VFC } from 'react';
+import { SmallFileList, SmallFileListProps } from './SmallFileList';
 
 export interface FilePickerModalProps
   extends Omit<ModalProps, 'onClose' | 'onChange'> {
-  multiple?: boolean
-  onClose: () => void
-  pickedFiles: ItemID[]
-  onChange: (itemId: ItemID[]) => void
-  title?: SmallFileListProps['title']
-  where?: SmallFileListProps['where']
+  multiple?: boolean;
+  onClose: () => void;
+  pickedFiles: ItemID[];
+  onChange: (itemId: ItemID[]) => void;
+  title?: SmallFileListProps['title'];
+  where?: SmallFileListProps['where'];
 }
 
 export const FilePickerModal: VFC<FilePickerModalProps> = ({
@@ -33,5 +33,5 @@ export const FilePickerModal: VFC<FilePickerModalProps> = ({
         onChange={onChange}
       />
     </Modal>
-  )
-}
+  );
+};

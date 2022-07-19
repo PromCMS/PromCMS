@@ -1,20 +1,20 @@
 import {
   EntryUnderpageContextProvider,
   Footer,
-} from '@components/pages/EntryUnderpage'
-import useCurrentModel from '@hooks/useCurrentModel'
-import NotFoundPage from '@pages/404'
-import { EntryTypeUrlActionType, NextPage } from '@custom-types'
-import { EntryEditorLayout } from 'layouts/EntryEditorLayout'
-import { Aside, Header, FormContent } from '@components/pages/EntryUnderpage'
+} from '@components/pages/EntryUnderpage';
+import useCurrentModel from '@hooks/useCurrentModel';
+import NotFoundPage from '@pages/404';
+import { EntryTypeUrlActionType, NextPage } from '@custom-types';
+import { EntryEditorLayout } from 'layouts/EntryEditorLayout';
+import { Aside, Header, FormContent } from '@components/pages/EntryUnderpage';
 
 export const getEntryUnderPageComponent = (
   viewType: EntryTypeUrlActionType
 ) => {
   const Component: NextPage = () => {
-    const model = useCurrentModel()
+    const model = useCurrentModel();
 
-    if (!model || model.name === 'users') return <NotFoundPage />
+    if (!model || model.name === 'users') return <NotFoundPage />;
 
     return (
       <EntryUnderpageContextProvider viewType={viewType}>
@@ -36,8 +36,8 @@ export const getEntryUnderPageComponent = (
           </EntryEditorLayout>
         )}
       </EntryUnderpageContextProvider>
-    )
-  }
+    );
+  };
 
-  return Component
-}
+  return Component;
+};

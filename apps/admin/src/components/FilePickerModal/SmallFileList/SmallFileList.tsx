@@ -1,28 +1,28 @@
-import { WhereQueryParam } from '@custom-types'
-import { ActionIcon, Button, Pagination } from '@mantine/core'
-import { ItemID } from '@prom-cms/shared'
-import { FileService } from '@services'
-import { useCallback, useMemo, useState, VFC } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { useTranslation } from 'react-i18next'
-import { Plus } from "tabler-icons-react"
-import { FilePickerModalProps } from '../FilePickerModal'
+import { WhereQueryParam } from '@custom-types';
+import { ActionIcon, Button, Pagination } from '@mantine/core';
+import { ItemID } from '@prom-cms/shared';
+import { FileService } from '@services';
+import { useCallback, useMemo, useState, VFC } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { useTranslation } from 'react-i18next';
+import { Plus } from 'tabler-icons-react';
+import { FilePickerModalProps } from '../FilePickerModal';
 import {
   ISmallFileListContext,
   SmallFileListContext,
   useSmallFileListContextReducer,
-} from './context'
-import { List, ListProps } from './List'
-import { useFileList } from './List/hooks'
-import { SearchBar } from './SearchBar'
+} from './context';
+import { List, ListProps } from './List';
+import { useFileList } from './List/hooks';
+import { SearchBar } from './SearchBar';
 
 export interface SmallFileListProps {
-  multiple?: boolean
-  triggerClose?: FilePickerModalProps['onClose']
-  pickedFiles: ItemID[]
-  title?: string
-  onChange: (newValue: ItemID[]) => void
-  where?: WhereQueryParam
+  multiple?: boolean;
+  triggerClose?: FilePickerModalProps['onClose'];
+  pickedFiles: ItemID[];
+  title?: string;
+  onChange: (newValue: ItemID[]) => void;
+  where?: WhereQueryParam;
 }
 
 export const SmallFileList: VFC<SmallFileListProps> = ({
@@ -33,9 +33,9 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   onChange,
   where,
 }) => {
-  const { t } = useTranslation()
-  const [state, updateValue] = useSmallFileListContextReducer()
-  const [page, setPage] = useState(1)
+  const { t } = useTranslation();
+  const [state, updateValue] = useSmallFileListContextReducer();
+  const [page, setPage] = useState(1);
   const { data, isError, isLoading, mutate } = useFileList({
     page,
     where: {
@@ -49,25 +49,25 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
         : {}),
       ...(where ?? {}),
     },
-  })
+  });
 
-  const onDeleteClick: ListProps['onDeleteClick'] = useCallback((id) => {}, [])
+  const onDeleteClick: ListProps['onDeleteClick'] = useCallback((id) => {}, []);
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      updateValue({ name: 'isLoading', value: true })
-      await FileService.create(acceptedFiles[0], { root: '/' })
-      updateValue({ name: 'isLoading', value: false })
-      mutate()
+      updateValue({ name: 'isLoading', value: true });
+      await FileService.create(acceptedFiles[0], { root: '/' });
+      updateValue({ name: 'isLoading', value: false });
+      mutate();
     },
     [updateValue, mutate]
-  )
+  );
 
   const { open, getInputProps } = useDropzone({
     onDrop,
     noClick: true,
     noKeyboard: true,
     multiple: false,
-  })
+  });
 
   const contextUpdateValue: ISmallFileListContext['updateValue'] = useCallback(
     ({ name, value }) => {
@@ -76,17 +76,17 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
           ? pickedFiles.filter((id) => id !== value)
           : multiple
           ? [...pickedFiles, value as ItemID]
-          : [value as ItemID]
+          : [value as ItemID];
 
-        onChange(resultValue)
-        if (!multiple && triggerClose) triggerClose()
-        return
+        onChange(resultValue);
+        if (!multiple && triggerClose) triggerClose();
+        return;
       }
 
-      updateValue({ name, value })
+      updateValue({ name, value });
     },
     [updateValue, onChange, triggerClose, multiple, pickedFiles]
-  )
+  );
 
   const contextValue = useMemo(
     () => ({
@@ -98,7 +98,7 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
       updateValue: contextUpdateValue,
     }),
     [state, data, isLoading, isError, contextUpdateValue, multiple, pickedFiles]
-  )
+  );
 
   return (
     <SmallFileListContext.Provider value={contextValue}>
@@ -139,5 +139,5 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
         </div>
       </div>
     </SmallFileListContext.Provider>
-  )
-}
+  );
+};

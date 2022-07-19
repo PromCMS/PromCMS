@@ -1,5 +1,5 @@
-import clsx from 'clsx'
-import { DetailedHTMLProps, HTMLAttributes, VFC } from 'react'
+import clsx from 'clsx';
+import { DetailedHTMLProps, HTMLAttributes, VFC } from 'react';
 
 export interface InfiniteHorizontalProgressProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
@@ -16,9 +16,9 @@ const InfiniteHorizontalProgress: VFC<InfiniteHorizontalProgressProps> = ({
       )}
       {...rest}
     >
-      <span className="animate-infiniteLoader absolute top-0 h-full bg-blue-400 rounded-full" />
+      <span className="absolute top-0 h-full animate-infiniteLoader rounded-full bg-blue-400" />
     </div>
-  )
-}
+  );
+};
 
-export default InfiniteHorizontalProgress
+export default InfiniteHorizontalProgress;

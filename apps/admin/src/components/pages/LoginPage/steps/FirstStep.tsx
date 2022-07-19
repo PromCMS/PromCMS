@@ -1,15 +1,15 @@
-import { Anchor, Group, PasswordInput, TextInput } from '@mantine/core'
-import Link from 'next/link'
-import { VFC } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
+import { Anchor, Group, PasswordInput, TextInput } from '@mantine/core';
+import Link from 'next/link';
+import { VFC } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 export const FirstStep: VFC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation();
   const {
     register,
     formState: { errors },
-  } = useFormContext()
+  } = useFormContext();
 
   return (
     <div className="grid w-full gap-3">
@@ -44,5 +44,5 @@ export const FirstStep: VFC = () => {
         {...register('password')}
       />
     </div>
-  )
-}
+  );
+};

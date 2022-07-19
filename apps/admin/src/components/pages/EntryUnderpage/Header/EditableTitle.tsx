@@ -1,13 +1,13 @@
-import clsx from 'clsx'
-import { VFC } from 'react'
-import { useFormContext } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
-import { useEntryUnderpageContext } from '../context'
+import clsx from 'clsx';
+import { VFC } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useEntryUnderpageContext } from '../context';
 
 export const EditableTitle: VFC = () => {
-  const { itemIsLoading } = useEntryUnderpageContext()
-  const { register, formState } = useFormContext()
-  const { t } = useTranslation()
+  const { itemIsLoading } = useEntryUnderpageContext();
+  const { register, formState } = useFormContext();
+  const { t } = useTranslation();
 
   return (
     <>
@@ -27,5 +27,5 @@ export const EditableTitle: VFC = () => {
         )}
       </div>
     </>
-  )
-}
+  );
+};

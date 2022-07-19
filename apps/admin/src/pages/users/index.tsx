@@ -1,71 +1,71 @@
-import { TableView, TableViewCol } from '@components/TableView'
-import { useModelInfo } from '@hooks/useModelInfo'
-import { useModelItems } from '@hooks/useModelItems'
-import { PageLayout } from '@layouts'
-import { ApiResultModel, ItemID } from '@prom-cms/shared'
+import { TableView, TableViewCol } from '@components/TableView';
+import { useModelInfo } from '@hooks/useModelInfo';
+import { useModelItems } from '@hooks/useModelItems';
+import { PageLayout } from '@layouts';
+import { ApiResultModel, ItemID } from '@prom-cms/shared';
 import { UserPlus } from 'tabler-icons-react';
-import { MESSAGES } from '@constants'
-import { EntryService } from '@services'
-import { useRouter } from 'next/router'
-import { useMemo, useState, VFC } from 'react'
-import { useTranslation } from 'react-i18next'
-import { formatApiModelResultToTableView } from '@utils'
-import { Button, Pagination } from '@mantine/core'
-import { useCurrentUser } from '@hooks/useCurrentUser'
+import { MESSAGES } from '@constants';
+import { EntryService } from '@services';
+import { useRouter } from 'next/router';
+import { useMemo, useState, VFC } from 'react';
+import { useTranslation } from 'react-i18next';
+import { formatApiModelResultToTableView } from '@utils';
+import { Button, Pagination } from '@mantine/core';
+import { useCurrentUser } from '@hooks/useCurrentUser';
 
 const UsersListPage: VFC = () => {
-  const { push } = useRouter()
-  const { t } = useTranslation()
-  const [page, setPage] = useState(1)
-  const currentUser = useCurrentUser()
-  const model = useModelInfo<ApiResultModel>('users')
+  const { push } = useRouter();
+  const { t } = useTranslation();
+  const [page, setPage] = useState(1);
+  const currentUser = useCurrentUser();
+  const model = useModelInfo<ApiResultModel>('users');
   const { data, isLoading, isError, mutate } = useModelItems('users', {
     page,
-  })
+  });
 
   // Models metadata
   const metadata = useMemo(() => {
-    if (!data) return false
-    const { data: items, ...metadata } = data
+    if (!data) return false;
+    const { data: items, ...metadata } = data;
 
-    return metadata
-  }, [data])
+    return metadata;
+  }, [data]);
 
   const filteredUsers = useMemo(
     () =>
       data?.data ? data.data.filter((user) => user.id !== currentUser?.id) : [],
     [data, currentUser]
-  )
+  );
 
   const userCanEdit = currentUser?.can({
     action: 'update',
     targetModel: 'users',
-  })
+  });
 
   // Take care of user creation
-  const onCreateRequest = () => push(`/users/invite`)
+  const onCreateRequest = () => push(`/users/invite`);
 
   // Take care of edit requests
   const onEditRequest = userCanEdit
     ? (id: ItemID) => push(`/users/${id}`)
-    : undefined
+    : undefined;
 
   // Take care of delete item request
   const onItemDeleteRequest = userCanEdit
     ? async (id: ItemID) => {
         if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-          await EntryService.delete({ id, model: 'users' })
-          mutate()
+          await EntryService.delete({ id, model: 'users' });
+          mutate();
         }
       }
-    : undefined
+    : undefined;
 
   // Table columns need to be formated
   const tableViewColumns = useMemo<TableViewCol[] | undefined>(() => {
-    if (!model) return
+    if (!model) return;
 
-    return formatApiModelResultToTableView(model)
-  }, [model])
+    return formatApiModelResultToTableView(model);
+  }, [model]);
 
   return (
     <>
@@ -109,7 +109,7 @@ const UsersListPage: VFC = () => {
         />
       </PageLayout>
     </>
-  )
-}
+  );
+};
 
-export default UsersListPage
+export default UsersListPage;

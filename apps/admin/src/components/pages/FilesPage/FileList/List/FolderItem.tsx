@@ -1,18 +1,18 @@
-import { ActionIcon } from '@mantine/core'
-import clsx from 'clsx'
-import { useCallback, useMemo, useState, VFC } from 'react'
-import { Folder, Folders, Trash } from "tabler-icons-react"
-import { useFileListContext } from '../context'
-import { useClassNames } from '../useClassNames'
+import { ActionIcon } from '@mantine/core';
+import clsx from 'clsx';
+import { useCallback, useMemo, useState, VFC } from 'react';
+import { Folder, Folders, Trash } from 'tabler-icons-react';
+import { useFileListContext } from '../context';
+import { useClassNames } from '../useClassNames';
 
 export interface Folder {
-  itemKey: string
-  name: string
+  itemKey: string;
+  name: string;
 }
 
 export interface FolderItemProps extends Folder {
-  onClick: (path: string) => void
-  onDeleteClick: (path: string) => void
+  onClick: (path: string) => void;
+  onDeleteClick: (path: string) => void;
 }
 
 export const FolderItem: VFC<FolderItemProps> = ({
@@ -21,29 +21,29 @@ export const FolderItem: VFC<FolderItemProps> = ({
   onClick,
   onDeleteClick,
 }) => {
-  const { currentPath, workingFolders } = useFileListContext()
-  const [isHovering, setIsHovering] = useState(false)
-  const classNames = useClassNames()
+  const { currentPath, workingFolders } = useFileListContext();
+  const [isHovering, setIsHovering] = useState(false);
+  const classNames = useClassNames();
   const folderPath = useMemo(
     () => `${currentPath === '/' ? '' : currentPath}/${itemKey}`,
     [itemKey, currentPath]
-  )
+  );
 
-  const toggleHover = () => setIsHovering(!isHovering)
+  const toggleHover = () => setIsHovering(!isHovering);
   const CustomFolderIcon = useMemo(
     () => (isHovering ? Folders : Folder),
     [isHovering]
-  )
+  );
 
   const onFolderClick = useCallback(
     () => onClick(folderPath),
     [onClick, folderPath]
-  )
+  );
 
   const onFolderDeleteClick = useCallback(
     () => onDeleteClick(folderPath),
     [onDeleteClick, folderPath]
-  )
+  );
 
   return (
     <div
@@ -79,5 +79,5 @@ export const FolderItem: VFC<FolderItemProps> = ({
         </ActionIcon>
       </div>
     </div>
-  )
-}
+  );
+};

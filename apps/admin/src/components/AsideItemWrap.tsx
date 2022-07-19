@@ -1,10 +1,10 @@
-import { Paper, Title } from '@mantine/core'
-import clsx from 'clsx'
-import { DetailedHTMLProps, FC, HTMLAttributes } from 'react'
+import { Paper, Title } from '@mantine/core';
+import clsx from 'clsx';
+import { DetailedHTMLProps, FC, HTMLAttributes } from 'react';
 
 const AsideItemWrap: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
-    description?: string
+    description?: string;
   }
 > = ({ children, className, title, ref, description, ...rest }) => (
   <Paper
@@ -27,6 +27,6 @@ const AsideItemWrap: FC<
     <hr className="border-b-2 border-project-border" />
     {children}
   </Paper>
-)
+);
 
-export default AsideItemWrap
+export default AsideItemWrap;

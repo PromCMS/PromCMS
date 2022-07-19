@@ -1,5 +1,5 @@
-import { FC } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { FC } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import {
   Button,
   Drawer as MantineDrawer,
@@ -8,38 +8,38 @@ import {
   Textarea,
   TextInput,
   Title,
-} from '@mantine/core'
-import { ItemID } from '@prom-cms/shared'
-import { useTranslation } from 'react-i18next'
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
-import { UserRolesService } from '@services'
-import { useGlobalContext } from '@contexts/GlobalContext'
-import { Fragment } from 'react'
-import { ModelPermissionToggles } from './ModelPermissionToggles'
-import { useEffect } from 'react'
-import { useModelItem } from '@hooks/useModelItem'
-import { useMemo } from 'react'
-import { CUSTOM_MODELS } from '@constants'
+} from '@mantine/core';
+import { ItemID } from '@prom-cms/shared';
+import { useTranslation } from 'react-i18next';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { UserRolesService } from '@services';
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { Fragment } from 'react';
+import { ModelPermissionToggles } from './ModelPermissionToggles';
+import { useEffect } from 'react';
+import { useModelItem } from '@hooks/useModelItem';
+import { useMemo } from 'react';
+import { CUSTOM_MODELS } from '@constants';
 
 export const Drawer: FC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
 > = ({ opened, onClose, optionToEdit }) => {
-  const formMethods = useForm()
-  const { t } = useTranslation()
-  const { data } = useModelItem('userroles', optionToEdit)
-  const reqWithNotification = useRequestWithNotifications()
-  const { models } = useGlobalContext()
-  const { handleSubmit, formState, register, reset } = formMethods
+  const formMethods = useForm();
+  const { t } = useTranslation();
+  const { data } = useModelItem('userroles', optionToEdit);
+  const reqWithNotification = useRequestWithNotifications();
+  const { models } = useGlobalContext();
+  const { handleSubmit, formState, register, reset } = formMethods;
 
   useEffect(() => {
     if (optionToEdit) {
       if (data) {
-        reset(data)
+        reset(data);
       }
     } else {
-      reset({})
+      reset({});
     }
-  }, [data, reset, optionToEdit, opened])
+  }, [data, reset, optionToEdit, opened]);
 
   const onSubmit = async (values) => {
     try {
@@ -55,16 +55,16 @@ export const Drawer: FC<
         },
         async () => {
           if (optionToEdit) {
-            const { id, ...newOptionDataset } = values
-            await UserRolesService.update(optionToEdit, newOptionDataset)
+            const { id, ...newOptionDataset } = values;
+            await UserRolesService.update(optionToEdit, newOptionDataset);
           } else {
-            await UserRolesService.create(values)
+            await UserRolesService.create(values);
           }
-          onClose()
+          onClose();
         }
-      )
+      );
     } catch (e) {}
-  }
+  };
 
   const filteredModelEntries = useMemo(() => {
     if (models) {
@@ -73,9 +73,9 @@ export const Drawer: FC<
         // We leave out settings because they can be assigned auth
         ([modelKey]) =>
           !CUSTOM_MODELS.filter((val) => val === 'settings').includes(modelKey)
-      )
+      );
     }
-  }, [models])
+  }, [models]);
 
   return (
     <FormProvider {...formMethods}>
@@ -129,5 +129,5 @@ export const Drawer: FC<
         </form>
       </MantineDrawer>
     </FormProvider>
-  )
-}
+  );
+};

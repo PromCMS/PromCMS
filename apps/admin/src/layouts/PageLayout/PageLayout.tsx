@@ -1,19 +1,19 @@
-import clsx from 'clsx'
-import { DetailedHTMLProps, FC, HTMLAttributes, VFC } from 'react'
-import { ReactChildren } from '@custom-types'
+import clsx from 'clsx';
+import { DetailedHTMLProps, FC, HTMLAttributes, VFC } from 'react';
+import { ReactChildren } from '@custom-types';
 
 export interface PageLayoutProps {
-  withAside?: boolean
-  leftAside?: ReactChildren[] | ReactChildren
+  withAside?: boolean;
+  leftAside?: ReactChildren[] | ReactChildren;
 }
 
 export interface HeaderProps {
-  title?: string
+  title?: string;
 }
 
 export interface SectionProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  title?: string
+  title?: string;
 }
 
 const Header: VFC<HeaderProps> = ({ title }) => {
@@ -22,8 +22,8 @@ const Header: VFC<HeaderProps> = ({ title }) => {
       <h1 className="text-4xl font-semibold">{title}</h1>
       <hr className="mt-4 border-t-4 border-gray-200" />
     </header>
-  )
-}
+  );
+};
 
 const Section: FC<SectionProps> = ({ children, className, title, ...rest }) => {
   return (
@@ -42,26 +42,26 @@ const Section: FC<SectionProps> = ({ children, className, title, ...rest }) => {
       )}
       {children}
     </section>
-  )
-}
+  );
+};
 
 export const PageLayout: FC<PageLayoutProps> & {
-  Header: typeof Header
-  Section: typeof Section
+  Header: typeof Header;
+  Section: typeof Section;
 } = ({ children, withAside, ...rest }) => {
   return withAside ? (
     <PageLayoutWithAside {...rest}>{children}</PageLayoutWithAside>
   ) : (
     <div className="container mx-auto mb-10">{children}</div>
-  )
-}
+  );
+};
 
 const useClassNames = () => ({
   aside: clsx('w-full flex-none lg:max-w-xs'),
-})
+});
 
 const PageLayoutWithAside: FC<PageLayoutProps> = ({ children, leftAside }) => {
-  const classNames = useClassNames()
+  const classNames = useClassNames();
 
   return (
     <div className="flex flex-col justify-center lg:min-h-screen lg:flex-row">
@@ -69,8 +69,8 @@ const PageLayoutWithAside: FC<PageLayoutProps> = ({ children, leftAside }) => {
       <div className="container w-full">{children}</div>
       <div className={clsx(classNames.aside, 'hidden 2xl:block')} />
     </div>
-  )
-}
+  );
+};
 
-PageLayout.Header = Header
-PageLayout.Section = Section
+PageLayout.Header = Header;
+PageLayout.Section = Section;

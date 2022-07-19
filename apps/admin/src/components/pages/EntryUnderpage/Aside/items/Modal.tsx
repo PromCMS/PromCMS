@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { FC } from 'react'
+import { useState } from 'react';
+import { FC } from 'react';
 
 export const Modal: FC = () => {
-  const [] = useState(false)
+  const [] = useState(false);
 
-  return <></>
-}
+  return <></>;
+};

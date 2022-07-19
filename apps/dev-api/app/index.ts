@@ -10,7 +10,14 @@ import path from 'path';
 await loadRootEnv();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-export const CLI_ROOT = path.join(__dirname, '..', '..', '..', 'packages', 'cli');
+export const CLI_ROOT = path.join(
+  __dirname,
+  '..',
+  '..',
+  '..',
+  'packages',
+  'cli'
+);
 
 const { PORT: FRONT_PORT = 3000 } = process.env;
 const SERVER_PORT = Number(FRONT_PORT) + 1;

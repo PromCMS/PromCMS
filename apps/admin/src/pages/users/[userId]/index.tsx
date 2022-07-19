@@ -1,6 +1,6 @@
-import UserUnderpages from '@components/pages/UserUnderPages'
-import { PageLayout } from '@layouts'
-import { NextPage } from '@custom-types'
+import UserUnderpages from '@components/pages/UserUnderPages';
+import { PageLayout } from '@layouts';
+import { NextPage } from '@custom-types';
 
 const UserUnderPage: NextPage = () => {
   return (
@@ -9,7 +9,7 @@ const UserUnderPage: NextPage = () => {
         <UserUnderpages.Content />
       </UserUnderpages.ContextProvider>
     </PageLayout>
-  )
-}
+  );
+};
 
-export default UserUnderPage
+export default UserUnderPage;

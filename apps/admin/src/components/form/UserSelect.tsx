@@ -1,16 +1,16 @@
-import { useModelItem } from '@hooks/useModelItem'
-import { useModelItems } from '@hooks/useModelItems'
+import { useModelItem } from '@hooks/useModelItem';
+import { useModelItems } from '@hooks/useModelItems';
 import {
   Autocomplete,
   AutocompleteItem,
   AutocompleteProps,
   Skeleton,
   Text,
-} from '@mantine/core'
-import { PagedResult, User, UserRole } from '@prom-cms/shared'
-import { t } from 'i18next'
-import { forwardRef } from 'react'
-import { FC } from 'react'
+} from '@mantine/core';
+import { PagedResult, User, UserRole } from '@prom-cms/shared';
+import { t } from 'i18next';
+import { forwardRef } from 'react';
+import { FC } from 'react';
 
 interface AutoCompleteItemProps extends User {}
 
@@ -22,7 +22,7 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, AutoCompleteItemProps>(
     const { data, isLoading } = useModelItem<UserRole>(
       'userroles',
       role as number
-    )
+    );
 
     return (
       <div ref={ref} {...others}>
@@ -35,13 +35,13 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, AutoCompleteItemProps>(
           )}
         </Text>
       </div>
-    )
+    );
   }
-)
+);
 
 export interface UserSelectProps
   extends Omit<AutocompleteProps, 'data' | 'onItemSubmit'> {
-  onItemSubmit: (item: AutocompleteItem & User) => void
+  onItemSubmit: (item: AutocompleteItem & User) => void;
 }
 
 export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
@@ -71,7 +71,7 @@ export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
     {
       isPaused: () => !props.value,
     }
-  )
+  );
 
   return (
     <>
@@ -90,5 +90,5 @@ export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
         }))}
       />
     </>
-  )
-}
+  );
+};
