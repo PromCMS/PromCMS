@@ -5,21 +5,22 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/api-client/README.md",
   "license": "MIT",
-  "main": "dist/prom-cms-api-client.cjs.js",
-  "module": "dist/prom-cms-api-client.esm.js",
-  "typings": "dist/prom-cms-api-client.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "module": "dist/index.mjs",
   "source": "src/index.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "version": "git add -A src",
-    "postversion": "git push && git push --tags"
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:source": "tsup src/index.ts --format esm,cjs",
+    "build": "npm run build:types && npm run build:source"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PromCMS/PromCMS.git"
+    "url": "git+https://github.com/PromCMS/PromCMS.git",
+    "directory": "packages/api-client"
   },
   "bugs": {
     "url": "https://github.com/PromCMS/PromCMS/issues"
