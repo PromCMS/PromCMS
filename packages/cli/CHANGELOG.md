@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.5.1
+
+### Patch Changes
+
+- 7273515: Fix cli by moving templates and php scripts to separate folder and fix that build not having esm files problem.
+
 ## 0.5.0
 
 ### Minor Changes
