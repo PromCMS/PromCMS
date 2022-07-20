@@ -1,6 +1,5 @@
 import { Command, GlobalOptions, Options, Params } from '@boost/cli';
-import recopy from 'recursive-copy';
-import path, { dirname } from 'path';
+import path from 'path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
 import {
@@ -8,7 +7,6 @@ import {
   ExportConfig,
   GENERATOR_FILENAME__JSON,
 } from '@prom-cms/shared';
-import { fileURLToPath } from 'url';
 import crypto from 'crypto';
 
 import {
@@ -19,21 +17,12 @@ import {
   pathInputToRelative,
   validateConfigPathInput,
   getAppRootInputValidator,
-} from '../../utils';
-import { PROJECT_ROOT } from '../../constants';
-import { generateCoreModule } from '../../parts/generate-core-module';
-import generateCore from '../../parts/generate-core-files';
-import { installPHPDeps } from '../../parts/install-php-deps';
+} from '../utils';
+import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
+import { generateCoreModule } from '../parts/generate-core-module';
+import generateCore from '../parts/generate-core-files';
+import { installPHPDeps } from '../parts/install-php-deps';
 
-const copyAdminOptions = {
-  overwrite: true,
-  expand: true,
-  dot: true,
-  junk: true,
-  filter: ['**/*'],
-};
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 type CustomParams = [string];
 
 const simplifyProjectName = (name: string) =>
@@ -126,7 +115,7 @@ export class GenerateCMSProgram extends Command {
         skip: this.regenerate,
         async job() {
           await generateByTemplates(
-            path.join(__dirname, '_templates'),
+            path.join(TEMPLATES_ROOT, 'commands', 'generate-cms'),
             FINAL_PATH,
             {
               '*': {
@@ -196,10 +185,13 @@ export class GenerateCMSProgram extends Command {
           await fs.ensureDir(adminFinalPath);
           await fs.emptyDir(adminFinalPath);
 
-          await recopy(
+          fs.copy(
             path.join(ADMIN_ROOT, 'out'),
             path.join(FINAL_PATH, 'public', 'admin'),
-            copyAdminOptions
+            {
+              recursive: true,
+              overwrite: true,
+            }
           );
         },
       },

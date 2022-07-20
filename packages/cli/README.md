@@ -1,11 +1,3 @@
-# `cli`
+# `@prom-cms/cli`
 
-> TODO: description
-
-## Usage
-
-```
-const cli = require('cli');
-
-// TODO: DEMONSTRATE API
-```
+This is a cli package of PromCMS that makes things happen.

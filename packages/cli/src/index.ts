@@ -5,14 +5,12 @@ import { GenerateCMSProgram } from './commands/generate-cms';
 import { GenerateDevelopProgram } from './commands/generate-develop';
 import { SyncDatabaseProgram } from './commands/sync-database';
 import fs from 'fs-extra';
-import path, { dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import path from 'path';
+import { PACKAGE_ROOT } from './constants';
 
 (async () => {
   const { version } = await fs.readJson(
-    path.join(__dirname, '..', 'package.json')
+    path.join(PACKAGE_ROOT, 'package.json')
   );
   await loadRootEnv();
 

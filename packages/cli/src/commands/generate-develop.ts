@@ -4,11 +4,11 @@ import fs from 'fs-extra';
 import path from 'path';
 import { formatGeneratorConfig } from '@prom-cms/shared';
 
-import { PROJECT_ROOT } from '../../constants';
-import { loggedJobWorker, LoggedWorkerJob, Logger } from '../../utils';
-import { generateCoreModule } from '../../parts/generate-core-module';
-import generateCore from '../../parts/generate-core-files';
-import { installPHPDeps } from '../../parts/install-php-deps';
+import { PROJECT_ROOT } from '../constants';
+import { loggedJobWorker, LoggedWorkerJob, Logger } from '../utils';
+import { generateCoreModule } from '../parts/generate-core-module';
+import generateCore from '../parts/generate-core-files';
+import { installPHPDeps } from '../parts/install-php-deps';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;

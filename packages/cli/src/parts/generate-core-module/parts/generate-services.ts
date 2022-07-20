@@ -1,8 +1,6 @@
-import path, { dirname } from 'path';
-import { generateByTemplates } from '../../../../utils';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { TEMPLATES_ROOT } from '../../../constants';
+import path from 'path';
+import { generateByTemplates } from '../../../utils';
 
 /**
  * Generates a core services
@@ -10,7 +8,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  */
 const generateServices = async (moduleRoot: string) => {
   const servicesRoot = path.join(moduleRoot, 'Services');
-  const templatesRoot = path.join(__dirname, '_templates');
+  const templatesRoot = path.join(
+    TEMPLATES_ROOT,
+    'parts',
+    'generate-core-module',
+    'generate-services'
+  );
 
   await generateByTemplates(templatesRoot, servicesRoot);
 };
