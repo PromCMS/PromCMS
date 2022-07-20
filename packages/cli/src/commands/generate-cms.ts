@@ -17,11 +17,11 @@ import {
   pathInputToRelative,
   validateConfigPathInput,
   getAppRootInputValidator,
-} from '../../utils/index.js';
-import { PROJECT_ROOT } from '../../constants/index.js';
-import { generateCoreModule } from '../../parts/generate-core-module/index.js';
-import generateCore from '../../parts/generate-core-files/index.js';
-import { installPHPDeps } from '../../parts/install-php-deps/index.js';
+} from '../utils';
+import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
+import { generateCoreModule } from '../parts/generate-core-module';
+import generateCore from '../parts/generate-core-files';
+import { installPHPDeps } from '../parts/install-php-deps';
 
 type CustomParams = [string];
 
@@ -115,7 +115,7 @@ export class GenerateCMSProgram extends Command {
         skip: this.regenerate,
         async job() {
           await generateByTemplates(
-            path.join(__dirname, '_templates'),
+            path.join(TEMPLATES_ROOT, 'commands', 'generate-cms'),
             FINAL_PATH,
             {
               '*': {

@@ -1,19 +1,17 @@
 import { Command, Params } from '@boost/cli';
 import {
+  getAppRootInputValidator,
   Logger,
   pathInputToRelative,
-  getAppRootInputValidator,
-} from '../../utils/index.js';
+} from '../utils';
 import child_process from 'child_process';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { SCRIPTS_ROOT } from '../constants';
 
 type CustomParams = [string];
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-export class SeedDatabaseProgram extends Command {
-  static path: string = 'seed-database';
+export class SyncDatabaseProgram extends Command {
+  static path: string = 'sync-database';
   static description: string = 'Sync database with provided config';
 
   static params: Params<CustomParams> = [
@@ -28,14 +26,19 @@ export class SeedDatabaseProgram extends Command {
   ];
 
   async run(root: string) {
-    Logger.info('🔃 Starting the database seeder and seeding...');
+    Logger.info('🔃 Starting database sync and syncing...');
 
     let messages = '';
 
     try {
       await new Promise((resolve, reject) => {
         const child = child_process.exec(
-          `php ${path.join(__dirname, 'seed-database.php')} "${root}"`
+          `php ${path.join(
+            SCRIPTS_ROOT,
+            'php',
+            'commands',
+            'sync-database.php'
+          )} "${root}"`
         );
 
         child.stdout?.on('data', (data) => {
@@ -52,11 +55,11 @@ export class SeedDatabaseProgram extends Command {
         });
       });
     } catch (error) {
-      throw `⛔️ An error happened during database seeding(from php script): \n${
+      throw `⛔️ An error happened during database syncing(from php script): \n${
         (error as Error).message
       }`;
     }
 
-    Logger.success('✅ Seeding done!');
+    Logger.success('✅ Sync done!');
   }
 }

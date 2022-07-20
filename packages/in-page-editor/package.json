@@ -5,18 +5,14 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",
-  "main": "dist/index.js",
+  "main": "dist/prom-cms-in-page-edit.cjs.js",
   "typings": "dist/index.d.ts",
-  "module": "dist/index.mjs",
+  "module": "dist/prom-cms-in-page-edit.esm.js",
   "source": "src/index.ts",
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build:types": "tsc --emitDeclarationOnly",
-    "build:source": "tsup src/index.ts --format esm,cjs",
-    "build": "npm run build:types && npm run build:source"
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PromCMS/PromCMS.git",

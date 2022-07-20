@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-import('../dist/index.js');
+import('../dist/prom-cms-cli.esm.js');

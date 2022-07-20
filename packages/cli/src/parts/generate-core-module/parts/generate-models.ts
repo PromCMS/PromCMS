@@ -7,12 +7,9 @@ import {
 } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
 import ejs from 'ejs';
-import { formatCodeString } from '../../../../utils/index.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import { formatCodeString } from '../../../utils';
+import { TEMPLATES_ROOT } from '../../../constants';
 
 const columnTypeToCast = (type: ColumnType['type']) => {
   let finalType = 'string';
@@ -49,7 +46,12 @@ const generateModels = async (
   configModels: ExportConfig['database']['models']
 ) => {
   const modelsRoot = path.join(moduleRoot, 'Models');
-  const templatesRoot = path.join(__dirname, '_templates');
+  const templatesRoot = path.join(
+    TEMPLATES_ROOT,
+    'parts',
+    'generate-core-module',
+    'generate-models'
+  );
 
   for (const modelKey in configModels) {
     const capitalizedModelName = capitalizeFirstLetter(modelKey, false);

@@ -2,10 +2,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { formatCodeString } from '../../utils/index.js';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+import { formatCodeString } from '../utils';
+import { TEMPLATES_ROOT } from '../constants';
 
 /**
  * Creates a PROM CMS module to specified directory with bootstrapped content.
@@ -26,7 +24,7 @@ const generateModule = async (
   if (fs.existsSync(pluginRoot) && fs.readdirSync(pluginRoot).length)
     throw Error(`Folder "${pluginName}" does not appear to be empty.`);
 
-  const templatesRoot = path.join(__dirname, '_template');
+  const templatesRoot = path.join(TEMPLATES_ROOT, 'parts', 'generate-module');
   const templateFiles = fs.readdirSync(templatesRoot);
 
   for (const templateFilename of templateFiles) {

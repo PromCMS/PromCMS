@@ -1,8 +1,6 @@
-import path, { dirname } from 'path';
-import { generateByTemplates } from '../../../../utils/index.js';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import path from 'path';
+import { generateByTemplates } from '../../../utils';
+import { TEMPLATES_ROOT } from '../../../constants';
 
 /**
  * Generates a basic controllers
@@ -10,7 +8,12 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  */
 const generateControllers = async (moduleRoot: string) => {
   const controllersRoot = path.join(moduleRoot, 'Controllers');
-  const templatesRoot = path.join(__dirname, '_templates');
+  const templatesRoot = path.join(
+    TEMPLATES_ROOT,
+    'parts',
+    'generate-core-module',
+    'generate-controllers'
+  );
 
   await generateByTemplates(templatesRoot, controllersRoot);
 };

@@ -6,10 +6,8 @@
     "outDir": "dist",
     "noEmit": false,
     "target": "ESNEXT",
-    "module": "NodeNext",
+    "module": "esnext",
     "esModuleInterop": true,
-    "moduleResolution": "NodeNext",
-    "resolveJsonModule": true,
     "experimentalDecorators": true
   },
   "include": [
@@ -18,5 +16,5 @@
   "exclude": [
     "node_modules", 
     "dist"
-  ],
+  ]
 }
