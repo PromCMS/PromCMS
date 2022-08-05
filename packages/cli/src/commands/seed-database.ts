@@ -27,7 +27,6 @@ export class SeedDatabaseProgram extends Command {
 
   async run(root: string) {
     Logger.info('🔃 Starting the database seeder and seeding...');
-
     let messages = '';
 
     try {
