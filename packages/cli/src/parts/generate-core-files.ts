@@ -13,7 +13,7 @@ const generateCore = async (
   );
 
   // Small hacky way to just regenerate whats inside an app folder
-  if (regenerate) {
+  if (!regenerate) {
     await generateByTemplates(templatesRoot, projectRoot);
   } else {
     await generateByTemplates(
