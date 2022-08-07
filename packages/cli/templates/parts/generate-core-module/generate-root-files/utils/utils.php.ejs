@@ -3,7 +3,6 @@
 function normalizeWhereQueryParam($filterParam)
 {
   $whereQuery = [];
-  $whereInQuery = [];
   $PART_SEPARATOR = ';';
   $PIECE_SEPARATOR = '.';
   $stringToExtract = $filterParam;
@@ -19,7 +18,7 @@ function normalizeWhereQueryParam($filterParam)
 
     if (isset($pieces[0]) && isset($pieces[1]) && isset($pieces[2])) {
       if ($pieces[1] === 'IN') {
-        $whereInQuery[] = [$pieces[0], json_decode("[$pieces[2]]")];
+        $whereQuery[] = [$pieces[0], 'IN', json_decode("[$pieces[2]]")];
       } else {
         $whereQuery[] = [
           $pieces[0],
@@ -30,7 +29,7 @@ function normalizeWhereQueryParam($filterParam)
     }
   }
 
-  return [$whereQuery, $whereInQuery];
+  return [$whereQuery];
 }
 
 require_once __DIR__ . '/handleDuplicateEntriesError.php';
