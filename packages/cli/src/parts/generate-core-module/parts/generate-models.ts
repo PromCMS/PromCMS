@@ -2,8 +2,6 @@ import {
   capitalizeFirstLetter,
   ColumnType,
   ExportConfig,
-  FileColumnType,
-  RelationshipColumnType,
 } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
@@ -45,32 +43,7 @@ const generateModels = async (
     const currentModel = configModels[modelKey];
     const info = {
       modelName: capitalizedModelName,
-      // TODO - finish translations
-      translations: false,
       ...currentModel,
-      relationships: (
-        Object.entries(currentModel.columns).filter(
-          ([_key, { type }]) => type === 'file' || type === 'relationship'
-        ) as [string, FileColumnType | RelationshipColumnType][]
-      ).map(([key, props]) => [
-        key,
-        props.type === 'file'
-          ? {
-              type: props.multiple ? 'oneToMany' : 'oneToOne',
-              fill: true,
-              target: '\\Files::class',
-              foreignKey: 'id',
-            }
-          : {
-              type: props.multiple ? 'oneToMany' : 'oneToOne',
-              fill: props.fill,
-              target: `\\${capitalizeFirstLetter(
-                props.targetModel,
-                false
-              )}::class`,
-              foreignKey: props.foreignKey,
-            },
-      ]),
       columnCasts: Object.entries(currentModel.columns)
         .filter(([_, { type }]) => type === 'json')
         .map(([key, { type }]) => [key, columnTypeToCast(type)]),
