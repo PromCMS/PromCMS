@@ -6,7 +6,7 @@
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/shared/README.md",
   "main": "dist/prom-cms-shared.cjs.js",
-  "typings": "dist/index.d.ts",
+  "typings": "dist/prom-cms-shared.cjs.d.ts",
   "module": "dist/prom-cms-shared.esm.js",
   "source": "src/index.ts",
   "files": [

@@ -36,15 +36,10 @@ export class GenerateDevelopProgram extends Command {
 
     const GENERATOR_CONFIG = await findGeneratorConfig();
     const envFilepath = await getEnvFilepath();
-    const { DB_CONNECTION } = process.env as unknown as {
-      DB_CONNECTION: string;
-    };
 
-    if (!GENERATOR_CONFIG)
+    if (!GENERATOR_CONFIG) {
       throw '⛔️ No generator config provided, please provide a config.';
-    if (DB_CONNECTION !== 'sqlite')
-      throw '⛔️ At the moment we dont provide a way to seed database other than SQLITE.';
-
+    }
     const DEV_API_ROOT = path.join(PROJECT_ROOT, 'apps', 'dev-api');
     const TEMP_CORE_ROOT = path.join(DEV_API_ROOT, '.temp');
     const MODULES_ROOT = path.join(TEMP_CORE_ROOT, 'modules');

@@ -186,7 +186,7 @@ export const EntryUnderpageContextProvider: FC<{
           }
         );
       } catch (e) {
-        if (axios.isAxiosError(e) && e.response?.data?.code === 23000) {
+        if (axios.isAxiosError(e) && e.response?.data?.code === 900409) {
           const fieldNames = e.response.data.data;
           if (Array.isArray(fieldNames) && fieldNames.length) {
             for (const fieldName of fieldNames) {

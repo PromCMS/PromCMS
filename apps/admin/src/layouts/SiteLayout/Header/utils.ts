@@ -28,7 +28,7 @@ export const useConstructedMenuItems = () => {
           .map(([modelKey, { icon }]) => ({
             href: EntryService.getListUrl(modelKey),
             icon: iconSet[icon],
-            label: modelKey.toUpperCase(),
+            label: modelKey,
           })),
       ].filter((item) => !!item.icon);
     }

@@ -1,36 +1,21 @@
 <?php
 
-/**
- * DO NOT DELETE OR EDIT THIS FILE.
- * THIS FILE IS PART OF COCKPIT CMS.
- *
- */
-
 use DI\Container;
 use Symfony\Component\Dotenv\Dotenv;
-
-// Autoload vendor libs if they are not included already
-include_once __DIR__ . '/../../vendor/autoload.php';
-
-function joinPath(...$inp)
-{
-  return implode(DIRECTORY_SEPARATOR, $inp);
-}
+use SleekDB\Query;
 
 $PROM_ROOT_FOLDER = joinPath(__DIR__, '..', '..');
 $dotenv = new Dotenv();
 $dotenv->load($PROM_ROOT_FOLDER . '/.env');
 
-return function (Container $container) {
-  global $PROM_ROOT_FOLDER;
-
+return function (Container $container) use ($PROM_ROOT_FOLDER) {
   $PROM_UPLOADS_ROOT = joinPath($PROM_ROOT_FOLDER, 'uploads');
   $PROM_LOCALES_ROOT = joinPath($PROM_ROOT_FOLDER, 'locales');
   $PROM_FILE_CACHE_ROOT = joinPath($PROM_ROOT_FOLDER, 'cache', 'files');
 
   $APP_PREFIX = $_ENV['APP_PREFIX'] ? '/' . $_ENV['APP_PREFIX'] : '';
   $APP_ENV = $_ENV['APP_ENV'] ?? 'development';
-  $dbIsSqlite = $_ENV['DB_CONNECTION'] === 'sqlite';
+  $IS_DEV_ENV = $APP_ENV == 'development';
 
   $config = [
     'app' => [
@@ -51,20 +36,22 @@ return function (Container $container) {
       ],
     ],
     'db' => [
-      'driver' => $_ENV['DB_CONNECTION'],
-      'host' => $_ENV['DB_HOST'],
-      'database' =>
-        // If database is SQLite then we need to go to root since database is basically
-        // a path to db file
-        ($dbIsSqlite ? __DIR__ . '/../../' : '') . $_ENV['DB_DATABASE'],
-      'username' => $_ENV['DB_USERNAME'],
-      'password' => $_ENV['DB_PASSWORD'],
-      'collation' => $_ENV['DB_COLLATION'] ?? 'utf8_unicode_ci',
-      'charset' => $_ENV['DB_CHARSET'] ?? 'utf8',
-      'prefix' => $_ENV['DB_TABLE_PREFIX'] ?? '',
+      'root' => joinPath($PROM_ROOT_FOLDER, '.database'),
+      'storeConfig' => [
+        'auto_cache' => !$IS_DEV_ENV,
+        'cache_lifetime' => $IS_DEV_ENV ? null : 180, // Three minutes
+        'timeout' => false,
+        'primary_key' => 'id',
+        'search' => [
+          'min_length' => 2,
+          'mode' => 'or',
+          'score_key' => 'scoreKey',
+          'algorithm' => Query::SEARCH_ALGORITHM['hits'],
+        ],
+      ],
     ],
     'env' => [
-      'development' => $APP_ENV === 'development',
+      'development' => $IS_DEV_ENV,
       'debug' => $_ENV['APP_DEBUG'],
       'env' => $APP_ENV,
     ],
@@ -74,7 +61,8 @@ return function (Container $container) {
       'uploadsPath' => $PROM_UPLOADS_ROOT,
     ],
     'i18n' => [
-      'language' => 'en',
+      'default' => 'cs',
+      'languages' => ['cs', 'en'],
     ],
     'system' => [
       'modules' => [

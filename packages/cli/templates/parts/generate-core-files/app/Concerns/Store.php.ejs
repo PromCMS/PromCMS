@@ -1,0 +1,31 @@
+<?php
+namespace App\Database\Concerns;
+
+use SleekDB\Store as SleekStore;
+
+trait Store
+{
+  protected SleekStore $store;
+  protected SleekStore $translationsStore;
+  protected static string $databaseDirectory;
+  protected static array $storeConfiguration;
+
+  /**
+   *  Returns store
+   */
+  public function getStore($translations = false): SleekStore
+  {
+    return $translations ? $this->translationsStore : $this->store;
+  }
+
+  /**
+   * Sets static config
+   */
+  static function setConfig(
+    string $databaseDirectory,
+    array $storeConfiguration
+  ) {
+    static::$databaseDirectory = $databaseDirectory;
+    static::$storeConfiguration = $storeConfiguration;
+  }
+}

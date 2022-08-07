@@ -4,15 +4,13 @@ use App\Services\Password as PasswordService;
 $PHP_APP_ROOT = $argv[1];
 $LIBS_ROOT = $PHP_APP_ROOT . '/app/libs';
 include_once $PHP_APP_ROOT . '/vendor/autoload.php';
-include_once $PHP_APP_ROOT . '/app/utils.php';
+include_once $PHP_APP_ROOT . '/app/autoload.php';
 include_once $PHP_APP_ROOT . '/modules/Core/Services/Password.service.php';
 
 $container = new Container();
 $configBootstrap = require_once $LIBS_ROOT . '/config.bootstrap.php';
 $utilsBootstrap = require_once $LIBS_ROOT . '/utils.bootstrap.php';
-$dbBootstrap = require_once $LIBS_ROOT . '/db.bootstrap.php';
 $configBootstrap($container);
-$dbBootstrap($container);
 $utilsBootstrap($container);
 $utils = $container->get('utils');
 
@@ -51,7 +49,7 @@ try {
     $modelsFolderName = $container->get('config')['system']['modules'][
       'modelsFolderName'
     ];
-    $modelsRoot = "$moduleRoot/$modelsFolderName";
+    $modelsRoot = joinPath($moduleRoot, $modelsFolderName);
 
     if (is_dir($modelsRoot)) {
       $modelNames = $utils->autoloadModels($moduleRoot);
@@ -130,7 +128,7 @@ try {
             $inputValue = is_string($value) ? $value : implode(' ', $value);
             break;
           default:
-            echo "❗Unknown value \"$fieldType\" supplied as a column type in mock generator";
+            echo "❗Unsupported field type of value \"$fieldType\" supplied as a column type in mock generator";
             continue 2;
             break;
         }
@@ -139,7 +137,7 @@ try {
       }
 
       // Try to create static admin user
-      if (strtolower($modelName) === 'users' && $i === 0) {
+      if ($modelName === 'Users' && $i === 0) {
         try {
           $creationPayload['email'] = 'test@example.com';
           $creationPayload['role'] = 0;
@@ -158,6 +156,7 @@ try {
   exit(0);
 } catch (Exception $e) {
   $message = $e->getMessage();
-  echo "⛔️ An error happened: $message";
+  $trace = $e->getTraceAsString();
+  echo "⛔️ An error happened: $message \n $trace";
   exit(1);
 }

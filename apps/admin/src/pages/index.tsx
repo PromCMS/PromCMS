@@ -42,7 +42,7 @@ const Home: NextPage = () => {
                 <div className="m-auto text-center">
                   <itemInfo.icon className="mx-auto aspect-square h-12 w-12 text-gray-400 duration-150 group-hover:text-blue-500" />
                   <span className="mt-3 block text-xl font-semibold">
-                    {t(capitalizeFirstLetter(itemInfo.label))}
+                    {t(capitalizeFirstLetter(itemInfo.label, false))}
                   </span>
                 </div>
               </a>

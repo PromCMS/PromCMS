@@ -1,0 +1,385 @@
+<?php
+
+namespace App\Database;
+
+use App\Exceptions\EntityDuplicateException;
+use App\Exceptions\EntityNotFoundException;
+use Exception;
+use ParseError;
+use SleekDB\Store;
+use SleekDB\Query as SleekQuery;
+use SleekDB\QueryBuilder;
+
+class Query
+{
+  protected Store $store;
+  protected QueryBuilder $queryBuilder;
+  protected Model $modelClass;
+
+  function __construct(Store $store, Model $modelClass)
+  {
+    $this->store = $store;
+    $this->modelClass = $modelClass;
+  }
+
+  /**
+   * Gets a sleekdb QueryBuilder instance
+   */
+  public function getQueryBuilder(): QueryBuilder
+  {
+    if (!isset($this->queryBuilder)) {
+      $this->queryBuilder = $this->store->createQueryBuilder();
+    }
+
+    return $this->queryBuilder;
+  }
+
+  /**
+   * Destroy query builder that was previously created and used
+   */
+  public function destroyQueryBuilder()
+  {
+    unset($this->queryBuilder);
+  }
+
+  function where(array $arg)
+  {
+    $this->getQueryBuilder()->where($arg);
+
+    return $this;
+  }
+
+  function orderBy(array $arg)
+  {
+    $this->getQueryBuilder()->orderBy($arg);
+
+    return $this;
+  }
+
+  function join(\Closure $arg, string $propertyName)
+  {
+    $this->getQueryBuilder()->join($arg, $propertyName);
+
+    return $this;
+  }
+
+  function limit($count)
+  {
+    $this->getQueryBuilder()->limit($count);
+
+    return $this;
+  }
+
+  function skip($count)
+  {
+    $this->getQueryBuilder()->skip($count);
+
+    return $this;
+  }
+
+  /**
+   * Select what fields to include in result
+   */
+  function select(array $fieldNames)
+  {
+    $this->getQueryBuilder()->select($fieldNames);
+
+    return $this;
+  }
+
+  /**
+   * Opposite of select
+   */
+  function except(array $fieldNames)
+  {
+    $this->getQueryBuilder()->except($fieldNames);
+
+    return $this;
+  }
+
+  /**
+   * Get many items that matches where clause
+   */
+  public function getMany(): array
+  {
+    $result = $this->getQueryBuilder()
+      ->getQuery()
+      ->fetch();
+
+    $this->destroyQueryBuilder();
+
+    return array_map(function ($item) {
+      return static::applyCasts($item);
+    }, $result);
+  }
+
+  /**
+   * Get one item that matches where clause first
+   */
+  public function getOne()
+  {
+    $result = $this->getQueryBuilder()
+      ->getQuery()
+      ->first();
+
+    $this->destroyQueryBuilder();
+
+    if (count($result) === 0) {
+      throw new EntityNotFoundException('Entity is missing');
+    }
+
+    return new ModelResult($this->modelClass, static::applyCasts($result));
+  }
+
+  /**
+   * Shorthand for getOne
+   */
+  public function getById($id)
+  {
+    $this->getQueryBuilder()->where(['id', '=', static::serializeId($id)]);
+
+    return $this->getOne();
+  }
+
+  /**
+   * Much more efficient method to check if some entry exists. Does not attach to current query builder
+   */
+  function exists($where)
+  {
+    if (!count($where)) {
+      return false;
+    }
+
+    $this->store
+      ->createQueryBuilder()
+      ->where($where)
+      ->getQuery()
+      ->exists();
+  }
+
+  protected function existsAgainstPayload($payload, $ignoreId = null)
+  {
+    $uniqueFilter = [];
+    $index = 1;
+    $filledUniqueFields = array_filter(
+      $this->modelClass::getUniqueFields(),
+      function ($item) use ($payload) {
+        return isset($payload[$item]);
+      },
+    );
+
+    foreach ($filledUniqueFields as $uniqueFieldName) {
+      $uniqueFilter[] = [$uniqueFieldName, '=', $payload[$uniqueFieldName]];
+      if (count($filledUniqueFields) !== $index) {
+        $uniqueFilter[] = 'OR';
+      }
+      $index++;
+    }
+
+    if (!count($uniqueFilter)) {
+      return false;
+    }
+
+    try {
+      $match = $this->store->findOneBy(
+        $ignoreId !== null
+          ? [$uniqueFilter, 'AND', ['id', '!=', $ignoreId]]
+          : $uniqueFilter,
+      );
+
+      if ($match === null) {
+        throw new EntityNotFoundException();
+      }
+
+      $conflictedFields = [];
+
+      foreach ($filledUniqueFields as $uniqueFieldName) {
+        if ($match[$uniqueFieldName] == $payload[$uniqueFieldName]) {
+          $conflictedFields[] = $uniqueFieldName;
+        }
+      }
+
+      return $conflictedFields;
+    } catch (\Exception $exception) {
+      if ($exception instanceof EntityNotFoundException) {
+        return false;
+      }
+
+      throw $exception;
+    }
+  }
+
+  /**
+   * Create item
+   */
+  function create($payload)
+  {
+    // We add timestamps if current model has timestamps enabled
+    if ($this->modelClass->hasTimestamps()) {
+      $timeNow = new \DateTime();
+      $payload['created_at'] = $timeNow->getTimestamp();
+      $payload['updated_at'] = $timeNow->getTimestamp();
+    }
+
+    // Trigger events
+    $payload = $this->modelClass::beforeSafe($payload);
+    $payload = $this->modelClass::beforeCreate($payload);
+
+    // Check for conflicts
+    if ($conflictedFields = static::existsAgainstPayload($payload)) {
+      throw new EntityDuplicateException(
+        'This item already exists',
+        $conflictedFields,
+      );
+    }
+
+    // Insert new item
+    $result = $this->store->insert($payload);
+
+    // Apply casts
+    $result = static::applyCasts($result);
+
+    // Convert it to model result
+    $result = new ModelResult($this->modelClass, $result);
+
+    // Trigger events
+    $result = $this->modelClass::afterCreate($result);
+
+    return $result;
+  }
+
+  /**
+   * Update item(s), previously defined where conditions are applied too
+   */
+  function updateById($_id, $payload)
+  {
+    // Id can be int or string and we need to convert it to int for SleekDB
+    $id = static::serializeId($_id);
+
+    // If has timestamps enabled we attach updated_at
+    if ($this->modelClass->hasTimestamps()) {
+      $timeNow = new \DateTime();
+      $payload['updated_at'] = $timeNow->getTimestamp();
+    }
+
+    // Apply id to filters
+    $this->getQueryBuilder()->where(['id', '=', $id]);
+
+    // Check for conflicts
+    if ($conflictedFields = $this->existsAgainstPayload($payload, $id)) {
+      throw new EntityDuplicateException(
+        'This item already exists',
+        $conflictedFields,
+      );
+    }
+
+    // Trigger events
+    $payload = $this->modelClass::beforeSafe($payload);
+
+    // Update item in store and get it back
+    $result = $this->getQueryBuilder()
+      ->getQuery()
+      ->update($payload, true);
+
+    // Destroy query builder that was made for this instance
+    $this->destroyQueryBuilder();
+
+    // If there are no results we fire exception
+    if ($result === false) {
+      throw new EntityNotFoundException();
+    }
+
+    // We apply casts and return it via ModelResult
+    return new ModelResult($this->modelClass, static::applyCasts($result[0]));
+  }
+
+  /**
+   * Shorthand for delete, accepts previously defined where conditions
+   */
+  function deleteById($id)
+  {
+    $this->getQueryBuilder()->where(['id', '=', static::serializeId($id)]);
+
+    return $this->delete();
+  }
+
+  /**
+   * Find items with closures
+   */
+  function findBy(
+    array $criteria,
+    array $orderBy = null,
+    int $limit = null,
+    int $offset = null
+  ) {
+    $results = $this->store->findBy($criteria, $orderBy, $limit, $offset);
+
+    return array_map(function ($item) {
+      return static::applyCasts($item);
+    }, $results);
+  }
+
+  /**
+   * Delete item
+   */
+  function delete()
+  {
+    $result = $this->getQueryBuilder()
+      ->getQuery()
+      ->delete(SleekQuery::DELETE_RETURN_RESULTS);
+
+    if ($result == false) {
+      return $result;
+    }
+
+    return new ModelResult($this->modelClass, static::applyCasts($result[0]));
+  }
+
+  private static function serializeId($id): int
+  {
+    $intId = intval($id);
+    if ($intId === 0) {
+      if ($id === '0') {
+        throw new Exception("Cannot query item with id '0'");
+      } else {
+        throw new ParseError("'$id' cannot be converted to number");
+      }
+    }
+
+    return $intId;
+  }
+
+  private function applyCasts($args)
+  {
+    $casts = $this->modelClass::getCasts();
+    if (count($casts) == 0) {
+      return $args;
+    }
+
+    foreach ($casts as $castFieldName => $castTo) {
+      if (!isset($args[$castFieldName])) {
+        continue;
+      }
+
+      $fieldValue = $args[$castFieldName];
+      switch ($castTo) {
+        case 'json':
+          $casted = json_encode($fieldValue);
+          break;
+        case 'array':
+          $casted = is_array($fieldValue)
+            ? $fieldValue
+            : json_decode($fieldValue);
+          break;
+        default:
+          throw new \Exception(
+            "Unknown castTo $castTo on field $castFieldName",
+          );
+          break;
+      }
+      $args[$castFieldName] = $casted;
+    }
+
+    return $args;
+  }
+}

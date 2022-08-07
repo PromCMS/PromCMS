@@ -2,13 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\EntityNotFoundException;
 use App\Services\FileService;
 use App\Services\ImageService;
 use DI\Container;
 use GuzzleHttp\Psr7\MimeType;
 use GuzzleHttp\Psr7\Stream;
 use GuzzleHttp\Psr7\UploadedFile;
-use Illuminate\Database\Capsule\Manager as DB;
 use League\Flysystem\Filesystem;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,9 +34,7 @@ class Files
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
-    $instance = new \Files();
-
-    prepareJsonResponse($response, (array) $instance->getSummary());
+    prepareJsonResponse($response, (array) (new \Files())->getSummary());
 
     return $response;
   }
@@ -49,12 +47,16 @@ class Files
     try {
       prepareJsonResponse(
         $response,
-        $this->fileService->getById($args['itemId'])->toArray(),
+        $this->fileService->getById($args['itemId'])->getData(),
       );
 
       return $response;
     } catch (\Exception $e) {
-      return $response->withStatus(404);
+      if ($e instanceof EntityNotFoundException) {
+        return $response->withStatus(404);
+      }
+
+      throw $e;
     }
   }
 
@@ -67,7 +69,7 @@ class Files
 
     prepareJsonResponse(
       $response,
-      $this->fileService->getManyByDirectory($directoryPath)->toArray(),
+      $this->fileService->getManyByDirectory($directoryPath),
     );
 
     return $response;
@@ -78,26 +80,28 @@ class Files
     ResponseInterface $response
   ): ResponseInterface {
     $queryParams = $request->getQueryParams();
-    $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
+    $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
 
     if (isset($queryParams['where'])) {
       [$where] = normalizeWhereQueryParam($queryParams['where']);
     }
 
-    $dataPaginated = json_decode(
-      \Files::where($where ?? [])
-        ->paginate(15, ['*'], 'page', $page)
-        ->toJson(),
-    );
-    // Unset some things as they are not useful or active
-    unset($dataPaginated->links);
-    unset($dataPaginated->first_page_url);
-    unset($dataPaginated->last_page_url);
-    unset($dataPaginated->next_page_url);
-    unset($dataPaginated->prev_page_url);
-    unset($dataPaginated->path);
+    $pageLimit = 15;
+    $query = \Files::where($where ?? [])
+      ->limit($pageLimit)
+      ->skip($pageLimit * ($page - 1));
+    $data = $query->getMany();
+    $total = count(\Files::where($where ?? [])->getMany());
 
-    $response->getBody()->write(json_encode($dataPaginated));
+    $response->getBody()->write(
+      json_encode([
+        'data' => $data,
+        'current_page' => $page,
+        'last_page' => floor($total / $pageLimit),
+        'per_page' => $pageLimit,
+        'total' => $total,
+      ]),
+    );
 
     return $response;
   }
@@ -120,12 +124,12 @@ class Files
 
       if (preg_match('/image\/.*/', $fileInfo->mimeType)) {
         $imageResource = $this->imageService->getProcessed(
-          $fileInfo,
+          $fileInfo->getData(),
           $queryParams,
         );
         $stream = new Stream($imageResource['resource']);
       } else {
-        $stream = $this->fileService->getStream($fileInfo);
+        $stream = $this->fileService->getStream($fileInfo->getData());
       }
 
       return $response
@@ -185,7 +189,8 @@ class Files
     $mimeType = MimeType::fromFilename($newFilename);
 
     try {
-      DB::beginTransaction();
+      // TODO: Transactions
+      //DB::beginTransaction();
 
       $fileArgs = [
         'filepath' => $filepath,
@@ -206,13 +211,11 @@ class Files
       $createdFile = \Files::create($fileArgs);
       $file->moveTo($this->config['fs']['uploadsPath'] . $filepath);
 
-      DB::commit();
+      //DB::commit();
 
-      prepareJsonResponse($response, $createdFile->toArray());
+      prepareJsonResponse($response, $createdFile->getData());
     } catch (\Exception $e) {
-      echo $e->getMessage();
-
-      DB::rollback();
+      //DB::rollback();
 
       return $response
         ->withStatus(500)
@@ -229,10 +232,10 @@ class Files
   ): ResponseInterface {
     $parsedBody = $request->getParsedBody();
 
-    $file = \Files::findOrFail($args['itemId']);
+    $file = \Files::getById($args['itemId']);
     $file->update($parsedBody['data']);
 
-    prepareJsonResponse($response, $file->toArray());
+    prepareJsonResponse($response, $file->getData());
 
     return $response;
   }

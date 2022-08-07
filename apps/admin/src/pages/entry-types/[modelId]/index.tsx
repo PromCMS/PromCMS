@@ -55,12 +55,13 @@ const EntryTypeUnderpage: VFC = ({}) => {
     const fromId = listItems[source.index].id;
     const toId = listItems[destination.index].id;
 
-    handlers.reorder({ from: source.index, to: destination.index });
-
-    await EntryService.reorder(model!.name, {
-      fromId,
-      toId,
-    });
+    if (fromId !== toId) {
+      handlers.reorder({ from: source.index, to: destination.index });
+      await EntryService.reorder(model!.name, {
+        fromId,
+        toId,
+      });
+    }
 
     setApiWorking(false);
   };

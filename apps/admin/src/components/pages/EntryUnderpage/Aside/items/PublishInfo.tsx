@@ -5,6 +5,7 @@ import { useUser } from '@hooks/useUser';
 import { Skeleton, SkeletonProps } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
 import { UserService } from '@services';
+import { dynamicDayjs } from '@utils';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import Link from 'next/link';
@@ -67,7 +68,7 @@ export const PublishInfo: FC = () => {
                       <TextSkeleton className="w-full max-w-[6rem]" />
                     ) : (
                       <span className="font-semibold text-blue-600">
-                        {dayjs(itemData?.updated_at).format(dateFormat)}
+                        {dynamicDayjs(itemData.updated_at).format(dateFormat)}
                       </span>
                     )}
                   </li>
@@ -79,7 +80,7 @@ export const PublishInfo: FC = () => {
                       <TextSkeleton className="w-full max-w-[6rem]" />
                     ) : (
                       <span className="font-semibold text-blue-600">
-                        {dayjs(itemData?.created_at).format(dateFormat)}
+                        {dynamicDayjs(itemData.created_at).format(dateFormat)}
                       </span>
                     )}
                   </li>
@@ -88,22 +89,24 @@ export const PublishInfo: FC = () => {
             )}
             {currentModel?.ownable && (
               <>
-                {itemData?.updated_by && String(itemData?.updated_by) !== '0' && (
-                  <li>
-                    <div className="flex items-center gap-1">
-                      <span className="flex-none">{t('Updated by:')}</span>{' '}
-                      <UserName userId={itemData?.updated_by} />
-                    </div>
-                  </li>
-                )}
-                {itemData?.created_by && String(itemData?.created_by) !== '0' && (
-                  <li>
-                    <div className="flex items-center gap-1">
-                      <span className="flex-none">{t('Created by:')}</span>{' '}
-                      <UserName userId={itemData?.created_by} />
-                    </div>
-                  </li>
-                )}
+                {!!itemData?.updated_by &&
+                  String(itemData?.updated_by) !== '0' && (
+                    <li>
+                      <div className="flex items-center gap-1">
+                        <span className="flex-none">{t('Updated by:')}</span>{' '}
+                        <UserName userId={itemData?.updated_by} />
+                      </div>
+                    </li>
+                  )}
+                {!!itemData?.created_by &&
+                  String(itemData?.created_by) !== '0' && (
+                    <li>
+                      <div className="flex items-center gap-1">
+                        <span className="flex-none">{t('Created by:')}</span>{' '}
+                        <UserName userId={itemData?.created_by} />
+                      </div>
+                    </li>
+                  )}
               </>
             )}
           </ul>

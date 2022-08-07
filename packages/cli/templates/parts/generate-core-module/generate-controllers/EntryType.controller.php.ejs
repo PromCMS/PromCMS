@@ -2,10 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\EntityDuplicateException;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class EntryType
 {
@@ -14,11 +14,6 @@ class EntryType
   public function __construct(Container $container)
   {
     $this->currentUser = $container->get('session')->get('user', false);
-  }
-
-  private function handleDuplicate($response, $exception)
-  {
-    handleDuplicateEntriesError($response, $exception);
   }
 
   public function getInfo(
@@ -36,7 +31,6 @@ class EntryType
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
-    $instancePath = $request->getAttribute('model-instance-path');
     $classInstance = $request->getAttribute('model-instance');
     $instance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
@@ -45,49 +39,56 @@ class EntryType
     if (
       !$instance->getSummary()->hasOrdering ||
       !isset($data['fromId']) ||
-      !isset($data['toId'])
+      !isset($data['toId']) ||
+      $data['fromId'] === $data['toId']
     ) {
       return $response->withStatus(400);
     }
 
+    // TODO: add transactions
     try {
       $ownableQueryFilter =
         $request->getAttribute('permission-only-own', false) === true
           ? onlyOwnersOrEditors($this->currentUser->id, $classInstance)
           : [];
 
-      $fromEntryQuery = $instancePath::where('id', $data['fromId']);
-      $toEntryQuery = $instancePath::where('id', $data['toId']);
+      $fromEntry = $classInstance
+        ->where(
+          array_merge(
+            ['id', '=', intval($data['fromId'])],
+            $ownableQueryFilter,
+          ),
+        )
+        ->getOne();
 
-      $fromEntryQuery->where($ownableQueryFilter);
-      $toEntryQuery->where($ownableQueryFilter);
+      $toEntry = $classInstance
+        ->where(
+          array_merge(['id', '=', intval($data['toId'])], $ownableQueryFilter),
+        )
+        ->getOne();
 
-      $fromEntry = $fromEntryQuery->firstOrFail();
-      $toEntry = $toEntryQuery->firstOrFail();
+      // just make copy of data with just 'order' values which we will be saving to db
+      $fromEntryData = ['order' => $fromEntry->order];
+      $toEntryData = ['order' => $toEntry->order];
 
-      DB::beginTransaction();
-
-      $savedOrderId = $toEntry->order;
-      $toEntry->order = $fromEntry->order;
-      $fromEntry->order = $savedOrderId;
+      $savedOrderId = $toEntryData['order'];
+      $toEntryData['order'] = $fromEntryData['order'];
+      $fromEntryData['order'] = $savedOrderId;
 
       if ($instance->getSummary()->ownable && $this->currentUser) {
-        $fromEntry->updated_by = $this->currentUser->id;
-        $toEntry->updated_by = $this->currentUser->id;
+        $fromEntryData['updated_by'] = $this->currentUser->id;
+        $toEntryData['updated_by'] = $this->currentUser->id;
       }
 
-      $fromEntry->save();
-      $toEntry->save();
-
-      DB::commit();
+      $fromEntry->update($fromEntryData);
+      $toEntry->update($toEntryData);
 
       prepareJsonResponse($response, [], '', 'success');
     } catch (\Exception $e) {
-      DB::rollback();
-
       return $response
         ->withStatus(500)
-        ->withHeader('Content-Description', $e->getMessage());
+        ->withHeader('x-custom-message', $e->getMessage())
+        ->withHeader('x-custom-trace', $e->getTraceAsString());
     }
 
     return $response;
@@ -97,38 +98,41 @@ class EntryType
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
-    $modelInstancePath = $request->getAttribute('model-instance-path');
     $classInstance = $request->getAttribute('model-instance');
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
 
-    if ($classInstance->getSummary()->hasOrdering) {
-      $query = $modelInstancePath
-        ::orderBy('order', 'ASC')
-        ->orderBy('id', 'ASC');
-    } else {
-      $query = $modelInstancePath::orderBy('id', 'ASC');
-    }
+    $pageLimit = 15;
+    $query = $classInstance
+      ->orderBy(
+        $classInstance->getSummary()->hasOrdering
+          ? ['order' => 'asc', 'id' => 'asc']
+          : ['id' => 'asc'],
+      )
+      ->limit($pageLimit)
+      ->skip($pageLimit * $page);
 
     if ($request->getAttribute('permission-only-own', false) === true) {
-      $query->where(
-        onlyOwnersOrEditors($this->currentUser->id, $classInstance),
-      );
+      $filter = onlyOwnersOrEditors($this->currentUser->id, $classInstance);
+      $total = count($classInstance->where($filter)->getMany());
+      $query->where($filter);
+    } else {
+      $total = count($classInstance->getMany());
     }
 
-    $dataPaginated = json_decode(
-      $query->paginate(15, ['*'], 'page', $page)->toJson(),
+    $data = $query->getMany();
+
+    $response->getBody()->write(
+      json_encode([
+        'data' => $data,
+        'current_page' => $page,
+        'last_page' => floor($total / $pageLimit),
+        'per_page' => $pageLimit,
+        'total' => $total,
+        'from' => $pageLimit * $page + 1,
+        'to' => $pageLimit * $page + $pageLimit,
+      ]),
     );
-
-    // Unset some things as they are not useful or active
-    unset($dataPaginated->links);
-    unset($dataPaginated->first_page_url);
-    unset($dataPaginated->last_page_url);
-    unset($dataPaginated->next_page_url);
-    unset($dataPaginated->prev_page_url);
-    unset($dataPaginated->path);
-
-    $response->getBody()->write(json_encode($dataPaginated));
 
     return $response;
   }
@@ -138,12 +142,11 @@ class EntryType
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $request->getAttribute('model-instance-path');
     $classInstance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
 
     try {
-      $query = $modelInstancePath::where('id', $args['itemId']);
+      $query = $classInstance;
 
       if ($request->getAttribute('permission-only-own', false) === true) {
         $query->where(
@@ -151,7 +154,7 @@ class EntryType
         );
       }
 
-      $item = $query->firstOrFail();
+      $item = $query->getById($args['itemId']);
 
       if ($classInstance->getSummary()->ownable && $this->currentUser) {
         $parsedBody['data']['updated_by'] = $this->currentUser->id;
@@ -159,12 +162,12 @@ class EntryType
 
       $item->update($parsedBody['data']);
 
-      prepareJsonResponse($response, $item->toArray());
+      prepareJsonResponse($response, $item->getData());
 
       return $response;
     } catch (\Exception $ex) {
-      if ($ex->getCode() === '23000') {
-        $this->handleDuplicate($response, $ex);
+      if ($ex instanceof EntityDuplicateException) {
+        handleDuplicateEntriesError($response, $ex);
 
         return $response
           ->withStatus(400)
@@ -182,11 +185,10 @@ class EntryType
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $request->getAttribute('model-instance-path');
     $classInstance = $request->getAttribute('model-instance');
 
     try {
-      $query = $modelInstancePath::where('id', $args['itemId']);
+      $query = $classInstance->where(['id', '=', intval($args['itemId'])]);
 
       if ($request->getAttribute('permission-only-own', false) === true) {
         $query->where(
@@ -194,9 +196,9 @@ class EntryType
         );
       }
 
-      $item = $query->firstOrFail();
+      $item = $query->getOne();
 
-      prepareJsonResponse($response, $item->toArray());
+      prepareJsonResponse($response, $item->getData());
 
       return $response;
     } catch (\Exception $error) {
@@ -210,7 +212,6 @@ class EntryType
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
-    $modelInstancePath = $request->getAttribute('model-instance-path');
     $classInstance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
 
@@ -221,13 +222,13 @@ class EntryType
 
       prepareJsonResponse(
         $response,
-        $modelInstancePath::create($parsedBody['data'])->toArray(),
+        $classInstance->create($parsedBody['data'])->getData(),
       );
 
       return $response;
     } catch (\Exception $ex) {
-      if ($ex->getCode() === '23000') {
-        $this->handleDuplicate($response, $ex);
+      if ($ex instanceof EntityDuplicateException) {
+        handleDuplicateEntriesError($response, $ex);
 
         return $response
           ->withStatus(400)
@@ -245,10 +246,9 @@ class EntryType
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $modelInstancePath = $request->getAttribute('model-instance-path');
     $classInstance = $request->getAttribute('model-instance');
 
-    $query = $modelInstancePath::where('id', $args['itemId']);
+    $query = $classInstance->where(['id', '=', intval($args['itemId'])]);
 
     if ($request->getAttribute('permission-only-own', false) === true) {
       $query->where(

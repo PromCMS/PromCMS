@@ -4,7 +4,7 @@ import { API_ENTRY_TYPES_URL } from '@constants';
 
 export class EntryService {
   static getListUrl(entryId?: string) {
-    return `${API_ENTRY_TYPES_URL}/${entryId?.toLowerCase()}`;
+    return `${API_ENTRY_TYPES_URL}/${entryId}`;
   }
 
   static getCreateUrl(entryId: string) {
@@ -20,13 +20,11 @@ export class EntryService {
   }
 
   static apiGetUrl(id: ItemID, entryId: string) {
-    return `${API_ENTRY_TYPES_URL}/${(
-      entryId as string
-    ).toLowerCase()}/items/${id}`;
+    return `${API_ENTRY_TYPES_URL}/${entryId}/items/${id}`;
   }
 
   static apiGetListUrl(entryId: string) {
-    return `${this.getListUrl((entryId as string).toLowerCase())}/items`;
+    return `${this.getListUrl(entryId)}/items`;
   }
 
   static apiGetListReorderUrl(entryId: string) {
@@ -34,9 +32,7 @@ export class EntryService {
   }
 
   static apiGetCreateUrl(entryId: string) {
-    return `${this.getListUrl(
-      (entryId as string).toLowerCase()
-    )}/entries/create`;
+    return `${this.getListUrl(entryId)}/entries/create`;
   }
 
   static async update(

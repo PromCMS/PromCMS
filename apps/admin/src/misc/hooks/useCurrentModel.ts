@@ -7,10 +7,7 @@ import { useModelInfo, useRouterQuery } from '.';
  */
 const useCurrentModel = () => {
   const modelName = useRouterQuery('modelId');
-  const formattedModelName = useMemo(
-    () => String(modelName).toLowerCase(),
-    [modelName]
-  );
+  const formattedModelName = useMemo(() => String(modelName), [modelName]);
   const modelInfo = useModelInfo(formattedModelName);
 
   return useMemo(

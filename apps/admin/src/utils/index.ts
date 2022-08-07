@@ -1,4 +1,4 @@
-export * from './rendering.js';
-export * from './data.js';
-export * from './formatters.js';
+export * from './rendering';
+export * from './data';
+export * from './formatters';
 export * from './users';

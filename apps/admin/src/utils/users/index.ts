@@ -1,1 +1,1 @@
-export * from './canUser.js';
+export * from './canUser';

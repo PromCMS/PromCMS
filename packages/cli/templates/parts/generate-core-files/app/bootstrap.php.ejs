@@ -1,17 +1,11 @@
 <?php
 
-/**
- * DO NOT DELETE OR EDIT THIS FILE.
- * THIS FILE IS PART OF COCKPIT CMS.
- *
- */
-
 use Slim\Factory\AppFactory;
 use DI\Container;
 use Slim\Middleware\Session;
 
 include_once __DIR__ . '/../vendor/autoload.php';
-include_once __DIR__ . '/utils.php';
+include_once __DIR__ . '/autoload.php';
 
 function bootstrap()
 {
@@ -39,7 +33,6 @@ function bootstrap()
     $libsToInject = [
       '/libs/config.bootstrap.php',
       '/libs/utils.bootstrap.php',
-      '/libs/db.bootstrap.php',
       '/libs/fly-system.bootstrap.php',
       '/libs/mailer.bootstrap.php',
       '/libs/twig.bootstrap.php',
