@@ -5,7 +5,7 @@ use Slim\App;
 
 return function (App $app, Container $container) {
   // Make sure that 'Core' module is loaded first
-  $moduleNames = BootstrapUtils::getValidModuleNames();
+  $moduleNames = \BootstrapUtils::getValidModuleNames();
   $utils = $container->get('utils');
   $config = $container->get('config');
 
@@ -17,7 +17,7 @@ return function (App $app, Container $container) {
 
   // Simple load module logic
   foreach ($moduleNames as $dirname) {
-    $moduleRoot = BootstrapUtils::getModuleRoot($dirname);
+    $moduleRoot = \BootstrapUtils::getModuleRoot($dirname);
     // Make sure that plugin has valid info file
     $bootstrapFilepath = "$moduleRoot/bootstrap.php";
     $bootstrapAfter = "$moduleRoot/bootstrap.after.php";
