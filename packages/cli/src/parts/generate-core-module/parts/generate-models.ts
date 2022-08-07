@@ -18,24 +18,11 @@ const columnTypeToCast = (type: ColumnType['type']) => {
     case 'json':
       finalType = 'array';
       break;
-    case 'boolean':
-      finalType = 'boolean';
-      break;
     default:
       break;
   }
 
   return finalType;
-};
-
-const virtualByModel = {
-  files: [
-    {
-      name: 'path',
-      accessKey: 'Path',
-      content: `return $config['app']['baseUrl'] . "/api/entry-types/files/items/{$this->id}/raw";`,
-    },
-  ],
 };
 
 /**
@@ -58,6 +45,8 @@ const generateModels = async (
     const currentModel = configModels[modelKey];
     const info = {
       modelName: capitalizedModelName,
+      // TODO - finish translations
+      translations: false,
       ...currentModel,
       relationships: (
         Object.entries(currentModel.columns).filter(
@@ -83,7 +72,7 @@ const generateModels = async (
             },
       ]),
       columnCasts: Object.entries(currentModel.columns)
-        .filter(([_, { type }]) => type === 'json' || type === 'boolean')
+        .filter(([_, { type }]) => type === 'json')
         .map(([key, { type }]) => [key, columnTypeToCast(type)]),
       events: {
         shouldInclude() {
@@ -108,7 +97,6 @@ const generateModels = async (
           ordering: currentModel.sorting,
         },
       },
-      virtuals: virtualByModel[modelKey.toLowerCase()] ?? [],
       formattedColumns: Object.keys(currentModel.columns).reduce(
         (finalTransformedColumns, currentColumnKey) => {
           const currentColumn = currentModel.columns[currentColumnKey];
