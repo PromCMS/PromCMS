@@ -6,8 +6,6 @@ services:
     build:
       context: "."
       dockerfile: Dockerfile
-    depends_on:
-      - mysql
     env_file:
       - ".env"
     volumes:
@@ -15,17 +13,5 @@ services:
     user: "1000:1000"
     ports:
       - "80:80"
-  mysql:
-    container_name: <%= project.name %>_mysql
-    image: mariadb:latest
-    environment:
-      MYSQL_ROOT_PASSWORD: "secret"
-      MYSQL_USER: "secret"
-      MYSQL_PASSWORD: "secret"
-      MYSQL_DATABASE: "secret"
-    volumes:
-      - "mysqldata:/var/lib/mysql"
-    ports:
-      - "3306:3306"
 volumes:
   mysqldata: {}
