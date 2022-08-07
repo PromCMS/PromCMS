@@ -51,7 +51,7 @@ class Auth
       try {
         $this->container
           ->get('session')
-          ->set('user', \Users::findOrFail($userId));
+          ->set('user', \Users::where(['id', '=', intval($userId)])->getOne());
       } catch (\Exception $e) {
         $response = new Response();
         // User does not exist hence the session destroy
