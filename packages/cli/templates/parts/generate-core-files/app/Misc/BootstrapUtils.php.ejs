@@ -1,17 +1,10 @@
 <?php
-/**
- * DO NOT DELETE OR EDIT THIS FILE.
- * THIS FILE IS PART OF COCKPIT CMS
- * AND ANY MODIFICATION MAY BREAK OR BE
- * OVERRIDDEN IN NEXT UPDATE.
- *
- */
 
 class BootstrapUtils
 {
   public static function getModuleRoot(string $moduleName)
   {
-    return __DIR__ . "/../modules/$moduleName";
+    return joinPath(__DIR__, '..', '..', 'modules', $moduleName);
   }
 
   public static function getValidModuleNames()
@@ -26,12 +19,12 @@ class BootstrapUtils
             return basename($dir);
           },
           // Firstly get all the dirs from modules folder
-          glob(__DIR__ . '/../modules/*', GLOB_ONLYDIR),
+          glob(joinPath(__DIR__, '..', '..', 'modules', '*'), GLOB_ONLYDIR),
         ),
         function ($moduleName) {
           $moduleRoot = BootstrapUtils::getModuleRoot($moduleName);
 
-          if (!file_exists("$moduleRoot/module-info.json")) {
+          if (!file_exists(joinPath($moduleRoot, 'module-info.json'))) {
             echo "<b>Warning </b> - Created module '$moduleName' wont be functional if you don't provide module-info.json";
             return false;
           }
@@ -41,9 +34,4 @@ class BootstrapUtils
       ),
     );
   }
-}
-
-function str_includes($haystack, $needle)
-{
-  return strpos($haystack, $needle) !== false;
 }
