@@ -1,20 +1,14 @@
 <?php
 
-function handleDuplicateEntriesError($response, $exception)
-{
-  $errorText = str_replace(
-    ['UNIQUE constraint failed: ', ' '],
-    '',
-    $exception->errorInfo[2],
-  );
+use App\Exceptions\EntityDuplicateException;
 
+function handleDuplicateEntriesError(
+  $response,
+  EntityDuplicateException $exception
+) {
   prepareJsonResponse(
     $response,
-    array_map(function ($item) {
-      return strpos($item, '.') !== false
-        ? explode('.', $item)[1]
-        : explode('_', $item)[1];
-    }, explode(',', $errorText)),
+    $exception->getFailedFields(),
     'Duplicate entries',
     intval($exception->getCode()),
   );
