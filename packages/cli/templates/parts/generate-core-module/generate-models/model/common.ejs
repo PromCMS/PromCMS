@@ -1,145 +1,96 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
-<% if (softDelete) { %>use Illuminate\Database\Eloquent\SoftDeletes;<% } %>
+use App\Database\Model;
+use App\Database\ModelResult;
 <% if (events.beforeSave.slugify) { %>use Illuminate\Support\Str;<% } %>
 
+<%# TODO: user soft deletes %> 
 class <%- modelName %> extends Model
 {
-  <% if (softDelete) { %>
-    use SoftDeletes;
-  <% } %>
+  protected string $tableName = '<%- tableName %>';
+  protected bool $timestamps = <%- timestamp ? 'true' : 'false' %>;
+  protected bool $softDelete = <%- softDelete ? 'true' : 'false' %>;
+  protected bool $translations = <%- translations ? 'true' : 'false' %>;
 
-  protected $table = '<%- tableName %>';
-  protected $modelIcon = '<%- icon %>';
-  public $timestamps = <%- timestamp ? 'true' : 'false' %>;
-  protected $hasSoftDeletes = <%- softDelete ? 'true' : 'false' %>;
-  protected $ignoreSeeding = <%- ignoreSeeding ? 'true' : 'false' %>;
-  protected $adminSettings = [
-    "layout" => "<%- admin.layout %>"
-  ];
-  
+  <%# Column casts %> 
   <% if (columnCasts.length) { %>
-    protected $casts = [
-      <% columnCasts.forEach(([columnKey, castTo]) => { %>
-        '<%- columnKey %>' => '<%- castTo %>',
-      <%  });%> 
-    ];
-  <% } %>
-
-  <% if (events.shouldInclude()) { %>
-    /**
-    * Takes care of events
-    */
-    public static function boot()
-    {
-      parent::boot();
-
-      <% if (events.afterCreated.shouldInclude()) { %>
-        static::created(function ($entry) {
-          <% if (events.afterCreated.ordering) { %>
-            $entry->order = $entry->id;
-            $entry->save();
-          <% } %>
-        });
-      <% } %>
-
-      <% if (events.beforeSave.shouldInclude()) { %>
-        static::saving(function ($entry) {
-          <% if (events.beforeSave.slugify) { %>
-            // Take care of slugs
-            foreach (
-              array_filter(self::$tableColumns, function ($col) {
-                return $col['type'] === 'slug';
-              })
-              as $colKey => $col
-            ) {
-              if ($entry->{$col['of']}) {
-                $entry->{$colKey} = Str::slug($entry->{$col['of']});
-              }
-            }
-          <% } %>
-        });
-      <% } %>
-    }
-  <% } %>
-
-  <% if (draftable) { %>
-    public function scopeOnlyPublished($query)
-    {
-        return $query->where('is_published', 1);
-    }
-  <% } %>
-
-  <% if (virtuals.length) { %>
-    <% const virtualKeys = virtuals.map(({name}) => name).join("', '"); %>
-    protected $appends = ['<%- virtualKeys %>'];
-
-    <% virtuals.forEach(({ accessKey, content }) => { %>
-      public function get<%- accessKey %>Attribute() {
-        <%- content %>
-      }
-    <%  }) %> 
-  <% } %>
-
-  <%
-    const fillableKeys =
-      Object.keys(columns).join("', '");
-  %>
-  protected $fillable = [
-    '<%- fillableKeys %>'
-  ];
-
-  <% const relationshipsToFill = relationships.filter(([_, {fill}]) => fill); %>
-  <% if (relationshipsToFill.length) { %>
-    protected $with = [
-      '<%- relationshipsToFill.map(([columnKey]) => columnKey).join("','")  %>'
-    ];
-  <% } %>
-
-  <% relationships.forEach(([columnKey, {type, target, foreignKey}]) => { %>
-    public function <%- columnKey %>()
-    {
-        return $this-><% if (type === "oneToOne") { %>belongsTo<% } else { %>belongsToMany<% } %>(<%- target %>, '<%- columnKey %>', '<%- foreignKey %>');
-    }
-  <%  }) %> 
-
-  <%
-    const hiddenKeys =
-      Object.keys(columns)
-        .filter((columnKey) => columns[columnKey].hide)
-        .join("', '");
-  %>
-  <% if (hiddenKeys.length) { %>
-  protected $hidden = [
-    '<%- hiddenKeys %>'
+  public static array $casts = [
+    <% columnCasts.forEach(([columnKey, castTo]) => { %>
+      '<%- columnKey %>' => '<%- castTo %>',
+    <%  });%> 
   ];
   <% } %>
 
-  protected static $tableColumns = [
+  <%# Table columns info %> 
+  public static array $tableColumns = [
     <% 
       Object.keys(formattedColumns).forEach(columnKey => { 
       const formattedColumnSettings = formattedColumns[columnKey];
     %>
       '<%- columnKey %>' => [
-          <%- formattedColumnSettings.join(', ') %>
-        ],
+        <%- formattedColumnSettings.join(', ') %>
+      ],
     <% }) %>
   ];
+  
+  <%# Custom model info not tied to App\Database\Model perse %> 
+  static bool $ignoreSeeding = <%- ignoreSeeding ? 'true' : 'false' %>;
+  static string $modelIcon = '<%- icon %>';
+  static $adminSettings = [
+    "layout" => "<%- admin.layout %>"
+  ];
 
-  public function getSummary () {
-      return (object)[
-        "columns" => self::$tableColumns,
-        "tableName" => $this->table,
-        "icon" => $this->modelIcon,
-        "ignoreSeeding" => $this->ignoreSeeding,
-        "hasTimestamps" => $this->timestamps,
-        "hasSoftDelete" => $this->hasSoftDeletes,
-        "hasOrdering" => <% if (sorting) { %> true <% } else { %> false <% } %>,
-        "isDraftable" => <% if (draftable) { %> true <% } else { %> false <% } %>,
-        "isSharable" => <% if (sharable) { %> true <% } else { %> false <% } %>,
-        "ownable" => <% if (ownable) { %> true <% } else { %> false <% } %>,
-        "admin" => $this->adminSettings,
-      ];
+  <%# Listeners #%> 
+  <% if (events.shouldInclude()) { %>
+      <%# after created #%>
+      <% if (events.afterCreated.shouldInclude()) { %>
+        public static function afterCreate(ModelResult $entry): ModelResult {
+          <%# Copy ids when ordering #%>
+          <% if (events.afterCreated.ordering) { %>
+            $entry->update(['order' => $entry->id]);
+
+            return $entry;
+          <% } %>
+        }
+      <% } %>
+
+      <%# Before save #%>
+      <% if (events.beforeSave.shouldInclude()) { %>
+        public static function beforeCreate($entry): array {
+          <%# Slugify fields #%>
+          <% if (events.beforeSave.slugify) { %>
+            foreach (
+              array_filter(static::$tableColumns, function ($col) {
+                return $col['type'] === 'slug';
+              })
+              as $colKey => $col
+            ) {
+              if ($entry[$col['of']]) {
+                $entry[$colKey] = Str::slug($entry[$col['of']]);
+              }
+            }
+          <% } %>
+
+          return $entry;
+        }
+      <% } %>
+  <% } %>
+
+  <%# Getter of private and all relevant info #%>
+  public function getSummary()
+  {
+    return (object) [
+      'icon'            => self::$modelIcon,
+      'ignoreSeeding'   => self::$ignoreSeeding,
+      'admin'           => self::$adminSettings,
+      'tableName'       => $this->getTableName(),
+      'hasTimestamps'   => $this->hasTimestamps(),
+      'hasSoftDelete'   => $this->hasSoftDelete(),
+      'columns'         => static::$tableColumns,
+      'hasOrdering'     => <%- sorting ? 'true' : 'false' %>,
+      'isDraftable'     => <%- draftable ? 'true' : 'false' %>,
+      'isSharable'      => <%- sharable ? 'true' : 'false' %>,
+      'ownable'         => <%- ownable ? 'true' : 'false' %>,
+    ];
   }
 }
