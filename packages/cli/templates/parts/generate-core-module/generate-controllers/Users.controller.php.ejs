@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\EntityDuplicateException;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -36,33 +37,27 @@ class Users
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
     $where = [];
-    $whereIn = [];
+    $query = (new \Users())->query();
 
     if (isset($queryParams['where'])) {
-      [$where, $whereIn] = normalizeWhereQueryParam($queryParams['where']);
+      [$where] = normalizeWhereQueryParam($queryParams['where']);
+      $query->where($where);
     }
 
-    //echo json_encode($whereIn);
+    $pageLimit = 15;
+    $query = $query->limit($pageLimit)->skip($pageLimit * $page);
+    $total = count(\Users::getMany());
+    $data = $query->getMany();
 
-    $query = \Users::where($where);
-    if (count($whereIn)) {
-      foreach ($whereIn as $whereInItem) {
-        $query->whereIn($whereInItem[0], $whereInItem[1]);
-      }
-    }
-
-    $result = $query->paginate(15, ['*'], 'page', $page);
-    $dataPaginated = json_decode($result->toJson());
-
-    // Unset some things as they are not useful or active
-    unset($dataPaginated->links);
-    unset($dataPaginated->first_page_url);
-    unset($dataPaginated->last_page_url);
-    unset($dataPaginated->next_page_url);
-    unset($dataPaginated->prev_page_url);
-    unset($dataPaginated->path);
-
-    $response->getBody()->write(json_encode($dataPaginated));
+    $response->getBody()->write(
+      json_encode([
+        'data' => $data,
+        'current_page' => $page,
+        'last_page' => floor($total / $pageLimit),
+        'per_page' => $pageLimit,
+        'total' => $total,
+      ]),
+    );
 
     return $response;
   }
@@ -74,6 +69,7 @@ class Users
   ): ResponseInterface {
     $parsedBody = $request->getParsedBody();
     $user = $this->container->get('session')->get('user');
+    $classInstance = new \Users();
 
     if ($user->id === $args['itemId']) {
       return $response
@@ -86,14 +82,14 @@ class Users
     }
 
     try {
-      $user = \Users::findOrFail($args['itemId']);
-      $user->update($parsedBody['data']);
+      $user = $classInstance->getById($args['itemId']);
+      $updatedUser = $user->update($parsedBody['data']);
 
-      prepareJsonResponse($response, $user->toArray());
+      prepareJsonResponse($response, $updatedUser->getData());
 
       return $response;
     } catch (\Exception $ex) {
-      if ($ex->getCode() === '23000') {
+      if ($ex instanceof EntityDuplicateException) {
         $errorText = str_replace(
           ['UNIQUE constraint failed: ', ' '],
           '',
@@ -127,15 +123,19 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
+    $classInstance = new \Users();
+
     try {
       // If is not admin then we will return just id and name for safety reasons
       if (strval($this->currentUser->role) === '0') {
-        $item = \Users::findOrFail($args['itemId']);
+        $item = $classInstance
+          ->where(['id', '=', intval($args['itemId'])])
+          ->getOne();
       } else {
-        $item = \Users::select('id', 'name')->findOrFail($args['itemId']);
+        $item = $classInstance->select(['id', 'name'])->getOne($args['itemId']);
       }
 
-      prepareJsonResponse($response, $item->toArray());
+      prepareJsonResponse($response, $item->getData());
 
       return $response;
     } catch (\Exception $e) {
@@ -163,9 +163,11 @@ class Users
     );
 
     try {
-      $user = \Users::create($parsedBody['data'])->toArray();
+      $user = \Users::create($parsedBody['data']);
     } catch (\Exception $ex) {
-      if ($ex->getCode() === '23000') {
+      if ($ex instanceof EntityDuplicateException) {
+        handleDuplicateEntriesError($response, $ex);
+
         return $response
           ->withStatus(409)
           ->withHeader('Content-Description', $ex->getMessage());
@@ -176,11 +178,11 @@ class Users
         ->withHeader('Content-Description', $ex->getMessage());
     }
 
-    $generatedJwt = $jwtService->generate(['id' => $user['id']]);
+    $generatedJwt = $jwtService->generate(['id' => $user->id]);
 
-    prepareJsonResponse($response, $user);
+    prepareJsonResponse($response, $user->getData());
 
-    $themePayload = array_merge($user, [
+    $themePayload = array_merge($user->getData(), [
       'token' => $generatedJwt,
       'app_url' => $_ENV['APP_URL'],
     ]);
@@ -201,7 +203,7 @@ class Users
     }
 
     $emailService->isHtml();
-    $emailService->addAddress($user['email'], $user['name']);
+    $emailService->addAddress($user->email, $user->name);
     $emailService->Subject = 'Finalize registration';
     $emailService->Body = $generatedEmailContent;
     $emailService->send();
@@ -214,11 +216,14 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
+    $classInstance = new \Users();
+
     prepareJsonResponse(
       $response,
-      \Users::findOrFail($args['itemId'])
+      $classInstance
+        ->where(['id', '=', intval($args['itemId'])])
         ->delete()
-        ->toArray(),
+        ->getData(),
     );
 
     return $response;
@@ -229,12 +234,11 @@ class Users
     ResponseInterface $response,
     $args
   ) {
-    $user = \Users::findOrFail($args['itemId']);
+    $updatedUser = \Users::updateById(intval($args['itemId']), [
+      'state' => 'blocked',
+    ]);
 
-    $user->state = 'blocked';
-    $user->save();
-
-    prepareJsonResponse($response, $user->toArray());
+    prepareJsonResponse($response, $updatedUser->getData());
 
     return $response;
   }
@@ -244,16 +248,20 @@ class Users
     ResponseInterface $response,
     $args
   ) {
-    $user = \Users::findOrFail($args['itemId']);
+    $classInstance = new \Users();
+    $user = $classInstance
+      ->where(['id', '=', intval($args['itemId'])])
+      ->getOne();
 
     if ($user->state !== 'blocked') {
       return $response->withStatus(400);
     }
 
-    $user->state = 'active';
-    $user->save();
+    $updatedUser = $user->update([
+      'state' => 'active',
+    ]);
 
-    prepareJsonResponse($response, $user->toArray());
+    prepareJsonResponse($response, $updatedUser->getData());
 
     return $response;
   }
@@ -263,17 +271,17 @@ class Users
     ResponseInterface $response,
     $args
   ) {
-    $params = $request->getQueryParams();
+    $classInstance = new \Users();
     $jwtService = $this->container->get('jwt-service');
     $emailService = $this->container->get('email');
     $twigService = $this->container->get('twig');
 
-    $user = \Users::findOrFail($args['itemId']);
+    $user = $classInstance->getById($args['itemId']);
     if ($user->state === 'blocked') {
       return $response->withStatus(400);
     }
 
-    $generatedJwt = $jwtService->generate(['id' => $user['id']]);
+    $generatedJwt = $jwtService->generate(['id' => $user->id]);
     $themePayload = [
       'name' => $user->name,
       'email' => $user->email,
@@ -304,13 +312,16 @@ class Users
 
     // If user is invited the this whole function is for resending whole token
     if ($user->state !== 'invited') {
-      $user->state = 'password-reset';
+      $userData = $user
+        ->update([
+          'state' => 'password-reset',
+        ])
+        ->getData();
     }
 
-    $user->save();
     $emailService->send();
 
-    prepareJsonResponse($response, $user->toArray());
+    prepareJsonResponse($response, $userData);
 
     return $response;
   }

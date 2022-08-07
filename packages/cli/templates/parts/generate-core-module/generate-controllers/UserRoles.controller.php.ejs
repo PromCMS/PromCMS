@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\EntityDuplicateException;
+use App\Exceptions\EntityNotFoundException;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,27 +34,30 @@ class UserRoles
     $page = intval(isset($queryParams['page']) ? $queryParams['page'] : 1);
     $classInstance = new \UserRoles();
 
-    if ($classInstance->getSummary()->hasOrdering) {
-      $query = \UserRoles::orderBy('order', 'ASC')->orderBy('id', 'ASC');
-    } else {
-      $query = \UserRoles::orderBy('id', 'ASC');
-    }
+    $pageLimit = 15;
+    $query = $classInstance
+      ->orderBy(
+        $classInstance->getSummary()->hasOrdering
+          ? ['order' => 'asc', 'id' => 'asc']
+          : ['id' => 'asc'],
+      )
+      ->limit($pageLimit)
+      ->skip($pageLimit * $page);
+    $total = count($classInstance->getMany());
+    $data = $query->getMany();
 
-    $dataPaginated = json_decode(
-      $query
-        ->paginate($queryParams['limit'] ?? 15, ['*'], 'page', $page)
-        ->toJson(),
+    $response->getBody()->write(
+      json_encode([
+        'data' => $data,
+        'current_page' => $page,
+        'last_page' => floor($total / $pageLimit),
+        'per_page' => $pageLimit,
+        'total' => $total,
+      ]),
     );
-    // Unset some things as they are not useful or active
-    unset($dataPaginated->links);
-    unset($dataPaginated->first_page_url);
-    unset($dataPaginated->last_page_url);
-    unset($dataPaginated->next_page_url);
-    unset($dataPaginated->prev_page_url);
-    unset($dataPaginated->path);
 
     if ($page === 1) {
-      $dataPaginated->data = array_merge(
+      $data['data'] = array_merge(
         [
           [
             'id' => 0,
@@ -61,11 +66,11 @@ class UserRoles
             'description' => 'Main user role provided by PROM CMS Core module',
           ],
         ],
-        $dataPaginated->data,
+        $data['data'],
       );
     }
 
-    $response->getBody()->write(json_encode($dataPaginated));
+    $response->getBody()->write(json_encode($data));
 
     return $response;
   }
@@ -76,20 +81,25 @@ class UserRoles
     array $args
   ): ResponseInterface {
     $parsedBody = $request->getParsedBody();
+    $classInstance = new \UserRoles();
 
     try {
-      $item = \UserRoles::findOrFail($args['itemId']);
+      $item = $classInstance->getById($args['itemId']);
       $item->update($parsedBody['data']);
 
-      prepareJsonResponse($response, $item->toArray());
+      prepareJsonResponse($response, $item->getData());
 
       return $response;
     } catch (\Exception $ex) {
-      if ($ex->getCode() === '23000') {
+      if ($ex instanceof EntityDuplicateException) {
         handleDuplicateEntriesError($response, $ex);
 
         return $response
           ->withStatus(400)
+          ->withHeader('Content-Description', $ex->getMessage());
+      } elseif ($ex instanceof EntityNotFoundException) {
+        return $response
+          ->withStatus(404)
           ->withHeader('Content-Description', $ex->getMessage());
       } else {
         return $response
@@ -105,6 +115,7 @@ class UserRoles
     array $args
   ): ResponseInterface {
     $itemId = $args['itemId'];
+    $classInstance = new \UserRoles();
 
     // For admin we return few static values
     if ($itemId === '0') {
@@ -120,7 +131,10 @@ class UserRoles
     try {
       prepareJsonResponse(
         $response,
-        \UserRoles::findOrFail($itemId)->toArray(),
+        $classInstance
+          ->where(['id', '=', intval($itemId)])
+          ->getOne()
+          ->getData(),
       );
 
       return $response;
@@ -134,16 +148,17 @@ class UserRoles
     ResponseInterface $response
   ): ResponseInterface {
     $parsedBody = $request->getParsedBody();
+    $classInstance = new \UserRoles();
 
     try {
       prepareJsonResponse(
         $response,
-        \UserRoles::create($parsedBody['data'])->toArray(),
+        $classInstance->create($parsedBody['data'])->getData(),
       );
 
       return $response;
     } catch (\Exception $ex) {
-      if ($ex->getCode() === '23000') {
+      if ($ex instanceof EntityDuplicateException) {
         handleDuplicateEntriesError($response, $ex);
 
         return $response
@@ -162,11 +177,14 @@ class UserRoles
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
+    $classInstance = new \UserRoles();
+
     prepareJsonResponse(
       $response,
-      \UserRoles::where('id', $args['itemId'])
+      $classInstance
+        ->where(['id', '=', intval($args['itemId'])])
         ->delete()
-        ->toArray(),
+        ->getData(),
     );
 
     return $response;
