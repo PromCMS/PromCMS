@@ -18,7 +18,7 @@ export type ColumnSettingsBase = {
   hide?: boolean;
   /**
    * Decides if column should be required or not
-   * @default true
+   * @default false
    */
   required?: boolean;
   /**
@@ -180,6 +180,11 @@ export interface DatabaseConfigModel extends DatabaseConfigItemBase {
    * @default true
    */
   ownable?: boolean;
+  /**
+   * Toggles the multi language functionality for current model
+   * @default true;
+   */
+  intl?: boolean;
   /**
    * Admin config
    */
