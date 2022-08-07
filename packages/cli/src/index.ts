@@ -6,6 +6,7 @@ import { GenerateDevelopProgram } from './commands/generate-develop';
 import fs from 'fs-extra';
 import path from 'path';
 import { PACKAGE_ROOT } from './constants';
+import { DbToolsMigrateProgram } from 'commands/db-tools/migrate';
 
 (async () => {
   const { version } = await fs.readJson(
@@ -23,5 +24,6 @@ import { PACKAGE_ROOT } from './constants';
     .register(new GenerateDevelopProgram())
     .register(new GenerateCMSProgram())
     .register(new SeedDatabaseProgram())
+    .register(new DbToolsMigrateProgram())
     .runAndExit(process.argv);
 })();
