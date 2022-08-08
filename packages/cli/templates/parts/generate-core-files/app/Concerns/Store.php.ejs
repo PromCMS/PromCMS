@@ -6,22 +6,21 @@ use SleekDB\Store as SleekStore;
 trait Store
 {
   protected SleekStore $store;
-  protected SleekStore $translationsStore;
   protected static string $databaseDirectory;
   protected static array $storeConfiguration;
 
   /**
    *  Returns store
    */
-  public function getStore($translations = false): SleekStore
+  public function getStore(): SleekStore
   {
-    return $translations ? $this->translationsStore : $this->store;
+    return $this->store;
   }
 
   /**
    * Sets static config
    */
-  static function setConfig(
+  static function setStoreConfig(
     string $databaseDirectory,
     array $storeConfiguration
   ) {
