@@ -12,6 +12,27 @@ use Psr\Http\Message\ServerRequestInterface;
 class EntryType
 {
   protected $currentUser;
+  protected array $languageConfig;
+
+  private function getCurrentLanguage($request, $args)
+  {
+    $queryParams = $request->getQueryParams();
+    $nextLanguage = null;
+    $supportedLanguages = $this->languageConfig['languages'];
+
+    if (
+      isset($queryParams['lang']) &&
+      in_array($queryParams['lang'], $supportedLanguages)
+    ) {
+      $nextLanguage = $queryParams['language'];
+    }
+
+    if (isset($args['language'])) {
+      $nextLanguage = $args['language'];
+    }
+
+    return $nextLanguage;
+  }
 
   public function getInfo(
     ServerRequestInterface $request,
@@ -27,14 +48,19 @@ class EntryType
   public function __construct(Container $container)
   {
     $this->currentUser = $container->get('session')->get('user', false);
+    $this->languageConfig = $container->get('config')['i18n'];
   }
 
   public function create(
     ServerRequestInterface $request,
-    ResponseInterface $response
+    ResponseInterface $response,
+    $args
   ): ResponseInterface {
     $modelInstance = $request->getAttribute('model-instance');
-    $service = new EntryTypeService($modelInstance);
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
     $parsedBody = $request->getParsedBody();
 
     try {
@@ -69,7 +95,10 @@ class EntryType
     array $args
   ): ResponseInterface {
     $modelInstance = $request->getAttribute('model-instance');
-    $service = new EntryTypeService($modelInstance);
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
 
     try {
       prepareJsonResponse(
@@ -96,10 +125,14 @@ class EntryType
 
   public function getMany(
     ServerRequestInterface $request,
-    ResponseInterface $response
+    ResponseInterface $response,
+    $args
   ): ResponseInterface {
     $modelInstance = $request->getAttribute('model-instance');
-    $service = new EntryTypeService($modelInstance);
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
     $where = [];
@@ -121,7 +154,10 @@ class EntryType
     array $args
   ): ResponseInterface {
     $modelInstance = $request->getAttribute('model-instance');
-    $service = new EntryTypeService($modelInstance);
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
     $parsedBody = $request->getParsedBody();
 
     try {

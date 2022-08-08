@@ -8,10 +8,14 @@ use App\Database\ModelResult;
 class EntryTypeService
 {
   protected Model $modelInstance;
+  protected string $language;
 
-  public function __construct(Model $modelInstance)
+  public function __construct(Model $modelInstance, $language = null)
   {
     $this->modelInstance = $modelInstance;
+    if ($language) {
+      $this->language = $language;
+    }
   }
 
   /**
@@ -19,7 +23,13 @@ class EntryTypeService
    */
   public function create(array $payload): ModelResult
   {
-    return $this->modelInstance->create($payload);
+    $query = $this->modelInstance->query();
+
+    if ($this->language) {
+      $query->setLanguage($this->language);
+    }
+
+    return $query->create($payload);
   }
 
   /**
