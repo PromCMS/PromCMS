@@ -9,13 +9,14 @@ const useModelItemConfig = {
   revalidateOnReconnect: false,
 };
 
-const useCurrentModelItem = () => {
+const useCurrentModelItem = (language?: string) => {
   const modelInfo = useCurrentModel();
   const entryId = useRouterQuery('entryId');
   const itemInfo = useModelItem(
     modelInfo?.name,
     (entryId as string) || undefined,
-    useModelItemConfig
+    useModelItemConfig,
+    language
   );
 
   return itemInfo;

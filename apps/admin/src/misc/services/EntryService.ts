@@ -19,8 +19,10 @@ export class EntryService {
     return `${this.getListUrl(entryId)}/entries/duplicate/${id}`;
   }
 
-  static apiGetUrl(id: ItemID, entryId: string) {
-    return `${API_ENTRY_TYPES_URL}/${entryId}/items/${id}`;
+  static apiGetUrl(id: ItemID, entryId: string, language?: string) {
+    return `${API_ENTRY_TYPES_URL}/${entryId}/items/${id}${
+      language ? `?lang=${language}` : ''
+    }`;
   }
 
   static apiGetListUrl(entryId: string) {
@@ -39,14 +41,19 @@ export class EntryService {
     info: {
       id: ItemID;
       model: DatabaseTableName;
+      language?: string;
     },
     payload: ApiResultItem
   ) {
     if (!Object.keys(payload).length) return;
 
-    return apiClient.patch(this.apiGetUrl(info.id, info.model), {
-      data: payload,
-    });
+    return apiClient.patch(
+      this.apiGetUrl(info.id, info.model),
+      {
+        data: payload,
+      },
+      { params: { lang: info.language } }
+    );
   }
 
   static async delete(info: { id: ItemID; model: DatabaseTableName }) {

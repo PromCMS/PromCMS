@@ -30,6 +30,7 @@ import { useCallback } from 'react';
 import { Dispatch } from 'react';
 import { SetStateAction } from 'react';
 import { useLocalStorage } from '@mantine/hooks';
+import { useSettings } from '@hooks/useSettings';
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType;
@@ -42,6 +43,8 @@ export interface IEntryUnderpageContext {
   asideOpen: boolean;
   setAsideOpen: Dispatch<SetStateAction<boolean>>;
   onSubmit: (values: any) => Promise<void>;
+  language?: string;
+  setLanguage: (nextLanguage: string | undefined) => void;
 }
 
 export const EntryUnderpageContext = createContext<IEntryUnderpageContext>({
@@ -54,6 +57,7 @@ export const EntryUnderpageContext = createContext<IEntryUnderpageContext>({
   onSubmit: async () => {},
   setAsideOpen: () => {},
   asideOpen: false,
+  setLanguage: () => {},
 });
 
 export const useEntryUnderpageContext = () => useContext(EntryUnderpageContext);
@@ -68,6 +72,10 @@ export const EntryUnderpageContextProvider: FC<{
         }>;
       }) => ReactNode);
 }> = ({ children, viewType }) => {
+  const settings = useSettings();
+  const [language, setLanguage] = useState<string | undefined>(
+    settings?.i18n?.default
+  );
   const [asideOpen, setAsideOpen] = useLocalStorage({
     key: 'aside-toggled',
     defaultValue: true,
@@ -85,7 +93,7 @@ export const EntryUnderpageContextProvider: FC<{
     isLoading: itemIsLoading,
     itemIsMissing,
     mutate,
-  } = useCurrentModelItem();
+  } = useCurrentModelItem(language);
   const schema = useMemo(
     () =>
       currentModel && getModelItemSchema(currentModel, viewType === 'update'),
@@ -152,6 +160,7 @@ export const EntryUnderpageContextProvider: FC<{
                 {
                   id: itemId,
                   model: modelName,
+                  language,
                 },
                 finalValues
               );
@@ -216,27 +225,47 @@ export const EntryUnderpageContextProvider: FC<{
       setError,
       t,
       viewType,
+      language,
+    ]
+  );
+
+  const value = useMemo(
+    () => ({
+      currentView: viewType,
+      exitView: () => {
+        push(EntryService.getListUrl(currentModel?.name as string));
+      },
+      itemData: updatedItemData as ApiResultItem,
+      itemIsError,
+      itemIsLoading: viewType === 'update' ? itemIsLoading : false,
+      itemIsMissing,
+      mutateItem: mutate,
+      asideOpen,
+      setAsideOpen,
+      onSubmit: formMethods.handleSubmit(onSubmit),
+      language,
+      setLanguage,
+    }),
+    [
+      asideOpen,
+      currentModel?.name,
+      formMethods,
+      itemIsError,
+      itemIsLoading,
+      itemIsMissing,
+      mutate,
+      onSubmit,
+      push,
+      setAsideOpen,
+      updatedItemData,
+      viewType,
+      language,
     ]
   );
 
   return (
     <FormProvider {...formMethods}>
-      <EntryUnderpageContext.Provider
-        value={{
-          currentView: viewType,
-          exitView: () => {
-            push(EntryService.getListUrl(currentModel?.name as string));
-          },
-          itemData: updatedItemData as ApiResultItem,
-          itemIsError,
-          itemIsLoading: viewType === 'update' ? itemIsLoading : false,
-          itemIsMissing,
-          mutateItem: mutate,
-          asideOpen,
-          setAsideOpen,
-          onSubmit: formMethods.handleSubmit(onSubmit),
-        }}
-      >
+      <EntryUnderpageContext.Provider value={value}>
         {typeof children === 'function'
           ? children({ formContentRefs })
           : children}
