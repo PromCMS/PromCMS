@@ -430,12 +430,11 @@ class Query
         $defaultLanguage
       ) {
         $itemTranslations = $item[$translationsFieldName];
-        $translations = isset($itemTranslations[$currentLanguageKey])
-          ? $itemTranslations[$currentLanguageKey]
-          : $itemTranslations[$defaultLanguage];
 
-        if (isset($translations[$fieldName])) {
-          return $translations[$fieldName];
+        if (isset($itemTranslations[$currentLanguageKey][$fieldName])) {
+          return $itemTranslations[$currentLanguageKey][$fieldName];
+        } elseif (isset($itemTranslations[$defaultLanguage][$fieldName])) {
+          return $itemTranslations[$defaultLanguage][$fieldName];
         }
       };
     }
