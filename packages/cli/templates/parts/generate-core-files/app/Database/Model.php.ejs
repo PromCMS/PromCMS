@@ -29,15 +29,7 @@ abstract class Model
   {
     if (!isset(static::$booted[static::class])) {
       if (!$this->tableName) {
-        $this->tableName = static::class;
-      }
-
-      if ($this->translations) {
-        $this->translationsStore = new SleekStore(
-          $this->tableName . '--translations',
-          static::$databaseDirectory,
-          static::$storeConfiguration,
-        );
+        $this->tableName = lcfirst(static::class);
       }
 
       $this->store = new SleekStore(
@@ -53,7 +45,7 @@ abstract class Model
    */
   public function query(): Query
   {
-    return new Query($this->store, $this);
+    return new Query($this->getStore(), $this, static::$defaultLanguage);
   }
 
   /**
