@@ -101,9 +101,9 @@ class Users
     try {
       // If is not admin then we will return just id and name for safety reasons
       if (strval($this->currentUser->role) === '0') {
-        $item = \Users::getById($args['itemId']);
+        $item = \Users::getOneById($args['itemId']);
       } else {
-        $item = \Users::select(['id', 'name'])->getById($args['itemId']);
+        $item = \Users::select(['id', 'name'])->getOneById($args['itemId']);
       }
 
       prepareJsonResponse($response, $item->getData());
@@ -189,7 +189,10 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    prepareJsonResponse($response, \Users::getById($args['itemId'])->delete());
+    prepareJsonResponse(
+      $response,
+      \Users::getOneById($args['itemId'])->delete(),
+    );
 
     return $response;
   }

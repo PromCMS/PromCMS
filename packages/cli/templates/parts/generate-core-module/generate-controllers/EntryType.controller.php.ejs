@@ -24,7 +24,7 @@ class EntryType
       isset($queryParams['lang']) &&
       in_array($queryParams['lang'], $supportedLanguages)
     ) {
-      $nextLanguage = $queryParams['language'];
+      $nextLanguage = $queryParams['lang'];
     }
 
     if (isset($args['language'])) {

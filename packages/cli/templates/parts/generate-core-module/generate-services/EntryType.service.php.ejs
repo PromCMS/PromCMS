@@ -37,7 +37,13 @@ class EntryTypeService
    */
   public function getOne($where): ModelResult
   {
-    return $this->modelInstance->where($where)->getOne();
+    $query = $this->modelInstance->query();
+
+    if ($this->language) {
+      $query->setLanguage($this->language);
+    }
+
+    return $query->where($where)->getOne();
   }
 
   /**
@@ -74,9 +80,13 @@ class EntryTypeService
    */
   public function update(array $where, array $payload): ModelResult
   {
-    $item = $this->modelInstance->where($where)->update($payload);
+    $query = $this->modelInstance->query();
 
-    return $item;
+    if ($this->language) {
+      $query->setLanguage($this->language);
+    }
+
+    return $query->where($where)->update($payload);
   }
 
   /**
