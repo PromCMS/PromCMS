@@ -23,13 +23,7 @@ class EntryTypeService
    */
   public function create(array $payload): ModelResult
   {
-    $query = $this->modelInstance->query();
-
-    if ($this->language) {
-      $query->setLanguage($this->language);
-    }
-
-    return $query->create($payload);
+    return $this->modelInstance->create($payload);
   }
 
   /**
@@ -39,7 +33,7 @@ class EntryTypeService
   {
     $query = $this->modelInstance->query();
 
-    if ($this->language) {
+    if (isset($this->language)) {
       $query->setLanguage($this->language);
     }
 
@@ -51,7 +45,13 @@ class EntryTypeService
    */
   public function getMany(array $where = [], $page = 1, $pageLimit = 15): array
   {
-    $query = $this->modelInstance
+    $query = $this->modelInstance->query();
+
+    if (isset($this->language)) {
+      $query->setLanguage($this->language);
+    }
+
+    $query
       ->orderBy(
         $this->modelInstance->getSummary()->hasOrdering
           ? ['order' => 'asc', 'id' => 'asc']
@@ -82,7 +82,7 @@ class EntryTypeService
   {
     $query = $this->modelInstance->query();
 
-    if ($this->language) {
+    if (isset($this->language)) {
       $query->setLanguage($this->language);
     }
 
