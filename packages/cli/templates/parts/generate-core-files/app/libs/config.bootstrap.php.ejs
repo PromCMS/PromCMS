@@ -16,7 +16,7 @@ return function (Container $container) use ($PROM_ROOT_FOLDER) {
   $APP_PREFIX = $_ENV['APP_PREFIX'] ? '/' . $_ENV['APP_PREFIX'] : '';
   $APP_ENV = $_ENV['APP_ENV'] ?? 'development';
   $IS_DEV_ENV = $APP_ENV == 'development';
-  $DEFAULT_LANGUAGE = $_ENV['LANG'] ?? 'en';
+  $DEFAULT_LANGUAGE = $_ENV['LANGUAGE'] ?? 'en';
   $LANGUAGES = array_merge(
     [$DEFAULT_LANGUAGE],
     explode(',', $_ENV['MORE_LANG'] ?? ''),
