@@ -9,9 +9,11 @@ include_once $PHP_APP_ROOT . '/modules/Core/Services/Password.service.php';
 
 $container = new Container();
 $configBootstrap = require_once $LIBS_ROOT . '/config.bootstrap.php';
+$dbBootstrap = require_once $LIBS_ROOT . '/db.bootstrap.php';
 $utilsBootstrap = require_once $LIBS_ROOT . '/utils.bootstrap.php';
 $configBootstrap($container);
 $utilsBootstrap($container);
+$dbBootstrap($container);
 $utils = $container->get('utils');
 
 $moduleNames = BootstrapUtils::getValidModuleNames();
