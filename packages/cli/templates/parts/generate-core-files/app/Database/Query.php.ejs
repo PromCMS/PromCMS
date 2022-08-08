@@ -8,205 +8,31 @@ use Exception;
 use ParseError;
 use SleekDB\Store;
 use SleekDB\Query as SleekQuery;
-use SleekDB\QueryBuilder;
 
 class Query
 {
-  protected Store $store;
-  protected QueryBuilder $queryBuilder;
-  protected Model $modelClass;
+  use Query\Concerns\Managers, Query\Concerns\Builder;
 
-  function __construct(Store $store, Model $modelClass)
+  protected Store $store;
+  protected Model $modelClass;
+  protected string $currentLanguage;
+  protected string $defaultLanguage;
+  static string $TRANSLATIONS_FIELD_NAME = '_translations';
+
+  function __construct(Store $store, Model $modelClass, $defaultLanguage)
   {
     $this->store = $store;
     $this->modelClass = $modelClass;
+    $this->currentLanguage = $defaultLanguage;
+    $this->defaultLanguage = $defaultLanguage;
   }
 
   /**
-   * Gets a sleekdb QueryBuilder instance
+   * Set language for current query
    */
-  public function getQueryBuilder(): QueryBuilder
+  public function setLanguage(string $nextLanguage)
   {
-    if (!isset($this->queryBuilder)) {
-      $this->queryBuilder = $this->store->createQueryBuilder();
-    }
-
-    return $this->queryBuilder;
-  }
-
-  /**
-   * Destroy query builder that was previously created and used
-   */
-  public function destroyQueryBuilder()
-  {
-    unset($this->queryBuilder);
-  }
-
-  function where(array $arg)
-  {
-    $this->getQueryBuilder()->where($arg);
-
-    return $this;
-  }
-
-  function orderBy(array $arg)
-  {
-    $this->getQueryBuilder()->orderBy($arg);
-
-    return $this;
-  }
-
-  function join(\Closure $arg, string $propertyName)
-  {
-    $this->getQueryBuilder()->join($arg, $propertyName);
-
-    return $this;
-  }
-
-  function limit($count)
-  {
-    $this->getQueryBuilder()->limit($count);
-
-    return $this;
-  }
-
-  function skip($count)
-  {
-    $this->getQueryBuilder()->skip($count);
-
-    return $this;
-  }
-
-  /**
-   * Select what fields to include in result
-   */
-  function select(array $fieldNames)
-  {
-    $this->getQueryBuilder()->select($fieldNames);
-
-    return $this;
-  }
-
-  /**
-   * Opposite of select
-   */
-  function except(array $fieldNames)
-  {
-    $this->getQueryBuilder()->except($fieldNames);
-
-    return $this;
-  }
-
-  /**
-   * Get many items that matches where clause
-   */
-  public function getMany(): array
-  {
-    $result = $this->getQueryBuilder()
-      ->getQuery()
-      ->fetch();
-
-    $this->destroyQueryBuilder();
-
-    return array_map(function ($item) {
-      return static::applyCasts($item);
-    }, $result);
-  }
-
-  /**
-   * Get one item that matches where clause first
-   */
-  public function getOne()
-  {
-    $result = $this->getQueryBuilder()
-      ->getQuery()
-      ->first();
-
-    $this->destroyQueryBuilder();
-
-    if (count($result) === 0) {
-      throw new EntityNotFoundException('Entity is missing');
-    }
-
-    return new ModelResult($this->modelClass, static::applyCasts($result));
-  }
-
-  /**
-   * Shorthand for getOne
-   */
-  public function getById($id)
-  {
-    $this->getQueryBuilder()->where(['id', '=', static::serializeId($id)]);
-
-    return $this->getOne();
-  }
-
-  /**
-   * Much more efficient method to check if some entry exists. Does not attach to current query builder
-   */
-  function exists($where)
-  {
-    if (!count($where)) {
-      return false;
-    }
-
-    $this->store
-      ->createQueryBuilder()
-      ->where($where)
-      ->getQuery()
-      ->exists();
-  }
-
-  protected function existsAgainstPayload($payload, $ignoreId = null)
-  {
-    $uniqueFilter = [];
-    $index = 1;
-    $filledUniqueFields = array_filter(
-      $this->modelClass::getUniqueFields(),
-      function ($item) use ($payload) {
-        return isset($payload[$item]);
-      },
-    );
-
-    foreach ($filledUniqueFields as $uniqueFieldName) {
-      $uniqueFilter[] = [$uniqueFieldName, '=', $payload[$uniqueFieldName]];
-      if (count($filledUniqueFields) !== $index) {
-        $uniqueFilter[] = 'OR';
-      }
-      $index++;
-    }
-
-    if (!count($uniqueFilter)) {
-      return false;
-    }
-
-    try {
-      $match = $this->store->findOneBy(
-        $ignoreId !== null
-          ? [$uniqueFilter, 'AND', ['id', '!=', $ignoreId]]
-          : $uniqueFilter,
-      );
-
-      if ($match === null) {
-        throw new EntityNotFoundException();
-      }
-
-      $conflictedFields = [];
-
-      foreach ($filledUniqueFields as $uniqueFieldName) {
-        if ($match[$uniqueFieldName] == $payload[$uniqueFieldName]) {
-          $conflictedFields[] = $uniqueFieldName;
-        }
-      }
-
-      return $conflictedFields;
-    } catch (\Exception $exception) {
-      if ($exception instanceof EntityNotFoundException) {
-        return false;
-      }
-
-      throw $exception;
-    }
+    $this->currentLanguage = $nextLanguage;
   }
 
   /**
@@ -233,8 +59,54 @@ class Query
       );
     }
 
+    [
+      $neutralFields,
+      $intlFields,
+    ] = $this->modelClass::getInternationalizedFields();
+    if ($this->modelClass->hasTranslationsEnabled()) {
+      $formattedPayload = [];
+
+      foreach ($neutralFields as $fieldName) {
+        if (!isset($payload[$fieldName])) {
+          continue;
+        }
+        $formattedPayload[$fieldName] = $payload[$fieldName];
+      }
+
+      foreach ($intlFields as $fieldName) {
+        if (!isset($payload[$fieldName])) {
+          continue;
+        }
+        if (!isset($formattedPayload[static::$TRANSLATIONS_FIELD_NAME])) {
+          $formattedPayload[static::$TRANSLATIONS_FIELD_NAME] = [];
+          $formattedPayload[static::$TRANSLATIONS_FIELD_NAME][
+            $this->currentLanguage
+          ] = [];
+        }
+        $formattedPayload[static::$TRANSLATIONS_FIELD_NAME][
+          $this->currentLanguage
+        ][$fieldName] = $payload[$fieldName];
+      }
+
+      $payload = $formattedPayload;
+    }
+
     // Insert new item
     $result = $this->store->insert($payload);
+
+    // Unwrap those translations
+    if ($this->modelClass->hasTranslationsEnabled()) {
+      $translations =
+        $result[static::$TRANSLATIONS_FIELD_NAME][$this->currentLanguage];
+      foreach ($intlFields as $fieldName) {
+        if (!isset($translations[$fieldName])) {
+          continue;
+        }
+        $result[$fieldName] = $translations[$fieldName];
+      }
+
+      unset($result[static::$TRANSLATIONS_FIELD_NAME]);
+    }
 
     // Apply casts
     $result = static::applyCasts($result);
@@ -246,6 +118,50 @@ class Query
     $result = $this->modelClass::afterCreate($result);
 
     return $result;
+  }
+
+  /**
+   * Get many items that matches where clause
+   */
+  public function getMany(): array
+  {
+    $result = $this->getQueryBuilder()
+      ->getQuery()
+      ->fetch();
+
+    $this->destroyQueryBuilder();
+
+    return array_map(function ($item) {
+      return static::applyCasts($item);
+    }, $result);
+  }
+
+  /**
+   * Shorthand for getOne
+   */
+  public function getOneById($id)
+  {
+    $this->getQueryBuilder()->where(['id', '=', static::serializeId($id)]);
+
+    return $this->getOne();
+  }
+
+  /**
+   * Get one item that matches where clause first
+   */
+  public function getOne()
+  {
+    $result = $this->getQueryBuilder()
+      ->getQuery()
+      ->first();
+
+    $this->destroyQueryBuilder();
+
+    if (count($result) === 0) {
+      throw new EntityNotFoundException('Entity is missing');
+    }
+
+    return new ModelResult($this->modelClass, static::applyCasts($result));
   }
 
   /**
@@ -275,6 +191,7 @@ class Query
 
     // Trigger events
     $payload = $this->modelClass::beforeSafe($payload);
+    $payload = $this->payloadFieldKeysToTranslations($payload);
 
     // Update item in store and get it back
     $result = $this->getQueryBuilder()
@@ -304,22 +221,6 @@ class Query
   }
 
   /**
-   * Find items with closures
-   */
-  function findBy(
-    array $criteria,
-    array $orderBy = null,
-    int $limit = null,
-    int $offset = null
-  ) {
-    $results = $this->store->findBy($criteria, $orderBy, $limit, $offset);
-
-    return array_map(function ($item) {
-      return static::applyCasts($item);
-    }, $results);
-  }
-
-  /**
    * Delete item
    */
   function delete()
@@ -334,6 +235,24 @@ class Query
 
     return new ModelResult($this->modelClass, static::applyCasts($result[0]));
   }
+
+  /**
+   * Much more efficient method to check if some entry exists. Does not attach to current query builder
+   */
+  function exists($where)
+  {
+    if (!count($where)) {
+      return false;
+    }
+
+    $this->getStore()
+      ->createQueryBuilder()
+      ->where($where)
+      ->getQuery()
+      ->exists();
+  }
+
+  // PRIVATE FUNCTIONS
 
   private static function serializeId($id): int
   {
@@ -381,5 +300,134 @@ class Query
     }
 
     return $args;
+  }
+
+  protected function existsAgainstPayload($payload, $ignoreId = null)
+  {
+    $uniqueFilter = [];
+    $index = 1;
+    $translationsFieldName = static::$TRANSLATIONS_FIELD_NAME;
+    $currentLanguageKey = $this->currentLanguage;
+    $intlFields = $this->modelClass::getInternationalizedFields()[1];
+    $filledUniqueFields = array_filter(
+      $this->modelClass::getUniqueFields(),
+      function ($item) use ($payload) {
+        return isset($payload[$item]);
+      },
+    );
+
+    foreach ($filledUniqueFields as $uniqueFieldName) {
+      $uniqueFilter[] =
+        $this->modelClass->hasTranslationsEnabled() &&
+        in_array($uniqueFieldName, $intlFields)
+          ? [
+            "$translationsFieldName.$currentLanguageKey.$uniqueFieldName",
+            '=',
+            $payload[$uniqueFieldName],
+          ]
+          : [$uniqueFieldName, '=', $payload[$uniqueFieldName]];
+
+      if (count($filledUniqueFields) !== $index) {
+        $uniqueFilter[] = 'OR';
+      }
+      $index++;
+    }
+
+    if (!count($uniqueFilter)) {
+      return false;
+    }
+
+    try {
+      $match = $this->getStore()
+        ->createQueryBuilder()
+        ->select($this->getFieldKeyAliases())
+        ->where(
+          $ignoreId !== null
+            ? [$uniqueFilter, 'AND', ['id', '!=', $ignoreId]]
+            : $uniqueFilter,
+        )
+        ->getQuery()
+        ->first();
+
+      if (count($match) == 0) {
+        throw new EntityNotFoundException();
+      }
+
+      $conflictedFields = [];
+
+      foreach ($filledUniqueFields as $uniqueFieldName) {
+        if ($match[$uniqueFieldName] == $payload[$uniqueFieldName]) {
+          $conflictedFields[] = $uniqueFieldName;
+        }
+      }
+
+      return $conflictedFields;
+    } catch (\Exception $exception) {
+      if ($exception instanceof EntityNotFoundException) {
+        return false;
+      }
+
+      throw $exception;
+    }
+  }
+
+  protected function payloadFieldKeysToTranslations($payload)
+  {
+    if (!$this->modelClass->hasTranslationsEnabled()) {
+      return $payload;
+    }
+
+    $intlFields = $this->modelClass::getInternationalizedFields()[1];
+    $translationsFieldName = static::$TRANSLATIONS_FIELD_NAME;
+    $currentLanguageKey = $this->currentLanguage;
+
+    foreach ($intlFields as $fieldName) {
+      if (!isset($payload[$fieldName])) {
+        continue;
+      }
+
+      $payload["$translationsFieldName.$currentLanguageKey.$fieldName"] =
+        $payload[$fieldName];
+      unset($payload[$fieldName]);
+    }
+
+    return $payload;
+  }
+
+  protected function getFieldKeyAliases()
+  {
+    if (!$this->modelClass->hasTranslationsEnabled()) {
+      return $this->modelClass::getFieldKeys();
+    }
+
+    [
+      $neutralFields,
+      $intlFields,
+    ] = $this->modelClass::getInternationalizedFields();
+
+    $fieldKeys = $neutralFields;
+    $translationsFieldName = static::$TRANSLATIONS_FIELD_NAME;
+    $currentLanguageKey = $this->currentLanguage;
+    $defaultLanguage = $this->defaultLanguage;
+
+    foreach ($intlFields as $fieldName) {
+      $fieldKeys[$fieldName] = function ($item) use (
+        $fieldName,
+        $translationsFieldName,
+        $currentLanguageKey,
+        $defaultLanguage
+      ) {
+        $itemTranslations = $item[$translationsFieldName];
+        $translations = isset($itemTranslations[$currentLanguageKey])
+          ? $itemTranslations[$currentLanguageKey]
+          : $itemTranslations[$defaultLanguage];
+
+        if (isset($translations[$fieldName])) {
+          return $translations[$fieldName];
+        }
+      };
+    }
+
+    return $fieldKeys;
   }
 }
