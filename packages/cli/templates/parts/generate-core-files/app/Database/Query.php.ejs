@@ -164,22 +164,34 @@ class Query
     return new ModelResult($this->modelClass, static::applyCasts($result));
   }
 
+  function updateById($id, $payload)
+  {
+    $this->getQueryBuilder()->where(['id', '=', static::serializeId($id)]);
+
+    return $this->update($payload);
+  }
+
   /**
    * Update item(s), previously defined where conditions are applied too
    */
-  function updateById($_id, $payload)
+  function update($payload)
   {
-    // Id can be int or string and we need to convert it to int for SleekDB
-    $id = static::serializeId($_id);
-
     // If has timestamps enabled we attach updated_at
     if ($this->modelClass->hasTimestamps()) {
       $timeNow = new \DateTime();
       $payload['updated_at'] = $timeNow->getTimestamp();
     }
 
-    // Apply id to filters
-    $this->getQueryBuilder()->where(['id', '=', $id]);
+    $whereConditions = json_encode(
+      $this->getQueryBuilder()->_getConditionProperties()['whereConditions'],
+    );
+
+    if (!str_includes($whereConditions, '["id","=",')) {
+      throw new Exception('You must specify where clause to use update');
+    }
+
+    // Hacky way to access the id from where
+    $id = intval(explode(']', explode('["id","=",', $whereConditions)[1])[0]);
 
     // Check for conflicts
     if ($conflictedFields = $this->existsAgainstPayload($payload, $id)) {
