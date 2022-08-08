@@ -5,12 +5,7 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 
 return function (App $app, RouteCollectorProxy $router) {
-  $container = $app->getContainer();
-  $config = $container->get('config');
-
-  $baseUrl = $config['app']['baseUrl'];
-
-  function adminRouting(
+  $router->get('/admin[/{routePiece:.*}]', function (
     ServerRequestInterface $request,
     ResponseInterface $response,
     $args
@@ -42,7 +37,5 @@ return function (App $app, RouteCollectorProxy $router) {
     $response->getBody()->write($content);
 
     return $response;
-  }
-
-  $router->get('/admin[/{routePiece:.*}]', 'adminRouting');
+  });
 };

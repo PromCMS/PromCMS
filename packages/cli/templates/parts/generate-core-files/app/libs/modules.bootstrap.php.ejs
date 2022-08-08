@@ -19,10 +19,10 @@ return function (App $app, Container $container) {
   foreach ($moduleNames as $dirname) {
     $moduleRoot = \BootstrapUtils::getModuleRoot($dirname);
     // Make sure that plugin has valid info file
-    $bootstrapFilepath = "$moduleRoot/bootstrap.php";
-    $bootstrapAfter = "$moduleRoot/bootstrap.after.php";
-    $apiRoutesFilepath = "$moduleRoot/api.routes.php";
-    $frontRoutesFilepath = "$moduleRoot/front.routes.php";
+    $bootstrapFilepath = joinPath($moduleRoot, 'bootstrap.php');
+    $bootstrapAfter = joinPath($moduleRoot, 'bootstrap.after.php');
+    $apiRoutesFilepath = joinPath($moduleRoot, 'api.routes.php');
+    $frontRoutesFilepath = joinPath($moduleRoot, 'front.routes.php');
 
     // Load bootstrap for that module
     if (file_exists($bootstrapFilepath)) {
@@ -62,52 +62,69 @@ return function (App $app, Container $container) {
     'loadedModels' => $loadedModels,
   ]);
 
-  // Every module should have been bootstrapped by now so we can continue to including custom routes
-  $app->group($config['app']['prefix'], function ($router) use (
-    $filePathsToApiRoutes,
-    $filePathsToFrontRoutes,
-    $app,
-    $config
-  ) {
-    // Load api routes first from prepared set
-    $router
-      ->group('/api', function ($router) use ($filePathsToApiRoutes, $app) {
-        foreach ($filePathsToApiRoutes as $filePath) {
-          $module = require_once $filePath;
+  $routePrefix = $config['app']['prefix'];
+  $supportedLanguages = $config['i18n']['languages'];
+  $importedModules = [];
+  $intlRoutePrefix =
+    $routePrefix . '/{language:' . implode('|', $supportedLanguages) . '}';
 
-          $module($app, $router);
+  foreach ([$routePrefix, $intlRoutePrefix] as $routePrefixPart) {
+    // Every module should have been bootstrapped by now so we can continue to including custom routes
+    $app->group($routePrefixPart, function ($router) use (
+      $filePathsToApiRoutes,
+      $filePathsToFrontRoutes,
+      $app,
+      &$importedModules,
+      $config
+    ) {
+      // Load api routes first from prepared set
+      $router
+        ->group('/api', function ($router) use (
+          $filePathsToApiRoutes,
+          $app,
+          &$importedModules
+        ) {
+          foreach ($filePathsToApiRoutes as $filePath) {
+            if (!isset($importedModules[$filePath])) {
+              $importedModules[$filePath] = require_once $filePath;
+            }
+
+            $importedModules[$filePath]($app, $router);
+          }
+        })
+        ->add(function ($request, $handler) use ($config) {
+          $response = $handler->handle($request);
+          $responseHeaders = $response->getHeaders();
+
+          return $response
+            ->withHeader(
+              'Access-Control-Allow-Origin',
+              $config['env']['development'] ? '*' : '',
+            )
+            ->withHeader(
+              'Access-Control-Allow-Headers',
+              'X-Requested-With, Content-Type, Accept, Origin, Authorization',
+            )
+            ->withHeader(
+              'Access-Control-Allow-Methods',
+              'GET, POST, DELETE, PATCH',
+            )
+            ->withHeader(
+              'Content-Type',
+              isset($responseHeaders['Content-Type'])
+                ? $responseHeaders['Content-Type']
+                : 'application/json',
+            );
+        });
+
+      // Load front routes second - same as api
+      foreach ($filePathsToFrontRoutes as $filePath) {
+        if (!isset($importedModules[$filePath])) {
+          $importedModules[$filePath] = require_once $filePath;
         }
-      })
-      ->add(function ($request, $handler) use ($config) {
-        $response = $handler->handle($request);
-        $responseHeaders = $response->getHeaders();
 
-        return $response
-          ->withHeader(
-            'Access-Control-Allow-Origin',
-            $config['env']['development'] ? '*' : '',
-          )
-          ->withHeader(
-            'Access-Control-Allow-Headers',
-            'X-Requested-With, Content-Type, Accept, Origin, Authorization',
-          )
-          ->withHeader(
-            'Access-Control-Allow-Methods',
-            'GET, POST, DELETE, PATCH',
-          )
-          ->withHeader(
-            'Content-Type',
-            isset($responseHeaders['Content-Type'])
-              ? $responseHeaders['Content-Type']
-              : 'application/json',
-          );
-      });
-
-    // Load front routes second - same as api
-    foreach ($filePathsToFrontRoutes as $filePath) {
-      $module = require_once $filePath;
-
-      $module($app, $router);
-    }
-  });
+        $importedModules[$filePath]($app, $router);
+      }
+    });
+  }
 };
