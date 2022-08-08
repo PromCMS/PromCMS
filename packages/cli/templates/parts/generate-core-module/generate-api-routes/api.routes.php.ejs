@@ -16,6 +16,10 @@ return function (App $app, Router $router) {
     '\App\Controllers\Localization:getLocalization',
   );
 
+  $router->group('/settings', function (Router $innerRouter) {
+    $innerRouter->get('', '\App\Controllers\Settings:get');
+  });
+
   // Profile
   $router->group('/profile', function (Router $innerRouter) use ($auth) {
     $innerRouter->get(
