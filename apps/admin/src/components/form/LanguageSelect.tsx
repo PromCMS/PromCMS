@@ -21,22 +21,21 @@ const languageCodeToFlagCode = {
   cs: 'cz',
 };
 
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(function SelectItem(
-  { label, value, ...others }: ItemProps,
-  ref
-) {
-  return (
-    <div ref={ref} {...others}>
-      <Group noWrap>
-        <Flag width={18} code={languageCodeToFlagCode[value] ?? value} />
+const SelectItemComponent = forwardRef<HTMLDivElement, ItemProps>(
+  function SelectItem({ label, value, ...others }: ItemProps, ref) {
+    return (
+      <div ref={ref} {...others}>
+        <Group noWrap>
+          <Flag width={18} code={languageCodeToFlagCode[value] ?? value} />
 
-        <div>
-          <Text size="sm">{label}</Text>
-        </div>
-      </Group>
-    </div>
-  );
-});
+          <div>
+            <Text size="sm">{label}</Text>
+          </div>
+        </Group>
+      </div>
+    );
+  }
+);
 
 export const LanguageSelect: FC<LanguageSelectProps> = ({
   value,
@@ -64,7 +63,7 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
       placeholder={t('Select an option')}
       shadow="xl"
       disabled={!settings || disabled}
-      itemComponent={SelectItem}
+      itemComponent={SelectItemComponent}
       value={value}
       icon={
         <Flag

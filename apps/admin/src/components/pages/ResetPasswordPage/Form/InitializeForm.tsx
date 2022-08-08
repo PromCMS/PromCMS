@@ -18,15 +18,12 @@ type FormValues = {
 export const InitializeForm: VFC = () => {
   const { t } = useTranslation();
   const notifications = useNotifications();
-  const formMethods =
-    useForm <
-    FormValues >
-    {
-      resolver: yupResolver(initializeResetPasswordFormSchema),
-      defaultValues: {
-        email: '',
-      },
-    };
+  const formMethods = useForm<FormValues>({
+    resolver: yupResolver(initializeResetPasswordFormSchema),
+    defaultValues: {
+      email: '',
+    },
+  });
   const { register, formState, handleSubmit, watch } = formMethods;
 
   const providedEmail = watch('email');
