@@ -32,6 +32,11 @@ export type ColumnSettingsBase = {
    */
   editable?: boolean;
   /**
+   * If current field can be translated
+   * @default true;
+   */
+  translations?: boolean;
+  /**
    * If column is hidden in admin ui
    */
   adminHidden?: boolean;

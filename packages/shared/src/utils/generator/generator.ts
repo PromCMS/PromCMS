@@ -72,11 +72,13 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         type: 'string',
         required: true,
         unique: true,
+        translations: false,
       },
       label: {
         title: 'Label',
         type: 'string',
         required: true,
+        translations: false,
       },
       content: {
         title: 'content',
@@ -212,6 +214,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Is published',
         type: 'boolean',
         unique: false,
+        translations: false,
       };
     }
 
@@ -223,6 +226,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         autoIncrement: true,
         editable: false,
         adminHidden: true,
+        translations: false,
       };
     }
 
@@ -231,6 +235,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Coeditors',
         type: 'json',
         default: '{}',
+        translations: false,
       };
     }
 
@@ -243,6 +248,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         labelConstructor: 'name',
         fill: false,
         adminHidden: true,
+        translations: false,
       };
 
       model.columns.updated_by = {
@@ -253,6 +259,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         labelConstructor: 'name',
         fill: false,
         adminHidden: true,
+        translations: false,
       };
     }
 
@@ -263,6 +270,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         editable: false,
         autoIncrement: true,
         unique: true,
+        translations: false,
       },
       ...model.columns,
     };
@@ -280,6 +288,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
             editable: true,
             unique: false,
             hide: false,
+            translations: true,
             ...(column.type === 'number' ? { autoIncrement: false } : {}),
             ...(column.type === 'slug' ? { unique: true } : {}),
             ...(column.type === 'relationship'
