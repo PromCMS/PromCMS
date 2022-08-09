@@ -105,7 +105,6 @@ export class GenerateCMSProgram extends Command {
     const jobs: LoggedWorkerJob[] = [
       {
         title: 'Generate new core',
-        skip: this.regenerate,
         job: async () => {
           await generateCore(FINAL_PATH, this.regenerate);
         },
