@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Exceptions\EntityDuplicateException;
+use App\Exceptions\EntityNotFoundException;
+use App\Services\EntryTypeService;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -34,30 +36,17 @@ class Users
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
+    $service = new EntryTypeService(new \Users());
+
     $queryParams = $request->getQueryParams();
-    $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
+    $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
     $where = [];
-    $query = (new \Users())->query();
 
     if (isset($queryParams['where'])) {
       [$where] = normalizeWhereQueryParam($queryParams['where']);
-      $query->where($where);
     }
 
-    $pageLimit = 15;
-    $query = $query->limit($pageLimit)->skip($pageLimit * $page);
-    $total = count(\Users::getMany());
-    $data = $query->getMany();
-
-    $response->getBody()->write(
-      json_encode([
-        'data' => $data,
-        'current_page' => $page,
-        'last_page' => floor($total / $pageLimit),
-        'per_page' => $pageLimit,
-        'total' => $total,
-      ]),
-    );
+    $response->getBody()->write(json_encode($service->getMany($where), $page));
 
     return $response;
   }
@@ -68,10 +57,9 @@ class Users
     array $args
   ): ResponseInterface {
     $parsedBody = $request->getParsedBody();
-    $user = $this->container->get('session')->get('user');
-    $classInstance = new \Users();
+    $currentUser = $this->container->get('session')->get('user');
 
-    if ($user->id === $args['itemId']) {
+    if ($currentUser->id === $args['itemId']) {
       return $response
         ->withStatus(400)
         ->withHeader('Content-Description', 'cannot change self by this route');
@@ -82,39 +70,26 @@ class Users
     }
 
     try {
-      $user = $classInstance->getById($args['itemId']);
+      $user = \Users::getOneById($args['itemId']);
       $updatedUser = $user->update($parsedBody['data']);
 
       prepareJsonResponse($response, $updatedUser->getData());
 
       return $response;
     } catch (\Exception $ex) {
+      $response = $response->withHeader(
+        'Content-Description',
+        $ex->getMessage(),
+      );
+
       if ($ex instanceof EntityDuplicateException) {
-        $errorText = str_replace(
-          ['UNIQUE constraint failed: ', ' '],
-          '',
-          $ex->errorInfo[2],
-        );
-
-        prepareJsonResponse(
-          $response,
-          array_map(function ($item) {
-            return strpos($item, '.') !== false
-              ? explode('.', $item)[1]
-              : explode('_', $item)[1];
-          }, explode(',', $errorText)),
-          'Duplicate entries',
-          intval($ex->getCode()),
-        );
-
-        return $response
-          ->withStatus(400)
-          ->withHeader('Content-Description', $ex->getMessage());
+        handleDuplicateEntriesError($response, $ex);
+        return $response->withStatus(400);
+      } elseif ($ex instanceof EntityNotFoundException) {
+        return $response->withStatus(404);
+      } else {
+        return $response->withStatus(500);
       }
-
-      return $response
-        ->withStatus(500)
-        ->withHeader('Content-Description', $ex->getMessage());
     }
   }
 
@@ -123,16 +98,12 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $classInstance = new \Users();
-
     try {
       // If is not admin then we will return just id and name for safety reasons
       if (strval($this->currentUser->role) === '0') {
-        $item = $classInstance
-          ->where(['id', '=', intval($args['itemId'])])
-          ->getOne();
+        $item = \Users::getOneById($args['itemId']);
       } else {
-        $item = $classInstance->select(['id', 'name'])->getOne($args['itemId']);
+        $item = \Users::select(['id', 'name'])->getOneById($args['itemId']);
       }
 
       prepareJsonResponse($response, $item->getData());
@@ -165,22 +136,22 @@ class Users
     try {
       $user = \Users::create($parsedBody['data']);
     } catch (\Exception $ex) {
+      $response = $response->withHeader(
+        'Content-Description',
+        $ex->getMessage(),
+      );
+
       if ($ex instanceof EntityDuplicateException) {
         handleDuplicateEntriesError($response, $ex);
-
-        return $response
-          ->withStatus(409)
-          ->withHeader('Content-Description', $ex->getMessage());
+        return $response->withStatus(400);
+      } elseif ($ex instanceof EntityNotFoundException) {
+        return $response->withStatus(404);
+      } else {
+        return $response->withStatus(500);
       }
-
-      return $response
-        ->withStatus(500)
-        ->withHeader('Content-Description', $ex->getMessage());
     }
 
     $generatedJwt = $jwtService->generate(['id' => $user->id]);
-
-    prepareJsonResponse($response, $user->getData());
 
     $themePayload = array_merge($user->getData(), [
       'token' => $generatedJwt,
@@ -208,6 +179,8 @@ class Users
     $emailService->Body = $generatedEmailContent;
     $emailService->send();
 
+    prepareJsonResponse($response, $user->getData());
+
     return $response;
   }
 
@@ -216,14 +189,9 @@ class Users
     ResponseInterface $response,
     array $args
   ): ResponseInterface {
-    $classInstance = new \Users();
-
     prepareJsonResponse(
       $response,
-      $classInstance
-        ->where(['id', '=', intval($args['itemId'])])
-        ->delete()
-        ->getData(),
+      \Users::getOneById($args['itemId'])->delete(),
     );
 
     return $response;
@@ -248,10 +216,7 @@ class Users
     ResponseInterface $response,
     $args
   ) {
-    $classInstance = new \Users();
-    $user = $classInstance
-      ->where(['id', '=', intval($args['itemId'])])
-      ->getOne();
+    $user = \Users::where(['id', '=', intval($args['itemId'])])->getOne();
 
     if ($user->state !== 'blocked') {
       return $response->withStatus(400);
@@ -271,12 +236,11 @@ class Users
     ResponseInterface $response,
     $args
   ) {
-    $classInstance = new \Users();
     $jwtService = $this->container->get('jwt-service');
     $emailService = $this->container->get('email');
     $twigService = $this->container->get('twig');
 
-    $user = $classInstance->getById($args['itemId']);
+    $user = \Users::getOneById($args['itemId']);
     if ($user->state === 'blocked') {
       return $response->withStatus(400);
     }

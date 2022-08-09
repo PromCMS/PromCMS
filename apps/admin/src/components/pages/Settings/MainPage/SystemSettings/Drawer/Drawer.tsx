@@ -1,4 +1,4 @@
-import { useEffect, VFC } from 'react';
+import { useEffect, useState, VFC } from 'react';
 import {
   Button,
   Drawer as MantineDrawer,
@@ -12,7 +12,6 @@ import {
 import { useModelItem } from '@hooks/useModelItem';
 import { ItemID } from '@prom-cms/shared';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { List } from './contentTypes/List';
 import { SettingsService } from '@services';
 import { Textarea } from './contentTypes/Textarea';
@@ -20,12 +19,18 @@ import { Image } from './contentTypes/Image';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '@hooks/useCurrentUser';
+import { LanguageSelect } from '@components/form/LanguageSelect';
+import { useSettings } from '@hooks/useSettings';
 
 export const Drawer: VFC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
 > = ({ opened, onClose, optionToEdit }) => {
+  const settings = useSettings();
+  const [language, setLanguage] = useState<string | undefined>(
+    settings?.i18n?.default
+  );
   const currentUser = useCurrentUser();
-  const { data } = useModelItem('settings', optionToEdit);
+  const { data } = useModelItem('settings', optionToEdit, undefined, language);
   const { t } = useTranslation();
   const reqNotification = useRequestWithNotifications();
   const formMethods = useForm({
@@ -66,7 +71,11 @@ export const Drawer: VFC<
         async () => {
           if (optionToEdit) {
             const { id, ...newOptionDataset } = values;
-            await SettingsService.update(optionToEdit, newOptionDataset);
+            await SettingsService.update(
+              optionToEdit,
+              newOptionDataset,
+              language
+            );
           } else {
             await SettingsService.create(values);
           }
@@ -119,6 +128,15 @@ export const Drawer: VFC<
                       ]}
                     />
                   )}
+                />
+
+                <LanguageSelect
+                  value={language}
+                  onChange={(value) => value && setLanguage(value)}
+                  className="w-full"
+                  shadow="xl"
+                  pt="md"
+                  disabled={!optionToEdit}
                 />
               </Paper>
             )}

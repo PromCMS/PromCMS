@@ -230,7 +230,7 @@ class UserProfile
     $decodedArray = (array) $decodedPayload;
 
     try {
-      $user = \Users::getById($decodedArray['id']);
+      $user = \Users::getOneById($decodedArray['id']);
     } catch (\Exception $e) {
       return $response->withStatus(404);
     }

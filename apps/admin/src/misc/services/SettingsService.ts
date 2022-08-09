@@ -27,12 +27,13 @@ export class SettingsService {
     return `${this.getListUrl()}/entries/create`;
   }
 
-  static async update(id: ItemID, payload: ApiResultItem) {
+  static async update(id: ItemID, payload: ApiResultItem, language?: string) {
     if (!Object.keys(payload).length) return;
 
     const result = apiClient.patch(
       `${API_ENTRY_TYPES_URL}/settings/items/${id}`,
-      { data: payload }
+      { data: payload },
+      { params: { lang: language } }
     );
     return result;
   }

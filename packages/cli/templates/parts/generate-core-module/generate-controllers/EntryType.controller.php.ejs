@@ -3,17 +3,35 @@
 namespace App\Controllers;
 
 use App\Exceptions\EntityDuplicateException;
+use App\Exceptions\EntityNotFoundException;
+use App\Services\EntryTypeService;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class EntryType
 {
-  private $currentUser;
+  protected $currentUser;
+  protected array $languageConfig;
 
-  public function __construct(Container $container)
+  private function getCurrentLanguage($request, $args)
   {
-    $this->currentUser = $container->get('session')->get('user', false);
+    $queryParams = $request->getQueryParams();
+    $nextLanguage = null;
+    $supportedLanguages = $this->languageConfig['languages'];
+
+    if (
+      isset($queryParams['lang']) &&
+      in_array($queryParams['lang'], $supportedLanguages)
+    ) {
+      $nextLanguage = $queryParams['lang'];
+    }
+
+    if (isset($args['language'])) {
+      $nextLanguage = $args['language'];
+    }
+
+    return $nextLanguage;
   }
 
   public function getInfo(
@@ -27,17 +45,197 @@ class EntryType
     return $response;
   }
 
+  public function __construct(Container $container)
+  {
+    $this->currentUser = $container->get('session')->get('user', false);
+    $this->languageConfig = $container->get('config')['i18n'];
+  }
+
+  public function create(
+    ServerRequestInterface $request,
+    ResponseInterface $response,
+    $args
+  ): ResponseInterface {
+    $modelInstance = $request->getAttribute('model-instance');
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
+    $parsedBody = $request->getParsedBody();
+
+    try {
+      if ($modelInstance->getSummary()->ownable && $this->currentUser) {
+        $parsedBody['data']['created_by'] = $this->currentUser->id;
+      }
+
+      $item = $service->create($parsedBody['data']);
+
+      prepareJsonResponse($response, $item->getData());
+
+      return $response;
+    } catch (\Exception $ex) {
+      $response = $response->withHeader(
+        'Content-Description',
+        $ex->getMessage(),
+      );
+
+      if ($ex instanceof EntityDuplicateException) {
+        handleDuplicateEntriesError($response, $ex);
+
+        return $response->withStatus(400);
+      } else {
+        return $response->withStatus(500);
+      }
+    }
+  }
+
+  public function getOne(
+    ServerRequestInterface $request,
+    ResponseInterface $response,
+    array $args
+  ): ResponseInterface {
+    $modelInstance = $request->getAttribute('model-instance');
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
+
+    try {
+      prepareJsonResponse(
+        $response,
+        $service
+          ->getOne(
+            array_merge(
+              [['id', '=', intval($args['itemId'])]],
+              $request->getAttribute('permission-only-own', false) === true
+                ? onlyOwnersOrEditors($this->currentUser->id, $modelInstance)
+                : [],
+            ),
+          )
+          ->getData(),
+      );
+
+      return $response;
+    } catch (\Exception $error) {
+      return $response
+        ->withStatus(404)
+        ->withHeader('Content-Description', $error->getMessage());
+    }
+  }
+
+  public function getMany(
+    ServerRequestInterface $request,
+    ResponseInterface $response,
+    $args
+  ): ResponseInterface {
+    $modelInstance = $request->getAttribute('model-instance');
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
+    $queryParams = $request->getQueryParams();
+    $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
+    $where = [];
+
+    // If current user can view this content
+    if ($request->getAttribute('permission-only-own', false) === true) {
+      $filter = onlyOwnersOrEditors($this->currentUser->id, $modelInstance);
+      $where = $filter;
+    }
+
+    $response->getBody()->write(json_encode($service->getMany($where, $page)));
+
+    return $response;
+  }
+
+  public function update(
+    ServerRequestInterface $request,
+    ResponseInterface $response,
+    array $args
+  ): ResponseInterface {
+    $modelInstance = $request->getAttribute('model-instance');
+    $service = new EntryTypeService(
+      $modelInstance,
+      $this->getCurrentLanguage($request, $args),
+    );
+    $parsedBody = $request->getParsedBody();
+
+    try {
+      $where = [['id', '=', intval($args['itemId'])]];
+
+      if ($request->getAttribute('permission-only-own', false) === true) {
+        $where = array_merge(
+          $where,
+          onlyOwnersOrEditors($this->currentUser->id, $modelInstance),
+        );
+      }
+
+      if ($modelInstance->getSummary()->ownable && $this->currentUser) {
+        $parsedBody['data']['updated_by'] = $this->currentUser->id;
+      }
+
+      $item = $service->update($where, $parsedBody['data']);
+
+      prepareJsonResponse($response, $item->getData());
+
+      return $response;
+    } catch (\Exception $ex) {
+      $response = $response->withHeader(
+        'Content-Description',
+        $ex->getMessage(),
+      );
+
+      if ($ex instanceof EntityDuplicateException) {
+        handleDuplicateEntriesError($response, $ex);
+        return $response->withStatus(400);
+      } elseif ($ex instanceof EntityNotFoundException) {
+        return $response->withStatus(404);
+      } else {
+        return $response->withStatus(500);
+      }
+    }
+  }
+
+  public function delete(
+    ServerRequestInterface $request,
+    ResponseInterface $response,
+    array $args
+  ): ResponseInterface {
+    $modelInstance = $request->getAttribute('model-instance');
+    $service = new EntryTypeService($modelInstance);
+
+    $where = [['id', '=', intval($args['itemId'])]];
+
+    if ($request->getAttribute('permission-only-own', false) === true) {
+      $where = array_merge(
+        $where,
+        onlyOwnersOrEditors($this->currentUser->id, $modelInstance),
+      );
+    }
+
+    if (!$service->delete($where)) {
+      prepareJsonResponse($response, [], 'Failed to delete');
+
+      return $response
+        ->withStatus(500)
+        ->withHeader('Content-Description', 'Failed to delete');
+    }
+
+    prepareJsonResponse($response, [], 'Item deleted');
+
+    return $response;
+  }
+
   public function swapTwo(
     ServerRequestInterface $request,
     ResponseInterface $response
   ): ResponseInterface {
     $classInstance = $request->getAttribute('model-instance');
-    $instance = $request->getAttribute('model-instance');
     $parsedBody = $request->getParsedBody();
     $data = $parsedBody['data'];
 
     if (
-      !$instance->getSummary()->hasOrdering ||
+      !$classInstance->getSummary()->hasOrdering ||
       !isset($data['fromId']) ||
       !isset($data['toId']) ||
       $data['fromId'] === $data['toId']
@@ -75,7 +273,7 @@ class EntryType
       $toEntryData['order'] = $fromEntryData['order'];
       $fromEntryData['order'] = $savedOrderId;
 
-      if ($instance->getSummary()->ownable && $this->currentUser) {
+      if ($classInstance->getSummary()->ownable && $this->currentUser) {
         $fromEntryData['updated_by'] = $this->currentUser->id;
         $toEntryData['updated_by'] = $this->currentUser->id;
       }
@@ -90,181 +288,6 @@ class EntryType
         ->withHeader('x-custom-message', $e->getMessage())
         ->withHeader('x-custom-trace', $e->getTraceAsString());
     }
-
-    return $response;
-  }
-
-  public function getMany(
-    ServerRequestInterface $request,
-    ResponseInterface $response
-  ): ResponseInterface {
-    $classInstance = $request->getAttribute('model-instance');
-    $queryParams = $request->getQueryParams();
-    $page = isset($queryParams['page']) ? $queryParams['page'] : 0;
-
-    $pageLimit = 15;
-    $query = $classInstance
-      ->orderBy(
-        $classInstance->getSummary()->hasOrdering
-          ? ['order' => 'asc', 'id' => 'asc']
-          : ['id' => 'asc'],
-      )
-      ->limit($pageLimit)
-      ->skip($pageLimit * $page);
-
-    if ($request->getAttribute('permission-only-own', false) === true) {
-      $filter = onlyOwnersOrEditors($this->currentUser->id, $classInstance);
-      $total = count($classInstance->where($filter)->getMany());
-      $query->where($filter);
-    } else {
-      $total = count($classInstance->getMany());
-    }
-
-    $data = $query->getMany();
-
-    $response->getBody()->write(
-      json_encode([
-        'data' => $data,
-        'current_page' => $page,
-        'last_page' => floor($total / $pageLimit),
-        'per_page' => $pageLimit,
-        'total' => $total,
-        'from' => $pageLimit * $page + 1,
-        'to' => $pageLimit * $page + $pageLimit,
-      ]),
-    );
-
-    return $response;
-  }
-
-  public function update(
-    ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
-  ): ResponseInterface {
-    $classInstance = $request->getAttribute('model-instance');
-    $parsedBody = $request->getParsedBody();
-
-    try {
-      $query = $classInstance;
-
-      if ($request->getAttribute('permission-only-own', false) === true) {
-        $query->where(
-          onlyOwnersOrEditors($this->currentUser->id, $classInstance),
-        );
-      }
-
-      $item = $query->getById($args['itemId']);
-
-      if ($classInstance->getSummary()->ownable && $this->currentUser) {
-        $parsedBody['data']['updated_by'] = $this->currentUser->id;
-      }
-
-      $item->update($parsedBody['data']);
-
-      prepareJsonResponse($response, $item->getData());
-
-      return $response;
-    } catch (\Exception $ex) {
-      if ($ex instanceof EntityDuplicateException) {
-        handleDuplicateEntriesError($response, $ex);
-
-        return $response
-          ->withStatus(400)
-          ->withHeader('Content-Description', $ex->getMessage());
-      } else {
-        return $response
-          ->withStatus(500)
-          ->withHeader('Content-Description', $ex->getMessage());
-      }
-    }
-  }
-
-  public function getOne(
-    ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
-  ): ResponseInterface {
-    $classInstance = $request->getAttribute('model-instance');
-
-    try {
-      $query = $classInstance->where(['id', '=', intval($args['itemId'])]);
-
-      if ($request->getAttribute('permission-only-own', false) === true) {
-        $query->where(
-          onlyOwnersOrEditors($this->currentUser->id, $classInstance),
-        );
-      }
-
-      $item = $query->getOne();
-
-      prepareJsonResponse($response, $item->getData());
-
-      return $response;
-    } catch (\Exception $error) {
-      return $response
-        ->withStatus(404)
-        ->withHeader('Content-Description', $error->getMessage());
-    }
-  }
-
-  public function create(
-    ServerRequestInterface $request,
-    ResponseInterface $response
-  ): ResponseInterface {
-    $classInstance = $request->getAttribute('model-instance');
-    $parsedBody = $request->getParsedBody();
-
-    try {
-      if ($classInstance->getSummary()->ownable && $this->currentUser) {
-        $parsedBody['data']['created_by'] = $this->currentUser->id;
-      }
-
-      prepareJsonResponse(
-        $response,
-        $classInstance->create($parsedBody['data'])->getData(),
-      );
-
-      return $response;
-    } catch (\Exception $ex) {
-      if ($ex instanceof EntityDuplicateException) {
-        handleDuplicateEntriesError($response, $ex);
-
-        return $response
-          ->withStatus(400)
-          ->withHeader('Content-Description', $ex->getMessage());
-      } else {
-        return $response
-          ->withStatus(500)
-          ->withHeader('Content-Description', $ex->getMessage());
-      }
-    }
-  }
-
-  public function delete(
-    ServerRequestInterface $request,
-    ResponseInterface $response,
-    array $args
-  ): ResponseInterface {
-    $classInstance = $request->getAttribute('model-instance');
-
-    $query = $classInstance->where(['id', '=', intval($args['itemId'])]);
-
-    if ($request->getAttribute('permission-only-own', false) === true) {
-      $query->where(
-        onlyOwnersOrEditors($this->currentUser->id, $classInstance),
-      );
-    }
-
-    if (!$query->delete()) {
-      prepareJsonResponse($response, [], 'Failed to delete');
-
-      return $response
-        ->withStatus(500)
-        ->withHeader('Content-Description', 'Failed to delete');
-    }
-
-    prepareJsonResponse($response, [], 'Item deleted');
 
     return $response;
   }

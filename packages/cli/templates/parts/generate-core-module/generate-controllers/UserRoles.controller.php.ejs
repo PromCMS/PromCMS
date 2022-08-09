@@ -84,7 +84,7 @@ class UserRoles
     $classInstance = new \UserRoles();
 
     try {
-      $item = $classInstance->getById($args['itemId']);
+      $item = $classInstance->getOneById($args['itemId']);
       $item->update($parsedBody['data']);
 
       prepareJsonResponse($response, $item->getData());

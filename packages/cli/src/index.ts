@@ -6,7 +6,7 @@ import { GenerateDevelopProgram } from './commands/generate-develop';
 import fs from 'fs-extra';
 import path from 'path';
 import { PACKAGE_ROOT } from './constants';
-import { DbToolsMigrateProgram } from 'commands/db-tools/migrate';
+import { DbToolsMigrateProgram } from './commands/db-tools/migrate';
 
 (async () => {
   const { version } = await fs.readJson(

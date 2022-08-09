@@ -14,6 +14,11 @@ trait Properties
   static array $casts = [];
 
   /**
+   * Default language
+   */
+  static string $defaultLanguage;
+
+  /**
    * The name of table in database
    */
   protected string $tableName;
@@ -31,7 +36,7 @@ trait Properties
   /**
    * If current model has translations
    */
-  protected bool $translations = false;
+  protected bool $translations = true;
 
   /**
    * Getter of table name
@@ -50,6 +55,14 @@ trait Properties
   }
 
   /**
+   * Getter of all columns
+   */
+  public function hasTranslationsEnabled(): bool
+  {
+    return $this->translations;
+  }
+
+  /**
    * Getter of timestamps
    */
   public function hasTimestamps(): bool
@@ -63,6 +76,11 @@ trait Properties
   public function hasSoftDelete(): bool
   {
     return $this->softDelete;
+  }
+
+  public static function getFieldKeys(): array
+  {
+    return array_values(array_keys(static::$tableColumns));
   }
 
   /**
@@ -98,6 +116,27 @@ trait Properties
         },
       ),
     );
+  }
+
+  public static function getInternationalizedFields(): array
+  {
+    $neutralFields = array_values(
+      array_keys(
+        array_filter(static::$tableColumns, function ($item) {
+          return $item['translations'] === false;
+        }),
+      ),
+    );
+
+    $intlFields = array_values(
+      array_keys(
+        array_filter(static::$tableColumns, function ($item) {
+          return $item['translations'] === true;
+        }),
+      ),
+    );
+
+    return [$neutralFields, $intlFields];
   }
 
   public static function getCasts(): array

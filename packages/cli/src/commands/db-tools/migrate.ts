@@ -1,7 +1,7 @@
 import { Command, GlobalOptions, Options, Params } from '@boost/cli';
 import path from 'path';
 import child_process from 'child_process';
-import { Logger, pathInputToRelative } from 'utils';
+import { Logger, pathInputToRelative } from '../../utils';
 import fs from 'fs-extra';
 
 import { SCRIPTS_ROOT } from '../../constants';
@@ -33,12 +33,11 @@ export class DbToolsMigrateProgram extends Command {
       required: true,
       type: 'string',
       validate: (value) => {
-        const requestedPath = path.join(process.cwd(), value);
-        if (!fs.pathExistsSync(requestedPath)) {
-          throw new Error(`Path to a file "${requestedPath}" does not exists`);
+        if (!fs.pathExistsSync(value)) {
+          throw new Error(`Path to a file "${value}" does not exists`);
         }
 
-        if (!requestedPath.endsWith('.json')) {
+        if (!value.endsWith('.json')) {
           throw new Error('Must be a json file');
         }
       },

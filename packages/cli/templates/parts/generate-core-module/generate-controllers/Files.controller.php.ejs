@@ -232,7 +232,7 @@ class Files
   ): ResponseInterface {
     $parsedBody = $request->getParsedBody();
 
-    $file = \Files::getById($args['itemId']);
+    $file = \Files::getOneById($args['itemId']);
     $file->update($parsedBody['data']);
 
     prepareJsonResponse($response, $file->getData());

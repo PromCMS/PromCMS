@@ -30,6 +30,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     timestamp: true,
     ignoreSeeding: true,
     sharable: false,
+    intl: false,
     columns: {
       filename: {
         title: 'Filename',
@@ -39,7 +40,6 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       description: {
         title: 'Description',
         type: 'string',
-        required: false,
       },
       filepath: {
         title: 'Filepath',
@@ -72,6 +72,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         type: 'string',
         required: true,
         unique: true,
+        translations: false,
       },
       label: {
         title: 'Label',
@@ -93,6 +94,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     },
     ownable: false,
     icon: 'UserExclamation',
+    intl: false,
     columns: {
       label: {
         title: 'Label',
@@ -103,18 +105,15 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Slug',
         type: 'slug',
         of: 'label',
-        required: false,
         editable: false,
       },
       description: {
         type: 'longText',
         title: 'Popisek',
-        required: false,
       },
       permissions: {
         title: 'Permissions',
         type: 'json',
-        required: false,
         default: '{}',
       },
     },
@@ -128,6 +127,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     sharable: false,
     ownable: false,
     icon: 'Users',
+    intl: false,
     columns: {
       // TODO: Do not make these values overridable
       name: {
@@ -150,12 +150,12 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       avatar: {
         title: 'Avatar',
         type: 'string',
-        required: false,
       },
       state: {
         title: 'State',
         type: 'enum',
         editable: false,
+        required: true,
         enum: ['active', 'invited', 'blocked', 'password-reset'],
       },
       role: {
@@ -191,6 +191,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
           title: 'Title',
           type: 'string',
           unique: true,
+          required: true,
         },
         content: {
           title: 'Content',
@@ -201,7 +202,6 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
           title: 'Zkratka',
           type: 'slug',
           of: 'title',
-          required: false,
           editable: false,
         },
         ...restColumns,
@@ -213,7 +213,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Is published',
         type: 'boolean',
         unique: false,
-        required: false,
+        translations: false,
       };
     }
 
@@ -224,17 +224,17 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         unique: false,
         autoIncrement: true,
         editable: false,
-        required: false,
         adminHidden: true,
+        translations: false,
       };
     }
 
     if (model.sharable || model.sharable === undefined) {
       model.columns.coeditors = {
         title: 'Coeditors',
-        required: false,
         type: 'json',
         default: '{}',
+        translations: false,
       };
     }
 
@@ -242,23 +242,23 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       model.columns.created_by = {
         title: 'Created by',
         editable: false,
-        required: false,
         type: 'relationship',
         targetModel: 'user',
         labelConstructor: 'name',
         fill: false,
         adminHidden: true,
+        translations: false,
       };
 
       model.columns.updated_by = {
         title: 'Updated by',
         editable: false,
-        required: false,
         type: 'relationship',
         targetModel: 'user',
         labelConstructor: 'name',
         fill: false,
         adminHidden: true,
+        translations: false,
       };
     }
 
@@ -269,7 +269,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         editable: false,
         autoIncrement: true,
         unique: true,
-        required: false,
+        translations: false,
       },
       ...model.columns,
     };
@@ -283,10 +283,11 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         return {
           ...finalColumns,
           [currentColumnKey]: {
-            required: true,
+            required: false,
             editable: true,
             unique: false,
             hide: false,
+            translations: true,
             ...(column.type === 'number' ? { autoIncrement: false } : {}),
             ...(column.type === 'slug' ? { unique: true } : {}),
             ...(column.type === 'relationship'
@@ -308,6 +309,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       ignoreSeeding: false,
       ownable: true,
       tableName: modelKey.toLocaleLowerCase(),
+      intl: true,
       ...model,
     };
   });

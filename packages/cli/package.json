@@ -24,6 +24,7 @@
     "generate:cms": "npm run starter-commands -- generate-cms",
     "regenerate:dev": "npm run starter-commands -- generate:develop --regenerate",
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
+    "db-tools:migrate": "npm run starter-commands -- db-tools:migrate",
     "seed-database": "npm run starter-commands -- seed-database"
   },
   "repository": {

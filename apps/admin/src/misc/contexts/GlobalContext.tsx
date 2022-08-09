@@ -1,7 +1,11 @@
 import { ApiResultModels, User, UserRole } from '@prom-cms/shared';
 import axios from 'axios';
 import { apiClient } from '@api';
-import { API_CURRENT_USER_URL, API_ENTRY_TYPES_URL } from '@constants';
+import {
+  API_CURRENT_USER_URL,
+  API_ENTRY_TYPES_URL,
+  API_SETTINGS_URL,
+} from '@constants';
 import { useRouter } from 'next/router';
 import { createContext, FC, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +22,10 @@ export interface IGlobalContext {
   currentUserIsAdmin: boolean;
   isBooting: boolean;
   isLoggedIn: boolean;
+  settings?: {
+    i18n: { default: string; languages: string[] };
+    app: { name: string; url: string; prefix: string; baseUrl: string };
+  };
 }
 
 export const GlobalContext = createContext<IGlobalContext>({
@@ -36,6 +44,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
   const [models, setModels] = useState();
   const [isBooting, setIsBooting] = useState(true);
   const [isNotOnline, setIsNotOnline] = useState(false);
+  const [settings, setSettings] = useState();
 
   const updateValue: IGlobalContext['updateValue'] = (key, value) => {
     switch (key) {
@@ -58,10 +67,16 @@ export const GlobalContextProvider: FC = ({ children }) => {
 
     const getModels = async () => {
       setIsBooting(true);
-      const modelsQuery = await apiClient.get(API_ENTRY_TYPES_URL, {
-        cancelToken: cancelToken.token,
-      });
+      const [modelsQuery, settingsRes] = await Promise.all([
+        apiClient.get(API_ENTRY_TYPES_URL, {
+          cancelToken: cancelToken.token,
+        }),
+        apiClient.get(API_SETTINGS_URL, {
+          cancelToken: cancelToken.token,
+        }),
+      ]);
 
+      setSettings(settingsRes.data.data);
       setModels(modelsQuery.data);
       setIsBooting(false);
     };
@@ -160,8 +175,9 @@ export const GlobalContextProvider: FC = ({ children }) => {
       isBooting: isBooting || !i18n.isInitialized,
       currentUserIsAdmin: !!(currentUser?.role && currentUser.role.id === 0),
       isLoggedIn: !!currentUser,
+      settings,
     }),
-    [currentUser, i18n.isInitialized, isBooting, models]
+    [currentUser, i18n.isInitialized, isBooting, models, settings]
   );
 
   return (

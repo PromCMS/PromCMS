@@ -6,16 +6,13 @@ class Utils
 {
   private string $modelsFolderName;
   private string $controllersFolderName;
-  private $databaseConfig;
 
   public function __construct(Container $container)
   {
     $modulesConfig = $container->get('config')['system']['modules'];
-    $databaseConfig = $container->get('config')['db'];
 
     $this->modelsFolderName = $modulesConfig['modelsFolderName'];
     $this->controllersFolderName = $modulesConfig['controllersFolderName'];
-    $this->databaseConfig = $databaseConfig;
   }
 
   /**
@@ -36,14 +33,6 @@ class Utils
 
     // Should have all of loaded model names in array
     $diff = array_values(array_diff(get_declared_classes(), $classes));
-
-    // initialize each model
-    foreach ($diff as $className) {
-      $className::setConfig(
-        $this->databaseConfig['root'],
-        $this->databaseConfig['storeConfig'],
-      );
-    }
 
     return $diff;
   }

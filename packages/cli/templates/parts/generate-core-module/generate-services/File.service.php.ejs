@@ -26,7 +26,7 @@ class FileService
     $andWhere = [];
     $orWhere = [];
 
-    return \Files::getById($id);
+    return \Files::getOneById($id);
   }
 
   /**
@@ -37,13 +37,13 @@ class FileService
     $fixedDirectoryPath = $directoryPath . ($directoryPath !== '/' ? '/' : '');
     $regexPart = str_replace('/', '\/', $fixedDirectoryPath);
 
-    return \Files::findBy([
+    return \Files::where([
       function ($file) use ($regexPart) {
         $pattern = '(' . $regexPart . ')[^\/]*(\.).*';
         $pattern = '/^' . $pattern . "$/m";
         return !!preg_match($pattern, $file['filepath']);
       },
-    ]);
+    ])->getMany();
   }
 
   /**

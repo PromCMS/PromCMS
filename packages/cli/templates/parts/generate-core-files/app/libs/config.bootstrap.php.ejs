@@ -16,6 +16,11 @@ return function (Container $container) use ($PROM_ROOT_FOLDER) {
   $APP_PREFIX = $_ENV['APP_PREFIX'] ? '/' . $_ENV['APP_PREFIX'] : '';
   $APP_ENV = $_ENV['APP_ENV'] ?? 'development';
   $IS_DEV_ENV = $APP_ENV == 'development';
+  $DEFAULT_LANGUAGE = $_ENV['LANGUAGE'] ?? 'en';
+  $LANGUAGES = array_merge(
+    [$DEFAULT_LANGUAGE],
+    explode(',', $_ENV['MORE_LANG'] ?? ''),
+  );
 
   $config = [
     'app' => [
@@ -61,8 +66,8 @@ return function (Container $container) use ($PROM_ROOT_FOLDER) {
       'uploadsPath' => $PROM_UPLOADS_ROOT,
     ],
     'i18n' => [
-      'default' => 'cs',
-      'languages' => ['cs', 'en'],
+      'default' => $DEFAULT_LANGUAGE,
+      'languages' => $LANGUAGES,
     ],
     'system' => [
       'modules' => [
