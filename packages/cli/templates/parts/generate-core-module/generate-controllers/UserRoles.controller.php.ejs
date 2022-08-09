@@ -45,19 +45,16 @@ class UserRoles
       ->skip($pageLimit * $page);
     $total = count($classInstance->getMany());
     $data = $query->getMany();
-
-    $response->getBody()->write(
-      json_encode([
-        'data' => $data,
-        'current_page' => $page,
-        'last_page' => floor($total / $pageLimit),
-        'per_page' => $pageLimit,
-        'total' => $total,
-      ]),
-    );
+    $responseData = [
+      'data' => $data,
+      'current_page' => $page,
+      'last_page' => floor($total / $pageLimit),
+      'per_page' => $pageLimit,
+      'total' => $total,
+    ];
 
     if ($page === 1) {
-      $data['data'] = array_merge(
+      $responseData['data'] = array_merge(
         [
           [
             'id' => 0,
@@ -66,11 +63,11 @@ class UserRoles
             'description' => 'Main user role provided by PROM CMS Core module',
           ],
         ],
-        $data['data'],
+        $responseData['data'],
       );
     }
 
-    $response->getBody()->write(json_encode($data));
+    $response->getBody()->write(json_encode($responseData));
 
     return $response;
   }
