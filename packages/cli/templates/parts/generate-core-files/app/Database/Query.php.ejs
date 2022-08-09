@@ -6,6 +6,7 @@ use App\Exceptions\EntityDuplicateException;
 use App\Exceptions\EntityNotFoundException;
 use Exception;
 use ParseError;
+use SleekDB\Cache;
 use SleekDB\Store;
 use SleekDB\Query as SleekQuery;
 
@@ -212,6 +213,11 @@ class Query
       ->getQuery()
       ->update($payload, true);
 
+    // Purge cache for current store - to ensure getMany() results are valid too
+    if ($result) {
+      $this->getQueryCache()->deleteAll();
+    }
+
     // Destroy query builder that was made for this instance
     $this->destroyQueryBuilder();
 
@@ -219,6 +225,7 @@ class Query
     if ($result === false) {
       throw new EntityNotFoundException();
     }
+
     $result = $result[0];
 
     if ($this->modelClass->hasTranslationsEnabled()) {
@@ -265,6 +272,9 @@ class Query
     if ($result == false) {
       return $result;
     }
+
+    // Purge cache for current store - to ensure getMany() results are valid too
+    $this->getQueryCache()->deleteAll();
 
     return new ModelResult($this->modelClass, static::applyCasts($result[0]));
   }
@@ -425,6 +435,13 @@ class Query
     }
 
     return $payload;
+  }
+
+  protected function getQueryCache(): Cache
+  {
+    return $this->getQueryBuilder()
+      ->getQuery()
+      ->getCache();
   }
 
   protected function getFieldKeyAliases()
