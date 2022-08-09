@@ -23,6 +23,7 @@
     },
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "src"],
-  "exclude": ["node_modules"]
+  "include": ["src"],
+  "exclude": ["node_modules"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
