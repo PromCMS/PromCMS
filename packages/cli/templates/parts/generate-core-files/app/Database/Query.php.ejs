@@ -217,9 +217,28 @@ class Query
     if ($result === false) {
       throw new EntityNotFoundException();
     }
+    $result = $result[0];
+
+    if ($this->modelClass->hasTranslationsEnabled()) {
+      $newResult = [];
+
+      foreach ($this->getFieldKeyAliases() as $fieldKey => $fieldValueOrKey) {
+        if (is_int($fieldKey)) {
+          if (isset($result[$fieldValueOrKey])) {
+            $newResult[$fieldValueOrKey] = $result[$fieldValueOrKey];
+          }
+
+          continue;
+        }
+
+        $newResult[$fieldKey] = $fieldValueOrKey($result);
+      }
+
+      $result = $newResult;
+    }
 
     // We apply casts and return it via ModelResult
-    return new ModelResult($this->modelClass, static::applyCasts($result[0]));
+    return new ModelResult($this->modelClass, static::applyCasts($result));
   }
 
   /**
