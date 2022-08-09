@@ -119,10 +119,16 @@ export const EntryUnderpageContextProvider: FC<{
     return itemData;
   }, [itemData, viewType]);
 
-  useEffect(
-    () => itemData && formMethods.reset(itemData),
-    [itemData, formMethods]
-  );
+  useEffect(() => {
+    if (itemData) {
+      formMethods.reset({
+        ...itemData,
+        ...(itemData.content
+          ? { content: JSON.stringify(itemData.content) }
+          : {}),
+      });
+    }
+  }, [itemData, formMethods]);
 
   const onSubmit = useCallback(
     async (values) => {
