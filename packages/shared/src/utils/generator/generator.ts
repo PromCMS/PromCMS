@@ -78,7 +78,6 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
         title: 'Label',
         type: 'string',
         required: true,
-        translations: false,
       },
       content: {
         title: 'content',
