@@ -15,11 +15,11 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       tsconfigPaths(),
       react(),
-      visualizer({
+      /*visualizer({
         filename: './dev/stats.html',
-      }),
+      }),*/
     ],
-    base: APP_URL_PREFIX || '/',
+    base: APP_URL_PREFIX,
     define: {
       APP_URL_PREFIX,
     },
