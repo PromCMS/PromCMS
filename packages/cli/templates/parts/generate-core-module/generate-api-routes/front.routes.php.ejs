@@ -11,9 +11,8 @@ return function (App $app, RouteCollectorProxy $router) {
     $args
   ) {
     $adminPath = joinPath(__DIR__, '..', '..', 'public', 'admin');
-    $content = fopen($adminPath . '/index.html', 'r');
+    $content = file_get_contents($adminPath . '/index.html', 'r');
     $response->getBody()->write($content);
-    fclose($content);
 
     return $response;
   });
