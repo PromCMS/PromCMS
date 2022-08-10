@@ -1,6 +1,6 @@
 import {
   ActionIcon,
-  InputWrapper,
+  Input,
   Paper,
   SimpleGrid,
   Text,
@@ -75,7 +75,7 @@ export const List: VFC = () => {
             }
           }}
         />
-        <InputWrapper label={t('Items')} mt="lg">
+        <Input.Wrapper label={t('Items')} mt="lg">
           <SimpleGrid cols={1}>
             {!!data && Array.isArray(data) ? (
               data.map((item, index) => (
@@ -111,7 +111,7 @@ export const List: VFC = () => {
               <Text color="dimmed">{t('No items for now')}</Text>
             )}
           </SimpleGrid>
-        </InputWrapper>
+        </Input.Wrapper>
       </Paper>
     </>
   );

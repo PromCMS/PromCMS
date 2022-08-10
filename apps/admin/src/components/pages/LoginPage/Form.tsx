@@ -1,8 +1,7 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ProfileService } from '@services';
-import { useRouter } from 'next/router';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { FirstStep } from '.';
 import { loginFormSchema } from './schema';
@@ -11,6 +10,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Button, Paper, Title } from '@mantine/core';
 import { MESSAGES } from '@constants';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginFormValues {
   email: string;
@@ -19,8 +19,8 @@ interface LoginFormValues {
   mfaImageUrl?: string;
 }
 
-export const Form: VFC = () => {
-  const { push } = useRouter();
+export const Form: FC = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const { updateValue } = useGlobalContext();
   const formMethods = useForm<LoginFormValues>({
@@ -50,7 +50,7 @@ export const Form: VFC = () => {
           updateValue('currentUser', data.data);
 
           // push user to main page
-          push('/');
+          navigate('/');
         } catch (e) {
           let message = MESSAGES.LOGIN_INVALID_CREDENTIALS;
           if (axios.isAxiosError(e) && e.response?.data?.code) {
@@ -84,8 +84,8 @@ export const Form: VFC = () => {
       <div className="flex min-h-screen w-full">
         <div className="m-auto w-full max-w-lg">
           <Title className="mb-3 ml-5 text-2xl font-semibold">
-            <Trans i18nKey="Log in (step ...)" humanStep={humanStep}>
-              Log in (step <strong>{{ humanStep }}</strong>).
+            <Trans i18nKey="Log in (step ...)" values={{ humanStep }}>
+              {`Log in (step <strong>{{ humanStep }}</strong>).`}
             </Trans>
           </Title>
           <form onSubmit={handleSubmit(onSubmitCallback)}>

@@ -1,13 +1,14 @@
 import { useMemo } from 'react';
-import { useModelInfo, useRouterQuery } from '.';
+import { useParams } from 'react-router-dom';
+import { useModelInfo } from './useModelInfo';
 
 /**
  * Quick hook to access current model information on current route.
  * @returns A current model (taken from url) information if that modelId exists
  */
 const useCurrentModel = () => {
-  const modelName = useRouterQuery('modelId');
-  const formattedModelName = useMemo(() => String(modelName), [modelName]);
+  const { modelId } = useParams();
+  const formattedModelName = useMemo(() => String(modelId), [modelId]);
   const modelInfo = useModelInfo(formattedModelName);
 
   return useMemo(

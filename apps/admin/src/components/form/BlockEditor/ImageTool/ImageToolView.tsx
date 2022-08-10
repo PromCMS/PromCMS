@@ -6,12 +6,12 @@ import {
 import ThemeProvider from '@components/ThemeProvider';
 import { Button, Popover, Textarea, TextInput } from '@mantine/core';
 import clsx from 'clsx';
-import { useEffect, useMemo, useState, VFC } from 'react';
+import { useEffect, useMemo, useState, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil, Settings } from 'tabler-icons-react';
 import { ImageToolData } from './ImageTool';
 
-export const ImageToolView: VFC<{
+export const ImageToolView: FC<{
   data: ImageToolData;
   onDataChange: (data: Partial<ImageToolData>) => void;
   readOnly?: boolean;
@@ -55,12 +55,12 @@ export const ImageToolView: VFC<{
               <Popover
                 withArrow
                 width={590}
-                position="top"
-                placement="start"
+                position="top-start"
                 withinPortal={false}
                 opened={imagePopoverOpen}
                 onClose={() => setImagePopoverOpen(false)}
-                target={
+              >
+                <Popover.Target>
                   <Button
                     className="relative flex-none"
                     radius="xl"
@@ -71,27 +71,28 @@ export const ImageToolView: VFC<{
                   >
                     {t('Change image')}
                   </Button>
-                }
-              >
-                <SmallFileList
-                  where={{
-                    mimeType: { manipulator: 'LIKE', value: '%image%' },
-                  }}
-                  multiple={false}
-                  pickedFiles={pickedFiles}
-                  onChange={onChange}
-                  triggerClose={() => setImagePopoverOpen(false)}
-                />
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <SmallFileList
+                    where={{
+                      mimeType: { manipulator: 'LIKE', value: '%image%' },
+                    }}
+                    multiple={false}
+                    pickedFiles={pickedFiles}
+                    onChange={onChange}
+                    triggerClose={() => setImagePopoverOpen(false)}
+                  />
+                </Popover.Dropdown>
               </Popover>
               <Popover
                 withArrow
                 width={590}
-                position="top"
-                placement="start"
+                position="top-start"
                 withinPortal={false}
                 opened={textPopoverOpen}
                 onClose={() => setTextPopoverOpen(false)}
-                target={
+              >
+                <Popover.Target>
                   <Button
                     className="relative flex-none"
                     radius="xl"
@@ -101,27 +102,28 @@ export const ImageToolView: VFC<{
                   >
                     {t('Change metadata')}
                   </Button>
-                }
-              >
-                <TextInput
-                  label={t('Label')}
-                  value={state.label || ''}
-                  placeholder={t('Some text')}
-                  onChange={onTextInput}
-                />
-                <Textarea
-                  label={t('Description')}
-                  mt="sm"
-                  value={state.description || ''}
-                  placeholder={t('Some text')}
-                  onChange={onDescriptionInput}
-                />
-                <Button
-                  onClick={() => setTextPopoverOpen(false)}
-                  className="mt-5"
-                >
-                  Ok
-                </Button>
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <TextInput
+                    label={t('Label')}
+                    value={state.label || ''}
+                    placeholder={t('Some text')}
+                    onChange={onTextInput}
+                  />
+                  <Textarea
+                    label={t('Description')}
+                    mt="sm"
+                    value={state.description || ''}
+                    placeholder={t('Some text')}
+                    onChange={onDescriptionInput}
+                  />
+                  <Button
+                    onClick={() => setTextPopoverOpen(false)}
+                    className="mt-5"
+                  >
+                    Ok
+                  </Button>
+                </Popover.Dropdown>
               </Popover>
             </div>
           </>

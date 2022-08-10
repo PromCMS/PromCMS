@@ -12,7 +12,7 @@ const AsideItemWrap: FC<
       'rounded-lg border-2 border-project-border shadow-lg shadow-blue-100',
       className
     )}
-    shadow="smallBlue"
+    shadow="sm"
     withBorder
     {...rest}
   >

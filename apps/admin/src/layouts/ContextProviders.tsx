@@ -1,9 +1,9 @@
 import { GlobalContextProvider } from '@contexts/GlobalContext';
 import { apiClient } from '@api';
-import { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { SWRConfig } from 'swr';
 
-const ContextProviders: FC = ({ children }) => {
+const ContextProviders: FC<PropsWithChildren> = ({ children }) => {
   return (
     <SWRConfig
       value={{

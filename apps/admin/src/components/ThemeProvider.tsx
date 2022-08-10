@@ -1,55 +1,72 @@
-import { MantineProvider } from '@mantine/core';
-import { FC } from 'react';
+import { MantineProvider, MantineThemeOverride } from '@mantine/core';
+import { FC, PropsWithChildren } from 'react';
 
-const ThemeProvider: FC = ({ children }) => (
-  <MantineProvider
-    withGlobalStyles
-    withNormalizeCSS
-    defaultProps={{
-      Input: {
+export const theme: MantineThemeOverride = {
+  /** Put your mantine theme override here */
+  colorScheme: 'light',
+  fontFamily: "'Open Sans', sans-serif",
+  defaultRadius: 'md',
+  shadows: {
+    sm: '0 10px 15px -3px #dbeafe, 0 4px 6px -4px #dbeafe',
+  },
+  components: {
+    Input: {
+      defaultProps: {
         size: 'md',
       },
-      TextInput: {
+    },
+    TextInput: {
+      defaultProps: {
         size: 'md',
       },
-      PasswordInput: {
+    },
+    PasswordInput: {
+      defaultProps: {
         size: 'md',
         radius: 'md',
       },
-      Textarea: {
+    },
+    Textarea: {
+      defaultProps: {
         size: 'md',
       },
-      Select: {
+    },
+    Select: {
+      defaultProps: {
         size: 'md',
       },
-      Modal: {
+    },
+    Modal: {
+      defaultProps: {
         size: 'lg',
         overflow: 'outside',
         transition: 'slide-up',
         centered: 'true',
       },
-      Popover: {
+    },
+    Popover: {
+      defaultProps: {
         shadow: 'lg',
-        radius: 'lg',
+        radius: 'md',
       },
-    }}
-    styles={{
-      Divider: (theme) => ({
+    },
+    Divider: {
+      styles: (theme) => ({
         root: {
           borderTopColor: `#e5e7eb!important`,
         },
       }),
-    }}
-    theme={{
-      /** Put your mantine theme override here */
-      colorScheme: 'light',
-      fontFamily: "'Open Sans', sans-serif",
-      defaultRadius: 'md',
-      shadows: {
-        smallBlue: '0 10px 15px -3px #dbeafe, 0 4px 6px -4px #dbeafe',
+    },
+    Button: {
+      defaultProps: {
+        radius: 'md',
       },
-    }}
-  >
+    },
+  },
+};
+
+const ThemeProvider: FC<PropsWithChildren> = ({ children }) => (
+  <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
     {children}
   </MantineProvider>
 );

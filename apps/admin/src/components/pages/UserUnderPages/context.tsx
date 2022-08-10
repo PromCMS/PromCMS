@@ -2,8 +2,8 @@ import { useModelInfo } from '@hooks/useModelInfo';
 import { useUser } from '@hooks/useUser';
 import { ApiResultModel, User } from '@prom-cms/shared';
 import { UserService } from '@services';
-import { useRouter } from 'next/router';
-import { FC, createContext, useContext } from 'react';
+import { FC, createContext, useContext, PropsWithChildren } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { KeyedMutator } from 'swr';
 
 type View = 'create' | 'update';
@@ -26,17 +26,21 @@ export const Context = createContext<IContext>({
 
 export const useData = () => useContext(Context);
 
-export const ContextProvider: FC<{ view: View }> = ({ view, children }) => {
-  const { query, push } = useRouter();
+export const ContextProvider: FC<PropsWithChildren<{ view: View }>> = ({
+  view,
+  children,
+}) => {
+  const navigate = useNavigate();
+  const { userId } = useParams();
   const model = useModelInfo('users') as ApiResultModel;
-  const currentUser = useUser(query.userId as string, {
+  const currentUser = useUser(userId as string, {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnMount: true,
     revalidateOnReconnect: false,
     refreshWhenHidden: false,
   });
-  const exitView = () => push(UserService.getListUrl());
+  const exitView = () => navigate(UserService.getListUrl());
 
   return (
     <Context.Provider

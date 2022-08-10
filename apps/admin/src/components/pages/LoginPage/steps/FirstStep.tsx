@@ -1,10 +1,10 @@
-import { Anchor, Group, PasswordInput, TextInput } from '@mantine/core';
-import Link from 'next/link';
-import { VFC } from 'react';
+import { Group, PasswordInput, TextInput } from '@mantine/core';
+import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
-export const FirstStep: VFC = () => {
+export const FirstStep: FC = () => {
   const { t } = useTranslation();
   const {
     register,
@@ -16,30 +16,16 @@ export const FirstStep: VFC = () => {
       <TextInput
         label={t('Email')}
         type="email"
-        error={t(errors?.email?.message)}
+        error={t(errors?.email?.message as unknown as string)}
         className="w-full"
         {...register('email')}
       />
       <Group position="right" className="z-10 -mb-12">
-        <Link href="/reset-password" passHref>
-          <Anchor<'a'>
-            sx={(theme) => ({
-              paddingTop: 2,
-              color:
-                theme.colors[theme.primaryColor][
-                  theme.colorScheme === 'dark' ? 4 : 6
-                ],
-              fontWeight: 500,
-              fontSize: theme.fontSizes.xs,
-            })}
-          >
-            {t('Forgot password?')}
-          </Anchor>
-        </Link>
+        <Link to="/reset-password">{t('Forgot password?')}</Link>
       </Group>
       <PasswordInput
         label={t('Password')}
-        error={t(errors?.password?.message)}
+        error={t(errors?.password?.message as unknown as string)}
         className="w-full"
         {...register('password')}
       />

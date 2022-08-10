@@ -122,7 +122,7 @@ return function (App $app, Router $router) {
 
     // User roles
     $innerRouter
-      ->group('/{route:user-roles|userroles}', function (Router $innerRouter) {
+      ->group('/{route:user-roles|userRoles}', function (Router $innerRouter) {
         $innerRouter->get('', '\App\Controllers\UserRoles:getInfo');
 
         $innerRouter->group('/items', function (Router $innerRouter) {
@@ -139,7 +139,7 @@ return function (App $app, Router $router) {
       ->add($auth);
     $innerRouter
       ->get(
-        '/{route:user-roles|userroles}/items/{itemId}',
+        '/{route:user-roles|userRoles}/items/{itemId}',
         '\App\Controllers\UserRoles:getOne',
       )
       ->add($auth);

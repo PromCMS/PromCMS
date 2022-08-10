@@ -1,5 +1,5 @@
 import { useId } from '@mantine/hooks';
-import { useNotifications } from '@mantine/notifications';
+import { showNotification, updateNotification } from '@mantine/notifications';
 import { useTranslation } from 'react-i18next';
 
 export interface NotificationConfig {
@@ -10,7 +10,6 @@ export interface NotificationConfig {
 }
 const autocloseInterval = 4000;
 export const useRequestWithNotifications = () => {
-  const notifications = useNotifications();
   const notifId = useId();
   const { t } = useTranslation();
 
@@ -18,7 +17,7 @@ export const useRequestWithNotifications = () => {
     config: NotificationConfig,
     fc: T
   ) => {
-    const notificationId = notifications.showNotification({
+    showNotification({
       id: notifId,
       loading: true,
       title: config.title,
@@ -30,14 +29,16 @@ export const useRequestWithNotifications = () => {
     try {
       const fcRes = await fc();
 
-      notifications.updateNotification(notificationId, {
+      updateNotification({
+        id: notifId,
         message: config.successMessage || t('Task completed successfully'),
         autoClose: autocloseInterval,
       });
 
       return fcRes;
     } catch (e) {
-      notifications.updateNotification(notificationId, {
+      updateNotification({
+        id: notifId,
         color: 'red',
         message: config.errorMessage
           ? typeof config.errorMessage === 'function'

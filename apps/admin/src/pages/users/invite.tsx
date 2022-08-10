@@ -1,8 +1,8 @@
 import UserUnderpages from '@components/pages/UserUnderPages';
 import { PageLayout } from '@layouts';
-import { NextPage } from '@custom-types';
+import { Page } from '@custom-types';
 
-const CreateUserPage: NextPage = () => {
+const CreateUserPage: Page = () => {
   return (
     <PageLayout>
       <UserUnderpages.ContextProvider view="create">

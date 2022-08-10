@@ -13,8 +13,7 @@ export const CopyName: VFC<{ name: string }> = ({ name }) => {
   return (
     <Tooltip
       label={t('Copied!')}
-      gutter={5}
-      placement="center"
+      offset={5}
       position="bottom"
       radius="xl"
       transition="slide-down"

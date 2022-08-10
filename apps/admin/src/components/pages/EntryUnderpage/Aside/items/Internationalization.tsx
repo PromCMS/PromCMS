@@ -1,5 +1,6 @@
 import AsideItemWrap from '@components/AsideItemWrap';
 import { LanguageSelect } from '@components/form/LanguageSelect';
+import { useGlobalContext } from '@contexts/GlobalContext';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useEntryUnderpageContext } from '../../context';
@@ -7,6 +8,11 @@ import { useEntryUnderpageContext } from '../../context';
 export const Internationalization: FC = () => {
   const { t } = useTranslation();
   const { currentView, language, setLanguage } = useEntryUnderpageContext();
+  const { settings } = useGlobalContext();
+
+  if (settings?.i18n.languages.length === 0) {
+    return null;
+  }
 
   return (
     <AsideItemWrap title={t('Internationalization')}>

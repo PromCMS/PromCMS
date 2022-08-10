@@ -185,7 +185,7 @@ export class GenerateCMSProgram extends Command {
           await fs.emptyDir(adminFinalPath);
 
           fs.copy(
-            path.join(ADMIN_ROOT, 'out'),
+            path.join(ADMIN_ROOT, 'dist'),
             path.join(FINAL_PATH, 'public', 'admin'),
             {
               recursive: true,

@@ -1,19 +1,19 @@
 import { useModelItem } from '@hooks/useModelItem';
-import { SiteLayout } from '@layouts';
 import { Button, Divider, Drawer, Title, Tooltip } from '@mantine/core';
 import { useClipboard } from '@mantine/hooks';
 import { ClipboardCheck } from 'tabler-icons-react';
 import { FileService } from '@services';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
-import { NextPage } from '../../../../types';
-import FilesPage from '../../index';
+import { Page } from '@custom-types';
+import { useRouterQuery } from '@hooks/useRouterQuery';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const FilePage: NextPage = () => {
+const FilePage: Page = () => {
   const { t } = useTranslation();
-  const { back, query } = useRouter();
+  const { fileId } = useParams();
+  const navigate = useNavigate();
   const clipboard = useClipboard();
-  const { data, isLoading } = useModelItem('files', query.fileId as string);
+  const { data, isLoading } = useModelItem('files', fileId as string);
 
   // TODO: Get base url from server settings
   const onCopyClick = () =>
@@ -28,7 +28,7 @@ const FilePage: NextPage = () => {
     <Drawer
       size="xl"
       opened={true}
-      onClose={back}
+      onClose={() => navigate(-1)}
       padding="xl"
       position="right"
       closeButtonLabel={t('Close')}
@@ -51,8 +51,6 @@ const FilePage: NextPage = () => {
           <Divider mb="lg" mt="sm" size="sm" />
           <Tooltip
             label={t('Link copied!')}
-            gutter={5}
-            placement="center"
             position="bottom"
             radius="xl"
             transition="slide-down"
@@ -77,15 +75,6 @@ const FilePage: NextPage = () => {
         </>
       )}
     </Drawer>
-  );
-};
-
-FilePage.getLayout = function getLayout(page) {
-  return (
-    <SiteLayout>
-      <FilesPage />
-      {page}
-    </SiteLayout>
   );
 };
 

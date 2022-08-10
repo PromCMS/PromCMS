@@ -1,7 +1,5 @@
 import { PageLayout } from '@layouts';
-import { FC, useMemo, VFC } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { FC, PropsWithChildren, useMemo } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mantine/core';
@@ -12,13 +10,14 @@ import {
   UserCircle,
   UserExclamation,
 } from 'tabler-icons-react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const items = [
   { title: 'Profile', url: '/settings/profile', Icon: UserCircle },
   { title: 'Authentication', url: '/settings/password', Icon: Lock },
   {
     title: 'User Roles',
-    url: '/settings/user-roles',
+    url: '/settings/roles',
     Icon: UserExclamation,
     canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
       currentUser?.role.id === 0,
@@ -35,8 +34,9 @@ const items = [
   },
 ];
 
-const LeftAside: VFC = () => {
-  const { pathname } = useRouter();
+const LeftAside: FC = () => {
+  let navigate = useNavigate();
+  const { pathname } = useLocation();
   const { t } = useTranslation();
   const currentUser = useCurrentUser();
 
@@ -54,35 +54,35 @@ const LeftAside: VFC = () => {
       <nav className="mt-24 flex flex-none gap-3 lg:flex-col">
         {filteredItems &&
           filteredItems.map(({ url, title, Icon }) => (
-            <Link key={url} href={url} passHref>
-              <Button
-                component="a"
-                size="lg"
-                variant="subtle"
-                color={pathname === url ? 'green' : 'blue'}
-                className={clsx(
-                  pathname === url
-                    ? 'border-green-300 underline'
-                    : 'border-blue-200',
-                  'border-2 bg-white'
-                )}
-                styles={() => ({
-                  inner: {
-                    justifyContent: 'space-between',
-                  },
-                })}
-                leftIcon={<Icon className="mr-auto aspect-square w-6" />}
-              >
-                {t(title)}
-              </Button>
-            </Link>
+            <Button
+              key={url}
+              component="a"
+              size="lg"
+              variant="subtle"
+              color={pathname === url ? 'green' : 'blue'}
+              className={clsx(
+                pathname === url
+                  ? 'border-green-300 underline'
+                  : 'border-blue-200',
+                'border-2 bg-white'
+              )}
+              styles={() => ({
+                inner: {
+                  justifyContent: 'space-between',
+                },
+              })}
+              leftIcon={<Icon className="mr-auto aspect-square w-6" />}
+              onClick={() => navigate(url, { replace: true })}
+            >
+              {t(title)}
+            </Button>
           ))}
       </nav>
     </div>
   );
 };
 
-export const ProfileLayout: FC = ({ children }) => {
+export const ProfileLayout: FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -90,7 +90,9 @@ export const ProfileLayout: FC = ({ children }) => {
       <PageLayout.Header title={t('Settings')} />
 
       <PageLayout.Section className="mt-5 min-h-[500px] justify-evenly lg:flex">
-        <div className="w-full">{children}</div>
+        <div className="w-full">
+          <Outlet />
+        </div>
       </PageLayout.Section>
     </PageLayout>
   );

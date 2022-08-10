@@ -1,14 +1,10 @@
-import { forwardRef, useCallback } from 'react';
-import dynamic from 'next/dynamic';
+import { forwardRef, useCallback, lazy } from 'react';
 import type EditorJS from '@editorjs/editorjs';
 import { Controller, useFormContext } from 'react-hook-form';
 import type { LazyEditorProps } from './LazyEditor';
 import { useTranslation } from 'react-i18next';
 
-const LazyEditor = dynamic(
-  async () => (await import('./LazyEditor')).LazyEditor,
-  { ssr: false }
-);
+const LazyEditor = lazy(async () => await import('./LazyEditor'));
 
 export type BlockEditorProps = LazyEditorProps;
 
@@ -32,7 +28,7 @@ export const BlockEditor = forwardRef<EditorJS, BlockEditorProps>(
             editorRef={editorRef}
             onChange={onEditorChange(onChange)}
             placeholder={t('Start typing here...') as string}
-            error={errors?.[name]?.message}
+            error={errors?.[name]?.message as unknown as string}
             className="mb-20"
             {...props}
           />

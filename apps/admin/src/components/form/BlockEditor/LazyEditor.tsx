@@ -168,3 +168,5 @@ export const LazyEditor: FC<LazyEditorProps> = ({
     </div>
   );
 };
+
+export default LazyEditor;

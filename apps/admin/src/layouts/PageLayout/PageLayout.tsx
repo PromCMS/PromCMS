@@ -1,5 +1,10 @@
 import clsx from 'clsx';
-import { DetailedHTMLProps, FC, HTMLAttributes, VFC } from 'react';
+import {
+  DetailedHTMLProps,
+  FC,
+  HTMLAttributes,
+  PropsWithChildren,
+} from 'react';
 import { ReactChildren } from '@custom-types';
 
 export interface PageLayoutProps {
@@ -16,7 +21,7 @@ export interface SectionProps
   title?: string;
 }
 
-const Header: VFC<HeaderProps> = ({ title }) => {
+const Header: FC<HeaderProps> = ({ title }) => {
   return (
     <header className="mt-6">
       <h1 className="text-4xl font-semibold">{title}</h1>
@@ -25,7 +30,12 @@ const Header: VFC<HeaderProps> = ({ title }) => {
   );
 };
 
-const Section: FC<SectionProps> = ({ children, className, title, ...rest }) => {
+const Section: FC<PropsWithChildren<SectionProps>> = ({
+  children,
+  className,
+  title,
+  ...rest
+}) => {
   return (
     <section
       className={clsx(
@@ -45,7 +55,7 @@ const Section: FC<SectionProps> = ({ children, className, title, ...rest }) => {
   );
 };
 
-export const PageLayout: FC<PageLayoutProps> & {
+export const PageLayout: FC<PropsWithChildren<PageLayoutProps>> & {
   Header: typeof Header;
   Section: typeof Section;
 } = ({ children, withAside, ...rest }) => {
@@ -60,7 +70,10 @@ const useClassNames = () => ({
   aside: clsx('w-full flex-none lg:max-w-xs'),
 });
 
-const PageLayoutWithAside: FC<PageLayoutProps> = ({ children, leftAside }) => {
+const PageLayoutWithAside: FC<PropsWithChildren<PageLayoutProps>> = ({
+  children,
+  leftAside,
+}) => {
   const classNames = useClassNames();
 
   return (

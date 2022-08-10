@@ -2,7 +2,7 @@ import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
 import { ItemID, PagedResult } from '@prom-cms/shared';
 import clsx from 'clsx';
-import { useCallback, useMemo, VFC } from 'react';
+import { PropsWithChildren, useCallback, useMemo, VFC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { createIterativeArray } from '@utils';
 import { ActionIcon, Group, Paper } from '@mantine/core';
@@ -44,18 +44,15 @@ export interface TableViewProps {
   disabled?: boolean;
 }
 
-const TableSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
+const TableSkeleton: FC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton className={clsx(className, 'h-7 w-full')} {...rest} />
 );
 
 const iterativeSkeletonArray = createIterativeArray(5);
 
-const DynamicDraggable: FC<{ index: number; id: ItemID; toggled: boolean }> = ({
-  children,
-  index,
-  id,
-  toggled,
-}) => {
+const DynamicDraggable: FC<
+  PropsWithChildren<{ index: number; id: ItemID; toggled: boolean }>
+> = ({ children, index, id, toggled }) => {
   const classNames = useClassNames();
 
   if (!toggled) {
@@ -63,6 +60,7 @@ const DynamicDraggable: FC<{ index: number; id: ItemID; toggled: boolean }> = ({
   }
 
   return (
+    // @ts-ignore
     <Draggable index={index} draggableId={String(id)}>
       {(provided, snapshot) => (
         <tr
@@ -140,12 +138,9 @@ const TableView: VFC<TableViewProps> = ({
 
   return (
     <>
+      {/* @ts-ignore */}
       <DragDropContext onDragEnd={onDragEnd}>
-        <Paper
-          withBorder
-          shadow="smallBlue"
-          className={classNames.tableWrapper}
-        >
+        <Paper withBorder shadow="sm" className={classNames.tableWrapper}>
           <table className="min-w-full leading-normal">
             <thead>
               <tr>
@@ -171,17 +166,20 @@ const TableView: VFC<TableViewProps> = ({
                 )}
               </tr>
             </thead>
+            {/* @ts-ignore */}
             <Droppable
               droppableId="dnd-table-view"
               direction="vertical"
               isDropDisabled={!ordering}
             >
               {(provided) => (
+                // @ts-ignore
                 <tbody {...provided.droppableProps} ref={provided.innerRef}>
                   {/* Items  */}
                   {!!items.length &&
                     !isLoading &&
                     items.map((itemData, index) => (
+                      // @ts-ignore
                       <DynamicDraggable
                         key={itemData.id}
                         index={index}

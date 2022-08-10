@@ -35,8 +35,8 @@ export const ImageItem: FC<ImageInfo> = ({ id, description, title }) => {
             withinPortal={false}
             width={590}
             position="top"
-            placement="center"
-            target={
+          >
+            <Popover.Target>
               <ActionIcon
                 size="xl"
                 color="blue"
@@ -47,28 +47,29 @@ export const ImageItem: FC<ImageInfo> = ({ id, description, title }) => {
               >
                 <Settings size={30} />
               </ActionIcon>
-            }
-          >
-            <TextInput
-              label={t('Title')}
-              value={title || ''}
-              placeholder={t('Some text')}
-              onChange={(e) =>
-                changeMetadata('title', id, e.currentTarget.value)
-              }
-            />
-            <Textarea
-              label={t('Description')}
-              mt="sm"
-              value={description || ''}
-              placeholder={t('Some text')}
-              onChange={(e) =>
-                changeMetadata('description', id, e.currentTarget.value)
-              }
-            />
-            <Button onClick={() => setPopoverOpen(false)} className="mt-5">
-              Ok
-            </Button>
+            </Popover.Target>
+            <Popover.Dropdown>
+              <TextInput
+                label={t('Title')}
+                value={title || ''}
+                placeholder={t('Some text')}
+                onChange={(e) =>
+                  changeMetadata('title', id, e.currentTarget.value)
+                }
+              />
+              <Textarea
+                label={t('Description')}
+                mt="sm"
+                value={description || ''}
+                placeholder={t('Some text')}
+                onChange={(e) =>
+                  changeMetadata('description', id, e.currentTarget.value)
+                }
+              />
+              <Button onClick={() => setPopoverOpen(false)} className="mt-5">
+                Ok
+              </Button>
+            </Popover.Dropdown>
           </Popover>
           <ActionIcon
             size="xl"

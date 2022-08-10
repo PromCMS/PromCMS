@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
 import { useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRouterQuery } from '.';
 
 export function useActionRoute<T extends string>(): {
@@ -8,32 +8,35 @@ export function useActionRoute<T extends string>(): {
   update: (nextActionName: string, payload?: string | undefined) => void;
   remove: () => void;
 } {
-  const { push, pathname, query } = useRouter();
+  const navigate = useNavigate();
+  const { search } = useLocation();
   const actions = useRouterQuery('action');
 
   const update = useCallback(
     (nextActionName: string, payload: string = '') => {
-      push({
-        pathname,
-        query: {
-          ...query,
-          action: `${nextActionName}${payload ? '/' : ''}${payload}`,
-        },
+      const searchParams = new URLSearchParams(search);
+
+      searchParams.set(
+        'action',
+        `${nextActionName}${payload ? '/' : ''}${payload}`
+      );
+
+      navigate({
+        search: new URLSearchParams(search).toString(),
       });
     },
-    [pathname, push, query]
+    [search]
   );
 
   const remove = useCallback(() => {
-    const newQuery = { ...query };
+    const searchParams = new URLSearchParams(search);
 
-    delete newQuery['action'];
+    searchParams.delete('action');
 
-    push({
-      pathname,
-      query: newQuery,
+    navigate({
+      search: new URLSearchParams(search).toString(),
     });
-  }, [pathname, push, query]);
+  }, [search]);
 
   if (!actions || Array.isArray(actions))
     return { type: undefined, payload: undefined, update, remove };

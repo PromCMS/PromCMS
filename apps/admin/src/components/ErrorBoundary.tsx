@@ -1,39 +1,56 @@
-import { Component } from 'react';
+import { Button, Code, Paper, Title } from '@mantine/core';
+import { Component, PropsWithChildren } from 'react';
+import { theme } from './ThemeProvider';
 
-class ErrorBoundary extends Component<{}, { hasError: boolean }> {
+class ErrorBoundary extends Component<
+  PropsWithChildren,
+  { hasError: boolean; errorInfo?: Error }
+> {
   constructor(props) {
     super(props);
 
-    // Define a state variable to track whether is an error or not
     this.state = { hasError: false };
   }
-  static getDerivedStateFromError(error) {
-    // Update state so the next render will show the fallback UI
 
+  static getDerivedStateFromError(error) {
     return { hasError: true };
   }
-  componentDidCatch(error, errorInfo) {
-    // You can use your own error logging service here
+
+  componentDidCatch(error: Error, errorInfo: { componentStack: string }) {
+    this.setState({
+      errorInfo: error,
+    });
+
     console.log({ error, errorInfo });
   }
+
   render() {
-    // Check if the error is thrown
     if (this.state.hasError) {
-      // You can render any custom fallback UI
       return (
-        <div>
-          <h2>Oops, there is an error!</h2>
-          <button
-            type="button"
-            onClick={() => this.setState({ hasError: false })}
-          >
-            Try again?
-          </button>
+        <div className="flex min-h-screen">
+          <div className="m-auto text-center">
+            <Title order={1} mb="lg" className="text-red-500">
+              Oops, there is an error!
+            </Title>
+            <Paper
+              withBorder
+              shadow="xl"
+              mb="lg"
+              p="md"
+              className="max-w-[1000px]"
+            >
+              <Code>{this.state.errorInfo?.stack}</Code>
+            </Paper>
+            <Button
+              type="button"
+              onClick={() => this.setState({ hasError: false })}
+            >
+              Try again?
+            </Button>
+          </div>
         </div>
       );
     }
-
-    // Return children components in case of no error
 
     return this.props.children;
   }

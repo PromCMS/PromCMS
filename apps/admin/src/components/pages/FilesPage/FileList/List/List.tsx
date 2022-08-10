@@ -8,7 +8,11 @@ import { FileItemSkeleton, FileItem, FileItemProps } from './FileItem';
 import { FolderItem, FolderItemProps } from './FolderItem';
 import { NewFolderCreator } from './NewFolderCreator';
 import axios from 'axios';
-import { useNotifications } from '@mantine/notifications';
+import {
+  showNotification,
+  updateNotification,
+  useNotifications,
+} from '@mantine/notifications';
 import { Transition } from '@mantine/core';
 
 export const List: VFC = () => {
@@ -36,8 +40,9 @@ export const List: VFC = () => {
 
   const onFolderDeleteClick: FolderItemProps['onDeleteClick'] = useCallback(
     async (path) => {
-      const notificationId = notifications.showNotification({
-        id: 'Deleting folder',
+      const notificationId = 'Deleting folder';
+      showNotification({
+        id: notificationId,
         loading: true,
         title: 'Deleting folder',
         message: t('Deleting your folder...'),
@@ -63,21 +68,24 @@ export const List: VFC = () => {
             path: { type: 'none' },
           });
 
-          notifications.updateNotification(notificationId, {
+          updateNotification({
+            id: notificationId,
             color: 'green',
             message: t('Your folder has been deleted'),
             autoClose: 2000,
           });
         } catch (e) {
           if (axios.isAxiosError(e) && e.response?.status === 400) {
-            notifications.updateNotification(notificationId, {
+            updateNotification({
+              id: notificationId,
               color: 'red',
               message: t('This folder is not empty! Delete its contents first'),
               autoClose: 2000,
             });
             return;
           }
-          notifications.updateNotification(notificationId, {
+          updateNotification({
+            id: notificationId,
             color: 'red',
             message: t('An unexpected error happened'),
             autoClose: 2000,

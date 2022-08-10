@@ -6,22 +6,25 @@ import {
   useCallback,
   VFC,
 } from 'react';
-import Link from 'next/link';
 import { FileService } from '@services';
 import { useClassNames as getClassnames } from '../../useClassNames';
 import { ActionIcon } from '@mantine/core';
 import { Trash } from 'tabler-icons-react';
+import { Link } from 'react-router-dom';
 
 const classNames = getClassnames();
 
 const LinkItem: FC<
-  { itemId: ItemID } & DetailedHTMLProps<
-    AnchorHTMLAttributes<HTMLAnchorElement>,
-    HTMLAnchorElement
+  { itemId: ItemID } & Omit<
+    DetailedHTMLProps<
+      AnchorHTMLAttributes<HTMLAnchorElement>,
+      HTMLAnchorElement
+    >,
+    'ref'
   >
 > = ({ itemId, children, className, ...rest }) => (
-  <Link href={FileService.getUrl(itemId)}>
-    <a {...rest}>{children}</a>
+  <Link to={FileService.getUrl(itemId)} {...rest}>
+    {children}
   </Link>
 );
 

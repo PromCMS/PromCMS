@@ -2,7 +2,6 @@ import useCurrentModel from '@hooks/useCurrentModel';
 import useCurrentModelItem from '@hooks/useCurrentModelItem';
 import { ApiResultItem } from '@prom-cms/shared';
 import { EntryService } from '@services';
-import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -31,6 +30,7 @@ import { Dispatch } from 'react';
 import { SetStateAction } from 'react';
 import { useLocalStorage } from '@mantine/hooks';
 import { useSettings } from '@hooks/useSettings';
+import { useNavigate } from 'react-router-dom';
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType;
@@ -81,7 +81,7 @@ export const EntryUnderpageContextProvider: FC<{
     defaultValue: true,
     deserialize: (value) => value === 'true',
   });
-  const { push } = useRouter();
+  const navigate = useNavigate();
   const editorRef = useRef<EditorJS>(null);
   // We make copy out of ref that came from useOnSubmit hook and make an object that contains refs
   const formContentRefs = useRef({ editorRef });
@@ -196,7 +196,7 @@ export const EntryUnderpageContextProvider: FC<{
                 throw new Error('No data has been received');
               }
 
-              push(EntryService.getListUrl(currentModel?.name as string));
+              navigate(EntryService.getListUrl(currentModel?.name as string));
             }
           }
         );
@@ -226,7 +226,7 @@ export const EntryUnderpageContextProvider: FC<{
       currentModel,
       itemData,
       mutate,
-      push,
+      navigate,
       reqNotification,
       setError,
       t,
@@ -239,7 +239,7 @@ export const EntryUnderpageContextProvider: FC<{
     () => ({
       currentView: viewType,
       exitView: () => {
-        push(EntryService.getListUrl(currentModel?.name as string));
+        navigate(EntryService.getListUrl(currentModel?.name as string));
       },
       itemData: updatedItemData as ApiResultItem,
       itemIsError,
@@ -261,7 +261,7 @@ export const EntryUnderpageContextProvider: FC<{
       itemIsMissing,
       mutate,
       onSubmit,
-      push,
+      navigate,
       setAsideOpen,
       updatedItemData,
       viewType,
