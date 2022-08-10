@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}'],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     container: {
       padding: {
