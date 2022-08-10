@@ -1,6 +1,6 @@
 import BackendImage from '@components/BackendImage';
 import { SmallFileList } from '@components/FilePickerModal/SmallFileList';
-import { Button, InputWrapper, Popover } from '@mantine/core';
+import { Button, Input, Popover } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
 import {
@@ -73,7 +73,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
     return (
       <>
         <div className={clsx(wrapperClassName, className)}>
-          <InputWrapper size="md" label={label} error={error}>
+          <Input.Wrapper size="md" label={label} error={error}>
             <div className="mt-1 flex items-center">
               <div className="relative mr-6 aspect-square w-20 overflow-hidden rounded-full">
                 {modalPickedFiles.length ? (
@@ -98,7 +98,10 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                 opened={modalOpen}
                 onClose={onClose}
                 withinPortal={false}
-                target={
+                width={590}
+                position="bottom-end"
+              >
+                <Popover.Target>
                   <Button
                     className="flex-none"
                     color="ghost"
@@ -108,24 +111,22 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                   >
                     {t('Change')}
                   </Button>
-                }
-                width={590}
-                placement="end"
-                position="bottom"
-              >
-                <SmallFileList
-                  where={{
-                    mimeType: { manipulator: 'LIKE', value: '%image%' },
-                  }}
-                  title={t('Choose an image')}
-                  triggerClose={onClose}
-                  multiple={multiple}
-                  pickedFiles={modalPickedFiles}
-                  onChange={onChangeCallback}
-                />
+                </Popover.Target>
+                <Popover.Dropdown>
+                  <SmallFileList
+                    where={{
+                      mimeType: { manipulator: 'LIKE', value: '%image%' },
+                    }}
+                    title={t('Choose an image')}
+                    triggerClose={onClose}
+                    multiple={multiple}
+                    pickedFiles={modalPickedFiles}
+                    onChange={onChangeCallback}
+                  />
+                </Popover.Dropdown>
               </Popover>
             </div>
-          </InputWrapper>
+          </Input.Wrapper>
         </div>
       </>
     );

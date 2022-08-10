@@ -1,23 +1,22 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNotifications } from '@mantine/notifications';
+import { showNotification } from '@mantine/notifications';
 import axios from 'axios';
 import { ProfileService } from '@services';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import Link from 'next/link';
 
 import { initializeResetPasswordFormSchema } from './schema';
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, Paper, TextInput } from '@mantine/core';
 import { Check } from 'tabler-icons-react';
+import { Link } from 'react-router-dom';
 
 type FormValues = {
   email: string;
 };
 
-export const InitializeForm: VFC = () => {
+export const InitializeForm: FC = () => {
   const { t } = useTranslation();
-  const notifications = useNotifications();
   const formMethods = useForm<FormValues>({
     resolver: yupResolver(initializeResetPasswordFormSchema),
     defaultValues: {
@@ -33,7 +32,7 @@ export const InitializeForm: VFC = () => {
       await ProfileService.requestPasswordReset({ email });
     } catch (e) {
       if (axios.isAxiosError(e)) {
-        notifications.showNotification({
+        showNotification({
           id: 'reset-password-request-notification',
           color: 'red',
           title: 'An error happened',
@@ -81,16 +80,17 @@ export const InitializeForm: VFC = () => {
                         i18nKey={
                           'Please check your inbox on {{providedEmail}} and follow instructions there.'
                         }
-                        providedEmail={providedEmail}
+                        values={{ providedEmail }}
+                        components={{ 1: <b /> }}
                       >
-                        Please check your inbox on <b>{{ providedEmail }}</b>{' '}
-                        and follow instructions there.
+                        {`Please check your inbox on <1>{{ providedEmail }}</1> and follow instructions there.`}
                       </Trans>
                     </p>
-                    <Link href="/login">
-                      <a className="mt-5 block font-semibold text-blue-400 hover:underline">
-                        {t('Back to login')}
-                      </a>
+                    <Link
+                      to="/login"
+                      className="mt-5 block font-semibold text-blue-400 hover:underline"
+                    >
+                      {t('Back to login')}
                     </Link>
                   </div>
                 </>

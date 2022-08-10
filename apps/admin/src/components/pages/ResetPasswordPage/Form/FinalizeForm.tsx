@@ -1,15 +1,15 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useNotifications } from '@mantine/notifications';
+import { showNotification, useNotifications } from '@mantine/notifications';
 import axios from 'axios';
 import { ProfileService } from '@services';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import Link from 'next/link';
 
 import { finalizeResetPasswordFormSchema } from './schema';
 import { useTranslation } from 'react-i18next';
 import { Button, Paper, PasswordInput } from '@mantine/core';
 import { Check, X } from 'tabler-icons-react';
+import { Link } from 'react-router-dom';
 
 type FormValues = {
   new_password: string;
@@ -17,9 +17,8 @@ type FormValues = {
   token: string;
 };
 
-export const FinalizeForm: VFC<{ token?: string }> = ({ token }) => {
+export const FinalizeForm: FC<{ token?: string }> = ({ token }) => {
   const { t } = useTranslation();
-  const notifications = useNotifications();
   const formMethods = useForm<FormValues>({
     resolver: yupResolver(finalizeResetPasswordFormSchema),
     defaultValues: {
@@ -41,7 +40,7 @@ export const FinalizeForm: VFC<{ token?: string }> = ({ token }) => {
         if (e.response?.status) {
           setError('token', { message: 'Your token seems expired...' });
         } else {
-          notifications.showNotification({
+          showNotification({
             id: 'reset-password-finalization-notification',
             color: 'red',
             title: 'An error happened',
@@ -109,10 +108,11 @@ export const FinalizeForm: VFC<{ token?: string }> = ({ token }) => {
                           : 'We are done here! You can login again and continue with your work.'
                       )}
                     </p>
-                    <Link href="/login">
-                      <a className="mt-5 block font-semibold text-blue-400 hover:underline">
-                        {t('Login to my account')}
-                      </a>
+                    <Link
+                      to="/login"
+                      className="mt-5 block font-semibold text-blue-400 hover:underline"
+                    >
+                      {t('Login to my account')}
                     </Link>
                   </div>
                 </>

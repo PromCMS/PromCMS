@@ -1,20 +1,26 @@
 import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder';
-import { useNotifications } from '@mantine/notifications';
+import { useRouterQuery } from '@hooks/useRouterQuery';
+import {
+  showNotification,
+  updateNotification,
+  useNotifications,
+} from '@mantine/notifications';
 import { File as FileType } from '@prom-cms/shared';
 import { FileService } from '@services';
 import { t } from 'i18next';
-import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
+  PropsWithChildren,
   useCallback,
   useContext,
   useMemo,
   useReducer,
 } from 'react';
 import { DropzoneRootProps, useDropzone } from 'react-dropzone';
+import { useNavigate } from 'react-router-dom';
 import { KeyedMutator } from 'swr';
-import { UploadingFilesRecord, UploadingFile } from './types';
+import { UploadingFilesRecord } from './types';
 import { formatDroppedFiles } from './utils';
 
 type ReadonlyValues =
@@ -85,13 +91,15 @@ function reducer<T extends keyof IFileListContextValues>(
   return { ...state, [name]: value };
 }
 
-export const FileListContextProvider: FC = ({ children }) => {
+export const FileListContextProvider: FC<PropsWithChildren> = ({
+  children,
+}) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { push, query } = useRouter();
-  const notifications = useNotifications();
+  const currentFolder = useRouterQuery('folder');
+  const navigate = useNavigate();
   const currentPath = useMemo(
-    () => ((query.folder as string) || '/').replaceAll('//', '/'),
-    [query]
+    () => ((currentFolder as string) || '/').replaceAll('//', '/'),
+    [currentFolder]
   );
   const {
     data: files,
@@ -104,10 +112,8 @@ export const FileListContextProvider: FC = ({ children }) => {
   const updateValue: IFileListContext['updateValue'] = useCallback(
     (name, value) => {
       if (name === 'currentPath') {
-        push({
-          query: {
-            folder: value as string,
-          },
+        navigate({
+          search: `?folder=${value}`,
         });
 
         return;
@@ -115,7 +121,7 @@ export const FileListContextProvider: FC = ({ children }) => {
 
       dispatch({ name, value });
     },
-    [dispatch, push]
+    [dispatch, navigate]
   );
 
   const onDrop = useCallback(
@@ -124,8 +130,11 @@ export const FileListContextProvider: FC = ({ children }) => {
 
       updateValue('uploadingFiles', files);
 
-      const notificationId = notifications.showNotification({
-        message: t('Working'),
+      const notificationId = 'on-drop-file-info';
+
+      showNotification({
+        id: notificationId,
+        message: <>{t('Working')}</>,
         title: t('Uploading files...'),
         color: 'blue',
         autoClose: false,
@@ -139,8 +148,9 @@ export const FileListContextProvider: FC = ({ children }) => {
           await FileService.create(entry.file, { root: currentPath });
         } catch {
           isError = true;
-          notifications.updateNotification(notificationId, {
-            message: t('Error'),
+          updateNotification({
+            id: notificationId,
+            message: <>{t('Error')}</>,
             title: t('An error happened'),
             color: 'red',
             autoClose: 2000,
@@ -156,15 +166,16 @@ export const FileListContextProvider: FC = ({ children }) => {
 
         await mutateFiles();
 
-        notifications.updateNotification(notificationId, {
-          message: t('Success'),
+        updateNotification({
+          id: notificationId,
+          message: <>{t('Success')}</>,
           title: t('All files has been uploaded'),
           color: 'green',
           autoClose: 2000,
         });
       }
     },
-    [updateValue, currentPath, mutateFiles, notifications]
+    [updateValue, currentPath, mutateFiles]
   );
 
   const {

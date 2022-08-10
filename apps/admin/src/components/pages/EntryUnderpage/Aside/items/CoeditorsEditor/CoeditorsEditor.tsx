@@ -15,7 +15,7 @@ import { CoeditorsList } from './CoeditorList';
  * @returns
  */
 export const CoeditorsEditor: FC = () => {
-  const { itemData, itemIsLoading } = useEntryUnderpageContext();
+  const { itemData } = useEntryUnderpageContext();
   const currentUser = useCurrentUser();
   const [isAddingUser, setIsAddingUser] = useState(false);
   const [selectInputValue, setSelectInputValue] = useState<string>();
@@ -61,13 +61,10 @@ export const CoeditorsEditor: FC = () => {
             opened={popoverOpen}
             onClose={() => setPopoverOpen(false)}
             position="bottom"
-            placement="center"
-            withCloseButton
-            title={t('Select user')}
             transition="pop-top-right"
-            className="w-full"
             width={400}
-            target={
+          >
+            <Popover.Target>
               <Button
                 className="w-full"
                 leftIcon={<Plus className="h-7 w-7" />}
@@ -79,26 +76,27 @@ export const CoeditorsEditor: FC = () => {
                   {t('Add coeditor')}
                 </span>
               </Button>
-            }
-          >
-            <UserSelect
-              disabled={isAddingUser}
-              value={selectInputValue}
-              onChange={setSelectInputValue}
-              onItemSubmit={onUserSelect}
-            />
-
-            <Group position="apart" style={{ marginTop: 15 }}>
-              <Anchor
-                component="button"
-                color="gray"
-                size="sm"
+            </Popover.Target>
+            <Popover.Dropdown className="w-full" title={t('Select user')}>
+              <UserSelect
                 disabled={isAddingUser}
-                onClick={() => setPopoverOpen(false)}
-              >
-                {t('Cancel')}
-              </Anchor>
-            </Group>
+                value={selectInputValue}
+                onChange={setSelectInputValue}
+                onItemSubmit={onUserSelect}
+              />
+
+              <Group position="apart" style={{ marginTop: 15 }}>
+                <Anchor
+                  component="button"
+                  color="gray"
+                  size="sm"
+                  disabled={isAddingUser}
+                  onClick={() => setPopoverOpen(false)}
+                >
+                  {t('Cancel')}
+                </Anchor>
+              </Group>
+            </Popover.Dropdown>
           </Popover>
         </div>
       </AsideItemWrap>

@@ -4,7 +4,7 @@ import { EntryService } from '.';
 
 export class UserRolesService {
   static getListUrl() {
-    return '/settings/user-roles';
+    return '/settings/roles';
   }
 
   static getCreateUrl() {
@@ -12,7 +12,7 @@ export class UserRolesService {
   }
 
   static apiGetInfoUrl() {
-    return `${API_ENTRY_TYPES_URL}/userroles`;
+    return `${API_ENTRY_TYPES_URL}/userRoles`;
   }
 
   static apiGetUrl(id: ItemID) {
@@ -24,14 +24,14 @@ export class UserRolesService {
   }
 
   static async create(payload: ApiResultItem) {
-    return EntryService.create({ model: 'userroles' }, payload);
+    return EntryService.create({ model: 'userRoles' }, payload);
   }
 
   static async update(id: ItemID, payload: ApiResultItem) {
-    return EntryService.update({ model: 'userroles', id }, payload);
+    return EntryService.update({ model: 'userRoles', id }, payload);
   }
 
   static async delete(id: ItemID) {
-    return EntryService.delete({ model: 'userroles', id });
+    return EntryService.delete({ model: 'userRoles', id });
   }
 }

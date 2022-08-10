@@ -1,7 +1,7 @@
+import { Flag } from '@components/Flag';
 import { useSettings } from '@hooks/useSettings';
 import { Group, Select, SelectItem, SelectProps, Text } from '@mantine/core';
 import { ComponentPropsWithoutRef, FC, forwardRef, useMemo } from 'react';
-import Flag from 'react-world-flags';
 import { useTranslation } from 'react-i18next';
 import { Hash } from 'tabler-icons-react';
 
@@ -26,7 +26,10 @@ const SelectItemComponent = forwardRef<HTMLDivElement, ItemProps>(
     return (
       <div ref={ref} {...others}>
         <Group noWrap>
-          <Flag width={18} code={languageCodeToFlagCode[value] ?? value} />
+          <Flag
+            width={18}
+            countryCode={languageCodeToFlagCode[value] ?? value}
+          />
 
           <div>
             <Text size="sm">{label}</Text>
@@ -68,8 +71,8 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
       icon={
         <Flag
           width={18}
-          code={(value && languageCodeToFlagCode[value]) || value}
-          fallback={<Hash size={18} />}
+          countryCode={(value && languageCodeToFlagCode[value]) || value}
+          placeholder={<Hash size={18} />}
         />
       }
       {...rest}

@@ -1,4 +1,5 @@
-import { useModelItem, useRouterQuery } from '.';
+import { useParams } from 'react-router-dom';
+import { useModelItem } from '.';
 import useCurrentModel from './useCurrentModel';
 
 const useModelItemConfig = {
@@ -11,7 +12,7 @@ const useModelItemConfig = {
 
 const useCurrentModelItem = (language?: string) => {
   const modelInfo = useCurrentModel();
-  const entryId = useRouterQuery('entryId');
+  const { entryId } = useParams();
   const itemInfo = useModelItem(
     modelInfo?.name,
     (entryId as string) || undefined,

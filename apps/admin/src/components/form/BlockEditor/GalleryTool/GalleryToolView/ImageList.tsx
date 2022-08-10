@@ -22,12 +22,12 @@ export const ImageList: FC = () => {
           withArrow
           opened={popoverOpen}
           onClose={() => setPopoverOpen(false)}
-          className="w-full"
           positionDependencies={[fileIds]}
           withinPortal={false}
           width={590}
-          placement="start"
-          target={
+          position="bottom-start"
+        >
+          <Popover.Target>
             <Button
               size="lg"
               variant="light"
@@ -37,17 +37,18 @@ export const ImageList: FC = () => {
             >
               <Plus size={50} />
             </Button>
-          }
-        >
-          <SmallFileList
-            multiple
-            where={{
-              mimeType: { manipulator: 'LIKE', value: '%image%' },
-            }}
-            pickedFiles={fileIds?.map(({ id }) => id) || []}
-            onChange={addFile}
-            triggerClose={() => setPopoverOpen(false)}
-          />
+          </Popover.Target>
+          <Popover.Dropdown className="w-full">
+            <SmallFileList
+              multiple
+              where={{
+                mimeType: { manipulator: 'LIKE', value: '%image%' },
+              }}
+              pickedFiles={fileIds?.map(({ id }) => id) || []}
+              onChange={addFile}
+              triggerClose={() => setPopoverOpen(false)}
+            />
+          </Popover.Dropdown>
         </Popover>
       )}
     </div>

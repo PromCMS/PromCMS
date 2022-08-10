@@ -1,7 +1,8 @@
-import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
 export const useRouterQuery = (name: string) => {
-  const { query } = useRouter();
-  return useMemo(() => query[name], [query, name]);
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search).get(name), [search, name]);
 };

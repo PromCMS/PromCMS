@@ -1,29 +1,19 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { SiteLayoutHead } from '@layouts';
 import { Loader } from '@components/SiteLoader';
-import { NextPage } from '@custom-types';
 import { Form } from '@components/pages/FinalizeRegistration';
-import { useRouter } from 'next/router';
 import NotFoundPage from './404';
+import { Page } from '@custom-types';
+import { useRouterQuery } from '@hooks/useRouterQuery';
 
-const FinalizeRegistrationPage: NextPage = () => {
+const FinalizeRegistrationPage: Page = () => {
   const { isBooting } = useGlobalContext();
-  const { query } = useRouter();
+  const token = useRouterQuery('token');
 
   // Take care of booting phase
   if (isBooting) return <Loader show={isBooting} />;
-  if (!query.token) return <NotFoundPage />;
+  if (!token) return <NotFoundPage />;
 
-  return <Form token={query.token as string} />;
-};
-
-FinalizeRegistrationPage.getLayout = (page) => {
-  return (
-    <>
-      <SiteLayoutHead />
-      {page}
-    </>
-  );
+  return <Form token={token} />;
 };
 
 export default FinalizeRegistrationPage;

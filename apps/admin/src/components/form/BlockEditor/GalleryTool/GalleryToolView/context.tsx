@@ -1,6 +1,6 @@
 import { SmallFileListProps } from '@components/FilePickerModal/SmallFileList';
 import { ItemID } from '@prom-cms/shared';
-import { useCallback, useEffect, useReducer } from 'react';
+import { PropsWithChildren, useCallback, useEffect, useReducer } from 'react';
 import { FC, useContext } from 'react';
 import { createContext } from 'react';
 import { GalleryToolData } from '../GalleryTool';
@@ -40,11 +40,13 @@ const reducer = (
   ...(typeof change === 'function' ? change(prevState) : change),
 });
 
-export const GalleryToolViewContextProvider: FC<{
-  initialData: GalleryToolData;
-  onDataChange: (data: Partial<GalleryToolData>) => void;
-  readOnly: boolean;
-}> = ({ children, initialData, onDataChange, readOnly }) => {
+export const GalleryToolViewContextProvider: FC<
+  PropsWithChildren<{
+    initialData: GalleryToolData;
+    onDataChange: (data: Partial<GalleryToolData>) => void;
+    readOnly: boolean;
+  }>
+> = ({ children, initialData, onDataChange, readOnly }) => {
   const [state, setState] = useReducer(reducer, { ...initialData });
 
   useEffect(() => setState({ ...initialData }), [initialData, readOnly]);

@@ -1,6 +1,6 @@
-import { Checkbox, InputWrapper, Textarea, TextInput } from '@mantine/core';
+import { Checkbox, Input, Textarea, TextInput } from '@mantine/core';
 import { ModelColumnName, ColumnType } from '@prom-cms/shared';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import ImageSelect from '../form/ImageSelect';
@@ -12,8 +12,9 @@ export interface FieldMapperProps {
   })[][];
 }
 
-const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
-  const { formState, register, control } = useFormContext();
+const FieldMapper: FC<FieldMapperProps> = ({ fields }) => {
+  const { formState, register, control } =
+    useFormContext<Record<string, string | boolean | number>>();
   const { t } = useTranslation();
 
   return (
@@ -76,7 +77,7 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     render={({ field: { onChange, value } }) => (
                       <ImageSelect
                         onChange={onChange}
-                        selected={value}
+                        selected={String(value)}
                         error={errorMessage}
                         label={values.title}
                         {...values}
@@ -91,13 +92,13 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                     control={control}
                     name={columnName}
                     render={({ field: { onChange, value } }) => (
-                      <InputWrapper
+                      <Input.Wrapper
                         size="md"
                         label={title}
                         error={errorMessage}
                       >
                         <Checkbox
-                          checked={value}
+                          checked={!!value}
                           size={'md'}
                           onChange={(event) =>
                             onChange(event.currentTarget.checked)
@@ -105,7 +106,7 @@ const FieldMapper: VFC<FieldMapperProps> = ({ fields }) => {
                           label={t(value ? 'Yes' : 'No')}
                           className="mt-1"
                         />
-                      </InputWrapper>
+                      </Input.Wrapper>
                     )}
                   />
                 );

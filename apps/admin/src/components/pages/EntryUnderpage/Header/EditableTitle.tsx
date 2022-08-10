@@ -1,12 +1,12 @@
 import clsx from 'clsx';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useEntryUnderpageContext } from '../context';
 
-export const EditableTitle: VFC = () => {
+export const EditableTitle: FC = () => {
   const { itemIsLoading } = useEntryUnderpageContext();
-  const { register, formState } = useFormContext();
+  const { register, formState } = useFormContext<{ title?: string }>();
   const { t } = useTranslation();
 
   return (
@@ -20,9 +20,9 @@ export const EditableTitle: VFC = () => {
           placeholder={t(itemIsLoading ? 'Loading...' : 'Title here...')}
           {...register('title')}
         />
-        {formState.errors?.['title']?.message && (
+        {formState.errors?.title?.message && (
           <small className="font-bold text-red-500">
-            {formState.errors['title'].message}
+            {formState.errors.title.message}
           </small>
         )}
       </div>

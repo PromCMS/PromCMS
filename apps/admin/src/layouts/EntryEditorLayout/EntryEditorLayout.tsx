@@ -5,7 +5,7 @@ import { Skeleton } from '@mantine/core';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { EntryService } from '@services';
 import clsx from 'clsx';
-import { HTMLAttributes } from 'react';
+import { HTMLAttributes, PropsWithChildren } from 'react';
 import { DetailedHTMLProps } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -19,11 +19,11 @@ export interface EntryEditorLayoutContentProps {}
 export interface EntryEditorLayoutProps {}
 
 export interface EntryEditorLayoutParts {
-  Aside: FC<EntryEditorLayoutAsideProps>;
-  Content: FC<EntryEditorLayoutContentProps>;
+  Aside: FC<PropsWithChildren<EntryEditorLayoutAsideProps>>;
+  Content: FC<PropsWithChildren<EntryEditorLayoutContentProps>>;
 }
 
-export const EntryEditorLayout: FC<EntryEditorLayoutProps> &
+export const EntryEditorLayout: FC<PropsWithChildren<EntryEditorLayoutProps>> &
   EntryEditorLayoutParts = ({ children }) => {
   const { onSubmit } = useEntryUnderpageContext();
 

@@ -8,9 +8,9 @@ import {
   Text,
 } from '@mantine/core';
 import { PagedResult, User, UserRole } from '@prom-cms/shared';
-import { t } from 'i18next';
 import { forwardRef } from 'react';
 import { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface AutoCompleteItemProps extends User {}
 
@@ -20,7 +20,7 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, AutoCompleteItemProps>(
     ref
   ) {
     const { data, isLoading } = useModelItem<UserRole>(
-      'userroles',
+      'userRoles',
       role as number
     );
 
@@ -45,6 +45,7 @@ export interface UserSelectProps
 }
 
 export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
+  const { t } = useTranslation();
   const { data } = useModelItems<PagedResult<User>>(
     'users',
     {
@@ -74,21 +75,19 @@ export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
   );
 
   return (
-    <>
-      <Autocomplete
-        label="User"
-        itemComponent={AutoCompleteItem}
-        placeholder={t('Start typing to see options')}
-        filter={() => true}
-        nothingFound={
-          !!props.value ? <div>{t('Nothing has been found')}</div> : undefined
-        }
-        {...props}
-        data={(data?.data || []).map((item) => ({
-          ...item,
-          value: String(item.name),
-        }))}
-      />
-    </>
+    <Autocomplete
+      label="User"
+      itemComponent={AutoCompleteItem}
+      placeholder={t('Start typing to see options')}
+      filter={() => true}
+      nothingFound={
+        !!props.value ? <div>{t('Nothing has been found')}</div> : undefined
+      }
+      {...props}
+      data={(data?.data || []).map((item) => ({
+        ...item,
+        value: String(item.name),
+      }))}
+    />
   );
 };

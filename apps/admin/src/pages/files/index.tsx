@@ -1,11 +1,12 @@
 import { FileList } from '@components/pages/FilesPage';
+import { Page } from '@custom-types';
 import { useModelInfo } from '@hooks/useModelInfo';
 import { PageLayout } from '@layouts';
 import { useTranslation } from 'react-i18next';
-import { NextPage } from '../../types';
+import { Outlet } from 'react-router-dom';
 import NotFoundPage from '../404';
 
-const FilesPage: NextPage = () => {
+const FilesPage: Page = () => {
   const { t } = useTranslation();
   const model = useModelInfo('files');
 
@@ -20,6 +21,7 @@ const FilesPage: NextPage = () => {
         </h1>
       </div>
       <FileList />
+      <Outlet />
     </PageLayout>
   );
 };

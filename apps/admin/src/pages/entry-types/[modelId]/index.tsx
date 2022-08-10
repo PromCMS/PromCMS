@@ -5,7 +5,6 @@ import { useModelItems } from '@hooks/useModelItems';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { formatApiModelResultToTableView, modelIsCustom } from '@utils';
 import { ApiResultItem, ItemID } from '@prom-cms/shared';
-import { useRouter } from 'next/router';
 import { EntryService } from '@services';
 import { MESSAGES } from '@constants';
 import NotFoundPage from '@pages/404';
@@ -14,16 +13,16 @@ import { Button, Pagination } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Plus } from 'tabler-icons-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Page } from '@custom-types';
 
-const EntryTypeUnderpage: VFC = ({}) => {
-  const { push } = useRouter();
+const EntryTypeUnderpage: Page = ({}) => {
+  const navigate = useNavigate();
+  const { modelId: routerModelId } = useParams();
   const [page, setPage] = useState(1);
   const model = useCurrentModel();
   const currentUser = useCurrentUser();
   const [apiWorking, setApiWorking] = useState(false);
-  const {
-    query: { modelId: routerModelId },
-  } = useRouter();
   const { data, isLoading, isError, mutate } = useModelItems(model?.name, {
     page: page,
   });
@@ -96,16 +95,16 @@ const EntryTypeUnderpage: VFC = ({}) => {
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ENTRY_ITEM_DUPLICATE))) {
-            push(EntryService.getDuplicateUrl(id, model?.name as string));
+            navigate(EntryService.getDuplicateUrl(id, model?.name as string));
           }
         }
       : undefined;
 
   const onCreateRequest = () =>
-    push(EntryService.getCreateUrl(model?.name as string));
+    navigate(EntryService.getCreateUrl(model?.name as string));
 
   const onEditRequest = (id: ItemID) =>
-    push(EntryService.getUrl(id, model?.name as string));
+    navigate(EntryService.getUrl(id, model?.name as string));
 
   // This resets a pager to start, because this page component maintains internal state across pages
   useEffect(() => setPage(1), [routerModelId]);

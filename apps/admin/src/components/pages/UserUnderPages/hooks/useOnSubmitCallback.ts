@@ -1,6 +1,5 @@
 import { ApiResultItem } from '@prom-cms/shared';
 import { UserService } from '@services';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { getObjectDiff } from '@utils';
 import { useData } from '../context';
@@ -8,9 +7,10 @@ import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import axios from 'axios';
 import { useFormContext } from 'react-hook-form';
 import { MESSAGES } from '@constants';
+import { useNavigate } from 'react-router-dom';
 
 export const useOnSubmitCallback = () => {
-  const { push } = useRouter();
+  const navigate = useNavigate();
   const { view, user, mutateUser } = useData();
   const reqNotification = useRequestWithNotifications();
   const { t } = useTranslation();
@@ -60,7 +60,7 @@ export const useOnSubmitCallback = () => {
             );
 
             if (result?.data) {
-              push(UserService.getListUrl());
+              navigate(UserService.getListUrl());
             }
           }
         }

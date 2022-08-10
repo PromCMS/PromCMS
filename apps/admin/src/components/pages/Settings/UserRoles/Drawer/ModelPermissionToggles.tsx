@@ -1,4 +1,4 @@
-import { Checkbox, Collapse, Radio, RadioGroup, Title } from '@mantine/core';
+import { Checkbox, Collapse, Radio, Title } from '@mantine/core';
 import { randomId } from '@mantine/hooks';
 import { ApiResultModel, SecurityOptionOptions } from '@prom-cms/shared';
 import { FC } from 'react';
@@ -38,7 +38,7 @@ export const ModelPermissionToggles: FC<{
           />
           {!isSimple && modelName !== 'settings' && (
             <Collapse in={!!value}>
-              <RadioGroup
+              <Radio.Group
                 required
                 spacing={'xs'}
                 value={value}
@@ -57,7 +57,7 @@ export const ModelPermissionToggles: FC<{
                   value="allow-own"
                   label={t('Allow on only own and shared')}
                 />
-              </RadioGroup>
+              </Radio.Group>
             </Collapse>
           )}
         </div>

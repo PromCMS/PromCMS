@@ -26,7 +26,7 @@ export const Drawer: FC<
 > = ({ opened, onClose, optionToEdit }) => {
   const formMethods = useForm();
   const { t } = useTranslation();
-  const { data } = useModelItem('userroles', optionToEdit);
+  const { data } = useModelItem('userRoles', optionToEdit);
   const reqWithNotification = useRequestWithNotifications();
   const { models } = useGlobalContext();
   const { handleSubmit, formState, register, reset } = formMethods;

@@ -4,14 +4,14 @@ import {
 } from '@components/pages/EntryUnderpage';
 import useCurrentModel from '@hooks/useCurrentModel';
 import NotFoundPage from '@pages/404';
-import { EntryTypeUrlActionType, NextPage } from '@custom-types';
+import { EntryTypeUrlActionType, Page } from '@custom-types';
 import { EntryEditorLayout } from 'layouts/EntryEditorLayout';
 import { Aside, Header, FormContent } from '@components/pages/EntryUnderpage';
 
 export const getEntryUnderPageComponent = (
   viewType: EntryTypeUrlActionType
 ) => {
-  const Component: NextPage = () => {
+  const Component: Page = () => {
     const model = useCurrentModel();
 
     if (!model || model.name === 'users') return <NotFoundPage />;

@@ -6,15 +6,16 @@ import { ApiResultModel, ItemID } from '@prom-cms/shared';
 import { UserPlus } from 'tabler-icons-react';
 import { MESSAGES } from '@constants';
 import { EntryService } from '@services';
-import { useRouter } from 'next/router';
-import { useMemo, useState, VFC } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatApiModelResultToTableView } from '@utils';
 import { Button, Pagination } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
+import { Page } from '@custom-types';
+import { useNavigate } from 'react-router-dom';
 
-const UsersListPage: VFC = () => {
-  const { push } = useRouter();
+const UsersListPage: Page = () => {
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const currentUser = useCurrentUser();
@@ -43,11 +44,11 @@ const UsersListPage: VFC = () => {
   });
 
   // Take care of user creation
-  const onCreateRequest = () => push(`/users/invite`);
+  const onCreateRequest = () => navigate(`/users/invite`);
 
   // Take care of edit requests
   const onEditRequest = userCanEdit
-    ? (id: ItemID) => push(`/users/${id}`)
+    ? (id: ItemID) => navigate(`/users/${id}`)
     : undefined;
 
   // Take care of delete item request

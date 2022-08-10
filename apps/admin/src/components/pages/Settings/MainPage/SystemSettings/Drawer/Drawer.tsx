@@ -130,14 +130,16 @@ export const Drawer: VFC<
                   )}
                 />
 
-                <LanguageSelect
-                  value={language}
-                  onChange={(value) => value && setLanguage(value)}
-                  className="w-full"
-                  shadow="xl"
-                  pt="md"
-                  disabled={!optionToEdit}
-                />
+                {settings?.i18n.languages.length !== 0 && (
+                  <LanguageSelect
+                    value={language}
+                    onChange={(value) => value && setLanguage(value)}
+                    className="w-full"
+                    shadow="xl"
+                    pt="md"
+                    disabled={!optionToEdit}
+                  />
+                )}
               </Paper>
             )}
             <TextInput label="Label" {...register('label')} />

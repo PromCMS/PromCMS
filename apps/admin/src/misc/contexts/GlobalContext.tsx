@@ -6,11 +6,18 @@ import {
   API_ENTRY_TYPES_URL,
   API_SETTINGS_URL,
 } from '@constants';
-import { useRouter } from 'next/router';
-import { createContext, FC, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  FC,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserRolesService } from '@services';
 import { useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export interface IGlobalContext {
   currentUser?: Omit<User, 'role'> & { role: UserRole };
@@ -35,8 +42,9 @@ export const GlobalContext = createContext<IGlobalContext>({
   isLoggedIn: false,
 });
 
-export const GlobalContextProvider: FC = ({ children }) => {
-  const { push, pathname } = useRouter();
+export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
+  let navigate = useNavigate();
+  let { pathname } = useLocation();
   const { t, i18n } = useTranslation();
   const [currentUser, setCurrentUser] = useState<
     Omit<User, 'role'> & { role: UserRole }
@@ -86,7 +94,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
     }
 
     return () => cancelToken.cancel();
-  }, [currentUser, push, models]);
+  }, [currentUser, navigate, models]);
 
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
@@ -123,7 +131,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
               !pathname.includes('/reset-password') &&
               !pathname.includes('/finalize-registration')
             )
-              await push('/login');
+              await navigate('/login');
           } else {
             // TODO: Make this a better message to some component/page
             alert('Looks like API is not working, please tell your developer');
@@ -138,7 +146,7 @@ export const GlobalContextProvider: FC = ({ children }) => {
     }
 
     return () => cancelToken.cancel();
-  }, [currentUser, push]);
+  }, [currentUser, navigate]);
 
   useEffect(() => {
     // TODO

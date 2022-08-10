@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { createUserSchema, updateUserSchema } from '@schemas';
-import { FC, useEffect, VFC } from 'react';
+import { FC, PropsWithChildren, useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
 import { useData } from './context';
 import { UserUnderpageForm } from './Form';
@@ -12,7 +12,7 @@ import { FormAside } from './FormAside';
 import { useOnSubmitCallback } from './hooks';
 import { useTranslation } from 'react-i18next';
 
-const FormWrapper: FC = ({ children }) => {
+const FormWrapper: FC<PropsWithChildren> = ({ children }) => {
   const { handleSubmit } = useFormContext();
   const onSubmitCallback = useOnSubmitCallback();
 
@@ -23,7 +23,7 @@ const FormWrapper: FC = ({ children }) => {
   );
 };
 
-export const Content: VFC = () => {
+export const Content: FC = () => {
   const { user, model, isLoading, view } = useData();
   const { t } = useTranslation();
 
