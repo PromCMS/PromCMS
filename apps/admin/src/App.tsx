@@ -26,6 +26,7 @@ import { UserProfilePasswordPage } from '@pages/settings/password';
 import UserRolesPage from '@pages/settings/user-roles';
 import { lazy, Suspense } from 'react';
 import { Loader } from '@components/SiteLoader';
+import { CreateTranslationSettings } from '@pages/settings/translations/keys/create';
 
 const LazyFilesPage = lazy(() => import('@pages/files'));
 const LazyFilePage = lazy(() => import('@pages/files/entries/[fileId]'));
@@ -37,6 +38,9 @@ const LazyEntryTypeUnderpage = lazy(
 );
 const LazyProfileLayout = lazy(() =>
   import('@layouts').then(({ ProfileLayout }) => ({ default: ProfileLayout }))
+);
+const LazyGeneralTranslationsPage = lazy(
+  () => import('@pages/settings/translations')
 );
 
 if (!i18next.isInitialized) {
@@ -115,6 +119,19 @@ export function App() {
                     element={<UserProfilePasswordPage />}
                   />
                   <Route path="roles" element={<UserRolesPage />} />
+                  <Route
+                    path="translations"
+                    element={
+                      <Suspense fallback={<Loader fullScreen={false} />}>
+                        <LazyGeneralTranslationsPage />
+                      </Suspense>
+                    }
+                  >
+                    <Route
+                      path="keys/create"
+                      element={<CreateTranslationSettings />}
+                    />
+                  </Route>
                 </Route>
                 <Route path="users">
                   <Route

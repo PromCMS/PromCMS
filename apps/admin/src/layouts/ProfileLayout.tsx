@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import {
+  LanguageHiragana,
   Lock,
   Settings,
   UserCircle,
@@ -31,6 +32,11 @@ const items = [
         action: 'read',
         targetModel: 'settings',
       }),
+  },
+  {
+    title: 'General translations',
+    url: '/settings/translations',
+    Icon: LanguageHiragana,
   },
 ];
 
