@@ -57,6 +57,25 @@ return function (App $app, Router $router) {
     // get info about all of models
     $innerRouter->get('', 'App\Controllers\EntryTypes:getInfo')->add($auth);
 
+    $innerRouter->group('/generalTranslations/items', function (
+      Router $innerRouter
+    ) use ($auth) {
+      $innerRouter->get('', '\App\Controllers\Localization:getMany');
+      $innerRouter
+        ->post('/create', '\App\Controllers\Localization:addGeneralKey')
+        ->add($auth);
+
+      $innerRouter
+        ->group('/{key}', function (Router $innerRouter) {
+          $innerRouter->delete('', '\App\Controllers\Localization:delete');
+          $innerRouter->patch(
+            '',
+            '\App\Controllers\Localization:updateKeyTranslations',
+          );
+        })
+        ->add($auth);
+    });
+
     // Folders
     $innerRouter
       ->group('/folders', function (Router $innerRouter) {

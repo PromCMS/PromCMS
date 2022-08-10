@@ -47,6 +47,10 @@ return function (App $app) {
   $container->set('jwt-service', new \App\Services\JWT($container));
   $container->set('image-service', new \App\Services\ImageService($container));
   $container->set('file-service', new \App\Services\FileService($container));
+  $container->set(
+    'localization-service',
+    new \App\Services\Localization($container),
+  );
 
   // Add twig app extension
   $twig->addExtension(new AppExtension($container));
