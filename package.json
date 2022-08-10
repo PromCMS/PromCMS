@@ -5,7 +5,7 @@
   "description": "",
   "scripts": {
     "build:library": "yarn preconstruct build",
-    "postinstall": "yarn preconstruct dev",
+    "postinstall": "yarn preconstruct dev && yarn build:library",
     "release": "yarn build:library && changeset publish",
     "build:admin": "yarn workspace @prom-cms/admin run build",
     "clean": "del **/dist/** && del **/.next/**",
