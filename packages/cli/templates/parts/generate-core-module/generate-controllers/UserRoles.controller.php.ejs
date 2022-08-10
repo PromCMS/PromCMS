@@ -42,7 +42,7 @@ class UserRoles
           : ['id' => 'asc'],
       )
       ->limit($pageLimit)
-      ->skip($pageLimit * $page);
+      ->skip($pageLimit * ($page - 1));
     $total = count($classInstance->getMany());
     $data = $query->getMany();
     $responseData = [
