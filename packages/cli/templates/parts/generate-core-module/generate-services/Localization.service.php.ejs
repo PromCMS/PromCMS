@@ -77,4 +77,20 @@ class Localization
       }
     }
   }
+
+  function getTranslation($key, $countryCode)
+  {
+    $defaultTranslations = $this->getFileContents('default');
+    $requestedTranslations = $this->getFileContents($countryCode);
+
+    if (isset($requestedTranslations[$key])) {
+      return $requestedTranslations[$key];
+    }
+
+    if (isset($defaultTranslations[$key])) {
+      return $defaultTranslations[$key];
+    }
+
+    return false;
+  }
 }
