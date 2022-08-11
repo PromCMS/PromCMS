@@ -8,7 +8,7 @@ import { useConstructedMenuItems } from './utils';
 import { useTranslation } from 'react-i18next';
 import BackendImage from '@components/BackendImage';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { Button, Popover, Tooltip } from '@mantine/core';
+import { Popover, Tooltip, UnstyledButton } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Briefcase } from 'tabler-icons-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -64,7 +64,7 @@ const Header: FC = () => {
           offset={10}
         >
           <Popover.Target>
-            <Button
+            <UnstyledButton
               onClick={toggle}
               disabled={isBooting || !currentUser}
               sx={{
@@ -83,11 +83,11 @@ const Header: FC = () => {
                   onError={() => setError(true)}
                 />
               ) : (
-                <p className="m-auto text-lg font-bold tracking-wider">
+                <p className="m-auto text-lg font-bold tracking-wider text-black">
                   {getInitials(currentUser?.name || '.. ..')}
                 </p>
               )}
-            </Button>
+            </UnstyledButton>
           </Popover.Target>
           <Popover.Dropdown>
             <PopoverList>
