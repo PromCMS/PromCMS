@@ -119,15 +119,15 @@ export const GeneralTranslationsSettings: Page = () => {
   const ths = (
     <tr>
       <th>{t('Translation key')}</th>
-      <th>{t('Translation value')}</th>
-      <th className="w-[100px] opacity-0">Tools</th>
+      <th className="w-full max-w-[350px]">{t('Translation value')}</th>
+      <th className="w-full max-w-[100px] opacity-0">Tools</th>
     </tr>
   );
 
   const rows = Object.entries(data || {}).map(([key, value]) => (
     <tr key={key}>
       <td>{key}</td>
-      <td>
+      <td className="w-full max-w-[350px]">
         <TextInput
           onFocus={setUserIsTyping}
           onBlur={() => onSaveItem(key)}
@@ -140,7 +140,7 @@ export const GeneralTranslationsSettings: Page = () => {
           value={value}
         />
       </td>
-      <td className="flex w-[100px]">
+      <td className="w-full max-w-[100px]">
         <ActionIcon onClick={onDeleteClick(key)} color="red">
           <Trash />
         </ActionIcon>

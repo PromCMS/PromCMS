@@ -15,7 +15,12 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const items = [
   { title: 'Profile', url: '/settings/profile', Icon: UserCircle },
-  { title: 'Authentication', url: '/settings/password', Icon: Lock },
+  {
+    title: 'Authentication',
+    url: '/settings/password',
+    Icon: Lock,
+    canBeShown: () => false,
+  },
   {
     title: 'User Roles',
     url: '/settings/roles',
