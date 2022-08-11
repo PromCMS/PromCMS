@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Exceptions\EntityNotFoundException;
+use App\Services\EntryTypeService;
 use App\Services\FileService;
 use App\Services\ImageService;
 use DI\Container;
@@ -81,27 +82,14 @@ class Files
   ): ResponseInterface {
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
+    $service = new EntryTypeService(new \Files());
+    $where = [];
 
     if (isset($queryParams['where'])) {
       [$where] = normalizeWhereQueryParam($queryParams['where']);
     }
 
-    $pageLimit = 15;
-    $query = \Files::where($where ?? [])
-      ->limit($pageLimit)
-      ->skip($pageLimit * ($page - 1));
-    $data = $query->getMany();
-    $total = count(\Files::where($where ?? [])->getMany());
-
-    $response->getBody()->write(
-      json_encode([
-        'data' => $data,
-        'current_page' => $page,
-        'last_page' => floor($total / $pageLimit),
-        'per_page' => $pageLimit,
-        'total' => $total,
-      ]),
-    );
+    $response->getBody()->write(json_encode($service->getMany($where, $page)));
 
     return $response;
   }

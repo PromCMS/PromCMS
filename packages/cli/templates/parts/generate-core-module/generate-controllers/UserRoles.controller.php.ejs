@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Exceptions\EntityDuplicateException;
 use App\Exceptions\EntityNotFoundException;
+use App\Services\EntryTypeService;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -32,26 +33,8 @@ class UserRoles
   ): ResponseInterface {
     $queryParams = $request->getQueryParams();
     $page = intval(isset($queryParams['page']) ? $queryParams['page'] : 1);
-    $classInstance = new \UserRoles();
-
-    $pageLimit = 15;
-    $query = $classInstance
-      ->orderBy(
-        $classInstance->getSummary()->hasOrdering
-          ? ['order' => 'asc', 'id' => 'asc']
-          : ['id' => 'asc'],
-      )
-      ->limit($pageLimit)
-      ->skip($pageLimit * ($page - 1));
-    $total = count($classInstance->getMany());
-    $data = $query->getMany();
-    $responseData = [
-      'data' => $data,
-      'current_page' => $page,
-      'last_page' => floor($total / $pageLimit),
-      'per_page' => $pageLimit,
-      'total' => $total,
-    ];
+    $service = new EntryTypeService(new \UserRoles());
+    $responseData = $service->getMany([], $page);
 
     if ($page === 1) {
       $responseData['data'] = array_merge(
@@ -60,7 +43,7 @@ class UserRoles
             'id' => 0,
             'label' => 'Admin',
             'slug' => 'admin',
-            'description' => 'Main user role provided by PROM CMS Core module',
+            'description' => 'Main user role provided by PromCMS Core module',
           ],
         ],
         $responseData['data'],
