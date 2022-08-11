@@ -23,7 +23,7 @@ const { PORT: FRONT_PORT = 3000 } = process.env;
 const SERVER_PORT = Number(FRONT_PORT) + 1;
 let abortController: AbortController | undefined;
 
-Logger.info('🔔 Welcome to dev-api server of prom cms generator!');
+Logger.info('🔔 Welcome to dev-api server of PromCMS generator!');
 Logger.info('🔄 Booting up...');
 
 // Clean old log file

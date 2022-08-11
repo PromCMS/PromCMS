@@ -1,3 +1,3 @@
-# Admin app for prom cms
+# Admin app for PromCMS
 
-This app is part of PROM CMS. This app is generated to ssg
+This app is part of PromCMS. This app is generated to ssg
