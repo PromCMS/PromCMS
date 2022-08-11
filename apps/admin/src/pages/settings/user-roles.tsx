@@ -90,7 +90,7 @@ const UserRolesPage: Page = () => {
   const ths = (
     <tr>
       <th>{t('Title')}</th>
-      <th className="w-full max-w-[350px]">{t('Description')}</th>
+      <th>{t('Description')}</th>
       <th className="w-[100px] opacity-0">Tools</th>
     </tr>
   );
@@ -99,7 +99,7 @@ const UserRolesPage: Page = () => {
     data.data.map((row, index) => (
       <tr key={row.id}>
         <td>{row.label}</td>
-        <td className="w-full max-w-[350px]">{row.description}</td>
+        <td>{row.description}</td>
         <td>
           {row.id !== 0 && (
             <Group className="ml-auto" position="right" spacing="xs" noWrap>
