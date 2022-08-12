@@ -11,6 +11,7 @@ import {
   Divider,
   Grid,
   Group,
+  LoadingOverlay,
   Pagination,
   Paper,
   Textarea,
@@ -45,7 +46,10 @@ const UserProfileMainPage: Page = () => {
   const { t } = useTranslation();
   const currentUser = useCurrentUser();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, mutate } = useModelItems('settings', { page: currentPage });
+  const { data, mutate, isLoading, isValidating, isError } = useModelItems(
+    'settings',
+    { page: currentPage }
+  );
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
   const [creationAction, setCreationMode] = useState(false);
   const reqNotification = useRequestWithNotifications();
@@ -108,100 +112,112 @@ const UserProfileMainPage: Page = () => {
           {t('Add new')}
         </Button>
       )}
-      <Grid
-        sx={{ minWidth: 800 }}
-        className={clsx(classes.root, 'mt-5')}
-        columns={maxCols}
-      >
-        {currentUserCanCreate && (
+      <div className="relative min-h-[400px]">
+        <LoadingOverlay
+          visible={isLoading || isValidating || isError}
+          overlayBlur={2}
+        />
+        <Grid
+          sx={{ minWidth: 800 }}
+          className={clsx(classes.root, 'mt-5')}
+          columns={maxCols}
+        >
+          {currentUserCanCreate && (
+            <Grid.Col span={smallColSize} className="font-semibold uppercase">
+              {t('Slug')}
+            </Grid.Col>
+          )}
           <Grid.Col span={smallColSize} className="font-semibold uppercase">
-            {t('Slug')}
+            {t('Title')}
           </Grid.Col>
-        )}
-        <Grid.Col span={smallColSize} className="font-semibold uppercase">
-          {t('Title')}
-        </Grid.Col>
-        <Grid.Col span={largeColSize} className="font-semibold uppercase">
-          {t('Value')}
-        </Grid.Col>
-        <Grid.Col span={smallColSize}>
-          <span className="hidden">{t('Tools')}</span>
-        </Grid.Col>
-        <Grid.Col span={maxCols}>
-          <Divider size="sm" />
-        </Grid.Col>
-        {data?.data ? (
-          data.data.map((row, index) => (
-            <Fragment key={row.id}>
-              {index !== 0 && colDivider}
-              {currentUserCanCreate && (
+          <Grid.Col span={largeColSize} className="font-semibold uppercase">
+            {t('Value')}
+          </Grid.Col>
+          <Grid.Col span={smallColSize}>
+            <span className="hidden">{t('Tools')}</span>
+          </Grid.Col>
+          <Grid.Col span={maxCols}>
+            <Divider size="sm" />
+          </Grid.Col>
+          {data?.data ? (
+            data.data.map((row, index) => (
+              <Fragment key={row.id}>
+                {index !== 0 && colDivider}
+                {currentUserCanCreate && (
+                  <Grid.Col span={smallColSize}>
+                    <Group>
+                      <CopyName name={row.name} />
+                      {row.name}
+                    </Group>
+                  </Grid.Col>
+                )}
+                <Grid.Col span={smallColSize}>{row.label}</Grid.Col>
+                <Grid.Col span={largeColSize}>
+                  {row.content?.type === 'textArea' ? (
+                    <Textarea autosize readOnly value={row.content.data} />
+                  ) : row.content?.type === 'list' ? (
+                    <Paper
+                      sx={(theme) => ({ borderColor: theme.colors.gray[4] })}
+                      withBorder
+                      p="sm"
+                    >
+                      <ul className="list-disc pl-5">
+                        {row.content?.data.map(({ id, value }) => (
+                          <li
+                            key={id}
+                            dangerouslySetInnerHTML={{ __html: value }}
+                          />
+                        ))}
+                      </ul>
+                    </Paper>
+                  ) : row.content?.type === 'image' ? (
+                    <BackendImage
+                      className="h-20 w-auto"
+                      imageId={row.content?.data}
+                    />
+                  ) : (
+                    'none'
+                  )}
+                </Grid.Col>
                 <Grid.Col span={smallColSize}>
-                  <Group>
-                    <CopyName name={row.name} />
-                    {row.name}
+                  <Group
+                    className="ml-auto"
+                    position="right"
+                    spacing="xs"
+                    noWrap
+                  >
+                    {currentUserCanEdit && (
+                      <ActionIcon onClick={onEditClick(row.id)} color="blue">
+                        <Edit />
+                      </ActionIcon>
+                    )}
+                    {currentUserCanDelete && (
+                      <ActionIcon onClick={onDeleteClick(row.id)} color="red">
+                        <Trash />
+                      </ActionIcon>
+                    )}
                   </Group>
                 </Grid.Col>
-              )}
-              <Grid.Col span={smallColSize}>{row.label}</Grid.Col>
-              <Grid.Col span={largeColSize}>
-                {row.content?.type === 'textArea' ? (
-                  <Textarea autosize readOnly value={row.content.data} />
-                ) : row.content?.type === 'list' ? (
-                  <Paper
-                    sx={(theme) => ({ borderColor: theme.colors.gray[4] })}
-                    withBorder
-                    p="sm"
-                  >
-                    <ul className="list-disc pl-5">
-                      {row.content?.data.map(({ id, value }) => (
-                        <li
-                          key={id}
-                          dangerouslySetInnerHTML={{ __html: value }}
-                        />
-                      ))}
-                    </ul>
-                  </Paper>
-                ) : row.content?.type === 'image' ? (
-                  <BackendImage
-                    className="h-20 w-auto"
-                    imageId={row.content?.data}
-                  />
-                ) : (
-                  'none'
-                )}
-              </Grid.Col>
-              <Grid.Col span={smallColSize}>
-                <Group className="ml-auto" position="right" spacing="xs" noWrap>
-                  {currentUserCanEdit && (
-                    <ActionIcon onClick={onEditClick(row.id)} color="blue">
-                      <Edit />
-                    </ActionIcon>
-                  )}
-                  {currentUserCanDelete && (
-                    <ActionIcon onClick={onDeleteClick(row.id)} color="red">
-                      <Trash />
-                    </ActionIcon>
-                  )}
-                </Group>
-              </Grid.Col>
-            </Fragment>
-          ))
-        ) : (
-          <Grid.Col span={12}>
-            <ItemsMissingMessage />
-          </Grid.Col>
+              </Fragment>
+            ))
+          ) : (
+            <Grid.Col span={12}>
+              <ItemsMissingMessage />
+            </Grid.Col>
+          )}
+        </Grid>
+
+        {data && (
+          <Group position="center" my="xl">
+            <Pagination
+              className="my-auto"
+              page={currentPage}
+              onChange={setCurrentPage}
+              total={data!.last_page}
+            />
+          </Group>
         )}
-      </Grid>
-      {data && (
-        <Group position="center" my="xl">
-          <Pagination
-            className="my-auto"
-            page={currentPage}
-            onChange={setCurrentPage}
-            total={data!.last_page}
-          />
-        </Group>
-      )}
+      </div>
       <Drawer
         opened={creationAction || !!optionToEdit}
         optionToEdit={optionToEdit}

@@ -37,7 +37,6 @@ class Users
     ResponseInterface $response
   ): ResponseInterface {
     $service = new EntryTypeService(new \Users());
-
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
     $where = [];

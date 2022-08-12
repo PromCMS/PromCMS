@@ -43,7 +43,7 @@ export class EntryService {
       model: DatabaseTableName;
       language?: string;
     },
-    payload: ApiResultItem
+    payload: Omit<ApiResultItem, 'id'>
   ) {
     if (!Object.keys(payload).length) return;
 
@@ -68,7 +68,7 @@ export class EntryService {
 
   static async create(
     info: { model: DatabaseTableName },
-    payload: ApiResultItem
+    payload: Omit<ApiResultItem, 'id'>
   ) {
     try {
       const result = apiClient.post(

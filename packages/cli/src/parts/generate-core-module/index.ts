@@ -21,7 +21,7 @@ export const generateCoreModule = async (
   const DEV_MODULE_ROOT = path.join(modulesRoot, MODULE_NAME);
 
   await generateModule(modulesRoot, MODULE_NAME, {
-    author: `PROM CMS${isDev ? ' Developer' : ''}`,
+    author: `PromCMS${isDev ? ' Developer' : ''}`,
     description: isDev
       ? 'This is just for development purposes.'
       : 'Key module that provides functionality to this CMS. DO NOT DELETE!',

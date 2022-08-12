@@ -6,7 +6,7 @@ import { formatCodeString } from '../utils';
 import { TEMPLATES_ROOT } from '../constants';
 
 /**
- * Creates a PROM CMS module to specified directory with bootstrapped content.
+ * Creates a PromCMS module to specified directory with bootstrapped content.
  * @param pluginsRoot Root of module
  * @param pluginName Name of module
  * @param param2 Some additional settings

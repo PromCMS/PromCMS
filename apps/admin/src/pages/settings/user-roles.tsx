@@ -10,12 +10,13 @@ import {
   Divider,
   Grid,
   Group,
+  LoadingOverlay,
   Pagination,
+  Table,
 } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
 import { UserRolesService } from '@services';
 import clsx from 'clsx';
-import { Fragment } from 'react';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
@@ -43,7 +44,10 @@ const UserRolesPage: Page = () => {
   const { t } = useTranslation();
   const { currentUserIsAdmin } = useGlobalContext();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, mutate } = useModelItems('userRoles', { page: currentPage });
+  const { data, mutate, isLoading, isError, isValidating } = useModelItems(
+    'userRoles',
+    { page: currentPage }
+  );
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
   const [creationAction, setCreationMode] = useState(false);
   const reqNotification = useRequestWithNotifications();
@@ -83,6 +87,45 @@ const UserRolesPage: Page = () => {
     [t, reqNotification, mutate]
   );
 
+  const ths = (
+    <tr>
+      <th>{t('Title')}</th>
+      <th>{t('Description')}</th>
+      <th className="w-[100px] opacity-0">Tools</th>
+    </tr>
+  );
+
+  const rows = data?.data ? (
+    data.data.map((row, index) => (
+      <tr key={row.id}>
+        <td>{row.label}</td>
+        <td>{row.description}</td>
+        <td>
+          {row.id !== 0 && (
+            <Group className="ml-auto" position="right" spacing="xs" noWrap>
+              {currentUserCanEdit && (
+                <ActionIcon onClick={onEditClick(row.id)} color="blue">
+                  <Edit />
+                </ActionIcon>
+              )}
+              {currentUserCanDelete && (
+                <ActionIcon onClick={onDeleteClick(row.id)} color="red">
+                  <Trash />
+                </ActionIcon>
+              )}
+            </Group>
+          )}
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={3} rowSpan={5}>
+        <ItemsMissingMessage />
+      </td>
+    </tr>
+  );
+
   return (
     <>
       <div>
@@ -97,68 +140,31 @@ const UserRolesPage: Page = () => {
           </Button>
         )}
       </div>
-      <Grid
-        sx={{ minWidth: 800 }}
-        className={clsx(classes.root, 'mt-5')}
-        columns={maxCols}
-      >
-        <Grid.Col span={smallColSize} className="font-semibold uppercase">
-          {t('Title')}
-        </Grid.Col>
-        <Grid.Col span={largeColSize} className="font-semibold uppercase">
-          {t('Description')}
-        </Grid.Col>
-        <Grid.Col span={smallColSize}>
-          <span className="hidden">{t('Tools')}</span>
-        </Grid.Col>
-        <Grid.Col span={maxCols}>
-          <Divider size="sm" />
-        </Grid.Col>
-        {data?.data ? (
-          data.data.map((row, index) => (
-            <Fragment key={row.id}>
-              {index !== 0 && colDivider}
-              <Grid.Col span={smallColSize}>{row.label}</Grid.Col>
-              <Grid.Col span={largeColSize}>{row.description}</Grid.Col>
-              <Grid.Col span={smallColSize}>
-                {row.id !== 0 && (
-                  <Group
-                    className="ml-auto"
-                    position="right"
-                    spacing="xs"
-                    noWrap
-                  >
-                    {currentUserCanEdit && (
-                      <ActionIcon onClick={onEditClick(row.id)} color="blue">
-                        <Edit />
-                      </ActionIcon>
-                    )}
-                    {currentUserCanDelete && (
-                      <ActionIcon onClick={onDeleteClick(row.id)} color="red">
-                        <Trash />
-                      </ActionIcon>
-                    )}
-                  </Group>
-                )}
-              </Grid.Col>
-            </Fragment>
-          ))
-        ) : (
-          <Grid.Col span={12}>
-            <ItemsMissingMessage />
-          </Grid.Col>
+      <div className="relative min-h-[400px]">
+        <LoadingOverlay
+          visible={isLoading || isValidating || isError}
+          overlayBlur={2}
+        />
+        <Table
+          className={clsx(classes.root, '-mx-5 mt-5')}
+          horizontalSpacing="xl"
+          verticalSpacing="sm"
+        >
+          <thead>{ths}</thead>
+          <tbody>{rows}</tbody>
+          <tfoot>{ths}</tfoot>
+        </Table>
+        {data && (
+          <Group position="center" my="xl">
+            <Pagination
+              className="my-auto"
+              page={currentPage}
+              onChange={setCurrentPage}
+              total={data!.last_page}
+            />
+          </Group>
         )}
-      </Grid>
-      {data && (
-        <Group position="center" my="xl">
-          <Pagination
-            className="my-auto"
-            page={currentPage}
-            onChange={setCurrentPage}
-            total={data!.last_page}
-          />
-        </Group>
-      )}
+      </div>
       <Drawer
         opened={creationAction || !!optionToEdit}
         optionToEdit={optionToEdit}

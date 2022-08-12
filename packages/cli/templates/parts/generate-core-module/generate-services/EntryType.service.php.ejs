@@ -46,6 +46,7 @@ class EntryTypeService
   public function getMany(array $where = [], $page = 1, $pageLimit = 15): array
   {
     $query = $this->modelInstance->query();
+    $page = intval($page) > 0 ? intval($page) : 1;
 
     if (isset($this->language)) {
       $query->setLanguage($this->language);
@@ -63,15 +64,18 @@ class EntryTypeService
     $total = count($this->modelInstance->where($where)->getMany());
     $query->where($where);
     $data = $query->getMany();
+    $from = $pageLimit * ($page - 1) + 1;
+    $to = $from + ($pageLimit - 1) - ($pageLimit - count($data));
+    $lastPage = ceil($total / $pageLimit);
 
     return [
       'data' => $data,
       'current_page' => $page,
-      'last_page' => floor($total / $pageLimit),
+      'last_page' => $lastPage,
       'per_page' => $pageLimit,
       'total' => $total,
-      'from' => $pageLimit * $page + 1,
-      'to' => $pageLimit * $page + $pageLimit,
+      'from' => $from,
+      'to' => $to,
     ];
   }
 

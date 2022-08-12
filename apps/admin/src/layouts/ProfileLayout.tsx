@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import {
+  LanguageHiragana,
   Lock,
   Settings,
   UserCircle,
@@ -14,7 +15,12 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const items = [
   { title: 'Profile', url: '/settings/profile', Icon: UserCircle },
-  { title: 'Authentication', url: '/settings/password', Icon: Lock },
+  {
+    title: 'Authentication',
+    url: '/settings/password',
+    Icon: Lock,
+    canBeShown: () => false,
+  },
   {
     title: 'User Roles',
     url: '/settings/roles',
@@ -31,6 +37,11 @@ const items = [
         action: 'read',
         targetModel: 'settings',
       }),
+  },
+  {
+    title: 'General translations',
+    url: '/settings/translations',
+    Icon: LanguageHiragana,
   },
 ];
 
