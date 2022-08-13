@@ -35,12 +35,13 @@ return function (App $app) {
    */
   function onlyOwnersOrEditors(int $ownerId, $classInstance)
   {
-    return array_merge(
-      [['created_by', '=', $ownerId]],
-      $classInstance->getSummary()->isSharable
-        ? ['OR', ['coeditors', 'LIKE', $ownerId . '":true%']]
-        : [],
-    );
+    return !$classInstance->getSummary()->isSharable
+      ? ['created_by', '=', $ownerId]
+      : [
+        ['created_by', '=', $ownerId],
+        'OR',
+        ["coeditors.$ownerId", '=', true],
+      ];
   }
 
   $container->set('password-service', new \App\Services\Password());
