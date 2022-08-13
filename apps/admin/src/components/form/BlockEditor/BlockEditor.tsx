@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, lazy } from 'react';
+import { forwardRef, useCallback, lazy, Suspense } from 'react';
 import type EditorJS from '@editorjs/editorjs';
 import { Controller, useFormContext } from 'react-hook-form';
 import type { LazyEditorProps } from './LazyEditor';
@@ -24,14 +24,16 @@ export const BlockEditor = forwardRef<EditorJS, BlockEditorProps>(
         control={control}
         name="content"
         render={({ field: { onChange, name }, formState: { errors } }) => (
-          <LazyEditor
-            editorRef={editorRef}
-            onChange={onEditorChange(onChange)}
-            placeholder={t('Start typing here...') as string}
-            error={errors?.[name]?.message as unknown as string}
-            className="mb-20"
-            {...props}
-          />
+          <Suspense fallback={<>{t('Loading editor, please wait...')}</>}>
+            <LazyEditor
+              editorRef={editorRef}
+              onChange={onEditorChange(onChange)}
+              placeholder={t('Start typing here...') as string}
+              error={errors?.[name]?.message as unknown as string}
+              className="mb-20"
+              {...props}
+            />
+          </Suspense>
         )}
       />
     );

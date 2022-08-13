@@ -1,6 +1,6 @@
 import { API, BlockTool } from '@editorjs/editorjs';
 import { ItemID } from '@prom-cms/shared';
-import ReactDom from 'react-dom';
+import ReactDom from 'react-dom/client';
 import { ImageToolView } from './GalleryToolView';
 
 export interface ImageInfo {
@@ -97,13 +97,12 @@ class GalleryTool implements BlockTool {
     };
 
     // Render react controller
-    ReactDom.render(
+    ReactDom.createRoot(this.nodes.reactElement!).render(
       <ImageToolView
         data={this.data}
         onDataChange={onDataChange}
         readOnly={this.readOnly}
-      />,
-      this.nodes.reactElement
+      />
     );
 
     return this.nodes.holder;
