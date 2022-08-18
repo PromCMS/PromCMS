@@ -1,5 +1,12 @@
 # @prom-cms/shared
 
+## 1.3.0
+
+### Minor Changes
+
+- 376ccbf: Make possibility to create model that can have internationalized fields
+- 0ad043f: Move away from mysql based orm(eloquent) and replace it with SleekDB
+
 ## 1.2.0
 
 ### Minor Changes
