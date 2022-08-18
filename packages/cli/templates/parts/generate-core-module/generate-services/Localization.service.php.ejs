@@ -4,6 +4,7 @@ namespace App\Services;
 
 use DI\Container;
 use League\Flysystem\Filesystem;
+use PromCMS\Core\Config;
 
 class Localization
 {
@@ -14,9 +15,9 @@ class Localization
   {
     $this->container = $container;
     $this->fs = $container->get('locales-filesystem');
-    $this->supportedLanguages = $this->container->get('config')['i18n'][
-      'languages'
-    ];
+    $this->supportedLanguages = $this->container->get(
+      Config::class,
+    )->i18n->languages;
   }
 
   /**

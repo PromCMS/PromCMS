@@ -60,7 +60,7 @@ export class GenerateDevelopProgram extends Command {
       {
         title: 'Generate new core',
         job: async () => {
-          await generateCore(TEMP_CORE_ROOT, this.regenerate);
+          await generateCore(TEMP_CORE_ROOT);
         },
       },
       {

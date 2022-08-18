@@ -5,14 +5,15 @@ namespace App\Services;
 use DI\Container;
 use Firebase\JWT\JWT as JWTWorker;
 use Firebase\JWT\Key;
+use PromCMS\Core\Config;
 
 class JWT
 {
-  private $config;
+  private Config $config;
 
   public function __construct(Container $container)
   {
-    $this->config = $container->get('config');
+    $this->config = $container->get(Config::class);
   }
 
   public function generate($payload, int $expiration = null)
@@ -26,7 +27,7 @@ class JWT
           'exp' =>
             $now +
             ($expiration === null
-              ? $this->config['security']['token']['lifetime']
+              ? $this->config->security->token->lifetime
               : $expiration),
         ],
         $payload,

@@ -14,6 +14,7 @@ export const installPHPDeps = async (appRoot: string) => {
     'phpmailer/phpmailer:^6.6',
     'twig/twig:^3.0',
     'symfony/dotenv:^5.4',
+    'prom-cms/core',
     'illuminate/support',
   ];
 

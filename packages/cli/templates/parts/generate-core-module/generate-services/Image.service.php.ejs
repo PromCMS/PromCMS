@@ -5,18 +5,19 @@ namespace App\Services;
 use DI\Container;
 use Exception;
 use League\Flysystem\Filesystem;
-use Path;
+use PromCMS\Core\Config;
+use PromCMS\Core\Path;
 
 class ImageService
 {
   private Filesystem $cacheFs;
   private Filesystem $fs;
-  private array $config;
+  private Config $config;
 
   public function __construct(Container $container)
   {
     $this->fs = $container->get('filesystem');
-    $this->config = $container->get('config');
+    $this->config = $container->get(Config::class);
     $this->cacheFs = $container->get('file-cache-filesystem');
   }
 
@@ -77,7 +78,7 @@ class ImageService
 
         $imageConverted = \imagejpeg(
           $gdImageSource,
-          Path::join($this->config['fs']['cachePath'], $fileBasenameWithArgs),
+          Path::join($this->config->fs->cachePath, $fileBasenameWithArgs),
           $args['q'] ?? 90,
         );
 
@@ -104,7 +105,7 @@ class ImageService
     return [
       'resource' => $fileStream,
       'src' =>
-        $this->config['app']['baseUrl'] .
+        $this->config->app->baseUrl .
         "/api/entry-types/files/items/$fileId/raw?$joinedArgs",
       'width' => $imageWidth,
       'height' => $imageHeight,

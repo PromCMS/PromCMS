@@ -3,6 +3,8 @@
 require __DIR__ . '/utils/utils.php';
 
 use App\Twig\Extensions\AppExtension;
+use PromCMS\Core\Path;
+use PromCMS\Core\Utils;
 use Slim\App;
 
 return function (App $app) {
@@ -11,24 +13,9 @@ return function (App $app) {
   $container = $app->getContainer();
   $twig = $container->get('twig');
 
-  autoloadFolder(__DIR__ . '/Services');
-  autoloadFolder(__DIR__ . '/Http/Middleware');
-  autoloadFolder(__DIR__ . '/rendering/TwigExtensions');
-
-  class Path
-  {
-    private static function hasSystemPathStarter(string $path)
-    {
-      return str_starts_with($path, DIRECTORY_SEPARATOR) ||
-        str_starts_with($path, 'C:');
-    }
-
-    public static function join(...$args)
-    {
-      return (Path::hasSystemPathStarter($args[0]) ? '' : DIRECTORY_SEPARATOR) .
-        implode(DIRECTORY_SEPARATOR, $args);
-    }
-  }
+  Utils::autoloadFolder(Path::join(__DIR__, 'Services'));
+  Utils::autoloadFolder(Path::join(__DIR__, 'Http', 'Middleware'));
+  Utils::autoloadFolder(Path::join(__DIR__, 'rendering', 'TwigExtensions'));
 
   /**
    * This generates mysql search params

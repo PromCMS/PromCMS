@@ -5,18 +5,19 @@ namespace App\Controllers;
 use DI\Container;
 use League\Flysystem\DirectoryListing;
 use League\Flysystem\FilesystemException;
+use PromCMS\Core\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Folders
 {
   private $fs;
-  private $config;
+  private Config $config;
 
   public function __construct(Container $container)
   {
     $this->fs = $container->get('filesystem');
-    $this->config = $container->get('config');
+    $this->config = $container->get(Config::class);
   }
 
   private function listingHasContents(DirectoryListing $listing)
@@ -68,7 +69,7 @@ class Folders
     $data = $parsedBody['data'];
 
     try {
-      if (is_dir($this->config['fs']['uploadsPath'] . $data['path'])) {
+      if (is_dir($this->config->fs->uploadsPath . $data['path'])) {
         return $response->withStatus(409);
       }
 

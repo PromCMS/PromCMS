@@ -1,26 +1,29 @@
 <?php
-use DI\Container;
 use App\Services\Password as PasswordService;
+use PromCMS\Core\App;
+use PromCMS\Core\Config;
+use PromCMS\Core\Path;
+use PromCMS\Core\Utils;
+
 $PHP_APP_ROOT = $argv[1];
-$LIBS_ROOT = $PHP_APP_ROOT . '/app/libs';
 include_once $PHP_APP_ROOT . '/vendor/autoload.php';
-include_once $PHP_APP_ROOT . '/app/autoload.php';
 include_once $PHP_APP_ROOT . '/modules/Core/Services/Password.service.php';
 
-$container = new Container();
-$configBootstrap = require_once $LIBS_ROOT . '/config.bootstrap.php';
-$dbBootstrap = require_once $LIBS_ROOT . '/db.bootstrap.php';
-$utilsBootstrap = require_once $LIBS_ROOT . '/utils.bootstrap.php';
-$configBootstrap($container);
-$utilsBootstrap($container);
-$dbBootstrap($container);
-$utils = $container->get('utils');
+$app = new App($PHP_APP_ROOT);
+$app->init(true);
+$container = $app->getSlimApp()->getContainer();
 
-$moduleNames = BootstrapUtils::getValidModuleNames();
-$utils = $container->get('utils');
+/** @var Utils */
+$utils = $container->get(Utils::class);
+$moduleNames = Utils::getValidModuleNames($PHP_APP_ROOT);
 $availableModels = [];
 $faker = Faker\Factory::create();
 $passwordService = new PasswordService();
+
+function str_includes(string $toSearch, string $text)
+{
+  return strpos($toSearch, $text) !== false;
+}
 
 function specialStringFaker($columnName)
 {
@@ -47,11 +50,10 @@ function specialStringFaker($columnName)
  */
 try {
   foreach ($moduleNames as $moduleName) {
-    $moduleRoot = BootstrapUtils::getModuleRoot($moduleName);
-    $modelsFolderName = $container->get('config')['system']['modules'][
-      'modelsFolderName'
-    ];
-    $modelsRoot = joinPath($moduleRoot, $modelsFolderName);
+    $moduleRoot = Utils::getModuleRoot($PHP_APP_ROOT, $moduleName);
+    $modelsFolderName = $container->get(Config::class)->system->modules
+      ->modelsFolderName;
+    $modelsRoot = Path::join($moduleRoot, $modelsFolderName);
 
     if (is_dir($modelsRoot)) {
       $modelNames = $utils->autoloadModels($moduleRoot);
