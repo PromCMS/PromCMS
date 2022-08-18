@@ -49,8 +49,12 @@ export const GalleryToolViewContextProvider: FC<
 > = ({ children, initialData, onDataChange, readOnly }) => {
   const [state, setState] = useReducer(reducer, { ...initialData });
 
-  useEffect(() => setState({ ...initialData }), [initialData, readOnly]);
-  useEffect(() => onDataChange(state), [state, onDataChange]);
+  useEffect(() => {
+    setState({ ...initialData });
+  }, [initialData, readOnly]);
+  useEffect(() => {
+    onDataChange(state);
+  }, [state, onDataChange]);
 
   const addFile = useCallback<SmallFileListProps['onChange']>(
     (itemIds) =>

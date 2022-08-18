@@ -1,5 +1,5 @@
 import { API, BlockTool } from '@editorjs/editorjs';
-import ReactDom from 'react-dom';
+import ReactDom from 'react-dom/client';
 import { DynamicBlockToolView } from './DynamicBlockToolView';
 
 export interface DynamicBlockToolData {
@@ -82,13 +82,12 @@ class DynamicBlockTool implements BlockTool {
     };
 
     // Render react controller
-    ReactDom.render(
+    ReactDom.createRoot(this.nodes.reactElement!).render(
       <DynamicBlockToolView
         data={this.data}
         onDataChange={onDataChange}
         readOnly={this.readOnly}
-      />,
-      this.nodes.reactElement
+      />
     );
 
     return this.nodes.holder;

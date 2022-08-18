@@ -1,7 +1,7 @@
 import { API, BlockTool } from '@editorjs/editorjs';
 import * as iconSet from 'tabler-icons-react';
 import { ItemID } from '@prom-cms/shared';
-import ReactDom from 'react-dom';
+import ReactDom from 'react-dom/client';
 import { ButtonLinkView } from './ButtonLinkView';
 export interface ButtonLinkToolData {
   linkTo: string;
@@ -98,13 +98,12 @@ class ButtonLinkTool implements BlockTool {
     };
 
     // Render react controller
-    ReactDom.render(
+    ReactDom.createRoot(this.nodes.reactElement!).render(
       <ButtonLinkView
         dataFromParent={this.data}
         onDataChange={onDataChange}
         readOnly={this.readOnly}
-      />,
-      this.nodes.reactElement
+      />
     );
 
     return this.nodes.holder;

@@ -106,7 +106,7 @@ export class GenerateCMSProgram extends Command {
       {
         title: 'Generate new core',
         job: async () => {
-          await generateCore(FINAL_PATH, this.regenerate);
+          await generateCore(FINAL_PATH);
         },
       },
       {

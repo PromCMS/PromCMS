@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Exceptions\EntityNotFoundException;
+use PromCMS\Core\Exceptions\EntityNotFoundException;
 use App\Services\EntryTypeService;
 use App\Services\FileService;
 use App\Services\ImageService;
@@ -20,7 +20,6 @@ class Files
   private Filesystem $fs;
   private FileService $fileService;
   private ImageService $imageService;
-  private $config;
 
   public function __construct(Container $container)
   {
@@ -28,7 +27,6 @@ class Files
     $this->fs = $container->get('filesystem');
     $this->fileService = $container->get('file-service');
     $this->imageService = $container->get('image-service');
-    $this->config = $container->get('config');
   }
 
   public function getInfo(
@@ -125,6 +123,10 @@ class Files
         ->withHeader('Content-Length', $stream->getSize())
         ->withBody($stream);
     } catch (\Exception $e) {
+      if ($e instanceof EntityNotFoundException) {
+        return $response->withStatus(404);
+      }
+
       return $response
         ->withStatus(500)
         ->withHeader('Content-Description', $e->getMessage());
@@ -197,7 +199,7 @@ class Files
       }
 
       $createdFile = \Files::create($fileArgs);
-      $file->moveTo($this->config['fs']['uploadsPath'] . $filepath);
+      $file->moveTo($this->config->fs->uploadsPath . $filepath);
 
       //DB::commit();
 

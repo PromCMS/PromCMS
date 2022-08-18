@@ -16,10 +16,14 @@ export class FileService {
   }
 
   static getApiRawUrl(
-    id: ItemID,
+    id?: ItemID,
     searchParams: Record<string, string> = {},
     withPrefix: boolean = false
   ) {
+    if (id === undefined || id === 'undefined') {
+      return undefined;
+    }
+
     const params = new URLSearchParams(searchParams).toString();
     return `${
       withPrefix ? '/api' : ''

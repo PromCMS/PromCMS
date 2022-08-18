@@ -13,7 +13,7 @@
     "dev:admin": "yarn workspace @prom-cms/admin run dev",
     "dev:api": "yarn workspace @prom-cms/dev-api run dev",
     "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
-    "regenerate:cms": "yarn workspace @prom-cms/cli run regenerate:cms",
+    "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
     "prettier": "prettier --config ./packages/config/prettier-config.js --write \"**/*.{ts,tsx}\"",
     "version-packages": "changeset version && yarn prettier"
   },

@@ -85,7 +85,8 @@ class Permission
       }
 
       $response = new Response();
-      $role = \UserRoles::getOneById($roleId)->getData();
+      $role = \Models\UserRoles::getOneById($roleId)->getData();
+      $role = json_decode(json_encode($role), true);
       $modelPermissions = $role['permissions']['models'][$modelFromUrl];
       $requestMethod = $request->getMethod();
       // 'allow-everything' | 'allow-own' | false

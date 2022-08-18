@@ -1,25 +1,21 @@
 <?php
 
 use App\Services\EntryTypeService;
-use DI\Container;
+use PromCMS\Core\App;
+use PromCMS\Core\Config;
+use PromCMS\Core\Path;
+use PromCMS\Core\Utils;
+
 $PHP_APP_ROOT = $argv[1];
 $PATH_TO_DATA_FILE = $argv[2];
-$LIBS_ROOT = $PHP_APP_ROOT . '/app/libs';
 include_once $PHP_APP_ROOT . '/vendor/autoload.php';
-include_once $PHP_APP_ROOT . '/app/autoload.php';
 include_once $PHP_APP_ROOT . '/modules/Core/Services/EntryType.service.php';
 
-$container = new Container();
-$configBootstrap = require_once $LIBS_ROOT . '/config.bootstrap.php';
-$dbBootstrap = require_once $LIBS_ROOT . '/db.bootstrap.php';
-$utilsBootstrap = require_once $LIBS_ROOT . '/utils.bootstrap.php';
-$configBootstrap($container);
-$utilsBootstrap($container);
-$dbBootstrap($container);
-$utils = $container->get('utils');
-
-$moduleNames = BootstrapUtils::getValidModuleNames();
-$utils = $container->get('utils');
+$app = new App($PHP_APP_ROOT);
+$app->init(true);
+$container = $app->getSlimApp()->getContainer();
+$moduleNames = Utils::getValidModuleNames($PHP_APP_ROOT);
+$utils = $container->get(Utils::class);
 $availableModels = [];
 
 try {
@@ -41,11 +37,10 @@ try {
 
   // Load all models from modules
   foreach ($moduleNames as $moduleName) {
-    $moduleRoot = BootstrapUtils::getModuleRoot($moduleName);
-    $modelsFolderName = $container->get('config')['system']['modules'][
-      'modelsFolderName'
-    ];
-    $modelsRoot = joinPath($moduleRoot, $modelsFolderName);
+    $moduleRoot = Utils::getModuleRoot($PHP_APP_ROOT, $moduleName);
+    $modelsFolderName = $container->get(Config::class)->system->modules
+      ->modelsFolderName;
+    $modelsRoot = Path::join($moduleRoot, $modelsFolderName);
 
     if (is_dir($modelsRoot)) {
       $modelNames = $utils->autoloadModels($moduleRoot);

@@ -1,5 +1,5 @@
 import { API, BlockTool } from '@editorjs/editorjs';
-import ReactDom from 'react-dom';
+import ReactDom from 'react-dom/client';
 import { TagsToolView } from './TagsToolView';
 
 export interface TagsToolData {
@@ -95,13 +95,12 @@ class TagsTool implements BlockTool {
     };
 
     // Render react controller
-    ReactDom.render(
+    ReactDom.createRoot(this.nodes.reactElement!).render(
       <TagsToolView
         dataFromParent={this.data}
         onDataChange={onDataChange}
         readOnly={this.readOnly}
-      />,
-      this.nodes.reactElement
+      />
     );
 
     return this.nodes.holder;
