@@ -1,5 +1,21 @@
 # @prom-cms/cli
 
+## 0.6.0
+
+### Minor Changes
+
+- 7735342: Use dynamic localizations from json
+- 376ccbf: Make possibility to create model that can have internationalized fields
+- b5687f3: Simplify admin by replacing nextjs with more fitting vite
+- 25944c2: Use prom-cms/core package and remove app folder
+- 0ad043f: Move away from mysql based orm(eloquent) and replace it with SleekDB
+
+### Patch Changes
+
+- Updated dependencies [376ccbf]
+- Updated dependencies [0ad043f]
+  - @prom-cms/shared@1.3.0
+
 ## 0.5.1
 
 ### Patch Changes
