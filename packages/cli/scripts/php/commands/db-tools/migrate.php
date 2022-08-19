@@ -35,18 +35,7 @@ try {
     $groupedData[$item->name] = $item->data;
   }
 
-  // Load all models from modules
-  foreach ($moduleNames as $moduleName) {
-    $moduleRoot = Utils::getModuleRoot($PHP_APP_ROOT, $moduleName);
-    $modelsFolderName = $container->get(Config::class)->system->modules
-      ->modelsFolderName;
-    $modelsRoot = Path::join($moduleRoot, $modelsFolderName);
-
-    if (is_dir($modelsRoot)) {
-      $modelNames = $utils->autoloadModels($moduleRoot);
-      $availableModels = array_merge($availableModels, $modelNames);
-    }
-  }
+  $availableModels = $container->get('sysinfo')['loadedModels'];
 
   foreach ($availableModels as $modelName) {
     echo "🔧 Founded model by the name of: '$modelName', trying to find data...";
