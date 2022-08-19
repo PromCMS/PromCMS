@@ -1,5 +1,12 @@
 # @prom-cms/cli
 
+## 0.7.0
+
+### Minor Changes
+
+- 8339990: Use prom-cms/core package and remove app folder
+- 8339990: Remove namespace from models classes
+
 ## 0.6.0
 
 ### Minor Changes
