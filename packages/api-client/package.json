@@ -6,7 +6,7 @@
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/api-client/README.md",
   "license": "MIT",
   "main": "dist/prom-cms-api-client.cjs.js",
-  "typings": "dist/index.d.ts",
+  "typings": "dist/prom-cms-api-client.cjs.d.ts",
   "module": "dist/prom-cms-api-client.esm.js",
   "source": "src/index.ts",
   "files": [
