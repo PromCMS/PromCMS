@@ -1,6 +1,4 @@
-import { User } from './users';
-
-export default {};
+import { User } from "./User";
 
 type MockDatabaseUserDatabase = Record<'users', User[]>;
 
