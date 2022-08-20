@@ -1,32 +1,34 @@
-import { ApiResultItem } from '@prom-cms/shared';
+import { ItemID, User } from '@prom-cms/shared';
+import { PagedResponse, QueryParams, Response } from "../../types";
+import { formatQueryParams } from "../../utils";
 import { ApiClientBase } from '../ApiClientBase';
 import { EntryApiClient } from './EntryApiClient';
 
 export class UserApiClient extends ApiClientBase {
   private modelId = 'users';
 
-  async getOne(id: string) {
-    return this.axios.get(EntryApiClient.getItemUrl(this.modelId, id));
+  async getOne(id: ItemID) {
+    return this.axios.get<Response<User>>(EntryApiClient.getItemUrl(this.modelId, id));
   }
 
-  async getMany(options: { page: number; limit?: number }) {
-    return this.axios.get(EntryApiClient.getItemsUrl(this.modelId), {
-      params: options,
+  async getMany(options: QueryParams = {}) {
+    return this.axios.get<PagedResponse<User>>(EntryApiClient.getItemsUrl(this.modelId), {
+      params: formatQueryParams(options),
     });
   }
 
-  async update(id: string, payload: ApiResultItem) {
-    return this.axios.patch(EntryApiClient.getItemUrl(this.modelId, id), {
+  async update(id: ItemID, payload: Omit<Partial<User>, "id">) {
+    return this.axios.patch<Response<User>>(EntryApiClient.getItemUrl(this.modelId, id), {
       data: payload,
     });
   }
 
-  async delete(id: string) {
-    return this.axios.delete(EntryApiClient.getItemUrl(this.modelId, id));
+  async delete(id: ItemID) {
+    return this.axios.delete<Response<User>>(EntryApiClient.getItemUrl(this.modelId, id));
   }
 
-  async create(payload: ApiResultItem) {
-    return this.axios.post(
+  async create(payload: Omit<User, "id">) {
+    return this.axios.post<Response<User>>(
       `${EntryApiClient.getItemsUrl(this.modelId)}/create`,
       {
         data: payload,
@@ -34,14 +36,14 @@ export class UserApiClient extends ApiClientBase {
     );
   }
 
-  block(userId: string) {
-    return this.axios.patch(
+  block(userId: ItemID) {
+    return this.axios.patch<Response<User>>(
       `${EntryApiClient.getItemUrl(this.modelId, userId)}/block`
     );
   }
 
-  unblock(userId: string) {
-    return this.axios.patch(
+  unblock(userId: ItemID) {
+    return this.axios.patch<Response<User>>(
       `${EntryApiClient.getItemUrl(this.modelId, userId)}/unblock`
     );
   }

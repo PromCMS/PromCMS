@@ -28,4 +28,8 @@ export class ApiClient {
     this.settings = new SettingsApiClient(this.axios);
     this.users = new UserApiClient(this.axios);
   }
+
+  getAxios() {
+    return this.axios;
+  }
 }
