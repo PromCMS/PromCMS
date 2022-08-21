@@ -4,5 +4,6 @@ export * from './PagedResponse';
 export * from './QueryParams';
 export * from './Response';
 export * from './ResultItem';
+export * from './RichAxiosRequestConfig';
 export * from './SettingsItem';
 export * from './WhereQueryParameter';

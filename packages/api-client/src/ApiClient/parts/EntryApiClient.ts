@@ -1,6 +1,10 @@
 import { ItemID } from '@prom-cms/shared';
-import { PagedResponse, QueryParams, Response, ResultItem } from '../../types';
-import { formatQueryParams } from '../../utils';
+import {
+  PagedResponse,
+  Response,
+  ResultItem,
+  RichAxiosRequestConfig,
+} from '../../types';
 import { ApiClientBase } from '../ApiClientBase';
 
 export class EntryApiClient extends ApiClientBase {
@@ -16,47 +20,64 @@ export class EntryApiClient extends ApiClientBase {
     return `${this.getItemsUrl(modelId)}/${id}`;
   }
 
-  async getOne<T extends ResultItem>(modelId: string, id: ItemID) {
-    return this.axios.get<Response<T>>(EntryApiClient.getItemUrl(modelId, id));
+  async getOne<T extends ResultItem>(
+    modelId: string,
+    id: ItemID,
+    config?: RichAxiosRequestConfig<T>
+  ) {
+    return this.axios.get<Response<T>>(
+      EntryApiClient.getItemUrl(modelId, id),
+      this.formatAxiosConfig<T>(config)
+    );
   }
 
-  async getMany<T extends ResultItem>(modelId: string, options: QueryParams) {
+  async getMany<T extends ResultItem>(
+    modelId: string,
+    config?: RichAxiosRequestConfig<T>
+  ) {
     return this.axios.get<PagedResponse<T>>(
       EntryApiClient.getItemsUrl(modelId),
-      {
-        params: formatQueryParams(options),
-      }
+      this.formatAxiosConfig<T>(config)
     );
   }
 
   async update<T extends ResultItem>(
     modelId: string,
     id: ItemID,
-    payload: Omit<ResultItem, 'id'>
+    payload: Omit<ResultItem, 'id'>,
+    config?: RichAxiosRequestConfig<T>
   ) {
     return this.axios.patch<Response<T>>(
       EntryApiClient.getItemUrl(modelId, id),
       {
         data: payload,
-      }
+      },
+      this.formatAxiosConfig<T>(config)
     );
   }
 
-  async delete<T extends ResultItem>(modelId: string, id: ItemID) {
+  async delete<T extends ResultItem>(
+    modelId: string,
+    id: ItemID,
+    config?: RichAxiosRequestConfig<T>
+  ) {
     return this.axios.delete<Response<T>>(
-      EntryApiClient.getItemUrl(modelId, id)
+      EntryApiClient.getItemUrl(modelId, id),
+      this.formatAxiosConfig<T>(config)
     );
   }
 
   async create<T extends ResultItem>(
     modelId: string,
-    payload: Omit<ResultItem, 'id'>
+    payload: Omit<ResultItem, 'id'>,
+    config?: RichAxiosRequestConfig<T>
   ) {
     return this.axios.post<Response<T>>(
       `${EntryApiClient.getItemsUrl(modelId)}/create`,
       {
         data: payload,
-      }
+      },
+      this.formatAxiosConfig<T>(config)
     );
   }
 }
