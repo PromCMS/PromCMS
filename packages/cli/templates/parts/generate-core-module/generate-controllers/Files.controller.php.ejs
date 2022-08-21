@@ -66,6 +66,7 @@ class Files
     $queryParams = $request->getQueryParams();
     $service = new EntryTypeService(new \Files());
     $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
+    $limit = intval($queryParams['limit'] ?? 15);
     $where = [];
 
     if (isset($queryParams['where'])) {
@@ -84,7 +85,9 @@ class Files
       };
     }
 
-    $response->getBody()->write(json_encode($service->getMany($where, $page)));
+    $response
+      ->getBody()
+      ->write(json_encode($service->getMany($where, $page, $limit)));
 
     return $response;
   }
