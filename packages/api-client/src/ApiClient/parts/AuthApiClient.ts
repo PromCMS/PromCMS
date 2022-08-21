@@ -9,13 +9,13 @@ export class AuthApiClient extends ApiClientBase {
     props: { email: string; password: string },
     config?: AxiosRequestConfig
   ) {
-    return this.axios.post<Response<User>>('/api/profile/login', props, config);
+    return this.axios.post<Response<User>>('/profile/login', props, config);
   }
 
   logout(
     props: { email: string; password: string },
     config?: AxiosRequestConfig
   ) {
-    return this.axios.post<Response>('/api/profile/logout', props, config);
+    return this.axios.post<Response>('/profile/logout', props, config);
   }
 }
