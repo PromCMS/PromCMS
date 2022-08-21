@@ -76,6 +76,7 @@ class UserProfile
         }
 
         $this->container->get('session')->set('user_id', $user->id);
+        $responseAry['data'] = $user->getData();
         $responseAry['result'] = 'success';
         $responseAry['message'] = 'successfully logged in';
         $code = 200;
