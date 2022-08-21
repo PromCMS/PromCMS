@@ -1,6 +1,6 @@
 import { ItemID, User } from '@prom-cms/shared';
-import { PagedResponse, QueryParams, Response } from "../../types";
-import { formatQueryParams } from "../../utils";
+import { PagedResponse, QueryParams, Response } from '../../types';
+import { formatQueryParams } from '../../utils';
 import { ApiClientBase } from '../ApiClientBase';
 import { EntryApiClient } from './EntryApiClient';
 
@@ -8,26 +8,36 @@ export class UserApiClient extends ApiClientBase {
   private modelId = 'users';
 
   async getOne(id: ItemID) {
-    return this.axios.get<Response<User>>(EntryApiClient.getItemUrl(this.modelId, id));
+    return this.axios.get<Response<User>>(
+      EntryApiClient.getItemUrl(this.modelId, id)
+    );
   }
 
   async getMany(options: QueryParams = {}) {
-    return this.axios.get<PagedResponse<User>>(EntryApiClient.getItemsUrl(this.modelId), {
-      params: formatQueryParams(options),
-    });
+    return this.axios.get<PagedResponse<User>>(
+      EntryApiClient.getItemsUrl(this.modelId),
+      {
+        params: formatQueryParams(options),
+      }
+    );
   }
 
-  async update(id: ItemID, payload: Omit<Partial<User>, "id">) {
-    return this.axios.patch<Response<User>>(EntryApiClient.getItemUrl(this.modelId, id), {
-      data: payload,
-    });
+  async update(id: ItemID, payload: Omit<Partial<User>, 'id'>) {
+    return this.axios.patch<Response<User>>(
+      EntryApiClient.getItemUrl(this.modelId, id),
+      {
+        data: payload,
+      }
+    );
   }
 
   async delete(id: ItemID) {
-    return this.axios.delete<Response<User>>(EntryApiClient.getItemUrl(this.modelId, id));
+    return this.axios.delete<Response<User>>(
+      EntryApiClient.getItemUrl(this.modelId, id)
+    );
   }
 
-  async create(payload: Omit<User, "id">) {
+  async create(payload: Omit<User, 'id'>) {
     return this.axios.post<Response<User>>(
       `${EntryApiClient.getItemsUrl(this.modelId)}/create`,
       {
@@ -45,6 +55,15 @@ export class UserApiClient extends ApiClientBase {
   unblock(userId: ItemID) {
     return this.axios.patch<Response<User>>(
       `${EntryApiClient.getItemUrl(this.modelId, userId)}/unblock`
+    );
+  }
+
+  requestPasswordReset(userId: ItemID) {
+    return this.axios.patch<Response<User>>(
+      `${EntryApiClient.getItemUrl(
+        this.modelId,
+        userId
+      )}/request-password-reset`
     );
   }
 }
