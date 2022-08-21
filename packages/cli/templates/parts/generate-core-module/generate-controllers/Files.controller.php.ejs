@@ -64,27 +64,24 @@ class Files
     ResponseInterface $response
   ): ResponseInterface {
     $queryParams = $request->getQueryParams();
-    $directoryPath = isset($queryParams['path']) ? $queryParams['path'] : '/';
-
-    prepareJsonResponse(
-      $response,
-      $this->fileService->getManyByDirectory($directoryPath),
-    );
-
-    return $response;
-  }
-
-  public function getManyListed(
-    ServerRequestInterface $request,
-    ResponseInterface $response
-  ): ResponseInterface {
-    $queryParams = $request->getQueryParams();
-    $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
     $service = new EntryTypeService(new \Files());
+    $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
     $where = [];
 
     if (isset($queryParams['where'])) {
       [$where] = normalizeWhereQueryParam($queryParams['where']);
+    }
+
+    if (isset($queryParams['path'])) {
+      $directoryPath = $queryParams['path'];
+      $fixedDirectoryPath =
+        $directoryPath . ($directoryPath !== '/' ? '/' : '');
+      $regexPart = str_replace('/', '\/', $fixedDirectoryPath);
+      $where[] = function ($file) use ($regexPart) {
+        $pattern = '(' . $regexPart . ')[^\/]*(\.).*';
+        $pattern = '/^' . $pattern . "$/m";
+        return !!preg_match($pattern, $file['filepath']);
+      };
     }
 
     $response->getBody()->write(json_encode($service->getMany($where, $page)));
