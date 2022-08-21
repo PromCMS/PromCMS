@@ -5,7 +5,7 @@ import { ApiClientBase } from '../ApiClientBase';
 
 export class EntryApiClient extends ApiClientBase {
   static getBaseUrl(modelId: string) {
-    return `/api/entry-types/${modelId}`;
+    return `/entry-types/${modelId}`;
   }
 
   static getItemsUrl(modelId: string) {
