@@ -1,7 +1,4 @@
-import { ItemID } from "./ItemID";
-
 export interface File {
-  id: ItemID;
   filename: string;
   filepath: string;
   created_at: string;
