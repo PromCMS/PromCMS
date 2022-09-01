@@ -58,12 +58,15 @@ export class UserApiClient extends ApiClientBase {
     );
   }
 
-  requestPasswordReset(userId: ItemID) {
-    return this.axios.patch<Response<User>>(
-      `${EntryApiClient.getItemUrl(
-        this.modelId,
-        userId
-      )}/request-password-reset`
-    );
+  requestPasswordReset(email: string) {
+    return this.axios.get<Response<User>>(`/profile/request-password-reset`, {
+      params: {
+        email,
+      },
+    });
+  }
+
+  finalizePasswordReset(payload: { new_password: string; token: string }) {
+    return this.axios.post('/profile/finalize-password-reset', payload);
   }
 }
