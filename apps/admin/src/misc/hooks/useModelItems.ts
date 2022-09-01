@@ -1,4 +1,4 @@
-import { PagedResponse, QueryParams, ResultItem } from "@prom-cms/api-client"
+import { PagedResponse, ResultItem } from "@prom-cms/api-client"
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@api";
 import { useCallback, useMemo } from "react";

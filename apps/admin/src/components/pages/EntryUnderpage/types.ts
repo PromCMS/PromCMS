@@ -1,3 +1,3 @@
-import { ApiResultItem } from '@prom-cms/shared';
+import { ResultItem } from '@prom-cms/api-client';
 
-export interface ItemFormValues extends Partial<ApiResultItem> {}
+export interface ItemFormValues extends Partial<ResultItem> {}

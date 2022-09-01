@@ -69,7 +69,9 @@ export const FormAside: FC = () => {
           successMessage: t('User can now follow instruction in their email'),
         },
         async () => {
-          const { data } = await apiClient.users.requestPasswordReset(user!.id);
+          const { data } = await apiClient.users.requestPasswordReset(
+            user!.email
+          );
 
           mutateUser(data.data);
         }

@@ -28,8 +28,8 @@ export const useFileFolder = (currentPath: string) => {
     refetch: refetchFolders
   } = useFolders(currentPath);
 
-  const mutateFiles = useCallback((param: Parameters<typeof setQueryData<NonNullable<typeof filesRes>>>["1"]) => setQueryData(filesQueryKey, param), [setQueryData, filesQueryKey]);
-  const mutateFolders = useCallback((param: Parameters<typeof setQueryData<NonNullable<typeof foldersRes>>>["1"]) => setQueryData(foldersKey, param), [setQueryData]);
+  const mutateFiles = useCallback((param: Parameters<typeof setQueryData<NonNullable<typeof filesRes>>>["1"]) => setQueryData<NonNullable<typeof filesRes>>(filesQueryKey, param), [setQueryData, filesQueryKey]);
+  const mutateFolders = useCallback((param: Parameters<typeof setQueryData<NonNullable<typeof foldersRes>>>["1"]) => setQueryData<NonNullable<typeof foldersRes>>(foldersKey, param), [setQueryData]);
 
   return useMemo(() => ({
     data:

@@ -1,10 +1,11 @@
-import { File, ItemID } from '@prom-cms/shared';
+import { FileItem } from '@prom-cms/api-client';
+import { ItemID } from '@prom-cms/shared';
 import { createContext, useContext, useReducer } from 'react';
 
 type ContextReadonlyKeys = Omit<ISmallFileListContext, 'updateValues'>;
 
 export interface ISmallFileListContext {
-  files: File[];
+  files: FileItem[];
   isLoading: boolean;
   searchValue: string;
   selectedFiles: ItemID[];

@@ -1,19 +1,20 @@
-import { File, ItemID } from '@prom-cms/shared';
-import { useCallback, useMemo, VFC } from 'react';
+import { ItemID } from '@prom-cms/shared';
+import { useCallback, useMemo, FC } from 'react';
 import { useClassNames as getClassnames } from '../../useClassNames';
 import { useSmallFileList } from '../../context';
 import clsx from 'clsx';
 import { UnstyledButton } from '@mantine/core';
 import BackendImage from '@components/BackendImage';
 import { Check } from 'tabler-icons-react';
+import { FileItem as FileItemType } from '@prom-cms/api-client';
 
 const classNames = getClassnames();
 
-export interface FileItemProps extends File {
+export interface FileItemProps extends FileItemType {
   onDeleteClick: (id: ItemID) => void;
 }
 
-export const FileItem: VFC<FileItemProps> = ({ id, filename, mimeType }) => {
+export const FileItem: FC<FileItemProps> = ({ id, filename, mimeType }) => {
   const { selectedFiles, updateValue } = useSmallFileList();
   const extension = filename.split('.').at(-1) || 'unknown';
   const type = mimeType?.split('/')?.[0] || 'unknown';

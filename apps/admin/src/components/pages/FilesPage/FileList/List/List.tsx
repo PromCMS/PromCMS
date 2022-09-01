@@ -61,7 +61,7 @@ export const List: FC = () => {
 
         try {
           await apiClient.folders.delete(path);
-          await mutateFolders((folders) => {
+          mutateFolders((folders) => {
             return folders?.filter((folder) => folder !== folderName);
           });
 
@@ -102,10 +102,11 @@ export const List: FC = () => {
     async (id) => {
       if (confirm(t('Do you really want to delete this file?'))) {
         await apiClient.files.delete(id);
-        await mutateFiles((memory) => {
+        mutateFiles((memory) => {
           if (!memory) return memory;
 
           return {
+            ...memory,
             data: memory.data.filter((file) => file.id !== id),
           };
         });

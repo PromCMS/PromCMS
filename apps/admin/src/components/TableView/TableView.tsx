@@ -1,8 +1,8 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
-import { ItemID, PagedResult } from '@prom-cms/shared';
+import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
-import { PropsWithChildren, useCallback, useMemo, VFC } from 'react';
+import { PropsWithChildren, useCallback, useMemo, FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { createIterativeArray } from '@utils';
 import { ActionIcon, Group, Paper } from '@mantine/core';
@@ -14,9 +14,9 @@ import {
   Droppable,
 } from 'react-beautiful-dnd';
 import { useClassNames } from './useClassNames';
-import { FC } from 'react';
 import { useState } from 'react';
 import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
+import { PagedResponse } from '@prom-cms/api-client';
 
 export type TableViewItem = { id: string | number; [x: string]: any };
 
@@ -34,7 +34,7 @@ export interface TableViewProps {
   columns: TableViewCol[];
   items: Array<TableViewItem>;
   isLoading?: boolean;
-  metadata?: Omit<PagedResult<any>, 'data'>;
+  metadata?: Omit<PagedResponse<any>, 'data'>;
   pagination?: ReactNode;
   onDeleteAction?: (id: ItemID) => void;
   onEditAction?: (id: ItemID) => void;
@@ -82,7 +82,7 @@ const DynamicDraggable: FC<
 
 type ActionType = 'delete' | 'edit' | 'duplicate';
 
-const TableView: VFC<TableViewProps> = ({
+const TableView: FC<TableViewProps> = ({
   columns,
   items,
   metadata,
