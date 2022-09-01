@@ -1,5 +1,5 @@
 import { Modal, ModalProps } from '@mantine/core';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFileListContext } from '../context';
 
@@ -7,7 +7,7 @@ export type UploadFilesModalProps = Pick<ModalProps, 'onClose'> & {
   isOpen: boolean;
 };
 
-export const UploadFilesModal: VFC<UploadFilesModalProps> = ({
+export const UploadFilesModal: FC<UploadFilesModalProps> = ({
   isOpen,
   onClose,
 }) => {

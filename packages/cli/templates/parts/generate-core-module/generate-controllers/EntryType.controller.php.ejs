@@ -137,6 +137,7 @@ class EntryType
     );
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
+    $limit = intval($queryParams['limit'] ?? 15);
     $where = [];
 
     // If current user can view this content
@@ -145,7 +146,9 @@ class EntryType
       $where = $filter;
     }
 
-    $response->getBody()->write(json_encode($service->getMany($where, $page)));
+    $response
+      ->getBody()
+      ->write(json_encode($service->getMany($where, $page, $limit)));
 
     return $response;
   }

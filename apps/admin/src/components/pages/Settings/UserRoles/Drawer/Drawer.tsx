@@ -12,7 +12,6 @@ import {
 import { ItemID } from '@prom-cms/shared';
 import { useTranslation } from 'react-i18next';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { UserRolesService } from '@services';
 import { useGlobalContext } from '@contexts/GlobalContext';
 import { Fragment } from 'react';
 import { ModelPermissionToggles } from './ModelPermissionToggles';
@@ -20,6 +19,7 @@ import { useEffect } from 'react';
 import { useModelItem } from '@hooks/useModelItem';
 import { useMemo } from 'react';
 import { CUSTOM_MODELS } from '@constants';
+import { apiClient } from '@api';
 
 export const Drawer: FC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
@@ -42,28 +42,30 @@ export const Drawer: FC<
   }, [data, reset, optionToEdit, opened]);
 
   const onSubmit = async (values) => {
-    try {
-      reqWithNotification(
-        {
-          title: t(optionToEdit ? 'Updating user role' : 'Creating user role'),
-          message: t('Please wait...'),
-          successMessage: t(
-            optionToEdit
-              ? 'User role successfully updated'
-              : 'User role has been created'
-          ),
-        },
-        async () => {
-          if (optionToEdit) {
-            const { id, ...newOptionDataset } = values;
-            await UserRolesService.update(optionToEdit, newOptionDataset);
-          } else {
-            await UserRolesService.create(values);
-          }
-          onClose();
+    reqWithNotification(
+      {
+        title: t(optionToEdit ? 'Updating user role' : 'Creating user role'),
+        message: t('Please wait...'),
+        successMessage: t(
+          optionToEdit
+            ? 'User role successfully updated'
+            : 'User role has been created'
+        ),
+      },
+      async () => {
+        if (optionToEdit) {
+          const { id, ...newOptionDataset } = values;
+          await apiClient.entries.update(
+            'userRoles',
+            optionToEdit,
+            newOptionDataset
+          );
+        } else {
+          await apiClient.entries.create('userRoles', values);
         }
-      );
-    } catch (e) {}
+        onClose();
+      }
+    );
   };
 
   const filteredModelEntries = useMemo(() => {

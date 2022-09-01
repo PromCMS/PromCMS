@@ -39,13 +39,16 @@ class Users
     $service = new EntryTypeService(new \Users());
     $queryParams = $request->getQueryParams();
     $page = isset($queryParams['page']) ? $queryParams['page'] : 1;
+    $limit = intval($queryParams['limit'] ?? 15);
     $where = [];
 
     if (isset($queryParams['where'])) {
       [$where] = normalizeWhereQueryParam($queryParams['where']);
     }
 
-    $response->getBody()->write(json_encode($service->getMany($where), $page));
+    $response
+      ->getBody()
+      ->write(json_encode($service->getMany($where, $page, $limit)));
 
     return $response;
   }

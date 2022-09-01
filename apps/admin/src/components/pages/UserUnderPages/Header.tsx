@@ -1,8 +1,8 @@
-import { VFC } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useData } from './context';
 
-export const Header: VFC = () => {
+export const Header: FC = () => {
   const { view } = useData();
   const { t } = useTranslation();
 

@@ -34,7 +34,8 @@ class UserRoles
     $queryParams = $request->getQueryParams();
     $page = intval(isset($queryParams['page']) ? $queryParams['page'] : 1);
     $service = new EntryTypeService(new \UserRoles());
-    $responseData = $service->getMany([], $page);
+    $limit = intval($queryParams['limit'] ?? 15);
+    $responseData = $service->getMany([], $page, $limit);
 
     if ($page === 1) {
       $responseData['data'] = array_merge(

@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "@types/find-config": "1.0.1",
-    "typescript": "^4.7.4",
+    "typescript": "4.8.2",
     "@prom-cms/config": "*"
   },
   "peerDependencies": {

@@ -1,3 +1,4 @@
+import { apiClient } from '@api';
 import BackendImage from '@components/BackendImage';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import { Page } from '@custom-types';
@@ -17,7 +18,6 @@ import {
   Textarea,
 } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
-import { SettingsService } from '@services';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { useCallback, useState } from 'react';
@@ -46,10 +46,15 @@ const UserProfileMainPage: Page = () => {
   const { t } = useTranslation();
   const currentUser = useCurrentUser();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, mutate, isLoading, isValidating, isError } = useModelItems(
-    'settings',
-    { page: currentPage }
-  );
+  const {
+    data,
+    refetch: mutate,
+    isLoading,
+    isRefetching,
+    isError,
+  } = useModelItems('settings', {
+    params: { page: currentPage },
+  });
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
   const [creationAction, setCreationMode] = useState(false);
   const reqNotification = useRequestWithNotifications();
@@ -91,7 +96,7 @@ const UserProfileMainPage: Page = () => {
             successMessage: t('Option deleted!'),
           },
           async () => {
-            await SettingsService.delete(id);
+            await apiClient.settings.delete(id);
             await mutate();
           }
         );
@@ -114,7 +119,7 @@ const UserProfileMainPage: Page = () => {
       )}
       <div className="relative min-h-[400px]">
         <LoadingOverlay
-          visible={isLoading || isValidating || isError}
+          visible={isLoading || isRefetching || isError}
           overlayBlur={2}
         />
         <Grid

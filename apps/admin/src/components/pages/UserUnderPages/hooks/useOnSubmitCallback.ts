@@ -1,18 +1,17 @@
-import { ApiResultItem } from '@prom-cms/shared';
-import { UserService } from '@services';
 import { useTranslation } from 'react-i18next';
 import { getObjectDiff } from '@utils';
 import { useData } from '../context';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import axios from 'axios';
 import { useFormContext } from 'react-hook-form';
-import { MESSAGES } from '@constants';
+import { MESSAGES, pageUrls } from '@constants';
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '@api';
 
 export const useOnSubmitCallback = () => {
   const navigate = useNavigate();
-  const { view, user, mutateUser } = useData();
   const reqNotification = useRequestWithNotifications();
+  const { view, user, mutateUser } = useData();
   const { t } = useTranslation();
   const { setError } = useFormContext();
 
@@ -41,26 +40,19 @@ export const useOnSubmitCallback = () => {
         },
         async () => {
           if (view === 'update') {
-            const result = await UserService.update(
+            const result = await apiClient.users.update(
               user?.id as number,
-              getObjectDiff(user, values) as ApiResultItem
+              getObjectDiff(user, values)
             );
 
-            await mutateUser(
-              (prev) => {
-                if (prev && result?.data?.data) {
-                  return { ...prev, ...result.data.data };
-                }
-              },
-              { revalidate: false }
-            );
+            mutateUser(result.data.data);
           } else if (view === 'create') {
-            const result = await UserService.create(
-              getObjectDiff(user || {}, values) as ApiResultItem
+            const result = await apiClient.users.create(
+              getObjectDiff(user || {}, values)
             );
 
             if (result?.data) {
-              navigate(UserService.getListUrl());
+              navigate(pageUrls.users.list);
             }
           }
         }

@@ -1,23 +1,22 @@
-import { getUseFoldersRoute } from '@hooks/useFolders';
 import axios from 'axios';
 import clsx from 'clsx';
-import { FolderService } from '@services';
-import { useEffect, VFC } from 'react';
+import { useEffect, FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useSWRConfig } from 'swr';
 import { useFileListContext } from '../../context';
 import { useClassNames } from '../../useClassNames';
 import { FolderPlus } from 'tabler-icons-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@api';
 
-export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
+export const NewFolderCreator: FC<{ styles: any }> = ({ styles = {} }) => {
   const { updateValue, currentPath } = useFileListContext();
-  const { mutate } = useSWRConfig();
   const classNames = useClassNames();
   const { t } = useTranslation();
   const { register, handleSubmit, setFocus, formState, setError } = useForm<{
     name: string;
   }>();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     setFocus('name');
@@ -25,8 +24,8 @@ export const NewFolderCreator: VFC<{ styles: any }> = ({ styles = {} }) => {
 
   const onSubmit = async ({ name }) => {
     try {
-      await FolderService.create(`${currentPath}/${name}`);
-      await mutate(getUseFoldersRoute(currentPath));
+      await apiClient.folders.create(`${currentPath}/${name}`);
+      queryClient.invalidateQueries(['files']);
       updateValue('showNewFolderCreator', false);
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 409) {

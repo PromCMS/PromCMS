@@ -1,6 +1,7 @@
+import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { Page } from '@custom-types';
-import { useModelItems } from '@hooks/useModelItems';
+import { useGeneralTranslations } from '@hooks/useGeneralTranslations';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { useSettings } from '@hooks/useSettings';
 import {
@@ -8,13 +9,10 @@ import {
   Button,
   Group,
   LoadingOverlay,
-  Pagination,
   Table,
   TextInput,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { ItemID } from '@prom-cms/shared';
-import { EntryService } from '@services';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation } from 'react-router-dom';
@@ -24,29 +22,20 @@ export const GeneralTranslationsSettings: Page = () => {
   const { t } = useTranslation();
   const settings = useSettings();
   const location = useLocation();
-  const [language, setLanguage] = useState(settings?.i18n.default);
+  const [language, setLanguage] = useState(settings?.i18n.default || 'en');
   const reqWithNotification = useRequestWithNotifications();
   const [userIsUpdating, { open: setUserIsTyping, close: setUserIsNotTyping }] =
     useDisclosure(false);
   const [itemIsUpdating, setIsUpdating] = useState(false);
   const {
     data: originalData,
-    mutate,
     isLoading,
-  } = useModelItems<{
-    data: Record<string, string>;
-  }>(
-    'generalTranslations',
-    {
-      lang: language || 'en',
-    },
-    {
-      revalidateIfStale: !userIsUpdating,
-      revalidateOnFocus: !userIsUpdating,
-      revalidateOnMount: !userIsUpdating,
-    }
-  );
-  const [data, setData] = useState(originalData?.data);
+    refetch,
+  } = useGeneralTranslations(language, {
+    refetchOnMount: !userIsUpdating,
+    refetchOnWindowFocus: !userIsUpdating,
+  });
+  const [data, setData] = useState(originalData);
 
   const updateKey = useCallback(
     async (key: string, value: string) => {
@@ -71,11 +60,12 @@ export const GeneralTranslationsSettings: Page = () => {
         successMessage: t('Key translated!'),
       },
       async () => {
-        await EntryService.update(
-          { id: key, model: 'generalTranslations', language },
-          { value: data![key] }
+        await apiClient.generalTranslations.updateTranslation(
+          key,
+          data![key],
+          language
         );
-        await mutate();
+        await refetch();
         setIsUpdating(false);
         setUserIsNotTyping();
       }
@@ -83,15 +73,15 @@ export const GeneralTranslationsSettings: Page = () => {
   };
 
   useEffect(() => {
-    setData(originalData?.data);
+    setData(originalData);
   }, [originalData]);
 
   useEffect(() => {
-    mutate();
+    refetch();
   }, [location]);
 
   const onDeleteClick = useCallback(
-    (id: ItemID) => async () => {
+    (id: string) => async () => {
       if (!confirm(t('Do you really want to delete this key?'))) {
         return;
       }
@@ -104,16 +94,13 @@ export const GeneralTranslationsSettings: Page = () => {
             successMessage: t('Key deleted!'),
           },
           async () => {
-            await EntryService.delete({
-              id,
-              model: 'generalTranslations',
-            });
-            await mutate();
+            await apiClient.generalTranslations.deleteKey(id);
+            await refetch();
           }
         );
       } catch {}
     },
-    [t, mutate]
+    [t, refetch]
   );
 
   const ths = (

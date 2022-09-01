@@ -88,10 +88,7 @@ return function (App $app, Router $router) {
     // Files
     $innerRouter
       ->group('/files', function (Router $innerRouter) {
-        $innerRouter->get(
-          '/paged-items',
-          '\App\Controllers\Files:getManyListed',
-        );
+        $innerRouter->get('/paged-items', '\App\Controllers\Files:getMany');
 
         $innerRouter->group('/items', function (Router $innerRouter) {
           $innerRouter->get('', '\App\Controllers\Files:getMany');

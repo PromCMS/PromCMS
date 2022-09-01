@@ -1,4 +1,4 @@
-import { useEffect, useState, VFC } from 'react';
+import { useEffect, useState, FC } from 'react';
 import {
   Button,
   Drawer as MantineDrawer,
@@ -13,7 +13,6 @@ import { useModelItem } from '@hooks/useModelItem';
 import { ItemID } from '@prom-cms/shared';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { List } from './contentTypes/List';
-import { SettingsService } from '@services';
 import { Textarea } from './contentTypes/Textarea';
 import { Image } from './contentTypes/Image';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
@@ -21,8 +20,9 @@ import { useTranslation } from 'react-i18next';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { useSettings } from '@hooks/useSettings';
+import { apiClient } from '@api';
 
-export const Drawer: VFC<
+export const Drawer: FC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
 > = ({ opened, onClose, optionToEdit }) => {
   const settings = useSettings();
@@ -30,7 +30,9 @@ export const Drawer: VFC<
     settings?.i18n?.default
   );
   const currentUser = useCurrentUser();
-  const { data } = useModelItem('settings', optionToEdit, undefined, language);
+  const { data } = useModelItem('settings', optionToEdit, {
+    language,
+  });
   const { t } = useTranslation();
   const reqNotification = useRequestWithNotifications();
   const formMethods = useForm({
@@ -71,13 +73,11 @@ export const Drawer: VFC<
         async () => {
           if (optionToEdit) {
             const { id, ...newOptionDataset } = values;
-            await SettingsService.update(
-              optionToEdit,
-              newOptionDataset,
-              language
-            );
+            await apiClient.settings.update(optionToEdit, newOptionDataset, {
+              language,
+            });
           } else {
-            await SettingsService.create(values);
+            await apiClient.settings.create(values);
           }
           onClose();
         }

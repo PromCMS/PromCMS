@@ -2,11 +2,20 @@
 
 namespace App\Controllers;
 
+use PromCMS\Core\Config;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class Settings
 {
+  private Config $config;
+
+  // Let it be injected by psr
+  public function __construct(Config $config)
+  {
+    $this->config = $config;
+  }
+
   public function get(
     ServerRequestInterface $request,
     ResponseInterface $response,

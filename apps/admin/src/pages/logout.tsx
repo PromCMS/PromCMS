@@ -2,7 +2,6 @@ import { useGlobalContext } from '@contexts/GlobalContext';
 import axios from 'axios';
 import { Loader } from '@components/SiteLoader';
 import { apiClient } from '@api';
-import { API_CURRENT_USER_LOGOUT_URL } from '@constants';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Page } from '@custom-types';
@@ -18,7 +17,7 @@ const LogoutPage: Page = () => {
 
     const logoutUser = async () => {
       try {
-        await apiClient.get(API_CURRENT_USER_LOGOUT_URL, {
+        await apiClient.auth.logout({
           cancelToken: cancelToken.token,
         });
         updateValue('currentUser', undefined);

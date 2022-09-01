@@ -1,21 +1,30 @@
 import { GlobalContextProvider } from '@contexts/GlobalContext';
-import { apiClient } from '@api';
 import { FC, PropsWithChildren } from 'react';
-import { SWRConfig } from 'swr';
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryFunctionContext,
+} from '@tanstack/react-query';
+import { apiClient } from '@api';
 
-const ContextProviders: FC<PropsWithChildren> = ({ children }) => {
-  return (
-    <SWRConfig
-      value={{
-        fetcher: (url, params = {}) =>
-          apiClient
-            .get(url, Object.keys(params).length ? { params } : {})
-            .then((res) => res.data.data),
-      }}
-    >
-      <GlobalContextProvider>{children}</GlobalContextProvider>
-    </SWRConfig>
-  );
+const defaultQueryFn = async ({ queryKey }: QueryFunctionContext<any>) => {
+  return apiClient.entries
+    .getOne(queryKey[0], queryKey[1])
+    .then(({ data }) => data.data);
 };
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      queryFn: defaultQueryFn,
+    },
+  },
+});
+
+const ContextProviders: FC<PropsWithChildren> = ({ children }) => (
+  <QueryClientProvider client={queryClient}>
+    <GlobalContextProvider>{children}</GlobalContextProvider>
+  </QueryClientProvider>
+);
 
 export default ContextProviders;

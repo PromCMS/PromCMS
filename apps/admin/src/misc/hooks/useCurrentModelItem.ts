@@ -1,26 +1,32 @@
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { useModelItem } from '.';
+import { useModelItem } from './useModelItem';
 import useCurrentModel from './useCurrentModel';
 
-const useModelItemConfig = {
-  refreshInterval: 0,
-  revalidateOnFocus: false,
-  revalidateIfStale: false,
-  revalidateOnMount: true,
-  revalidateOnReconnect: false,
+const queryConfig = {
+  refetchInterval: 0,
+  refetchOnWindowFocus: false,
+  refetchOnMount: true,
+  refetchIntervalInBackground: false,
+  refetchOnReconnect: false,
 };
 
 const useCurrentModelItem = (language?: string) => {
   const modelInfo = useCurrentModel();
   const { entryId } = useParams();
-  const itemInfo = useModelItem(
-    modelInfo?.name,
-    (entryId as string) || undefined,
-    useModelItemConfig,
-    language
+  const axiosConfig = useMemo(
+    () => ({
+      language,
+    }),
+    [language]
   );
 
-  return itemInfo;
+  return useModelItem(
+    modelInfo?.name,
+    (entryId as string) || undefined,
+    axiosConfig,
+    queryConfig
+  );
 };
 
 export default useCurrentModelItem;

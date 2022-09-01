@@ -1,4 +1,4 @@
-import { ApiResultModels, User, UserRole } from '@prom-cms/shared';
+import { ApiResultModels, ItemID, User, UserRole } from '@prom-cms/shared';
 import axios from 'axios';
 import { apiClient } from '@api';
 import {
@@ -15,7 +15,6 @@ import {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UserRolesService } from '@services';
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -76,10 +75,10 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const getModels = async () => {
       setIsBooting(true);
       const [modelsQuery, settingsRes] = await Promise.all([
-        apiClient.get(API_ENTRY_TYPES_URL, {
+        apiClient.getAxios().get(API_ENTRY_TYPES_URL, {
           cancelToken: cancelToken.token,
         }),
-        apiClient.get(API_SETTINGS_URL, {
+        apiClient.getAxios().get(API_SETTINGS_URL, {
           cancelToken: cancelToken.token,
         }),
       ]);
@@ -102,17 +101,16 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const getUser = async () => {
       setIsBooting(true);
       try {
-        const loggedInUserQuery = await apiClient.get(API_CURRENT_USER_URL, {
-          cancelToken: cancelToken.token,
-        });
+        const loggedInUserQuery = await apiClient
+          .getAxios()
+          .get(API_CURRENT_USER_URL, {
+            cancelToken: cancelToken.token,
+          });
 
         const loggedInUser = loggedInUserQuery.data.data as User;
-
-        const currentUserRoleQuery = await apiClient.get<{ data: UserRole }>(
-          UserRolesService.apiGetUrl(loggedInUser.role as number),
-          {
-            cancelToken: cancelToken.token,
-          }
+        const currentUserRoleQuery = await apiClient.entries.getOne<UserRole>(
+          'userRoles',
+          loggedInUser.role as ItemID
         );
 
         setCurrentUser({

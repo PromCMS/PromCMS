@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ProfileService } from '@services';
 import { getObjectDiff } from '@utils';
 import { User } from '@prom-cms/shared';
 import { showNotification, updateNotification } from '@mantine/notifications';
@@ -12,6 +11,7 @@ import { Button, TextInput } from '@mantine/core';
 import { LanguageSelect } from '@components/pages/Settings/Profile';
 import { At } from 'tabler-icons-react';
 import { Page } from '@custom-types';
+import { apiClient } from '@api';
 
 const Row: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
@@ -50,7 +50,7 @@ export const ProfileSettingsPage: Page = () => {
     const diffedUser = getObjectDiff(currentUser, values) as User;
 
     try {
-      await ProfileService.save(diffedUser);
+      await apiClient.profile.update(diffedUser);
 
       updateValue('currentUser', {
         ...currentUser,

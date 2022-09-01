@@ -1,10 +1,16 @@
-import { API_ENTRY_TYPES_URL } from '@constants';
-import useSWR from 'swr';
+import { apiClient } from '@api';
+import { useQuery } from '@tanstack/react-query';
+import { useMemo } from "react";
 
-export const getUseFoldersRoute = (path: string) =>
-  `${API_ENTRY_TYPES_URL}/folders?path=${path}`;
+const fetcher = (path: string) => () => {
+  return apiClient.folders.getMany(path).then((data) => data.data.data);
+};
 
-export const useFolders = (path: string) =>
-  useSWR<string[]>(getUseFoldersRoute(path), {
-    isPaused: () => !path,
-  });
+export const useFolders = (path: string) => {
+  const key = useMemo(() => ['folders', path], [path])
+  const response = useQuery(key, fetcher(path), {
+    enabled: !!path,
+  })
+
+  return useMemo(() => ({...response, key}), [response, key])
+};

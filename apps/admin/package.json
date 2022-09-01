@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:analyze": "tsc && cross-env ANALYZE=true vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@prom-cms/api-client": "*",
     "tabler-icons-react": "^1.52.0",
     "@headlessui/react": "~1.6.6",
     "@svgr/webpack": "^6.1.2",
@@ -24,7 +26,7 @@
     "@popperjs/core": "2.11.0",
     "react-beautiful-dnd": "^13.1.0",
     "sass": "~1.54.3",
-    "swr": "1.1.2",
+    "@tanstack/react-query": "~4.2.1",
     "react-hook-form": "7.34.0",
     "react-dropzone": "14.2.2",
     "@editorjs/editorjs": "2.24.3",
@@ -55,6 +57,7 @@
   },
   "devDependencies": {
     "rollup-plugin-visualizer": "~5.7.1",
+    "cross-env": "~7.0.3",
     "vite": "^3.0.2",
     "@vitejs/plugin-react": "^2.0.0",
     "vite-tsconfig-paths": "^3.5.0",
@@ -73,6 +76,6 @@
     "find-config": "1.0.0",
     "postcss": "^8.4.4",
     "tailwindcss": "3.0.7",
-    "typescript": "4.5.2"
+    "typescript": "4.8.2"
   }
 }

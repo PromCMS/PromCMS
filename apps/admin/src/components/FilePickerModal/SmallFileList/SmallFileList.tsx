@@ -1,7 +1,7 @@
+import { apiClient } from '@api';
 import { WhereQueryParam } from '@custom-types';
 import { ActionIcon, Button, Pagination } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
-import { FileService } from '@services';
 import { useCallback, useMemo, useState, VFC } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +36,12 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   const { t } = useTranslation();
   const [state, updateValue] = useSmallFileListContextReducer();
   const [page, setPage] = useState(1);
-  const { data, isError, isLoading, mutate } = useFileList({
+  const {
+    data,
+    isError,
+    isLoading,
+    refetch: mutate,
+  } = useFileList({
     page,
     where: {
       ...(state.searchValue
@@ -55,7 +60,9 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       updateValue({ name: 'isLoading', value: true });
-      await FileService.create(acceptedFiles[0], { root: '/' });
+      await apiClient.files.create(acceptedFiles[0], {
+        root: '/',
+      });
       updateValue({ name: 'isLoading', value: false });
       mutate();
     },

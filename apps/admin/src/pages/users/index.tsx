@@ -5,7 +5,6 @@ import { PageLayout } from '@layouts';
 import { ApiResultModel, ItemID } from '@prom-cms/shared';
 import { UserPlus } from 'tabler-icons-react';
 import { MESSAGES } from '@constants';
-import { EntryService } from '@services';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formatApiModelResultToTableView } from '@utils';
@@ -13,6 +12,7 @@ import { Button, Pagination } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Page } from '@custom-types';
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '@api';
 
 const UsersListPage: Page = () => {
   const navigate = useNavigate();
@@ -20,8 +20,15 @@ const UsersListPage: Page = () => {
   const [page, setPage] = useState(1);
   const currentUser = useCurrentUser();
   const model = useModelInfo<ApiResultModel>('users');
-  const { data, isLoading, isError, mutate } = useModelItems('users', {
-    page,
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: mutate,
+  } = useModelItems('users', {
+    params: {
+      page,
+    },
   });
 
   // Models metadata
@@ -55,7 +62,7 @@ const UsersListPage: Page = () => {
   const onItemDeleteRequest = userCanEdit
     ? async (id: ItemID) => {
         if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-          await EntryService.delete({ id, model: 'users' });
+          await apiClient.entries.delete('users', id);
           mutate();
         }
       }

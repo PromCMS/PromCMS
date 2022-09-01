@@ -1,6 +1,6 @@
 import { useModelItems } from '@hooks/useModelItems';
 import { ActionIcon, Text } from '@mantine/core';
-import { ItemID, PagedResult, User } from '@prom-cms/shared';
+import { ItemID, User } from '@prom-cms/shared';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Trash } from 'tabler-icons-react';
@@ -25,18 +25,20 @@ export const CoeditorsList: FC = () => {
   const { watch, setValue, getValues } = useFormContext();
   const sharedWithItems = watch('coeditors');
   const hasNoItems = !Object.keys(sharedWithItems || {}).length;
-  const { data: coeditors, isLoading } = useModelItems<PagedResult<User>>(
+  const { data: coeditors, isLoading } = useModelItems<User>(
     'users',
     {
-      limit: 999,
-      where: {
-        id: {
-          manipulator: 'IN',
-          value: Object.keys(sharedWithItems || {}),
+      params: {
+        limit: 999,
+        where: {
+          id: {
+            manipulator: 'IN',
+            value: Object.keys(sharedWithItems || {}),
+          },
         },
       },
     },
-    { isPaused: () => hasNoItems }
+    { enabled: !hasNoItems }
   );
 
   const onItemDelete = useCallback(

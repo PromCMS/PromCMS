@@ -2,7 +2,6 @@ import { useModelItems } from '@hooks/useModelItems';
 import { Select, SelectItem } from '@mantine/core';
 import {
   ModelColumnName,
-  PagedResult,
   RelationshipColumnType,
   UserRole,
 } from '@prom-cms/shared';
@@ -24,10 +23,7 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
   labelConstructor,
 }) => {
   const { t } = useTranslation();
-  const { data, isError, isLoading } = useModelItems<PagedResult<UserRole>>(
-    targetModel,
-    {}
-  );
+  const { data, isError, isLoading } = useModelItems<UserRole>(targetModel, {});
 
   const values = useMemo<SelectItem[]>(
     () =>

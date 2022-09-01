@@ -1,7 +1,5 @@
 import useCurrentModel from '@hooks/useCurrentModel';
 import useCurrentModelItem from '@hooks/useCurrentModelItem';
-import { ApiResultItem } from '@prom-cms/shared';
-import { EntryService } from '@services';
 import {
   createContext,
   FC,
@@ -12,7 +10,6 @@ import {
   useState,
 } from 'react';
 import { EntryTypeUrlActionType } from '@custom-types';
-import { KeyedMutator } from 'swr';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { getModelItemSchema } from '@schemas';
@@ -20,7 +17,7 @@ import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import { getObjectDiff } from '@utils';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import EditorJS from '@editorjs/editorjs';
+import type EditorJS from '@editorjs/editorjs';
 import { ReactNode } from 'react';
 import { ReactElement } from 'react';
 import { MutableRefObject } from 'react';
@@ -31,15 +28,19 @@ import { SetStateAction } from 'react';
 import { useLocalStorage } from '@mantine/hooks';
 import { useSettings } from '@hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
+import { ResultItem } from '@prom-cms/api-client';
+import { apiClient } from '@api';
+import { pageUrls } from '@constants';
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType;
   exitView: () => void;
   itemIsError: boolean;
   itemIsLoading: boolean;
-  itemData?: ApiResultItem | undefined;
+  itemData?: ResultItem | undefined;
   itemIsMissing: boolean;
-  mutateItem: KeyedMutator<ApiResultItem>;
+  mutateItem: (values: ResultItem) => ResultItem | undefined;
   asideOpen: boolean;
   setAsideOpen: Dispatch<SetStateAction<boolean>>;
   onSubmit: (values: any) => Promise<void>;
@@ -53,7 +54,7 @@ export const EntryUnderpageContext = createContext<IEntryUnderpageContext>({
   itemIsMissing: false,
   itemIsLoading: true,
   itemIsError: false,
-  mutateItem: async () => undefined,
+  mutateItem: () => undefined,
   onSubmit: async () => {},
   setAsideOpen: () => {},
   asideOpen: false,
@@ -91,8 +92,7 @@ export const EntryUnderpageContextProvider: FC<{
     data: itemData,
     isError: itemIsError,
     isLoading: itemIsLoading,
-    itemIsMissing,
-    mutate,
+    key: modelItemQueryKey,
   } = useCurrentModelItem(language);
   const schema = useMemo(
     () =>
@@ -105,8 +105,13 @@ export const EntryUnderpageContextProvider: FC<{
     mode: 'onTouched',
     resolver: schema && yupResolver(schema),
   });
+  const queryClient = useQueryClient();
   const { setError } = formMethods;
   const reqNotification = useRequestWithNotifications();
+  const mutateItemInCache = useCallback(
+    (values: ResultItem) => queryClient.setQueryData(modelItemQueryKey, values),
+    [modelItemQueryKey]
+  );
 
   // Unset id because of duplication
   // TODO we should handle this better via third viewType
@@ -156,47 +161,29 @@ export const EntryUnderpageContextProvider: FC<{
           },
           async () => {
             if (viewType === 'update') {
-              const finalValues = getObjectDiff(
-                itemData,
-                values
-              ) as ApiResultItem;
+              const finalValues = getObjectDiff(itemData, values) as ResultItem;
               const itemId = (itemData as NonNullable<typeof itemData>).id;
 
-              await EntryService.update(
+              const {
+                data: { data },
+              } = await apiClient.entries.update(
+                modelName,
+                itemId,
+                finalValues,
                 {
-                  id: itemId,
-                  model: modelName,
                   language,
-                },
-                finalValues
+                }
               );
 
-              await mutate(
-                (prevData) => {
-                  if (prevData?.id) {
-                    return {
-                      ...(prevData || {}),
-                      ...finalValues,
-                    };
-                  } else {
-                    return prevData;
-                  }
-                },
-                { revalidate: true }
-              );
+              mutateItemInCache(data);
             } else if (viewType === 'create') {
-              const result = await EntryService.create(
-                {
-                  model: modelName,
-                },
-                values
-              );
+              const result = await apiClient.entries.create(modelName, values);
 
               if (!result?.data) {
                 throw new Error('No data has been received');
               }
 
-              navigate(EntryService.getListUrl(currentModel?.name as string));
+              navigate(pageUrls.entryTypes(currentModel?.name as string).list);
             }
           }
         );
@@ -225,7 +212,7 @@ export const EntryUnderpageContextProvider: FC<{
     [
       currentModel,
       itemData,
-      mutate,
+      mutateItemInCache,
       navigate,
       reqNotification,
       setError,
@@ -239,13 +226,13 @@ export const EntryUnderpageContextProvider: FC<{
     () => ({
       currentView: viewType,
       exitView: () => {
-        navigate(EntryService.getListUrl(currentModel?.name as string));
+        navigate(pageUrls.entryTypes(currentModel?.name as string).list);
       },
-      itemData: updatedItemData as ApiResultItem,
+      itemData: updatedItemData as ResultItem,
       itemIsError,
       itemIsLoading: viewType === 'update' ? itemIsLoading : false,
-      itemIsMissing,
-      mutateItem: mutate,
+      itemIsMissing: !updatedItemData,
+      mutateItem: mutateItemInCache,
       asideOpen,
       setAsideOpen,
       onSubmit: formMethods.handleSubmit(onSubmit),
@@ -258,8 +245,7 @@ export const EntryUnderpageContextProvider: FC<{
       formMethods,
       itemIsError,
       itemIsLoading,
-      itemIsMissing,
-      mutate,
+      mutateItemInCache,
       onSubmit,
       navigate,
       setAsideOpen,

@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { showNotification } from '@mantine/notifications';
 import axios from 'axios';
-import { ProfileService } from '@services';
 import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
@@ -10,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Paper, PasswordInput } from '@mantine/core';
 import { Check, X } from 'tabler-icons-react';
 import { Link } from 'react-router-dom';
+import { apiClient } from '@api';
 
 type FormValues = {
   new_password: string;
@@ -34,7 +34,7 @@ export const Form: FC<{ token?: string }> = ({ token }) => {
     ...values
   }) => {
     try {
-      await ProfileService.finalizePasswordReset(values);
+      await apiClient.users.finalizePasswordReset(values);
     } catch (e) {
       if (axios.isAxiosError(e)) {
         if (e.response?.status) {

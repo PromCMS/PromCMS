@@ -1,5 +1,5 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { VFC } from 'react';
+import { FC } from 'react';
 import { useSmallFileList } from '../context';
 import { useClassNames } from '../useClassNames';
 import { FileItem, FileItemProps, FileItemSkeleton } from './FileItem';
@@ -8,7 +8,7 @@ export interface ListProps {
   onDeleteClick: FileItemProps['onDeleteClick'];
 }
 
-export const List: VFC<ListProps> = ({ onDeleteClick }) => {
+export const List: FC<ListProps> = ({ onDeleteClick }) => {
   const classNames = useClassNames();
   const { files, isLoading, isUploading } = useSmallFileList();
 

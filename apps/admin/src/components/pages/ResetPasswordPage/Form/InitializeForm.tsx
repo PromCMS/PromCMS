@@ -1,7 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { showNotification } from '@mantine/notifications';
 import axios from 'axios';
-import { ProfileService } from '@services';
 import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
@@ -10,6 +9,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { Button, Paper, TextInput } from '@mantine/core';
 import { Check } from 'tabler-icons-react';
 import { Link } from 'react-router-dom';
+import { apiClient } from '@api';
 
 type FormValues = {
   email: string;
@@ -29,7 +29,7 @@ export const InitializeForm: FC = () => {
 
   const onSubmitCallback: SubmitHandler<FormValues> = async ({ email }) => {
     try {
-      await ProfileService.requestPasswordReset({ email });
+      await apiClient.users.requestPasswordReset(email);
     } catch (e) {
       if (axios.isAxiosError(e)) {
         showNotification({

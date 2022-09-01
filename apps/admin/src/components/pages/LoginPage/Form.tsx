@@ -1,16 +1,17 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ProfileService } from '@services';
 import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { FirstStep } from '.';
 import { loginFormSchema } from './schema';
-import { LoginFailedResponseCodes } from '@prom-cms/shared';
+import { ItemID, LoginFailedResponseCodes, UserRole } from '@prom-cms/shared';
 import { Trans, useTranslation } from 'react-i18next';
 import { Button, Paper, Title } from '@mantine/core';
 import { MESSAGES } from '@constants';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { apiClient } from '@api';
+import { createLogger } from '@utils';
 
 interface LoginFormValues {
   email: string;
@@ -18,6 +19,8 @@ interface LoginFormValues {
   password: string;
   mfaImageUrl?: string;
 }
+
+const logger = createLogger('Login Form');
 
 export const Form: FC = () => {
   const navigate = useNavigate();
@@ -45,13 +48,25 @@ export const Form: FC = () => {
     switch (step) {
       case 0:
         try {
-          const { data } = await ProfileService.login({ password, email });
+          const {
+            data: { data: user },
+          } = await apiClient.auth.login({ password, email });
+          const currentUserRoleQuery = await apiClient.entries.getOne<UserRole>(
+            'userRoles',
+            user.role as ItemID
+          );
+
           // set current user since we are logged in
-          updateValue('currentUser', data.data);
+          updateValue('currentUser', {
+            ...user,
+            role: currentUserRoleQuery.data.data,
+          });
 
           // push user to main page
           navigate('/');
         } catch (e) {
+          logger.error(`Failed login because of ${(e as Error).message}`);
+
           let message = MESSAGES.LOGIN_INVALID_CREDENTIALS;
           if (axios.isAxiosError(e) && e.response?.data?.code) {
             const code: LoginFailedResponseCodes = e.response.data.code;
@@ -74,8 +89,9 @@ export const Form: FC = () => {
           setError('email', { message: ' ' });
         }
         break;
-      default:
-        console.error(`There are not implemented that many steps... (${step})`);
+      default: {
+        logger.error(`There are not implemented that many steps... (${step})`);
+      }
     }
   };
 

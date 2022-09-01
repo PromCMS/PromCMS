@@ -2,11 +2,10 @@ import { useModelItem } from '@hooks/useModelItem';
 import { Button, Divider, Drawer, Title, Tooltip } from '@mantine/core';
 import { useClipboard } from '@mantine/hooks';
 import { ClipboardCheck } from 'tabler-icons-react';
-import { FileService } from '@services';
 import { useTranslation } from 'react-i18next';
 import { Page } from '@custom-types';
-import { useRouterQuery } from '@hooks/useRouterQuery';
 import { useNavigate, useParams } from 'react-router-dom';
+import { apiClient } from '@api';
 
 const FilePage: Page = () => {
   const { t } = useTranslation();
@@ -15,14 +14,8 @@ const FilePage: Page = () => {
   const clipboard = useClipboard();
   const { data, isLoading } = useModelItem('files', fileId as string);
 
-  // TODO: Get base url from server settings
   const onCopyClick = () =>
-    clipboard.copy(
-      new URL(
-        '/api' + FileService.getApiRawUrl(data!.id),
-        window.location.origin
-      )
-    );
+    clipboard.copy(apiClient.files.getAssetUrl(fileId!));
 
   return (
     <Drawer

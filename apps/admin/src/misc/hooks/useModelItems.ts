@@ -1,18 +1,19 @@
-import { ApiResultItem, PagedResult } from '@prom-cms/shared';
-import { EntryService } from '@services';
-import { BareFetcher } from 'swr';
-import { PublicConfiguration } from 'swr/dist/types';
-import { useQuery } from '.';
-import { QueryParams } from '@custom-types';
+import { PagedResponse, ResultItem } from "@prom-cms/api-client"
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@api";
+import { useCallback, useMemo } from "react";
 
-export function useModelItems<T = PagedResult<ApiResultItem>>(
+export const useModelItems = <T extends ResultItem>(
   modelName: string | undefined,
-  queryParams?: QueryParams,
-  config?: Partial<PublicConfiguration<T, any, BareFetcher<T>>>
-) {
-  return useQuery<T>(
-    EntryService.apiGetListUrl((modelName as string) || ''),
-    queryParams,
-    { isPaused: () => !modelName, ...config }
+  axiosConfig?: Parameters<typeof apiClient.entries.getMany<T>>["1"],
+  queryConfig?: Parameters<typeof useQuery<PagedResponse<T>>>["2"],
+) => {
+  const fetcher = useCallback(() => apiClient.entries.getMany<T>(modelName!, axiosConfig!).then(({ data }) => data), [modelName,axiosConfig]);
+  const key = useMemo(() => [modelName, axiosConfig], [modelName, axiosConfig])
+  const result = useQuery<PagedResponse<T>>(
+    key, fetcher, queryConfig
   );
-}
+
+  return useMemo(() => ({...result, key}), [key, result])
+};
+

@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { userHasBeenLoggedOff } from '@events';
+import { ApiClient } from '@prom-cms/api-client';
 
-export const apiClient = axios.create({
+export const apiClient = new ApiClient({
   baseURL: '/api',
   timeout: 15000,
 });
 
-apiClient.interceptors.response.use(undefined, (error) => {
+apiClient.getAxios().interceptors.response.use(undefined, (error) => {
   if (
     window &&
     axios.isAxiosError(error) &&

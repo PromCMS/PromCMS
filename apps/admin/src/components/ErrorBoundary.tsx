@@ -1,6 +1,5 @@
 import { Button, Code, Paper, Title } from '@mantine/core';
 import { Component, PropsWithChildren } from 'react';
-import { theme } from './ThemeProvider';
 
 class ErrorBoundary extends Component<
   PropsWithChildren,

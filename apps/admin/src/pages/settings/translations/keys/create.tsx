@@ -1,7 +1,7 @@
+import { apiClient } from '@api';
 import { Page } from '@custom-types';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { Button, Modal, TextInput, Title } from '@mantine/core';
-import { EntryService } from '@services';
 import { useCallback } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -26,10 +26,7 @@ export const CreateTranslationSettings: Page = () => {
           successMessage: t('Translation key successfully created'),
         },
         async () => {
-          await EntryService.create(
-            { model: 'generalTranslations' },
-            { key: values.title }
-          );
+          await apiClient.generalTranslations.createKey(values.title);
           onClose();
         }
       );
