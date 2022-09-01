@@ -8,7 +8,7 @@ import { ItemID } from '@prom-cms/shared';
 import { MESSAGES, pageUrls } from '@constants';
 import NotFoundPage from '@pages/404';
 import { useTranslation } from 'react-i18next';
-import { Button, Pagination } from '@mantine/core';
+import { Button } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Plus } from 'tabler-icons-react';
@@ -21,6 +21,7 @@ const EntryTypeUnderpage: Page = ({}) => {
   const navigate = useNavigate();
   const { modelId: routerModelId } = useParams();
   const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
   const model = useCurrentModel();
   const currentUser = useCurrentUser();
   const [apiWorking, setApiWorking] = useState(false);
@@ -32,6 +33,7 @@ const EntryTypeUnderpage: Page = ({}) => {
   } = useModelItems(model?.name, {
     params: {
       page: page,
+      limit: pageSize,
     },
   });
   const { t } = useTranslation();
@@ -154,21 +156,30 @@ const EntryTypeUnderpage: Page = ({}) => {
         isLoading={isLoading || isError}
         items={listItems}
         columns={tableViewColumns}
-        metadata={metadata || undefined}
         onEditAction={onEditRequest}
         onDeleteAction={onItemDeleteRequest}
         onDuplicateAction={onItemDuplicateRequest}
         ordering={model.hasOrdering}
         onDragEnd={onDragEnd}
         disabled={apiWorking}
-        pagination={
-          <Pagination
-            total={data?.last_page || 1}
-            page={page}
-            onChange={setPage}
-          />
-        }
       />
+      <TableView.Footer>
+        <TableView.PageSizeSelect
+          value={String(pageSize)}
+          onChange={(val) => {
+            setPageSize(val ? Number(val) : 20);
+          }}
+        />
+        {metadata && (
+          <TableView.Metadata className="mr-auto ml-5" {...metadata} />
+        )}
+        <TableView.Pagination
+          className="ml-auto"
+          total={data?.last_page || 1}
+          page={page}
+          onChange={setPage}
+        />
+      </TableView.Footer>
     </PageLayout>
   );
 };
