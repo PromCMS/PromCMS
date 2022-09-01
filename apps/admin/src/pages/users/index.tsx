@@ -104,17 +104,18 @@ const UsersListPage: Page = () => {
           isLoading={isLoading || isError}
           items={filteredUsers}
           columns={tableViewColumns || []}
-          metadata={metadata || undefined}
           onEditAction={onEditRequest}
           onDeleteAction={onItemDeleteRequest}
-          pagination={
-            <Pagination
-              total={data?.last_page || 1}
-              page={page}
-              onChange={setPage}
-            />
-          }
         />
+        <TableView.Footer>
+          {metadata && <TableView.Metadata {...metadata} />}
+          <TableView.Pagination
+            className="ml-auto"
+            total={data?.last_page || 1}
+            page={page}
+            onChange={setPage}
+          />
+        </TableView.Footer>
       </PageLayout>
     </>
   );

@@ -2,11 +2,24 @@ import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
 import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
-import { PropsWithChildren, useCallback, useMemo, FC } from 'react';
+import {
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+  FC,
+  DetailedHTMLProps,
+  HTMLAttributes,
+} from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { createIterativeArray } from '@utils';
-import { ActionIcon, Group, Paper } from '@mantine/core';
-import { ReactNode } from 'react';
+import {
+  ActionIcon,
+  Group,
+  Pagination,
+  Paper,
+  Select,
+  SelectItem,
+} from '@mantine/core';
 import {
   DragDropContext,
   DragDropContextProps,
@@ -17,6 +30,10 @@ import { useClassNames } from './useClassNames';
 import { useState } from 'react';
 import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
 import { PagedResponse } from '@prom-cms/api-client';
+import {
+  SelectProps,
+  SelectSharedProps,
+} from '@mantine/core/lib/Select/Select';
 
 export type TableViewItem = { id: string | number; [x: string]: any };
 
@@ -34,14 +51,13 @@ export interface TableViewProps {
   columns: TableViewCol[];
   items: Array<TableViewItem>;
   isLoading?: boolean;
-  metadata?: Omit<PagedResponse<any>, 'data'>;
-  pagination?: ReactNode;
   onDeleteAction?: (id: ItemID) => void;
   onEditAction?: (id: ItemID) => void;
   onDuplicateAction?: (id: ItemID) => void;
   ordering?: boolean;
   onDragEnd?: DragDropContextProps['onDragEnd'];
   disabled?: boolean;
+  pageSizes?: number[];
 }
 
 const TableSkeleton: FC<SkeltonProps> = ({ className, ...rest }) => (
@@ -82,12 +98,15 @@ const DynamicDraggable: FC<
 
 type ActionType = 'delete' | 'edit' | 'duplicate';
 
-const TableView: FC<TableViewProps> = ({
+const TableView: FC<TableViewProps> & {
+  Footer: typeof Footer;
+  Metadata: typeof Metadata;
+  Pagination: typeof Pagination;
+  PageSizeSelect: typeof PageSizeSelect;
+} = ({
   columns,
   items,
-  metadata,
   isLoading,
-  pagination,
   onDeleteAction,
   onEditAction,
   onDuplicateAction,
@@ -292,27 +311,73 @@ const TableView: FC<TableViewProps> = ({
           )}
         </Paper>
       </DragDropContext>
-
-      {metadata && (
-        <>
-          <div className="xs:justify-between mt-2 flex items-center justify-between">
-            <div className="xs:text-sm text-xs text-gray-900">
-              <Trans
-                i18nKey={'Showing {{from}} to {{to}} of {{total}} entries'}
-                from={metadata.from}
-                to={metadata.to}
-                total={metadata.total}
-              >
-                Showing {{ from: metadata.from }} to {{ to: metadata.to }} of{' '}
-                {{ total: metadata.total }} entries
-              </Trans>
-            </div>
-            <div className="inline-flex gap-2 text-gray-500">{pagination}</div>
-          </div>
-        </>
-      )}
     </>
   );
 };
+
+const Footer: FC<PropsWithChildren> = ({ children }) => (
+  <>
+    <div className="xs:justify-between mt-2 flex items-center justify-between">
+      {children}
+    </div>
+  </>
+);
+
+const Metadata: FC<
+  Omit<PagedResponse<any>, 'data'> &
+    DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+> = ({ from, to, total, className, ...rest }) => (
+  <div
+    className={clsx('xs:text-sm text-xs text-gray-900', className)}
+    {...rest}
+  >
+    <Trans
+      i18nKey={'Showing {{from}} to {{to}} of {{total}} entries'}
+      from={from}
+      to={to}
+      total={total}
+    >
+      Showing {{ from: from }} to {{ to: to }} of {{ total: total }} entries
+    </Trans>
+  </div>
+);
+
+const PageSizeSelect: FC<
+  {
+    options?: number[];
+    onChange: SelectProps['onChange'];
+    value: string;
+  } & Omit<SelectProps, 'options' | 'onChange' | 'value' | 'data'>
+> = ({
+  onChange,
+  value,
+  options = [
+    DEFAULT_TABLE_PAGE_SIZE,
+    DEFAULT_TABLE_PAGE_SIZE * 2,
+    DEFAULT_TABLE_PAGE_SIZE * 3,
+    DEFAULT_TABLE_PAGE_SIZE * 4,
+  ],
+  ...rest
+}) => {
+  const { t } = useTranslation();
+
+  const data = useMemo(() => {
+    const label = t('items');
+
+    return options.map<SelectItem>((value) => ({
+      value: String(value),
+      label: `${value} ${label}`,
+    }));
+  }, [options]);
+
+  return <Select data={data} value={value} onChange={onChange} {...rest} />;
+};
+
+TableView.Metadata = Metadata;
+TableView.Footer = Footer;
+TableView.Pagination = Pagination;
+TableView.PageSizeSelect = PageSizeSelect;
+
+export const DEFAULT_TABLE_PAGE_SIZE = 20;
 
 export default TableView;
