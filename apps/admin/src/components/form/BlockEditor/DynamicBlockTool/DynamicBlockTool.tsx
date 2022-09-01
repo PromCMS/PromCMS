@@ -1,4 +1,4 @@
-import { API, BlockTool } from '@editorjs/editorjs';
+import type { API, BlockTool } from '@editorjs/editorjs';
 import ReactDom from 'react-dom/client';
 import { DynamicBlockToolView } from './DynamicBlockToolView';
 
