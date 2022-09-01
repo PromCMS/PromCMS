@@ -1,10 +1,17 @@
+import { pageUrls } from '@constants';
 import { useModelInfo } from '@hooks/useModelInfo';
 import { useUser } from '@hooks/useUser';
 import { ApiResultModel, User } from '@prom-cms/shared';
-import { UserService } from '@services';
-import { FC, createContext, useContext, PropsWithChildren } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import {
+  FC,
+  createContext,
+  useContext,
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+} from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { KeyedMutator } from 'swr';
 
 type View = 'create' | 'update';
 
@@ -14,14 +21,14 @@ export interface IContext {
   exitView: () => void;
   model?: ApiResultModel;
   user?: User;
-  mutateUser: KeyedMutator<User>;
+  mutateUser: (nextData: User) => void;
 }
 
 export const Context = createContext<IContext>({
   view: 'create',
   isLoading: true,
   exitView: () => {},
-  mutateUser: async () => undefined,
+  mutateUser: (async () => {}) as any,
 });
 
 export const useData = () => useContext(Context);
@@ -34,20 +41,34 @@ export const ContextProvider: FC<PropsWithChildren<{ view: View }>> = ({
   const { userId } = useParams();
   const model = useModelInfo('users') as ApiResultModel;
   const currentUser = useUser(userId as string, {
-    revalidateIfStale: false,
-    revalidateOnFocus: false,
-    revalidateOnMount: true,
-    revalidateOnReconnect: false,
-    refreshWhenHidden: false,
+    enabled: false,
   });
-  const exitView = () => navigate(UserService.getListUrl());
+  const { setQueryData } = useQueryClient();
+  const exitView = () => navigate(pageUrls.users.list);
+  const updateUserInCache = useCallback(
+    (nextData: User) => {
+      setQueryData<User>(currentUser.key, (prevData) => ({
+        ...prevData,
+        ...nextData,
+      }));
+    },
+    [setQueryData, currentUser.key]
+  );
+
+  useEffect(() => {
+    if (userId) {
+      currentUser.refetch();
+    }
+
+    return () => currentUser.remove();
+  }, [userId]);
 
   return (
     <Context.Provider
       value={{
         view,
         ...(currentUser.data ? { user: currentUser.data } : {}),
-        mutateUser: currentUser.mutate,
+        mutateUser: updateUserInCache,
         isLoading: currentUser.isLoading || currentUser.isError,
         exitView,
         model,

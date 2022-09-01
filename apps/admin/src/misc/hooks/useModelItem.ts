@@ -1,34 +1,30 @@
-import { useGlobalContext } from '@contexts/GlobalContext';
-import { ApiResultItem, ItemID } from '@prom-cms/shared';
-import { EntryService } from '@services';
-import { useMemo } from 'react';
-import useSWR from 'swr';
-import type { PublicConfiguration, BareFetcher } from 'swr/dist/types';
+import { useCallback, useMemo } from 'react';
+import { ResultItem } from "@prom-cms/api-client"
+import { ItemID } from "@prom-cms/shared";
+import { useQuery } from "@tanstack/react-query";
+import { apiClient } from "@api";
 
-export const useModelItem = <T extends ApiResultItem>(
+export const useModelItem = <T extends ResultItem>(
   modelName: string | undefined,
   itemId: ItemID | undefined,
-  config?: Partial<PublicConfiguration<T, any, BareFetcher<T>>>,
-  language?: string
+  axiosConfig?: Parameters<typeof apiClient.entries.getMany<T>>["1"],
+  queryConfig?: Parameters<typeof useQuery<T>>["2"],
 ) => {
-  const { models } = useGlobalContext();
   const shouldFetch = useMemo(() => itemId !== undefined, [itemId]);
-
-  const { data, error, mutate } = useSWR<T>(
-    shouldFetch && models
-      ? EntryService.apiGetUrl(itemId!, modelName as string, language)
-      : null,
-    config
+  const fetcher = useCallback(
+    () => apiClient.entries
+      .getOne<T>(modelName!, itemId!, axiosConfig)
+      .then(({ data }) => data.data), 
+    [modelName, itemId, axiosConfig]
+  );
+  const key = useMemo(() => [modelName, itemId], [modelName, itemId])
+  const response = useQuery<T>(
+    [key, axiosConfig],
+    fetcher, {
+      enabled: shouldFetch,
+      ...queryConfig
+    }
   );
 
-  return useMemo(
-    () => ({
-      data,
-      isLoading: !error && !data,
-      itemIsMissing: error,
-      isError: error,
-      mutate,
-    }),
-    [data, error, mutate]
-  );
+  return useMemo(() => ({...response, key}), [key, response])
 };

@@ -1,3 +1,4 @@
+import { apiClient } from '@api';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import { useGlobalContext } from '@contexts/GlobalContext';
 import { Page } from '@custom-types';
@@ -7,15 +8,12 @@ import {
   ActionIcon,
   Button,
   createStyles,
-  Divider,
-  Grid,
   Group,
   LoadingOverlay,
   Pagination,
   Table,
 } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
-import { UserRolesService } from '@services';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,24 +28,22 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-const smallColSize = 2;
 const maxCols = 12;
-const largeColSize = 8;
-const colDivider = (
-  <Grid.Col span={maxCols}>
-    <Divider />
-  </Grid.Col>
-);
 
 const UserRolesPage: Page = () => {
   const { classes } = useStyles();
   const { t } = useTranslation();
   const { currentUserIsAdmin } = useGlobalContext();
   const [currentPage, setCurrentPage] = useState(1);
-  const { data, mutate, isLoading, isError, isValidating } = useModelItems(
-    'userRoles',
-    { page: currentPage }
-  );
+  const {
+    data,
+    refetch: mutate,
+    isLoading,
+    isError,
+    isRefetching,
+  } = useModelItems('userRoles', {
+    params: { page: currentPage },
+  });
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
   const [creationAction, setCreationMode] = useState(false);
   const reqNotification = useRequestWithNotifications();
@@ -78,7 +74,7 @@ const UserRolesPage: Page = () => {
             successMessage: t('User role deleted!'),
           },
           async () => {
-            await UserRolesService.delete(id);
+            await apiClient.entries.delete('userRoles', id);
             await mutate();
           }
         );
@@ -142,7 +138,7 @@ const UserRolesPage: Page = () => {
       </div>
       <div className="relative min-h-[400px]">
         <LoadingOverlay
-          visible={isLoading || isValidating || isError}
+          visible={isLoading || isRefetching || isError}
           overlayBlur={2}
         />
         <Table

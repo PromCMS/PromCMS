@@ -7,7 +7,7 @@ import {
   Skeleton,
   Text,
 } from '@mantine/core';
-import { PagedResult, User, UserRole } from '@prom-cms/shared';
+import { User, UserRole } from '@prom-cms/shared';
 import { forwardRef } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -46,31 +46,33 @@ export interface UserSelectProps
 
 export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
   const { t } = useTranslation();
-  const { data } = useModelItems<PagedResult<User>>(
+  const { data } = useModelItems<User>(
     'users',
     {
-      limit: 5,
-      where: {
-        ...(props.value && Number.isNaN(Number(props.value))
-          ? {
-              name: {
-                manipulator: 'LIKE',
-                value: `%${props.value}%`,
-              },
-            }
-          : {}),
-        ...(props.value && !Number.isNaN(Number(props.value))
-          ? {
-              id: {
-                manipulator: 'LIKE',
-                value: props.value,
-              },
-            }
-          : {}),
+      params: {
+        limit: 5,
+        where: {
+          ...(props.value && Number.isNaN(Number(props.value))
+            ? {
+                name: {
+                  manipulator: 'LIKE',
+                  value: `%${props.value}%`,
+                },
+              }
+            : {}),
+          ...(props.value && !Number.isNaN(Number(props.value))
+            ? {
+                id: {
+                  manipulator: 'LIKE',
+                  value: props.value,
+                },
+              }
+            : {}),
+        },
       },
     },
     {
-      isPaused: () => !props.value,
+      enabled: !!props.value,
     }
   );
 

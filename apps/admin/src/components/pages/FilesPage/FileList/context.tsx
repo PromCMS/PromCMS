@@ -1,12 +1,8 @@
+import { apiClient } from '@api';
 import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder';
 import { useRouterQuery } from '@hooks/useRouterQuery';
-import {
-  showNotification,
-  updateNotification,
-  useNotifications,
-} from '@mantine/notifications';
-import { File as FileType } from '@prom-cms/shared';
-import { FileService } from '@services';
+import { showNotification, updateNotification } from '@mantine/notifications';
+import { createLogger } from '@utils';
 import { t } from 'i18next';
 import {
   createContext,
@@ -19,7 +15,6 @@ import {
 } from 'react';
 import { DropzoneRootProps, useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
-import { KeyedMutator } from 'swr';
 import { UploadingFilesRecord } from './types';
 import { formatDroppedFiles } from './utils';
 
@@ -42,10 +37,8 @@ export interface IFileListContext {
   isLoading: boolean;
   isError: boolean;
   files: UseFileFolderData | undefined;
-  mutateFiles: KeyedMutator<{
-    data: FileType[];
-  }>;
-  mutateFolders: KeyedMutator<string[]>;
+  mutateFiles: ReturnType<typeof useFileFolder>['mutateFiles'];
+  mutateFolders: ReturnType<typeof useFileFolder>['mutateFolders'];
   openFilePicker: () => void;
   getDropZoneRootProps: <T extends DropzoneRootProps>(
     config: T | undefined
@@ -91,6 +84,8 @@ function reducer<T extends keyof IFileListContextValues>(
   return { ...state, [name]: value };
 }
 
+const logger = createLogger('FileListContextProvider');
+
 export const FileListContextProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
@@ -102,11 +97,12 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
     [currentFolder]
   );
   const {
-    data: files,
+    data: filesAndFolders,
     isError,
     isLoading,
     mutateFiles,
     mutateFolders,
+    refetchFiles,
   } = useFileFolder(currentPath);
 
   const updateValue: IFileListContext['updateValue'] = useCallback(
@@ -145,8 +141,8 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
         const entry = files[filePath];
 
         try {
-          await FileService.create(entry.file, { root: currentPath });
-        } catch {
+          await apiClient.files.create(entry.file, { root: currentPath });
+        } catch (e) {
           isError = true;
           updateNotification({
             id: notificationId,
@@ -155,6 +151,10 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
             color: 'red',
             autoClose: 2000,
           });
+
+          logger.error(
+            `An error happened during onDrop creation: ${(e as Error).message}`
+          );
         }
 
         updateValue(
@@ -164,7 +164,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
           ) as UploadingFilesRecord
         );
 
-        await mutateFiles();
+        await refetchFiles();
 
         updateNotification({
           id: notificationId,
@@ -191,7 +191,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
   const contextValue = useMemo(
     () => ({
       ...state,
-      files,
+      files: filesAndFolders,
       isError,
       isLoading,
       updateValue,
@@ -203,7 +203,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
       mutateFolders,
     }),
     [
-      files,
+      filesAndFolders,
       isError,
       isLoading,
       updateValue,

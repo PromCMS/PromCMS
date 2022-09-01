@@ -1,9 +1,9 @@
 import { useEntryUnderpageContext } from '@components/pages/EntryUnderpage';
 import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
+import { pageUrls } from '@constants';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { Skeleton } from '@mantine/core';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { EntryService } from '@services';
 import clsx from 'clsx';
 import { HTMLAttributes, PropsWithChildren } from 'react';
 import { DetailedHTMLProps } from 'react';
@@ -47,7 +47,7 @@ EntryEditorLayout.Content = function Content({ children }) {
         items={[
           { content: t('Entry types') as string },
           {
-            isLinkTo: EntryService.getListUrl(model?.name as string),
+            isLinkTo: pageUrls.entryTypes(model?.name as string).list,
             content: t(capitalizeFirstLetter(model?.name || '')) as string,
           },
           {

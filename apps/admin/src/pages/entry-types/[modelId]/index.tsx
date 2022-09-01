@@ -4,9 +4,8 @@ import { TableView, TableViewCol, TableViewProps } from '@components/TableView';
 import { useModelItems } from '@hooks/useModelItems';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { formatApiModelResultToTableView, modelIsCustom } from '@utils';
-import { ApiResultItem, ItemID } from '@prom-cms/shared';
-import { EntryService } from '@services';
-import { MESSAGES } from '@constants';
+import { ItemID } from '@prom-cms/shared';
+import { MESSAGES, pageUrls } from '@constants';
 import NotFoundPage from '@pages/404';
 import { useTranslation } from 'react-i18next';
 import { Button, Pagination } from '@mantine/core';
@@ -15,6 +14,8 @@ import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Plus } from 'tabler-icons-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from '@custom-types';
+import { ResultItem } from '@prom-cms/api-client';
+import { apiClient } from '@api';
 
 const EntryTypeUnderpage: Page = ({}) => {
   const navigate = useNavigate();
@@ -23,11 +24,18 @@ const EntryTypeUnderpage: Page = ({}) => {
   const model = useCurrentModel();
   const currentUser = useCurrentUser();
   const [apiWorking, setApiWorking] = useState(false);
-  const { data, isLoading, isError, mutate } = useModelItems(model?.name, {
-    page: page,
+  const {
+    data,
+    isLoading,
+    isError,
+    refetch: mutate,
+  } = useModelItems(model?.name, {
+    params: {
+      page: page,
+    },
   });
   const { t } = useTranslation();
-  const [listItems, handlers] = useListState<ApiResultItem>(data?.data);
+  const [listItems, handlers] = useListState<ResultItem>(data?.data);
 
   useEffect(() => {
     if (data?.data) {
@@ -56,7 +64,7 @@ const EntryTypeUnderpage: Page = ({}) => {
 
     if (fromId !== toId) {
       handlers.reorder({ from: source.index, to: destination.index });
-      await EntryService.reorder(model!.name, {
+      await apiClient.entries.swap(model!.name, {
         fromId,
         toId,
       });
@@ -81,7 +89,7 @@ const EntryTypeUnderpage: Page = ({}) => {
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-            await EntryService.delete({ id, model: model?.name as string });
+            await apiClient.entries.delete(model.name, id);
             mutate();
           }
         }
@@ -95,16 +103,16 @@ const EntryTypeUnderpage: Page = ({}) => {
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ENTRY_ITEM_DUPLICATE))) {
-            navigate(EntryService.getDuplicateUrl(id, model?.name as string));
+            navigate(pageUrls.entryTypes(model?.name as string).duplicate(id));
           }
         }
       : undefined;
 
   const onCreateRequest = () =>
-    navigate(EntryService.getCreateUrl(model?.name as string));
+    navigate(pageUrls.entryTypes(model?.name as string).create);
 
   const onEditRequest = (id: ItemID) =>
-    navigate(EntryService.getUrl(id, model?.name as string));
+    navigate(pageUrls.entryTypes(model?.name as string).view(id));
 
   // This resets a pager to start, because this page component maintains internal state across pages
   useEffect(() => setPage(1), [routerModelId]);

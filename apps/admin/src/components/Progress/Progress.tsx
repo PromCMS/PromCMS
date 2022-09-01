@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, ProgressHTMLAttributes, VFC } from 'react';
+import { DetailedHTMLProps, ProgressHTMLAttributes, FC } from 'react';
 
 export interface ProgressProps
   extends DetailedHTMLProps<
@@ -8,7 +8,7 @@ export interface ProgressProps
   loading?: boolean;
 }
 
-export const Progress: VFC<ProgressProps> = ({ className }) => {
+export const Progress: FC<ProgressProps> = ({ className }) => {
   return (
     <div>
       <span />

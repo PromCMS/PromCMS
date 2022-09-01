@@ -1,8 +1,8 @@
+import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core';
-import { EntryService } from '@services';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
 import { useMemo } from 'react';
@@ -33,10 +33,7 @@ export const Footer: FC<{}> = () => {
   const onItemDeleteRequest = async () => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
       exitView();
-      await EntryService.delete({
-        id: itemData?.id as string,
-        model: currentModel?.name as string,
-      });
+      await apiClient.entries.delete(currentModel?.name!, itemData?.id!);
     }
   };
 

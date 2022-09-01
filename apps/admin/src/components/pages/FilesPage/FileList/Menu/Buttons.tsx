@@ -14,7 +14,10 @@ export const Buttons: FC = () => {
     <div className="ml-3 grid aspect-square h-full flex-none">
       <Popover offset={10} position="bottom-end">
         <Popover.Target>
-          <Button color="success" className="flex aspect-square h-full">
+          <Button
+            color="success"
+            className="relative flex aspect-square h-full cursor-pointer"
+          >
             <Plus size={32} className="absolute left-3 top-3" />
           </Button>
         </Popover.Target>

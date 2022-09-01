@@ -47,6 +47,12 @@ export const useRequestWithNotifications = () => {
           : t('An error happened'),
         autoClose: autocloseInterval,
       });
+      if (!import.meta.env.PROD) {
+        console.error({
+          Message: 'an error happened during execution request notifications',
+          Error: e,
+        });
+      }
       throw e;
     }
   };

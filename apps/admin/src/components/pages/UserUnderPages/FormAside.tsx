@@ -2,8 +2,7 @@ import AsideItemWrap from '@components/AsideItemWrap';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
 import clsx from 'clsx';
 import { MESSAGES } from '@constants';
-import { EntryService, UserService } from '@services';
-import { useMemo, VFC } from 'react';
+import { useMemo, FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { getObjectDiff } from '@utils';
@@ -15,15 +14,16 @@ import { useSetState } from '@mantine/hooks';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Trash } from 'tabler-icons-react';
+import { apiClient } from '@api';
 
-const TextSkeleton: VFC<SkeltonProps> = ({ className, ...rest }) => (
+const TextSkeleton: FC<SkeltonProps> = ({ className, ...rest }) => (
   <Skeleton
     className={clsx('relative top-0.5 inline-block h-4', className)}
     {...rest}
   />
 );
 
-export const FormAside: VFC = () => {
+export const FormAside: FC = () => {
   const { isLoading, view, user, exitView, mutateUser } = useData();
   const {
     watch,
@@ -50,10 +50,7 @@ export const FormAside: VFC = () => {
   const onItemDeleteRequest = async () => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
       exitView();
-      await EntryService.delete({
-        id: user?.id as number,
-        model: 'users',
-      });
+      apiClient.users.delete(user?.id!);
     }
   };
 
@@ -72,16 +69,9 @@ export const FormAside: VFC = () => {
           successMessage: t('User can now follow instruction in their email'),
         },
         async () => {
-          const res = await UserService.requestPasswordReset(user!.id);
+          const { data } = await apiClient.users.requestPasswordReset(user!.id);
 
-          await mutateUser(
-            (prev) => {
-              if (prev && res.data?.data) {
-                return { ...prev, ...res.data.data };
-              }
-            },
-            { revalidate: false }
-          );
+          mutateUser(data.data);
         }
       );
     } catch (e) {}
@@ -102,15 +92,10 @@ export const FormAside: VFC = () => {
           ),
         },
         async () => {
-          const res = await UserService.toggleBlock(user!.id, userIsNowBlocked);
-          await mutateUser(
-            (prev) => {
-              if (prev && res.data?.data) {
-                return { ...prev, ...res.data.data };
-              }
-            },
-            { revalidate: false }
-          );
+          const { data } = await apiClient.users[
+            userIsNowBlocked ? 'unblock' : 'block'
+          ](user!.id);
+          mutateUser(data.data);
         }
       );
     } catch (e) {}

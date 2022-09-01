@@ -1,4 +1,5 @@
 export * from './api';
 export * from './localization';
-export * from './texts';
+export * from './pageUrls';
 export * from './misc';
+export * from './texts';

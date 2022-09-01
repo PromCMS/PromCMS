@@ -1,6 +1,5 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { FileService, FolderService } from '@services';
-import { useCallback, VFC } from 'react';
+import { useCallback, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFileListContext } from '../context';
 import { useClassNames } from '../useClassNames';
@@ -14,8 +13,11 @@ import {
   useNotifications,
 } from '@mantine/notifications';
 import { Transition } from '@mantine/core';
+import { apiClient } from '@api';
+import { ResultItem } from '@prom-cms/api-client';
+import { File } from '@prom-cms/shared';
 
-export const List: VFC = () => {
+export const List: FC = () => {
   const {
     isLoading,
     isError,
@@ -58,7 +60,7 @@ export const List: VFC = () => {
         });
 
         try {
-          await FolderService.delete(path);
+          await apiClient.folders.delete(path);
           await mutateFolders((folders) => {
             return folders?.filter((folder) => folder !== folderName);
           });
@@ -99,7 +101,7 @@ export const List: VFC = () => {
   const onFileDeleteClick: FileItemProps['onDeleteClick'] = useCallback(
     async (id) => {
       if (confirm(t('Do you really want to delete this file?'))) {
-        await FileService.delete(id);
+        await apiClient.files.delete(id);
         await mutateFiles((memory) => {
           if (!memory) return memory;
 
@@ -142,7 +144,7 @@ export const List: VFC = () => {
             {files?.files &&
               files.files.map((fileInfo) => (
                 <FileItem
-                  key={fileInfo.id}
+                  key={(fileInfo as ResultItem & File).id}
                   onDeleteClick={onFileDeleteClick}
                   {...fileInfo}
                 />

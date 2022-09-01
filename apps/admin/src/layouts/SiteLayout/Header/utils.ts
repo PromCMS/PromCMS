@@ -1,10 +1,10 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { EntryService } from '@services';
 import { useMemo } from 'react';
 import { modelIsCustom } from '@utils';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Home, Photo } from 'tabler-icons-react';
 import * as iconSet from 'tabler-icons-react';
+import { pageUrls } from '@constants';
 
 const menuItems = [
   { label: 'Domů', href: '/', icon: Home },
@@ -26,7 +26,7 @@ export const useConstructedMenuItems = () => {
             currentUser.can({ action: 'read', targetModel: modelKey })
           )
           .map(([modelKey, { icon }]) => ({
-            href: EntryService.getListUrl(modelKey),
+            href: pageUrls.entryTypes(modelKey).list,
             icon: iconSet[icon],
             label: modelKey,
           })),

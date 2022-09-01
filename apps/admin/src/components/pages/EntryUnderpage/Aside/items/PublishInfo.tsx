@@ -1,10 +1,10 @@
 import AsideItemWrap from '@components/AsideItemWrap';
+import { pageUrls } from '@constants';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { useUser } from '@hooks/useUser';
 import { Skeleton, SkeletonProps } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
-import { UserService } from '@services';
 import { dynamicDayjs } from '@utils';
 import clsx from 'clsx';
 import { FC } from 'react';
@@ -22,7 +22,7 @@ const TextSkeleton: FC<SkeletonProps> = ({ className, ...rest }) => (
 const UserName: FC<{ userId?: ItemID }> = ({ userId }) => {
   const { t } = useTranslation();
   const { data, isLoading } = useUser(userId, {
-    isPaused: () => !userId,
+    enabled: !!userId,
   });
   const currentUser = useCurrentUser();
   const userIsCurrentUser = Number(userId) === Number(currentUser?.id);
@@ -31,7 +31,7 @@ const UserName: FC<{ userId?: ItemID }> = ({ userId }) => {
     <TextSkeleton className="inline-block" />
   ) : (
     <Link
-      to={userIsCurrentUser ? '/settings/profile' : UserService.getUrl(userId)}
+      to={userIsCurrentUser ? '/settings/profile' : pageUrls.users.view(userId)}
       className="font-semibold text-blue-600"
     >
       {userIsCurrentUser ? t('Me') : data.name}

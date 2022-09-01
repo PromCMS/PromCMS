@@ -1,16 +1,17 @@
-import { File, ItemID } from '@prom-cms/shared';
+import { ItemID } from '@prom-cms/shared';
 import {
   AnchorHTMLAttributes,
   DetailedHTMLProps,
   FC,
   useCallback,
-  VFC,
 } from 'react';
-import { FileService } from '@services';
 import { useClassNames as getClassnames } from '../../useClassNames';
 import { ActionIcon } from '@mantine/core';
 import { Trash } from 'tabler-icons-react';
 import { Link } from 'react-router-dom';
+import { FileItem as FileItemType } from '@prom-cms/api-client';
+import { apiClient } from '@api';
+import { pageUrls } from '@constants';
 
 const classNames = getClassnames();
 
@@ -23,16 +24,16 @@ const LinkItem: FC<
     'ref'
   >
 > = ({ itemId, children, className, ...rest }) => (
-  <Link to={FileService.getUrl(itemId)} {...rest}>
+  <Link to={pageUrls.files.view(itemId)} {...rest}>
     {children}
   </Link>
 );
 
-export interface FileItemProps extends File {
+export interface FileItemProps extends FileItemType {
   onDeleteClick: (id: ItemID) => void;
 }
 
-export const FileItem: VFC<FileItemProps> = ({
+export const FileItem: FC<FileItemProps> = ({
   id,
   filename,
   mimeType,
@@ -52,7 +53,9 @@ export const FileItem: VFC<FileItemProps> = ({
             <img
               alt="uploaded file"
               className="absolute top-0 left-0 h-full w-full object-cover"
-              src={FileService.getApiRawUrl(id, { w: '250', q: '60' }, true)}
+              src={apiClient.files
+                .getAssetUrl(id, { w: '250', q: '60' })
+                .toString()}
             />
           ) : (
             <div className="flex h-full w-full">
