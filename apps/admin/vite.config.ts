@@ -6,7 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, path.join(process.cwd(), '..', '..'), '');
-  const { PORT = 3004 } = env;
+  const { PORT = 3004, ANALYZE = false } = env;
   const isDev = mode == 'development';
   const APP_PORT = Number(PORT);
   const APP_URL_PREFIX = isDev ? undefined : '/admin/';
@@ -15,9 +15,10 @@ export default defineConfig(({ command, mode }) => {
     plugins: [
       tsconfigPaths(),
       react(),
-      /*visualizer({
-        filename: './dev/stats.html',
-      }),*/
+      ANALYZE &&
+        visualizer({
+          filename: './dev/stats.html',
+        }),
     ],
     base: APP_URL_PREFIX,
     define: {

@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:analyze": "tsc && cross-env ANALYZE=true vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -56,6 +57,7 @@
   },
   "devDependencies": {
     "rollup-plugin-visualizer": "~5.7.1",
+    "cross-env": "~7.0.3",
     "vite": "^3.0.2",
     "@vitejs/plugin-react": "^2.0.0",
     "vite-tsconfig-paths": "^3.5.0",
