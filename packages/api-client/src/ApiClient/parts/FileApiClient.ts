@@ -13,6 +13,16 @@ import { EntryApiClient } from './EntryApiClient';
 export class FileApiClient extends ApiClientBase {
   private modelId = 'files';
 
+  getAssetUrl(fileId: ItemID, searchParams: Record<string, string> = {}) {
+    const url = new URL(
+      `/api/entry-types/files/items/${fileId}/raw`,
+      this.axios.defaults.baseURL || window.location.origin
+    );
+    url.search = new URLSearchParams(searchParams).toString();
+
+    return url;
+  }
+
   getFileUrl(fileId: string, searchParams: Record<string, string> = {}) {
     const params = new URLSearchParams(searchParams).toString();
     return `${EntryApiClient.getItemUrl(this.modelId, fileId)}/raw${
