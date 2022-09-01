@@ -1,4 +1,4 @@
-import { ItemID } from '@prom-cms/shared';
+import { DatabaseTableName, ItemID } from '@prom-cms/shared';
 import {
   PagedResponse,
   Response,
@@ -79,5 +79,14 @@ export class EntryApiClient extends ApiClientBase {
       },
       this.formatAxiosConfig<T>(config)
     );
+  }
+
+  async swap(
+    modelId: DatabaseTableName,
+    payload: { fromId: ItemID; toId: ItemID }
+  ) {
+    return this.axios.patch(`${EntryApiClient.getItemsUrl(modelId)}/reorder`, {
+      data: payload,
+    });
   }
 }
