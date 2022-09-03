@@ -119,6 +119,29 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     },
   };
 
+  models['generalTranslations'] = {
+    ownable: false,
+    icon: 'LanguageHiragana',
+    intl: false,
+    columns: {
+      lang: {
+        title: 'Language',
+        type: 'string',
+        required: true,
+      },
+      key: {
+        title: 'Key',
+        type: 'string',
+        required: true,
+      },
+      value: {
+        title: 'Value',
+        type: 'string',
+        required: true,
+      },
+    },
+  };
+
   // we need to make sure that we at least have default columns
   models['users'] = {
     admin: {
