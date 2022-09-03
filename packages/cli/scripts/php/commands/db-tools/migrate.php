@@ -2,8 +2,6 @@
 
 use App\Services\EntryTypeService;
 use PromCMS\Core\App;
-use PromCMS\Core\Config;
-use PromCMS\Core\Path;
 use PromCMS\Core\Utils;
 
 $PHP_APP_ROOT = $argv[1];
@@ -26,12 +24,10 @@ try {
   }
 
   $groupedData = [];
-  foreach (
-    array_filter($dataFromJson, function ($item) {
-      return $item->type === 'table';
-    })
-    as $item
-  ) {
+  foreach (array_filter($dataFromJson, function ($item) {
+    return $item->type === 'table';
+  })
+    as $item) {
     $groupedData[$item->name] = $item->data;
   }
 
