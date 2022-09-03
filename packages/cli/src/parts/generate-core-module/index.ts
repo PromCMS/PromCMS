@@ -1,12 +1,8 @@
 import generateModule from '../../parts/generate-module';
 import type { ExportConfig } from '@prom-cms/shared';
 import path from 'path';
-import generateApiRoutes from './parts/generate-api-routes';
-import generateControllers from './parts/generate-controllers';
-import generateMiddleware from './parts/generate-middleware';
+import generateStaticFiles from './parts/generate-static-files';
 import generateModels from './parts/generate-models';
-import generateRootFiles from './parts/generate-root-files';
-import generateServices from './parts/generate-services';
 
 /**
  * Generates a core module as a whole
@@ -27,23 +23,11 @@ export const generateCoreModule = async (
       : 'Key module that provides functionality to this CMS. DO NOT DELETE!',
   });
 
-  //Logger.info('🔃 Creating root files...');
-  await generateRootFiles(DEV_MODULE_ROOT);
-
   // Logger.info('🔃 Generating models...');
   await generateModels(DEV_MODULE_ROOT, configModels);
 
-  // Logger.info('🔃 Creating services...');
-  await generateServices(DEV_MODULE_ROOT);
-
-  // Logger.info('🔃 Creating controllers...');
-  await generateControllers(DEV_MODULE_ROOT);
-
-  // Logger.info('🔃 Creating api middleware...');
-  await generateMiddleware(DEV_MODULE_ROOT);
-
   // Logger.info('🔃 Creating api routes...');
-  await generateApiRoutes(DEV_MODULE_ROOT);
+  await generateStaticFiles(DEV_MODULE_ROOT);
 
   // Logger.success('✅ Generating development module into core done!');
 };
