@@ -18,7 +18,7 @@ class ImageService
   {
     $this->fs = $container->get('filesystem');
     $this->config = $container->get(Config::class);
-    $this->cacheFs = $container->get('file-cache-filesystem');
+    $this->cacheFs = $container->get('cache-filesystem');
   }
 
   public function getProcessed(array $fileInfo, $dirtyParams = [])
@@ -105,7 +105,7 @@ class ImageService
     return [
       'resource' => $fileStream,
       'src' =>
-        $this->config->app->baseUrl .
+      $this->config->app->baseUrl .
         "/api/entry-types/files/items/$fileId/raw?$joinedArgs",
       'width' => $imageWidth,
       'height' => $imageHeight,
