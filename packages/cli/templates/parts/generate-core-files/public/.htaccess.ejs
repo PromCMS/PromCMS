@@ -1,12 +1,41 @@
-RewriteEngine On
-RewriteBase /
+<ifModule mod_expires.c> 
+  ExpiresActive On 
+  ExpiresByType image/x-icon "access plus 600 seconds" 
+  ExpiresByType image/jpeg "access plus 600 seconds" 
+  ExpiresByType image/jpg "access plus 600 seconds" 
+  ExpiresByType image/png "access plus 600 seconds" 
+  ExpiresByType image/gif "access plus 600 seconds" 
+  ExpiresByType application/x-shockwave-flash "access plus 600 seconds" 
+  ExpiresByType text/css "access plus 600 seconds" 
+  ExpiresByType text/javascript "access plus 600 seconds" 
+  ExpiresByType application/javascript "access plus 600 seconds" 
+  ExpiresByType application/x-javascript "access plus 600 seconds" 
+</ifModule> 
 
-# Handle Authorization Header
-RewriteCond %{HTTP:Authorization} .
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+<ifModule mod_rewrite.c> 
+  RewriteEngine On
+  RewriteBase /
 
-# Handle Front Controller...
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_URI} !^/admin
-RewriteRule ^ index.php [L]
+  # HTTP >> HTTPS 
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP_HOST} !=localhost:3001
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  ## non www to www
+  RewriteCond %{HTTP_HOST} !=localhost:3001
+  RewriteCond %{HTTP_HOST} !^test\.
+  RewriteCond %{HTTP_HOST} !^www\.
+  RewriteRule ^(.*)$ http://www.%{HTTP_HOST}/$1 [L,R=301]
+
+  # Server only public folder to public
+  RewriteCond %{REQUEST_URI} !^/public/
+  RewriteRule (.*) public/$1
+
+  # If we did not find any file then we handle requests with php app
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule (.*) public/index.php
+</ifModule> 
+
+
+
+
