@@ -120,9 +120,13 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
   };
 
   models['generalTranslations'] = {
+    admin: {
+      layout: 'simple',
+    },
     ownable: false,
     icon: 'LanguageHiragana',
     intl: false,
+    sharable: false,
     columns: {
       lang: {
         title: 'Language',
