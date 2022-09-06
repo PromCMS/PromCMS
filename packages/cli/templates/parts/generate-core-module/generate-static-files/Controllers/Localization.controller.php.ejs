@@ -92,9 +92,6 @@ class Localization
     if (!isset($args['lang'])) {
       return $response->withStatus(400);
     }
-    if (!$this->localizationService->languageIsSupported($args['lang'])) {
-      return $response->withStatus(404);
-    }
     $locales = $this->localizationService->getTranslations($args['lang']);
 
     $response->getBody()->write(json_encode($locales));

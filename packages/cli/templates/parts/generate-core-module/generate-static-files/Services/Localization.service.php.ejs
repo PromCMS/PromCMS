@@ -34,10 +34,6 @@ class Localization
    */
   function getTranslations($language, $includeUnknown = false)
   {
-    if (!$this->languageIsSupported($language)) {
-      throw new Exception('This language is not supported');
-    }
-
     $languageTranslations = GeneralTranslations::where(['lang', '=', $language])->orderBy(["key" => "desc"])->getMany();
 
     $items = [];
