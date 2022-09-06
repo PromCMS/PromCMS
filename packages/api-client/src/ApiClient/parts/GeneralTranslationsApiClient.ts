@@ -17,33 +17,20 @@ export class GeneralTranslationsApiClient extends ApiClientBase {
   }
 
   async updateTranslation(key: string, value: string, language: string) {
-    return this.axios.patch<Response<Record<string, string>>>(
-      EntryApiClient.getItemUrl(this.modelId, key),
+    return this.axios.post<Response<Record<string, string>>>(
+      `${EntryApiClient.getItemsUrl(this.modelId)}/create`,
       {
-        params: {
-          lang: language,
-        },
-        data: {
-          value,
-        },
+        value,
+        key,
+        lang: language,
       }
     );
   }
 
   async deleteKey(key: string) {
     return this.axios.delete<Response<Record<string, string>>>(
-      EntryApiClient.getItemUrl(this.modelId, key)
-    );
-  }
-
-  async createKey(key: string) {
-    return this.axios.post<Response<Record<string, string>>>(
-      `${EntryApiClient.getItemsUrl(this.modelId)}/create`,
-      {
-        data: {
-          key,
-        },
-      }
+      `${EntryApiClient.getItemsUrl(this.modelId)}/delete`,
+      { data: { key } }
     );
   }
 }
