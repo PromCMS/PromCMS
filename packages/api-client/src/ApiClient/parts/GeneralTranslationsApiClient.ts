@@ -18,7 +18,7 @@ export class GeneralTranslationsApiClient extends ApiClientBase {
 
   async updateTranslation(key: string, value: string, language: string) {
     return this.axios.post<Response<Record<string, string>>>(
-      `${EntryApiClient.getItemsUrl(this.modelId)}/create`,
+      `${EntryApiClient.getItemsUrl(this.modelId)}/update`,
       {
         value,
         key,
