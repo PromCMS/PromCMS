@@ -8,6 +8,7 @@ use App\Services\EntryTypeService;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\Twig;
 
 class Users
 {
@@ -123,7 +124,7 @@ class Users
     $parsedBody = $request->getParsedBody();
     $jwtService = $this->container->get('jwt-service');
     $emailService = $this->container->get('email');
-    $twigService = $this->container->get('twig');
+    $twigService = $this->container->get(Twig::class);
 
     if (isset($parsedBody['data']['password'])) {
       unset($parsedBody['data']['password']);
@@ -168,7 +169,7 @@ class Users
     } catch (\Exception $e) {
       $loader = new \Twig\Loader\ArrayLoader([
         'index' =>
-          'Welcome, {{ name }}! Please continue with your registration <a href="{{ app_url }}/admin/finalize-registration?token={{ token }}">here</a>!',
+        'Welcome, {{ name }}! Please continue with your registration <a href="{{ app_url }}/admin/finalize-registration?token={{ token }}">here</a>!',
       ]);
       $twig = new \Twig\Environment($loader);
 
@@ -240,7 +241,7 @@ class Users
   ) {
     $jwtService = $this->container->get('jwt-service');
     $emailService = $this->container->get('email');
-    $twigService = $this->container->get('twig');
+    $twigService = $this->container->get(Twig::class);
 
     $user = \Users::getOneById($args['itemId']);
     if ($user->state === 'blocked') {
@@ -264,7 +265,7 @@ class Users
     } catch (\Exception $e) {
       $loader = new \Twig\Loader\ArrayLoader([
         'index' =>
-          'Hey, {{ name }}! We noticed that you requested a password reset. Please continue <a href="{{ app_url }}/admin/reset-password?token={{ token }}">here</a>!',
+        'Hey, {{ name }}! We noticed that you requested a password reset. Please continue <a href="{{ app_url }}/admin/reset-password?token={{ token }}">here</a>!',
       ]);
       $twig = new \Twig\Environment($loader);
 

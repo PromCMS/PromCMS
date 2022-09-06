@@ -5,6 +5,7 @@ namespace App\Controllers;
 use DI\Container;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Views\Twig;
 
 class UserProfile
 {
@@ -156,7 +157,7 @@ class UserProfile
   ) {
     $params = $request->getQueryParams();
     $emailService = $this->container->get('email');
-    $twigService = $this->container->get('twig');
+    $twigService = $this->container->get(Twig::class);
 
     if (!$params['email']) {
       return $response->withStatus(400);
@@ -190,7 +191,7 @@ class UserProfile
     } catch (\Exception $e) {
       $loader = new \Twig\Loader\ArrayLoader([
         'index' =>
-          'Hey, {{ name }}! We noticed that you requested a password reset. Please continue <a href="{{ app_url }}/admin/reset-password?token={{ token }}">here</a>!',
+        'Hey, {{ name }}! We noticed that you requested a password reset. Please continue <a href="{{ app_url }}/admin/reset-password?token={{ token }}">here</a>!',
       ]);
       $twig = new \Twig\Environment($loader);
 

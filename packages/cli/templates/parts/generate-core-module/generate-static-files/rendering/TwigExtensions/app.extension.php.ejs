@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Twig\Extensions;
 
 use App\Services\FileService;
 use App\Services\ImageService;
 use DI\Container;
 use Twig\Extension\AbstractExtension;
+use Slim\Views\Twig;
 use Twig\TwigFunction;
 
 class AppExtension extends AbstractExtension
@@ -16,7 +18,7 @@ class AppExtension extends AbstractExtension
   public function __construct(Container $container)
   {
     $this->fileService = $container->get('file-service');
-    $this->twigService = $container->get('twig');
+    $this->twigService = $container->get(Twig::class);
     $this->imageService = $container->get('image-service');
   }
 
