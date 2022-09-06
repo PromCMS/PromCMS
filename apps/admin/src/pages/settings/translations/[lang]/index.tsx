@@ -14,7 +14,7 @@ import {
   TextInput,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Link,
@@ -44,6 +44,14 @@ export const GeneralTranslationsSettings: Page = () => {
     refetchOnWindowFocus: !userIsUpdating,
   });
   const [data, setData] = useState(originalData);
+
+  const sortedTranslations = useMemo(
+    () =>
+      Object.entries(data || {}).sort(([keyA], [keyB]) =>
+        keyA.localeCompare(keyB)
+      ),
+    [data]
+  );
 
   const updateKey = useCallback(
     async (key: string, value: string) => {
@@ -121,7 +129,7 @@ export const GeneralTranslationsSettings: Page = () => {
     </tr>
   );
 
-  const rows = Object.entries(data || {}).map(([key, value]) => (
+  const rows = sortedTranslations.map(([key, value]) => (
     <tr key={key}>
       <td>{key}</td>
       <td className="w-full max-w-[350px]">
@@ -135,6 +143,7 @@ export const GeneralTranslationsSettings: Page = () => {
             }
           }}
           value={value}
+          placeholder={t('Translate by entering some keyword')}
         />
       </td>
       <td className="w-full max-w-[100px]">
