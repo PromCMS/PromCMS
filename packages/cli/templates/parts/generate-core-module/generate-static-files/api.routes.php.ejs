@@ -1,4 +1,5 @@
 <?php
+
 use Slim\Routing\RouteCollectorProxy as Router;
 use App\Middleware\Auth as AuthMiddleware;
 use App\Middleware\EntryType as EntryTypeMiddleware;
@@ -61,19 +62,11 @@ return function (App $app, Router $router) {
       Router $innerRouter
     ) use ($auth) {
       $innerRouter->get('', '\App\Controllers\Localization:getMany');
-      $innerRouter
-        ->post('/create', '\App\Controllers\Localization:addGeneralKey')
-        ->add($auth);
-
-      $innerRouter
-        ->group('/{key}', function (Router $innerRouter) {
-          $innerRouter->delete('', '\App\Controllers\Localization:delete');
-          $innerRouter->patch(
-            '',
-            '\App\Controllers\Localization:updateKeyTranslations',
-          );
-        })
-        ->add($auth);
+      $innerRouter->delete('/delete', '\App\Controllers\Localization:delete')->add($auth);
+      $innerRouter->post(
+        '/update',
+        '\App\Controllers\Localization:updateTranslation',
+      )->add($auth);
     });
 
     // Folders
