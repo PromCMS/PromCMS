@@ -6,12 +6,13 @@ use App\Twig\Extensions\AppExtension;
 use PromCMS\Core\Path;
 use PromCMS\Core\Utils;
 use Slim\App;
+use Slim\Views\Twig;
 
 return function (App $app) {
   // get container
   /** @var \DI\Container $container */
   $container = $app->getContainer();
-  $twig = $container->get('twig');
+  $twig = $container->get(Twig::class);
 
   Utils::autoloadFolder(Path::join(__DIR__, 'Services'));
   Utils::autoloadFolder(Path::join(__DIR__, 'Http', 'Middleware'));
