@@ -1,5 +1,6 @@
 import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
+import { pageUrls } from '@constants';
 import { Page } from '@custom-types';
 import { useGeneralTranslations } from '@hooks/useGeneralTranslations';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
@@ -15,14 +16,21 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import {
+  Link,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 import { Plus, Trash } from 'tabler-icons-react';
 
 export const GeneralTranslationsSettings: Page = () => {
   const { t } = useTranslation();
-  const settings = useSettings();
   const location = useLocation();
-  const [language, setLanguage] = useState(settings?.i18n.default || 'en');
+  const settings = useSettings();
+  const navigate = useNavigate();
+  const { lang } = useParams();
   const reqWithNotification = useRequestWithNotifications();
   const [userIsUpdating, { open: setUserIsTyping, close: setUserIsNotTyping }] =
     useDisclosure(false);
@@ -31,7 +39,7 @@ export const GeneralTranslationsSettings: Page = () => {
     data: originalData,
     isLoading,
     refetch,
-  } = useGeneralTranslations(language, {
+  } = useGeneralTranslations(lang!, {
     refetchOnMount: !userIsUpdating,
     refetchOnWindowFocus: !userIsUpdating,
   });
@@ -41,14 +49,14 @@ export const GeneralTranslationsSettings: Page = () => {
     async (key: string, value: string) => {
       setData({
         ...(data || {}),
-        ...(value.length > 0 ? { [key]: value } : {}),
+        [key]: value,
       } as Record<string, string>);
     },
     [data]
   );
 
   const onSaveItem = async (key: string) => {
-    if (originalData?.data[key] == data![key]) {
+    if (originalData?.[key] == data![key]) {
       return;
     }
 
@@ -63,7 +71,7 @@ export const GeneralTranslationsSettings: Page = () => {
         await apiClient.generalTranslations.updateTranslation(
           key,
           data![key],
-          language
+          lang!
         );
         await refetch();
         setIsUpdating(false);
@@ -82,7 +90,9 @@ export const GeneralTranslationsSettings: Page = () => {
 
   const onDeleteClick = useCallback(
     (id: string) => async () => {
-      if (!confirm(t('Do you really want to delete this key?'))) {
+      if (
+        !confirm(t('Do you really want to delete this key for ALL languages?'))
+      ) {
         return;
       }
 
@@ -140,11 +150,14 @@ export const GeneralTranslationsSettings: Page = () => {
       <Group position="apart" mb="md" mt="md">
         <LanguageSelect
           label=""
-          value={language}
-          onChange={(value) => value && setLanguage(value)}
+          value={lang}
+          disabledOptions={[settings?.i18n.default!]}
+          onChange={(value) =>
+            value && navigate(pageUrls.settings.translations(value).list)
+          }
         />
         <Button
-          to="/settings/translations/keys/create"
+          to={pageUrls.settings.translations(lang!).create}
           color={'green'}
           leftIcon={<Plus />}
           component={Link}
