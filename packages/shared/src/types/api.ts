@@ -1,5 +1,5 @@
 import { DatabaseConfigModel, DatabaseTableName } from './generateConfig';
-import { UserStates } from "./UserStates";
+import { UserStates } from './UserStates';
 
 export type PrimitiveTypes = 'number' | 'string' | 'boolean' | 'date';
 
