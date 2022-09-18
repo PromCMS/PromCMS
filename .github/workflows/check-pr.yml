@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  release:
+  check-build:
     runs-on: ubuntu-latest
     steps:
       - uses: n1hility/cancel-previous-runs@v2
