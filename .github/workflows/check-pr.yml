@@ -32,6 +32,11 @@ jobs:
       - name: Install Dependencies
         run: yarn --frozen-lockfile
 
+      - name: Run prettier
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: prettier
+
       - name: Build
         uses: borales/actions-yarn@v3.0.0
         with:
