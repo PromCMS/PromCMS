@@ -5,7 +5,9 @@ import { ComponentPropsWithoutRef, FC, forwardRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Hash } from 'tabler-icons-react';
 
-interface LanguageSelectProps extends Omit<SelectProps, 'data'> {}
+interface LanguageSelectProps extends Omit<SelectProps, 'data'> {
+  disabledOptions?: string[];
+}
 interface ItemProps extends ComponentPropsWithoutRef<'div'> {
   label: string;
   value: string;
@@ -43,6 +45,7 @@ const SelectItemComponent = forwardRef<HTMLDivElement, ItemProps>(
 export const LanguageSelect: FC<LanguageSelectProps> = ({
   value,
   disabled,
+  disabledOptions,
   ...rest
 }) => {
   const { t } = useTranslation();
@@ -53,10 +56,17 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
       return undefined;
     }
 
-    return settings.i18n.languages.map((value) => ({
-      label: t(languageTitles[value] ?? value),
-      value,
-    }));
+    return settings.i18n.languages.map((value) => {
+      const isDisabled = disabledOptions?.includes(value);
+
+      return {
+        label: `${t(languageTitles[value] ?? value)} ${
+          isDisabled ? ` (${t('Default')})` : ''
+        }`,
+        value,
+        disabled: isDisabled,
+      };
+    });
   }, [settings, t]);
 
   return (

@@ -44,4 +44,15 @@ export const pageUrls = {
       return `${this.list}/entries/duplicate/${id}`;
     },
   }),
+  settings: {
+    profile: '/settings/profile',
+    roles: '/settings/roles',
+    system: '/settings/system',
+    translations: (language: string) => ({
+      list: `/settings/translations/${language}`,
+      get create() {
+        return `${this.list}/keys/create`;
+      },
+    }),
+  },
 };

@@ -1,23 +1,28 @@
 import { apiClient } from '@api';
+import { LanguageSelect } from '@components/form/LanguageSelect';
 import { Page } from '@custom-types';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { useSettings } from '@hooks/useSettings';
 import { Button, Modal, TextInput, Title } from '@mantine/core';
-import { useCallback } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useCallback, useEffect } from 'react';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+
+type FormValues = { key: string; value: string };
 
 export const CreateTranslationSettings: Page = () => {
   const navigate = useNavigate();
-  const formMethods = useForm<{ title: string }>();
-  const { t } = useTranslation();
+  const settings = useSettings();
+  const formMethods = useForm<FormValues>();
   const reqWithNotification = useRequestWithNotifications();
-  const { handleSubmit, formState, register, watch } = formMethods;
+  const { lang } = useParams();
+  const { t } = useTranslation();
+  const { handleSubmit, formState, register } = formMethods;
 
   const onClose = useCallback(() => navigate(-1), [navigate]);
-  const titleValue = watch('title');
 
-  const onSubmit = async (values) => {
+  const onSubmit: SubmitHandler<FormValues> = async (values) => {
     try {
       reqWithNotification(
         {
@@ -26,12 +31,22 @@ export const CreateTranslationSettings: Page = () => {
           successMessage: t('Translation key successfully created'),
         },
         async () => {
-          await apiClient.generalTranslations.createKey(values.title);
+          await apiClient.generalTranslations.updateTranslation(
+            values.key,
+            values.value,
+            lang!
+          );
           onClose();
         }
       );
     } catch (e) {}
   };
+
+  useEffect(() => {
+    if (lang && settings && !settings.i18n.languages.includes(lang)) {
+      navigate('/404');
+    }
+  }, [lang, settings]);
 
   return (
     <Modal
@@ -45,18 +60,21 @@ export const CreateTranslationSettings: Page = () => {
     >
       <FormProvider {...formMethods}>
         <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
+          <LanguageSelect disabled label={t('Current language')} value={lang} />
           <TextInput
             label={t('Key title')}
-            {...register('title', {
-              min: { value: 1, message: 'This field is required' },
+            mt={'sm'}
+            {...register('key', {
+              min: { value: 1, message: t('This field is required') },
             })}
           />
           <TextInput
-            disabled
             label={t('Value')}
             mt={'sm'}
-            value={titleValue ?? ''}
-            description={t('This is an initial translation key value')}
+            description={t('This is a translation value for current language')}
+            {...register('value', {
+              min: { value: 1, message: t('This field is required') },
+            })}
           />
           <Button
             className="mr-auto block"

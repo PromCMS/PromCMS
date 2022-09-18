@@ -1,70 +1,84 @@
 import { PageLayout } from '@layouts';
-import { FC, PropsWithChildren, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import {
+  Icon,
   LanguageHiragana,
-  Lock,
   Settings,
   UserCircle,
   UserExclamation,
 } from 'tabler-icons-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-
-const items = [
-  { title: 'Profile', url: '/settings/profile', Icon: UserCircle },
-  {
-    title: 'Authentication',
-    url: '/settings/password',
-    Icon: Lock,
-    canBeShown: () => false,
-  },
-  {
-    title: 'User Roles',
-    url: '/settings/roles',
-    Icon: UserExclamation,
-    canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
-      currentUser?.role.id === 0,
-  },
-  {
-    title: 'System settings',
-    url: '/settings/system',
-    Icon: Settings,
-    canBeShown: (currentUser: ReturnType<typeof useCurrentUser>) =>
-      currentUser?.can({
-        action: 'read',
-        targetModel: 'settings',
-      }),
-  },
-  {
-    title: 'General translations',
-    url: '/settings/translations',
-    Icon: LanguageHiragana,
-  },
-];
+import { useSettings } from '@hooks/useSettings';
+import { pageUrls } from '@constants';
 
 const LeftAside: FC = () => {
   let navigate = useNavigate();
+  const settings = useSettings();
   const { pathname } = useLocation();
   const { t } = useTranslation();
   const currentUser = useCurrentUser();
 
-  const filteredItems = useMemo(
-    () =>
-      currentUser &&
-      items.filter(({ canBeShown }) =>
-        canBeShown ? canBeShown(currentUser) : true
-      ),
-    [currentUser]
-  );
+  const items = useMemo(() => {
+    if (!settings || !currentUser) {
+      return [];
+    }
+
+    return (
+      [
+        { title: 'Profile', url: '/settings/profile', Icon: UserCircle },
+        /*{
+          title: 'Authentication',
+          url: '/settings/password',
+          Icon: Lock,
+          canBeShown: () => false,
+        },*/
+        {
+          title: 'User Roles',
+          url: '/settings/roles',
+          Icon: UserExclamation,
+          canBeShown: currentUser?.role.id === 0,
+        },
+        {
+          title: 'System settings',
+          url: '/settings/system',
+          Icon: Settings,
+          canBeShown: !!currentUser?.can({
+            action: 'read',
+            targetModel: 'settings',
+          }),
+        },
+        {
+          title: 'General translations',
+          url: pageUrls.settings.translations(settings?.i18n.languages[1]).list,
+          isInUrl(currentUrl) {
+            return currentUrl.startsWith(
+              pageUrls.settings
+                .translations(settings?.i18n.languages[1])
+                .list.replace(settings?.i18n.languages[1], '')
+            );
+          },
+          Icon: LanguageHiragana,
+          canBeShown: settings && settings.i18n.languages.length >= 2,
+        },
+      ] as {
+        title: string;
+        url: string;
+        Icon: Icon;
+        isInUrl?: (currentUrl: string) => boolean;
+        canBeShown?: boolean;
+      }[]
+    ).filter((item) => item.canBeShown || item.canBeShown === undefined);
+  }, [settings, currentUser]);
 
   return (
     <div className="h-full px-5 pt-6">
       <nav className="mt-24 flex flex-none gap-3 lg:flex-col">
-        {filteredItems &&
-          filteredItems.map(({ url, title, Icon }) => (
+        {items &&
+          items.map(({ url, title, Icon, isInUrl }) => (
             <Button
               key={url}
               component="a"
@@ -72,7 +86,7 @@ const LeftAside: FC = () => {
               variant="subtle"
               color={pathname === url ? 'green' : 'blue'}
               className={clsx(
-                pathname === url
+                (isInUrl === undefined ? pathname === url : isInUrl(pathname))
                   ? 'border-green-300 underline'
                   : 'border-blue-200',
                 'border-2 bg-white'
