@@ -1,4 +1,5 @@
 <?php
+
 /**
  * DO NOT DELETE OR EDIT THIS FILE.
  * THIS FILE IS PART OF COCKPIT CMS
@@ -37,7 +38,14 @@ class EntryType
           return strtolower($modelName);
         }, $this->loadedModels),
         function ($modelName) {
-          return !in_array($modelName, ['files', 'users', 'userroles']);
+          return !in_array($modelName, [
+            'files',
+            'users',
+            'userroles',
+            'userRoles',
+            'generalTranslations',
+            'generaltranslations',
+          ]);
         },
       ),
     );

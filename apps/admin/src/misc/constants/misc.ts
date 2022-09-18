@@ -4,4 +4,5 @@ export const CUSTOM_MODELS = [
   'userRoles',
   'settings',
   'userroles',
+  'generalTranslations',
 ];
