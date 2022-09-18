@@ -1,5 +1,20 @@
 # @prom-cms/cli
 
+## 0.8.0
+
+### Minor Changes
+
+- 493a220: Get rid of SWR and custom services in admin and use tanstack/react-query and prom-cms/api-client instead
+- 9b60d7c: Move translations from general json file per language to per-key translation to database
+
+### Patch Changes
+
+- 44fae0c: Fix build by updating prettier and applying to files
+- Updated dependencies [493a220]
+- Updated dependencies [9b60d7c]
+- Updated dependencies [44fae0c]
+  - @prom-cms/shared@1.4.0
+
 ## 0.7.0
 
 ### Minor Changes
