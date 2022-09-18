@@ -1,7 +1,8 @@
-import { Response } from "./Response";
-import { ResultItem } from "./ResultItem";
+import { Response } from './Response';
+import { ResultItem } from './ResultItem';
 
-export interface PagedResponse<T extends ResultItem> extends Omit<Response<T>, "data"> {
+export interface PagedResponse<T extends ResultItem>
+  extends Omit<Response<T>, 'data'> {
   /**
    * Resulted data for page
    */

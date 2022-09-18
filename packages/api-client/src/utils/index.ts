@@ -1,1 +1,1 @@
-export * from "./formatQueryParams" 
+export * from './formatQueryParams';

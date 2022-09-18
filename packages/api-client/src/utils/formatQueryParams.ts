@@ -1,4 +1,4 @@
-import { QueryParams } from "../types";
+import { QueryParams } from '../types';
 
 export const formatQueryParams = ({ where, ...restParams }: QueryParams) => {
   const params: Record<string, string | number> = { ...restParams };

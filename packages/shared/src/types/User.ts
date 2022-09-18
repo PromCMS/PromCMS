@@ -1,6 +1,6 @@
-import { ItemID } from "./ItemID";
-import { UserRole } from "./UserRole";
-import { UserStates } from "./UserStates";
+import { ItemID } from './ItemID';
+import { UserRole } from './UserRole';
+import { UserStates } from './UserStates';
 
 export interface User {
   id: ItemID;
