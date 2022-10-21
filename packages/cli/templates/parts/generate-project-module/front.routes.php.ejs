@@ -15,6 +15,6 @@ return function (App $app, RouteCollectorProxy $router) {
     $container = $app->getContainer();
     $twig = $container->get(TwigViews::class);
 
-    return $twig->render($response, "@plugins:<%= views.prefix %>/pages/home.twig");
+    return $twig->render($response, "@modules:<%= views.prefix %>/pages/home.twig");
   });
 };
