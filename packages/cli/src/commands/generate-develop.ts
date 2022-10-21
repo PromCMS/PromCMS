@@ -9,6 +9,7 @@ import { loggedJobWorker, LoggedWorkerJob, Logger } from '../utils';
 import { generateCoreModule } from '../parts/generate-core-module';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
+import { generateProjectModule } from '../parts/generate-project-module';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
@@ -43,9 +44,8 @@ export class GenerateDevelopProgram extends Command {
     const DEV_API_ROOT = path.join(PROJECT_ROOT, 'apps', 'dev-api');
     const TEMP_CORE_ROOT = path.join(DEV_API_ROOT, '.temp');
     const MODULES_ROOT = path.join(TEMP_CORE_ROOT, 'modules');
-    const { database: databaseConfig } = await formatGeneratorConfig(
-      GENERATOR_CONFIG
-    );
+    const { database: databaseConfig, project: projectConfig } =
+      await formatGeneratorConfig(GENERATOR_CONFIG);
 
     const jobs: LoggedWorkerJob[] = [
       {
@@ -71,9 +71,15 @@ export class GenerateDevelopProgram extends Command {
         },
       },
       {
-        title: 'Generate development module into core',
+        title: 'Generate core module into core',
         async job() {
           await generateCoreModule(MODULES_ROOT, databaseConfig.models);
+        },
+      },
+      {
+        title: 'Generate project module',
+        async job() {
+          await generateProjectModule(MODULES_ROOT, projectConfig);
         },
       },
       {

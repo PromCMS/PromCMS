@@ -22,6 +22,7 @@ import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
 import { generateCoreModule } from '../parts/generate-core-module';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
+import { generateProjectModule } from '../parts/generate-project-module';
 
 type CustomParams = [string];
 
@@ -102,6 +103,7 @@ export class GenerateCMSProgram extends Command {
       );
     }
 
+    const exportModulesRoot = path.join(FINAL_PATH, 'modules');
     const jobs: LoggedWorkerJob[] = [
       {
         title: 'Generate new core',
@@ -151,8 +153,6 @@ export class GenerateCMSProgram extends Command {
       {
         title: 'Build "CORE" module into final folder',
         async job() {
-          const exportModulesRoot = path.join(FINAL_PATH, 'modules');
-
           // Core already exists - we delete it first to not to have some ghost files
           const existingCoreModulePath = path.join(exportModulesRoot, 'Core');
           if (await fs.pathExists(existingCoreModulePath)) {
@@ -164,6 +164,13 @@ export class GenerateCMSProgram extends Command {
             databaseConfig.models,
             false
           );
+        },
+      },
+      {
+        title: 'Generate project module',
+        skip: this.regenerate,
+        async job() {
+          await generateProjectModule(exportModulesRoot, project);
         },
       },
       // HTML Build
