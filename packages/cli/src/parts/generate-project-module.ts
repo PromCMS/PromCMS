@@ -1,12 +1,12 @@
 import { TEMPLATES_ROOT } from '../constants';
 import path from 'path';
-import { generateByTemplates } from '../utils';
-import generateModule from './generate-module';
 import {
-  capitalizeFirstLetter,
-  ProjectConfig,
-  removeDiacritics,
-} from '@prom-cms/shared';
+  generateByTemplates,
+  getModuleFolderName,
+  lowerCaseFirst,
+} from '../utils';
+import generateModule from './generate-module';
+import { ProjectConfig } from '@prom-cms/shared';
 
 export const generateProjectModule = async (
   modulesRoot: string,
@@ -18,14 +18,15 @@ export const generateProjectModule = async (
     'generate-project-module'
   );
 
-  const moduleName = removeDiacritics(
-    capitalizeFirstLetter(projectConfig.name, false).split(' ')[0]
-  );
+  const moduleName = getModuleFolderName(projectConfig.name);
   await generateModule(modulesRoot, moduleName);
 
   await generateByTemplates(templatesRoot, path.join(modulesRoot, moduleName), {
     '*': {
       project: projectConfig,
+      views: {
+        prefix: lowerCaseFirst(moduleName),
+      },
     },
   });
 };

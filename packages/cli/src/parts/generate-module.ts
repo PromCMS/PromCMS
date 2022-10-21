@@ -1,8 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { formatCodeString } from '../utils';
+import { formatCodeString, getModuleFolderName } from '../utils';
 import { TEMPLATES_ROOT } from '../constants';
 
 /**
@@ -16,7 +15,7 @@ const generateModule = async (
   _pluginName: string,
   { description, author }: { description?: string; author?: string } = {}
 ) => {
-  const pluginName = capitalizeFirstLetter(_pluginName, false);
+  const pluginName = getModuleFolderName(_pluginName);
   const pluginRoot = path.join(pluginsRoot, pluginName);
 
   await fs.emptyDir(pluginRoot);
