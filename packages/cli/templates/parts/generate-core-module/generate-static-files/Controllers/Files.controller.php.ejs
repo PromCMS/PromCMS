@@ -121,6 +121,7 @@ class Files
       return $response
         ->withHeader('Content-Type', $this->fs->mimeType($fileInfo->filepath))
         ->withHeader('Content-Length', $stream->getSize())
+        ->withHeader('Cache-Control', 'max-age=31536000')
         ->withBody($stream);
     } catch (\Exception $e) {
       if ($e instanceof EntityNotFoundException) {

@@ -33,4 +33,15 @@ export class GeneralTranslationsApiClient extends ApiClientBase {
       { data: { key } }
     );
   }
+
+  async createKey(key: string) {
+    return this.axios.post<Response<Record<string, string>>>(
+      `${EntryApiClient.getItemsUrl(this.modelId)}/create`,
+      {
+        data: {
+          key,
+        },
+      }
+    );
+  }
 }
