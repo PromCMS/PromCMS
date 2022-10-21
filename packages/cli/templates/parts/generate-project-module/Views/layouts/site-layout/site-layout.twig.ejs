@@ -19,10 +19,10 @@
     <script defer src="bundle/index.js"></script>
   </head>
   <body>
-    {% include '@plugins:<%= project.name %>/layouts/site-layout/header.twig' %}
+    {% include '@plugins:<%= views.prefix %>/layouts/site-layout/header.twig' %}
     <main>
       {{ block('content') }}
     </main>
-    {% include '@plugins:<%= project.name %>/layouts/site-layout/footer.twig' %}
+    {% include '@plugins:<%= views.prefix %>/layouts/site-layout/footer.twig' %}
   </body>
 </html>
