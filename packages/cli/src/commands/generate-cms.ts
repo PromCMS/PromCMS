@@ -206,22 +206,11 @@ export class GenerateCMSProgram extends Command {
         skip: this.regenerate,
         async job() {
           const devDeps = [
-            'mini-css-extract-plugin',
-            'compression-webpack-plugin',
-            'css-minimizer-webpack-plugin',
-            'webpack',
-            'path',
-            'fs-extra',
-            'webpack-dev-server',
-            'css-loader',
-            'sass-loader',
-            'sass',
-            'webpack-cli',
-            'chokidar',
-            'ts-loader',
-            'typescript',
             'prettier-plugin-twig-melody',
             '@prettier/plugin-php',
+            'vite',
+            'vite-plugin-live-reload',
+            'typescript',
           ];
           // const deps = [];
 
