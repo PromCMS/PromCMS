@@ -1,5 +1,17 @@
 # @prom-cms/api-client
 
+## 0.4.0
+
+### Minor Changes
+
+- a551401: Add caching to file routes.
+
+### Patch Changes
+
+- Updated dependencies [a551401]
+- Updated dependencies [9589ec6]
+  - @prom-cms/shared@1.5.0
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,5 +1,18 @@
 # @prom-cms/cli
 
+## 0.9.0
+
+### Minor Changes
+
+- a551401: Add caching to file routes.
+- 9589ec6: Move Views from root to scoping per module. Also add new shared utility removeDiacritics.
+
+### Patch Changes
+
+- Updated dependencies [a551401]
+- Updated dependencies [9589ec6]
+  - @prom-cms/shared@1.5.0
+
 ## 0.8.0
 
 ### Minor Changes

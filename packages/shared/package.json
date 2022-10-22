@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/shared",
   "description": "Shared package for prom cms packages",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/shared/README.md",
