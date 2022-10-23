@@ -173,19 +173,15 @@ export class GenerateCMSProgram extends Command {
           await generateProjectModule(exportModulesRoot, project);
         },
       },
-      // HTML Build
       {
-        title: 'Build admin html',
+        title: 'Add admin html',
         async job() {
+          // Build first
           await execa('npm', ['run', 'build:admin'], {
             cwd: PROJECT_ROOT,
           });
-        },
-      },
-      // Copy that html to export folder...
-      {
-        title: 'Copy admin html',
-        async job() {
+
+          // And the copy
           const adminFinalPath = path.join(FINAL_PATH, 'public', 'admin');
 
           await fs.ensureDir(adminFinalPath);
@@ -206,22 +202,12 @@ export class GenerateCMSProgram extends Command {
         skip: this.regenerate,
         async job() {
           const devDeps = [
-            'mini-css-extract-plugin',
-            'compression-webpack-plugin',
-            'css-minimizer-webpack-plugin',
-            'webpack',
-            'path',
-            'fs-extra',
-            'webpack-dev-server',
-            'css-loader',
-            'sass-loader',
-            'sass',
-            'webpack-cli',
-            'chokidar',
-            'ts-loader',
-            'typescript',
             'prettier-plugin-twig-melody',
             '@prettier/plugin-php',
+            '@prom-cms/vite-plugin',
+            'vite',
+            'vite-plugin-live-reload',
+            'typescript',
           ];
           // const deps = [];
 

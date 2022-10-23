@@ -1,11 +1,11 @@
 {
   "name": "<%= project.name %>",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "license": "MIT",
+  "type": "module",
   "scripts": {
-    "build": "webpack --config webpack.config.js --env NODE_ENV=local --env production --progress",
-    "dev": "docker-compose up -d && webpack serve --config webpack.config.js",
-    "stop-docker": "docker-compose down"
+    "build": "vite build",
+    "dev": "vite"
   }
 }
