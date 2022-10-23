@@ -34,6 +34,9 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
       const serverOrigin = `http://localhost:${serverPort}`;
       const { serverProcess } = await startPhpServer(serverPort);
       const proxy = httpProxy.createProxyServer({});
+      proxy.on('proxyRes', (proxyReq, clientReq, clientRes) => {
+        console.log(proxyReq);
+      });
 
       // And then before starting your server...
       runBeforeExiting(async () => {
