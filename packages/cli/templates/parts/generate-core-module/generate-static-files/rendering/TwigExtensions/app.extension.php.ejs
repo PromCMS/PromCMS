@@ -5,7 +5,11 @@ namespace App\Twig\Extensions;
 use App\Services\FileService;
 use App\Services\ImageService;
 use DI\Container;
+use Exception;
+use PromCMS\Core\Config;
+use PromCMS\Core\Path;
 use Twig\Extension\AbstractExtension;
+use Rakit\Validation\Validator;
 use Slim\Views\Twig;
 use Twig\TwigFunction;
 
@@ -14,12 +18,17 @@ class AppExtension extends AbstractExtension
   private ImageService $imageService;
   private FileService $fileService;
   private $twigService;
+  private Validator $validator;
+  private Config $config;
 
   public function __construct(Container $container)
   {
     $this->fileService = $container->get('file-service');
     $this->twigService = $container->get(Twig::class);
     $this->imageService = $container->get('image-service');
+    $this->imageService = $container->get('image-service');
+    $this->config = $container->get(Config::class);
+    $this->validator = new Validator();
   }
 
   public function getFunctions()
@@ -27,6 +36,7 @@ class AppExtension extends AbstractExtension
     return [
       new TwigFunction('image', [$this, 'getImage']),
       new TwigFunction('getDynamicBlock', [$this, 'getDynamicBlock']),
+      new TwigFunction('getViteAssets', [$this, 'getViteAssets']),
     ];
   }
 
@@ -56,5 +66,79 @@ class AppExtension extends AbstractExtension
     } catch (\Exception $e) {
       return "No block found for '$blockPath'";
     }
+  }
+
+  private function validateGetViteAssetsConfig(array $config)
+  {
+    $assetsTypes = ['stylesheet', 'script'];
+    $validator = $this->validator;
+
+    $validationResult = $this->validator->validate($config, [
+      'manifestFileName' => 'default:manifest.json',
+      'distFolderPath' => 'required',
+      'assets' => 'required|array',
+      'assets.*.path' => 'required',
+      'assets.*.type' => [
+        'required',
+        $validator('in', $assetsTypes)->strict(),
+      ],
+      'assets.*.scriptType' => 'default:module',
+    ]);
+
+    if ($validationResult->fails()) {
+      return false;
+    }
+
+    return $validationResult->getValidatedData();
+  }
+
+  public function getViteAssets(array $config = []): string
+  {
+    if (!($config = $this->validateGetViteAssetsConfig($config))) {
+      return "<script>alert('Invalid assets array in getViteAssets twig function');</script>";
+    }
+
+    $assets = $config['assets'];
+    $distFolderPath = $config['distFolderPath'];
+    $manifestFilePath = Path::join(
+      $this->config->app->root,
+      $distFolderPath,
+      $config['manifestFileName'],
+    );
+
+    if (!$this->config->env->development) {
+      if (!file_exists($manifestFilePath)) {
+        throw new Exception(
+          'Manifest is not present in provided path in getViteAssets twig function',
+        );
+      }
+
+      $manifestAssets = json_decode(file_get_contents($manifestFilePath), true);
+      foreach ($assets as &$assetInfo) {
+        if (!isset($manifestAssets[$assetInfo['path']])) {
+          continue;
+        }
+        $assetInfo['path'] = implode('/', [
+          $distFolderPath,
+          $manifestAssets[$assetInfo['path']]['file'],
+        ]);
+      }
+    }
+
+    foreach ($assets as $assetInfo) {
+      $src = $assetInfo['path'];
+
+      switch ($assetInfo['type']) {
+        case 'stylesheet':
+          return "<link rel=\"stylesheet\" href=\"$src\"> \n";
+          break;
+        case 'script':
+          $scriptType = $assetInfo['scriptType'];
+          return "<script type=\"$scriptType\" crossorigin src=\"$src\"></script> \n";
+          break;
+      }
+    }
+
+    return '';
   }
 }

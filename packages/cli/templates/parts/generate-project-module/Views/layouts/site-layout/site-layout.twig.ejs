@@ -14,9 +14,18 @@
     {# SEO #}
     <meta name="description" content="<%= project.name %>" />
 
-    {# Bundle files #}
-    <link rel="stylesheet" href="bundle/root.css" />
-    <script defer src="bundle/index.js"></script>
+    {# Assets #}
+    {{
+      getViteAssets({
+        distFolderPath: 'dist',
+        assets: [
+          {
+            path: 'index.ts',
+            type: 'script'
+          }
+        ]
+      })|raw
+    }}
   </head>
   <body>
     {% include '@modules:<%= views.prefix %>/layouts/site-layout/header.twig' %}
