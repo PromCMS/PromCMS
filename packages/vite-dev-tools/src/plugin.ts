@@ -32,14 +32,13 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
     async configureServer(server) {
       const serverPort = server.config.server.port! + 1;
       const serverOrigin = `http://localhost:${serverPort}`;
-      const serverProcess = await startPhpServer(serverPort);
+      const { serverProcess } = await startPhpServer(serverPort);
       const proxy = httpProxy.createProxyServer({});
 
       // And then before starting your server...
       runBeforeExiting(async () => {
         console.log('Cleaning up...');
         if (serverProcess) {
-          // @ts-ignore
           serverProcess.kill();
         }
       });

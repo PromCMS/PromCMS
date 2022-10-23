@@ -1,11 +1,10 @@
 import fs from 'fs-extra';
 import type { ExecaChildProcess } from 'execa';
 import path from 'path';
-import { cwd } from 'process';
 
 export const startPhpServer = async (
   port: number
-): Promise<ExecaChildProcess<string>> => {
+): Promise<{ serverProcess: ExecaChildProcess<string> }> => {
   const { execa } = await import('execa');
 
   const serverProcess = execa(
@@ -30,5 +29,5 @@ export const startPhpServer = async (
     fs.appendFileSync(path.join(projectRoot, 'log.txt'), data);
   });
 
-  return serverProcess;
+  return { serverProcess };
 };
