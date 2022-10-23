@@ -33,9 +33,19 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
       const serverPort = server.config.server.port! + 1;
       const serverOrigin = `http://localhost:${serverPort}`;
       const { serverProcess } = await startPhpServer(serverPort);
-      const proxy = httpProxy.createProxyServer({});
-      proxy.on('proxyRes', (proxyReq, clientReq, clientRes) => {
-        console.log(proxyReq);
+      const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
+
+      const htmlTransform = server.transformIndexHtml;
+      proxy.on('proxyRes', (proxyRes, clientReq, clientRes) => {
+        var bodyChunks: any[] = [];
+        proxyRes.on('data', function (chunk: any) {
+          bodyChunks.push(chunk);
+        });
+        proxyRes.on('end', async function () {
+          const originalBody = Buffer.concat(bodyChunks).toString();
+          const body = await htmlTransform(clientReq.url ?? '/', originalBody);
+          clientRes.end(body);
+        });
       });
 
       // And then before starting your server...
