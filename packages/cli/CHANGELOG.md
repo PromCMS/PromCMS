@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.10.0
+
+### Minor Changes
+
+- 3503e4c: Add vite logic for development and production of resulted project
+
 ## 0.9.0
 
 ### Minor Changes
