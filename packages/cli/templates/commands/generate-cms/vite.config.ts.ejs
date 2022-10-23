@@ -4,9 +4,7 @@ import { promCmsVitePlugin } from '@prom-cms/vite-plugin'
 
 export default defineConfig({
   plugins: [
-    liveReload(
-      '../(modules|public|frontend-src)/**/*.(php|ts|js|css|scss|json)'
-    ),
+    liveReload('../(modules|public)/**/*.(php|ts|js|css|scss|json|twig)'),
     promCmsVitePlugin(),
   ],
 })
