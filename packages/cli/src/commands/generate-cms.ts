@@ -19,7 +19,6 @@ import {
   getAppRootInputValidator,
 } from '../utils';
 import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
-import { generateCoreModule } from '../parts/generate-core-module';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
@@ -86,9 +85,8 @@ export class GenerateCMSProgram extends Command {
       ? await fs.readJson(this.configPath)
       : (await import('file:/' + this.configPath)).default;
 
-    const { database: databaseConfig, project } = await formatGeneratorConfig(
-      generatorConfig
-    );
+    const projectConfig = await formatGeneratorConfig(generatorConfig);
+    const { database: databaseConfig, project } = projectConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
     const ADMIN_ROOT = path.join(PROJECT_ROOT, 'apps', 'admin');
 
@@ -151,26 +149,10 @@ export class GenerateCMSProgram extends Command {
         },
       },
       {
-        title: 'Build "CORE" module into final folder',
-        async job() {
-          // Core already exists - we delete it first to not to have some ghost files
-          const existingCoreModulePath = path.join(exportModulesRoot, 'Core');
-          if (await fs.pathExists(existingCoreModulePath)) {
-            await fs.remove(existingCoreModulePath);
-          }
-
-          await generateCoreModule(
-            exportModulesRoot,
-            databaseConfig.models,
-            false
-          );
-        },
-      },
-      {
         title: 'Generate project module',
         skip: this.regenerate,
         async job() {
-          await generateProjectModule(exportModulesRoot, project);
+          await generateProjectModule(exportModulesRoot, projectConfig);
         },
       },
       {
