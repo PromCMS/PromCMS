@@ -20,6 +20,7 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
     database: databaseConfig,
   } = config;
 
+  /* TODO: Commented out because of provided default models are included in core already
   // Files are predefined and cannot be changed
   models['files'] = {
     icon: 'Folder',
@@ -197,6 +198,8 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       ...((models['users'] || {}).columns || {}),
     },
   };
+
+  */
 
   Object.keys(models).forEach((modelKey) => {
     const model = models[modelKey];
