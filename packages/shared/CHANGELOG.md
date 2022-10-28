@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 1.6.0
+
+### Minor Changes
+
+- c5bdfa2: Remove generation of core module.
+
 ## 1.5.0
 
 ### Minor Changes
