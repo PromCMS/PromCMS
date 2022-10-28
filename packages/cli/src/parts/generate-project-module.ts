@@ -6,11 +6,12 @@ import {
   lowerCaseFirst,
 } from '../utils';
 import generateModule from './generate-module';
-import { ProjectConfig } from '@prom-cms/shared';
+import { ExportConfig } from '@prom-cms/shared';
+import generateModels from './generate-models';
 
 export const generateProjectModule = async (
   modulesRoot: string,
-  projectConfig: ProjectConfig
+  projectConfig: ExportConfig
 ) => {
   const templatesRoot = path.join(
     TEMPLATES_ROOT,
@@ -18,15 +19,20 @@ export const generateProjectModule = async (
     'generate-project-module'
   );
 
-  const moduleName = getModuleFolderName(projectConfig.name);
+  const moduleName = getModuleFolderName(projectConfig.project.name);
   await generateModule(modulesRoot, moduleName);
 
   await generateByTemplates(templatesRoot, path.join(modulesRoot, moduleName), {
     '*': {
-      project: projectConfig,
+      project: projectConfig.project,
       views: {
         prefix: lowerCaseFirst(moduleName),
       },
     },
   });
+
+  await generateModels(
+    path.join(modulesRoot, moduleName),
+    projectConfig.database.models
+  );
 };

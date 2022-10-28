@@ -6,8 +6,8 @@ import {
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { formatCodeString } from '../../../utils';
-import { TEMPLATES_ROOT } from '../../../constants';
+import { formatCodeString } from '../utils';
+import { TEMPLATES_ROOT } from '../constants';
 
 const columnTypeToCast = (type: ColumnType['type']) => {
   let finalType = 'string';
@@ -31,12 +31,7 @@ const generateModels = async (
   configModels: ExportConfig['database']['models']
 ) => {
   const modelsRoot = path.join(moduleRoot, 'Models');
-  const templatesRoot = path.join(
-    TEMPLATES_ROOT,
-    'parts',
-    'generate-core-module',
-    'generate-models'
-  );
+  const templatesRoot = path.join(TEMPLATES_ROOT, 'parts', 'generate-models');
 
   for (const modelKey in configModels) {
     const capitalizedModelName = capitalizeFirstLetter(modelKey, false);
@@ -113,7 +108,7 @@ const generateModels = async (
     // Module
     const moduleFilename = `${capitalizedModelName}.model.php`;
     const moduleTemplateString = fs.readFileSync(
-      path.join(templatesRoot, 'model', 'common.ejs'),
+      path.join(templatesRoot, 'common.ejs'),
       'utf-8'
     );
     const moduleFilepath = path.join(modelsRoot, moduleFilename);
