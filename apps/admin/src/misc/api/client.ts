@@ -3,7 +3,7 @@ import { userHasBeenLoggedOff } from '@events';
 import { ApiClient } from '@prom-cms/api-client';
 
 export const apiClient = new ApiClient({
-  baseURL: '/api',
+  baseURL: new URL('/api', window.location.origin).toString(),
   timeout: 15000,
 });
 
