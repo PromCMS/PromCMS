@@ -1,5 +1,17 @@
 # @prom-cms/cli
 
+## 0.11.0
+
+### Minor Changes
+
+- c5bdfa2: Remove generation of core module.
+- 0dabd83: Add vite logic for development and production of resulted project
+
+### Patch Changes
+
+- Updated dependencies [c5bdfa2]
+  - @prom-cms/shared@1.6.0
+
 ## 0.10.0
 
 ### Minor Changes

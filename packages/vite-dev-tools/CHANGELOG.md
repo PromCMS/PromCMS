@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.4.0
+
+### Minor Changes
+
+- 0dabd83: Add vite logic for development and production of resulted project
+
 ## 0.3.0
 
 ### Minor Changes
