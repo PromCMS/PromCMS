@@ -13,10 +13,10 @@ import {
   generateByTemplates,
   loggedJobWorker,
   LoggedWorkerJob,
-  Logger,
   pathInputToRelative,
   validateConfigPathInput,
   getAppRootInputValidator,
+  logSuccess,
 } from '../utils';
 import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
 import generateCore from '../parts/generate-core-files';
@@ -73,9 +73,9 @@ export class GenerateCMSProgram extends Command {
   ];
 
   async run(root: string) {
-    Logger.success(
-      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
-    );
+    logSuccess.apply(this, [
+      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
+    ]);
 
     // Apply formatters
     this.configPath = pathInputToRelative(this.configPath);
@@ -200,6 +200,6 @@ export class GenerateCMSProgram extends Command {
       },
     ];
 
-    await loggedJobWorker(jobs);
+    await loggedJobWorker.apply(this, [jobs]);
   }
 }
