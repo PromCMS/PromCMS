@@ -1,5 +1,6 @@
 <?php
-use App\Services\Password as PasswordService;
+
+use PromCMS\Core\Services\PasswordService;
 use PromCMS\Core\App;
 use PromCMS\Core\Utils;
 
@@ -50,7 +51,10 @@ try {
   $availableModels = $container->get('sysinfo')['loadedModels'];
 
   foreach ($availableModels as $modelName) {
-    echo "🔧 Founded model by the name of: '$modelName', trying to create table...";
+    $splittedName = explode("\\", $modelName);
+    $realModelName = end($splittedName);
+
+    echo "🔧 Founded model by the name of: '$realModelName', trying to create table...";
 
     $modelInstance = new $modelName();
     $modelSummary = $modelInstance->getSummary();

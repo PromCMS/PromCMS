@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\EntryTypeService;
+use PromCMS\Core\Services\EntryTypeService;
 use PromCMS\Core\App;
 use PromCMS\Core\Utils;
 
