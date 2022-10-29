@@ -48,6 +48,10 @@
   "dependencies": {
     "rimraf": "3.0.2"
   },
+  "overrides": {
+    "react": "^18.2.0",
+    "@types/react": "^18.0.24"
+  },
   "preconstruct": {
     "packages": [
       "packages/*",
