@@ -131,7 +131,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
       showNotification({
         id: notificationId,
         message: <>{t('Working')}</>,
-        title: t('Uploading files...'),
+        title: t('Uploading files...').toString(),
         color: 'blue',
         autoClose: false,
       });
@@ -147,7 +147,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
           updateNotification({
             id: notificationId,
             message: <>{t('Error')}</>,
-            title: t('An error happened'),
+            title: t('An error happened').toString(),
             color: 'red',
             autoClose: 2000,
           });
@@ -169,7 +169,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
         updateNotification({
           id: notificationId,
           message: <>{t('Success')}</>,
-          title: t('All files has been uploaded'),
+          title: t('All files has been uploaded').toString(),
           color: 'green',
           autoClose: 2000,
         });
