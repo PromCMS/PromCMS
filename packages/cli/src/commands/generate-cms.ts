@@ -1,4 +1,5 @@
 import { Command, GlobalOptions, Options, Params } from '@boost/cli';
+import { Select } from '@boost/cli/react';
 import path from 'path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
@@ -12,11 +13,11 @@ import crypto from 'crypto';
 import {
   generateByTemplates,
   loggedJobWorker,
-  LoggedWorkerJob,
   pathInputToRelative,
   validateConfigPathInput,
   getAppRootInputValidator,
   logSuccess,
+  getWorkerJob,
 } from '../utils';
 import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
 import generateCore from '../parts/generate-core-files';
@@ -86,7 +87,7 @@ export class GenerateCMSProgram extends Command {
       : (await import('file:/' + this.configPath)).default;
 
     const projectConfig = await formatGeneratorConfig(generatorConfig);
-    const { database: databaseConfig, project } = projectConfig;
+    const { project } = projectConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
     const ADMIN_ROOT = path.join(PROJECT_ROOT, 'apps', 'admin');
 
@@ -102,15 +103,13 @@ export class GenerateCMSProgram extends Command {
     }
 
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
-    const jobs: LoggedWorkerJob[] = [
-      {
-        title: 'Generate new core',
+    const jobs = [
+      getWorkerJob('Generate new core', {
         job: async () => {
           await generateCore(FINAL_PATH);
         },
-      },
-      {
-        title: 'Add another project resources',
+      }),
+      getWorkerJob('Add another project resources', {
         skip: this.regenerate,
         async job() {
           await generateByTemplates(
@@ -132,31 +131,27 @@ export class GenerateCMSProgram extends Command {
             }
           );
         },
-      },
-      {
-        title: 'Install PHP dependencies',
+      }),
+      getWorkerJob('Install PHP dependencies', {
         async job() {
           await installPHPDeps(FINAL_PATH);
         },
-      },
-      {
-        title: 'Paste generator config to project',
+      }),
+      getWorkerJob('Paste generator config to project', {
         async job() {
           await fs.writeJSON(
             path.join(FINAL_PATH, GENERATOR_FILENAME__JSON),
             generatorConfig
           );
         },
-      },
-      {
-        title: 'Generate project module',
+      }),
+      getWorkerJob('Generate project module', {
         skip: this.regenerate,
         async job() {
           await generateProjectModule(exportModulesRoot, projectConfig);
         },
-      },
-      {
-        title: 'Add admin html',
+      }),
+      getWorkerJob('Add admin html', {
         async job() {
           // Build first
           await execa('npm', ['run', 'build:admin'], {
@@ -178,11 +173,19 @@ export class GenerateCMSProgram extends Command {
             }
           );
         },
-      },
-      {
-        title: 'Install dependencies',
+      }),
+      getWorkerJob<{ packageManager: string }>('Install dependencies', {
         skip: this.regenerate,
-        async job() {
+        prompts: async () => ({
+          packageManager: {
+            type: Select,
+            props: {
+              label: 'What package manager should this project use?',
+              options: ['yarn', 'npm', 'pnpm'],
+            },
+          },
+        }),
+        async job({ packageManager } = { packageManager: 'npm' }) {
           const devDeps = [
             'prettier-plugin-twig-melody',
             '@prettier/plugin-php',
@@ -193,11 +196,11 @@ export class GenerateCMSProgram extends Command {
           ];
           // const deps = [];
 
-          await execa('npm', ['install', ...devDeps, '--save-dev'], {
+          await execa(packageManager, ['install', ...devDeps, '--save-dev'], {
             cwd: FINAL_PATH,
           });
         },
-      },
+      }),
     ];
 
     await loggedJobWorker.apply(this, [jobs]);

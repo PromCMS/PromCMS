@@ -5,10 +5,11 @@ import path from 'path';
 import { formatGeneratorConfig } from '@prom-cms/shared';
 
 import { PROJECT_ROOT } from '../constants';
-import { loggedJobWorker, LoggedWorkerJob, logSuccess } from '../utils';
+import { loggedJobWorker, logSuccess } from '../utils';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
+import { LoggedWorkerJob } from '../types';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
