@@ -7,7 +7,6 @@ use PromCMS\Core\Utils;
 $PHP_APP_ROOT = $argv[1];
 $PATH_TO_DATA_FILE = $argv[2];
 include_once $PHP_APP_ROOT . '/vendor/autoload.php';
-include_once $PHP_APP_ROOT . '/modules/Core/Services/EntryType.service.php';
 
 $app = new App($PHP_APP_ROOT);
 $app->init(true);

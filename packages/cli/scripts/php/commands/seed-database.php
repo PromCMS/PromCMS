@@ -6,7 +6,6 @@ use PromCMS\Core\Utils;
 
 $PHP_APP_ROOT = $argv[1];
 include_once $PHP_APP_ROOT . '/vendor/autoload.php';
-include_once $PHP_APP_ROOT . '/modules/Core/Services/Password.service.php';
 
 $app = new App($PHP_APP_ROOT);
 $app->init(true);
