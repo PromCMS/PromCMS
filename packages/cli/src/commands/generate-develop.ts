@@ -5,10 +5,11 @@ import path from 'path';
 import { formatGeneratorConfig } from '@prom-cms/shared';
 
 import { PROJECT_ROOT } from '../constants';
-import { loggedJobWorker, LoggedWorkerJob, Logger } from '../utils';
+import { loggedJobWorker, logSuccess } from '../utils';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
+import { LoggedWorkerJob } from '../types';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
@@ -20,6 +21,7 @@ export class GenerateDevelopProgram extends Command {
 
   // FLAGS
   regenerate: boolean = false;
+
   static options: Options<CustomOptions> = {
     regenerate: {
       description: 'To just only regenerate key files',
@@ -30,9 +32,9 @@ export class GenerateDevelopProgram extends Command {
   };
 
   async run() {
-    Logger.success(
-      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...'
-    );
+    logSuccess.apply(this, [
+      'Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
+    ]);
 
     const GENERATOR_CONFIG = await findGeneratorConfig();
     const envFilepath = await getEnvFilepath();
@@ -44,8 +46,6 @@ export class GenerateDevelopProgram extends Command {
     const TEMP_CORE_ROOT = path.join(DEV_API_ROOT, '.temp');
     const MODULES_ROOT = path.join(TEMP_CORE_ROOT, 'modules');
     const generatorConfig = await formatGeneratorConfig(GENERATOR_CONFIG);
-    const { database: databaseConfig, project: projectConfig } =
-      generatorConfig;
 
     const jobs: LoggedWorkerJob[] = [
       {
@@ -89,8 +89,8 @@ export class GenerateDevelopProgram extends Command {
       },
     ];
 
-    await loggedJobWorker(jobs);
+    await loggedJobWorker.apply(this, [jobs]);
 
-    Logger.success('✅ Everything done and ready! Bye.');
+    logSuccess.apply(this, ['✅ Everything done and ready! Bye.']);
   }
 }

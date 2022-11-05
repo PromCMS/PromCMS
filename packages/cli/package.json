@@ -25,7 +25,9 @@
     "regenerate:dev": "npm run starter-commands -- generate:develop --regenerate",
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
     "db-tools:migrate": "npm run starter-commands -- db-tools:migrate",
-    "seed-database": "npm run starter-commands -- seed-database"
+    "seed-database": "npm run starter-commands -- seed-database",
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -36,27 +38,29 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "ink": "3.2.0",
+    "@boost/cli": "^4.0.0",
+    "@faker-js/faker": "^7.6.0",
     "@prom-cms/shared": "*",
-    "ejs": "^3.1.8",
-    "enquirer": "2.3.6",
-    "@faker-js/faker": "6.0.0",
-    "@boost/cli": "3.0.3",
-    "chalk-animation": "1.6.0",
-    "chalk": "5.0.0",
-    "execa": "6.0.0",
-    "react": "^18.2.0",
-    "fs-extra": "10.0.0",
-    "prettier": "2.7.1",
+    "chalk": "^5.1.2",
+    "dayjs": "^1.11.6",
     "dotenv-cli": "^5.1.0",
-    "dayjs": "1.10.7"
+    "ejs": "^3.1.8",
+    "enquirer": "^2.3.6",
+    "execa": "^6.1.0",
+    "fs-extra": "^10.1.0",
+    "ink": "^3.2.0",
+    "prettier": "2.7.1",
+    "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/prettier": "2.7.0",
     "@prom-cms/config": "*",
     "@types/ejs": "^3.1.1",
-    "ts-node": "10.4.0",
+    "@types/fs-extra": "9.0.13",
+    "@types/prettier": "^2.7.1",
+    "@types/react": "^18.0.24",
+    "ink-testing-library": "^2.1.0",
+    "ts-node": "^10.9.1",
     "tsconfig-paths": "3.12.0",
-    "@types/fs-extra": "9.0.13"
+    "vitest": "^0.24.3"
   }
 }
