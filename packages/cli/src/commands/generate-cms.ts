@@ -1,5 +1,5 @@
 import { Command, GlobalOptions, Options, Params } from '@boost/cli';
-import { Select } from '@boost/cli/react';
+import { Input, Select } from '@boost/cli/react';
 import path from 'path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
@@ -105,6 +105,17 @@ export class GenerateCMSProgram extends Command {
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
     const jobs = [
       getWorkerJob('Generate new core', {
+        prompts: [
+          [
+            'packageManager',
+            {
+              type: Input,
+              props: {
+                label: 'What package manager should this project use?',
+              },
+            },
+          ],
+        ],
         job: async () => {
           await generateCore(FINAL_PATH);
         },
@@ -176,15 +187,18 @@ export class GenerateCMSProgram extends Command {
       }),
       getWorkerJob<{ packageManager: string }>('Install dependencies', {
         skip: this.regenerate,
-        prompts: async () => ({
-          packageManager: {
-            type: Select,
-            props: {
-              label: 'What package manager should this project use?',
-              options: ['yarn', 'npm', 'pnpm'],
+        prompts: [
+          [
+            'packageManager',
+            {
+              type: Select,
+              props: {
+                label: 'What package manager should this project use?',
+                options: ['yarn', 'npm', 'pnpm'],
+              },
             },
-          },
-        }),
+          ],
+        ],
         async job({ packageManager } = { packageManager: 'npm' }) {
           const devDeps = [
             'prettier-plugin-twig-melody',
