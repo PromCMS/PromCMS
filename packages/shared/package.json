@@ -29,6 +29,9 @@
   "bugs": {
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
+  "dependencies": {
+    "zod": "^3.19.1"
+  },
   "devDependencies": {
     "@types/find-config": "1.0.1",
     "vitest": "^0.24.3",
