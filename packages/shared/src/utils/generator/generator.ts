@@ -1,205 +1,26 @@
-import { ExportConfig } from '../../types';
 import { GENERATOR_FILENAME } from '../../generator-constants';
 import findConfig from 'find-config';
+import { GeneratorConfig } from '../../types';
 
 // TODO: Create generator config validator
 
 export const findGeneratorConfig = (
   root?: string
-): Promise<undefined | ExportConfig> =>
+): Promise<undefined | GeneratorConfig> =>
   findConfig.require(GENERATOR_FILENAME, {
     module: true,
     ...(root ? { cwd: root } : {}),
   });
 
-export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
+export const formatGeneratorConfig = (
+  config: GeneratorConfig
+): GeneratorConfig => {
   if (!config) throw 'No config provided to "formatGeneratorConfig" function';
 
   let {
     database: { models },
     database: databaseConfig,
   } = config;
-
-  /* TODO: Commented out because of provided default models are included in core already
-  // Files are predefined and cannot be changed
-  models['files'] = {
-    icon: 'Folder',
-    admin: {
-      layout: 'simple',
-    },
-    tableName: 'files',
-    timestamp: true,
-    ignoreSeeding: true,
-    sharable: false,
-    intl: false,
-    columns: {
-      filename: {
-        title: 'Filename',
-        type: 'string',
-        required: true,
-      },
-      description: {
-        title: 'Description',
-        type: 'string',
-      },
-      filepath: {
-        title: 'Filepath',
-        type: 'string',
-        editable: false,
-        required: true,
-        unique: true,
-      },
-      private: {
-        title: 'Is private',
-        type: 'boolean',
-      },
-      mimeType: {
-        title: 'Mime type',
-        editable: false,
-        required: true,
-        type: 'string',
-      },
-    },
-  };
-
-  models['settings'] = {
-    admin: {
-      layout: 'simple',
-    },
-    icon: 'Settings',
-    columns: {
-      name: {
-        title: 'Name',
-        type: 'string',
-        required: true,
-        unique: true,
-        translations: false,
-      },
-      label: {
-        title: 'Label',
-        type: 'string',
-        required: true,
-      },
-      content: {
-        title: 'content',
-        type: 'json',
-        required: true,
-        default: '{}',
-      },
-    },
-  };
-
-  models['userRoles'] = {
-    admin: {
-      layout: 'simple',
-    },
-    ownable: false,
-    icon: 'UserExclamation',
-    intl: false,
-    columns: {
-      label: {
-        title: 'Label',
-        type: 'string',
-        required: true,
-      },
-      slug: {
-        title: 'Slug',
-        type: 'slug',
-        of: 'label',
-        editable: false,
-      },
-      description: {
-        type: 'longText',
-        title: 'Popisek',
-      },
-      permissions: {
-        title: 'Permissions',
-        type: 'json',
-        default: '{}',
-      },
-    },
-  };
-
-  models['generalTranslations'] = {
-    admin: {
-      layout: 'simple',
-    },
-    ownable: false,
-    icon: 'LanguageHiragana',
-    intl: false,
-    sharable: false,
-    columns: {
-      lang: {
-        title: 'Language',
-        type: 'string',
-        required: true,
-      },
-      key: {
-        title: 'Key',
-        type: 'string',
-        required: true,
-      },
-      value: {
-        title: 'Value',
-        type: 'string',
-        required: true,
-      },
-    },
-  };
-
-  // we need to make sure that we at least have default columns
-  models['users'] = {
-    admin: {
-      layout: 'simple',
-    },
-    sharable: false,
-    ownable: false,
-    icon: 'Users',
-    intl: false,
-    columns: {
-      // TODO: Do not make these values overridable
-      name: {
-        title: 'Name',
-        type: 'string',
-        required: true,
-      },
-      password: {
-        title: 'Password',
-        type: 'password',
-        required: true,
-        hide: true,
-      },
-      email: {
-        title: 'Email',
-        type: 'string',
-        required: true,
-        unique: true,
-      },
-      avatar: {
-        title: 'Avatar',
-        type: 'string',
-      },
-      state: {
-        title: 'State',
-        type: 'enum',
-        editable: false,
-        required: true,
-        enum: ['active', 'invited', 'blocked', 'password-reset'],
-      },
-      role: {
-        type: 'relationship',
-        targetModel: 'userRoles',
-        title: 'Role',
-        adminHidden: true,
-        fill: false,
-        required: true,
-        labelConstructor: 'label',
-      },
-      ...((models['users'] || {}).columns || {}),
-    },
-  };
-
-  */
 
   Object.keys(models).forEach((modelKey) => {
     const model = models[modelKey];
@@ -338,21 +159,18 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
       draftable: false,
       ignoreSeeding: false,
       ownable: true,
-      tableName: modelKey.toLocaleLowerCase(),
       intl: true,
       ...model,
+      tableName: model.tableName ?? modelKey.toLocaleLowerCase(),
     };
   });
 
   const roles = config.project.security?.roles;
-  if (roles) {
-    if (!config.project.security) {
-      config.project.security = {};
-    }
 
+  if (roles) {
     // Set default values of roles
-    config.project.security.roles = roles.map(
-      ({ modelPermissions, ...rest }) => {
+    config.project.security = {
+      roles: roles.map(({ modelPermissions, ...rest }) => {
         const updatedPerms = Object.entries(modelPermissions).map(
           ([key, values]) => [
             key,
@@ -371,8 +189,8 @@ export const formatGeneratorConfig = (config: ExportConfig): ExportConfig => {
           ...rest,
           modelPermissions: Object.fromEntries(updatedPerms),
         };
-      }
-    );
+      }),
+    };
   }
 
   return { ...config, database: { ...databaseConfig, models } };
