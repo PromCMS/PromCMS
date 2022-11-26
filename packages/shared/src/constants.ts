@@ -1,1 +1,1 @@
-export const supportedConfigExtensions = ['js', 'cjs', 'json'];
+export const supportedConfigExtensions = ['js', 'cjs', 'json', 'ts'];
