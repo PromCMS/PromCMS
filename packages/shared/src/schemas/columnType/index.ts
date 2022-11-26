@@ -1,4 +1,5 @@
 export * from './columnTypeBaseSchema';
+export * from './columnTypeBooleanSchema';
 export * from './columnTypeEnumSchema';
 export * from './columnTypeFileSchema';
 export * from './columnTypeNormalSchema';
