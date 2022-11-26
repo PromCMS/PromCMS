@@ -1,16 +1,4 @@
-import { GENERATOR_FILENAME } from '../../generator-constants';
-import findConfig from 'find-config';
-import { GeneratorConfig } from '../../types';
-
-// TODO: Create generator config validator
-
-export const findGeneratorConfig = (
-  root?: string
-): Promise<undefined | GeneratorConfig> =>
-  findConfig.require(GENERATOR_FILENAME, {
-    module: true,
-    ...(root ? { cwd: root } : {}),
-  });
+import { GeneratorConfig } from '../types';
 
 export const formatGeneratorConfig = (
   config: GeneratorConfig
@@ -24,12 +12,6 @@ export const formatGeneratorConfig = (
 
   Object.keys(models).forEach((modelKey) => {
     const model = models[modelKey];
-
-    // Set default values
-    model.admin = {
-      layout: 'post-like',
-      ...(model.admin || {}),
-    };
 
     if (model.admin?.layout === 'post-like') {
       const {
