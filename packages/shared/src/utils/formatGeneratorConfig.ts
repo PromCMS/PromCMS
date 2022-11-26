@@ -1,8 +1,9 @@
 import { GeneratorConfig } from '../types';
+import { validateGeneratorConfig } from './validateGeneratorConfig';
 
-export const formatGeneratorConfig = (
+export const formatGeneratorConfig = async (
   config: GeneratorConfig
-): GeneratorConfig => {
+): Promise<GeneratorConfig> => {
   if (!config) throw 'No config provided to "formatGeneratorConfig" function';
 
   let {
@@ -175,5 +176,7 @@ export const formatGeneratorConfig = (
     };
   }
 
-  return { ...config, database: { ...databaseConfig, models } };
+  const result = { ...config, database: { ...databaseConfig, models } };
+
+  return validateGeneratorConfig(result);
 };
