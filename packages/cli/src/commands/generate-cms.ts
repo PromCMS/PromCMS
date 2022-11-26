@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import { execa } from 'execa';
 import {
   formatGeneratorConfig,
-  ExportConfig,
+  GeneratorConfig,
   GENERATOR_FILENAME__JSON,
 } from '@prom-cms/shared';
 import crypto from 'crypto';
@@ -23,6 +23,7 @@ import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
+import { getGeneratorConfigData } from 'utils/getGeneratorConfigData';
 
 type CustomParams = [string];
 
@@ -90,12 +91,8 @@ export class GenerateCMSProgram extends Command {
     this.configPath = pathInputToRelative(this.configPath);
 
     const FINAL_PATH = root;
-    const generatorConfig: ExportConfig = this.configPath.endsWith('.json')
-      ? await fs.readJson(this.configPath)
-      : (await import('file:/' + this.configPath)).default;
-
-    const projectConfig = await formatGeneratorConfig(generatorConfig);
-    const { project } = projectConfig;
+    const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
+    const { project } = generatorConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
     const ADMIN_ROOT = path.join(PROJECT_ROOT, 'apps', 'admin');
 
@@ -156,18 +153,18 @@ export class GenerateCMSProgram extends Command {
           await installPHPDeps(FINAL_PATH);
         },
       }),
-      getWorkerJob('Paste generator config to project', {
+      /*getWorkerJob('Paste generator config to project', {
         async job() {
           await fs.writeJSON(
             path.join(FINAL_PATH, GENERATOR_FILENAME__JSON),
             generatorConfig
           );
         },
-      }),
+      }),*/
       getWorkerJob('Generate project module', {
         skip: this.regenerate,
         async job() {
-          await generateProjectModule(exportModulesRoot, projectConfig);
+          await generateProjectModule(exportModulesRoot, generatorConfig);
         },
       }),
       getWorkerJob('Add admin html', {
