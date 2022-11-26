@@ -5,4 +5,5 @@ export * from './formatGeneratorConfig';
 export * from './getEnvFilepath';
 export * from './loadRootEnv';
 export * from './removeDiacritics';
+export * from './replaceFileExtension';
 export * from './validateGeneratorConfig';
