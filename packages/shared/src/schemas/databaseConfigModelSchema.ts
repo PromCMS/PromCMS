@@ -14,7 +14,7 @@ export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
    * Custom table name to model
    * @default string Key of this object
    */
-  tableName: z.string().min(1),
+  tableName: z.string().min(1).nullish(),
 
   /**
    * If generated table have entries with soft-delete
