@@ -1,4 +1,4 @@
-import { Command, GlobalOptions, Options, Params } from '@boost/cli';
+import { Command, GlobalOptions, Options } from '@boost/cli';
 import { Input, Select } from '@boost/cli/react';
 import path from 'path';
 import fs from 'fs-extra';
@@ -10,7 +10,6 @@ import {
   loggedJobWorker,
   pathInputToRelative,
   validateConfigPathInput,
-  getAppRootInputValidator,
   logSuccess,
   getWorkerJob,
 } from '../utils';
@@ -66,26 +65,14 @@ export class GenerateCMSProgram extends Command {
     },
   };
 
-  static params: Params<CustomParams> = [
-    {
-      label: 'Root',
-      description: 'Root of your final project',
-      required: true,
-      type: 'string',
-      validate: getAppRootInputValidator(),
-      format: pathInputToRelative,
-    },
-  ];
-
-  async run(root: string) {
+  async run() {
     logSuccess.apply(this, [
       '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
     ]);
 
-    // Apply formatters
     this.configPath = pathInputToRelative(this.configPath);
 
-    const FINAL_PATH = root;
+    const FINAL_PATH = path.basename(this.configPath);
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
     const { project } = generatorConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
@@ -148,14 +135,6 @@ export class GenerateCMSProgram extends Command {
           await installPHPDeps(FINAL_PATH);
         },
       }),
-      /*getWorkerJob('Paste generator config to project', {
-        async job() {
-          await fs.writeJSON(
-            path.join(FINAL_PATH, GENERATOR_FILENAME__JSON),
-            generatorConfig
-          );
-        },
-      }),*/
       getWorkerJob('Generate project module', {
         skip: this.regenerate,
         async job() {
