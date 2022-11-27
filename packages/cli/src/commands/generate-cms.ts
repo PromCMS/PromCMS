@@ -3,11 +3,6 @@ import { Input, Select } from '@boost/cli/react';
 import path from 'path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
-import {
-  formatGeneratorConfig,
-  GeneratorConfig,
-  GENERATOR_FILENAME__JSON,
-} from '@prom-cms/shared';
 import crypto from 'crypto';
 
 import {
