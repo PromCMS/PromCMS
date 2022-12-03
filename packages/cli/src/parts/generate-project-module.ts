@@ -6,12 +6,12 @@ import {
   lowerCaseFirst,
 } from '../utils';
 import generateModule from './generate-module';
-import { ExportConfig } from '@prom-cms/shared';
+import { GeneratorConfig } from '@prom-cms/shared';
 import generateModels from './generate-models';
 
 export const generateProjectModule = async (
   modulesRoot: string,
-  projectConfig: ExportConfig
+  projectConfig: GeneratorConfig
 ) => {
   const templatesRoot = path.join(
     TEMPLATES_ROOT,

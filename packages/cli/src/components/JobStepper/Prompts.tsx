@@ -1,5 +1,5 @@
 import { Box, Text } from 'ink';
-import { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { LoggedWorkerJob } from '../../types';
 
 export type PromptsProps = {

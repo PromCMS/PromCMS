@@ -1,4 +1,4 @@
-import fs from 'fs-extra';
+import fs from 'fs';
 
 import { GENERATOR_FILENAME } from '../../generator-constants';
 import { supportedConfigExtensions } from '../../constants';
