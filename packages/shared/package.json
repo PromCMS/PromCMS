@@ -14,7 +14,10 @@
   ],
   "scripts": {
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "tsup"
   },
   "repository": {
     "type": "git",

@@ -12,7 +12,11 @@
   "files": [
     "dist"
   ],
-  "scripts": {},
+  "scripts": {
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "tsup"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PromCMS/PromCMS.git",
