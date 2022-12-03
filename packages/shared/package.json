@@ -14,8 +14,8 @@
     "dist"
   ],
   "scripts": {
-    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
-    "test": "vitest",
+    "prettier": "npm run prettier --write \"**/*.{ts,tsx}\"",
+    "test": "npm run vitest",
     "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",

@@ -30,8 +30,8 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsup",
-    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
-    "test": "vitest"
+    "prettier": "npm run prettier --write \"**/*.{ts,tsx}\"",
+    "test": "npm run vitest"
   },
   "repository": {
     "type": "git",
