@@ -9,13 +9,12 @@
   "typings": "dist/index.d.ts",
   "module": "dist/index.js",
   "source": "src/index.ts",
-  "exports": "./dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "test": "echo \"TODO: add tests!\"",
-    "prettier": "npm run prettier --write \"**/*.{ts,tsx}\"",
+    "prettier": "yarn prettier --write \"**/*.{ts,tsx}\"",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsup"

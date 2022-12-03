@@ -9,7 +9,6 @@
   "typings": "dist/index.d.ts",
   "module": "dist/index.js",
   "source": "src/index.ts",
-  "exports": "./dist/index.js",
   "files": [
     "dist",
     "templates",
@@ -26,12 +25,12 @@
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
     "db-tools:migrate": "npm run starter-commands -- db-tools:migrate",
     "seed-database": "npm run starter-commands -- seed-database",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "yarn vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsup",
-    "prettier": "npm run prettier --write \"**/*.{ts,tsx}\"",
-    "test": "npm run vitest"
+    "prettier": "yarn prettier --write \"**/*.{ts,tsx}\"",
+    "test": "yarn vitest"
   },
   "repository": {
     "type": "git",
