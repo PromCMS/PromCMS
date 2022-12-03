@@ -6,7 +6,10 @@
       "dependsOn": ["^build"]
     },
     "test": {
-      "dependsOn": []
+      "outputs": []
+    },
+    "prettier": {
+      "outputs": []
     },
     "dev": {
       "cache": false
