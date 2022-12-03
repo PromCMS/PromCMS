@@ -10,9 +10,9 @@
     "build:admin": "turbo run build --filter=@prom-cms/admin",
     "dev:admin": "yarn workspace @prom-cms/admin run dev",
     "dev:api": "yarn workspace @prom-cms/dev-api run dev",
-    "dev": "npx concurrently \"npm run dev:api\" \"npm run dev:admin\"",
-    "prettier": "turbo run prettier --filter=./packages/*",
-    "test": "turbo run test --filter=./packages/*",
+    "dev": "yarn concurrently \"npm run dev:api\" \"npm run dev:admin\"",
+    "prettier": "yarn turbo run prettier --filter=./packages/*",
+    "test": "yarn turbo run test --filter=./packages/*",
     "release": "yarn build:packages && changeset publish",
     "version-packages": "changeset version && yarn prettier"
   },
