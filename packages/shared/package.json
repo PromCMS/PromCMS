@@ -14,6 +14,7 @@
     "dist"
   ],
   "scripts": {
+    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",

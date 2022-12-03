@@ -14,6 +14,8 @@
     "dist"
   ],
   "scripts": {
+    "test": "echo \"TODO: add tests!\"",
+    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsup"
