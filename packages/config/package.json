@@ -1,14 +1,15 @@
 {
   "name": "@prom-cms/config",
   "version": "0.0.0",
-  "dependencies": {
+  "devDependencies": {
     "vitest": "^0.24.3",
     "vite-tsconfig-paths": "^3.5.2"
   },
   "files": [
-    ".prettier-config.js",
-    "tsconfig.default.json",
-    "vitest.default.ts"
+    "default.prettier.cjs",
+    "default.tsconfig.json",
+    "default.tsup.mjs",
+    "default.vitest.mjs"
   ],
   "private": true
 }
