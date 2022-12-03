@@ -45,7 +45,12 @@ jobs:
         with:
           cmd: prettier
 
+      - name: Run tests
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: test
+
       - name: Build
         uses: borales/actions-yarn@v3.0.0
         with:
-          cmd: build:library
+          cmd: build:packages
