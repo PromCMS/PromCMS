@@ -33,6 +33,7 @@ interface CustomOptions extends GlobalOptions {
   configPath: string;
   override: boolean;
   regenerate: boolean;
+  admin: boolean;
 }
 
 export class GenerateCMSProgram extends Command {
@@ -43,6 +44,7 @@ export class GenerateCMSProgram extends Command {
   configPath: string;
   override: boolean = false;
   regenerate: boolean = false;
+  admin: boolean = true;
   static options: Options<CustomOptions> = {
     configPath: {
       type: 'string',
@@ -59,6 +61,12 @@ export class GenerateCMSProgram extends Command {
       type: 'boolean',
       description: 'To just only regenerate admin and Core',
       short: 'r',
+    },
+    admin: {
+      type: 'boolean',
+      description: 'To generate admin',
+      default: true,
+      short: 'a',
     },
   };
 
@@ -163,6 +171,7 @@ export class GenerateCMSProgram extends Command {
         },
       }),
       getWorkerJob('Add admin html', {
+        skip: this.admin === false,
         async job() {
           // Build first
           await execa('npm', ['run', 'build:admin'], {
