@@ -5,10 +5,11 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",
-  "main": "dist/prom-cms-in-page-edit.cjs.js",
+  "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
-  "module": "dist/prom-cms-in-page-edit.esm.js",
+  "module": "dist/index.js",
   "source": "src/index.ts",
+  "exports": "./dist/index.js",
   "files": [
     "dist"
   ],

@@ -6,19 +6,14 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/vite-plugin/README.md",
   "license": "MIT",
-  "main": "dist/prom-cms-vite-plugin.cjs.js",
-  "typings": "dist/prom-cms-vite-plugin.cjs.d.ts",
-  "module": "dist/prom-cms-vite-plugin.esm.js",
+  "main": "dist/index.cjs",
+  "typings": "dist/index.d.ts",
+  "module": "dist/index.js",
   "source": "src/index.ts",
+  "exports": "./dist/index.js",
   "files": [
     "dist"
   ],
-  "exports": {
-    ".": {
-      "import": "./dist/prom-cms-vite-plugin.esm.js",
-      "require": "./dist/prom-cms-vite-plugin.cjs.js"
-    }
-  },
   "scripts": {
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
