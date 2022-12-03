@@ -1,7 +1,7 @@
 import {
   capitalizeFirstLetter,
   ColumnType,
-  ExportConfig,
+  GeneratorConfig,
 } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
@@ -28,7 +28,7 @@ const columnTypeToCast = (type: ColumnType['type']) => {
  */
 const generateModels = async (
   moduleRoot: string,
-  configModels: ExportConfig['database']['models']
+  configModels: GeneratorConfig['database']['models']
 ) => {
   const modelsRoot = path.join(moduleRoot, 'Models');
   const templatesRoot = path.join(TEMPLATES_ROOT, 'parts', 'generate-models');

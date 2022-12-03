@@ -17,7 +17,7 @@ import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
-import { getGeneratorConfigData } from 'utils/getGeneratorConfigData';
+import { getGeneratorConfigData } from '../utils/getGeneratorConfigData';
 
 type CustomParams = [string];
 
