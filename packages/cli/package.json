@@ -25,12 +25,12 @@
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
     "db-tools:migrate": "npm run starter-commands -- db-tools:migrate",
     "seed-database": "npm run starter-commands -- seed-database",
-    "test:coverage": "yarn vitest run --coverage",
+    "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsup",
-    "prettier": "yarn prettier --write \"**/*.{ts,tsx}\"",
-    "test": "yarn vitest"
+    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
+    "test": "vitest"
   },
   "repository": {
     "type": "git",

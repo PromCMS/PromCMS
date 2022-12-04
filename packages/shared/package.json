@@ -14,9 +14,9 @@
     "dist"
   ],
   "scripts": {
-    "prettier": "yarn prettier --write \"**/*.{ts,tsx}\"",
-    "test": "yarn vitest",
-    "test:coverage": "yarn vitest run --coverage",
+    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
+    "test": "echo \"TODO: add tests!\"",
+    "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsup"

@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "test": "echo \"TODO: add tests!\"",
-    "prettier": "yarn prettier --write \"**/*.{ts,tsx}\"",
+    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "tsup"
