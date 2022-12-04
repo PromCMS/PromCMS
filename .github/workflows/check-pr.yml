@@ -17,6 +17,9 @@ jobs:
     name: Check project build
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
       - uses: n1hility/cancel-previous-runs@v2
         with: 
