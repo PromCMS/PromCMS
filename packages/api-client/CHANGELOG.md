@@ -1,5 +1,14 @@
 # @prom-cms/api-client
 
+## 0.4.1
+
+### Patch Changes
+
+- ebb67aa: Enable option for generating cms without admin as a CLI parameter
+- Updated dependencies [f04b0c3]
+- Updated dependencies [ebb67aa]
+  - @prom-cms/shared@1.7.0
+
 ## 0.4.0
 
 ### Minor Changes
