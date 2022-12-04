@@ -4,7 +4,8 @@
   "type": "module",
   "devDependencies": {
     "vitest": "^0.24.3",
-    "vite-tsconfig-paths": "^3.5.2"
+    "vite-tsconfig-paths": "^3.5.2",
+    "@vitejs/plugin-react": "^2.2.0"
   },
   "files": [
     "default.prettier.cjs",
