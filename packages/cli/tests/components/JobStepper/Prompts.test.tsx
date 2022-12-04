@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Input } from '@boost/cli/react';
 import { describe, expect, it } from 'vitest';
 import { render } from 'ink-testing-library';

@@ -5,10 +5,9 @@
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
   "license": "MIT",
-  "type": "module",
-  "main": "dist/prom-cms-cli.cjs.js",
-  "module": "dist/prom-cms-cli.esm.js",
+  "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
+  "module": "dist/index.js",
   "source": "src/index.ts",
   "files": [
     "dist",
@@ -26,8 +25,12 @@
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
     "db-tools:migrate": "npm run starter-commands -- db-tools:migrate",
     "seed-database": "npm run starter-commands -- seed-database",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "tsup",
+    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
+    "test": "vitest"
   },
   "repository": {
     "type": "git",

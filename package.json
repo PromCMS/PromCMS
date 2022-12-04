@@ -4,17 +4,16 @@
   "private": true,
   "description": "",
   "scripts": {
-    "build:library": "yarn preconstruct build",
-    "postinstall": "yarn preconstruct dev && yarn build:library",
-    "release": "yarn build:library && changeset publish",
-    "build:admin": "yarn workspace @prom-cms/admin run build",
-    "clean": "del **/dist/** && del **/.next/**",
-    "dev": "npx concurrently \"npm run dev:api\" \"npm run dev:admin\"",
-    "dev:admin": "yarn workspace @prom-cms/admin run dev",
-    "dev:api": "yarn workspace @prom-cms/dev-api run dev",
     "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
-    "prettier": "prettier --config ./packages/config/prettier-config.js --write \"**/*.{ts,tsx}\"",
+    "build:packages": "turbo run build --filter=./packages/*",
+    "build:admin": "turbo run build --filter=@prom-cms/admin",
+    "dev:admin": "yarn workspace @prom-cms/admin run dev",
+    "dev:api": "yarn workspace @prom-cms/dev-api run dev",
+    "dev": "yarn concurrently \"npm run dev:api\" \"npm run dev:admin\"",
+    "prettier": "yarn turbo run prettier --filter=./packages/*",
+    "test": "yarn turbo run test --filter=./packages/*",
+    "release": "yarn build:packages && changeset publish",
     "version-packages": "changeset version && yarn prettier"
   },
   "license": "MIT",
@@ -30,32 +29,20 @@
     "Ondřej Langr <hi@ondrejlangr.cz>"
   ],
   "devDependencies": {
-    "@babel/core": "^7.18.6",
-    "@babel/plugin-proposal-decorators": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
-    "@babel/preset-react": "^7.18.6",
-    "@babel/preset-typescript": "^7.18.6",
     "@changesets/cli": "^2.22.0",
-    "@preconstruct/cli": "2.2.0",
     "@prettier/plugin-php": "0.17.6",
-    "@types/node": "16.11.10",
-    "concurrently": "^7.2.2",
+    "@swc/core": "^1.3.21",
+    "@vitest/coverage-c8": "^0.25.3",
     "caniuse-lite": "^1.0.30001387",
+    "concurrently": "^7.2.2",
     "del-cli": "4.0.1",
     "prettier": "2.7.1",
-    "typescript": "4.8.2"
-  },
-  "dependencies": {
-    "rimraf": "3.0.2"
+    "rimraf": "3.0.2",
+    "tsup": "^6.5.0",
+    "turbo": "^1.6.3"
   },
   "overrides": {
     "react": "^18.2.0",
     "@types/react": "^18.0.24"
-  },
-  "preconstruct": {
-    "packages": [
-      "packages/*",
-      "!packages/config"
-    ]
   }
 }
