@@ -1,5 +1,5 @@
 import { findGeneratorConfig, validateGeneratorConfig } from '@prom-cms/shared';
-import { readJSON } from 'fs-extra';
+import fs from 'fs-extra';
 import tsNode from 'ts-node';
 import { isModule } from './isModule';
 
@@ -14,7 +14,7 @@ export const getGeneratorConfigData = async (root?: string) => {
   if (isModule(filepath)) {
     content = await import(filepath);
   } else {
-    content = await readJSON(filepath);
+    content = await fs.readJSON(filepath);
   }
 
   return validateGeneratorConfig(content);
