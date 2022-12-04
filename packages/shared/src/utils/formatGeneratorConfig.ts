@@ -1,5 +1,6 @@
 import { GeneratorConfig } from '../types';
 import { validateGeneratorConfig } from './validateGeneratorConfig';
+import kebabCase from 'lodash.kebabcase';
 
 export const formatGeneratorConfig = async (
   config: GeneratorConfig
@@ -144,7 +145,7 @@ export const formatGeneratorConfig = async (
       ownable: true,
       intl: true,
       ...model,
-      tableName: model.tableName ?? modelKey.toLocaleLowerCase(),
+      tableName: model.tableName ?? kebabCase(modelKey),
     };
   });
 

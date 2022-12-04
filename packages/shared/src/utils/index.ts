@@ -1,4 +1,5 @@
 export * from './findGeneratorConfig';
+export * from './camelCase';
 export * from './capitalizeFirstLetter';
 export * from './convertColumnTypeToPrimitive';
 export * from './formatGeneratorConfig';
