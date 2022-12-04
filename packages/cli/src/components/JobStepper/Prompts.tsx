@@ -1,5 +1,5 @@
 import { Box, Text } from 'ink';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { LoggedWorkerJob } from '../../types';
 
 export type PromptsProps = {
@@ -38,20 +38,15 @@ export const Prompts: FC<PromptsProps> = ({ onSuccess, prompts }) => {
     [onSuccess]
   );
 
-  const slicedPrompts = useMemo(
-    () => prompts.slice(0, shownPrompts + 1),
-    [prompts, shownPrompts]
-  );
-
   return (
     <>
-      {slicedPrompts.map(([key, value]) => {
+      {prompts.slice(0, shownPrompts + 1).map(([key, value]) => {
         const resultValue = promptResults[key];
         const isDone = !!resultValue;
         const Component = value.type;
 
         return (
-          <Box key={key as any}>
+          <Box key={String(key)}>
             {isDone ? (
               <Text>
                 {'? '}

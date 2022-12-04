@@ -1,1 +1,1 @@
-module.exports = require('@prom-cms/config/default.prettier.cjs');
+module.exports = require('@prom-cms/config/prettier-config');

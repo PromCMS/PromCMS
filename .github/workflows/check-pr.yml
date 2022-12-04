@@ -16,21 +16,15 @@ jobs:
   check-build:
     name: Check project build
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
       - uses: n1hility/cancel-previous-runs@v2
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: check-pr.yml
 
-        # https://github.com/actions/checkout
       - name: Checkout Repo
+        # https://github.com/actions/checkout
         uses: actions/checkout@v2
-        with:
-            fetch-depth: 2
 
       - uses: actions/cache@v2
         name: Cache
@@ -39,19 +33,19 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Setup node 16
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v1
         with:
           node-version: 16
-          cache: 'yarn'
 
       - name: Install Dependencies
         run: yarn --frozen-lockfile
 
       - name: Run prettier
-        run: yarn prettier
-
-      - name: Run tests
-        run: yarn test
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: prettier
 
       - name: Build
-        run: yarn build:packages
+        uses: borales/actions-yarn@v3.0.0
+        with:
+          cmd: build:library
