@@ -1,5 +1,5 @@
 import { Command, GlobalOptions, Options } from '@boost/cli';
-import { getEnvFilepath } from '@prom-cms/shared';
+import { getEnvFilepath, validateGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 import { formatGeneratorConfig } from '@prom-cms/shared';
@@ -40,7 +40,9 @@ export class GenerateDevelopProgram extends Command {
     const DEV_API_ROOT = path.join(PROJECT_ROOT, 'apps', 'dev-api');
     const TEMP_CORE_ROOT = path.join(DEV_API_ROOT, '.temp');
     const MODULES_ROOT = path.join(TEMP_CORE_ROOT, 'modules');
-    const generatorConfig = await formatGeneratorConfig(mockedGeneratorConfig);
+    const generatorConfig = await validateGeneratorConfig(
+      await formatGeneratorConfig(mockedGeneratorConfig)
+    );
 
     const jobs: LoggedWorkerJob[] = [
       {
