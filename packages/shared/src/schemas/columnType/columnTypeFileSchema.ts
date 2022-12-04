@@ -8,12 +8,12 @@ export const columnTypeFileSchema = columnTypeBaseSchema.extend({
   /**
    * If user can select multiple files
    */
-  multiple: z.boolean().default(false).nullish(),
+  multiple: z.boolean().default(false).optional(),
 
   /**
    * MimeType type part filter
    */
-  typeFilter: z.string().nullish(),
+  typeFilter: z.string().optional(),
 });
 
 export type ColumnTypeFile = z.infer<typeof columnTypeFileSchema>;

@@ -79,6 +79,7 @@ export class GenerateCMSProgram extends Command {
     }
 
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
+    console.log(generatorConfig.database.models);
     const { project } = generatorConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
     const ADMIN_ROOT = path.join(PROJECT_ROOT, 'apps', 'admin');

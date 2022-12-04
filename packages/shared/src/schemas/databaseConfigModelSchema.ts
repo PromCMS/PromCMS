@@ -8,54 +8,54 @@ export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
    *
    * @defaultValue false
    */
-  timestamp: z.boolean().default(false).nullish(),
+  timestamp: z.boolean().default(false).optional(),
 
   /**
    * Custom table name to model
    * @default string Key of this object
    */
-  tableName: z.string().min(1).nullish(),
+  tableName: z.string().min(1).optional(),
 
   /**
    * If generated table have entries with soft-delete
    *
    * @defaultValue false
    */
-  softDelete: z.boolean().default(false).nullish(),
+  softDelete: z.boolean().default(false).optional(),
 
   /**
    * Enable drafting of items
    *
    * @defaultValue false
    */
-  draftable: z.boolean().default(false).nullish(),
+  draftable: z.boolean().default(false).optional(),
 
   /**
    * Enable sorting for entries by drag and drop
    *
    * @defaultValue false
    */
-  sorting: z.boolean().default(false).nullish(),
+  sorting: z.boolean().default(false).optional(),
 
   /**
    * If user can share its entry and define permissions for other users to access
    * @default true
    */
-  sharable: z.boolean().default(true).nullish(),
+  sharable: z.boolean().default(true).optional(),
 
   /**
    * Determines if every entry should keep info about who changed|created entry
    *
    * @default true
    */
-  ownable: z.boolean().default(true).nullish(),
+  ownable: z.boolean().default(true).optional(),
 
   /**
    * Toggles the multi language functionality for current model
    *
    * @default true,
    */
-  intl: z.boolean().default(true).nullish(),
+  intl: z.boolean().default(true).optional(),
 
   /**
    * Admin config
@@ -66,10 +66,10 @@ export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
        * Indicates the resulted template for this model. "post-like" option generates default column "content" which is a block editor
        * @defaultValue post-like
        */
-      layout: z.enum(['simple', 'post-like']).default('post-like').nullish(),
+      layout: z.enum(['simple', 'post-like']).default('post-like').optional(),
     })
     .default({ layout: 'post-like' })
-    .nullish(),
+    .optional(),
 
   /**
    * Table columns

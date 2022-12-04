@@ -16,10 +16,10 @@ export const projectConfigSchema = z.object({
   /**
    * If final project will be hosted on different folder that in the root
    */
-  prefix: z.string().nullish(),
+  prefix: z.string().optional(),
 
   /**
    * Projects security config
    */
-  security: projectSecurityConfigSchema.nullish(),
+  security: projectSecurityConfigSchema.optional(),
 });

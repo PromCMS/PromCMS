@@ -20,5 +20,5 @@ export const projectSecurityRoleSchema = z.object({
    *
    * @default true
    */
-  hasAccessToAdmin: z.boolean().default(true).nullish(),
+  hasAccessToAdmin: z.boolean().default(true).optional(),
 });

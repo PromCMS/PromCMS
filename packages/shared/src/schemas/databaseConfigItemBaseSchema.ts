@@ -13,5 +13,5 @@ export const databaseConfigItemBaseSchema = z.object({
    * If seeding process should be omitted for this model
    * @defaultValue false
    */
-  ignoreSeeding: z.boolean().default(false).nullish(),
+  ignoreSeeding: z.boolean().default(false).optional(),
 });

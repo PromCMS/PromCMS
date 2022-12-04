@@ -13,23 +13,23 @@ export const projectSecurityRoleModelPermissionSchema = z.object({
    * Create
    * @default false;
    */
-  c: ZodSecurityOptionOptions.default(0).nullish(),
+  c: ZodSecurityOptionOptions.default(0).optional(),
 
   /**
    * Read
    * @default false;
    */
-  r: ZodSecurityOptionOptions.default(0).nullish(),
+  r: ZodSecurityOptionOptions.default(0).optional(),
 
   /**
    * Update
    * @default false;
    */
-  u: ZodSecurityOptionOptions.default(0).nullish(),
+  u: ZodSecurityOptionOptions.default(0).optional(),
 
   /**
    * Delete
    * @default false;
    */
-  d: ZodSecurityOptionOptions.default(0).nullish(),
+  d: ZodSecurityOptionOptions.default(0).optional(),
 });

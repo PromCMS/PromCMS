@@ -19,21 +19,21 @@ export const columnTypeRelationshipSchema = columnTypeBaseSchema.extend({
    *
    * @default boolean false
    */
-  multiple: z.boolean().default(false).nullish(),
+  multiple: z.boolean().default(false).optional(),
 
   /**
    * Specifies that the column will be filled with data if has connection to real target
    *
    * @default boolean true
    */
-  fill: z.boolean().default(true).nullish(),
+  fill: z.boolean().default(true).optional(),
 
   /**
    * Specify a field name that the target model has to hook on to
    *
    * @default string 'id'
    */
-  foreignKey: z.string().default('id').nullish(), // TODO make verify
+  foreignKey: z.string().default('id').optional(), // TODO make verify
 });
 
 export type ColumnTypeRelationship = z.infer<
