@@ -81,10 +81,7 @@ export class EntryApiClient extends ApiClientBase {
     );
   }
 
-  async swap(
-    modelId: string,
-    payload: { fromId: ItemID; toId: ItemID }
-  ) {
+  async swap(modelId: string, payload: { fromId: ItemID; toId: ItemID }) {
     return this.axios.patch(`${EntryApiClient.getItemsUrl(modelId)}/reorder`, {
       data: payload,
     });
