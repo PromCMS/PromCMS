@@ -18,6 +18,7 @@ import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
 import { getGeneratorConfigData } from '../utils/getGeneratorConfigData';
 import { GENERATOR_FILENAME } from '@prom-cms/shared';
+import rimraf from 'rimraf';
 
 type CustomParams = [string];
 
@@ -98,18 +99,14 @@ export class GenerateCMSProgram extends Command {
       getWorkerJob('Cleanup', {
         skip: this.override === false,
         async job() {
-          const rimrafExecutable = path.resolve(
-            PROJECT_ROOT,
-            'node_modules',
-            'rimraf',
-            'bin.js'
-          );
+          await new Promise((resolve, reject) =>
+            rimraf(`./**/!(${generatorFilenameBase}.*|.env)`, (error) => {
+              if (error) {
+                reject(error);
+              }
 
-          await execa(
-            `npx ${rimrafExecutable} **/!(${generatorFilenameBase}.*|.env)`,
-            {
-              cwd: PROJECT_ROOT,
-            }
+              resolve(undefined);
+            })
           );
         },
       }),
