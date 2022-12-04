@@ -10,14 +10,18 @@ import {
   loggedJobWorker,
   logSuccess,
   getWorkerJob,
+  getFilenameBase,
 } from '../utils';
 import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
 import { getGeneratorConfigData } from '../utils/getGeneratorConfigData';
+import { GENERATOR_FILENAME } from '@prom-cms/shared';
 
 type CustomParams = [string];
+
+const generatorFilenameBase = getFilenameBase(GENERATOR_FILENAME);
 
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
@@ -62,6 +66,17 @@ export class GenerateCMSProgram extends Command {
     ]);
 
     const FINAL_PATH = process.cwd();
+
+    if (
+      fs
+        .readdirSync(FINAL_PATH)
+        .findIndex((item) => item.startsWith(generatorFilenameBase)) == -1
+    ) {
+      throw new Error(
+        `⛔️ Current directory "${FINAL_PATH}" has no prom config.`
+      );
+    }
+
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
     const { project } = generatorConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
@@ -71,15 +86,33 @@ export class GenerateCMSProgram extends Command {
       !this.override &&
       !this.regenerate &&
       fs.existsSync(FINAL_PATH) &&
-      fs.readdirSync(FINAL_PATH).length !== 0
+      fs.readdirSync(FINAL_PATH).length > 1
     ) {
       throw new Error(
-        `⛔️ Your path to project "${FINAL_PATH}" already exists`
+        `⛔️ Current directory "${FINAL_PATH}" has some contents already`
       );
     }
 
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
     const jobs = [
+      getWorkerJob('Cleanup', {
+        skip: this.override === false,
+        async job() {
+          const rimrafExecutable = path.resolve(
+            PROJECT_ROOT,
+            'node_modules',
+            'rimraf',
+            'bin.js'
+          );
+
+          await execa(
+            `npx ${rimrafExecutable} **/!(${generatorFilenameBase}.*|.env)`,
+            {
+              cwd: PROJECT_ROOT,
+            }
+          );
+        },
+      }),
       getWorkerJob('Generate new core', {
         prompts: [
           [

@@ -159,10 +159,10 @@ export const formatGeneratorConfig = async (
           ([key, values]) => [
             key,
             {
-              c: false,
-              r: false,
-              u: false,
-              d: false,
+              c: 0,
+              r: 0,
+              u: 0,
+              d: 0,
               ...values,
             },
           ]

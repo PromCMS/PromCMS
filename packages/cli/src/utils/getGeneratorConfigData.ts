@@ -21,5 +21,5 @@ export const getGeneratorConfigData = async (root?: string) => {
     content = await fs.readJSON(filepath);
   }
 
-  return validateGeneratorConfig(formatGeneratorConfig(content));
+  return validateGeneratorConfig(await formatGeneratorConfig(content));
 };
