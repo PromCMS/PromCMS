@@ -68,7 +68,7 @@ export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
        */
       layout: z.enum(['simple', 'post-like']).default('post-like').optional(),
     })
-    .default({ layout: 'post-like' })
+    .default({})
     .optional(),
 
   /**

@@ -144,6 +144,7 @@ export const formatGeneratorConfig = async (
       ignoreSeeding: false,
       ownable: true,
       intl: true,
+      admin: { layout: 'post-like' },
       ...model,
       tableName: model.tableName ?? kebabCase(modelKey),
     };
