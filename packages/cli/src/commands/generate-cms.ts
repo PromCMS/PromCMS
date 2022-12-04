@@ -8,8 +8,6 @@ import crypto from 'crypto';
 import {
   generateByTemplates,
   loggedJobWorker,
-  pathInputToRelative,
-  validateConfigPathInput,
   logSuccess,
   getWorkerJob,
 } from '../utils';
@@ -25,7 +23,6 @@ const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
 
 interface CustomOptions extends GlobalOptions {
-  configPath: string;
   override: boolean;
   regenerate: boolean;
   admin: boolean;
@@ -41,12 +38,6 @@ export class GenerateCMSProgram extends Command {
   regenerate: boolean = false;
   admin: boolean = true;
   static options: Options<CustomOptions> = {
-    configPath: {
-      type: 'string',
-      description: 'To specify prom config path',
-      short: 'c',
-      validate: validateConfigPathInput,
-    },
     override: {
       type: 'boolean',
       description: 'To override contents of target folder',
@@ -70,9 +61,7 @@ export class GenerateCMSProgram extends Command {
       '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
     ]);
 
-    this.configPath = pathInputToRelative(this.configPath);
-
-    const FINAL_PATH = path.basename(this.configPath);
+    const FINAL_PATH = process.cwd();
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
     const { project } = generatorConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
