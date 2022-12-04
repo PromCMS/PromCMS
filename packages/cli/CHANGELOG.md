@@ -1,5 +1,18 @@
 # @prom-cms/cli
 
+## 0.12.0
+
+### Minor Changes
+
+- f04b0c3: Add prompts to loggedJobWorker and add test to other packages.
+- ebb67aa: Enable option for generating cms without admin as a CLI parameter
+
+### Patch Changes
+
+- Updated dependencies [f04b0c3]
+- Updated dependencies [ebb67aa]
+  - @prom-cms/shared@1.7.0
+
 ## 0.11.0
 
 ### Minor Changes
