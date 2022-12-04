@@ -159,7 +159,7 @@ const EntryTypeUnderpage: Page = ({}) => {
         onEditAction={onEditRequest}
         onDeleteAction={onItemDeleteRequest}
         onDuplicateAction={onItemDuplicateRequest}
-        ordering={model.hasOrdering}
+        ordering={!!model.hasOrdering}
         onDragEnd={onDragEnd}
         disabled={apiWorking}
       />

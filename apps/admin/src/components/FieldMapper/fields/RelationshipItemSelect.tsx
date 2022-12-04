@@ -1,17 +1,13 @@
 import { useModelItems } from '@hooks/useModelItems';
 import { Select, SelectItem } from '@mantine/core';
-import {
-  ModelColumnName,
-  RelationshipColumnType,
-  UserRole,
-} from '@prom-cms/shared';
+import { ColumnTypeRelationship, UserRole } from '@prom-cms/shared';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-export interface RelationshipItemSelectProps extends RelationshipColumnType {
-  columnName: ModelColumnName;
+export interface RelationshipItemSelectProps extends ColumnTypeRelationship {
+  columnName: string;
   error: string;
 }
 

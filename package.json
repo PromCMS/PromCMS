@@ -8,6 +8,7 @@
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
     "build:packages": "turbo run build --filter=./packages/*",
     "build:admin": "turbo run build --filter=@prom-cms/admin",
+    "build": "npm run build:packages && npm run build:admin",
     "dev:admin": "yarn workspace @prom-cms/admin run dev",
     "dev:api": "yarn workspace @prom-cms/dev-api run dev",
     "dev": "yarn concurrently \"npm run dev:api\" \"npm run dev:admin\"",

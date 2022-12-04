@@ -1,36 +1,33 @@
-import { Command, GlobalOptions, Options, Params } from '@boost/cli';
+import { Command, GlobalOptions, Options } from '@boost/cli';
 import { Input, Select } from '@boost/cli/react';
 import path from 'path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
-import {
-  formatGeneratorConfig,
-  ExportConfig,
-  GENERATOR_FILENAME__JSON,
-} from '@prom-cms/shared';
 import crypto from 'crypto';
 
 import {
   generateByTemplates,
   loggedJobWorker,
-  pathInputToRelative,
-  validateConfigPathInput,
-  getAppRootInputValidator,
   logSuccess,
   getWorkerJob,
+  getFilenameBase,
 } from '../utils';
 import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
 import { generateProjectModule } from '../parts/generate-project-module';
+import { getGeneratorConfigData } from '../utils/getGeneratorConfigData';
+import { GENERATOR_FILENAME } from '@prom-cms/shared';
+import rimraf from 'rimraf';
 
 type CustomParams = [string];
+
+const generatorFilenameBase = getFilenameBase(GENERATOR_FILENAME);
 
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
 
 interface CustomOptions extends GlobalOptions {
-  configPath: string;
   override: boolean;
   regenerate: boolean;
   admin: boolean;
@@ -46,12 +43,6 @@ export class GenerateCMSProgram extends Command {
   regenerate: boolean = false;
   admin: boolean = true;
   static options: Options<CustomOptions> = {
-    configPath: {
-      type: 'string',
-      description: 'To specify prom config path',
-      short: 'c',
-      validate: validateConfigPathInput,
-    },
     override: {
       type: 'boolean',
       description: 'To override contents of target folder',
@@ -70,32 +61,26 @@ export class GenerateCMSProgram extends Command {
     },
   };
 
-  static params: Params<CustomParams> = [
-    {
-      label: 'Root',
-      description: 'Root of your final project',
-      required: true,
-      type: 'string',
-      validate: getAppRootInputValidator(),
-      format: pathInputToRelative,
-    },
-  ];
-
-  async run(root: string) {
+  async run() {
     logSuccess.apply(this, [
       '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
     ]);
 
-    // Apply formatters
-    this.configPath = pathInputToRelative(this.configPath);
+    const FINAL_PATH = process.cwd();
 
-    const FINAL_PATH = root;
-    const generatorConfig: ExportConfig = this.configPath.endsWith('.json')
-      ? await fs.readJson(this.configPath)
-      : (await import('file:/' + this.configPath)).default;
+    if (
+      fs
+        .readdirSync(FINAL_PATH)
+        .findIndex((item) => item.startsWith(generatorFilenameBase)) == -1
+    ) {
+      throw new Error(
+        `⛔️ Current directory "${FINAL_PATH}" has no prom config.`
+      );
+    }
 
-    const projectConfig = await formatGeneratorConfig(generatorConfig);
-    const { project } = projectConfig;
+    const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
+    console.log(generatorConfig.database.models);
+    const { project } = generatorConfig;
     const projectNameSimplified = simplifyProjectName(project.name);
     const ADMIN_ROOT = path.join(PROJECT_ROOT, 'apps', 'admin');
 
@@ -103,15 +88,29 @@ export class GenerateCMSProgram extends Command {
       !this.override &&
       !this.regenerate &&
       fs.existsSync(FINAL_PATH) &&
-      fs.readdirSync(FINAL_PATH).length !== 0
+      fs.readdirSync(FINAL_PATH).length > 1
     ) {
       throw new Error(
-        `⛔️ Your path to project "${FINAL_PATH}" already exists`
+        `⛔️ Current directory "${FINAL_PATH}" has some contents already`
       );
     }
 
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
     const jobs = [
+      getWorkerJob('Cleanup', {
+        skip: this.override === false,
+        async job() {
+          await new Promise((resolve, reject) =>
+            rimraf(`./**/!(${generatorFilenameBase}.*|.env)`, (error) => {
+              if (error) {
+                reject(error);
+              }
+
+              resolve(undefined);
+            })
+          );
+        },
+      }),
       getWorkerJob('Generate new core', {
         prompts: [
           [
@@ -156,18 +155,10 @@ export class GenerateCMSProgram extends Command {
           await installPHPDeps(FINAL_PATH);
         },
       }),
-      getWorkerJob('Paste generator config to project', {
-        async job() {
-          await fs.writeJSON(
-            path.join(FINAL_PATH, GENERATOR_FILENAME__JSON),
-            generatorConfig
-          );
-        },
-      }),
       getWorkerJob('Generate project module', {
         skip: this.regenerate,
         async job() {
-          await generateProjectModule(exportModulesRoot, projectConfig);
+          await generateProjectModule(exportModulesRoot, generatorConfig);
         },
       }),
       getWorkerJob('Add admin html', {

@@ -1,5 +1,5 @@
 {
-  "extends": "@prom-cms/config/tsconfig.default.json",
+  "extends": "@prom-cms/config/default.tsconfig.json",
   "compilerOptions": {
     "target": "ESNEXT",
     "module": "ESNEXT",

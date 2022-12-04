@@ -30,10 +30,7 @@ import { useClassNames } from './useClassNames';
 import { useState } from 'react';
 import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
 import { PagedResponse } from '@prom-cms/api-client';
-import {
-  SelectProps,
-  SelectSharedProps,
-} from '@mantine/core/lib/Select/Select';
+import { SelectProps } from '@mantine/core/lib/Select/Select';
 
 export type TableViewItem = { id: string | number; [x: string]: any };
 

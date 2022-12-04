@@ -1,7 +1,8 @@
 {
   "name": "@prom-cms/cli",
-  "version": "0.11.0",
   "description": "PromCMS cli package",
+  "version": "0.11.0",
+  "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
   "license": "MIT",
@@ -52,7 +53,9 @@
     "execa": "^6.1.0",
     "fs-extra": "^10.1.0",
     "ink": "^3.2.0",
+    "ts-node": "^10.9.1",
     "prettier": "2.7.1",
+    "rimraf": "^3.0.2",
     "react": "^18.2.0"
   },
   "devDependencies": {
@@ -61,8 +64,8 @@
     "@types/fs-extra": "9.0.13",
     "@types/prettier": "^2.7.1",
     "@types/react": "^18.0.24",
+    "@types/rimraf": "^3.0.2",
     "ink-testing-library": "^2.1.0",
-    "ts-node": "^10.9.1",
     "tsconfig-paths": "3.12.0",
     "vitest": "^0.24.3"
   }

@@ -1,8 +1,8 @@
-import { ApiResultModel, ModelColumnName } from '@prom-cms/shared';
+import { ApiResultModel } from '@prom-cms/shared';
 
 export const prepareFieldsForMapper = (model: ApiResultModel) =>
   Object.keys(model.columns)
-    .map((columnName: ModelColumnName) => [
+    .map((columnName: string) => [
       {
         ...model.columns[columnName],
         columnName,

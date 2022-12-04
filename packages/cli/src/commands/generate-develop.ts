@@ -1,10 +1,10 @@
 import { Command, GlobalOptions, Options } from '@boost/cli';
-import { getEnvFilepath, findGeneratorConfig } from '@prom-cms/shared';
+import { getEnvFilepath, validateGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 import { formatGeneratorConfig } from '@prom-cms/shared';
 
-import { PROJECT_ROOT } from '../constants';
+import { mockedGeneratorConfig, PROJECT_ROOT } from '../constants';
 import { loggedJobWorker, logSuccess } from '../utils';
 import generateCore from '../parts/generate-core-files';
 import { installPHPDeps } from '../parts/install-php-deps';
@@ -36,16 +36,13 @@ export class GenerateDevelopProgram extends Command {
       'Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
     ]);
 
-    const GENERATOR_CONFIG = await findGeneratorConfig();
     const envFilepath = await getEnvFilepath();
-
-    if (!GENERATOR_CONFIG) {
-      throw '⛔️ No generator config provided, please provide a config.';
-    }
     const DEV_API_ROOT = path.join(PROJECT_ROOT, 'apps', 'dev-api');
     const TEMP_CORE_ROOT = path.join(DEV_API_ROOT, '.temp');
     const MODULES_ROOT = path.join(TEMP_CORE_ROOT, 'modules');
-    const generatorConfig = await formatGeneratorConfig(GENERATOR_CONFIG);
+    const generatorConfig = await validateGeneratorConfig(
+      await formatGeneratorConfig(mockedGeneratorConfig)
+    );
 
     const jobs: LoggedWorkerJob[] = [
       {

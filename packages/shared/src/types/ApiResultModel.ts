@@ -1,11 +1,4 @@
-import { DatabaseConfigModel, DatabaseTableName } from './generateConfig';
-import { UserStates } from './UserStates';
-
-export type PrimitiveTypes = 'number' | 'string' | 'boolean' | 'date';
-
-export type LoginFailedResponseCodes =
-  | 'invalid-credentials'
-  | `user-state-${UserStates}`;
+import { DatabaseConfigModel } from './DatabaseConfigModel';
 
 export interface ApiResultModel
   extends Omit<
@@ -18,5 +11,3 @@ export interface ApiResultModel
   isDraftable: DatabaseConfigModel['draftable'];
   isSharable?: DatabaseConfigModel['sharable'];
 }
-
-export type ApiResultModels = Record<DatabaseTableName, ApiResultModel>;

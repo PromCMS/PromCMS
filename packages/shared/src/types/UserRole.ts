@@ -1,5 +1,5 @@
-import { ModelUserPermissions } from './generateConfig';
 import { ItemID } from './ItemID';
+import { ProjectSecurityRoleModelPermission } from './ProjectSecurityRoleModelPermission';
 
 export type UserRole = {
   id: ItemID;
@@ -8,6 +8,6 @@ export type UserRole = {
   description?: string;
   permissions?: {
     hasAccessToAdmin: boolean;
-    models: ModelUserPermissions;
+    models: ProjectSecurityRoleModelPermission;
   };
 };

@@ -1,7 +1,7 @@
 import AsideItemWrap from '@components/AsideItemWrap';
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import useCurrentModel from '@hooks/useCurrentModel';
-import { ColumnType, ModelColumnName } from '@prom-cms/shared';
+import { ColumnType } from '@prom-cms/shared';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,7 @@ export const PostLikeFields: FC = () => {
   const currentModel = useCurrentModel();
 
   const groupedFields = useMemo<
-    Array<ColumnType & { columnName: ModelColumnName }>[] | undefined
+    Array<ColumnType & { columnName: string }>[] | undefined
   >(() => {
     if (!currentModel) return;
 
