@@ -1,5 +1,5 @@
 import { Checkbox, Input, Textarea, TextInput } from '@mantine/core';
-import { ModelColumnName, ColumnType } from '@prom-cms/shared';
+import { ColumnType } from '@prom-cms/shared';
 import { FC } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import { EnumSelect, RelationshipItemSelect } from './fields';
 
 export interface FieldMapperProps {
   fields: (ColumnType & {
-    columnName: ModelColumnName;
+    columnName: string;
   })[][];
 }
 
@@ -80,7 +80,7 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields }) => {
                         selected={String(value)}
                         error={errorMessage}
                         label={values.title}
-                        {...values}
+                        {...(values as any)}
                       />
                     )}
                   />

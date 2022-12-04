@@ -1,6 +1,6 @@
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import useCurrentModel from '@hooks/useCurrentModel';
-import { ColumnType, ModelColumnName } from '@prom-cms/shared';
+import { ColumnType } from '@prom-cms/shared';
 import { forwardRef, MutableRefObject, RefObject, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useEntryUnderpageContext } from '.';
@@ -19,7 +19,7 @@ export const FormContent = forwardRef<{ editorRef: RefObject<EditorJS> }, {}>(
     const model = useCurrentModel();
 
     const groupedFields = useMemo<
-      Array<ColumnType & { columnName: ModelColumnName }>[] | undefined
+      Array<ColumnType & { columnName: string }>[] | undefined
     >(() => {
       if (!model) return;
 
