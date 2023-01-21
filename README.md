@@ -1,3 +1,5 @@
+> ⚠️ Please be aware that this tool is under active development and is still not suitable for normal use. All help on interest would be awesome! 🚀
+
 # PromCMS
 
 Welcome to PromCMS project. This project focuses on making smaller PHP projects simpler and faster to build.
