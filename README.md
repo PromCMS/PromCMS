@@ -1,4 +1,4 @@
-> ⚠️ Please be aware that this tool is under active development and is still not suitable for normal use. All help on interest would be awesome! 🚀
+> ⚠️ Please be aware that this tool is under active development and is still not suitable for normal use. All help or interest is welcome! 🚀
 
 # PromCMS
 
