@@ -2,6 +2,7 @@ import { getWorkerJob } from '@utils';
 import { Select } from '@boost/cli/react';
 import { execa } from 'execa';
 import { SupportedPackageManagers } from '@custom-types';
+import { SUPPORTED_PACKAGE_MANAGERS } from '@constants';
 
 export interface GetInstallNodeDepsJobOptions {
   regenerate?: boolean;
@@ -24,7 +25,7 @@ export const getInstallNodeDepsJob = ({
               type: Select,
               props: {
                 label: 'What package manager should this project use?',
-                options: ['yarn', 'npm', 'pnpm'],
+                options: SUPPORTED_PACKAGE_MANAGERS,
               },
             },
           ],

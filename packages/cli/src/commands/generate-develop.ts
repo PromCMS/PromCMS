@@ -119,7 +119,7 @@ export class GenerateDevelopProgram extends Command {
       getInstallNodeDepsJob({
         cwd: devProjectRoot,
         regenerate: this.regenerate,
-        packageManager: 'yarn',
+        packageManager: 'npm',
       }),
       {
         title: 'Generate project module',

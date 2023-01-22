@@ -5,15 +5,13 @@
   "description": "",
   "scripts": {
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
-    "build:packages": "turbo run build --filter=./packages/*",
+    "build:packages": "npx turbo run build --filter=./packages/*",
     "build": "npm run build:packages",
-    "dev:admin": "yarn workspace @prom-cms/admin run dev",
-    "dev:api": "yarn workspace @prom-cms/dev-api run dev",
-    "dev": "yarn concurrently \"npm run dev:api\" \"npm run dev:admin\"",
-    "prettier": "yarn turbo run prettier --filter=./packages/*",
-    "test": "yarn turbo run test --filter=./packages/*",
-    "release": "yarn build:packages && changeset publish",
-    "version-packages": "changeset version && yarn prettier"
+    "dev": "npx turbo run dev --filter=...@prom-cms/dev-api --filter=...@prom-cms/admin",
+    "prettier": "npx turbo run prettier --filter=./packages/*",
+    "test": "npx turbo run test --filter=./packages/*",
+    "release": "npm run build:packages && changeset publish",
+    "version-packages": "changeset version && npx prettier"
   },
   "license": "MIT",
   "workspaces": [
@@ -33,7 +31,6 @@
     "@swc/core": "^1.3.21",
     "@vitest/coverage-c8": "^0.25.3",
     "caniuse-lite": "^1.0.30001387",
-    "concurrently": "^7.2.2",
     "del-cli": "4.0.1",
     "prettier": "2.7.1",
     "rimraf": "3.0.2",
