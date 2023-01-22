@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-import { GENERATOR_FILENAME } from '../../generator-constants';
+import { GENERATOR_FILENAME } from '../../generator/constants';
 import { supportedConfigExtensions } from '../../constants';
 import { replaceFileExtension } from '../replaceFileExtension';
 import path from 'path';

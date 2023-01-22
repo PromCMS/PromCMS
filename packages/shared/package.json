@@ -9,7 +9,18 @@
   "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
   "module": "dist/index.js",
-  "source": "src/index.ts",
+  "exports": {
+    "./*": "./*",
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./generator": {
+      "import": "./dist/generator.js",
+      "require": "./dist/generator.cjs"
+    }
+  },
   "files": [
     "dist"
   ],
