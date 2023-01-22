@@ -17,8 +17,12 @@
       "require": "./dist/index.cjs"
     },
     "./generator": {
-      "import": "./dist/generator.js",
-      "require": "./dist/generator.cjs"
+      "import": "./dist/generator/index.js",
+      "require": "./dist/generator/index.cjs"
+    },
+    "./internal": {
+      "import": "./dist/internal/index.js",
+      "require": "./dist/internal/index.cjs"
     }
   },
   "files": [
