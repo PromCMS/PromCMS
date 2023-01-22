@@ -1,6 +1,8 @@
 import { GeneratorConfig } from '../types';
-import { validateGeneratorConfig } from './validateGeneratorConfig';
 import kebabCase from 'lodash.kebabcase';
+
+const simplifyProjectName = (name: string) =>
+  name.replaceAll(' ', '-').toLocaleLowerCase();
 
 export const formatGeneratorConfig = async (
   config: GeneratorConfig
@@ -178,7 +180,14 @@ export const formatGeneratorConfig = async (
     };
   }
 
-  const result = { ...config, database: { ...databaseConfig, models } };
+  const result = {
+    ...config,
+    database: { ...databaseConfig, models },
+    project: {
+      slug: simplifyProjectName(config.project.name || ''),
+      ...config.project,
+    },
+  };
 
-  return validateGeneratorConfig(result);
+  return result;
 };

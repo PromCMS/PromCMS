@@ -9,6 +9,11 @@ export const projectConfigSchema = z.object({
   name: z.string(),
 
   /**
+   * A project name
+   */
+  slug: z.string().optional(),
+
+  /**
    * Final project url
    */
   url: z.string(),
