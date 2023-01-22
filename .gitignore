@@ -46,4 +46,4 @@ private
 
 # Development project
 /apps/*
-!/apps/.gitkeep
+!/apps/dev-api
