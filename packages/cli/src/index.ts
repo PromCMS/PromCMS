@@ -1,12 +1,12 @@
 import { Program } from '@boost/cli';
 import { loadRootEnv } from '@prom-cms/shared';
-import { SeedDatabaseProgram } from './commands/seed-database';
-import { GenerateCMSProgram } from './commands/generate-cms';
-import { GenerateDevelopProgram } from './commands/generate-develop';
+import { SeedDatabaseProgram } from './commands/seed-database.js';
+import { GenerateCMSProgram } from './commands/generate-cms.js';
+import { GenerateDevelopProgram } from './commands/generate-develop.js';
 import fs from 'fs-extra';
 import path from 'path';
-import { PACKAGE_ROOT } from './constants';
-import { DbToolsMigrateProgram } from './commands/db-tools/migrate';
+import { PACKAGE_ROOT } from '@constants';
+import { DbToolsMigrateProgram } from './commands/db-tools/migrate.js';
 
 (async () => {
   const { version } = await fs.readJson(

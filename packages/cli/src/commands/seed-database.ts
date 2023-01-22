@@ -1,12 +1,8 @@
 import { Command, Params } from '@boost/cli';
-import {
-  Logger,
-  pathInputToRelative,
-  getAppRootInputValidator,
-} from '../utils';
+import { Logger, pathInputToRelative, getAppRootInputValidator } from '@utils';
 import child_process from 'child_process';
 import path from 'path';
-import { SCRIPTS_ROOT } from '../constants';
+import { SCRIPTS_ROOT } from '@constants';
 
 type CustomParams = [string];
 

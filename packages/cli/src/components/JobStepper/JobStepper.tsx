@@ -1,7 +1,7 @@
 import { Box, Text } from 'ink';
 import { FC, useCallback, useState } from 'react';
-import { LoggedWorkerJob } from '../../types';
-import { WorkerJob } from './WorkerJob';
+import { LoggedWorkerJob } from '../../types.js';
+import { WorkerJob } from './WorkerJob.js';
 
 interface JobStepperProps {
   jobs: LoggedWorkerJob<any>[];

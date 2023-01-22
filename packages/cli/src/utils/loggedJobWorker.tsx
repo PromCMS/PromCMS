@@ -1,9 +1,19 @@
 import { ArgList, Command, GlobalOptions } from '@boost/cli';
-import type { PromptProps } from '@boost/cli/src/components/internal/Prompt';
 import { useProgram } from '@boost/cli/react';
 import { FC, useCallback } from 'react';
-import { LoggedWorkerJob } from 'types';
-import { JobStepper } from '../components';
+import { LoggedWorkerJob } from '@custom-types';
+import { JobStepper } from '@components';
+
+export interface PromptProps<T> {
+  /** Label to display before or above the prompt itself. */
+  label: NonNullable<React.ReactNode>;
+  /** Single character symbol to display before the label. Defaults to "?"". */
+  prefix?: string;
+  /** Callback triggered when the value is submitted. */
+  onSubmit: (value: T) => void;
+  /** Function to validate the value on submit. To trigger a failed state, thrown an `Error`. */
+  validate?: (value: T) => void;
+}
 
 export type PromptItem = {
   type: (props: any) => JSX.Element;

@@ -6,8 +6,7 @@ import {
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { formatCodeString } from '../utils';
-import { TEMPLATES_ROOT } from '../constants';
+import { formatCodeString, getTemplateFolder } from '@utils';
 
 const columnTypeToCast = (type: ColumnType['type']) => {
   let finalType = 'string';
@@ -31,7 +30,7 @@ const generateModels = async (
   configModels: GeneratorConfig['database']['models']
 ) => {
   const modelsRoot = path.join(moduleRoot, 'Models');
-  const templatesRoot = path.join(TEMPLATES_ROOT, 'parts', 'generate-models');
+  const templatesRoot = getTemplateFolder('parts.generate-models');
 
   for (const modelKey in configModels) {
     const capitalizedModelName = capitalizeFirstLetter(modelKey, false);

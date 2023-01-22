@@ -5,7 +5,7 @@ import {
 } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import tsNode from 'ts-node';
-import { isModule } from './isModule';
+import { isModule } from './isModule.js';
 
 export const getGeneratorConfigData = async (root?: string) => {
   // Enable import of TS files

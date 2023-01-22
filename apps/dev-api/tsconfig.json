@@ -4,7 +4,7 @@
     "baseUrl": ".",
     "lib": ["es2020"],
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "NodeNext",
     "target": "ESNext",
   }
 }

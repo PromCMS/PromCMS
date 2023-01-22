@@ -1,10 +1,10 @@
 import { Command, GlobalOptions, Options, Params } from '@boost/cli';
 import path from 'path';
 import child_process from 'child_process';
-import { Logger, pathInputToRelative } from '../../utils';
+import { Logger, pathInputToRelative } from '@utils';
 import fs from 'fs-extra';
 
-import { SCRIPTS_ROOT } from '../../constants';
+import { SCRIPTS_ROOT } from '@constants';
 
 type CustomParams = [string];
 

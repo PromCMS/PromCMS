@@ -1,6 +1,6 @@
 import { Box, Text } from 'ink';
 import { FC, useCallback, useMemo, useState } from 'react';
-import { LoggedWorkerJob } from '../../types';
+import { LoggedWorkerJob } from '@custom-types';
 
 export type PromptsProps = {
   onSuccess: (props: Record<string, any>) => void;

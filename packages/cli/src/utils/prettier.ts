@@ -1,17 +1,13 @@
 import prettier from 'prettier';
 
 export const formatCodeString = async (content: string, filename: string) => {
-  const ignoreFileParts = [
-    '.gitignore',
-    '.htaccess',
-    'Dockerfile',
-    '.twig',
-    '.env',
-  ];
+  const ignoreFileParts = ['.gitignore', '.htaccess', 'Dockerfile', '.env'];
+
+  const ignoreFileExtensions = ['.yml', '.yaml', '.twig', '.md'];
 
   if (
     ignoreFileParts.find((part) => filename.includes(part)) ||
-    filename.endsWith('.md')
+    ignoreFileExtensions.find((extension) => filename.endsWith(extension))
   ) {
     return content;
   }

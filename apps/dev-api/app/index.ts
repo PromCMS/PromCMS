@@ -4,8 +4,9 @@ import chokidar from 'chokidar';
 import { loadRootEnv } from '@prom-cms/shared';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { Logger } from './utils';
+import { Logger } from './utils.js';
 import path from 'path';
+import { DEVELOPMENT_APP_NAME } from '@prom-cms/shared/internal';
 
 await loadRootEnv();
 
@@ -21,6 +22,7 @@ export const CLI_ROOT = path.join(
 
 const { PORT: FRONT_PORT = 3000 } = process.env;
 const SERVER_PORT = Number(FRONT_PORT) + 1;
+const developmentAppRoot = `../${DEVELOPMENT_APP_NAME}/public`;
 let abortController: AbortController | undefined;
 
 Logger.info('🔔 Welcome to dev-api server of PromCMS generator!');
@@ -35,8 +37,8 @@ const serverProcess = execa('php', [
   '-S',
   `127.0.0.1:${SERVER_PORT}`,
   '-t',
-  './.temp/public',
-  './.temp/public/index.php',
+  developmentAppRoot,
+  `${developmentAppRoot}/index.php`,
 ]);
 if (!serverProcess.stderr) {
   throw Error('Stderr not found');

@@ -2,14 +2,23 @@ import { Command, GlobalOptions, Options } from '@boost/cli';
 import { getEnvFilepath, validateGeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
+import crypto from 'crypto';
 import { formatGeneratorConfig } from '@prom-cms/shared';
+import { DEVELOPMENT_APP_NAME } from '@prom-cms/shared/internal';
 
-import { mockedGeneratorConfig, PROJECT_ROOT } from '../constants';
-import { loggedJobWorker, logSuccess } from '../utils';
-import generateCore from '../parts/generate-core-files';
-import { installPHPDeps } from '../parts/install-php-deps';
-import { generateProjectModule } from '../parts/generate-project-module';
-import { LoggedWorkerJob } from '../types';
+import { mockedGeneratorConfig, PROJECT_ROOT } from '../constants.js';
+import {
+  generateByTemplates,
+  getWorkerJob,
+  loggedJobWorker,
+  logSuccess,
+} from '@utils';
+import { LoggedWorkerJob } from '@custom-types';
+import generateCore from '../parts/generate-core-files.js';
+import { installPHPDeps } from '../parts/install-php-deps.js';
+import { generateProjectModule } from '../parts/generate-project-module.js';
+import { getInstallNodeDepsJob } from '../jobs/getInstallNodeDepsJob.js';
+import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
@@ -24,7 +33,7 @@ export class GenerateDevelopProgram extends Command {
 
   static options: Options<CustomOptions> = {
     regenerate: {
-      description: 'To just only regenerate key files',
+      description: 'Recreates project from ground up',
       type: 'boolean',
       short: 'o',
       default: false,
@@ -37,53 +46,95 @@ export class GenerateDevelopProgram extends Command {
     ]);
 
     const envFilepath = await getEnvFilepath();
-    const DEV_API_ROOT = path.join(PROJECT_ROOT, 'apps', 'dev-api');
-    const TEMP_CORE_ROOT = path.join(DEV_API_ROOT, '.temp');
-    const MODULES_ROOT = path.join(TEMP_CORE_ROOT, 'modules');
+
+    const devProjectRoot = path.join(
+      PROJECT_ROOT,
+      'apps',
+      DEVELOPMENT_APP_NAME
+    );
+    const finalEnvFilePath = path.join(devProjectRoot, '.env');
+    const modulesRoot = path.join(devProjectRoot, 'modules');
+
     const generatorConfig = await validateGeneratorConfig(
       await formatGeneratorConfig(mockedGeneratorConfig)
     );
+    const { project } = generatorConfig;
 
     const jobs: LoggedWorkerJob[] = [
       {
-        title: 'Remove old core',
-        skip: this.regenerate,
-        async job() {
-          if (await fs.pathExists(TEMP_CORE_ROOT)) {
-            await fs.remove(TEMP_CORE_ROOT);
-          }
+        title: 'Delete old project',
+        skip: !this.regenerate,
+        job: async () => {
+          await fs.remove(devProjectRoot);
         },
       },
       {
+        title: 'Ensure project root',
+        skip: await fs.pathExists(devProjectRoot),
+        job: async () => {
+          await fs.ensureDir(devProjectRoot);
+        },
+      },
+      getCreatePackageJsonJob({
+        cwd: devProjectRoot,
+        project,
+      }),
+      getWorkerJob('Add project base resources', {
+        async job() {
+          await generateByTemplates(
+            'commands.generate-cms',
+            devProjectRoot,
+            {
+              '*': {
+                project: {
+                  ...project,
+                  security: {
+                    ...(project.security || {}),
+                    secret: crypto.randomBytes(20).toString('hex'),
+                  },
+                },
+              },
+            },
+            {
+              filter: (fileName) =>
+                fileName !== '.env' &&
+                fileName !== '.tsconfig.json' &&
+                fileName !== 'vite.config.ts',
+            }
+          );
+        },
+      }),
+      {
         title: 'Generate new core',
         job: async () => {
-          await generateCore(TEMP_CORE_ROOT);
+          await generateCore(devProjectRoot);
         },
       },
       {
         title: 'Install PHP deps',
-        skip: this.regenerate,
         async job() {
-          await installPHPDeps(TEMP_CORE_ROOT);
+          await installPHPDeps(devProjectRoot);
         },
       },
+      getInstallNodeDepsJob({
+        cwd: devProjectRoot,
+        regenerate: this.regenerate,
+        packageManager: 'yarn',
+      }),
       {
         title: 'Generate project module',
         async job() {
-          await generateProjectModule(MODULES_ROOT, generatorConfig);
+          await generateProjectModule(modulesRoot, generatorConfig);
         },
       },
       {
         title: 'Make symlink of .env variable file from project root',
-        skip: this.regenerate,
+        skip: await fs.pathExists(finalEnvFilePath),
         async job() {
-          const CORE_ENV_PATH = path.join(TEMP_CORE_ROOT, '.env');
-          if (await fs.pathExists(CORE_ENV_PATH)) {
-            await fs.remove(CORE_ENV_PATH);
-          }
-          await fs.createSymlink(envFilepath, CORE_ENV_PATH, 'file');
+          await fs.createSymlink(envFilepath, finalEnvFilePath, 'file');
         },
       },
+      // TODO: Run seeder here via execa
     ];
 
     await loggedJobWorker.apply(this, [jobs]);
