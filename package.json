@@ -4,7 +4,6 @@
   "private": true,
   "description": "",
   "scripts": {
-    "regenerate:dev": "yarn workspace @prom-cms/cli run regenerate:dev",
     "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
     "build:packages": "turbo run build --filter=./packages/*",
     "build": "npm run build:packages",
