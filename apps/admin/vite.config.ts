@@ -1,11 +1,12 @@
 import * as path from 'path';
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig, loadEnv, PluginOption } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 
-export default defineConfig(({ command, mode }) => {
-  const env = loadEnv(mode, path.join(process.cwd(), '..', '..'), '');
+export default defineConfig(({ mode }) => {
+  const currentFolder = process.cwd();
+  const env = loadEnv(mode, path.join(currentFolder, '..', '..'), '');
   const { PORT = 3004, ANALYZE = false } = env;
   const isDev = mode == 'development';
   const APP_PORT = Number(PORT);
@@ -13,17 +14,18 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [
-      tsconfigPaths(),
+      tsconfigPaths({root: currentFolder}),
       react(),
       ANALYZE &&
-        visualizer({
-          filename: './dev/stats.html',
-        }),
+      visualizer({
+        filename: './dev/stats.html',
+      }) as undefined as PluginOption,
     ],
     base: APP_URL_PREFIX,
     define: {
       APP_URL_PREFIX,
     },
+    root: "src",
     server: {
       port: Number(APP_PORT),
       proxy: {
