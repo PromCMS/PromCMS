@@ -1,3 +1,3 @@
-export * from './getAppRootInputValidator';
-export * from './pathInputToRelative';
-export * from './validateConfigPathInput';
+export * from './getAppRootInputValidator.js';
+export * from './pathInputToRelative.js';
+export * from './validateConfigPathInput.js';
