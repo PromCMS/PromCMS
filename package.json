@@ -4,10 +4,10 @@
   "private": true,
   "description": "",
   "scripts": {
-    "generate:dev": "yarn workspace @prom-cms/cli run generate:dev",
+    "generate:dev": "npm run generate:dev -w @prom-cms/cli",
     "build:packages": "npx turbo run build --filter=./packages/*",
     "build": "npm run build:packages",
-    "dev": "npx turbo run dev --filter=...@prom-cms/dev-api --filter=...@prom-cms/admin",
+    "dev": "npx turbo run dev -filter=...@prom-cms/admin",
     "prettier": "npx turbo run prettier --filter=./packages/*",
     "test": "npx turbo run test --filter=./packages/*",
     "release": "npm run build:packages && changeset publish",

@@ -43,5 +43,3 @@ private
 !.env.ejs
 
 # Development project
-/apps/*
-!/apps/dev-api

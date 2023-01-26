@@ -7,8 +7,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "dev": "npx vite -c ./vite/config.ts",
+    "build": "tsc --noEmit && vite build -c ./vite/config.ts",
     "build:analyze": "tsc && cross-env ANALYZE=true vite build",
     "preview": "vite preview"
   },
@@ -63,12 +63,18 @@
   "devDependencies": {
     "@prom-cms/config": "*",
     "@types/find-config": "1.0.1",
+    "chokidar": "^3.5.3",
+    "execa": "^6.1.0",
+    "@types/fs-extra": "9.0.13",
+    "fs-extra": "^10.1.0",
     "@types/lodash.find": "^4.6.6",
     "@types/node": "16.11.11",
     "@types/react": "^18.0.24",
     "@types/react-beautiful-dnd": "13.1.2",
     "@types/react-dom": "18.0.6",
     "@types/tailwindcss": "^2.2.4",
+    "http-proxy": "^1.18.1",
+    "mime": "^3.0.0",
     "@vitejs/plugin-react": "^2.0.0",
     "autoprefixer": "10.4.0",
     "cross-env": "~7.0.3",

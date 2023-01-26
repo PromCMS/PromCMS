@@ -47,10 +47,12 @@ export class GenerateDevelopProgram extends Command {
 
     const envFilepath = await getEnvFilepath();
 
+    // a path to a prom php server instance which is located in node_modules
     const devProjectRoot = path.join(
       PROJECT_ROOT,
-      'apps',
-      DEVELOPMENT_APP_NAME
+      'node_modules',
+      '.prom-cache',
+      'php-app'
     );
     const finalEnvFilePath = path.join(devProjectRoot, '.env');
     const modulesRoot = path.join(devProjectRoot, 'modules');

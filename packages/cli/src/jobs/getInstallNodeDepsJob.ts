@@ -45,8 +45,12 @@ export const getInstallNodeDepsJob = ({
       const finalPackageManager =
         preselectedPackageManager ?? packageManager ?? 'yarn';
       await execa(
-        finalPackageManager === 'yarn' ? 'add' : 'install',
-        ['install', ...devDeps, '--save-dev'],
+        finalPackageManager,
+        [
+          finalPackageManager === 'yarn' ? 'add' : 'install',
+          ...devDeps,
+          '--save-dev',
+        ],
         {
           cwd: cwd,
         }
