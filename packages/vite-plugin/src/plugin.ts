@@ -15,7 +15,7 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
   const { default: fetch } = await import('node-fetch');
 
   return {
-    name: 'prom-cms-vite-dev-tools',
+    name: 'prom-cms-vite-plugin',
     config(c, envConfig) {
       c.root ??= 'frontend-src';
       c.base ??= envConfig.mode === 'development' ? '/' : '/dist/';
