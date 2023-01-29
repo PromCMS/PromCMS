@@ -7,7 +7,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { PORT as DEFAULT_PORT } from "@prom-cms/shared/internal"
 import { phpServerVitePlugin } from "./plugins";
 
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode, command }) => {
   const currentFolder = process.cwd();
   const env = loadEnv(mode, path.join(currentFolder, '..', '..'), '');
   const { PORT = DEFAULT_PORT, ANALYZE = false } = env;
@@ -21,7 +21,7 @@ export default defineConfig(({ mode }) => {
       visualizer({
         filename: './dev/stats.html',
       }) as undefined as PluginOption,
-      phpServerVitePlugin()
+      command === "serve" && phpServerVitePlugin()
     ],
     base: APP_URL_PREFIX,
     define: {
@@ -31,5 +31,8 @@ export default defineConfig(({ mode }) => {
     server: {
       port: Number(PORT),
     },
+    build: {
+      outDir: '../dist'
+    }
   };
 });
