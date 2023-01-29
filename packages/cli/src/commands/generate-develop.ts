@@ -4,12 +4,12 @@ import fs from 'fs-extra';
 import path from 'path';
 import crypto from 'crypto';
 import { formatGeneratorConfig } from '@prom-cms/shared';
-import { DEVELOPMENT_APP_NAME } from '@prom-cms/shared/internal';
 
 import { mockedGeneratorConfig, PROJECT_ROOT } from '../constants.js';
 import {
   generateByTemplates,
   getWorkerJob,
+  isDirEmpty,
   loggedJobWorker,
   logSuccess,
 } from '@utils';
@@ -63,21 +63,19 @@ export class GenerateDevelopProgram extends Command {
     const { project } = generatorConfig;
 
     const jobs: LoggedWorkerJob[] = [
-      {
-        title: 'Delete old project',
+      getWorkerJob('Delete old project', {
         skip: !this.regenerate,
         job: async () => {
           await fs.remove(devProjectRoot);
         },
-      },
-      {
-        title: 'Ensure project root',
+      }),
+      getWorkerJob('Ensure project root', {
         skip: await fs.pathExists(devProjectRoot),
         job: async () => {
           await fs.ensureDir(devProjectRoot);
         },
-      },
-      getCreatePackageJsonJob({
+      }),
+      getCreatePackageJsonJob('Ensure package.json', {
         cwd: devProjectRoot,
         project,
       }),
@@ -106,36 +104,34 @@ export class GenerateDevelopProgram extends Command {
           );
         },
       }),
-      {
-        title: 'Generate new core',
+      getWorkerJob('Generate new core', {
         job: async () => {
           await generateCore(devProjectRoot);
         },
-      },
-      {
-        title: 'Install PHP deps',
+      }),
+      getWorkerJob('Install PHP deps', {
+        // No need to install again when deps are present
+        skip: (await isDirEmpty(path.join(devProjectRoot, 'vendor'))) === false,
         async job() {
           await installPHPDeps(devProjectRoot);
         },
-      },
-      getInstallNodeDepsJob({
+      }),
+      getInstallNodeDepsJob('Install dependencies', {
         cwd: devProjectRoot,
         regenerate: this.regenerate,
         packageManager: 'npm',
       }),
-      {
-        title: 'Generate project module',
+      getWorkerJob('Generate project module', {
         async job() {
           await generateProjectModule(modulesRoot, generatorConfig);
         },
-      },
-      {
-        title: 'Make symlink of .env variable file from project root',
+      }),
+      getWorkerJob('Make symlink of .env variable file from project root', {
         skip: await fs.pathExists(finalEnvFilePath),
         async job() {
           await fs.createSymlink(envFilepath, finalEnvFilePath, 'file');
         },
-      },
+      }),
       // TODO: Run seeder here via execa
     ];
 

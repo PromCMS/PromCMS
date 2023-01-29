@@ -108,7 +108,7 @@ export class GenerateCMSProgram extends Command {
           );
         },
       }),
-      getCreatePackageJsonJob({
+      getCreatePackageJsonJob('Ensure package.json', {
         cwd: FINAL_PATH,
         project,
       }),
@@ -181,7 +181,7 @@ export class GenerateCMSProgram extends Command {
           );
         },
       }),
-      getInstallNodeDepsJob({
+      getInstallNodeDepsJob('Install dependencies', {
         cwd: FINAL_PATH,
         regenerate: this.regenerate,
       }),

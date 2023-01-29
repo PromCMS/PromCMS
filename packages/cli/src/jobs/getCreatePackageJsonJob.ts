@@ -21,11 +21,11 @@ export interface GetCreatePackageJsonJobOptions {
   project: ProjectConfig;
 }
 
-export const getCreatePackageJsonJob = ({
-  cwd,
-  project,
-}: GetCreatePackageJsonJobOptions): ReturnType<typeof getWorkerJob> => {
-  return getWorkerJob('Ensure package.json', {
+export const getCreatePackageJsonJob = (
+  title: string,
+  { cwd, project }: GetCreatePackageJsonJobOptions
+): ReturnType<typeof getWorkerJob> => {
+  return getWorkerJob(title, {
     async job() {
       const packageJsonPath = path.join(cwd, 'package.json');
       const alreadyExists = await fs.pathExists(packageJsonPath);

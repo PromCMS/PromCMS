@@ -10,12 +10,15 @@ export interface GetInstallNodeDepsJobOptions {
   cwd: string;
 }
 
-export const getInstallNodeDepsJob = ({
-  packageManager: preselectedPackageManager,
-  regenerate,
-  cwd,
-}: GetInstallNodeDepsJobOptions) => {
-  return getWorkerJob<{ packageManager?: string }>('Install dependencies', {
+export const getInstallNodeDepsJob = (
+  title: string,
+  {
+    packageManager: preselectedPackageManager,
+    regenerate,
+    cwd,
+  }: GetInstallNodeDepsJobOptions
+) => {
+  return getWorkerJob<{ packageManager?: string }>(title, {
     skip: regenerate,
     prompts: !preselectedPackageManager
       ? [

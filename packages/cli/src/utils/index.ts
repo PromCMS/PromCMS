@@ -4,6 +4,7 @@ export * from './getFilenameBase.js';
 export * from './getModuleFolderName.js';
 export * from './getTemplateFolder.js';
 export * from './loggedJobWorker.js';
+export * from './isDirEmpty.js';
 export * from './logger.js';
 export * from './lowerCaseFirst.js';
 export * from './prettier.js';
