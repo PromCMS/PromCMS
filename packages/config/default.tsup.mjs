@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup';
 
 export const configValue = {
-  entry: ['src/index.ts'],
+  entry: ['src'],
   splitting: false,
   sourcemap: true,
   clean: true,
