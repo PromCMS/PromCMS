@@ -1,6 +1,5 @@
 import { execa, ExecaChildProcess } from "execa";
 import * as path from "node:path";
-import fs from "fs-extra"
 import {watch} from 'chokidar';
 import { FSWatcher } from "node:fs";
 
@@ -11,7 +10,14 @@ export const buildProject = (options) =>
   });
 
 
-const getFileWatcher = ({ abortController }) => {
+const getFileWatcher = ({ abortController: parentAbortController }: {abortController: AbortController}) => {
+  let abortController: AbortController;
+
+  // Catch parent aborter
+  parentAbortController.signal.addEventListener('abort', () => {
+    abortController?.abort();
+  })
+
   const instance = watch('../../packages/cli/**/*', {
     persistent: true,
     cwd: process.cwd(),
@@ -56,6 +62,7 @@ export const runPHPServer = async (
   port: number, {abortController}: {abortController: AbortController}
 ): Promise<{ serverProcess: ExecaChildProcess<string>, fileWatcher: FSWatcher }> => {
   const { execa } = await import('execa');
+  const fs = await import('fs');
 
   const serverProcess = execa(
     'php',
