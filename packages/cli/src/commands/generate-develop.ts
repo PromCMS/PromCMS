@@ -4,6 +4,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import crypto from 'crypto';
 import { formatGeneratorConfig } from '@prom-cms/shared';
+import { developmentPHPAppPath } from '@prom-cms/shared/internal';
 
 import { mockedGeneratorConfig, PROJECT_ROOT } from '../constants.js';
 import {
@@ -46,16 +47,8 @@ export class GenerateDevelopProgram extends Command {
     ]);
 
     const envFilepath = await getEnvFilepath();
-
-    // a path to a prom php server instance which is located in node_modules
-    const devProjectRoot = path.join(
-      PROJECT_ROOT,
-      'node_modules',
-      '.prom-cache',
-      'php-app'
-    );
-    const finalEnvFilePath = path.join(devProjectRoot, '.env');
-    const modulesRoot = path.join(devProjectRoot, 'modules');
+    const finalEnvFilePath = path.join(developmentPHPAppPath, '.env');
+    const modulesRoot = path.join(developmentPHPAppPath, 'modules');
 
     const generatorConfig = await validateGeneratorConfig(
       await formatGeneratorConfig(mockedGeneratorConfig)
@@ -66,24 +59,24 @@ export class GenerateDevelopProgram extends Command {
       getWorkerJob('Delete old project', {
         skip: !this.regenerate,
         job: async () => {
-          await fs.remove(devProjectRoot);
+          await fs.remove(developmentPHPAppPath);
         },
       }),
       getWorkerJob('Ensure project root', {
-        skip: await fs.pathExists(devProjectRoot),
+        skip: await fs.pathExists(developmentPHPAppPath),
         job: async () => {
-          await fs.ensureDir(devProjectRoot);
+          await fs.ensureDir(developmentPHPAppPath);
         },
       }),
       getCreatePackageJsonJob('Ensure package.json', {
-        cwd: devProjectRoot,
+        cwd: developmentPHPAppPath,
         project,
       }),
       getWorkerJob('Add project base resources', {
         async job() {
           await generateByTemplates(
             'commands.generate-cms',
-            devProjectRoot,
+            developmentPHPAppPath,
             {
               '*': {
                 project: {
@@ -106,21 +99,24 @@ export class GenerateDevelopProgram extends Command {
       }),
       getWorkerJob('Generate new core', {
         job: async () => {
-          await generateCore(devProjectRoot);
+          await generateCore(developmentPHPAppPath);
         },
       }),
       getWorkerJob('Install PHP deps', {
         // No need to install again when deps are present
-        skip: (await isDirEmpty(path.join(devProjectRoot, 'vendor'))) === false,
+        skip:
+          (await isDirEmpty(path.join(developmentPHPAppPath, 'vendor'))) ===
+          false,
         async job() {
-          await installPHPDeps(devProjectRoot);
+          await installPHPDeps(developmentPHPAppPath);
         },
       }),
-      getInstallNodeDepsJob('Install dependencies', {
-        cwd: devProjectRoot,
-        regenerate: this.regenerate,
-        packageManager: 'npm',
-      }),
+      // TODO: make some use of this
+      // getInstallNodeDepsJob('Install dependencies', {
+      //   cwd: developmentPHPAppPath,
+      //   regenerate: this.regenerate,
+      //   packageManager: 'npm',
+      // }),
       getWorkerJob('Generate project module', {
         async job() {
           await generateProjectModule(modulesRoot, generatorConfig);
