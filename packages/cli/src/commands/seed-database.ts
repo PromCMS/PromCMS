@@ -22,7 +22,7 @@ export class SeedDatabaseProgram extends Command {
   ];
 
   async run(root: string) {
-    Logger.info('🔃 Starting the database seeder and seeding...');
+    Logger.info(`🔃 Running prom-cms seeding on app in "${root}"...`);
     let messages = '';
 
     try {
