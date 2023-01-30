@@ -18,7 +18,6 @@ import { LoggedWorkerJob } from '@custom-types';
 import generateCore from '../parts/generate-core-files.js';
 import { installPHPDeps } from '../parts/install-php-deps.js';
 import { generateProjectModule } from '../parts/generate-project-module.js';
-import { getInstallNodeDepsJob } from '../jobs/getInstallNodeDepsJob.js';
 import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
 
 interface CustomOptions extends GlobalOptions {

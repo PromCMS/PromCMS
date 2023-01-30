@@ -19,7 +19,7 @@ export const phpServerVitePlugin = (): VitePlugin => ({
     const htmlTransform = server.transformIndexHtml;
 
     // And then before starting your server...
-    runBeforeExiting(async () => {
+    runBeforeExiting(async (...rest) => {
       console.log('Cleaning up...');
       abortController.abort();
       await fileWatcher.close();

@@ -3,6 +3,9 @@ import * as path from "node:path";
 import {watch} from 'chokidar';
 import { FSWatcher } from "node:fs";
 
+// @ts-ignore
+import { developmentPHPAppPath } from "@prom-cms/shared/internal"
+
 export const buildProject = (options) =>
   execa('npm', ['run', 'generate:dev'], {
     cwd: path.join(process.cwd(), '../../packages/cli'),
@@ -68,8 +71,7 @@ export const runPHPServer = async (
     'php',
     ['-S', `127.0.0.1:${port}`, '-t', './public', './public/index.php'],
     {
-      cwd: path.join(process.cwd(), "..", "..", "node_modules", '.prom-cache',
-        'php-app')
+      cwd: developmentPHPAppPath
     }
   );
 

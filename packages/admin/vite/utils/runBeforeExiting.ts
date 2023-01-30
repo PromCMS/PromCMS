@@ -11,10 +11,10 @@ export const runBeforeExiting = (fun: Function) => {
   ];
 
   for (const signal of exitSignals) {
-    process.on(signal, async () => {
+    process.on(signal, async (...rest) => {
       // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!wasCleanedUp) {
-        await fun();
+        await fun(...rest);
         wasCleanedUp = true;
       }
 
