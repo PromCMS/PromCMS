@@ -1,58 +1,82 @@
-import { FC, useState } from 'react';
+import { FC, Fragment, useMemo, useState } from 'react';
 import { useGlobalContext } from '@contexts/GlobalContext';
 import s from './header.module.scss';
 import Skeleton from '@components/Skeleton';
 import PopoverList from '@components/PopoverList';
 import { getInitials } from '@utils';
-import { useConstructedMenuItems } from './utils';
+import { Item as ItemProps, useConstructedMenuItems } from './utils';
 import { useTranslation } from 'react-i18next';
 import BackendImage from '@components/BackendImage';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { Popover, Tooltip, UnstyledButton } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
-import { Briefcase } from 'tabler-icons-react';
+import { Briefcase, Home, Photo } from 'tabler-icons-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
+import clsx from 'clsx';
+
+const defaultMenuItems: ItemProps[] = [
+  { label: 'Domů', href: '/', icon: Home },
+  { label: 'Files', href: '/files', icon: Photo },
+];
+
+const Item: FC<ItemProps> = ({ href, label, isSingleton, icon: Icon }) => {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
+
+  return (
+    <Tooltip
+      withinPortal
+      withArrow
+      offset={-25}
+      label={t(capitalizeFirstLetter(label, true))}
+      position="right"
+      color="gray"
+    >
+      <Link
+        to={href}
+        className={clsx([s.item, isSingleton])}
+        data-is-active={
+          href === '/' ? pathname === '/' : pathname.startsWith(href)
+        }
+      >
+        <Icon className="mr-auto h-8 w-8" />
+      </Link>
+    </Tooltip>
+  );
+};
 
 const Header: FC = () => {
   const { isBooting } = useGlobalContext();
   const currentUser = useCurrentUser();
-  const { pathname } = useLocation();
   const navigate = useNavigate();
   // TODO remove this and other loading stuff
   const [hasError, setError] = useState(false);
-  const menuItems = useConstructedMenuItems();
+  const { normalItems: normalMenuItems, singletonItems: singletonMenuItems } =
+    useConstructedMenuItems();
   const { t } = useTranslation();
   const [popoverOpened, { close, toggle }] = useDisclosure(false);
+
+  const allMenuItems = useMemo(
+    () => [defaultMenuItems, singletonMenuItems, normalMenuItems],
+    [singletonMenuItems, normalMenuItems]
+  );
 
   return (
     <header className={s.root}>
       <div className={s.top}>
-        <Briefcase className="mx-auto h-8 w-8" />
+        <Briefcase className="mx-auto h-10 w-10" />
       </div>
       <div className="grid gap-5 py-10">
-        {menuItems.map((item) => (
-          <Tooltip
-            withinPortal
-            withArrow
-            offset={-25}
-            key={item.href}
-            label={t(capitalizeFirstLetter(item.label, true))}
-            position="right"
-            color="gray"
-          >
-            <Link
-              to={item.href}
-              className={s.item}
-              data-is-active={
-                item.href === '/'
-                  ? pathname === '/'
-                  : pathname.startsWith(item.href)
-              }
-            >
-              <item.icon className="mr-auto h-8 w-8" />
-            </Link>
-          </Tooltip>
+        {allMenuItems.map((items, index, everything) => (
+          <Fragment key={index}>
+            {items.map((item) => (
+              <Item key={item.href} {...item} />
+            ))}
+            {everything[index + 1]?.length && (
+              <hr className="-mt-1 -mb-6 ml-auto h-0.5 w-full translate-x-1/2 border-none bg-gray-300" />
+            )}
+          </Fragment>
         ))}
       </div>
       <div className={s.bottom}>

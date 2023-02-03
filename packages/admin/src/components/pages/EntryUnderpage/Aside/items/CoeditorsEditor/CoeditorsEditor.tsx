@@ -1,4 +1,4 @@
-import AsideItemWrap from '@components/AsideItemWrap';
+import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { UserSelect, UserSelectProps } from '@components/form/UserSelect';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Anchor, Button, Group, Popover } from '@mantine/core';

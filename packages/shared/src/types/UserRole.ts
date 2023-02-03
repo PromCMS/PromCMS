@@ -1,5 +1,5 @@
-import { ItemID } from './ItemID';
-import { ProjectSecurityRoleModelPermission } from './ProjectSecurityRoleModelPermission';
+import { ItemID } from './ItemID.js';
+import { ProjectSecurityRoleModelPermission } from './ProjectSecurityRoleModelPermission.js';
 
 export type UserRole = {
   id: ItemID;

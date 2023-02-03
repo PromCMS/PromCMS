@@ -1,5 +1,6 @@
 import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
+import { useAsideToggle } from '@hooks/useAsideToggle';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core';
@@ -16,8 +17,8 @@ export const Footer: FC<{}> = () => {
   const { watch } = useFormContext();
   const formValues = watch();
   const { t } = useTranslation();
-  const { itemData, currentView, setAsideOpen, asideOpen, exitView } =
-    useEntryUnderpageContext();
+  const { isOpen: asideOpen, setIsOpen: setAsideOpen } = useAsideToggle();
+  const { itemData, currentView, exitView } = useEntryUnderpageContext();
   const currentModel = useCurrentModel();
   const currentUser = useCurrentUser();
   const { setValue, formState } = useFormContext();

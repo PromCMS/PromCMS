@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { projectSecurityRoleModelPermissionSchema } from './projectSecurityRoleModelPermissionSchema';
+import { projectSecurityRoleModelPermissionSchema } from './projectSecurityRoleModelPermissionSchema.js';
 
 export const projectSecurityRoleSchema = z.object({
   /**

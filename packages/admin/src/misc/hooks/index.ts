@@ -1,7 +1,9 @@
 export * from './mutations';
 export * from './useActionRoute';
+export * from './useAsideToggle';
 export * from './useCurrentModel';
 export * from './useCurrentModelItem';
+export * from './useCurrentSingleton';
 export * from './useCurrentUser';
 export * from './useFileFolder';
 export * from './useFolders';
@@ -12,4 +14,5 @@ export * from './useModelItems';
 export * from './useRequestWithNotifications';
 export * from './useRouterQuery';
 export * from './useSettings';
+export * from './useSingletonInfo';
 export * from './useUser';

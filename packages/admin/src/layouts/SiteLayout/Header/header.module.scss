@@ -1,5 +1,5 @@
 .root {
-  @apply sticky top-0 left-0 flex h-full min-h-screen flex-none flex-col overflow-hidden bg-blue-50 pt-4;
+  @apply sticky top-0 left-0 flex h-full min-h-screen flex-none flex-col overflow-hidden bg-blue-50;
 
   .item {
     @apply relative left-10 flex cursor-pointer rounded-l-lg bg-white p-3 text-xl text-gray-500 transition-all duration-100;
@@ -19,7 +19,7 @@
 }
 
 .top {
-  @apply mx-4 flex rounded-lg bg-blue-500 p-3 text-white shadow-lg;
+  @apply flex bg-blue-500 items-center justify-center text-white shadow-lg py-4;
 }
 
 .bottom {

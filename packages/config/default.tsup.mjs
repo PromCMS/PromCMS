@@ -1,5 +1,8 @@
 import { defineConfig } from 'tsup';
 
+/**
+ * @type {import("tsup").Options}
+ */
 export const configValue = {
   entry: ['src'],
   splitting: false,
@@ -7,7 +10,14 @@ export const configValue = {
   clean: true,
   outDir: 'dist',
   dts: true,
-  format: ['cjs', 'esm'],
+  format: 'esm',
+  async onSuccess() {
+    const { execa } = await import('execa');
+
+    await execa('tsc', ['--declarationMap'], {
+      cwd: process.cwd(),
+    });
+  },
 };
 
 export default defineConfig(configValue);

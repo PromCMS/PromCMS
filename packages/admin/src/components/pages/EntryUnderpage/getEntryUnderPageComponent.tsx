@@ -1,12 +1,16 @@
 import {
   EntryUnderpageContextProvider,
   Footer,
+  entryUnderpageContext,
 } from '@components/pages/EntryUnderpage';
 import useCurrentModel from '@hooks/useCurrentModel';
 import NotFoundPage from '@pages/404';
 import { EntryTypeUrlActionType, Page } from '@custom-types';
-import { EntryEditorLayout } from 'layouts/EntryEditorLayout';
-import { Aside, Header, FormContent } from '@components/pages/EntryUnderpage';
+import { Aside, Header } from '@components/pages/EntryUnderpage';
+import { Wrapper } from '@components/editorialPage/Wrapper';
+import { Content } from '@components/editorialPage/Content';
+import { Breadcrumbs } from './Breadcrumbs';
+import { DynamicFormFields } from '@components/editorialPage/DynamicFormFields';
 
 export const getEntryUnderPageComponent = (
   viewType: EntryTypeUrlActionType
@@ -18,23 +22,26 @@ export const getEntryUnderPageComponent = (
 
     return (
       <EntryUnderpageContextProvider viewType={viewType}>
-        {({ formContentRefs }) => (
-          <EntryEditorLayout>
-            <EntryEditorLayout.Content>
-              <Header />
-              {/* We pass multiple refs */}
-              <FormContent ref={formContentRefs} />
-              <Footer />
-            </EntryEditorLayout.Content>
-            <EntryEditorLayout.Aside
-              open
-              className="flex flex-col gap-5"
-              onClose={() => {}}
-            >
+        <entryUnderpageContext.Consumer>
+          {({ onSubmit, formContentRefs, itemData }) => (
+            <form autoComplete="off" onSubmit={onSubmit} className="flex">
+              <Wrapper>
+                <Breadcrumbs />
+                <Content>
+                  <Header />
+                  {/* We pass multiple refs */}
+                  <DynamicFormFields
+                    ref={formContentRefs}
+                    itemData={itemData}
+                    modelInfo={model}
+                  />
+                  <Footer />
+                </Content>
+              </Wrapper>
               <Aside />
-            </EntryEditorLayout.Aside>
-          </EntryEditorLayout>
-        )}
+            </form>
+          )}
+        </entryUnderpageContext.Consumer>
       </EntryUnderpageContextProvider>
     );
   };

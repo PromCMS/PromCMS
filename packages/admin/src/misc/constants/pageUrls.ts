@@ -16,6 +16,11 @@ export const pageUrls = {
       return `${this.list}/create`;
     },
   },
+  singletons: {
+    view(name: string) {
+      return `/singletons/${name}`;
+    },
+  },
   files: {
     list(folderPath?: string) {
       const urlParams = new URLSearchParams(

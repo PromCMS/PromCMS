@@ -37,6 +37,7 @@
     "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
+    "dev": "npx tsup --watch",
     "build": "npx tsup"
   },
   "repository": {

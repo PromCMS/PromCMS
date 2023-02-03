@@ -1,5 +1,4 @@
-import { ColumnType } from '../schemas';
-import { PrimitiveTypes } from '../types';
+import { ColumnType, PrimitiveTypes } from '../index.js';
 
 export const convertColumnTypeToPrimitive = (
   type: ColumnType['type']

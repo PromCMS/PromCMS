@@ -30,6 +30,6 @@ export const generateProjectModule = async (
 
   await generateModels(
     path.join(modulesRoot, moduleName),
-    projectConfig.database.models
+    projectConfig.database
   );
 };

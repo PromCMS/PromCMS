@@ -174,5 +174,22 @@ export const mockedGeneratorConfig: GeneratorConfig = {
         },
       },
     },
+    singletons: {
+      frontPage: {
+        icon: 'Archive',
+        admin: {
+          layout: 'post-like',
+        },
+        columns: {
+          image: {
+            type: 'file',
+            title: 'Úvodní obrázek',
+            adminHidden: true,
+            typeFilter: 'image',
+            translations: false,
+          },
+        },
+      },
+    },
   },
 };

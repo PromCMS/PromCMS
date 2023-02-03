@@ -1,4 +1,4 @@
-import AsideItemWrap from '@components/AsideItemWrap';
+import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
 import clsx from 'clsx';
 import { MESSAGES } from '@constants';

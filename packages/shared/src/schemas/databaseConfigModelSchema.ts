@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { databaseConfigItemBaseSchema } from './databaseConfigItemBaseSchema';
-import { columnTypeSchema } from './columnType';
+import { databaseConfigItemBaseSchema } from './databaseConfigItemBaseSchema.js';
+import { columnTypeSchema } from './columnType/columnTypeSchema.js';
 
 export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
   /**

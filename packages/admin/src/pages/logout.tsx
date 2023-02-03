@@ -33,7 +33,7 @@ const LogoutPage: Page = () => {
     }
 
     return () => cancelToken.cancel();
-  }, [isBooting, currentUser, navigate, updateValue]);
+  }, [isBooting, currentUser]);
 
   if (isBooting) return <Loader show={isBooting} />;
 

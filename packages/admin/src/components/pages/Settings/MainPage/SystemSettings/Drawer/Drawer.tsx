@@ -130,7 +130,7 @@ export const Drawer: FC<
                   )}
                 />
 
-                {settings?.i18n.languages.length !== 0 && (
+                {(settings?.i18n.languages.length ?? 0) > 1 && (
                   <LanguageSelect
                     value={language}
                     onChange={(value) => value && setLanguage(value)}

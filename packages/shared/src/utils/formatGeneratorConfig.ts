@@ -1,5 +1,5 @@
-import { GeneratorConfig } from '../types';
 import kebabCase from 'lodash.kebabcase';
+import type { GeneratorConfig } from '../types/GeneratorConfig.js';
 
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
@@ -10,12 +10,15 @@ export const formatGeneratorConfig = async (
   if (!config) throw 'No config provided to "formatGeneratorConfig" function';
 
   let {
-    database: { models },
+    database: { models, singletons },
     database: databaseConfig,
   } = config;
 
-  Object.keys(models).forEach((modelKey) => {
-    const model = models[modelKey];
+  // FIXME: Singleton overrides models
+  const allModels = { ...models, ...singletons };
+
+  Object.entries(allModels).forEach(([modelKey, model]) => {
+    const isSingleton = singletons && modelKey in singletons;
 
     if (model.admin?.layout === 'post-like') {
       const {
@@ -45,7 +48,7 @@ export const formatGeneratorConfig = async (
       };
     }
 
-    if (model.draftable) {
+    if ('draftable' in model && model.draftable) {
       model.columns.is_published = {
         title: 'Is published',
         type: 'boolean',
@@ -54,7 +57,7 @@ export const formatGeneratorConfig = async (
       };
     }
 
-    if (model.sorting) {
+    if ('sorting' in model && model.sorting) {
       model.columns.order = {
         title: 'Order',
         type: 'number',
@@ -66,7 +69,10 @@ export const formatGeneratorConfig = async (
       };
     }
 
-    if (model.sharable || model.sharable === undefined) {
+    if (
+      'sharable' in model &&
+      (model.sharable || model.sharable === undefined)
+    ) {
       model.columns.coeditors = {
         title: 'Coeditors',
         type: 'json',
@@ -75,7 +81,7 @@ export const formatGeneratorConfig = async (
       };
     }
 
-    if (model.ownable || model.ownable === undefined) {
+    if ('ownable' in model && (model.ownable || model.ownable === undefined)) {
       model.columns.created_by = {
         title: 'Created by',
         editable: false,
@@ -137,7 +143,7 @@ export const formatGeneratorConfig = async (
       {} as typeof model.columns
     );
 
-    models[modelKey] = {
+    (isSingleton ? singletons! : models)[modelKey] = {
       softDelete: false,
       timestamp: false,
       sorting: false,
@@ -148,7 +154,12 @@ export const formatGeneratorConfig = async (
       intl: true,
       admin: { layout: 'post-like' },
       ...model,
-      tableName: model.tableName ?? kebabCase(modelKey),
+      ...(isSingleton
+        ? { name: 'name' in model ? model.name : kebabCase(modelKey) }
+        : {
+            tableName:
+              'tableName' in model ? model.tableName : kebabCase(modelKey),
+          }),
     };
   });
 
@@ -182,7 +193,7 @@ export const formatGeneratorConfig = async (
 
   const result = {
     ...config,
-    database: { ...databaseConfig, models },
+    database: { ...databaseConfig, models, singletons },
     project: {
       slug: simplifyProjectName(config.project.name || ''),
       ...config.project,

@@ -7,6 +7,7 @@ import { FolderApiClient } from './parts/FolderApiClient';
 import { GeneralTranslationsApiClient } from './parts/GeneralTranslationsApiClient';
 import { ProfileApiClient } from './parts/ProfileApiClient';
 import { SettingsApiClient } from './parts/SettingsApiClient';
+import { SingletonApiClient } from './parts/SingletonApiClient';
 import { UserApiClient } from './parts/UserApiClient';
 
 export class ApiClient {
@@ -17,6 +18,7 @@ export class ApiClient {
   folders: FolderApiClient;
   profile: ProfileApiClient;
   settings: SettingsApiClient;
+  singletons: SingletonApiClient;
   users: UserApiClient;
   generalTranslations: GeneralTranslationsApiClient;
 
@@ -28,6 +30,7 @@ export class ApiClient {
     this.folders = new FolderApiClient(this.axios);
     this.profile = new ProfileApiClient(this.axios);
     this.settings = new SettingsApiClient(this.axios);
+    this.singletons = new SingletonApiClient(this.axios);
     this.users = new UserApiClient(this.axios);
     this.generalTranslations = new GeneralTranslationsApiClient(this.axios);
   }

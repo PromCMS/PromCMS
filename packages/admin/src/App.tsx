@@ -42,6 +42,7 @@ const LazyProfileLayout = lazy(() =>
 const LazyGeneralTranslationsPage = lazy(
   () => import('@pages/settings/translations/[lang]')
 );
+const LazySingletonPage = lazy(() => import('@pages/singletons/[singletonId]'));
 
 if (!i18next.isInitialized) {
   i18next
@@ -103,6 +104,16 @@ export function App() {
                       element={<EntryDuplicateUnderPage />}
                     />
                   </Route>
+                </Route>
+                <Route path="singletons">
+                  <Route
+                    path=":singletonId"
+                    element={
+                      <Suspense fallback={<Loader fullScreen={false} />}>
+                        <LazySingletonPage />
+                      </Suspense>
+                    }
+                  />
                 </Route>
                 <Route
                   path="settings"

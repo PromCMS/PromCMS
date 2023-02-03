@@ -1,4 +1,4 @@
-import AsideItemWrap from '@components/AsideItemWrap';
+import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { useGlobalContext } from '@contexts/GlobalContext';
 import { FC } from 'react';
@@ -10,7 +10,7 @@ export const Internationalization: FC = () => {
   const { currentView, language, setLanguage } = useEntryUnderpageContext();
   const { settings } = useGlobalContext();
 
-  if (settings?.i18n.languages.length === 0) {
+  if ((settings?.i18n.languages.length ?? 0) <= 1) {
     return null;
   }
 

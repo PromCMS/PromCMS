@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { projectSecurityConfigSchema } from './projectSecurityConfigSchema';
+import { projectSecurityConfigSchema } from './projectSecurityConfigSchema.js';
 
 export const projectConfigSchema = z.object({
   /**

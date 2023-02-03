@@ -23,9 +23,6 @@ import { ReactElement } from 'react';
 import { MutableRefObject } from 'react';
 import { RefObject } from 'react';
 import { useCallback } from 'react';
-import { Dispatch } from 'react';
-import { SetStateAction } from 'react';
-import { useLocalStorage } from '@mantine/hooks';
 import { useSettings } from '@hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
@@ -41,14 +38,15 @@ export interface IEntryUnderpageContext {
   itemData?: ResultItem | undefined;
   itemIsMissing: boolean;
   mutateItem: (values: ResultItem) => ResultItem | undefined;
-  asideOpen: boolean;
-  setAsideOpen: Dispatch<SetStateAction<boolean>>;
   onSubmit: (values: any) => Promise<void>;
   language?: string;
   setLanguage: (nextLanguage: string | undefined) => void;
+  formContentRefs: MutableRefObject<{
+    editorRef: RefObject<EditorJS>;
+  }>;
 }
 
-export const EntryUnderpageContext = createContext<IEntryUnderpageContext>({
+export const entryUnderpageContext = createContext<IEntryUnderpageContext>({
   exitView: () => {},
   currentView: 'update',
   itemIsMissing: false,
@@ -56,32 +54,20 @@ export const EntryUnderpageContext = createContext<IEntryUnderpageContext>({
   itemIsError: false,
   mutateItem: () => undefined,
   onSubmit: async () => {},
-  setAsideOpen: () => {},
-  asideOpen: false,
   setLanguage: () => {},
+  formContentRefs: { current: undefined } as any,
 });
 
-export const useEntryUnderpageContext = () => useContext(EntryUnderpageContext);
+export const useEntryUnderpageContext = () => useContext(entryUnderpageContext);
 
 export const EntryUnderpageContextProvider: FC<{
   viewType: EntryTypeUrlActionType;
-  children:
-    | ReactElement
-    | ((props: {
-        formContentRefs: MutableRefObject<{
-          editorRef: RefObject<EditorJS>;
-        }>;
-      }) => ReactNode);
+  children: ReactElement;
 }> = ({ children, viewType }) => {
   const settings = useSettings();
   const [language, setLanguage] = useState<string | undefined>(
     settings?.i18n?.default
   );
-  const [asideOpen, setAsideOpen] = useLocalStorage({
-    key: 'aside-toggled',
-    defaultValue: true,
-    deserialize: (value) => value === 'true',
-  });
   const navigate = useNavigate();
   const editorRef = useRef<EditorJS>(null);
   // We make copy out of ref that came from useOnSubmit hook and make an object that contains refs
@@ -233,14 +219,12 @@ export const EntryUnderpageContextProvider: FC<{
       itemIsLoading: viewType === 'update' ? itemIsLoading : false,
       itemIsMissing: !updatedItemData,
       mutateItem: mutateItemInCache,
-      asideOpen,
-      setAsideOpen,
       onSubmit: formMethods.handleSubmit(onSubmit),
       language,
       setLanguage,
+      formContentRefs,
     }),
     [
-      asideOpen,
       currentModel?.name,
       formMethods,
       itemIsError,
@@ -248,20 +232,18 @@ export const EntryUnderpageContextProvider: FC<{
       mutateItemInCache,
       onSubmit,
       navigate,
-      setAsideOpen,
       updatedItemData,
       viewType,
       language,
+      formContentRefs,
     ]
   );
 
   return (
     <FormProvider {...formMethods}>
-      <EntryUnderpageContext.Provider value={value}>
-        {typeof children === 'function'
-          ? children({ formContentRefs })
-          : children}
-      </EntryUnderpageContext.Provider>
+      <entryUnderpageContext.Provider value={value}>
+        {children}
+      </entryUnderpageContext.Provider>
     </FormProvider>
   );
 };

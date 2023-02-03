@@ -1,4 +1,4 @@
-import AsideItemWrap from '@components/AsideItemWrap';
+import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { ColumnType } from '@prom-cms/shared';

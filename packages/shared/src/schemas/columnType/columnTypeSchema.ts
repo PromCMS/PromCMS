@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { columnTypeBooleanSchema } from './columnTypeBooleanSchema';
-import { columnTypeEnumSchema } from './columnTypeEnumSchema';
-import { columnTypeFileSchema } from './columnTypeFileSchema';
-import { columnTypeNormalSchema } from './columnTypeNormalSchema';
-import { columnTypeNumberSchema } from './columnTypeNumberSchema';
-import { columnTypeRelationshipSchema } from './columnTypeRelationshipSchema';
-import { columnTypeSlugSchema } from './columnTypeSlugSchema';
+import { columnTypeBooleanSchema } from './columnTypeBooleanSchema.js';
+import { columnTypeEnumSchema } from './columnTypeEnumSchema.js';
+import { columnTypeFileSchema } from './columnTypeFileSchema.js';
+import { columnTypeNormalSchema } from './columnTypeNormalSchema.js';
+import { columnTypeNumberSchema } from './columnTypeNumberSchema.js';
+import { columnTypeRelationshipSchema } from './columnTypeRelationshipSchema.js';
+import { columnTypeSlugSchema } from './columnTypeSlugSchema.js';
 
 export const columnTypeSchema = z.union([
   columnTypeNormalSchema,

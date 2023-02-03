@@ -1,10 +1,11 @@
-import { ApiResultModels, ItemID, User, UserRole } from '@prom-cms/shared';
+import { ApiResultModel, ApiResultModels, ItemID, User, UserRole } from '@prom-cms/shared';
 import axios from 'axios';
 import { apiClient } from '@api';
 import {
   API_CURRENT_USER_URL,
   API_ENTRY_TYPES_URL,
   API_SETTINGS_URL,
+  API_SINGLETONS_URL,
 } from '@constants';
 import {
   createContext,
@@ -21,6 +22,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export interface IGlobalContext {
   currentUser?: Omit<User, 'role'> & { role: UserRole };
   models?: ApiResultModels;
+  singletons?: {
+    [x: string]: Omit<ApiResultModel, "tableName"> & {name: string};
+  };
   updateValue<T extends keyof Omit<IGlobalContext, 'updateValue'>>(
     key: T,
     value?: IGlobalContext[T]
@@ -49,6 +53,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
     Omit<User, 'role'> & { role: UserRole }
   >();
   const [models, setModels] = useState();
+  const [singletons, setSingletons] = useState();
   const [isBooting, setIsBooting] = useState(true);
   const [isNotOnline, setIsNotOnline] = useState(false);
   const [settings, setSettings] = useState();
@@ -74,16 +79,20 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     const getModels = async () => {
       setIsBooting(true);
-      const [modelsQuery, settingsRes] = await Promise.all([
+      const [modelsQuery, settingsRes, singletonsRes] = await Promise.all([
         apiClient.getAxios().get(API_ENTRY_TYPES_URL, {
           cancelToken: cancelToken.token,
         }),
         apiClient.getAxios().get(API_SETTINGS_URL, {
           cancelToken: cancelToken.token,
         }),
+        apiClient.getAxios().get(API_SINGLETONS_URL, {
+          cancelToken: cancelToken.token,
+        }),
       ]);
 
       setSettings(settingsRes.data.data);
+      setSingletons(singletonsRes.data);
       setModels(modelsQuery.data);
       setIsBooting(false);
     };
@@ -176,6 +185,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const contextValue = useMemo(
     () => ({
       models,
+      singletons,
       currentUser,
       updateValue,
       isBooting: isBooting || !i18n.isInitialized,
@@ -183,7 +193,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
       isLoggedIn: !!currentUser,
       settings,
     }),
-    [currentUser, i18n.isInitialized, isBooting, models, settings]
+    [currentUser, i18n.isInitialized, isBooting, models, singletons, settings]
   );
 
   return (

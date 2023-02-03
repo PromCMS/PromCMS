@@ -27,16 +27,23 @@ const columnTypeToCast = (type: ColumnType['type']) => {
  */
 const generateModels = async (
   moduleRoot: string,
-  configModels: GeneratorConfig['database']['models']
+  {
+    models: configModels,
+    singletons: configSingletons,
+  }: GeneratorConfig['database']
 ) => {
   const modelsRoot = path.join(moduleRoot, 'Models');
   const templatesRoot = getTemplateFolder('parts.generate-models');
+  // FIXME: Keys from singletons will override some duplicates in models
+  const models = { ...configModels, ...configSingletons };
 
-  for (const modelKey in configModels) {
+  for (const [modelKey, currentModel] of Object.entries(models)) {
     const capitalizedModelName = capitalizeFirstLetter(modelKey, false);
-    const currentModel = configModels[modelKey];
+    const isSingleton = configSingletons && modelKey in configSingletons;
+
     const info = {
       modelName: capitalizedModelName,
+      isSingleton,
       ...currentModel,
       columnCasts: Object.entries(currentModel.columns)
         .filter(([_, { type }]) => type === 'json')
@@ -61,7 +68,7 @@ const generateModels = async (
             return this.ordering;
           },
 
-          ordering: currentModel.sorting,
+          ordering: 'sorting' in currentModel && currentModel.sorting,
         },
       },
       formattedColumns: Object.keys(currentModel.columns).reduce(
