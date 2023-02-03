@@ -43,16 +43,16 @@ export const ContextProvider: FC<PropsWithChildren<{ view: View }>> = ({
   const currentUser = useUser(userId as string, {
     enabled: false,
   });
-  const { setQueryData } = useQueryClient();
+  const client = useQueryClient();
   const exitView = () => navigate(pageUrls.users.list);
   const updateUserInCache = useCallback(
     (nextData: User) => {
-      setQueryData<User>(currentUser.key, (prevData) => ({
+      client.setQueryData<User>(currentUser.key, (prevData) => ({
         ...prevData,
         ...nextData,
       }));
     },
-    [setQueryData, currentUser.key]
+    [client, currentUser.key]
   );
 
   useEffect(() => {

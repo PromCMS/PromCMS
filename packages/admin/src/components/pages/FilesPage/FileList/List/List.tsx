@@ -77,6 +77,8 @@ export const List: FC = () => {
             autoClose: 2000,
           });
         } catch (e) {
+          console.log(e);
+
           if (axios.isAxiosError(e) && e.response?.status === 400) {
             updateNotification({
               id: notificationId,

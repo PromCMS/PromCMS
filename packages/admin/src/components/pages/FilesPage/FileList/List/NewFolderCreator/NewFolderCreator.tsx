@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next';
 import { useFileListContext } from '../../context';
 import { useClassNames } from '../../useClassNames';
 import { FolderPlus } from 'tabler-icons-react';
-import { useQueryClient } from '@tanstack/react-query';
 import { apiClient } from '@api';
+import { useFileFolder } from '@hooks/useFileFolder';
 
 export const NewFolderCreator: FC<{ styles: any }> = ({ styles = {} }) => {
   const { updateValue, currentPath } = useFileListContext();
@@ -16,7 +16,8 @@ export const NewFolderCreator: FC<{ styles: any }> = ({ styles = {} }) => {
   const { register, handleSubmit, setFocus, formState, setError } = useForm<{
     name: string;
   }>();
-  const queryClient = useQueryClient();
+
+  const { refetchFolders } = useFileFolder(currentPath);
 
   useEffect(() => {
     setFocus('name');
@@ -25,7 +26,7 @@ export const NewFolderCreator: FC<{ styles: any }> = ({ styles = {} }) => {
   const onSubmit = async ({ name }) => {
     try {
       await apiClient.folders.create(`${currentPath}/${name}`);
-      queryClient.invalidateQueries(['files']);
+      await refetchFolders();
       updateValue('showNewFolderCreator', false);
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.status === 409) {

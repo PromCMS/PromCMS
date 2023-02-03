@@ -10,7 +10,7 @@ export interface UseFileFolderData {
 }
 
 export const useFileFolder = (currentPath: string) => {
-  const { setQueryData } = useQueryClient();
+  const client = useQueryClient();
   const {
     data: filesRes,
     isError,
@@ -30,17 +30,22 @@ export const useFileFolder = (currentPath: string) => {
 
   const mutateFiles = useCallback(
     (
-      param: Parameters<typeof setQueryData<NonNullable<typeof filesRes>>>['1']
-    ) => setQueryData<NonNullable<typeof filesRes>>(filesQueryKey, param),
-    [setQueryData, filesQueryKey]
+      param: Parameters<
+        typeof client.setQueryData<NonNullable<typeof filesRes>>
+      >['1']
+    ) =>
+      client.setQueryData<NonNullable<typeof filesRes>>(filesQueryKey, param),
+    [client, filesQueryKey]
   );
   const mutateFolders = useCallback(
     (
       param: Parameters<
-        typeof setQueryData<NonNullable<typeof foldersRes>>
+        typeof client.setQueryData<NonNullable<typeof foldersRes>>
       >['1']
-    ) => setQueryData<NonNullable<typeof foldersRes>>(foldersKey, param),
-    [setQueryData]
+    ) => {
+      client.setQueryData<NonNullable<typeof foldersRes>>(foldersKey, param);
+    },
+    [client, foldersKey]
   );
 
   return useMemo(
