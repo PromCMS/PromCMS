@@ -21,8 +21,12 @@ export const ImageToolView: FC<{
   const [state, setState] = useState({ ...data });
   const { t } = useTranslation();
 
-  useEffect(() => setState({ ...data }), [data]);
-  useEffect(() => onDataChange(state), [state, onDataChange]);
+  useEffect(() => {
+    setState({ ...data });
+  }, [data]);
+  useEffect(() => {
+    onDataChange(state);
+  }, [state, onDataChange]);
 
   const pickedFiles = useMemo(
     () => (state.fileId ? [state.fileId] : []),
