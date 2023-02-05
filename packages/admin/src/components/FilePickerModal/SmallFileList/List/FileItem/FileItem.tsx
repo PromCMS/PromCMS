@@ -58,17 +58,16 @@ export const FileItem: FC<FileItemProps> = ({ id, filename, mimeType }) => {
       <h3 className={classNames.itemLabel}>{filename}</h3>
       <div className="absolute top-0 right-0 m-2.5">
         <div
-          className={clsx(
-            'flex h-10 w-10 rounded-lg border-2 border-project-border bg-white shadow-lg transition-all duration-150',
-            isPicked ? 'text-green-600' : 'text-white group-hover:text-blue-200'
-          )}
+          className={clsx([
+            'flex h-10 w-10 rounded-lg border-2 border-project-border bg-white shadow-lg transition-all duration-150 items-center justify-center',
+            '[&>svg]:m-auto [&>svg]:h-8 [&>svg]:w-8 ![&>svg]:fill-transparent',
+            isPicked
+              ? 'text-green-600'
+              : 'text-white group-hover:text-blue-200',
+            isPicked ? '[&>svg]:scale-100' : '[&>svg]:scale-80',
+          ])}
         >
-          <Check
-            className={clsx(
-              'm-auto h-8 w-8 !fill-transparent',
-              isPicked ? 'scale-100' : 'scale-80 '
-            )}
-          />
+          <Check />
         </div>
       </div>
     </UnstyledButton>

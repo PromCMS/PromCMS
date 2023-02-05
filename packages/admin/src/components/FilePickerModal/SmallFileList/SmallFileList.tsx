@@ -116,12 +116,12 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
           color="blue"
           size={42}
           variant="filled"
-          className="flex-none"
+          className="flex-none ![&>svg]:-mx-3 [&>svg]:aspect-square [&>svg]:w-6"
           title={t('Add new')}
           ml="xl"
           onClick={open}
         >
-          <Plus className="!-mx-3 aspect-square w-6" />
+          <Plus />
         </ActionIcon>
       </div>
       <List onDeleteClick={onDeleteClick} />

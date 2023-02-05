@@ -125,7 +125,6 @@ export const LazyEditor: FC<LazyEditorProps> = ({
       tools: {
         ...editorConfig.tools,
         columns: generateLayoutConfig({
-          numberOfCols: 4,
           editorJSConfig: layoutEditorConfig,
           t,
         }),

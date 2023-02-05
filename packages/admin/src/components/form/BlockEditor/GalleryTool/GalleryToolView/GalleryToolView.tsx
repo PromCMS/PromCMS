@@ -1,5 +1,5 @@
-import ThemeProvider from '@components/ThemeProvider';
 import clsx from 'clsx';
+import ContextProviders from '../../../../../layouts/ContextProviders';
 import { FC } from 'react';
 import { GalleryToolData } from '../GalleryTool';
 import { GalleryToolViewContextProvider } from './context';
@@ -11,7 +11,7 @@ export const ImageToolView: FC<{
   onDataChange: (data: Partial<GalleryToolData>) => void;
   readOnly: boolean;
 }> = ({ data, onDataChange, readOnly }) => (
-  <ThemeProvider>
+  <ContextProviders>
     <GalleryToolViewContextProvider
       onDataChange={onDataChange}
       readOnly={readOnly}
@@ -22,5 +22,5 @@ export const ImageToolView: FC<{
         <ImageList />
       </div>
     </GalleryToolViewContextProvider>
-  </ThemeProvider>
+  </ContextProviders>
 );

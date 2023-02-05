@@ -22,6 +22,7 @@ class ImageTool implements BlockTool {
   readOnly: boolean;
   blockIndex: number;
   CSS: Record<string, string>;
+  root: ReactDom.Root;
   nodes: {
     holder: HTMLDivElement | null;
     reactElement: HTMLDivElement | null;
@@ -78,6 +79,7 @@ class ImageTool implements BlockTool {
     // Cache elements
     this.nodes.inputElement = inputElement;
     this.nodes.reactElement = rootElement;
+    this.root = ReactDom.createRoot(this.nodes.reactElement!);
     this.nodes.holder = holder;
 
     // On data change from react
@@ -92,7 +94,8 @@ class ImageTool implements BlockTool {
     };
 
     // Render react controller
-    ReactDom.createRoot(this.nodes.reactElement!).render(
+
+    this.root.render(
       <ImageToolView
         data={this.data}
         onDataChange={onDataChange}
@@ -113,6 +116,10 @@ class ImageTool implements BlockTool {
 
   save(): ImageToolData {
     return { ...this.data };
+  }
+
+  removed(): void {
+    this.root?.unmount();
   }
 }
 

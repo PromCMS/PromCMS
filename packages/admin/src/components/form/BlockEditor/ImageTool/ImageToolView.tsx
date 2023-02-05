@@ -3,7 +3,7 @@ import {
   SmallFileList,
   SmallFileListProps,
 } from '@components/FilePickerModal/SmallFileList';
-import ThemeProvider from '@components/ThemeProvider';
+import ContextProviders from '../../../../layouts/ContextProviders';
 import { Button, Popover, Textarea, TextInput } from '@mantine/core';
 import clsx from 'clsx';
 import { useEffect, useMemo, useState, FC } from 'react';
@@ -44,15 +44,20 @@ export const ImageToolView: FC<{
     setState({ ...state, description: e.currentTarget.value });
 
   return (
-    <ThemeProvider>
+    <ContextProviders>
       <div
         className={clsx('relative aspect-[3/1] w-full rounded-lg bg-white p-5')}
       >
-        <BackendImage
-          width={1500}
-          imageId={state.fileId}
-          className="absolute top-0 left-0 h-full w-full rounded-lg object-cover"
-        />
+        {state.fileId ? (
+          <BackendImage
+            width={1500}
+            imageId={state.fileId}
+            className="absolute top-0 left-0 h-full w-full rounded-lg object-cover"
+          />
+        ) : (
+          <div className="absolute top-0 left-0 h-full w-full rounded-lg bg-gray-200 object-cover" />
+        )}
+
         {!readOnly && (
           <>
             <div className="absolute left-0 bottom-0 m-5 flex flex-col gap-5">
@@ -133,6 +138,6 @@ export const ImageToolView: FC<{
           </>
         )}
       </div>
-    </ThemeProvider>
+    </ContextProviders>
   );
 };
