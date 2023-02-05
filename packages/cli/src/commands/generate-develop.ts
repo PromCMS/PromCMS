@@ -1,12 +1,13 @@
 import { Command, GlobalOptions, Options } from '@boost/cli';
-import { getEnvFilepath, validateGeneratorConfig } from '@prom-cms/shared';
+import { getEnvFilepath } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 import crypto from 'crypto';
-import { formatGeneratorConfig } from '@prom-cms/shared';
-import { developmentPHPAppPath } from '@prom-cms/shared/internal';
+import {
+  developmentPHPAppPath,
+  mockedGeneratorConfig,
+} from '@prom-cms/shared/internal';
 
-import { mockedGeneratorConfig, PROJECT_ROOT } from '../constants.js';
 import {
   generateByTemplates,
   getWorkerJob,
@@ -19,6 +20,10 @@ import generateCore from '../parts/generate-core-files.js';
 import { installPHPDeps } from '../parts/install-php-deps.js';
 import { generateProjectModule } from '../parts/generate-project-module.js';
 import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
+import {
+  formatGeneratorConfig,
+  validateGeneratorConfig,
+} from '@prom-cms/shared/generator';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;

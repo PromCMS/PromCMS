@@ -1,11 +1,4 @@
-import {
-  FC,
-  Ref,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import EditorJS, { EditorConfig, LogLevels } from '@editorjs/editorjs';
 import Table from '@editorjs/table';
 import Underline from '@editorjs/underline';
@@ -24,29 +17,29 @@ import { ButtonLinkTool } from './ButtonLink';
 import { TagsTool } from './TagsTool';
 import { LinkInlineTool } from './LinkInlineTool';
 import { DynamicBlockTool } from './DynamicBlockTool';
+import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 
 export const EDITOR_HOLDER_ID = 'editor-content';
 
 export interface LazyEditorProps
   extends Omit<EditorConfig, 'holder' | 'tools'> {
   initialValue?: EditorConfig['data'];
-  editorRef?: Ref<EditorJS | undefined>;
   error?: string;
   className?: string;
+  name: string;
 }
 
 export const LazyEditor: FC<LazyEditorProps> = ({
   initialValue,
-  editorRef,
   error,
   className,
+  name,
   ...config
 }) => {
-  const innerRef = useRef<EditorJS>();
+  const blockEditorRefs = useBlockEditorRefs();
+  const ref = useRef<EditorJS>();
   const [editorReady, setEditorReady] = useState(false);
   const { t } = useTranslation();
-
-  useImperativeHandle(editorRef, () => innerRef.current);
 
   useEffect(() => {
     const editorConfig: EditorConfig = {
@@ -133,32 +126,29 @@ export const LazyEditor: FC<LazyEditorProps> = ({
 
     const editorInstance = new EditorJS(editorConfigWithLayouts);
 
-    innerRef.current = editorInstance;
+    ref.current = editorInstance;
+    blockEditorRefs.add(name, ref.current);
 
     return () => {
-      if (innerRef.current?.destroy) {
-        innerRef.current?.destroy();
+      if (ref.current?.destroy) {
+        ref.current?.destroy();
+        blockEditorRefs.remove(name);
       }
     };
-  }, [t]);
+  }, [t, name]);
 
   useEffect(() => {
-    if (
-      innerRef.current &&
-      initialValue &&
-      innerRef.current.render &&
-      editorReady
-    ) {
+    if (ref.current && initialValue && 'render' in ref.current && editorReady) {
       const value =
         typeof initialValue == 'string'
           ? JSON.parse(initialValue)
           : JSON.parse(JSON.stringify(initialValue || {}));
 
       if (value.blocks && !!value.blocks.length) {
-        innerRef.current.render(value);
+        ref.current.render(value);
       }
     }
-  }, [editorReady, initialValue]);
+  }, [editorReady]);
 
   return (
     <div className={className}>

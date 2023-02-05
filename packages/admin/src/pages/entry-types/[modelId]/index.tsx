@@ -79,7 +79,7 @@ const EntryTypeUnderpage: Page = ({}) => {
   const tableViewColumns = useMemo<TableViewCol[] | undefined>(() => {
     if (!model) return;
 
-    return formatApiModelResultToTableView(model);
+    return formatApiModelResultToTableView(model as any);
   }, [model]);
 
   // take care of action if user requests entry delete

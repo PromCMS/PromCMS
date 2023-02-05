@@ -1,4 +1,4 @@
-import { User } from '@prom-cms/shared';
+import { FieldPlacements, User } from '@prom-cms/shared';
 import { useMemo, VFC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useData } from './context';
@@ -22,12 +22,14 @@ export const UserUnderpageForm: VFC = () => {
       unset(newModel, 'columns.role');
     }
 
-    return prepareFieldsForMapper(newModel);
+    return prepareFieldsForMapper(newModel, FieldPlacements.MAIN);
   }, [model, currentUser]);
 
   return (
     <>
-      {groupedFields && <FieldMapper fields={groupedFields} />}
+      {groupedFields && (
+        <FieldMapper type={FieldPlacements.MAIN} fields={groupedFields} />
+      )}
 
       {formState.isSubmitting && (
         <div className="absolute inset-0 cursor-progress bg-white/20 backdrop-blur-[2px]" />

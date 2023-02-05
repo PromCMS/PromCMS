@@ -2,7 +2,7 @@ import {
   findGeneratorConfig,
   formatGeneratorConfig,
   validateGeneratorConfig,
-} from '@prom-cms/shared';
+} from '@prom-cms/shared/generator';
 import fs from 'fs-extra';
 import tsNode from 'ts-node';
 import { isModule } from './isModule.js';

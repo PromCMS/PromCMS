@@ -17,7 +17,7 @@ export const formatApiModelResultToTableView = (
         columnInfo.hide ||
         columnInfo.type === 'slug' ||
         columnInfo.type === 'json' ||
-        columnInfo.adminHidden ||
+        columnInfo.admin?.isHidden ||
         false
       ),
       // TODO make new formatter

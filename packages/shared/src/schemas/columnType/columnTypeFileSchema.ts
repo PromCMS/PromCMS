@@ -8,7 +8,7 @@ export const columnTypeFileSchema = columnTypeBaseSchema.extend({
   /**
    * If user can select multiple files
    */
-  multiple: z.boolean().default(false).optional(),
+  multiple: z.boolean().default(false),
 
   /**
    * MimeType type part filter

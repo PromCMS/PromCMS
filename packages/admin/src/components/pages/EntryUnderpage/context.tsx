@@ -29,6 +29,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { ResultItem } from '@prom-cms/api-client';
 import { apiClient } from '@api';
 import { pageUrls } from '@constants';
+import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType;
@@ -41,9 +42,6 @@ export interface IEntryUnderpageContext {
   onSubmit: (values: any) => Promise<void>;
   language?: string;
   setLanguage: (nextLanguage: string | undefined) => void;
-  formContentRefs: MutableRefObject<{
-    editorRef: RefObject<EditorJS>;
-  }>;
 }
 
 export const entryUnderpageContext = createContext<IEntryUnderpageContext>({
@@ -55,7 +53,6 @@ export const entryUnderpageContext = createContext<IEntryUnderpageContext>({
   mutateItem: () => undefined,
   onSubmit: async () => {},
   setLanguage: () => {},
-  formContentRefs: { current: undefined } as any,
 });
 
 export const useEntryUnderpageContext = () => useContext(entryUnderpageContext);
@@ -64,14 +61,12 @@ export const EntryUnderpageContextProvider: FC<{
   viewType: EntryTypeUrlActionType;
   children: ReactElement;
 }> = ({ children, viewType }) => {
+  const blockEditorRefs = useBlockEditorRefs();
   const settings = useSettings();
   const [language, setLanguage] = useState<string | undefined>(
     settings?.i18n?.default
   );
   const navigate = useNavigate();
-  const editorRef = useRef<EditorJS>(null);
-  // We make copy out of ref that came from useOnSubmit hook and make an object that contains refs
-  const formContentRefs = useRef({ editorRef });
   const currentModel = useCurrentModel();
   const { t } = useTranslation();
   const {
@@ -125,10 +120,16 @@ export const EntryUnderpageContextProvider: FC<{
     async (values) => {
       const modelName = (currentModel as NonNullable<typeof currentModel>).name;
 
-      if (editorRef.current) {
-        await editorRef.current?.isReady;
+      if (blockEditorRefs.refs.current) {
+        for (const [key, editorRef] of Object.entries(
+          blockEditorRefs.refs.current
+        )) {
+          await editorRef?.isReady;
 
-        values.content = JSON.stringify(await editorRef.current.save());
+          if (editorRef && 'save' in editorRef) {
+            values[key] = JSON.stringify(await editorRef.save());
+          }
+        }
       }
 
       try {
@@ -222,7 +223,6 @@ export const EntryUnderpageContextProvider: FC<{
       onSubmit: formMethods.handleSubmit(onSubmit),
       language,
       setLanguage,
-      formContentRefs,
     }),
     [
       currentModel?.name,
@@ -235,7 +235,6 @@ export const EntryUnderpageContextProvider: FC<{
       updatedItemData,
       viewType,
       language,
-      formContentRefs,
     ]
   );
 

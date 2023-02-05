@@ -6,7 +6,11 @@ import {
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { formatCodeString, getTemplateFolder } from '@utils';
+import {
+  formatCodeString,
+  getTemplateFolder,
+  stringifyJSONRecursive,
+} from '@utils';
 
 const columnTypeToCast = (type: ColumnType['type']) => {
   let finalType = 'string';
@@ -20,6 +24,44 @@ const columnTypeToCast = (type: ColumnType['type']) => {
   }
 
   return finalType;
+};
+
+const recursivePrintObject = (obj: object | []) => {
+  let result = ``;
+
+  if (Array.isArray(obj)) {
+    result = `'${obj.join("', '")}'`;
+  } else {
+    const keys: string[] = [];
+
+    for (const [key, value] of Object.entries(obj)) {
+      let formattedValue = '';
+
+      switch (typeof value) {
+        case 'boolean':
+        case 'number':
+          formattedValue = String(value);
+          break;
+        case 'object':
+          if (Array.isArray(value)) {
+            // TODO: this will only result in joined strings
+            formattedValue = `['${value.join("', '")}']`;
+          } else {
+            formattedValue = recursivePrintObject(value);
+          }
+          break;
+        default:
+          formattedValue = `'${String(value)}'`;
+          break;
+      }
+
+      keys.push(`'${key}' => ${formattedValue}`);
+    }
+
+    result = keys.join(', ');
+  }
+
+  return `[${result}]`;
 };
 
 /**
@@ -85,10 +127,20 @@ const generateModels = async (
             // translates to php-like structure
             // We also use String here since we may also encounter some boolean values which we just translate to its string
             const settingValue = currentColumn[settingsKey];
-            const formattedValue =
-              typeof settingValue === 'boolean'
-                ? String(settingValue)
-                : `'${String(settingValue)}'`;
+
+            let formattedValue = '';
+            switch (typeof settingValue) {
+              case 'boolean':
+              case 'number':
+                formattedValue = String(settingValue);
+                break;
+              case 'object':
+                formattedValue = recursivePrintObject(settingValue);
+                break;
+              default:
+                formattedValue = `'${String(settingValue)}'`;
+                break;
+            }
 
             transformedSettings.push(`'${settingsKey}' => ${formattedValue}`);
           }

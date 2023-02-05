@@ -1,12 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import {
-  findGeneratorConfig,
-  GENERATOR_FILENAME,
-  replaceFileExtension,
-  supportedConfigExtensions,
-} from '../../src';
+import { replaceFileExtension, supportedConfigExtensions } from '../../../src';
 import fs from 'fs-extra';
 import path from 'path';
+import {
+  GENERATOR_FILENAME,
+  findGeneratorConfig,
+} from '../../../src/generator';
 
 const testFolderPath = path.join(
   __dirname,

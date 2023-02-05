@@ -8,3 +8,4 @@ export * from './isDirEmpty.js';
 export * from './logger.js';
 export * from './lowerCaseFirst.js';
 export * from './prettier.js';
+export * from './stringifyJSONRecursive.js';

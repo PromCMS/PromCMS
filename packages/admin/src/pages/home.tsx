@@ -39,7 +39,7 @@ const MainPage: Page = () => {
           .map((itemInfo) => (
             <Link
               to={itemInfo.href}
-              className="group flex aspect-square rounded-2xl shadow-lg shadow-blue-200"
+              className="group flex aspect-square rounded-2xl shadow-lg shadow-blue-200 hover:no-underline hover:scale-105"
               key={itemInfo.href}
             >
               <div className="m-auto text-center">

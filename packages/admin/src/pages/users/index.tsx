@@ -72,7 +72,7 @@ const UsersListPage: Page = () => {
   const tableViewColumns = useMemo<TableViewCol[] | undefined>(() => {
     if (!model) return;
 
-    return formatApiModelResultToTableView(model);
+    return formatApiModelResultToTableView(model as any);
   }, [model]);
 
   return (

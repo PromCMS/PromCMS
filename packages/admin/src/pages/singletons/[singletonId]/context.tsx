@@ -3,18 +3,14 @@ import {
   createContext,
   Dispatch,
   FC,
-  MutableRefObject,
   PropsWithChildren,
-  RefObject,
   SetStateAction,
   useCallback,
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
-import type EditorJS from '@editorjs/editorjs';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useCurrentSingletonData } from './useCurrentSingletonData';
 import { ResultItem } from '@prom-cms/api-client';
@@ -24,12 +20,10 @@ import { useTranslation } from 'react-i18next';
 import { apiClient } from '@api';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 
 export type SingletonPageContext = {
   setLanguage: Dispatch<SetStateAction<SingletonPageContext['language']>>;
-  formContentRefs: MutableRefObject<{
-    editorRef: RefObject<EditorJS>;
-  }>;
   language?: string;
   data?: ResultItem;
   isLoading: boolean;
@@ -37,7 +31,6 @@ export type SingletonPageContext = {
 };
 export const singletonPageContext = createContext<SingletonPageContext>({
   setLanguage: () => {},
-  formContentRefs: { current: undefined as any },
   isLoading: true,
   async clear() {},
 });
@@ -46,12 +39,14 @@ export const useSingletonPageContext = () => useContext(singletonPageContext);
 export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
+  const blockEditorRefs = useBlockEditorRefs();
   const settings = useSettings();
-  const formMethods = useForm();
+  const formMethods = useForm({
+    reValidateMode: 'onChange',
+    mode: 'onTouched',
+  });
   const singleton = useCurrentSingleton(true);
   const { t } = useTranslation();
-  const editorRef = useRef<EditorJS>(null);
-  const formContentRefs = useRef({ editorRef });
   const [language, setLanguage] = useState(settings?.i18n?.default);
   const queryClient = useQueryClient();
   const {
@@ -85,10 +80,16 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
   const onSubmit = handleSubmit(async (values) => {
     const singletonName = singleton.key;
 
-    if (editorRef.current) {
-      await editorRef.current?.isReady;
+    if (blockEditorRefs.refs.current) {
+      for (const [key, editorRef] of Object.entries(
+        blockEditorRefs.refs.current
+      )) {
+        await editorRef?.isReady;
 
-      values.content = JSON.stringify(await editorRef.current.save());
+        if (editorRef && 'save' in editorRef) {
+          values[key] = JSON.stringify(await editorRef.save());
+        }
+      }
     }
 
     try {
@@ -147,17 +148,23 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
             data: { data: result },
           } = await apiClient.singletons.clear(singleton?.key!);
 
-          editorRef.current?.blocks.clear();
+          if (blockEditorRefs.refs.current) {
+            for (const editorRef of Object.values(
+              blockEditorRefs.refs.current
+            )) {
+              editorRef?.blocks.clear?.();
+            }
+          }
 
           mutateItemInCache(result);
         }
       ),
-    [mutateItemInCache, singleton, t]
+    [mutateItemInCache, singleton, t, blockEditorRefs]
   );
 
   const contextValue = useMemo(
-    () => ({ language, setLanguage, formContentRefs, data, isLoading, clear }),
-    [language, setLanguage, formContentRefs, clear]
+    () => ({ language, setLanguage, data, isLoading, clear }),
+    [language, setLanguage, clear]
   );
 
   return (

@@ -23,18 +23,14 @@ export const getEntryUnderPageComponent = (
     return (
       <EntryUnderpageContextProvider viewType={viewType}>
         <entryUnderpageContext.Consumer>
-          {({ onSubmit, formContentRefs, itemData }) => (
+          {({ onSubmit }) => (
             <form autoComplete="off" onSubmit={onSubmit} className="flex">
               <Wrapper>
                 <Breadcrumbs />
                 <Content>
                   <Header />
                   {/* We pass multiple refs */}
-                  <DynamicFormFields
-                    ref={formContentRefs}
-                    itemData={itemData}
-                    modelInfo={model}
-                  />
+                  <DynamicFormFields modelInfo={model} />
                   <Footer />
                 </Content>
               </Wrapper>

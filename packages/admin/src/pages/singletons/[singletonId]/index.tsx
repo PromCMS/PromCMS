@@ -7,24 +7,12 @@ import NotFoundPage from '@pages/404';
 import { FC } from 'react';
 import { Aside, Breadcrumbs, Header } from './components';
 import { Footer } from './components/Footer';
-import {
-  SingletonPageContextProvider,
-  useSingletonPageContext,
-} from './context';
-import { useCurrentSingletonData } from './useCurrentSingletonData';
+import { SingletonPageContextProvider } from './context';
 
 const Fields: FC = () => {
   const singleton = useCurrentSingleton(true);
-  const { data } = useCurrentSingletonData();
-  const { formContentRefs } = useSingletonPageContext();
 
-  return (
-    <DynamicFormFields
-      ref={formContentRefs}
-      itemData={data}
-      modelInfo={singleton}
-    />
-  );
+  return <DynamicFormFields modelInfo={singleton} />;
 };
 
 const SingletonUnderpage: Page = ({}) => {

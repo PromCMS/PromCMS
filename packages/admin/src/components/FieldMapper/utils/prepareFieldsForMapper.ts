@@ -1,6 +1,9 @@
-import { ApiResultModel } from '@prom-cms/shared';
+import { ApiResultModel, FieldPlacements } from '@prom-cms/shared';
 
-export const prepareFieldsForMapper = (model: ApiResultModel) =>
+export const prepareFieldsForMapper = (
+  model: ApiResultModel,
+  placement?: FieldPlacements
+) =>
   Object.keys(model.columns)
     .map((columnName: string) => [
       {
@@ -9,6 +12,12 @@ export const prepareFieldsForMapper = (model: ApiResultModel) =>
       },
     ])
     .filter(
-      (items) => items.filter(({ hide, editable }) => !hide && editable).length
+      (columns) =>
+        columns.filter(
+          ({ hide, editable, admin }) =>
+            !hide &&
+            editable &&
+            (placement ? admin.editor.placement === placement : true)
+        ).length
     )
     .map((items) => items.filter((item) => item.columnName !== 'is_published'));

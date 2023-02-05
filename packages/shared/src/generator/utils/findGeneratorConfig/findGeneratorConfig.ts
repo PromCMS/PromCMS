@@ -1,9 +1,9 @@
 import fs from 'fs';
 
-import { GENERATOR_FILENAME } from '../../generator/constants.js';
-import { supportedConfigExtensions } from '../../constants.js';
-import { replaceFileExtension } from '../replaceFileExtension.js';
 import path from 'path';
+import { supportedConfigExtensions } from '../../../constants.js';
+import { replaceFileExtension } from '../../../index.js';
+import { GENERATOR_FILENAME } from '../../constants.js';
 
 export const findGeneratorConfig = (root?: string) => {
   let filepath = '';

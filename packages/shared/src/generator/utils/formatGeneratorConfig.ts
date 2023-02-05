@@ -1,12 +1,11 @@
 import kebabCase from 'lodash.kebabcase';
-import type { GeneratorConfig } from '../types/GeneratorConfig.js';
+import { FieldPlacements } from '../../index.js';
+import { GeneratorConfigInput } from '../../types/GeneratorConfig.js';
 
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
 
-export const formatGeneratorConfig = async (
-  config: GeneratorConfig
-): Promise<GeneratorConfig> => {
+export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
   if (!config) throw 'No config provided to "formatGeneratorConfig" function';
 
   let {
@@ -20,7 +19,7 @@ export const formatGeneratorConfig = async (
   Object.entries(allModels).forEach(([modelKey, model]) => {
     const isSingleton = singletons && modelKey in singletons;
 
-    if (model.admin?.layout === 'post-like') {
+    if (model.preset === 'post') {
       const {
         title: unsetTitle,
         content: unsetContent,
@@ -32,14 +31,26 @@ export const formatGeneratorConfig = async (
           type: 'string',
           unique: true,
           required: true,
+          admin: {
+            fieldType: 'heading',
+            editor: {
+              placement: FieldPlacements.ASIDE,
+            },
+          },
         },
         content: {
           title: 'Content',
           type: 'json',
           default: '{}',
+          admin: {
+            fieldType: 'blockEditor',
+            editor: {
+              placement: FieldPlacements.MAIN,
+            },
+          },
         },
         slug: {
-          title: 'Zkratka',
+          title: 'Slug',
           type: 'slug',
           of: 'title',
           editable: false,
@@ -64,8 +75,10 @@ export const formatGeneratorConfig = async (
         unique: false,
         autoIncrement: true,
         editable: false,
-        adminHidden: true,
         translations: false,
+        admin: {
+          isHidden: true,
+        },
       };
     }
 
@@ -89,8 +102,10 @@ export const formatGeneratorConfig = async (
         targetModel: 'user',
         labelConstructor: 'name',
         fill: false,
-        adminHidden: true,
         translations: false,
+        admin: {
+          isHidden: true,
+        },
       };
 
       model.columns.updated_by = {
@@ -100,8 +115,10 @@ export const formatGeneratorConfig = async (
         targetModel: 'user',
         labelConstructor: 'name',
         fill: false,
-        adminHidden: true,
         translations: false,
+        admin: {
+          isHidden: true,
+        },
       };
     }
 
@@ -152,7 +169,6 @@ export const formatGeneratorConfig = async (
       ignoreSeeding: false,
       ownable: true,
       intl: true,
-      admin: { layout: 'post-like' },
       ...model,
       ...(isSingleton
         ? { name: 'name' in model ? model.name : kebabCase(modelKey) }
@@ -191,7 +207,7 @@ export const formatGeneratorConfig = async (
     };
   }
 
-  const result = {
+  return {
     ...config,
     database: { ...databaseConfig, models, singletons },
     project: {
@@ -199,6 +215,4 @@ export const formatGeneratorConfig = async (
       ...config.project,
     },
   };
-
-  return result;
 };

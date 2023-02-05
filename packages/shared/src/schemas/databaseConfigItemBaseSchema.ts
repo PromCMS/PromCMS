@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import * as iconSet from 'tabler-icons-react';
 
+import { columnTypeSchema } from './columnType/columnTypeSchema.js';
+
 const keys = Object.keys(iconSet);
 
 export const databaseConfigItemBaseSchema = z.object({
@@ -14,4 +16,37 @@ export const databaseConfigItemBaseSchema = z.object({
    * @defaultValue false
    */
   ignoreSeeding: z.boolean().default(false).optional(),
+
+  /**
+   * If generated singleton should have timestamps
+   *
+   * @defaultValue true
+   */
+  timestamp: z.boolean().default(true).optional(),
+
+  /**
+   * Admin config
+   */
+  admin: z.object({}).default({}).optional(),
+
+  /**
+   * Columns preset, useful when you want to build something basic:
+   * - post:
+   *      title<type=string, unique=true, required=true>,
+   *      content<type=json, admin.fieldType=blockEditor, default={}>,
+   *      slug<type=slug, of=title, editable=false>;
+   */
+  preset: z.enum(['post']).optional(),
+
+  /**
+   * Table columns
+   */
+  columns: z.record(columnTypeSchema),
+
+  /**
+   * Toggles the multi language functionality for current model
+   *
+   * @default true,
+   */
+  intl: z.boolean().default(true).optional(),
 });

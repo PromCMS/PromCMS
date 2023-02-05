@@ -25,8 +25,12 @@ export const useConstructedMenuItems = () => {
         ...finalValue,
         ...Object.entries({ ...singletons, ...models })
           .filter(([modelKey]) => !modelIsCustom(modelKey || ''))
-          .filter(([modelKey]) =>
-            currentUser.can({ action: 'read', targetModel: modelKey })
+          .filter(
+            ([modelKey, model]) =>
+              currentUser.can({ action: 'read', targetModel: modelKey }) &&
+              (model.isSingleton
+                ? currentUser.can({ action: 'update', targetModel: modelKey })
+                : true)
           )
           .map(([modelKey, { icon, isSingleton, ...rest }]) => ({
             href: isSingleton
