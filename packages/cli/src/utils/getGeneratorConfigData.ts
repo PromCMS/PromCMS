@@ -16,7 +16,19 @@ export const getGeneratorConfigData = async (root?: string) => {
   let content;
 
   if (isModule(filepath)) {
-    content = await import(filepath);
+    try {
+      content = await import(`file:///${filepath}`);
+    } catch (error) {
+      throw new Error(
+        `Failed to load prom config at: ${filepath}, because ${
+          (error as Error)?.message
+        }`
+      );
+    }
+
+    if ('default' in content) {
+      content = content.default;
+    }
   } else {
     content = await fs.readJSON(filepath);
   }

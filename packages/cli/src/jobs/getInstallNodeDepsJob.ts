@@ -5,7 +5,7 @@ import { SupportedPackageManagers } from '@custom-types';
 import { SUPPORTED_PACKAGE_MANAGERS } from '@constants';
 
 export interface GetInstallNodeDepsJobOptions {
-  regenerate?: boolean;
+  skip?: boolean;
   packageManager?: SupportedPackageManagers;
   cwd: string;
 }
@@ -14,12 +14,12 @@ export const getInstallNodeDepsJob = (
   title: string,
   {
     packageManager: preselectedPackageManager,
-    regenerate,
+    skip,
     cwd,
   }: GetInstallNodeDepsJobOptions
 ) => {
   return getWorkerJob<{ packageManager?: string }>(title, {
-    skip: regenerate,
+    skip,
     prompts: !preselectedPackageManager
       ? [
           [
@@ -46,7 +46,8 @@ export const getInstallNodeDepsJob = (
       // const deps = [];
 
       const finalPackageManager =
-        preselectedPackageManager ?? packageManager ?? 'yarn';
+        preselectedPackageManager || packageManager || 'yarn';
+
       await execa(
         finalPackageManager,
         [

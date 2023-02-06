@@ -1,4 +1,6 @@
 import prettier from 'prettier';
+import path from 'path';
+import { PACKAGE_ROOT } from '@constants';
 
 export const formatCodeString = async (content: string, filename: string) => {
   const ignoreFileParts = ['.gitignore', '.htaccess', 'Dockerfile', '.env'];
@@ -13,7 +15,9 @@ export const formatCodeString = async (content: string, filename: string) => {
   }
 
   let result = content;
-  const config = await prettier.resolveConfig(filename);
+  const config = await prettier.resolveConfig(
+    path.join(PACKAGE_ROOT, filename)
+  );
 
   if (config) {
     result = prettier.format(result, config);
