@@ -27,9 +27,7 @@ type CustomParams = [string];
 const generatorFilenameBase = getFilenameBase(GENERATOR_FILENAME);
 
 interface CustomOptions extends GlobalOptions {
-  override: boolean;
   regenerate: boolean;
-  admin: boolean;
   skip: string;
   packageManager: SupportedPackageManagers;
 }
@@ -40,21 +38,14 @@ export class GenerateCMSProgram extends Command {
 
   // FLAGS
   configPath: string;
-  override: boolean = false;
   regenerate: boolean = false;
-  admin: boolean = true;
   skip: string = '';
   packageManager: SupportedPackageManagers | undefined;
 
   static options: Options<CustomOptions> = {
-    override: {
-      type: 'boolean',
-      description: 'To override contents of target folder',
-      short: 'o',
-    },
     regenerate: {
       type: 'boolean',
-      description: 'To just only regenerate admin and Core',
+      description: 'To regenerate entire project',
       short: 'r',
     },
     skip: {
@@ -67,12 +58,6 @@ export class GenerateCMSProgram extends Command {
       description: 'To specify which package manager use',
       short: 'p',
       choices: [...(SUPPORTED_PACKAGE_MANAGERS as any)],
-    },
-    admin: {
-      type: 'boolean',
-      description: 'To generate admin',
-      default: true,
-      short: 'a',
     },
   };
 
@@ -97,22 +82,11 @@ export class GenerateCMSProgram extends Command {
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
     const { project } = generatorConfig;
     const ADMIN_ROOT = path.join(PROJECT_ROOT, 'packages', 'admin');
-
-    if (
-      !this.override &&
-      !this.regenerate &&
-      fs.existsSync(FINAL_PATH) &&
-      fs.readdirSync(FINAL_PATH).length > 1
-    ) {
-      throw new Error(
-        `⛔️ Current directory "${FINAL_PATH}" has some contents already`
-      );
-    }
-
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
+
     const jobs = [
       getWorkerJob('Cleanup', {
-        skip: this.override === false,
+        skip: !this.regenerate,
         async job() {
           await new Promise((resolve, reject) =>
             rimraf(`./**/!(${generatorFilenameBase}.*|.env)`, (error) => {
@@ -135,7 +109,6 @@ export class GenerateCMSProgram extends Command {
         },
       }),
       getWorkerJob('Add another project resources', {
-        skip: this.regenerate,
         async job() {
           await generateByTemplates('commands.generate-cms', FINAL_PATH, {
             '*': {
@@ -159,13 +132,12 @@ export class GenerateCMSProgram extends Command {
         },
       }),
       getWorkerJob('Generate project module', {
-        skip: this.regenerate,
         async job() {
           await generateProjectModule(exportModulesRoot, generatorConfig);
         },
       }),
       getWorkerJob('Add admin html', {
-        skip: this.admin === false,
+        skip: shouldSkip.includes('admin'),
         async job() {
           // Build first
           await execa('npm', ['run', 'build:admin'], {
@@ -191,8 +163,7 @@ export class GenerateCMSProgram extends Command {
       getInstallNodeDepsJob('Install NODE dependencies', {
         packageManager: this.packageManager,
         cwd: FINAL_PATH,
-        regenerate:
-          this.regenerate || shouldSkip.includes('dependency-install'),
+        skip: shouldSkip.includes('dependency-install'),
       }),
     ];
 

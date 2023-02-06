@@ -42,8 +42,8 @@ export const getCreatePackageJsonJob = (
           packageJsonPath,
           await formatCodeString(
             JSON.stringify({
-              ...defaultPackageJsonContent,
               ...fileContent,
+              ...defaultPackageJsonContent,
               scripts: {
                 ...defaultPackageJsonContent.scripts,
                 ...fileContent.scripts,
