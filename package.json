@@ -10,9 +10,9 @@
     "build": "npm run build:packages",
     "dev": "npx turbo run dev --filter=@prom-cms/admin...",
     "prettier": "npx turbo run prettier --filter=./packages/*",
-    "test": "npx turbo run test --filter=./packages/*",
+    "test": "npx turbo run test --filter=./packages/* && npm run prettier",
     "release": "npm run build:packages && changeset publish",
-    "version-packages": "changeset version && npx prettier"
+    "version-packages": "changeset version"
   },
   "license": "MIT",
   "workspaces": [
