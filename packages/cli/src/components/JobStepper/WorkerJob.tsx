@@ -1,8 +1,8 @@
-import { Spinner } from '../../components/Spinner';
+import { Spinner } from '../../components/Spinner.js';
 import { Text } from 'ink';
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
-import { LoggedWorkerJob, MaybePromise } from '../../types';
-import { Prompts, PromptsProps } from './Prompts';
+import { LoggedWorkerJob, MaybePromise } from '@custom-types';
+import { Prompts, PromptsProps } from './Prompts.js';
 
 enum Statuses {
   working = 'WORKING',
@@ -26,7 +26,7 @@ export const WorkerJob: FC<{
   const workingJob = useRef<MaybePromise<void>>();
 
   const attachWorkingJob = (data?: any) => {
-    workingJob.current = Promise.resolve(info.job()).finally(() => {
+    workingJob.current = Promise.resolve(info.job(data)).finally(() => {
       setStatus(Statuses.done);
       onSuccess(data);
     });

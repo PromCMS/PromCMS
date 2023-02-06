@@ -1,2 +1,2 @@
-export * from './Spinner';
-export * from './JobStepper';
+export * from './Spinner.js';
+export * from './JobStepper/JobStepper.js';

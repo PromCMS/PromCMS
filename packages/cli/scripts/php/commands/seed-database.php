@@ -75,7 +75,7 @@ try {
           'unique' => $fieldIsUnique,
           'type' => $fieldType,
         ] = $column;
-        $inputValue;
+        $inputValue = '';
 
         // Add more randomness, if field is not required then we may not fill it out
         if (!$fieldIsRequired) {
@@ -123,7 +123,7 @@ try {
             $inputValue = is_string($value) ? $value : implode(' ', $value);
             break;
           default:
-            echo "❗Unsupported field type of value \"$fieldType\" supplied as a column type in mock generator";
+            echo "🗿 Cannot generate field type \"$fieldType\" for column \"$columnKey\" since its not supported - skipping...";
             continue 2;
             break;
         }
@@ -132,7 +132,7 @@ try {
       }
 
       // Try to create static admin user
-      if ($modelName === 'Users' && $i === 0) {
+      if ($realModelName === 'Users' && $i === 0) {
         try {
           $creationPayload['email'] = 'test@example.com';
           $creationPayload['role'] = 0;
@@ -140,9 +140,15 @@ try {
 
           $modelInstance::create($creationPayload);
         } catch (\Exception $e) {
+          echo $e;
           // Static admin user has been created already, skipping
         }
       } else {
+        if (!count($creationPayload)) {
+          echo "🗿 Empty creation payload for \"$fieldType\" - skipping...";
+          continue;
+        }
+
         $modelInstance::create($creationPayload);
       }
     }

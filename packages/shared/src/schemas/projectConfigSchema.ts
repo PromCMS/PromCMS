@@ -1,12 +1,17 @@
 import { z } from 'zod';
 
-import { projectSecurityConfigSchema } from './projectSecurityConfigSchema';
+import { projectSecurityConfigSchema } from './projectSecurityConfigSchema.js';
 
 export const projectConfigSchema = z.object({
   /**
    * A project name
    */
   name: z.string(),
+
+  /**
+   * A project name
+   */
+  slug: z.string().optional(),
 
   /**
    * Final project url

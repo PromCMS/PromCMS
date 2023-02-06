@@ -1,0 +1,40 @@
+.root {
+  @apply sticky top-0 left-0 flex h-full min-h-screen flex-none flex-col overflow-hidden bg-blue-50;
+
+  .item {
+    @apply relative left-10 flex cursor-pointer rounded-l-lg bg-white p-3 text-xl text-gray-500 transition-all duration-100;
+    box-shadow: 0 0 7px 2px #0000001e;
+
+    &:not([data-is-active="true"]):hover {
+      @apply left-8;
+    }
+
+    &[data-is-active="true"] {
+      @apply left-8 text-blue-500;
+    }
+    &[data-is-active="true"] {
+      @apply left-4;
+    }
+  }
+}
+
+.top {
+  @apply flex bg-blue-500 items-center justify-center text-white shadow-lg py-4;
+}
+
+.bottom {
+  @apply bottom-0 mt-auto p-4;
+
+  button {
+    @apply relative flex w-full overflow-hidden rounded-full bg-white shadow-lg;
+    aspect-ratio: 1 / 1;
+
+    img {
+      @apply absolute top-0 left-0 h-full w-full object-cover;
+    }
+  }
+}
+
+.skeleton {
+  @apply absolute left-0 right-0 h-full w-full;
+}

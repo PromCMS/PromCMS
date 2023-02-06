@@ -20,9 +20,8 @@
   },
   "scripts": {
     "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
-    "generate:dev": "npm run starter-commands -- generate:develop && npm run seed-database ../../apps/dev-api/.temp",
+    "generate:dev": "npm run starter-commands -- generate:develop",
     "generate:cms": "npm run starter-commands -- generate-cms",
-    "regenerate:dev": "npm run starter-commands -- generate:develop --regenerate",
     "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
     "db-tools:migrate": "npm run starter-commands -- db-tools:migrate",
     "seed-database": "npm run starter-commands -- seed-database",

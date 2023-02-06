@@ -1,12 +1,8 @@
 import { Command, Params } from '@boost/cli';
-import {
-  Logger,
-  pathInputToRelative,
-  getAppRootInputValidator,
-} from '../utils';
+import { Logger, pathInputToRelative, getAppRootInputValidator } from '@utils';
 import child_process from 'child_process';
 import path from 'path';
-import { SCRIPTS_ROOT } from '../constants';
+import { SCRIPTS_ROOT } from '@constants';
 
 type CustomParams = [string];
 
@@ -26,7 +22,7 @@ export class SeedDatabaseProgram extends Command {
   ];
 
   async run(root: string) {
-    Logger.info('🔃 Starting the database seeder and seeding...');
+    Logger.info(`🔃 Running prom-cms seeding on app in "${root}"...`);
     let messages = '';
 
     try {

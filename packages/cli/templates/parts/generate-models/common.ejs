@@ -1,15 +1,20 @@
 <?php
 
 use PromCMS\Core\Database\Model;
+use PromCMS\Core\Database\SingletonModel;
 use PromCMS\Core\Database\ModelResult;
 <% if (events.beforeSave.slugify) { %>use Illuminate\Support\Str;<% } %>
 
 <%# TODO: user soft deletes %> 
-class <%- modelName %> extends Model
+class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
 {
-  protected string $tableName = '<%- tableName %>';
+  <% if (isSingleton) { %>
+    protected string $name = '<%- name %>';
+  <% } else { %>
+    protected string $tableName = '<%- tableName %>';
+    protected bool $softDelete = <%- typeof softDelete !== 'undefined' && softDelete ? 'true' : 'false' %>;
+  <% } %>
   protected bool $timestamps = <%- timestamp ? 'true' : 'false' %>;
-  protected bool $softDelete = <%- softDelete ? 'true' : 'false' %>;
   protected bool $translations = <%- intl ? 'true' : 'false' %>;
 
   <%# Column casts %> 
@@ -36,9 +41,7 @@ class <%- modelName %> extends Model
   <%# Custom model info not tied to PromCMS\Core\Database\Model perse %> 
   static bool $ignoreSeeding = <%- ignoreSeeding ? 'true' : 'false' %>;
   static string $modelIcon = '<%- icon %>';
-  static $adminSettings = [
-    "layout" => "<%- admin.layout %>"
-  ];
+  static $adminSettings = [];
 
   <%# Listeners #%> 
   <% if (events.shouldInclude()) { %>
@@ -65,7 +68,7 @@ class <%- modelName %> extends Model
               })
               as $colKey => $col
             ) {
-              if ($entry[$col['of']]) {
+              if (isset($entry[$col['of']]) && $entry[$col['of']]) {
                 $entry[$colKey] = Str::slug($entry[$col['of']]);
               }
             }
@@ -80,17 +83,18 @@ class <%- modelName %> extends Model
   public function getSummary()
   {
     return (object) [
+      'isSingleton'     => $this instanceof SingletonModel,
+      <% if (isSingleton) { %> 'name'            => $this->getName(), <% } else { %> 'tableName'       => $this->getTableName(), <% } %>
       'icon'            => self::$modelIcon,
       'ignoreSeeding'   => self::$ignoreSeeding,
       'admin'           => self::$adminSettings,
-      'tableName'       => $this->getTableName(),
+      'columns'         => static::$tableColumns,
       'hasTimestamps'   => $this->hasTimestamps(),
       'hasSoftDelete'   => $this->hasSoftDelete(),
-      'columns'         => static::$tableColumns,
-      'hasOrdering'     => <%- sorting ? 'true' : 'false' %>,
-      'isDraftable'     => <%- draftable ? 'true' : 'false' %>,
-      'isSharable'      => <%- sharable ? 'true' : 'false' %>,
-      'ownable'         => <%- ownable ? 'true' : 'false' %>,
+      'ownable'         => <%- !isSingleton && ownable ? 'true' : 'false' %>,
+      'hasOrdering'     => <%- !isSingleton && sorting ? 'true' : 'false' %>,
+      'isDraftable'     => <%- !isSingleton && draftable ? 'true' : 'false' %>,
+      'isSharable'      => <%- !isSingleton && sharable ? 'true' : 'false' %>,
     ];
   }
 }

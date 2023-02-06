@@ -5,7 +5,7 @@ This is a javascript api client for your apps that use PROM CMS.
 ## Installation
 
 ```bash
-yarn install @prom-cms/api-client
+npm install @prom-cms/api-client
 ```
 
 ## How to use

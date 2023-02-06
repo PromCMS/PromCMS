@@ -28,7 +28,7 @@ jobs:
         name: Cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Setup node 16
         uses: actions/setup-node@v1
@@ -36,14 +36,14 @@ jobs:
           node-version: 16
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile
+        run: npm ci
 
         # https://github.com/changesets/action
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1
         with:
-          publish: yarn release
-          version: yarn version-packages
+          publish: npm run release
+          version: npm run version-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

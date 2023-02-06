@@ -1,0 +1,181 @@
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: currentColor;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+p {
+  margin: 0;
+}
+
+input {
+  background-color: transparent;
+}
+
+table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: currentColor;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+}
+
+.ce-toolbar {
+  z-index: 1;
+}
+
+.ce-toolbar__content,
+.ce-block__content {
+  max-width: none !important;
+}
+
+.ce-block a {
+  @apply text-blue-600;
+}
+
+
+.ce-inline-link-tool.ce-inline-tool-input--showed {
+  padding: 0;
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+}
+
+.ce-inline-tool-container {
+  border-top: 1px solid rgba(201,201,204,.48);
+  padding: 5px;
+  padding-left: 10px;
+  width: 100%;
+}
+
+.ce-inline-tool-container label span:first-child  {
+  padding-right: 10px;
+  width: 50px;
+  display: inline-block;
+}
+
+.ce-inline-tool-container input {
+  outline: none;
+  border: 0;
+  border-radius: 0 0 4px 4px;
+  margin: 0;
+  font-size: 13px;
+  margin: 5px;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  font-weight: 500;
+}
+
+.ce-inline-tool-container input + span {
+  padding-left: 5px;
+}
+
+.ce-inline-link-tool button {
+  outline: none;
+  padding: 5px 20px;
+  background: transparent;
+  margin: 0px 0 5px auto;
+  box-sizing: border-box;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.ce-popover__item--disabled {
+ opacity: .4;
+}
+
+.editor-js__layout__wrap {
+  @apply mt-3 mb-5 flex gap-x-3 gap-y-5;
+}
+
+.editor-js__layout__item {
+  border: 2px dashed #dfdfdf;
+  @apply min-h-[200px] w-full bg-white py-1 px-3 rounded-lg;
+}
+
+.editor-js__layout__item .codex-editor > .codex-editor__redactor {
+  margin: 0 !important;
+}
+
+dialog {
+  @apply rounded-lg;
+}
+
+dialog > div {
+  padding: 40px 85px;
+}
+
+.codex-editor svg.icon-tabler {
+  fill: none !important;
+}
+
+.codex-editor svg.icon-tabler path[stroke="none"] {
+  stroke: none;
+}
+
+.ce-header {
+  @apply font-bold;
+}
+
+h2.ce-header {
+  @apply text-4xl;
+}
+h3.ce-header {
+  @apply text-3xl;
+}
+h4.ce-header {
+  @apply text-2xl;
+}
+h5.ce-header {
+  @apply text-xl;
+}
+
+* {
+  -ms-overflow-style: -ms-autohiding-scrollbar;
+  scrollbar-width: thin;
+  scrollbar-color: gray transparent;
+}
+
+::-webkit-scrollbar {
+  width: 17px;
+  height: 17px;
+}
+
+::-webkit-scrollbar-track {
+  background: "transparent";
+}
+
+::-webkit-scrollbar-thumb {
+  background: gray;
+  border-radius: "15px";
+  border: 6px solid transparent;
+  background-clip: content-box;
+  border-radius: 10px;
+}

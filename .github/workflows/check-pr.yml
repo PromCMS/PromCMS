@@ -36,22 +36,22 @@ jobs:
         name: Cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
 
       - name: Setup node 16
         uses: actions/setup-node@v3
         with:
           node-version: 16
-          cache: 'yarn'
+          cache: 'npm'
 
       - name: Install Dependencies
-        run: yarn --frozen-lockfile
+        run: npm ci
 
       - name: Run prettier
-        run: yarn prettier
+        run: npm run prettier
 
       - name: Run tests
-        run: yarn test
+        run: npm run test
 
       - name: Build
-        run: yarn build:packages
+        run: npm run build:packages

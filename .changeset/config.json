@@ -6,9 +6,5 @@
   "linked": [],
   "access": "public",
   "baseBranch": "main",
-  "updateInternalDependencies": "patch",
-  "ignore": [
-    "@prom-cms/admin",
-    "@prom-cms/dev-api"
-  ]
+  "updateInternalDependencies": "patch"
 }

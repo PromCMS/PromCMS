@@ -1,4 +1,4 @@
-import { UserStates } from './UserStates';
+import { UserStates } from './UserStates.js';
 
 export type LoginFailedResponseCodes =
   | 'invalid-credentials'

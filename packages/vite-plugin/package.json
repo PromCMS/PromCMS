@@ -1,0 +1,48 @@
+{
+  "name": "@prom-cms/vite-plugin",
+  "description": "A vite tools package for prom-cms projects",
+  "version": "0.4.0",
+  "type": "module",
+  "author": "Ondřej Langr <hi@ondrejlangr.cz>",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/vite-plugin/README.md",
+  "license": "MIT",
+  "main": "dist/index.cjs",
+  "typings": "dist/index.d.ts",
+  "module": "dist/index.js",
+  "source": "src/index.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "test": "echo \"TODO: add tests!\"",
+    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
+    "clean": "rimraf dist",
+    "prebuild": "npm run clean",
+    "build": "tsup"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PromCMS/PromCMS.git",
+    "directory": "packages/vite-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/PromCMS/PromCMS/issues"
+  },
+  "dependencies": {
+    "execa": "^6.1.0",
+    "http-proxy": "^1.18.1",
+    "mime": "^3.0.0",
+    "node-fetch": "^3.2.10",
+    "fs-extra": "^10.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^4.9.4",
+    "@types/mime": "^3.0.1",
+    "@types/http-proxy": "^1.17.9",
+    "vite": "^3.0.2"
+  },
+  "peerDependencies": {
+    "vite": "^3.0.2",
+    "axios": "^0.27.2"
+  }
+}

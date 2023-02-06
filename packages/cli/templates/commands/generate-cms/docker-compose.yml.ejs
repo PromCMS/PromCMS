@@ -2,7 +2,7 @@ version: "3"
 
 services:
   php_web:
-    container_name: <%= project.name %>_web
+    container_name: <%= project.slug %>_web
     build:
       context: "."
       dockerfile: Dockerfile

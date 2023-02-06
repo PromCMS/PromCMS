@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { columnTypeBaseSchema } from './columnTypeBaseSchema';
+import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 
 export const columnTypeBooleanSchema = columnTypeBaseSchema.extend({
   type: z.enum(['boolean']),

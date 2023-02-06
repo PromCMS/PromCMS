@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { columnTypeBaseSchema } from './columnTypeBaseSchema';
+import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 
 export const columnTypeNormalSchema = columnTypeBaseSchema.extend({
-  type: z.enum(['string', 'date', 'password', 'dateTime', 'longText', 'json']),
+  type: z.enum(['date', 'password', 'dateTime', 'longText']),
   default: z.string().optional(),
 });
 

@@ -1,5 +1,4 @@
 import { Command, GlobalOptions, Options } from '@boost/cli';
-import { Input, Select } from '@boost/cli/react';
 import path from 'path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
@@ -11,26 +10,28 @@ import {
   logSuccess,
   getWorkerJob,
   getFilenameBase,
-} from '../utils';
-import { PROJECT_ROOT, TEMPLATES_ROOT } from '../constants';
-import generateCore from '../parts/generate-core-files';
-import { installPHPDeps } from '../parts/install-php-deps';
-import { generateProjectModule } from '../parts/generate-project-module';
-import { getGeneratorConfigData } from '../utils/getGeneratorConfigData';
-import { GENERATOR_FILENAME } from '@prom-cms/shared';
+} from '@utils';
+import { PROJECT_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
+import generateCore from '@parts/generate-core-files';
+import { installPHPDeps } from '@parts/install-php-deps';
+import { generateProjectModule } from '@parts/generate-project-module';
+import { getGeneratorConfigData } from '../utils/getGeneratorConfigData.js';
+import { GENERATOR_FILENAME } from '@prom-cms/shared/generator';
 import rimraf from 'rimraf';
+import { getInstallNodeDepsJob } from '../jobs/getInstallNodeDepsJob.js';
+import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
+import { SupportedPackageManagers } from '@custom-types';
 
 type CustomParams = [string];
 
 const generatorFilenameBase = getFilenameBase(GENERATOR_FILENAME);
 
-const simplifyProjectName = (name: string) =>
-  name.replaceAll(' ', '-').toLocaleLowerCase();
-
 interface CustomOptions extends GlobalOptions {
   override: boolean;
   regenerate: boolean;
   admin: boolean;
+  skip: string;
+  packageManager: SupportedPackageManagers;
 }
 
 export class GenerateCMSProgram extends Command {
@@ -42,6 +43,9 @@ export class GenerateCMSProgram extends Command {
   override: boolean = false;
   regenerate: boolean = false;
   admin: boolean = true;
+  skip: string = '';
+  packageManager: SupportedPackageManagers | undefined;
+
   static options: Options<CustomOptions> = {
     override: {
       type: 'boolean',
@@ -52,6 +56,17 @@ export class GenerateCMSProgram extends Command {
       type: 'boolean',
       description: 'To just only regenerate admin and Core',
       short: 'r',
+    },
+    skip: {
+      type: 'string',
+      description: 'To specify which steps to skip',
+      short: 's',
+    },
+    packageManager: {
+      type: 'string',
+      description: 'To specify which package manager use',
+      short: 'p',
+      choices: [...(SUPPORTED_PACKAGE_MANAGERS as any)],
     },
     admin: {
       type: 'boolean',
@@ -67,6 +82,7 @@ export class GenerateCMSProgram extends Command {
     ]);
 
     const FINAL_PATH = process.cwd();
+    const shouldSkip = this.skip.split(',');
 
     if (
       fs
@@ -79,10 +95,8 @@ export class GenerateCMSProgram extends Command {
     }
 
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
-    console.log(generatorConfig.database.models);
     const { project } = generatorConfig;
-    const projectNameSimplified = simplifyProjectName(project.name);
-    const ADMIN_ROOT = path.join(PROJECT_ROOT, 'apps', 'admin');
+    const ADMIN_ROOT = path.join(PROJECT_ROOT, 'packages', 'admin');
 
     if (
       !this.override &&
@@ -111,18 +125,11 @@ export class GenerateCMSProgram extends Command {
           );
         },
       }),
+      getCreatePackageJsonJob('Ensure package.json', {
+        cwd: FINAL_PATH,
+        project,
+      }),
       getWorkerJob('Generate new core', {
-        prompts: [
-          [
-            'packageManager',
-            {
-              type: Input,
-              props: {
-                label: 'What package manager should this project use?',
-              },
-            },
-          ],
-        ],
         job: async () => {
           await generateCore(FINAL_PATH);
         },
@@ -130,27 +137,23 @@ export class GenerateCMSProgram extends Command {
       getWorkerJob('Add another project resources', {
         skip: this.regenerate,
         async job() {
-          await generateByTemplates(
-            path.join(TEMPLATES_ROOT, 'commands', 'generate-cms'),
-            FINAL_PATH,
-            {
-              '*': {
-                project: {
-                  ...project,
-                  name: projectNameSimplified,
-                  security: {
-                    ...(project.security || {}),
-                    secret:
-                      project.security?.secret ||
-                      crypto.randomBytes(20).toString('hex'),
-                  },
+          await generateByTemplates('commands.generate-cms', FINAL_PATH, {
+            '*': {
+              project: {
+                ...project,
+                security: {
+                  ...(project.security || {}),
+                  secret:
+                    project.security?.secret ||
+                    crypto.randomBytes(20).toString('hex'),
                 },
               },
-            }
-          );
+            },
+          });
         },
       }),
       getWorkerJob('Install PHP dependencies', {
+        skip: shouldSkip.includes('dependency-install'),
         async job() {
           await installPHPDeps(FINAL_PATH);
         },
@@ -185,35 +188,11 @@ export class GenerateCMSProgram extends Command {
           );
         },
       }),
-      getWorkerJob<{ packageManager: string }>('Install dependencies', {
-        skip: this.regenerate,
-        prompts: [
-          [
-            'packageManager',
-            {
-              type: Select,
-              props: {
-                label: 'What package manager should this project use?',
-                options: ['yarn', 'npm', 'pnpm'],
-              },
-            },
-          ],
-        ],
-        async job({ packageManager } = { packageManager: 'npm' }) {
-          const devDeps = [
-            'prettier-plugin-twig-melody',
-            '@prettier/plugin-php',
-            '@prom-cms/vite-plugin',
-            'vite',
-            'vite-plugin-live-reload',
-            'typescript',
-          ];
-          // const deps = [];
-
-          await execa(packageManager, ['install', ...devDeps, '--save-dev'], {
-            cwd: FINAL_PATH,
-          });
-        },
+      getInstallNodeDepsJob('Install NODE dependencies', {
+        packageManager: this.packageManager,
+        cwd: FINAL_PATH,
+        regenerate:
+          this.regenerate || shouldSkip.includes('dependency-install'),
       }),
     ];
 

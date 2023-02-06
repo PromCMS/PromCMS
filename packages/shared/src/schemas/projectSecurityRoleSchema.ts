@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { projectSecurityRoleModelPermissionSchema } from './projectSecurityRoleModelPermissionSchema';
+import { projectSecurityRoleModelPermissionSchema } from './projectSecurityRoleModelPermissionSchema.js';
 
 export const projectSecurityRoleSchema = z.object({
   /**
@@ -20,5 +20,5 @@ export const projectSecurityRoleSchema = z.object({
    *
    * @default true
    */
-  hasAccessToAdmin: z.boolean().default(true).optional(),
+  hasAccessToAdmin: z.boolean().default(true),
 });

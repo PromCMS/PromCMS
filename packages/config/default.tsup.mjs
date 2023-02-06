@@ -1,11 +1,23 @@
 import { defineConfig } from 'tsup';
 
-export default defineConfig({
-  entry: ['src/index.ts'],
+/**
+ * @type {import("tsup").Options}
+ */
+export const configValue = {
+  entry: ['src'],
   splitting: false,
   sourcemap: true,
   clean: true,
   outDir: 'dist',
   dts: true,
-  format: ['cjs', 'esm'],
-});
+  format: 'esm',
+  async onSuccess() {
+    const { execa } = await import('execa');
+
+    await execa('tsc', ['--emitDeclarationOnly'], {
+      cwd: process.cwd(),
+    });
+  },
+};
+
+export default defineConfig(configValue);

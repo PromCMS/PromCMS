@@ -1,1 +1,3 @@
-export { default } from '@prom-cms/config/default.tsup.mjs';
+import { configValue } from '@prom-cms/config/default.tsup.mjs';
+
+export default configValue;

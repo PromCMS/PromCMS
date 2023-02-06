@@ -1,8 +1,11 @@
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { formatCodeString, getModuleFolderName } from '../utils';
-import { TEMPLATES_ROOT } from '../constants';
+import {
+  formatCodeString,
+  getModuleFolderName,
+  getTemplateFolder,
+} from '@utils';
 
 /**
  * Creates a PromCMS module to specified directory with bootstrapped content.
@@ -23,7 +26,7 @@ const generateModule = async (
   if (fs.existsSync(pluginRoot) && fs.readdirSync(pluginRoot).length)
     throw Error(`Folder "${pluginName}" does not appear to be empty.`);
 
-  const templatesRoot = path.join(TEMPLATES_ROOT, 'parts', 'generate-module');
+  const templatesRoot = getTemplateFolder('parts.generate-module');
   const templateFiles = fs.readdirSync(templatesRoot);
 
   for (const templateFilename of templateFiles) {

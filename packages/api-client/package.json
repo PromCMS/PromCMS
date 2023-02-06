@@ -18,7 +18,8 @@
     "prettier": "prettier --write \"**/*.{ts,tsx}\"",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
-    "build": "tsup"
+    "dev": "npx tsup --watch",
+    "build": "npx tsup"
   },
   "repository": {
     "type": "git",
@@ -32,7 +33,7 @@
     "@prom-cms/shared": "*"
   },
   "devDependencies": {
-    "typescript": "4.8.2",
+    "typescript": "^4.9.4",
     "@prom-cms/config": "*"
   },
   "peerDependencies": {
