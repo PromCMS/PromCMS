@@ -14,7 +14,7 @@ export const configValue = {
   async onSuccess() {
     const { execa } = await import('execa');
 
-    await execa('tsc', ['--declarationMap'], {
+    await execa('tsc', ['--emitDeclarationOnly'], {
       cwd: process.cwd(),
     });
   },

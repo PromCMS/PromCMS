@@ -1,5 +1,4 @@
 import { Command, GlobalOptions, Options } from '@boost/cli';
-import { Input } from '@boost/cli/react';
 import path from 'path';
 import fs from 'fs-extra';
 import { execa } from 'execa';
@@ -12,7 +11,7 @@ import {
   getWorkerJob,
   getFilenameBase,
 } from '@utils';
-import { PROJECT_ROOT } from '@constants';
+import { PROJECT_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
 import generateCore from '@parts/generate-core-files';
 import { installPHPDeps } from '@parts/install-php-deps';
 import { generateProjectModule } from '@parts/generate-project-module';
@@ -21,6 +20,7 @@ import { GENERATOR_FILENAME } from '@prom-cms/shared/generator';
 import rimraf from 'rimraf';
 import { getInstallNodeDepsJob } from '../jobs/getInstallNodeDepsJob.js';
 import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
+import { SupportedPackageManagers } from '@custom-types';
 
 type CustomParams = [string];
 
@@ -30,6 +30,8 @@ interface CustomOptions extends GlobalOptions {
   override: boolean;
   regenerate: boolean;
   admin: boolean;
+  skip: string;
+  packageManager: SupportedPackageManagers;
 }
 
 export class GenerateCMSProgram extends Command {
@@ -41,6 +43,9 @@ export class GenerateCMSProgram extends Command {
   override: boolean = false;
   regenerate: boolean = false;
   admin: boolean = true;
+  skip: string = '';
+  packageManager: SupportedPackageManagers | undefined;
+
   static options: Options<CustomOptions> = {
     override: {
       type: 'boolean',
@@ -51,6 +56,17 @@ export class GenerateCMSProgram extends Command {
       type: 'boolean',
       description: 'To just only regenerate admin and Core',
       short: 'r',
+    },
+    skip: {
+      type: 'string',
+      description: 'To specify which steps to skip',
+      short: 's',
+    },
+    packageManager: {
+      type: 'string',
+      description: 'To specify which package manager use',
+      short: 'p',
+      choices: [...(SUPPORTED_PACKAGE_MANAGERS as any)],
     },
     admin: {
       type: 'boolean',
@@ -66,6 +82,7 @@ export class GenerateCMSProgram extends Command {
     ]);
 
     const FINAL_PATH = process.cwd();
+    const shouldSkip = this.skip.split(',');
 
     if (
       fs
@@ -113,17 +130,6 @@ export class GenerateCMSProgram extends Command {
         project,
       }),
       getWorkerJob('Generate new core', {
-        prompts: [
-          [
-            'packageManager',
-            {
-              type: Input,
-              props: {
-                label: 'What package manager should this project use?',
-              },
-            },
-          ],
-        ],
         job: async () => {
           await generateCore(FINAL_PATH);
         },
@@ -147,6 +153,7 @@ export class GenerateCMSProgram extends Command {
         },
       }),
       getWorkerJob('Install PHP dependencies', {
+        skip: shouldSkip.includes('dependency-install'),
         async job() {
           await installPHPDeps(FINAL_PATH);
         },
@@ -181,9 +188,11 @@ export class GenerateCMSProgram extends Command {
           );
         },
       }),
-      getInstallNodeDepsJob('Install dependencies', {
+      getInstallNodeDepsJob('Install NODE dependencies', {
+        packageManager: this.packageManager,
         cwd: FINAL_PATH,
-        regenerate: this.regenerate,
+        regenerate:
+          this.regenerate || shouldSkip.includes('dependency-install'),
       }),
     ];
 
