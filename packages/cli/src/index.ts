@@ -7,6 +7,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { PACKAGE_ROOT } from '@constants';
 import { DbToolsMigrateProgram } from './commands/db-tools/migrate.js';
+import { UsersProgram } from './commands/users.js';
 
 (async () => {
   const { version } = await fs.readJson(
@@ -25,5 +26,6 @@ import { DbToolsMigrateProgram } from './commands/db-tools/migrate.js';
     .register(new GenerateCMSProgram())
     .register(new SeedDatabaseProgram())
     .register(new DbToolsMigrateProgram())
+    .register(new UsersProgram())
     .runAndExit(process.argv);
 })();
