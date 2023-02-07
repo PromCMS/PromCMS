@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.4.1
+
+### Patch Changes
+
+- 8dc8c0f: Rename plugin internally to prom-cms-vite-plugin
+
 ## 0.4.0
 
 ### Minor Changes
