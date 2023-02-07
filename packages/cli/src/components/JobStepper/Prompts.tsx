@@ -1,6 +1,7 @@
 import { Box, Text } from 'ink';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { LoggedWorkerJob } from '@custom-types';
+import { PasswordInput } from '@boost/cli/react';
 
 export type PromptsProps = {
   onSuccess: (props: Record<string, any>) => void;
@@ -56,7 +57,11 @@ export const Prompts: FC<PromptsProps> = ({ onSuccess, prompts }) => {
               <Text>
                 {'? '}
                 {value.props?.label}...{' '}
-                <Text color="green">{JSON.stringify(resultValue)}</Text>
+                <Text color="green">
+                  {Component.name === PasswordInput.name
+                    ? [...new Array(resultValue.length)].map(() => '*')
+                    : JSON.stringify(resultValue)}
+                </Text>
               </Text>
             ) : (
               <Component onSubmit={getOnSubmit(key)} {...value.props} />

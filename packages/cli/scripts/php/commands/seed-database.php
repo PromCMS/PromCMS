@@ -6,6 +6,7 @@ use PromCMS\Core\Utils;
 
 $PHP_APP_ROOT = $argv[1];
 include_once $PHP_APP_ROOT . '/vendor/autoload.php';
+include_once './_utils.php';
 
 $app = new App($PHP_APP_ROOT);
 $app->init(true);
@@ -17,11 +18,6 @@ $moduleNames = Utils::getValidModuleNames($PHP_APP_ROOT);
 $availableModels = [];
 $faker = Faker\Factory::create();
 $passwordService = new PasswordService();
-
-function str_includes(string $toSearch, string $text)
-{
-  return strpos($toSearch, $text) !== false;
-}
 
 function specialStringFaker($columnName)
 {
