@@ -13,10 +13,10 @@ export const UserUnderpageForm: VFC = () => {
 
   const groupedFields = useMemo(() => {
     if (!model) return;
-    const newModel = { ...model, columns: { ...model.columns } };
+    const newModel = { ...model, columns: new Map(model.columns) };
 
     if (
-      newModel.columns.role &&
+      newModel.columns.has('role') &&
       !currentUser?.can({ action: 'update', targetModel: 'users' })
     ) {
       unset(newModel, 'columns.role');

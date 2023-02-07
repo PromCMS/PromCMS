@@ -1,29 +1,20 @@
-import {
-  capitalizeFirstLetter,
-  ColumnType,
-  GeneratorConfig,
-} from '@prom-cms/shared';
+import { capitalizeFirstLetter, GeneratorConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import {
-  formatCodeString,
-  getTemplateFolder,
-  stringifyJSONRecursive,
-} from '@utils';
+import { formatCodeString, getTemplateFolder } from '@utils';
 
-const columnTypeToCast = (type: ColumnType['type']) => {
-  let finalType = 'string';
+type ModelColumns = GeneratorConfig['database']['models'][string]['columns'];
+type SingletonColumns = NonNullable<
+  GeneratorConfig['database']['singletons']
+>[string]['columns'];
 
-  switch (type) {
-    case 'json':
-      finalType = 'array';
-      break;
-    default:
-      break;
-  }
+type ColumnType = NonNullable<
+  ReturnType<(SingletonColumns | ModelColumns)['get']>
+>['type'];
 
-  return finalType;
+const columnCasts: Partial<{ [key in ColumnType]: string }> = {
+  json: 'array',
 };
 
 const recursivePrintObject = (obj: object | []) => {
@@ -64,6 +55,22 @@ const recursivePrintObject = (obj: object | []) => {
   return `[${result}]`;
 };
 
+const getColumnCasts = (columns?: SingletonColumns | ModelColumns) => {
+  const casts: [string, string][] = [];
+
+  for (const [columnKey, { type }] of (columns || new Map()) as NonNullable<
+    typeof columns
+  >) {
+    if (!columnCasts[type]) {
+      continue;
+    }
+
+    casts.push([columnKey, columnCasts[type]!]);
+  }
+
+  return casts;
+};
+
 /**
  * Creates a models by provided config
  */
@@ -87,9 +94,7 @@ const generateModels = async (
       modelName: capitalizedModelName,
       isSingleton,
       ...currentModel,
-      columnCasts: Object.entries(currentModel.columns)
-        .filter(([_, { type }]) => type === 'json')
-        .map(([key, { type }]) => [key, columnTypeToCast(type)]),
+      columnCasts: getColumnCasts(currentModel.columns),
       events: {
         shouldInclude() {
           return (
@@ -101,7 +106,7 @@ const generateModels = async (
             return this.slugify;
           },
 
-          slugify: !!Object.entries(currentModel.columns).find(
+          slugify: !![...currentModel.columns].find(
             ([_colKey, col]) => col.type === 'slug'
           ),
         },
@@ -113,9 +118,8 @@ const generateModels = async (
           ordering: 'sorting' in currentModel && currentModel.sorting,
         },
       },
-      formattedColumns: Object.keys(currentModel.columns).reduce(
-        (finalTransformedColumns, currentColumnKey) => {
-          const currentColumn = currentModel.columns[currentColumnKey];
+      formattedColumns: [...currentModel.columns].reduce(
+        (finalTransformedColumns, [currentColumnKey, currentColumn]) => {
           const transformedSettings: string[] = [];
 
           // Some column types are special and need some special logic
@@ -154,12 +158,11 @@ const generateModels = async (
             );
           }
 
-          return {
-            ...finalTransformedColumns,
-            [currentColumnKey]: transformedSettings,
-          };
+          finalTransformedColumns.set(currentColumnKey, transformedSettings);
+
+          return finalTransformedColumns;
         },
-        {} as Record<string, string[]>
+        new Map<string, string[]>()
       ),
     };
 

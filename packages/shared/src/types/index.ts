@@ -1,6 +1,7 @@
 export * from './ApiResultModel.js';
 export * from './ApiResultModels.js';
 export * from './ApiResultSingleton.js';
+export * from './ApiResultSingletons.js';
 export * from './DatabaseConfig.js';
 export * from './DatabaseConfigItemBase.js';
 export * from './DatabaseConfigModel.js';

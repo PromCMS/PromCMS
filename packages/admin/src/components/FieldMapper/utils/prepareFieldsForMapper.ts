@@ -1,23 +1,37 @@
-import { ApiResultModel, FieldPlacements } from '@prom-cms/shared';
+import {
+  ApiResultModel,
+  ApiResultModelSingleton,
+  FieldPlacements,
+} from '@prom-cms/shared';
 
 export const prepareFieldsForMapper = (
-  model: ApiResultModel,
+  { columns }: ApiResultModel | ApiResultModelSingleton,
   placement?: FieldPlacements
-) =>
-  Object.keys(model.columns)
-    .map((columnName: string) => [
+) => {
+  const fieldRows: (ReturnType<typeof columns['get']> & {
+    columnName: string;
+  })[][] = [];
+
+  for (const [columnName, column] of columns) {
+    const { hide, editable, admin } = column;
+
+    if (
+      hide ||
+      !editable ||
+      (placement && admin.editor.placement !== placement) ||
+      columnName === 'is_published'
+    ) {
+      continue;
+    }
+
+    fieldRows.push([
+      // TODO: Extend this when we will support grouped fields
       {
-        ...model.columns[columnName],
+        ...column,
         columnName,
       },
-    ])
-    .filter(
-      (columns) =>
-        columns.filter(
-          ({ hide, editable, admin }) =>
-            !hide &&
-            editable &&
-            (placement ? admin.editor.placement === placement : true)
-        ).length
-    )
-    .map((items) => items.filter((item) => item.columnName !== 'is_published'));
+    ]);
+  }
+
+  return fieldRows;
+};

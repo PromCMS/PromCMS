@@ -11,7 +11,8 @@ export const Header: FC = () => {
   const { t } = useTranslation();
   const hasHeading = useMemo(
     () =>
-      !!Object.entries(model?.columns || {}).find(
+      model?.columns &&
+      !!Object.entries(Object.fromEntries(model?.columns)).find(
         ([_, data]) =>
           !data.hide &&
           data.editable &&
