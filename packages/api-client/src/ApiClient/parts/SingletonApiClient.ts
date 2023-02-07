@@ -1,4 +1,6 @@
+import { ApiResultModelSingleton, ApiResultSingletons } from '@prom-cms/shared';
 import { Response, ResultItem, RichAxiosRequestConfig } from '../../types';
+import { formatColumns } from '../../utils/formatColumns';
 import { ApiClientBase } from '../ApiClientBase';
 
 export class SingletonApiClient extends ApiClientBase {
@@ -8,6 +10,28 @@ export class SingletonApiClient extends ApiClientBase {
 
   static getItemUrl(singletonId: string) {
     return `${this.getBaseUrl()}/${singletonId}`;
+  }
+
+  async aboutAll(config?: RichAxiosRequestConfig<ApiResultSingletons>) {
+    return this.axios
+      .get<ApiResultSingletons>(
+        SingletonApiClient.getBaseUrl(),
+        this.formatAxiosConfig(config)
+      )
+      .then(({ data, ...rest }) => ({
+        ...rest,
+        data: formatColumns(data),
+      }));
+  }
+
+  async aboutOne(
+    singletonId: string,
+    config?: RichAxiosRequestConfig<ApiResultModelSingleton>
+  ) {
+    return this.axios.get<Response<ApiResultModelSingleton>>(
+      `${SingletonApiClient.getItemUrl(singletonId)}/info`,
+      this.formatAxiosConfig(config)
+    );
   }
 
   async getOne<T extends ResultItem>(

@@ -29,13 +29,12 @@ class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
   <%# Table columns info %> 
   public static array $tableColumns = [
     <% 
-      Object.keys(formattedColumns).forEach(columnKey => { 
-      const formattedColumnSettings = formattedColumns[columnKey];
+      for (const [columnKey, formattedColumnConfig] of formattedColumns) { 
     %>
       '<%- columnKey %>' => [
-        <%- formattedColumnSettings.join(', ') %>
+        <%- formattedColumnConfig.join(', ') %>
       ],
-    <% }) %>
+    <% } %>
   ];
   
   <%# Custom model info not tied to PromCMS\Core\Database\Model perse %> 

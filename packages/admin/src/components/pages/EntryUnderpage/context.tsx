@@ -17,11 +17,7 @@ import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import { getObjectDiff } from '@utils';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
-import type EditorJS from '@editorjs/editorjs';
-import { ReactNode } from 'react';
 import { ReactElement } from 'react';
-import { MutableRefObject } from 'react';
-import { RefObject } from 'react';
 import { useCallback } from 'react';
 import { useSettings } from '@hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
@@ -176,10 +172,11 @@ export const EntryUnderpageContextProvider: FC<{
         );
       } catch (e) {
         if (axios.isAxiosError(e) && e.response?.data?.code === 900409) {
+          // TODO: add type
           const fieldNames = e.response.data.data;
           if (Array.isArray(fieldNames) && fieldNames.length) {
             for (const fieldName of fieldNames) {
-              const fieldInfo = currentModel?.columns?.[fieldName];
+              const fieldInfo = currentModel?.columns.get(fieldName);
               let variableFieldName = fieldName;
 
               if (fieldName === 'slug' && fieldInfo?.type === 'slug') {

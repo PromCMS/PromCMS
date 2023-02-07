@@ -15,12 +15,7 @@ export const PostLikeFields: FC = () => {
   >(() => {
     if (!currentModel) return;
 
-    const { title, content, ...columns } = currentModel.columns;
-
-    return prepareFieldsForMapper(
-      { ...currentModel, columns },
-      FieldPlacements.ASIDE
-    );
+    return prepareFieldsForMapper(currentModel, FieldPlacements.ASIDE);
   }, [currentModel]);
 
   if (!(groupedFields && groupedFields.length)) {

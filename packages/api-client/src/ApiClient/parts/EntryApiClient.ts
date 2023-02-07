@@ -1,15 +1,18 @@
-import { ItemID } from '@prom-cms/shared';
+import { ApiResultModel, ApiResultModels, ItemID } from '@prom-cms/shared';
 import {
   PagedResponse,
   Response,
   ResultItem,
   RichAxiosRequestConfig,
 } from '../../types';
+import { formatColumns } from '../../utils/formatColumns';
 import { ApiClientBase } from '../ApiClientBase';
+
+const routePrefix = '/entry-types';
 
 export class EntryApiClient extends ApiClientBase {
   static getBaseUrl(modelId: string) {
-    return `/entry-types/${modelId}`;
+    return `${routePrefix}/${modelId}`;
   }
 
   static getItemsUrl(modelId: string) {
@@ -18,6 +21,25 @@ export class EntryApiClient extends ApiClientBase {
 
   static getItemUrl(modelId: string, id: ItemID) {
     return `${this.getItemsUrl(modelId)}/${id}`;
+  }
+
+  async aboutAll(config?: RichAxiosRequestConfig<ApiResultModels>) {
+    return this.axios
+      .get<ApiResultModels>(routePrefix, this.formatAxiosConfig(config))
+      .then(({ data, ...rest }) => ({
+        ...rest,
+        data: formatColumns(data),
+      }));
+  }
+
+  async aboutOne(
+    modelId: string,
+    config?: RichAxiosRequestConfig<ApiResultModel>
+  ) {
+    return this.axios.get<Response<ApiResultModel>>(
+      EntryApiClient.getBaseUrl(modelId),
+      this.formatAxiosConfig(config)
+    );
   }
 
   async getOne<T extends ResultItem>(

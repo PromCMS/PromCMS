@@ -113,10 +113,11 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
       );
     } catch (e) {
       if (axios.isAxiosError(e) && e.response?.data?.code === 900409) {
+        // TODO: add types
         const fieldNames = e.response.data.data;
         if (Array.isArray(fieldNames) && fieldNames.length) {
           for (const fieldName of fieldNames) {
-            const fieldInfo = singleton?.columns?.[fieldName];
+            const fieldInfo = singleton?.columns?.get(fieldName);
             let variableFieldName = fieldName;
 
             if (fieldName === 'slug' && fieldInfo?.type === 'slug') {

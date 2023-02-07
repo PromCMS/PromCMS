@@ -38,10 +38,18 @@ export const databaseConfigItemBaseSchema = z.object({
    */
   preset: z.enum(['post']).optional(),
 
+  title: z
+    .string()
+    .min(1)
+    .describe('Human readable form of current model')
+    .optional(),
+
   /**
    * Table columns
    */
-  columns: z.record(columnTypeSchema),
+  columns: z
+    .record(columnTypeSchema)
+    .transform((columns) => new Map(Object.entries(columns))),
 
   /**
    * Toggles the multi language functionality for current model

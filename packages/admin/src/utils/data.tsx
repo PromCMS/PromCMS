@@ -7,36 +7,32 @@ import { Check, X } from 'tabler-icons-react';
 export const formatApiModelResultToTableView = (
   model: DatabaseConfigModel
 ): TableViewCol[] =>
-  Object.keys(model.columns).map((columnKey) => {
-    const columnInfo = model.columns[columnKey];
-
-    return {
-      fieldName: columnKey,
-      title: columnInfo.title,
-      show: !(
-        columnInfo.hide ||
-        columnInfo.type === 'slug' ||
-        columnInfo.type === 'json' ||
-        columnInfo.admin?.isHidden ||
-        false
-      ),
-      // TODO make new formatter
-      /*...(columnInfo.type === 'json' && {
-        formatter(value) {
-          return JSON.stringify(value || {})
-        },
-      }),*/
-      ...(columnInfo.type === 'boolean' && {
-        formatter(values) {
-          return values[columnKey] ? (
-            <Check className="text-green-400" />
-          ) : (
-            <X className="text-red-400" />
-          );
-        },
-      }),
-    };
-  });
+  [...model.columns].map(([columnKey, columnInfo]) => ({
+    fieldName: columnKey,
+    title: columnInfo.title,
+    show: !(
+      columnInfo.hide ||
+      columnInfo.type === 'slug' ||
+      columnInfo.type === 'json' ||
+      columnInfo.admin?.isHidden ||
+      false
+    ),
+    // TODO make new formatter
+    /*...(columnInfo.type === 'json' && {
+      formatter(value) {
+        return JSON.stringify(value || {})
+      },
+    }),*/
+    ...(columnInfo.type === 'boolean' && {
+      formatter(values) {
+        return values[columnKey] ? (
+          <Check className="text-green-400" />
+        ) : (
+          <X className="text-red-400" />
+        );
+      },
+    }),
+  }));
 
 export const getObjectDiff = (
   originalObject: any,

@@ -1,12 +1,7 @@
-import { ApiResultModel, ApiResultModels, ItemID, User, UserRole } from '@prom-cms/shared';
+import { ItemID, User, UserRole } from '@prom-cms/shared';
 import axios from 'axios';
 import { apiClient } from '@api';
-import {
-  API_CURRENT_USER_URL,
-  API_ENTRY_TYPES_URL,
-  API_SETTINGS_URL,
-  API_SINGLETONS_URL,
-} from '@constants';
+import { API_CURRENT_USER_URL, API_SETTINGS_URL } from '@constants';
 import {
   createContext,
   FC,
@@ -19,12 +14,14 @@ import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+type DataFromAxios<T extends (...any) => Promise<Record<any, any>>> = Awaited<
+  ReturnType<T>
+>['data'];
+
 export interface IGlobalContext {
   currentUser?: Omit<User, 'role'> & { role: UserRole };
-  models?: ApiResultModels;
-  singletons?: {
-    [x: string]: Omit<ApiResultModel, "tableName"> & {name: string};
-  };
+  models?: DataFromAxios<typeof apiClient.entries.aboutAll>;
+  singletons?: DataFromAxios<typeof apiClient.singletons.aboutAll>;
   updateValue<T extends keyof Omit<IGlobalContext, 'updateValue'>>(
     key: T,
     value?: IGlobalContext[T]
@@ -52,8 +49,8 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<
     Omit<User, 'role'> & { role: UserRole }
   >();
-  const [models, setModels] = useState();
-  const [singletons, setSingletons] = useState();
+  const [models, setModels] = useState<IGlobalContext['models']>();
+  const [singletons, setSingletons] = useState<IGlobalContext['singletons']>();
   const [isBooting, setIsBooting] = useState(true);
   const [isNotOnline, setIsNotOnline] = useState(false);
   const [settings, setSettings] = useState();
@@ -80,15 +77,11 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const getModels = async () => {
       setIsBooting(true);
       const [modelsQuery, settingsRes, singletonsRes] = await Promise.all([
-        apiClient.getAxios().get(API_ENTRY_TYPES_URL, {
-          cancelToken: cancelToken.token,
-        }),
+        apiClient.entries.aboutAll({ cancelToken: cancelToken.token }),
         apiClient.getAxios().get(API_SETTINGS_URL, {
           cancelToken: cancelToken.token,
         }),
-        apiClient.getAxios().get(API_SINGLETONS_URL, {
-          cancelToken: cancelToken.token,
-        }),
+        apiClient.singletons.aboutAll({ cancelToken: cancelToken.token }),
       ]);
 
       setSettings(settingsRes.data.data);
