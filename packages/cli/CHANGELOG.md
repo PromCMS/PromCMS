@@ -1,5 +1,23 @@
 # @prom-cms/cli
 
+## 0.13.0
+
+### Minor Changes
+
+- 8dc8c0f: Implement singleton logic
+- 8dc8c0f: Add new optional cli params - skip to skip some parts and packageManager to preselect desired package manager
+- 8dc8c0f: Change the internals and implement different column admin layout logic which now is more logical and more abstract
+- eb0c988: Create a new command users to manage users
+- 8dc8c0f: Bring admin to packages and change buildsystem in development. Now its possible to be closer to real application with the benefit of live vite dev server of admin.
+- 370a749: Fix invalid file loading of module and remove some cli parameters
+
+### Patch Changes
+
+- Updated dependencies [8dc8c0f]
+- Updated dependencies [8dc8c0f]
+- Updated dependencies [8dc8c0f]
+  - @prom-cms/shared@1.8.0
+
 ## 0.12.0
 
 ### Minor Changes

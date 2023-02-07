@@ -1,5 +1,19 @@
 # @prom-cms/api-client
 
+## 0.5.0
+
+### Minor Changes
+
+- 8dc8c0f: Implement singleton logic
+- 8dc8c0f: Change the internals and implement different column admin layout logic which now is more logical and more abstract
+
+### Patch Changes
+
+- Updated dependencies [8dc8c0f]
+- Updated dependencies [8dc8c0f]
+- Updated dependencies [8dc8c0f]
+  - @prom-cms/shared@1.8.0
+
 ## 0.4.1
 
 ### Patch Changes
