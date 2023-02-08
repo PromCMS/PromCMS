@@ -2,9 +2,12 @@
   "name": "@prom-cms/admin",
   "version": "0.2.0",
   "type": "module",
-  "files": [
-    "dist"
-  ],
+  "main": "./index.js",
+  "exports": {
+    "./*": "./*",
+    "./dist": "./dist",
+    "./package.json": "./package.json"
+  },
   "scripts": {
     "dev": "npx vite -c ./vite/config.ts",
     "build": "npx tsc --noEmit && vite build -c ./vite/config.ts",

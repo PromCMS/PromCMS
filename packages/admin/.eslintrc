@@ -3,5 +3,9 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "prettier"
-  ]
+  ],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2015
+  }
 }
