@@ -1,5 +1,18 @@
 # @prom-cms/api-client
 
+## 0.6.0
+
+### Minor Changes
+
+- 999c46c: Add title and update columns structure to be map instead of plain object to maintain order.
+- b61ac1d: Add new opening hours and repeater admin rendering type into json field type. Also add fieldType to file field type.
+
+### Patch Changes
+
+- Updated dependencies [999c46c]
+- Updated dependencies [b61ac1d]
+  - @prom-cms/shared@1.9.0
+
 ## 0.5.0
 
 ### Minor Changes
