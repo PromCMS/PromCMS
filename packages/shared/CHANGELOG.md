@@ -1,5 +1,12 @@
 # @prom-cms/shared
 
+## 1.9.0
+
+### Minor Changes
+
+- 999c46c: Add title and update columns structure to be map instead of plain object to maintain order.
+- b61ac1d: Add new opening hours and repeater admin rendering type into json field type. Also add fieldType to file field type.
+
 ## 1.8.0
 
 ### Minor Changes
