@@ -21,6 +21,9 @@ import { apiClient } from '@api';
 import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
+import { getModelItemSchema } from '@schemas';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
 
 export type SingletonPageContext = {
   setLanguage: Dispatch<SetStateAction<SingletonPageContext['language']>>;
@@ -41,11 +44,17 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
 }) => {
   const blockEditorRefs = useBlockEditorRefs();
   const settings = useSettings();
-  const formMethods = useForm({
+  const singleton = useCurrentSingleton(true);
+  const schema = useMemo(
+    () => singleton && getModelItemSchema(singleton, true),
+    [singleton]
+  );
+  const formMethods = useForm<Record<string, any>>({
+    defaultValues: constructDefaultFormValues(singleton),
     reValidateMode: 'onChange',
     mode: 'onTouched',
+    resolver: schema && yupResolver(schema),
   });
-  const singleton = useCurrentSingleton(true);
   const { t } = useTranslation();
   const [language, setLanguage] = useState(settings?.i18n?.default);
   const queryClient = useQueryClient();
@@ -71,7 +80,9 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
   useEffect(() => {
     if (data) {
       formMethods.reset({
-        ...data,
+        ...Object.fromEntries(
+          Object.entries(data).filter(([_, data]) => data !== null)
+        ),
         ...(data.content ? { content: JSON.stringify(data.content) } : {}),
       });
     }
@@ -157,10 +168,11 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
             }
           }
 
+          formMethods.reset(result);
           mutateItemInCache(result);
         }
       ),
-    [mutateItemInCache, singleton, t, blockEditorRefs]
+    [mutateItemInCache, singleton, t, blockEditorRefs, formMethods.reset]
   );
 
   const contextValue = useMemo(

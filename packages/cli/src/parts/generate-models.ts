@@ -17,7 +17,7 @@ const columnCasts: Partial<{ [key in ColumnType]: string }> = {
   json: 'array',
 };
 
-const recursivePrintObject = (obj: object | []) => {
+const recursivePrintObject = (obj: object | Map<any, any> | []) => {
   let result = ``;
 
   if (Array.isArray(obj)) {
@@ -25,7 +25,7 @@ const recursivePrintObject = (obj: object | []) => {
   } else {
     const keys: string[] = [];
 
-    for (const [key, value] of Object.entries(obj)) {
+    for (const [key, value] of obj instanceof Map ? obj : Object.entries(obj)) {
       let formattedValue = '';
 
       switch (typeof value) {
