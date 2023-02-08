@@ -190,15 +190,67 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
         icon: 'Archive',
         preset: 'post',
         columns: {
-          image: {
+          heroImage: {
             type: 'file',
             title: 'Úvodní obrázek',
+            typeFilter: 'image',
+            translations: false,
+            multiple: true,
+            admin: {
+              isHidden: true,
+              fieldType: 'big-image',
+            },
+          },
+          image: {
+            type: 'file',
+            title: 'Next image',
             typeFilter: 'image',
             translations: false,
             admin: {
               isHidden: true,
               editor: {
                 placement: FieldPlacements.ASIDE,
+              },
+            },
+          },
+          openingHours: {
+            type: 'json',
+            title: 'Opening hours test',
+            admin: {
+              fieldType: 'openingHours',
+            },
+          },
+          rip: {
+            type: 'json',
+            title: 'Repeater test',
+            admin: {
+              fieldType: 'repeater',
+              editor: {
+                placement: FieldPlacements.ASIDE,
+              },
+              columns: {
+                name: {
+                  type: 'string',
+                },
+                value: {
+                  title: 'value',
+                  type: 'string',
+                },
+                unmb: {
+                  type: 'number',
+                },
+              },
+            },
+          },
+          ripTwo: {
+            type: 'json',
+            title: 'Repeater test',
+            admin: {
+              fieldType: 'repeater',
+              columns: {
+                name: {
+                  type: 'string',
+                },
               },
             },
           },

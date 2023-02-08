@@ -6,6 +6,10 @@ import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import ImageSelect from '../form/ImageSelect';
 import { EnumSelect, RelationshipItemSelect } from './fields';
+import { BigImage } from './fields/file/BigImage';
+import { Normal } from './fields/file/Normal';
+import { OpeningHours } from './fields/json/OpeningHours';
+import { Repeater } from './fields/json/Repeater';
 
 export interface FieldMapperProps {
   type: FieldPlacements;
@@ -14,7 +18,7 @@ export interface FieldMapperProps {
   })[][];
 }
 
-const FieldMapper: FC<FieldMapperProps> = ({ fields }) => {
+const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
   const { formState, register, control } =
     useFormContext<Record<string, string | boolean | number>>();
   const { t } = useTranslation();
@@ -103,22 +107,30 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields }) => {
                   break;
 
                 case 'file':
-                  result = (
-                    <Controller
-                      key={columnName}
-                      control={control}
-                      name={columnName}
-                      render={({ field: { onChange, value } }) => (
-                        <ImageSelect
-                          onChange={onChange}
-                          selected={String(value)}
-                          error={errorMessage}
+                  switch (values.admin.fieldType) {
+                    case 'big-image':
+                      result = (
+                        <BigImage
+                          key={columnName}
+                          name={columnName}
+                          errorMessage={errorMessage}
                           label={values.title}
-                          {...(values as any)}
+                          {...values}
                         />
-                      )}
-                    />
-                  );
+                      );
+                      break;
+                    case 'normal':
+                      result = (
+                        <Normal
+                          key={columnName}
+                          name={columnName}
+                          errorMessage={errorMessage}
+                          label={values.title}
+                          {...values}
+                        />
+                      );
+                      break;
+                  }
                   break;
 
                 case 'boolean':
@@ -153,6 +165,26 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields }) => {
                     case 'blockEditor':
                       result = (
                         <BlockEditor key={columnName} name={columnName} />
+                      );
+                      break;
+                    case 'openingHours':
+                      result = (
+                        <OpeningHours
+                          key={columnName}
+                          label={title}
+                          name={columnName}
+                          placement={placement}
+                        />
+                      );
+                      break;
+                    case 'repeater':
+                      result = (
+                        <Repeater
+                          label={title}
+                          name={columnName}
+                          columns={(values.admin as any).columns as any}
+                          placement={placement}
+                        />
                       );
                       break;
                     case 'jsonEditor':

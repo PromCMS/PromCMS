@@ -6,7 +6,6 @@ import {
   useContext,
   useMemo,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import { EntryTypeUrlActionType } from '@custom-types';
@@ -26,6 +25,7 @@ import { ResultItem } from '@prom-cms/api-client';
 import { apiClient } from '@api';
 import { pageUrls } from '@constants';
 import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
+import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType;
@@ -63,7 +63,7 @@ export const EntryUnderpageContextProvider: FC<{
     settings?.i18n?.default
   );
   const navigate = useNavigate();
-  const currentModel = useCurrentModel();
+  const currentModel = useCurrentModel(true);
   const { t } = useTranslation();
   const {
     data: itemData,
@@ -76,8 +76,8 @@ export const EntryUnderpageContextProvider: FC<{
       currentModel && getModelItemSchema(currentModel, viewType === 'update'),
     [currentModel, viewType]
   );
-  const formMethods = useForm({
-    defaultValues: itemData?.data || {},
+  const formMethods = useForm<Record<string, any>>({
+    defaultValues: constructDefaultFormValues(currentModel),
     reValidateMode: 'onChange',
     mode: 'onTouched',
     resolver: schema && yupResolver(schema),
@@ -104,7 +104,9 @@ export const EntryUnderpageContextProvider: FC<{
   useEffect(() => {
     if (itemData) {
       formMethods.reset({
-        ...itemData,
+        ...Object.fromEntries(
+          Object.entries(itemData).filter(([_, data]) => data !== null)
+        ),
         ...(itemData.content
           ? { content: JSON.stringify(itemData.content) }
           : {}),

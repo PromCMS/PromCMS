@@ -38,7 +38,9 @@ const LazyProfileLayout = lazy(() =>
 const LazyGeneralTranslationsPage = lazy(
   () => import('@pages/settings/translations/[lang]')
 );
-const LazySingletonPage = lazy(() => import('@pages/singletons/[singletonId]'));
+const LazySingletonPage = lazy(
+  () => import('@pages/singletons/[singletonId]/page')
+);
 
 export function App() {
   return (

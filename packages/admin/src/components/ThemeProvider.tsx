@@ -20,6 +20,11 @@ export const theme: MantineThemeOverride = {
         size: 'md',
       },
     },
+    NumberInput: {
+      defaultProps: {
+        size: 'md',
+      },
+    },
     PasswordInput: {
       defaultProps: {
         size: 'md',

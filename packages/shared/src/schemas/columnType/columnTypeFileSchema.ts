@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { columnTypeBaseAdminConfigSchema } from './columnTypeBaseAdminConfigSchema.js';
 import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 
 export const columnTypeFileSchema = columnTypeBaseSchema.extend({
@@ -14,6 +15,13 @@ export const columnTypeFileSchema = columnTypeBaseSchema.extend({
    * MimeType type part filter
    */
   typeFilter: z.string().optional(),
+
+  /**
+   * Admin settings
+   */
+  admin: columnTypeBaseAdminConfigSchema
+    .extend({ fieldType: z.enum(['normal', 'big-image']).default('normal') })
+    .default({}),
 });
 
 export type ColumnTypeFile = z.infer<typeof columnTypeFileSchema>;

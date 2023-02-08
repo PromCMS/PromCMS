@@ -3,7 +3,9 @@ import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSingletonInfo } from './useSingletonInfo';
 
-type Item = ApiResultModelSingleton & { key: string };
+export type RichApiResultModelSingleton = ApiResultModelSingleton & {
+  key: string;
+};
 
 /**
  * Quick hook to access current singleton information on current route.
@@ -24,7 +26,9 @@ const useCurrentSingleton = <T extends boolean>(
   return useMemo(
     () => (modelInfo ? { ...modelInfo, key: formattedModelName } : undefined),
     [formattedModelName, modelInfo]
-  ) as T extends false ? Item | undefined : Item;
+  ) as T extends false
+    ? RichApiResultModelSingleton | undefined
+    : RichApiResultModelSingleton;
 };
 
 export default useCurrentSingleton;

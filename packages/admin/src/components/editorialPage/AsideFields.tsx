@@ -1,30 +1,37 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
-import useCurrentModel from '@hooks/useCurrentModel';
-import { ColumnType, FieldPlacements } from '@prom-cms/shared';
+import {
+  ApiResultModel,
+  ApiResultModelSingleton,
+  ColumnType,
+  FieldPlacements,
+} from '@prom-cms/shared';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export const PostLikeFields: FC = () => {
+export const AsideFields: FC<{
+  model: ApiResultModel | ApiResultModelSingleton;
+}> = ({ model }) => {
   const { t } = useTranslation();
-  const currentModel = useCurrentModel();
 
   const groupedFields = useMemo<
     Array<ColumnType & { columnName: string }>[] | undefined
   >(() => {
-    if (!currentModel) return;
+    if (!model) return;
 
-    return prepareFieldsForMapper(currentModel, FieldPlacements.ASIDE);
-  }, [currentModel]);
+    return prepareFieldsForMapper(model, FieldPlacements.ASIDE);
+  }, [model]);
 
   if (!(groupedFields && groupedFields.length)) {
     return null;
   }
 
+  console.log({ groupedFields });
+
   return (
     <AsideItemWrap title={t('Other info')}>
-      <div className="grid gap-5 p-4">
+      <div className="grid gap-5 sm:gap-8 p-4  mb-10">
         <FieldMapper type={FieldPlacements.ASIDE} fields={groupedFields} />
       </div>
     </AsideItemWrap>
