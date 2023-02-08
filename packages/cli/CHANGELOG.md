@@ -1,5 +1,18 @@
 # @prom-cms/cli
 
+## 0.15.0
+
+### Minor Changes
+
+- dfee4be: Release admin into npm and do not build it in cli - just copy it.
+- 2751c2a: Do not resolve admin package - just resolve folder manually
+
+### Patch Changes
+
+- Updated dependencies [dfee4be]
+- Updated dependencies [2751c2a]
+  - @prom-cms/admin@0.3.0
+
 ## 0.14.0
 
 ### Minor Changes
