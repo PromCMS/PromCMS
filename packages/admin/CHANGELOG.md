@@ -1,5 +1,12 @@
 # @prom-cms/admin
 
+## 0.3.0
+
+### Minor Changes
+
+- dfee4be: Release admin into npm and do not build it in cli - just copy it.
+- 2751c2a: Do not resolve admin package - just resolve folder manually
+
 ## 0.2.0
 
 ### Minor Changes
