@@ -18,6 +18,5 @@
     "clean": {
       "cache": false
     }
-  },
-  "ignore": ["@prom-cms/admin"]
+  }
 }

@@ -140,9 +140,11 @@ export class GenerateCMSProgram extends Command {
         skip: shouldSkip.includes('admin'),
         async job() {
           // Build first
-          await execa('npm', ['run', 'build:admin'], {
-            cwd: PROJECT_ROOT,
-          });
+          const { createRequire } = (await import(
+            'module'
+          )) as unknown as Record<string, any>;
+          const require = createRequire(import.meta.url);
+          const adminRoot = require.resolve('@prom-cms/admin');
 
           // And the copy
           const adminFinalPath = path.join(FINAL_PATH, 'public', 'admin');
@@ -151,7 +153,7 @@ export class GenerateCMSProgram extends Command {
           await fs.emptyDir(adminFinalPath);
 
           fs.copy(
-            path.join(ADMIN_ROOT, 'dist'),
+            path.join(adminRoot, 'dist'),
             path.join(FINAL_PATH, 'public', 'admin'),
             {
               recursive: true,

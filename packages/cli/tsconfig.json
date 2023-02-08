@@ -7,7 +7,7 @@
     "noEmit": false,
     "moduleResolution": "nodenext",
     "target": "ESNEXT",
-    "module": "esnext",
+    "module": "ES2020",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "paths": {

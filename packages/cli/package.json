@@ -41,6 +41,7 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
+    "@prom-cms/admin": "^0.2.0",
     "@boost/cli": "^4.0.0",
     "@faker-js/faker": "^7.6.0",
     "@prom-cms/shared": "*",
