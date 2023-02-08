@@ -1,7 +1,6 @@
 import { Command, GlobalOptions, Options } from '@boost/cli';
 import path from 'path';
 import fs from 'fs-extra';
-import { execa } from 'execa';
 import crypto from 'crypto';
 
 import {
@@ -11,7 +10,11 @@ import {
   getWorkerJob,
   getFilenameBase,
 } from '@utils';
-import { PROJECT_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
+import {
+  PACKAGE_ROOT,
+  PROJECT_ROOT,
+  SUPPORTED_PACKAGE_MANAGERS,
+} from '@constants';
 import generateCore from '@parts/generate-core-files';
 import { installPHPDeps } from '@parts/install-php-deps';
 import { generateProjectModule } from '@parts/generate-project-module';
@@ -139,12 +142,8 @@ export class GenerateCMSProgram extends Command {
       getWorkerJob('Add admin html', {
         skip: shouldSkip.includes('admin'),
         async job() {
-          // Build first
-          const { createRequire } = (await import(
-            'module'
-          )) as unknown as Record<string, any>;
-          const require = createRequire(import.meta.url);
-          const adminRoot = require.resolve('@prom-cms/admin');
+          // We will just prebuild admin from package on npm
+          const adminRoot = path.resolve(PACKAGE_ROOT, '..', 'admin');
 
           // And the copy
           const adminFinalPath = path.join(FINAL_PATH, 'public', 'admin');
