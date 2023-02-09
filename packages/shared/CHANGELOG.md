@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 1.9.2
+
+### Patch Changes
+
+- df425e2: Fix findGeneratorConfig, loadRootEnv, getEnvFilepath by not importing it dynamically but statically
+
 ## 1.9.1
 
 ### Patch Changes
