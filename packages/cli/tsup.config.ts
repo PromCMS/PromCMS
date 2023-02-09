@@ -3,7 +3,6 @@ import { Options } from 'tsup';
 
 const config: Options = {
   ...defaultConfig,
-  entry: ['./src/index.ts'],
   inject: ['./react-shim.js'],
 };
 
