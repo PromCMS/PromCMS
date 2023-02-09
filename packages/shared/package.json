@@ -61,7 +61,6 @@
     "tabler-icons-react": "^1.52.0",
     "@types/lodash.kebabcase": "^4.1.7",
     "chalk": "5.0.0",
-    "dotenv": "10.0.0",
     "@prom-cms/config": "^0.1.1"
   }
 }

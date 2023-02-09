@@ -1,5 +1,4 @@
 import { Command, GlobalOptions, Options } from '@boost/cli';
-import { getEnvFilepath } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 import crypto from 'crypto';
@@ -10,6 +9,7 @@ import {
 
 import {
   generateByTemplates,
+  getEnvFilepath,
   getWorkerJob,
   isDirEmpty,
   loggedJobWorker,

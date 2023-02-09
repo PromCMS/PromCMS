@@ -6,13 +6,8 @@
     "noEmit": false,
     "target": "ESNEXT",
     "moduleResolution": "nodenext",
-    "module": "esnext",
+    "module": "esnext"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

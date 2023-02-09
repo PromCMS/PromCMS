@@ -1,5 +1,6 @@
 export * from './boost-cli/index.js';
 export * from './generateByTemplates.js';
+export * from './getEnvFilepath.js';
 export * from './getFilenameBase.js';
 export * from './getModuleFolderName.js';
 export * from './getTemplateFolder.js';

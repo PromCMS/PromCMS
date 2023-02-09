@@ -1,5 +1,4 @@
 import { Program } from '@boost/cli';
-import { loadRootEnv } from '@prom-cms/shared';
 import { SeedDatabaseProgram } from './commands/seed-database.js';
 import { GenerateCMSProgram } from './commands/generate-cms.js';
 import { GenerateDevelopProgram } from './commands/generate-develop.js';
@@ -8,12 +7,14 @@ import path from 'path';
 import { PACKAGE_ROOT } from '@constants';
 import { DbToolsMigrateProgram } from './commands/db-tools/migrate.js';
 import { UsersProgram } from './commands/users.js';
+import dotenv from 'dotenv';
+import { getEnvFilepath } from '@utils';
 
 (async () => {
   const { version } = await fs.readJson(
     path.join(PACKAGE_ROOT, 'package.json')
   );
-  await loadRootEnv();
+  await dotenv.config({ path: await getEnvFilepath() });
 
   const program = new Program({
     bin: 'prom-cms-cli',
