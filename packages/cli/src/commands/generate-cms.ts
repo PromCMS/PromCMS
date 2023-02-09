@@ -9,12 +9,9 @@ import {
   logSuccess,
   getWorkerJob,
   getFilenameBase,
+  isDirEmpty,
 } from '@utils';
-import {
-  PACKAGE_ROOT,
-  PROJECT_ROOT,
-  SUPPORTED_PACKAGE_MANAGERS,
-} from '@constants';
+import { PACKAGE_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
 import generateCore from '@parts/generate-core-files';
 import { installPHPDeps } from '@parts/install-php-deps';
 import { generateProjectModule } from '@parts/generate-project-module';
@@ -84,8 +81,8 @@ export class GenerateCMSProgram extends Command {
 
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
     const { project } = generatorConfig;
-    const ADMIN_ROOT = path.join(PROJECT_ROOT, 'packages', 'admin');
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
+    const configs = this;
 
     const jobs = [
       getWorkerJob('Cleanup', {
@@ -113,23 +110,45 @@ export class GenerateCMSProgram extends Command {
       }),
       getWorkerJob('Add another project resources', {
         async job() {
-          await generateByTemplates('commands.generate-cms', FINAL_PATH, {
-            '*': {
-              project: {
-                ...project,
-                security: {
-                  ...(project.security || {}),
-                  secret:
-                    project.security?.secret ||
-                    crypto.randomBytes(20).toString('hex'),
+          await generateByTemplates(
+            'commands.generate-cms',
+            FINAL_PATH,
+            {
+              '*': {
+                project: {
+                  ...project,
+                  security: {
+                    ...(project.security || {}),
+                    secret:
+                      project.security?.secret ||
+                      crypto.randomBytes(20).toString('hex'),
+                  },
                 },
               },
             },
-          });
+            {
+              // Do not override some files
+              filter: (fileName) => {
+                let result = true;
+                const doNotOverrideFilenames = ['.env', 'tsconfig.json'];
+
+                if (doNotOverrideFilenames.includes(fileName)) {
+                  // if it exists then we wont override
+                  result =
+                    fs.existsSync(path.join(FINAL_PATH, fileName)) === false;
+                }
+
+                return result;
+              },
+            }
+          );
         },
       }),
       getWorkerJob('Install PHP dependencies', {
-        skip: shouldSkip.includes('dependency-install'),
+        // Skip if defined through cli or if vendor folder is already there
+        skip:
+          shouldSkip.includes('dependency-install') ||
+          (await isDirEmpty(path.join(FINAL_PATH, 'vendor'))) === false,
         async job() {
           await installPHPDeps(FINAL_PATH);
         },

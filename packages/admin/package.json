@@ -8,6 +8,9 @@
     "./dist": "./dist",
     "./package.json": "./package.json"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "npx vite -c ./vite/config.ts",
     "build": "npx tsc --noEmit && vite build -c ./vite/config.ts",
@@ -64,6 +67,7 @@
     "yup": "0.32.11"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "",
     "@prom-cms/config": "*",
     "@types/find-config": "1.0.1",
     "chokidar": "^3.5.3",

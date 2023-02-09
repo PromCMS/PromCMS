@@ -34,7 +34,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
           admin: {
             fieldType: 'heading',
             editor: {
-              placement: FieldPlacements.ASIDE,
+              placement: FieldPlacements.MAIN,
             },
           },
         },
