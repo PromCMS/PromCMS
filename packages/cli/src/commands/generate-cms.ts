@@ -82,7 +82,6 @@ export class GenerateCMSProgram extends Command {
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
     const { project } = generatorConfig;
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
-    const configs = this;
 
     const jobs = [
       getWorkerJob('Cleanup', {
