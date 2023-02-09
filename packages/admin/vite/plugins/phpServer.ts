@@ -1,19 +1,20 @@
 import { Plugin as VitePlugin } from 'vite';
-import httpProxy from "http-proxy"
-import { Readable } from "node:stream";
+import httpProxy from 'http-proxy';
+import { Readable } from 'node:stream';
 
-import { runBeforeExiting, runPHPServer } from "../utils"
+import { runBeforeExiting, runPHPServer } from '../utils';
 
-const isAdminRoute = (url: string) => url === '/admin' || url.startsWith('/admin/')
+const isAdminRoute = (url: string) =>
+  url === '/admin' || url.startsWith('/admin/');
 
 export const phpServerVitePlugin = (): VitePlugin => ({
-  name: "prom-internal-dev-server",
+  name: 'prom-internal-dev-server',
   async configureServer(server) {
     const abortController = new AbortController();
     const phpServerPort = server.config.server.port! + 1;
     const serverOrigin = `http://localhost:${phpServerPort}`;
     const { serverProcess, fileWatcher } = await runPHPServer(phpServerPort, {
-      abortController
+      abortController,
     });
     const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
     const htmlTransform = server.transformIndexHtml;
@@ -74,6 +75,5 @@ export const phpServerVitePlugin = (): VitePlugin => ({
 
       next();
     });
-  }
-}
-)
+  },
+});

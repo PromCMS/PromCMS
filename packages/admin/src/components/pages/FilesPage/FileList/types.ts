@@ -9,4 +9,4 @@ export type UploadingFile = {
 /**
  * Object with working files - key is current path to uploading file which holds all of info in value
  */
-export type UploadingFilesRecord = Record<string, UploadingFile>;
+export type UploadingFiles = (UploadingFile & { key: string })[];

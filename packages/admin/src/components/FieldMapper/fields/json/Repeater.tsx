@@ -52,7 +52,8 @@ export const Repeater: FC<{
                 formState.errors[columnKey]?.message || ''
               );
               const label =
-                columnInfo.title || hasLabels ? `${name} label` : undefined;
+                columnInfo.title ||
+                (hasLabels ? t(`${name} label`) : undefined);
               const labelProps = !columnInfo.title
                 ? { className: 'opacity-0' }
                 : undefined;

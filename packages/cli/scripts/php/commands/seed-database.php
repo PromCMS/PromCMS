@@ -4,17 +4,19 @@ use PromCMS\Core\Services\PasswordService;
 use PromCMS\Core\App;
 use PromCMS\Core\Utils;
 
-$PHP_APP_ROOT = $argv[1];
-include_once $PHP_APP_ROOT . '/vendor/autoload.php';
-include_once './_utils.php';
+include_once __DIR__ . '/_utils.php';
+$arguments = formatCliArguments($argv);
+$appRoot = $arguments[0];
 
-$app = new App($PHP_APP_ROOT);
+include_once $appRoot . '/vendor/autoload.php';
+
+$app = new App($appRoot);
 $app->init(true);
 $container = $app->getSlimApp()->getContainer();
 
 /** @var Utils */
 $utils = $container->get(Utils::class);
-$moduleNames = Utils::getValidModuleNames($PHP_APP_ROOT);
+$moduleNames = Utils::getValidModuleNames($appRoot);
 $availableModels = [];
 $faker = Faker\Factory::create();
 $passwordService = new PasswordService();

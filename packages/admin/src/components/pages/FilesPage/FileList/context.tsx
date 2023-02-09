@@ -15,7 +15,7 @@ import {
 } from 'react';
 import { DropzoneRootProps, useDropzone } from 'react-dropzone';
 import { useNavigate } from 'react-router-dom';
-import { UploadingFilesRecord } from './types';
+import { UploadingFiles } from './types';
 import { formatDroppedFiles } from './utils';
 
 type ReadonlyValues =
@@ -31,7 +31,7 @@ type ReadonlyValues =
 
 export interface IFileListContext {
   currentPath: string;
-  uploadingFiles: UploadingFilesRecord;
+  uploadingFiles: UploadingFiles;
   showNewFolderCreator: boolean;
   workingFolders: Record<string, { type: 'uploading' | 'deleting' | 'none' }>;
   isLoading: boolean;
@@ -56,7 +56,7 @@ type IFileListContextValues = Omit<IFileListContext, ReadonlyValues>;
 
 const initialState: IFileListContext = {
   currentPath: '/',
-  uploadingFiles: {},
+  uploadingFiles: [],
   showNewFolderCreator: false,
   workingFolders: {},
   files: undefined,
@@ -122,7 +122,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      const files = formatDroppedFiles(currentPath, acceptedFiles);
+      let files = formatDroppedFiles(currentPath, acceptedFiles);
 
       updateValue('uploadingFiles', files);
 
@@ -136,12 +136,12 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
         autoClose: false,
       });
 
-      for (const filePath in files) {
+      for (const { key: filePath, file } of files) {
         let isError = false;
-        const entry = files[filePath];
 
+        // Upload
         try {
-          await apiClient.files.create(entry.file, { root: currentPath });
+          await apiClient.files.create(file, { root: currentPath });
         } catch (e) {
           isError = true;
           updateNotification({
@@ -157,13 +157,13 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
           );
         }
 
-        updateValue(
-          `uploadingFiles`,
-          Object.fromEntries(
-            Object.entries(files).filter(([key]) => key !== filePath)
-          ) as UploadingFilesRecord
-        );
+        // Update files folder here
+        files = files.filter(({ key }) => key !== filePath);
 
+        // And just update for react reference
+        updateValue(`uploadingFiles`, files);
+
+        // Refetch them
         await refetchFiles();
 
         updateNotification({

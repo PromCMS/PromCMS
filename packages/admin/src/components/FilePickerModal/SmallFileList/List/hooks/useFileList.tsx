@@ -9,7 +9,7 @@ export function useFileList(
 ) {
   const fetcher = useCallback(
     () => apiClient.files.getMany(queryParams).then(({ data }) => data),
-    []
+    [queryParams]
   );
   return useQuery<PagedResponse<FileItem>>(
     ['files', queryParams],

@@ -1,5 +1,9 @@
 import path from 'path';
 import fs from 'fs-extra';
+import { getFilenameBase } from '../../utils/getFilenameBase.js';
+import { GENERATOR_FILENAME } from '@prom-cms/shared/generator';
+
+const generatorFilenameBase = getFilenameBase(GENERATOR_FILENAME);
 
 export const getAppRootInputValidator =
   (required = true) =>
@@ -8,8 +12,12 @@ export const getAppRootInputValidator =
       throw new Error('PromCMS root must be specified');
     }
 
-    const requestedPath = path.join(process.cwd(), value);
-    if (fs.pathExistsSync(requestedPath)) {
-      throw new Error(`PromCMS root "${requestedPath}" already exists`);
-    }
+    // TODO
+    // if (
+    //   fs
+    //     .readdirSync(value)
+    //     .findIndex((item) => item.startsWith(generatorFilenameBase)) == -1
+    // ) {
+    //   throw new Error(`⛔️ Current directory "${value}" has no prom config.`);
+    // }
   };
