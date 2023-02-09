@@ -1,5 +1,13 @@
 # @prom-cms/admin
 
+## 0.3.1
+
+### Patch Changes
+
+- 9ce049f: Update admin package exports to only export dist folder
+- Updated dependencies [9ce049f]
+  - @prom-cms/shared@1.9.1
+
 ## 0.3.0
 
 ### Minor Changes

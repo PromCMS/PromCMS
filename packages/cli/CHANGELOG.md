@@ -1,5 +1,17 @@
 # @prom-cms/cli
 
+## 0.15.1
+
+### Patch Changes
+
+- 9ce049f: Fix prettier formatting in cli by using current config for cli package
+- Updated dependencies [9ce049f]
+- Updated dependencies [9ce049f]
+- Updated dependencies [9ce049f]
+  - @prom-cms/config@0.1.1
+  - @prom-cms/shared@1.9.1
+  - @prom-cms/admin@0.3.1
+
 ## 0.15.0
 
 ### Minor Changes
