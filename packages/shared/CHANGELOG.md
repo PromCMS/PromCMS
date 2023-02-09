@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 1.9.1
+
+### Patch Changes
+
+- 9ce049f: Remove peer dependencies and fix post preset heading to be on main
+
 ## 1.9.0
 
 ### Minor Changes

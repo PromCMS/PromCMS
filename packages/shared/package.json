@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/shared",
   "description": "Shared package for prom cms packages",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
@@ -62,6 +62,6 @@
     "@types/lodash.kebabcase": "^4.1.7",
     "chalk": "5.0.0",
     "dotenv": "10.0.0",
-    "@prom-cms/config": "^0.1.0"
+    "@prom-cms/config": "^0.1.1"
   }
 }
