@@ -6,6 +6,8 @@ module.exports = {
   semi: true,
   singleQuote: true,
   jsxSingleQuote: false,
+  plugins: [prettierPhpPlugin],
+  phpVersion: '7.4',
 
   overrides: [
     {
@@ -33,7 +35,7 @@ module.exports = {
       files: ['*.php', '*.php.ejs'],
       options: {
         parser: 'php',
-        phpVersion: '7.3',
+        phpVersion: '7.4',
         tabWidth: 2,
         plugins: [prettierPhpPlugin],
       },
