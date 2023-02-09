@@ -13,6 +13,7 @@
   "files": [
     "dist",
     "templates",
+    ".prettierrc.cjs",
     "scripts"
   ],
   "bin": {
@@ -44,7 +45,8 @@
     "@prom-cms/admin": "^0.2.0",
     "@boost/cli": "^4.0.0",
     "@faker-js/faker": "^7.6.0",
-    "@prom-cms/shared": "*",
+    "@prom-cms/shared": "^1.9.0",
+    "@prom-cms/config": "^0.1.0",
     "chalk": "^5.1.2",
     "dayjs": "^1.11.6",
     "dotenv-cli": "^5.1.0",
@@ -59,7 +61,6 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@prom-cms/config": "*",
     "@types/ejs": "^3.1.1",
     "@types/fs-extra": "9.0.13",
     "@types/prettier": "^2.7.1",

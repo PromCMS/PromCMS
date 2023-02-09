@@ -1,6 +1,6 @@
 import prettier from 'prettier';
 import path from 'path';
-import { PACKAGE_ROOT } from '@constants';
+import { createRequire } from 'module';
 
 export const formatCodeString = async (content: string, filename: string) => {
   const ignoreFileParts = ['.gitignore', '.htaccess', 'Dockerfile', '.env'];
@@ -15,13 +15,13 @@ export const formatCodeString = async (content: string, filename: string) => {
   }
 
   let result = content;
-  const config = await prettier.resolveConfig(
-    path.join(PACKAGE_ROOT, filename)
-  );
+  const require = createRequire(import.meta.url);
+  const config = require('../../.prettierrc.cjs');
 
-  if (config) {
-    result = prettier.format(result, config);
-  }
+  result = prettier.format(result, {
+    ...config,
+    filepath: filename,
+  });
 
   return result;
 };

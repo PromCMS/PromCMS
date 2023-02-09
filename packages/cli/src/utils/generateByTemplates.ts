@@ -8,7 +8,7 @@ export type GenerateByTemplatesOptions = {
   /**
    * File filter
    */
-  filter: (fileName: string) => boolean;
+  filter?: (fileName: string) => boolean;
 };
 
 export const generateByTemplates = async (
