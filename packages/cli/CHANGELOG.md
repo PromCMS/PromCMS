@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.15.3
+
+### Patch Changes
+
+- af28315: Do not load env variables at the start of cli and only load when necessary
+
 ## 0.15.2
 
 ### Patch Changes
