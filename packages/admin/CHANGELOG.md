@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.3.2
+
+### Patch Changes
+
+- a321765: Fix admin repeater columns, small field select pager not working and uploader placeholder file uploader.
+
 ## 0.3.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @prom-cms/cli
 
+## 0.15.6
+
+### Patch Changes
+
+- a321765: Fix seeder
+- Updated dependencies [a321765]
+  - @prom-cms/admin@0.3.2
+
 ## 0.15.5
 
 ### Patch Changes
