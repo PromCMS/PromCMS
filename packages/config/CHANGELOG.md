@@ -1,5 +1,11 @@
 # @prom-cms/config
 
+## 0.1.2
+
+### Patch Changes
+
+- 897e7a4: Dynamic import prettier config and update plugins on prettier config
+
 ## 0.1.1
 
 ### Patch Changes
