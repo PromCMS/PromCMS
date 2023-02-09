@@ -1,5 +1,13 @@
 # @prom-cms/cli
 
+## 0.15.5
+
+### Patch Changes
+
+- 897e7a4: Dynamic import prettier config and update plugins on prettier config
+- Updated dependencies [897e7a4]
+  - @prom-cms/config@0.1.2
+
 ## 0.15.4
 
 ### Patch Changes
