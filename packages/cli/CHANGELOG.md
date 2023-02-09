@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.15.4
+
+### Patch Changes
+
+- 7904da1: Preserve folder structure on build in cli package
+
 ## 0.15.3
 
 ### Patch Changes
