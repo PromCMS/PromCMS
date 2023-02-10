@@ -9,7 +9,7 @@ import {
   logSuccess,
   getWorkerJob,
   getFilenameBase,
-  isDirEmpty,
+  getModuleFolderName,
 } from '@utils';
 import { PACKAGE_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
 import generateCore from '@parts/generate-core-files';
@@ -21,10 +21,51 @@ import rimraf from 'rimraf';
 import { getInstallNodeDepsJob } from '../jobs/getInstallNodeDepsJob.js';
 import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
 import { SupportedPackageManagers } from '@custom-types';
-
-type CustomParams = [string];
+import generateModels from '@parts/generate-models';
 
 const generatorFilenameBase = getFilenameBase(GENERATOR_FILENAME);
+const steps = [
+  'cleanup',
+  'package-json',
+  'admin',
+  'resources',
+  'module',
+  'models',
+  'php-dependencies',
+] as const;
+const allowedSkipArguments = [
+  ...steps,
+  '*',
+  ...(steps.map((item) => `!${item}`) as `!${typeof steps[number]}`[]),
+] as const;
+type AllowedSkipArgument =
+  typeof allowedSkipArguments[keyof typeof allowedSkipArguments];
+type AllowedSkipArguments = AllowedSkipArgument[];
+
+const normalizeIgnoreSteps = (shouldSkip: AllowedSkipArguments) => {
+  let result = new Set<AllowedSkipArgument>();
+
+  if (shouldSkip.includes('*')) {
+    for (const step of steps) {
+      result.add(step);
+    }
+  }
+
+  const includeSteps = shouldSkip.filter((item) => `${item}`.startsWith('!'));
+  const excludeSteps = shouldSkip.filter(
+    (item) => !`${item}`.startsWith('!') && item !== '*'
+  );
+
+  for (const excludeStep of excludeSteps) {
+    result.add(excludeStep);
+  }
+
+  for (const includeStep of includeSteps) {
+    result.delete(includeStep);
+  }
+
+  return Array.from(result);
+};
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
@@ -52,6 +93,21 @@ export class GenerateCMSProgram extends Command {
       type: 'string',
       description: 'To specify which steps to skip',
       short: 's',
+      validate(value) {
+        const unknownSteps: string[] = [];
+
+        for (const stepKey of value.split(',')) {
+          if (!allowedSkipArguments.includes(stepKey as any)) {
+            unknownSteps.push(stepKey);
+          }
+        }
+
+        if (unknownSteps.length) {
+          throw new Error(
+            `Unknown steps "${unknownSteps.join('", "')}" in skip argument`
+          );
+        }
+      },
     },
     packageManager: {
       type: 'string',
@@ -67,48 +123,73 @@ export class GenerateCMSProgram extends Command {
     ]);
 
     const FINAL_PATH = process.cwd();
-    const shouldSkip = this.skip.split(',');
-
-    if (
-      fs
-        .readdirSync(FINAL_PATH)
-        .findIndex((item) => item.startsWith(generatorFilenameBase)) == -1
-    ) {
-      throw new Error(
-        `⛔️ Current directory "${FINAL_PATH}" has no prom config.`
-      );
-    }
-
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
+
     const { project } = generatorConfig;
     const exportModulesRoot = path.join(FINAL_PATH, 'modules');
+    const moduleFolderName = getModuleFolderName(project.name);
+
+    // Format cli arguments
+    const skipArguments = normalizeIgnoreSteps(
+      this.skip.split(',') as unknown as AllowedSkipArguments
+    );
 
     const jobs = [
-      getWorkerJob('Cleanup', {
-        skip: !this.regenerate,
-        async job() {
-          await new Promise((resolve, reject) =>
-            rimraf(`./**/!(${generatorFilenameBase}.*|.env)`, (error) => {
-              if (error) {
-                reject(error);
-              }
+      // Clean up all files when regenerate is required
+      ...(this.regenerate
+        ? [
+            getWorkerJob('Cleanup', {
+              async job() {
+                await new Promise((resolve, reject) =>
+                  rimraf(`./**/!(${generatorFilenameBase}.*|.env)`, (error) => {
+                    if (error) {
+                      reject(error);
+                    }
 
-              resolve(undefined);
-            })
-          );
-        },
-      }),
+                    resolve(undefined);
+                  })
+                );
+              },
+            }),
+          ]
+        : []),
+
       getCreatePackageJsonJob('Ensure package.json', {
         cwd: FINAL_PATH,
         project,
+        skip: skipArguments.includes('package-json'),
       }),
-      getWorkerJob('Generate new core', {
-        job: async () => {
-          await generateCore(FINAL_PATH);
+      getInstallNodeDepsJob('Install NODE dependencies', {
+        packageManager: this.packageManager,
+        cwd: FINAL_PATH,
+        skip: skipArguments.includes('package-json'),
+      }),
+      getWorkerJob('Add admin html', {
+        skip: skipArguments.includes('admin'),
+        async job() {
+          // We will just prebuild admin from package on npm
+          const adminRoot = path.resolve(PACKAGE_ROOT, '..', 'admin');
+
+          // And the copy
+          const adminFinalPath = path.join(FINAL_PATH, 'public', 'admin');
+
+          await fs.ensureDir(adminFinalPath);
+          await fs.emptyDir(adminFinalPath);
+
+          fs.copy(
+            path.join(adminRoot, 'dist'),
+            path.join(FINAL_PATH, 'public', 'admin'),
+            {
+              recursive: true,
+              overwrite: true,
+            }
+          );
         },
       }),
-      getWorkerJob('Add another project resources', {
-        async job() {
+      getWorkerJob('Generate project core resources', {
+        skip: skipArguments.includes('resources'),
+        job: async () => {
+          await generateCore(FINAL_PATH);
           await generateByTemplates(
             'commands.generate-cms',
             FINAL_PATH,
@@ -143,46 +224,27 @@ export class GenerateCMSProgram extends Command {
           );
         },
       }),
-      getWorkerJob('Install PHP dependencies', {
-        // Skip if defined through cli or if vendor folder is already there
-        skip:
-          shouldSkip.includes('dependency-install') ||
-          (await isDirEmpty(path.join(FINAL_PATH, 'vendor'))) === false,
-        async job() {
-          await installPHPDeps(FINAL_PATH);
-        },
-      }),
-      getWorkerJob('Generate project module', {
+      getWorkerJob('Generate main module', {
+        skip: skipArguments.includes('module'),
         async job() {
           await generateProjectModule(exportModulesRoot, generatorConfig);
         },
       }),
-      getWorkerJob('Add admin html', {
-        skip: shouldSkip.includes('admin'),
+      getWorkerJob('Generate models into main module', {
+        skip: skipArguments.includes('models'),
         async job() {
-          // We will just prebuild admin from package on npm
-          const adminRoot = path.resolve(PACKAGE_ROOT, '..', 'admin');
-
-          // And the copy
-          const adminFinalPath = path.join(FINAL_PATH, 'public', 'admin');
-
-          await fs.ensureDir(adminFinalPath);
-          await fs.emptyDir(adminFinalPath);
-
-          fs.copy(
-            path.join(adminRoot, 'dist'),
-            path.join(FINAL_PATH, 'public', 'admin'),
-            {
-              recursive: true,
-              overwrite: true,
-            }
+          await generateModels(
+            path.join(exportModulesRoot, moduleFolderName),
+            generatorConfig.database
           );
         },
       }),
-      getInstallNodeDepsJob('Install NODE dependencies', {
-        packageManager: this.packageManager,
-        cwd: FINAL_PATH,
-        skip: shouldSkip.includes('dependency-install'),
+      getWorkerJob('Install PHP dependencies', {
+        // Skip if defined through cli or if vendor folder is already there
+        skip: skipArguments.includes('php-dependencies'),
+        async job() {
+          await installPHPDeps(FINAL_PATH);
+        },
       }),
     ];
 

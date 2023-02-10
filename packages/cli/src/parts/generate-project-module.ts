@@ -6,7 +6,6 @@ import {
 } from '@utils';
 import generateModule from './generate-module.js';
 import { GeneratorConfig } from '@prom-cms/shared';
-import generateModels from './generate-models.js';
 
 export const generateProjectModule = async (
   modulesRoot: string,
@@ -26,10 +25,5 @@ export const generateProjectModule = async (
         },
       },
     }
-  );
-
-  await generateModels(
-    path.join(modulesRoot, moduleName),
-    projectConfig.database
   );
 };

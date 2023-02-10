@@ -8,14 +8,13 @@ import tsNode from 'ts-node';
 import { isModule } from './isModule.js';
 
 export const getGeneratorConfigData = async (root?: string) => {
-  // Enable import of TS files
-  tsNode.register();
-
-  const filepath = await findGeneratorConfig(root);
-
+  const filepath = findGeneratorConfig(root);
   let content;
 
   if (isModule(filepath)) {
+    // Enable import of TS files
+    tsNode.register();
+
     try {
       content = await import(`file:///${filepath}`);
     } catch (error) {

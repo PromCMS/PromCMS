@@ -10,6 +10,7 @@ import {
 import {
   generateByTemplates,
   getEnvFilepath,
+  getModuleFolderName,
   getWorkerJob,
   isDirEmpty,
   loggedJobWorker,
@@ -24,6 +25,7 @@ import {
   formatGeneratorConfig,
   validateGeneratorConfig,
 } from '@prom-cms/shared/generator';
+import generateModels from '@parts/generate-models';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;
@@ -124,6 +126,16 @@ export class GenerateDevelopProgram extends Command {
       getWorkerJob('Generate project module', {
         async job() {
           await generateProjectModule(modulesRoot, generatorConfig);
+        },
+      }),
+      getWorkerJob('Generate project module models', {
+        async job() {
+          const moduleName = getModuleFolderName(generatorConfig.project.name);
+
+          await generateModels(
+            path.join(modulesRoot, moduleName),
+            generatorConfig.database
+          );
         },
       }),
       getWorkerJob('Make symlink of .env variable file from project root', {

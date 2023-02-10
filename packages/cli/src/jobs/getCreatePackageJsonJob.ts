@@ -19,13 +19,15 @@ const defaultPackageJsonContent = {
 export interface GetCreatePackageJsonJobOptions {
   cwd: string;
   project: ProjectConfig;
+  skip?: boolean;
 }
 
 export const getCreatePackageJsonJob = (
   title: string,
-  { cwd, project }: GetCreatePackageJsonJobOptions
+  { cwd, project, skip = false }: GetCreatePackageJsonJobOptions
 ): ReturnType<typeof getWorkerJob> => {
   return getWorkerJob(title, {
+    skip,
     async job() {
       const packageJsonPath = path.join(cwd, 'package.json');
       const alreadyExists = await fs.pathExists(packageJsonPath);
