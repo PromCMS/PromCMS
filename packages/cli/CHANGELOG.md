@@ -1,5 +1,21 @@
 # @prom-cms/cli
 
+## 0.16.0
+
+### Minor Changes
+
+- 3285a89: Finish skip cli argument. Now it accepts ignore with \* or !<stepName> to include
+
+### Patch Changes
+
+- 1a4a7c4: Update texting of error and add missing dependencies to cli package
+- Updated dependencies [1a4a7c4]
+- Updated dependencies [a3ee34f]
+- Updated dependencies [9e24657]
+- Updated dependencies [c4341e7]
+  - @prom-cms/shared@1.9.3
+  - @prom-cms/admin@0.4.0
+
 ## 0.15.6
 
 ### Patch Changes

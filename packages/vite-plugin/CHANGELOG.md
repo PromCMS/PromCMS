@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.5.0
+
+### Minor Changes
+
+- b2d55e1: Resolve public dir
+
 ## 0.4.2
 
 ### Patch Changes

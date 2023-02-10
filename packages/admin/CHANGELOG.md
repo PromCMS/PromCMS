@@ -1,5 +1,18 @@
 # @prom-cms/admin
 
+## 0.4.0
+
+### Minor Changes
+
+- a3ee34f: Make quality higher on images, add ordering when model has timestamps and fix margins on singleton page.
+- 9e24657: Add quote block
+- c4341e7: Update block tunes and add aligns of text
+
+### Patch Changes
+
+- Updated dependencies [1a4a7c4]
+  - @prom-cms/shared@1.9.3
+
 ## 0.3.2
 
 ### Patch Changes
