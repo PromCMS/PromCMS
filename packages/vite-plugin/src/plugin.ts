@@ -26,6 +26,7 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
 
       c.build ??= {};
       c.build.outDir ??= '../public/dist';
+      c.publicDir ??= path.join(projectRoot, 'public');
       c.build.manifest = true;
       c.build.rollupOptions ??= {};
       c.build.rollupOptions.input ??= path.join(
