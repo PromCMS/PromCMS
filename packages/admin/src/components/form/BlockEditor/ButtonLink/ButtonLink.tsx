@@ -110,7 +110,7 @@ class ButtonLinkTool implements BlockTool {
   }
 
   validate() {
-    if (!this.data.linkTo || !/^((https|http):\/\/).*/.test(this.data.linkTo)) {
+    if (!this.data.linkTo) {
       return false;
     }
 

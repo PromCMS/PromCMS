@@ -7,7 +7,6 @@ import List from '@editorjs/list';
 import ChangeCase from 'editorjs-change-case';
 import Header from '@editorjs/header';
 import Quote from '@editorjs/quote';
-import AlignmentTool from 'editorjs-text-alignment-blocktune';
 import ParagraphTool from '@editorjs/paragraph';
 import { ImageTool } from './ImageTool';
 import { generateLayoutConfig } from './utils';
@@ -19,6 +18,7 @@ import { TagsTool } from './TagsTool';
 import { LinkInlineTool } from './LinkInlineTool';
 import { DynamicBlockTool } from './DynamicBlockTool';
 import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
+import AlignmentTool from './AlignmentTool';
 
 export const EDITOR_HOLDER_ID = 'editor-content';
 
@@ -59,14 +59,21 @@ export const LazyEditor: FC<LazyEditorProps> = ({
             levels: [2, 3, 4],
             defaultLevel: 2,
           },
+          tunes: ['alignmentTool'],
         },
         link: { class: LinkInlineTool, inlineToolbar: true },
         table: { class: Table, inlineToolbar: true },
         underline: Underline,
         Marker: Marker,
         embed: Embed,
-        buttonLink: ButtonLinkTool,
-        tags: TagsTool,
+        buttonLink: {
+          class: ButtonLinkTool,
+          tunes: ['alignmentTool'],
+        },
+        tags: {
+          class: TagsTool,
+          tunes: ['alignmentTool'],
+        },
         image: ImageTool,
         gallery: GalleryTool,
         list: {
@@ -75,13 +82,14 @@ export const LazyEditor: FC<LazyEditorProps> = ({
           config: {
             defaultStyle: 'unordered',
           },
+          tunes: ['alignmentTool'],
         },
         quote: {
           class: Quote,
           inlineToolbar: true,
           config: {
-            quotePlaceholder: 'Enter a quote',
-            captionPlaceholder: "Quote's author",
+            quotePlaceholder: t('Enter a quote'),
+            captionPlaceholder: t("Quote's author"),
           },
         },
         changeCase: {
@@ -89,11 +97,11 @@ export const LazyEditor: FC<LazyEditorProps> = ({
           inlineToolbar: true,
           config: {
             showLocaleOption: true, // enable locale case options
-            locale: 'tr', // or ['tr', 'TR', 'tr-TR']
+            locale: 'en', // or ['tr', 'TR', 'tr-TR']
           },
         },
-        anyTuneName: {
-          class: AlignmentTool,
+        alignmentTool: {
+          class: AlignmentTool as any,
           config: {
             default: 'left',
             blocks: {
@@ -109,6 +117,7 @@ export const LazyEditor: FC<LazyEditorProps> = ({
           config: {
             placeholder: t('Start typing here...'),
           },
+          tunes: ['alignmentTool'],
         },
       },
       inlineToolbar: true,

@@ -85,6 +85,16 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         ),
         ...(data.content ? { content: JSON.stringify(data.content) } : {}),
       });
+
+      if (blockEditorRefs.refs.current) {
+        for (const [fieldName, editorRef] of Object.entries(
+          blockEditorRefs.refs.current
+        )) {
+          if (data[fieldName]) {
+            editorRef?.blocks?.render(data[fieldName]);
+          }
+        }
+      }
     }
   }, [data, formMethods]);
 

@@ -1,13 +1,13 @@
 import { Button as CustomButton } from '@components/Button';
 import ImageSelect from '@components/form/ImageSelect';
-import ThemeProvider from '@components/ThemeProvider';
 import { Checkbox, Group, Text, TextInput, Title } from '@mantine/core';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { forwardRef, useEffect, useMemo, useState, VFC } from 'react';
+import { FC, forwardRef, useEffect, useMemo, useState, VFC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'tabler-icons-react';
 import * as iconSet from 'tabler-icons-react';
 import { ButtonLinkToolData } from './ButtonLink';
+import ContextProviders from '../../../../layouts/ContextProviders';
 
 const selectData = Object.entries(iconSet).map(([iconName, icon]) => ({
   icon,
@@ -31,7 +31,7 @@ const SelectItem = forwardRef<HTMLDivElement, { icon: Icon; label: string }>(
   }
 );
 
-export const ButtonLinkView: VFC<{
+export const ButtonLinkView: FC<{
   dataFromParent: ButtonLinkToolData;
   onDataChange: (data: ButtonLinkToolData) => void;
   readOnly: boolean;
@@ -54,13 +54,14 @@ export const ButtonLinkView: VFC<{
     });
   };
 
+  // TODO - more complex solution
   const isUrlValid = useMemo(
-    () =>
-      data.linkTo.length
-        ? /^((https|http):\/\/).*/.test(data.linkTo)
-          ? true
-          : false
-        : true,
+    () => true,
+    // data.linkTo.length
+    //   ? /^((https|http):\/\/).*/.test(data.linkTo)
+    //     ? true
+    //     : false
+    //   : true,
     [data.linkTo]
   );
 
@@ -70,9 +71,9 @@ export const ButtonLinkView: VFC<{
   );
 
   return (
-    <ThemeProvider>
+    <ContextProviders>
       {!readOnly ? (
-        <div className="rounded-lg border-2 border-project-border bg-white p-5">
+        <div className="rounded-lg border-2 border-project-border bg-white p-5 text-left">
           <Title order={3}>{t('Button link')}</Title>
 
           <Group className="mt-4" noWrap grow>
@@ -130,12 +131,12 @@ export const ButtonLinkView: VFC<{
         <CustomButton
           color="success"
           size="large"
-          className="flex gap-5 !rounded-none"
+          className="inline-flex gap-5 !rounded-none"
         >
           {IconComponent && <IconComponent />}
           {data.label || data.linkTo}
         </CustomButton>
       )}
-    </ThemeProvider>
+    </ContextProviders>
   );
 };

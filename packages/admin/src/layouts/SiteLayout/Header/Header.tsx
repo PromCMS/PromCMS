@@ -16,7 +16,7 @@ import { useDisclosure } from '@mantine/hooks';
 import clsx from 'clsx';
 
 const defaultMenuItems: ItemProps[] = [
-  { label: 'Domů', href: '/', icon: Home },
+  { label: 'Home', href: '/', icon: Home },
   { label: 'Files', href: '/files', icon: Photo },
 ];
 

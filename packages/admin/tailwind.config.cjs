@@ -6,6 +6,13 @@ module.exports = {
       padding: {
         DEFAULT: '1rem',
       },
+      screens: {
+        sm: '600px',
+        md: '728px',
+        lg: '984px',
+        xl: '1024px',
+        '2xl': '1290px',
+      },
     },
     fontFamily: {
       sans: ['"Open Sans"', 'sans-serif'],

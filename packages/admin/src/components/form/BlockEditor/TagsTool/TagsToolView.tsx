@@ -2,12 +2,12 @@ import ThemeProvider from '@components/ThemeProvider';
 import { ActionIcon, Badge, Group, TextInput } from '@mantine/core';
 import { useInputState } from '@mantine/hooks';
 import clsx from 'clsx';
-import { KeyboardEventHandler, useEffect, useState, VFC } from 'react';
+import { FC, KeyboardEventHandler, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Tag, X } from 'tabler-icons-react';
 import { TagsToolData } from './TagsTool';
 
-export const TagsToolView: VFC<{
+export const TagsToolView: FC<{
   dataFromParent: TagsToolData;
   onDataChange: (data: TagsToolData) => void;
   readOnly: boolean;
@@ -57,10 +57,14 @@ export const TagsToolView: VFC<{
     <ThemeProvider>
       <div
         className={clsx(
-          'rounded-lg border-2 border-project-border bg-white p-5'
+          !readOnly
+            ? 'rounded-lg border-2 border-project-border bg-white p-5 text-left'
+            : ''
         )}
       >
-        <p className="text-xl font-semibold">{t('Tags')}</p>
+        {!readOnly ? (
+          <p className="text-xl font-semibold">{t('Tags')}</p>
+        ) : null}
         <Group className="my-5">
           {data.tags.length ? (
             data.tags.map((tagContent) => (
