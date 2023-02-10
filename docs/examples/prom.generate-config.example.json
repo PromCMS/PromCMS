@@ -1,0 +1,48 @@
+{
+  "project": {
+    "name": "Test project",
+    "slug": "test-project",
+    "url": "http://localhost"
+  },
+  "database": {
+    "models": {
+      "posts": {
+        "timestamp": true,
+        "icon": "Archive",
+        "sorting": true,
+        "draftable": true,
+        "preset": "post",
+        "columns": {
+          "photo": {
+            "type": "file",
+            "title": "Photo",
+            "typeFilter": "image",
+            "translations": false,
+            "admin": {
+              "isHidden": true,
+              "editor": {
+                "placement": "aside"
+              }
+            }
+          },
+          "description": {
+            "type": "longText",
+            "title": "Description",
+            "admin": {
+              "editor": {
+                "placement": "aside"
+              }
+            }
+          }
+        }
+      }
+    },
+    "singletons": {
+      "frontPage": {
+        "icon": "ShoppingBag",
+        "preset": "post",
+        "columns": {}
+      }
+    }
+  }
+}

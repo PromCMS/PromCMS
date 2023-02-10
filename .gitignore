@@ -36,7 +36,6 @@ npm-debug.log*
 # typescript
 *.tsbuildinfo
 /packages/**/yarn.lock
-*.generate-config*
 *mocks.json
 private
 
