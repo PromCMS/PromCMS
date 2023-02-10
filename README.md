@@ -33,7 +33,7 @@ This will boost your performance a lot and you can focus on what really matters 
     ```bash
     npm run dev
     ```
-7. You can now go to [http://localhost:3001](http://localhost:3000) 🤯
+7. You can now go to [http://localhost:3000](http://localhost:3000) 🤯
  
 > You may also find useful to seed your database with random data with `npx @prom-cms/cli seed-database` 😳
 
