@@ -27,7 +27,7 @@ This will boost your performance a lot and you can focus on what really matters 
 4. Create a config file `prom.generate-config.(cjs|mjs|js|ts|json)` with you definitions (in the same folder as your config)
 5. Generate CMS (still in the same folder as your config)
     ```bash
-    npx @prom-cms/cli generate:cms
+    npx @prom-cms/cli generate-cms
     ```
 6. Now your project is prepared, ready to go and you can start your dev server 🎉
     ```bash
