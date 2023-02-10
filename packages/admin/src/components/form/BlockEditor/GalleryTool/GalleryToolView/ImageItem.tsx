@@ -23,7 +23,7 @@ export const ImageItem: FC<ImageInfo> = ({ id, description, title }) => {
       <BackendImage
         imageId={id}
         width={290}
-        quality={40}
+        quality={60}
         className="absolute top-0 left-0 h-full w-full overflow-hidden rounded-xl object-cover object-center"
       />
       {!readOnly && (

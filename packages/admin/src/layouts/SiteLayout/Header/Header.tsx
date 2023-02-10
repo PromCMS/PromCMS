@@ -103,7 +103,7 @@ const Header: FC = () => {
                   imageId={currentUser.avatar}
                   alt=""
                   width={60}
-                  quality={40}
+                  quality={60}
                   onError={() => setError(true)}
                 />
               ) : (

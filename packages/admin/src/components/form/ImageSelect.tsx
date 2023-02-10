@@ -79,7 +79,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                 {modalPickedFiles.length ? (
                   <BackendImage
                     width={80}
-                    quality={40}
+                    quality={60}
                     imageId={modalPickedFiles[0]}
                     className="absolute h-full w-full object-cover object-center"
                   />

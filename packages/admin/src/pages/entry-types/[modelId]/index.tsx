@@ -34,6 +34,7 @@ const EntryTypeUnderpage: Page = ({}) => {
     params: {
       page: page,
       limit: pageSize,
+      ...(model?.hasTimestamps ? { 'orderBy.created_at': 'desc' } : {}),
     },
   });
   const { t } = useTranslation();

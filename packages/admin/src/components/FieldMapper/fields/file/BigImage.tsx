@@ -105,7 +105,7 @@ const ImageInput: FC<
                   <div className="w-full aspect-square rounded-lg overflow-hidden relative">
                     <BackendImage
                       width={250}
-                      quality={60}
+                      quality={90}
                       imageId={fileId}
                       className="absolute h-full w-full object-cover object-center"
                     />
