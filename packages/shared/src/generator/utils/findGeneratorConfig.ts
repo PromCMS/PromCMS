@@ -21,7 +21,7 @@ export const findGeneratorConfig = (root?: string) => {
   });
 
   if (!filepath) {
-    throw new Error('No generator file found');
+    throw new Error(`⛔️ Provided directory "${root}" has no prom config.`);
   }
 
   return filepath;
