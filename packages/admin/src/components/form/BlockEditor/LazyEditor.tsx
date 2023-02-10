@@ -6,6 +6,7 @@ import Marker from '@editorjs/marker';
 import List from '@editorjs/list';
 import ChangeCase from 'editorjs-change-case';
 import Header from '@editorjs/header';
+import Quote from '@editorjs/quote';
 import AlignmentTool from 'editorjs-text-alignment-blocktune';
 import ParagraphTool from '@editorjs/paragraph';
 import { ImageTool } from './ImageTool';
@@ -73,6 +74,14 @@ export const LazyEditor: FC<LazyEditorProps> = ({
           inlineToolbar: true,
           config: {
             defaultStyle: 'unordered',
+          },
+        },
+        quote: {
+          class: Quote,
+          inlineToolbar: true,
+          config: {
+            quotePlaceholder: 'Enter a quote',
+            captionPlaceholder: "Quote's author",
           },
         },
         changeCase: {
