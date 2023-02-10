@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 1.9.3
+
+### Patch Changes
+
+- 1a4a7c4: Update texting of error and add missing dependencies to cli package
+
 ## 1.9.2
 
 ### Patch Changes
