@@ -1,5 +1,14 @@
 # @prom-cms/cli
 
+## 0.16.1
+
+### Patch Changes
+
+- 16fa5d7: Fix cli by removing bangs from strings and update styling in admin
+- Updated dependencies [16fa5d7]
+- Updated dependencies [ab1a69c]
+  - @prom-cms/admin@0.5.0
+
 ## 0.16.0
 
 ### Minor Changes

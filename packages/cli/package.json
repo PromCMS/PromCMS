@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/cli",
   "description": "PromCMS cli package",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
@@ -42,7 +42,7 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "@prom-cms/admin": "^0.4.0",
+    "@prom-cms/admin": "^0.5.0",
     "@boost/cli": "^4.0.0",
     "@faker-js/faker": "^7.6.0",
     "@prom-cms/shared": "^1.9.3",

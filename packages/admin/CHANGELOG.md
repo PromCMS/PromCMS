@@ -1,5 +1,15 @@
 # @prom-cms/admin
 
+## 0.5.0
+
+### Minor Changes
+
+- ab1a69c: Button link now allows any string in url
+
+### Patch Changes
+
+- 16fa5d7: Fix cli by removing bangs from strings and update styling in admin
+
 ## 0.4.0
 
 ### Minor Changes
