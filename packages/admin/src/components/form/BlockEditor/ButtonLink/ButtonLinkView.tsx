@@ -82,7 +82,7 @@ export const ButtonLinkView: FC<{
               label={t('Link')}
               placeholder="https://google.com"
               error={isUrlValid ? undefined : t('Invalid url')}
-              type="url"
+              type="string"
               value={data.linkTo}
               onChange={(e) => onChange('linkTo', e.currentTarget.value)}
               rightSection={
