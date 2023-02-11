@@ -61,7 +61,7 @@ const normalizeIgnoreSteps = (shouldSkip: AllowedSkipArguments) => {
   }
 
   for (const includeStep of includeSteps) {
-    result.delete(includeStep);
+    result.delete((includeStep as string).replace('!', '') as any);
   }
 
   return Array.from(result);

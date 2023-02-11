@@ -33,7 +33,7 @@ const MainPage: Page = () => {
         </Trans>
       </h1>
       <hr className="mt-7 h-0.5 w-full border-0 bg-project-border" />
-      <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-7">
+      <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
         {menuItems.normalItems
           .filter(({ href }) => href !== '/')
           .map((itemInfo) => (
