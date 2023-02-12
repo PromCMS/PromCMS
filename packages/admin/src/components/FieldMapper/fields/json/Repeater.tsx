@@ -15,7 +15,7 @@ export const Repeater: FC<{
     useFormContext<Record<string, string | boolean | number>>();
   const { t } = useTranslation();
   const fieldName = `${name}.data`;
-  const { fields, append, remove } = useFieldArray({
+  const { fields, insert, remove } = useFieldArray({
     name: fieldName,
   });
 
@@ -111,7 +111,7 @@ export const Repeater: FC<{
                   p="xs"
                   variant="subtle"
                   color="blue"
-                  onClick={() => append({})}
+                  onClick={() => insert(index + 1, {})}
                 >
                   <Plus />
                 </ActionIcon>
