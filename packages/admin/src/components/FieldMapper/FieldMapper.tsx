@@ -1,10 +1,9 @@
 import { BlockEditor } from '@components/form/BlockEditor';
 import { Checkbox, clsx, Input, Textarea, TextInput } from '@mantine/core';
 import { ColumnType, FieldPlacements } from '@prom-cms/shared';
-import { FC } from 'react';
+import { FC, Fragment } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import ImageSelect from '../form/ImageSelect';
 import { EnumSelect, RelationshipItemSelect } from './fields';
 import { BigImage } from './fields/file/BigImage';
 import { Normal } from './fields/file/Normal';
@@ -41,7 +40,7 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                 case 'number':
                   if (type === 'string' && admin.fieldType === 'heading') {
                     result = (
-                      <div key={columnName} className="relative w-full">
+                      <div className="relative w-full">
                         <input
                           className={clsx(
                             'w-full !border-b-2 border-project-border bg-transparent pb-5 text-5xl font-bold outline-none duration-200 focus:border-blue-500'
@@ -59,7 +58,6 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                   } else {
                     result = (
                       <TextInput
-                        key={columnName}
                         label={title}
                         type={type === 'string' ? 'text' : type}
                         className="w-full"
@@ -75,7 +73,6 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                 case 'longText':
                   result = (
                     <Textarea
-                      key={columnName}
                       autosize
                       minRows={7}
                       label={title}
@@ -87,22 +84,12 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                   break;
 
                 case 'enum':
-                  result = (
-                    <EnumSelect
-                      key={columnName}
-                      error={errorMessage}
-                      {...values}
-                    />
-                  );
+                  result = <EnumSelect error={errorMessage} {...values} />;
                   break;
 
                 case 'relationship':
                   result = (
-                    <RelationshipItemSelect
-                      key={columnName}
-                      error={errorMessage}
-                      {...values}
-                    />
+                    <RelationshipItemSelect error={errorMessage} {...values} />
                   );
                   break;
 
@@ -111,7 +98,6 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                     case 'big-image':
                       result = (
                         <BigImage
-                          key={columnName}
                           name={columnName}
                           errorMessage={errorMessage}
                           label={values.title}
@@ -122,7 +108,6 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                     case 'normal':
                       result = (
                         <Normal
-                          key={columnName}
                           name={columnName}
                           errorMessage={errorMessage}
                           label={values.title}
@@ -136,7 +121,6 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                 case 'boolean':
                   result = (
                     <Controller
-                      key={columnName}
                       control={control}
                       name={columnName}
                       render={({ field: { onChange, value } }) => (
@@ -163,14 +147,11 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                 case 'json':
                   switch (admin.fieldType) {
                     case 'blockEditor':
-                      result = (
-                        <BlockEditor key={columnName} name={columnName} />
-                      );
+                      result = <BlockEditor name={columnName} />;
                       break;
                     case 'openingHours':
                       result = (
                         <OpeningHours
-                          key={columnName}
                           label={title}
                           name={columnName}
                           placement={placement}
@@ -192,7 +173,6 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                         <Textarea
                           autosize
                           minRows={7}
-                          key={columnName}
                           label={title}
                           className="w-full"
                           error={errorMessage}
@@ -205,7 +185,7 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                   break;
               }
 
-              return result;
+              return <Fragment key={columnName}>{result}</Fragment>;
             })}
           </div>
         ) : null

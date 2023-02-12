@@ -111,6 +111,16 @@ export const EntryUnderpageContextProvider: FC<{
           ? { content: JSON.stringify(itemData.content) }
           : {}),
       });
+
+      if (blockEditorRefs.refs.current) {
+        for (const [fieldName, editorRef] of Object.entries(
+          blockEditorRefs.refs.current
+        )) {
+          if (itemData[fieldName]) {
+            editorRef?.blocks?.render(itemData[fieldName]);
+          }
+        }
+      }
     }
   }, [itemData, formMethods]);
 

@@ -27,6 +27,7 @@ export const Repeater: FC<{
     () => (fields.length ? fields : [{ id: 'default' }]),
     [fields]
   );
+  const entriesArray = useMemo(() => Array.from(columns.entries()), [columns]);
 
   return (
     <Input.Wrapper size="md" label={label}>
@@ -45,7 +46,7 @@ export const Repeater: FC<{
             )}
             key={field.id}
           >
-            {Array.from(columns.entries()).map(([columnKey, columnInfo]) => {
+            {entriesArray.map(([columnKey, columnInfo]) => {
               let result = <></>;
               const columnFieldName = `${fieldName}.${index}.${columnKey}`;
               const errorMessage = t(

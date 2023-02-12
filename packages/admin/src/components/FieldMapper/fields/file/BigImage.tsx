@@ -1,8 +1,8 @@
 import BackendImage from '@components/BackendImage';
 import { SmallFileList } from '@components/FilePickerModal/SmallFileList';
-import { ActionIcon, Button, clsx, Input, Popover } from '@mantine/core';
+import { ActionIcon, Button, clsx, Popover, Input } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
-import { FC, useCallback, useMemo, useState } from 'react';
+import { FC, useCallback, useMemo, useState, forwardRef } from 'react';
 import {
   Controller,
   ControllerRenderProps,
@@ -13,10 +13,13 @@ import { Pencil, Trash } from 'tabler-icons-react';
 import { NormalProps } from './Normal';
 
 const ImageInput: FC<
-  ControllerRenderProps<FieldValues, string> & {
-    multiple: boolean;
-    typeFilter?: string;
-  }
+  Omit<
+    ControllerRenderProps<FieldValues, string> & {
+      multiple: boolean;
+      typeFilter?: string;
+    },
+    'ref'
+  >
 > = ({ onBlur, onChange, value, multiple, typeFilter }) => {
   const { t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
@@ -160,8 +163,15 @@ export const BigImage: FC<NormalProps> = ({
     <Input.Wrapper size="md" label={label} error={errorMessage}>
       <Controller
         name={name}
-        render={({ field }) => (
-          <ImageInput multiple={multiple} typeFilter={typeFilter} {...field} />
+        render={({ field: { name, onBlur, onChange, value } }) => (
+          <ImageInput
+            multiple={multiple}
+            typeFilter={typeFilter}
+            name={name}
+            onBlur={onBlur}
+            onChange={onChange}
+            value={value}
+          />
         )}
       />
     </Input.Wrapper>

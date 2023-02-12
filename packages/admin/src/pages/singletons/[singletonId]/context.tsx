@@ -62,13 +62,16 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
     data,
     isLoading,
     key: queryKey,
-  } = useCurrentSingletonData(undefined, {
-    refetchInterval: 0,
-    refetchOnMount: true,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
-    refetchIntervalInBackground: false,
-  });
+  } = useCurrentSingletonData(
+    { language },
+    {
+      refetchInterval: 0,
+      refetchOnMount: true,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      refetchIntervalInBackground: false,
+    }
+  );
 
   const { handleSubmit, setError } = formMethods;
 
