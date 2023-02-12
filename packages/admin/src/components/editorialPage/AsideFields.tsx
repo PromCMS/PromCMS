@@ -27,8 +27,6 @@ export const AsideFields: FC<{
     return null;
   }
 
-  console.log({ groupedFields });
-
   return (
     <AsideItemWrap title={t('Other info')}>
       <div className="grid gap-5 sm:gap-8 p-4  mb-10">

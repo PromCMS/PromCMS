@@ -78,8 +78,9 @@ export class GenerateDevelopProgram extends Command {
         cwd: developmentPHPAppPath,
         project,
       }),
-      getWorkerJob('Add project base resources', {
-        async job() {
+      getWorkerJob('Generate new core', {
+        job: async () => {
+          await generateCore(developmentPHPAppPath);
           await generateByTemplates(
             'commands.generate-cms',
             developmentPHPAppPath,
@@ -103,11 +104,6 @@ export class GenerateDevelopProgram extends Command {
           );
         },
       }),
-      getWorkerJob('Generate new core', {
-        job: async () => {
-          await generateCore(developmentPHPAppPath);
-        },
-      }),
       getWorkerJob('Install PHP deps', {
         // No need to install again when deps are present
         skip:
@@ -117,19 +113,9 @@ export class GenerateDevelopProgram extends Command {
           await installPHPDeps(developmentPHPAppPath);
         },
       }),
-      // TODO: make some use of this
-      // getInstallNodeDepsJob('Install dependencies', {
-      //   cwd: developmentPHPAppPath,
-      //   regenerate: this.regenerate,
-      //   packageManager: 'npm',
-      // }),
       getWorkerJob('Generate project module', {
         async job() {
           await generateProjectModule(modulesRoot, generatorConfig);
-        },
-      }),
-      getWorkerJob('Generate project module models', {
-        async job() {
           const moduleName = getModuleFolderName(generatorConfig.project.name);
 
           await generateModels(

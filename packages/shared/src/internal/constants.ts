@@ -40,6 +40,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
         sorting: true,
         draftable: true,
         preset: 'post',
+        title: 'Články',
         columns: {
           // Content and title is added as a default
           description: {

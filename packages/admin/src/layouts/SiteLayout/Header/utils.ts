@@ -32,12 +32,12 @@ export const useConstructedMenuItems = () => {
                 ? currentUser.can({ action: 'update', targetModel: modelKey })
                 : true)
           )
-          .map(([modelKey, { icon, isSingleton, ...rest }]) => ({
+          .map(([modelKey, { icon, isSingleton, title }]) => ({
             href: isSingleton
               ? pageUrls.singletons.view(modelKey)
               : pageUrls.entryTypes(modelKey).list,
             icon: iconSet[icon],
-            label: modelKey,
+            label: title || modelKey,
             isSingleton,
           })),
       ].filter((item) => !!item.icon);

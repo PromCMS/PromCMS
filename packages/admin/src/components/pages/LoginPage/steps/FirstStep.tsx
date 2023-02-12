@@ -18,6 +18,7 @@ export const FirstStep: FC = () => {
         type="email"
         error={t(errors?.email?.message as unknown as string)}
         className="w-full"
+        autoComplete="email"
         {...register('email')}
       />
       <Group position="right" className="z-10 -mb-12">
@@ -27,6 +28,7 @@ export const FirstStep: FC = () => {
         label={t('Password')}
         error={t(errors?.password?.message as unknown as string)}
         className="w-full"
+        autoComplete="current-password"
         {...register('password')}
       />
     </div>

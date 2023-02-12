@@ -39,6 +39,9 @@ class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
   
   <%# Custom model info not tied to PromCMS\Core\Database\Model perse %> 
   static bool $ignoreSeeding = <%- ignoreSeeding ? 'true' : 'false' %>;
+  <% if (typeof title !== "undefined") { %>
+    static string $title = '<%- title %>';
+  <% } %>
   static string $modelIcon = '<%- icon %>';
   static $adminSettings = [];
 
@@ -85,6 +88,7 @@ class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
       'isSingleton'     => $this instanceof SingletonModel,
       <% if (isSingleton) { %> 'name'            => $this->getName(), <% } else { %> 'tableName'       => $this->getTableName(), <% } %>
       'icon'            => self::$modelIcon,
+      'title'           => isset(self::$title) ? self::$title : null,
       'ignoreSeeding'   => self::$ignoreSeeding,
       'admin'           => self::$adminSettings,
       'columns'         => static::$tableColumns,
