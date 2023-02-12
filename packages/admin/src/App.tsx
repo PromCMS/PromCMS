@@ -7,30 +7,30 @@ import './assets/globals.css';
 
 import MainPage from '@pages/home';
 import NotFoundPage from '@pages/404';
-import LoginPage from '@pages/login';
+import LoginPage from '@pages/login/page';
 import LogoutPage from '@pages/logout';
-import FinalizeRegistrationPage from '@pages/finalize-registration';
-import ResetPasswordPage from '@pages/reset-password';
-import CreateEntryPage from '@pages/entry-types/[modelId]/entries/create';
-import EntryUnderPage from '@pages/entry-types/[modelId]/entries/[entryId]';
-import EntryDuplicateUnderPage from '@pages/entry-types/[modelId]/entries/duplicate/[entryId]';
+import FinalizeRegistrationPage from '@pages/finalize-registration/page';
+import ResetPasswordPage from '@pages/reset-password/page';
+import CreateEntryPage from '@pages/entry-types/[modelId]/entries/create/page';
+import EntryUnderPage from '@pages/entry-types/[modelId]/entries/[entryId]/page';
+import EntryDuplicateUnderPage from '@pages/entry-types/[modelId]/entries/duplicate/[entryId]/page';
 import UserProfileMainPage from '@pages/settings/system';
-import { ProfileSettingsPage } from '@pages/settings/profile';
+import { ProfileSettingsPage } from '@pages/settings/profile/page';
 import { UserProfilePasswordPage } from '@pages/settings/password';
-import UserRolesPage from '@pages/settings/user-roles';
+import UserRolesPage from '@pages/settings/user-roles/page';
 import { lazy, Suspense } from 'react';
 import { Loader } from '@components/SiteLoader';
 import { CreateTranslationSettings } from '@pages/settings/translations/[lang]/keys/create';
 import { GlobalContextProvider } from '@contexts/GlobalContext';
 import { BlockEditorRefsProvider } from '@contexts/BlockEditorContext';
 
-const LazyFilesPage = lazy(() => import('@pages/files'));
+const LazyFilesPage = lazy(() => import('@pages/files/page'));
 const LazyFilePage = lazy(() => import('@pages/files/entries/[fileId]'));
-const LazyCreateUserPage = lazy(() => import('@pages/users/invite'));
-const LazyUsersListPage = lazy(() => import('@pages/users'));
-const LazyUserUnderPage = lazy(() => import('@pages/users/[userId]'));
+const LazyCreateUserPage = lazy(() => import('@pages/users/invite/page'));
+const LazyUsersListPage = lazy(() => import('@pages/users/page'));
+const LazyUserUnderPage = lazy(() => import('@pages/users/[userId]/page'));
 const LazyEntryTypeUnderpage = lazy(
-  () => import('@pages/entry-types/[modelId]')
+  () => import('@pages/entry-types/[modelId]/page')
 );
 const LazyProfileLayout = lazy(() =>
   import('@layouts').then(({ ProfileLayout }) => ({ default: ProfileLayout }))

@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "dev": "npx vite -c ./vite/config.ts",
-    "build": "npx tsc --noEmit && vite build -c ./vite/config.ts",
+    "build": "npx tsc --noEmit && vite build --emptyOutDir -c ./vite/config.ts",
     "build:analyze": "tsc && cross-env ANALYZE=true vite build",
     "preview": "vite preview"
   },

@@ -18,7 +18,7 @@ export const prepareFieldsForMapper = (
     if (
       hide ||
       !editable ||
-      (placement && admin.editor.placement !== placement) ||
+      (placement && admin?.editor?.placement !== placement) ||
       columnName === 'is_published'
     ) {
       continue;

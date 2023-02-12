@@ -23,7 +23,7 @@ import { Fragment } from 'react';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
-import { Drawer, CopyName } from '../../components/pages/Settings/MainPage';
+import { Drawer, CopyName } from './_components';
 
 const useStyles = createStyles(() => ({
   root: {
