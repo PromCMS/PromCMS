@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/shared",
   "description": "Shared package for prom cms packages",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
