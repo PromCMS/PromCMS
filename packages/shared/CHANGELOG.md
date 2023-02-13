@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 1.9.4
+
+### Patch Changes
+
+- 988227f: Show human readable titles in admin
+
 ## 1.9.3
 
 ### Patch Changes

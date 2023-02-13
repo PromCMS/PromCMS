@@ -1,5 +1,18 @@
 # @prom-cms/admin
 
+## 0.6.0
+
+### Minor Changes
+
+- 988227f: Show human readable titles in admin
+- 4e5e9fe: Change input to textarea in admin translation page.
+
+### Patch Changes
+
+- d3ea1ec: Fix some react errors and fix bugs with editorjs on language change.
+- Updated dependencies [988227f]
+  - @prom-cms/shared@1.9.4
+
 ## 0.5.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @prom-cms/cli
 
+## 0.16.2
+
+### Patch Changes
+
+- 988227f: Show human readable titles in admin
+- Updated dependencies [d3ea1ec]
+- Updated dependencies [988227f]
+- Updated dependencies [4e5e9fe]
+  - @prom-cms/admin@0.6.0
+  - @prom-cms/shared@1.9.4
+
 ## 0.16.1
 
 ### Patch Changes
