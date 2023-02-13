@@ -1,5 +1,12 @@
 # @prom-cms/admin
 
+## 0.7.0
+
+### Minor Changes
+
+- 2c511cf: Update localization logic in admin and add default language packs.
+- 18df648: Add functionality to reset password through logged in admin
+
 ## 0.6.0
 
 ### Minor Changes
