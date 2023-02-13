@@ -1,17 +1,25 @@
 import ImageSelect from '@components/form/ImageSelect';
 import { useGlobalContext } from '@contexts/GlobalContext';
 import clsx from 'clsx';
-import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react';
+import axios from 'axios';
+import {
+  DetailedHTMLProps,
+  FC,
+  HTMLAttributes,
+  useMemo,
+  useState,
+} from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { getObjectDiff } from '@utils';
 import { User } from '@prom-cms/shared';
 import { showNotification, updateNotification } from '@mantine/notifications';
-import { Button, TextInput } from '@mantine/core';
-import { At } from 'tabler-icons-react';
+import { Button, TextInput, Input } from '@mantine/core';
+import { Lock } from 'tabler-icons-react';
 import { Page } from '@custom-types';
 import { apiClient } from '@api';
 import { LanguageSelect } from './_components';
+import { useNavigate } from 'react-router-dom';
 
 const Row: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
@@ -24,9 +32,11 @@ const Row: FC<
 export const ProfileSettingsPage: Page = () => {
   const { currentUser, updateValue } = useGlobalContext();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const formMethods = useForm({
     defaultValues: currentUser,
   });
+  const [isResetting, setIsResettings] = useState(false);
   const { register, control, handleSubmit, watch } = formMethods;
 
   const values = watch();
@@ -72,6 +82,27 @@ export const ProfileSettingsPage: Page = () => {
     }
   };
 
+  const requestPasswordReset = async () => {
+    if (confirm(t('Are you really sure?'))) {
+      try {
+        setIsResettings(true);
+        await apiClient.users.requestPasswordReset(currentUser?.email);
+        navigate('/logout');
+      } catch (e) {
+        setIsResettings(false);
+        if (axios.isAxiosError(e)) {
+          showNotification({
+            id: 'reset-password-request-notification',
+            color: 'red',
+            title: 'An error happened',
+            message: 'An error happened during request. Please try again...',
+          });
+          throw e;
+        }
+      }
+    }
+  };
+
   return (
     <FormProvider {...formMethods}>
       <form
@@ -87,6 +118,7 @@ export const ProfileSettingsPage: Page = () => {
               <ImageSelect
                 label={t('Avatar')}
                 className="w-full"
+                disabled={isResetting}
                 selected={value}
                 multiple={false}
                 onChange={(value) => value && onChange(value)}
@@ -99,6 +131,7 @@ export const ProfileSettingsPage: Page = () => {
           <TextInput
             label={t('Full name')}
             className="w-full"
+            disabled={isResetting}
             {...register('name')}
           />
         </Row>
@@ -109,14 +142,20 @@ export const ProfileSettingsPage: Page = () => {
             className="w-full"
             {...register('email')}
           />
-          {/* TODO */}
-          {false && (
-            <div className="w-full">
-              <Button className="flex-none" color="ghost" leftIcon={<At />}>
-                {t('Change email')}
-              </Button>
-            </div>
-          )}
+        </Row>
+        <Row className="items-end">
+          <Input.Wrapper size="md" label={t('Password')}>
+            <Button
+              className="block mt-1"
+              color="ghost"
+              size="lg"
+              leftIcon={<Lock />}
+              disabled={isResetting}
+              onClick={requestPasswordReset}
+            >
+              {t('Change password')}
+            </Button>
+          </Input.Wrapper>
         </Row>
         <Row className="items-end">
           <LanguageSelect />
@@ -126,7 +165,7 @@ export const ProfileSettingsPage: Page = () => {
           size="md"
           color="success"
           type="submit"
-          disabled={!canSubmit}
+          disabled={isResetting || !canSubmit}
           loading={formMethods.formState.isSubmitting}
         >
           {t('Save')}
