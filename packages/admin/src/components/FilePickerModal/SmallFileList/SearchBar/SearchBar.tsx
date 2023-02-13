@@ -8,7 +8,7 @@ export interface SearchBarProps {}
 
 export const SearchBar: VFC<SearchBarProps> = () => {
   const { t } = useTranslation();
-  const { updateValue, searchValue } = useSmallFileList();
+  const { updateValue, searchValue, isUploading } = useSmallFileList();
 
   return (
     <div className="flex w-full items-center">
@@ -18,6 +18,7 @@ export const SearchBar: VFC<SearchBarProps> = () => {
           name="query"
           className="w-full"
           value={searchValue}
+          disabled={isUploading}
           onInput={(ev) =>
             updateValue({ name: 'searchValue', value: ev.currentTarget.value })
           }

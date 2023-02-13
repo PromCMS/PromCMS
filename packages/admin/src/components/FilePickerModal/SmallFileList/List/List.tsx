@@ -32,7 +32,7 @@ export const List: FC<ListProps> = ({ onDeleteClick }) => {
           <FileItemSkeleton />
         </>
       )}
-      {isUploading && <FileItemSkeleton />}
+      {isUploading ? <FileItemSkeleton /> : null}
     </div>
   );
 };

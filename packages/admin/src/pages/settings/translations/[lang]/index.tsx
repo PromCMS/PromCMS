@@ -11,7 +11,7 @@ import {
   Group,
   LoadingOverlay,
   Table,
-  TextInput,
+  Textarea,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -131,9 +131,9 @@ export const GeneralTranslationsSettings: Page = () => {
 
   const rows = sortedTranslations.map(([key, value]) => (
     <tr key={key}>
-      <td>{key}</td>
+      <td className="align-top">{key}</td>
       <td className="w-full max-w-[350px]">
-        <TextInput
+        <Textarea
           onFocus={setUserIsTyping}
           onBlur={() => onSaveItem(key)}
           onChange={(e) => updateKey(key, e.currentTarget.value)}
@@ -143,7 +143,7 @@ export const GeneralTranslationsSettings: Page = () => {
             }
           }}
           value={value}
-          placeholder={t('Translate by entering some keyword')}
+          placeholder={key}
         />
       </td>
       <td className="w-full max-w-[100px]">

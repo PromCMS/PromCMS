@@ -2,10 +2,10 @@ import { apiClient } from '@api';
 import { WhereQueryParam } from '@custom-types';
 import { ActionIcon, Button, Pagination } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
-import { useCallback, useMemo, useState, VFC } from 'react';
+import { useCallback, useMemo, useState, FC } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useTranslation } from 'react-i18next';
-import { Plus } from 'tabler-icons-react';
+import { LoaderQuarter, Plus } from 'tabler-icons-react';
 import { FilePickerModalProps } from '../FilePickerModal';
 import {
   ISmallFileListContext,
@@ -25,7 +25,7 @@ export interface SmallFileListProps {
   where?: WhereQueryParam;
 }
 
-export const SmallFileList: VFC<SmallFileListProps> = ({
+export const SmallFileList: FC<SmallFileListProps> = ({
   title,
   multiple,
   triggerClose,
@@ -59,14 +59,34 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
   const onDeleteClick: ListProps['onDeleteClick'] = useCallback((id) => {}, []);
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      updateValue({ name: 'isLoading', value: true });
-      await apiClient.files.create(acceptedFiles[0], {
+      // Show loading indicator
+      updateValue({ name: 'isUploading', value: true });
+
+      // Upload file
+      const result = await apiClient.files.create(acceptedFiles[0], {
         root: '/',
       });
-      updateValue({ name: 'isLoading', value: false });
-      mutate();
+
+      // If we dont have multiple then we can select what is uploaded
+      if (!multiple) {
+        onChange([result.data.data.id]);
+        // Stop loading indicator
+        updateValue({ name: 'isUploading', value: false });
+
+        triggerClose?.();
+      } else {
+        // Refresh file list
+        const { data: changedData } = await mutate();
+
+        if (changedData?.last_page) {
+          setPage(changedData.last_page);
+        }
+      }
+
+      // Stop loading indicator after the page has been changed - if possible
+      updateValue({ name: 'isUploading', value: false });
     },
-    [updateValue, mutate]
+    [updateValue, mutate, multiple]
   );
 
   const { open, getInputProps } = useDropzone({
@@ -119,9 +139,14 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
           className="flex-none ![&>svg]:-mx-3 [&>svg]:aspect-square [&>svg]:w-6"
           title={t('Add new')}
           ml="xl"
+          disabled={isLoading || state.isUploading}
           onClick={open}
         >
-          <Plus />
+          {state.isUploading || isLoading ? (
+            <LoaderQuarter className="animate-spin" />
+          ) : (
+            <Plus />
+          )}
         </ActionIcon>
       </div>
       <List onDeleteClick={onDeleteClick} />
@@ -129,13 +154,14 @@ export const SmallFileList: VFC<SmallFileListProps> = ({
         <Pagination
           total={data?.last_page || 1}
           onChange={setPage}
+          disabled={isLoading || state.isUploading}
           className="items-center"
         />
         <div className="flex items-center gap-2">
           {triggerClose && (
             <Button
               onClick={triggerClose}
-              disabled={!pickedFiles.length}
+              disabled={!pickedFiles.length || isLoading || state.isUploading}
               size="md"
               color="green"
               ml="xl"
