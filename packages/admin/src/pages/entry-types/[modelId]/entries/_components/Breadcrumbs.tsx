@@ -19,7 +19,9 @@ export const Breadcrumbs: FC = () => {
         { content: t('Entry types') as string },
         {
           isLinkTo: pageUrls.entryTypes(model?.name as string).list,
-          content: t(capitalizeFirstLetter(model?.name || '')) as string,
+          content: t(
+            capitalizeFirstLetter(model?.title || model?.name || '')
+          ) as string,
         },
         {
           content: t(currentView == 'update' ? 'Update' : 'Create') as string,

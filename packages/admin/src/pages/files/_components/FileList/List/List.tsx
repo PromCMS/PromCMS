@@ -46,8 +46,8 @@ export const List: FC = () => {
       showNotification({
         id: notificationId,
         loading: true,
-        title: 'Deleting folder',
-        message: t('Deleting your folder...'),
+        title: t('Deleting folder'),
+        message: t('Deleting folder') + '...',
         autoClose: false,
         disallowClose: true,
       });

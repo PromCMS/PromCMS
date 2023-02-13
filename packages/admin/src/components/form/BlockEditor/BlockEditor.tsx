@@ -24,7 +24,13 @@ export const BlockEditor: FC<BlockEditorProps> = ({ name, ...props }) => {
       control={control}
       name={name}
       render={({ field: { onChange, value }, formState: { errors } }) => (
-        <Suspense fallback={<>{t('Loading editor, please wait...')}</>}>
+        <Suspense
+          fallback={
+            <div className="min-h-[350px]">
+              {t('Loading editor, please wait...')}
+            </div>
+          }
+        >
           <LazyEditor
             name={name}
             onChange={onEditorChange(onChange)}

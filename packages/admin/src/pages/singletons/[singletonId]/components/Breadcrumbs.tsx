@@ -16,7 +16,7 @@ export const Breadcrumbs: FC = () => {
           {
             content: (
               <p className="flex-none text-green-500 underline">
-                {t(singleton.name)}
+                {singleton.title || singleton.name}
               </p>
             ),
           },

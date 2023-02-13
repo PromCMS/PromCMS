@@ -72,7 +72,7 @@ export const GeneralTranslationsSettings: Page = () => {
     await reqWithNotification(
       {
         title: 'Saving',
-        message: t('Saving translation, please wait...'),
+        message: t('Saving, please wait...'),
         successMessage: t('Key translated!'),
       },
       async () => {

@@ -32,7 +32,7 @@ const FilePage: Page = () => {
       title={
         <Title order={4}>
           {isLoading ? (
-            t('Loading...')
+            t('Loading, please wait...')
           ) : (
             <>
               File info of &apos;

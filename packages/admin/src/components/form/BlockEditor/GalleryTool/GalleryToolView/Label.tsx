@@ -16,7 +16,7 @@ export const Label: FC = () => {
       label={t('Gallery name')}
       value={label || ''}
       size="xl"
-      placeholder={t('Some fancy gallery name...')}
+      placeholder={t('Start typing here...')}
       onChange={(e) => changeLabel(e.currentTarget.value)}
       className="mt-2"
     />

@@ -12,7 +12,7 @@ export const CopyName: VFC<{ name: string }> = ({ name }) => {
 
   return (
     <Tooltip
-      label={t('Copied!')}
+      label={t('Copied')}
       offset={5}
       position="bottom"
       radius="xl"

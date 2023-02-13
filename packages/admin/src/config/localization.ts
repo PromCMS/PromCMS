@@ -1,4 +1,5 @@
 import {
+  defaultLanguagePacks,
   localizationCookieStorageKey,
   localizationLocalStorageKey,
   localizationSessionStorageKey,
@@ -9,7 +10,8 @@ export const localizationConfig: InitOptions = {
   backend: {
     loadPath: '/api/locales/{{lng}}.json',
   },
-  fallbackLng: false,
+  fallbackLng: 'en',
+
   detection: {
     // order and from where user language should be detected
     order: ['localStorage', 'sessionStorage', 'cookie', 'navigator'],
@@ -20,13 +22,16 @@ export const localizationConfig: InitOptions = {
     lookupCookie: localizationCookieStorageKey,
 
     // cache user language on
-    caches: ['localStorage', 'cookie'],
+    caches: ['localStorage'],
     excludeCacheFor: ['cimode'], // languages to not persist (cookie, localStorage)
 
     // optional set cookie options, reference:[MDN Set-Cookie docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
     cookieOptions: { path: '/', sameSite: 'strict' },
   },
+  resources: defaultLanguagePacks,
   react: {
     useSuspense: false,
+    bindI18n: 'added',
+    bindI18nStore: 'added',
   },
 };

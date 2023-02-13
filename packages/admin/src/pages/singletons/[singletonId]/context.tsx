@@ -120,7 +120,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
       await toastedPromise(
         {
           title: 'Updating',
-          message: t('Updating your entry, please wait...'),
+          message: t('Updating, please wait...'),
           successMessage: t('Your entry is updated!'),
         },
         async () => {

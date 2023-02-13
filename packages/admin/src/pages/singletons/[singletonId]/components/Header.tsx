@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { FieldPlacements } from '@prom-cms/shared';
 
 export const Header: FC = () => {
-  const { name, columns } = useCurrentSingleton(true);
+  const { name, title, columns } = useCurrentSingleton(true);
   const { t } = useTranslation();
 
   const hasHeading = useMemo(
@@ -29,7 +29,7 @@ export const Header: FC = () => {
   return (
     <StyledHeader>
       <StyledHeader.Title>
-        {t('Update')} {name}
+        {t('Update')} {title || name}
       </StyledHeader.Title>
       <StyledHeader.Divider />
     </StyledHeader>

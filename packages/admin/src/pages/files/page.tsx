@@ -1,6 +1,7 @@
 import { Page } from '@custom-types';
 import { useModelInfo } from '@hooks/useModelInfo';
 import { PageLayout } from '@layouts';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import NotFoundPage from '../404';
@@ -17,7 +18,7 @@ const FilesPage: Page = () => {
     <PageLayout>
       <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
         <h1 className="text-3xl font-semibold capitalize">
-          {t(model.tableName || '')}
+          {t(capitalizeFirstLetter(model.tableName || ''))}
         </h1>
       </div>
       <FileList />

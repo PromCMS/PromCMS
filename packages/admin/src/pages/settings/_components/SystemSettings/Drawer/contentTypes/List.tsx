@@ -108,7 +108,7 @@ export const List: VFC = () => {
                 </div>
               ))
             ) : (
-              <Text color="dimmed">{t('No items for now')}</Text>
+              <Text color="dimmed">{t('No items yet...')}</Text>
             )}
           </SimpleGrid>
         </Input.Wrapper>
