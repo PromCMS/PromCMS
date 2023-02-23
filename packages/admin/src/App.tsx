@@ -16,13 +16,13 @@ import EntryUnderPage from '@pages/entry-types/[modelId]/entries/[entryId]/page'
 import EntryDuplicateUnderPage from '@pages/entry-types/[modelId]/entries/duplicate/[entryId]/page';
 import UserProfileMainPage from '@pages/settings/system';
 import { ProfileSettingsPage } from '@pages/settings/profile/page';
-import { UserProfilePasswordPage } from '@pages/settings/password';
 import UserRolesPage from '@pages/settings/user-roles/page';
 import { lazy, Suspense } from 'react';
 import { Loader } from '@components/SiteLoader';
 import { CreateTranslationSettings } from '@pages/settings/translations/[lang]/keys/create';
 import { GlobalContextProvider } from '@contexts/GlobalContext';
 import { BlockEditorRefsProvider } from '@contexts/BlockEditorContext';
+import { ChangePasswordPage } from '@pages/settings/profile/password/change/page';
 
 const LazyFilesPage = lazy(() => import('@pages/files/page'));
 const LazyFilePage = lazy(() => import('@pages/files/entries/[fileId]'));
@@ -113,12 +113,14 @@ export function App() {
                     </Suspense>
                   }
                 >
-                  <Route path="profile" element={<ProfileSettingsPage />} />
+                  <Route path="profile">
+                    <Route path="" element={<ProfileSettingsPage />} />
+                    <Route
+                      path="password/change"
+                      element={<ChangePasswordPage />}
+                    />
+                  </Route>
                   <Route path="system" element={<UserProfileMainPage />} />
-                  <Route
-                    path="password"
-                    element={<UserProfilePasswordPage />}
-                  />
                   <Route path="roles" element={<UserRolesPage />} />
                   <Route
                     path="translations/:lang"

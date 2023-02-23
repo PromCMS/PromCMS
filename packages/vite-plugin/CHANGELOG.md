@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.6.0
+
+### Minor Changes
+
+- b084ac9: Vite plugin specifies buildDir
+
 ## 0.5.0
 
 ### Minor Changes

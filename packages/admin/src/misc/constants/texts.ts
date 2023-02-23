@@ -1,8 +1,11 @@
 export enum MESSAGES {
   ON_DELETE_REQUEST_PROMPT = 'Are you sure you want to delete this item?',
+  INVALID_OLD_PASSWORD = 'Your old password is invalid',
   ERROR_BASIC = 'An error happened',
+  ARE_YOUR_REALLY_SURE = 'Are you really sure?',
   CHANGE_PASSWORD = 'Change password',
   NEW_PASSWORD = 'New password',
+  NEW_PASSWORD_AGAIN = 'New password again',
   OLD_PASSWORD = 'Old password',
   WELCOME_USER = 'Welcome back, {{name}}',
   PLEASE_ENTER_PASSWORD = 'Please enter password',

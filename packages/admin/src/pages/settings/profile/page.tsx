@@ -1,14 +1,7 @@
 import ImageSelect from '@components/form/ImageSelect';
 import { useGlobalContext } from '@contexts/GlobalContext';
 import clsx from 'clsx';
-import axios from 'axios';
-import {
-  DetailedHTMLProps,
-  FC,
-  HTMLAttributes,
-  useMemo,
-  useState,
-} from 'react';
+import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { getObjectDiff } from '@utils';
@@ -20,6 +13,7 @@ import { Page } from '@custom-types';
 import { apiClient } from '@api';
 import { LanguageSelect } from './_components';
 import { useNavigate } from 'react-router-dom';
+import { MESSAGES } from '@constants';
 
 const Row: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
@@ -36,7 +30,6 @@ export const ProfileSettingsPage: Page = () => {
   const formMethods = useForm({
     defaultValues: currentUser,
   });
-  const [isResetting, setIsResettings] = useState(false);
   const { register, control, handleSubmit, watch } = formMethods;
 
   const values = watch();
@@ -82,27 +75,6 @@ export const ProfileSettingsPage: Page = () => {
     }
   };
 
-  const requestPasswordReset = async () => {
-    if (confirm(t('Are you really sure?'))) {
-      try {
-        setIsResettings(true);
-        await apiClient.users.requestPasswordReset(currentUser?.email);
-        navigate('/logout');
-      } catch (e) {
-        setIsResettings(false);
-        if (axios.isAxiosError(e)) {
-          showNotification({
-            id: 'reset-password-request-notification',
-            color: 'red',
-            title: 'An error happened',
-            message: 'An error happened during request. Please try again...',
-          });
-          throw e;
-        }
-      }
-    }
-  };
-
   return (
     <FormProvider {...formMethods}>
       <form
@@ -118,7 +90,6 @@ export const ProfileSettingsPage: Page = () => {
               <ImageSelect
                 label={t('Avatar')}
                 className="w-full"
-                disabled={isResetting}
                 selected={value}
                 multiple={false}
                 onChange={(value) => value && onChange(value)}
@@ -131,7 +102,6 @@ export const ProfileSettingsPage: Page = () => {
           <TextInput
             label={t('Full name')}
             className="w-full"
-            disabled={isResetting}
             {...register('name')}
           />
         </Row>
@@ -142,20 +112,17 @@ export const ProfileSettingsPage: Page = () => {
             className="w-full"
             {...register('email')}
           />
-        </Row>
-        <Row className="items-end">
-          <Input.Wrapper size="md" label={t('Password')}>
+          <Row className="items-end">
             <Button
               className="block mt-1"
               color="ghost"
-              size="lg"
+              size="md"
               leftIcon={<Lock />}
-              disabled={isResetting}
-              onClick={requestPasswordReset}
+              onClick={() => navigate('/settings/profile/password/change')}
             >
-              {t('Change password')}
+              {t(MESSAGES.CHANGE_PASSWORD)}
             </Button>
-          </Input.Wrapper>
+          </Row>
         </Row>
         <Row className="items-end">
           <LanguageSelect />
@@ -165,7 +132,7 @@ export const ProfileSettingsPage: Page = () => {
           size="md"
           color="success"
           type="submit"
-          disabled={isResetting || !canSubmit}
+          disabled={!canSubmit}
           loading={formMethods.formState.isSubmitting}
         >
           {t('Save')}
