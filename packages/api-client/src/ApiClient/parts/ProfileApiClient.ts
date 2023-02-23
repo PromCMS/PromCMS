@@ -9,6 +9,18 @@ export class ProfileApiClient extends ApiClientBase {
     });
   }
 
+  changePassword(newPassword: string, oldPassword: string) {
+    return this.axios.post<
+      Response<
+        any,
+        'new-password-invalid' | 'old-password-invalid' | 'missing-body-values'
+      >
+    >('/profile/change-password', {
+      oldPassword,
+      newPassword,
+    });
+  }
+
   resetPassword(payload: { email: string }) {
     return this.axios.get('/profile/request-password-reset', {
       params: payload,
