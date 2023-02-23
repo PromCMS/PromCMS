@@ -13,7 +13,7 @@ import {
 } from 'tabler-icons-react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useSettings } from '@hooks/useSettings';
-import { pageUrls } from '@constants';
+import { MESSAGES, pageUrls } from '@constants';
 
 const LeftAside: FC = () => {
   let navigate = useNavigate();
@@ -37,13 +37,13 @@ const LeftAside: FC = () => {
           canBeShown: () => false,
         },*/
         {
-          title: 'User Roles',
+          title: MESSAGES.USER_ROLES,
           url: '/settings/roles',
           Icon: UserExclamation,
           canBeShown: currentUser?.role.id === 0,
         },
         {
-          title: 'System settings',
+          title: MESSAGES.SYSTEM_SETTINGS,
           url: '/settings/system',
           Icon: Settings,
           canBeShown: !!currentUser?.can({
@@ -52,7 +52,7 @@ const LeftAside: FC = () => {
           }),
         },
         {
-          title: 'General translations',
+          title: MESSAGES.GENERAL_TRANSLATIONS,
           url: pageUrls.settings.translations(settings?.i18n.languages[1]).list,
           isInUrl(currentUrl) {
             return currentUrl.startsWith(
@@ -112,7 +112,7 @@ export const ProfileLayout: FC = () => {
 
   return (
     <PageLayout withAside leftAside={<LeftAside />}>
-      <PageLayout.Header title={t('Settings')} />
+      <PageLayout.Header title={t(MESSAGES.SETTINGS)} />
 
       <PageLayout.Section className="mt-5 min-h-[500px] justify-evenly lg:flex">
         <div className="w-full">

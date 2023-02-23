@@ -1,5 +1,6 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { UserSelect, UserSelectProps } from '@components/form/UserSelect';
+import { MESSAGES } from '@constants';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Anchor, Button, Group, Popover } from '@mantine/core';
 import { useEntryUnderpageContext } from '@pages/entry-types/[modelId]/entries/_context';
@@ -50,8 +51,8 @@ export const CoeditorsEditor: FC = () => {
   return (
     <>
       <AsideItemWrap
-        title={t('Coeditors')}
-        description="Add coeditor and add permission to edit to some user"
+        title={t(MESSAGES.CONTRIBUTORS)}
+        description={t(MESSAGES.ADD_CONTRIBUTOR_TEXT)}
       >
         <div className="grid grid-cols-1 gap-2.5 p-2.5">
           <CoeditorsList />
@@ -73,12 +74,13 @@ export const CoeditorsEditor: FC = () => {
                 onClick={() => setPopoverOpen((o) => !o)}
               >
                 <span className="ml-auto inline-block">
-                  {t('Add coeditor')}
+                  {t(MESSAGES.ADD_CONTRIBUTOR)}
                 </span>
               </Button>
             </Popover.Target>
             <Popover.Dropdown className="w-full" title={t('Select user')}>
               <UserSelect
+                withLabel={false}
                 disabled={isAddingUser}
                 value={selectInputValue}
                 onChange={setSelectInputValue}

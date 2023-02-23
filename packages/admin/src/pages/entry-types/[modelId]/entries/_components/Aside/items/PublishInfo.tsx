@@ -1,5 +1,5 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
-import { pageUrls } from '@constants';
+import { MESSAGES, pageUrls } from '@constants';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { useUser } from '@hooks/useUser';
@@ -51,14 +51,14 @@ export const PublishInfo: FC = () => {
   }
 
   return (
-    <AsideItemWrap className="!pt-0" title={t('Publish info')}>
+    <AsideItemWrap className="!pt-0" title={t(MESSAGES.PUBLISH_INFO)}>
       {currentView === 'update' && (
         <div className="w-full px-4 py-5">
           <ul className="flex list-disc flex-col gap-2 pl-5">
             {currentModel?.hasTimestamps && (
               <>
                 <li>
-                  {t('Updated at:')}{' '}
+                  {t('Updated at')}:{' '}
                   {itemIsLoading ? (
                     <TextSkeleton className="w-full max-w-[6rem]" />
                   ) : (
@@ -71,7 +71,7 @@ export const PublishInfo: FC = () => {
                 </li>
                 {!!itemData?.created_at && (
                   <li>
-                    {t('Created at:')}{' '}
+                    {t('Created at')}:{' '}
                     {itemIsLoading ? (
                       <TextSkeleton className="w-full max-w-[6rem]" />
                     ) : (
@@ -89,7 +89,7 @@ export const PublishInfo: FC = () => {
                   String(itemData?.updated_by) !== '0' && (
                     <li>
                       <div className="flex items-center gap-1">
-                        <span className="flex-none">{t('Updated by:')}</span>{' '}
+                        <span className="flex-none">{t('Updated by')}:</span>{' '}
                         <UserName userId={itemData?.updated_by} />
                       </div>
                     </li>
@@ -97,7 +97,7 @@ export const PublishInfo: FC = () => {
 
                 <li>
                   <div className="flex items-center gap-1">
-                    <span className="flex-none">{t('Created by:')}</span>{' '}
+                    <span className="flex-none">{t('Created by')}:</span>{' '}
                     {!!itemData?.created_by &&
                     String(itemData?.created_by) !== '0' ? (
                       <UserName userId={itemData?.created_by} />

@@ -51,7 +51,7 @@ export const Content: FC = () => {
           className="py-5"
           items={[
             {
-              content: capitalizeFirstLetter(model?.tableName || ''),
+              content: t(capitalizeFirstLetter(model?.tableName || '')),
               isLinkTo: `/${model?.tableName?.toLowerCase()}`,
             },
             { content: t(view == 'update' ? 'Update' : 'Create') as string },

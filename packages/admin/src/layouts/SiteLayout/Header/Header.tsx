@@ -10,7 +10,7 @@ import BackendImage from '@components/BackendImage';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { Popover, Tooltip, UnstyledButton } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
-import { Briefcase, Home, Photo } from 'tabler-icons-react';
+import { Briefcase, Home, Photo, Settings, Users } from 'tabler-icons-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@mantine/hooks';
 import clsx from 'clsx';
@@ -116,7 +116,7 @@ const Header: FC = () => {
           <Popover.Dropdown>
             <PopoverList>
               <PopoverList.Item
-                icon={t('User')}
+                icon={'User'}
                 className="text-blue-500"
                 onClick={() => {
                   close();
@@ -130,7 +130,7 @@ const Header: FC = () => {
                 targetModel: 'users',
               }) && (
                 <PopoverList.Item
-                  icon={t('Users')}
+                  icon={'Users'}
                   className="text-blue-500"
                   onClick={() => {
                     close();
@@ -145,7 +145,7 @@ const Header: FC = () => {
                 targetModel: 'settings',
               }) && (
                 <PopoverList.Item
-                  icon={t('Settings')}
+                  icon={'Settings'}
                   className="text-blue-500"
                   onClick={() => {
                     close();

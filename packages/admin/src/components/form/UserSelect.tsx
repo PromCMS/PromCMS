@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { useModelItem } from '@hooks/useModelItem';
 import { useModelItems } from '@hooks/useModelItems';
 import {
@@ -42,9 +43,16 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, AutoCompleteItemProps>(
 export interface UserSelectProps
   extends Omit<AutocompleteProps, 'data' | 'onItemSubmit'> {
   onItemSubmit: (item: AutocompleteItem & User) => void;
+  /**
+   * @defaultValue true
+   */
+  withLabel?: boolean;
 }
 
-export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
+export const UserSelect: FC<UserSelectProps> = ({
+  withLabel = true,
+  ...props
+}) => {
   const { t } = useTranslation();
   const { data } = useModelItems<User>(
     'users',
@@ -78,7 +86,7 @@ export const UserSelect: FC<UserSelectProps> = ({ ...props }) => {
 
   return (
     <Autocomplete
-      label="User"
+      label={withLabel ? t(MESSAGES.USER) : undefined}
       itemComponent={AutoCompleteItem}
       placeholder={t('Start typing to see options')}
       filter={() => true}

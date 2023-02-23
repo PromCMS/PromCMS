@@ -31,7 +31,7 @@ export const localizationConfig: InitOptions = {
   resources: defaultLanguagePacks,
   react: {
     useSuspense: false,
-    bindI18n: 'added',
+    bindI18n: 'added languageChanged',
     bindI18nStore: 'added',
   },
 };

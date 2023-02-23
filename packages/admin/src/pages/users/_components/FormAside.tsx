@@ -105,12 +105,12 @@ export const FormAside: FC = () => {
 
   return (
     <AsideWrapper isOpen>
-      <AsideItemWrap className="!pt-0" title="Apply changes">
+      <AsideItemWrap className="!pt-0" title={t(MESSAGES.PUBLISH_INFO)}>
         {view === 'update' && (
           <div className={clsx('w-full bg-white py-5 px-4')}>
             <ul className="flex list-disc flex-col gap-2 pl-5">
               <li>
-                {t('State')}:{' '}
+                {t(MESSAGES.STATE)}:{' '}
                 {isLoading ? (
                   <TextSkeleton className="w-full max-w-[6rem]" />
                 ) : (

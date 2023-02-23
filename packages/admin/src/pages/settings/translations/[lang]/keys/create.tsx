@@ -1,5 +1,6 @@
 import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
+import { MESSAGES } from '@constants';
 import { Page } from '@custom-types';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { useSettings } from '@hooks/useSettings';
@@ -60,20 +61,24 @@ export const CreateTranslationSettings: Page = () => {
     >
       <FormProvider {...formMethods}>
         <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
-          <LanguageSelect disabled label={t('Current language')} value={lang} />
+          <LanguageSelect
+            disabled
+            label={t(MESSAGES.FOR_LANGUAGE)}
+            value={lang}
+          />
           <TextInput
             label={t('Key title')}
             mt={'sm'}
             {...register('key', {
-              min: { value: 1, message: t('This field is required') },
+              min: { value: 1, message: t(MESSAGES.FIELD_REQUIRED) },
             })}
           />
           <TextInput
             label={t('Value')}
             mt={'sm'}
-            description={t('This is a translation value for current language')}
+            description={t(MESSAGES.CREATE_TRANSLATION_KEY_VALUE_DESC)}
             {...register('value', {
-              min: { value: 1, message: t('This field is required') },
+              min: { value: 1, message: t(MESSAGES.FIELD_REQUIRED) },
             })}
           />
           <Button
@@ -82,6 +87,7 @@ export const CreateTranslationSettings: Page = () => {
             loading={formState.isSubmitting}
             loaderPosition="right"
             mt={'lg'}
+            size="md"
           >
             {t('Create')}
           </Button>

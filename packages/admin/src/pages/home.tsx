@@ -7,7 +7,8 @@ import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Page } from '@custom-types';
 import { Link } from 'react-router-dom';
-const dateFormat = 'dddd DD.MM. YYYY';
+import { MESSAGES } from '@constants';
+const dateFormat = 'dddd DD. MMMM YYYY';
 
 const MainPage: Page = () => {
   const { currentUser } = useGlobalContext();
@@ -26,9 +27,21 @@ const MainPage: Page = () => {
 
   return (
     <PageLayout>
-      <div className="mt-6 text-lg">Today is {currentTime}</div>
+      <div className="mt-6 text-lg">
+        <Trans
+          t={t}
+          i18nKey={MESSAGES.TODAY_IS_DATE}
+          values={{ date: capitalizeFirstLetter(currentTime) }}
+        >
+          Today is {{ date: capitalizeFirstLetter(currentTime) }}
+        </Trans>
+      </div>
       <h1 className="mt-16 text-4xl font-semibold text-blue-400">
-        <Trans i18nKey={'Welcome back, {{name}}'} name={currentUser?.name}>
+        <Trans
+          t={t}
+          i18nKey={MESSAGES.WELCOME_USER}
+          values={{ name: currentUser?.name }}
+        >
           Welcome back, {{ name: currentUser?.name }}
         </Trans>
       </h1>

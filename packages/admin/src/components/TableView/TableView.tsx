@@ -31,6 +31,7 @@ import { useState } from 'react';
 import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
 import { PagedResponse } from '@prom-cms/api-client';
 import { SelectProps } from '@mantine/core/lib/Select/Select';
+import { MESSAGES } from '@constants';
 
 export type TableViewItem = { id: string | number; [x: string]: any };
 
@@ -329,7 +330,7 @@ const Metadata: FC<
     {...rest}
   >
     <Trans
-      i18nKey={'Showing {{from}} to {{to}} of {{total}} entries'}
+      i18nKey={MESSAGES.PAGINATION_CONTENT}
       from={from}
       to={to}
       total={total}
