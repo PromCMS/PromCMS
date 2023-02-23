@@ -1,8 +1,11 @@
 export enum MESSAGES {
   ON_DELETE_REQUEST_PROMPT = 'Are you sure you want to delete this item?',
+  INVALID_OLD_PASSWORD = 'Your old password is invalid',
   ERROR_BASIC = 'An error happened',
+  ARE_YOUR_REALLY_SURE = 'Are you really sure?',
   CHANGE_PASSWORD = 'Change password',
   NEW_PASSWORD = 'New password',
+  NEW_PASSWORD_AGAIN = 'New password again',
   OLD_PASSWORD = 'Old password',
   PLEASE_ENTER_PASSWORD = 'Please enter password',
   PLEASE_ENTER_EMAIL = 'Please enter email',
@@ -14,4 +17,7 @@ export enum MESSAGES {
   LOGIN_USER_INVITED = 'Looks like you did not finish registration. Please check your inbox.',
   LOGIN_USER_PASSWORD_RESET = 'Looks like you did not finish password reset. Please check your inbox.',
   DUPLICATE_USER = 'User with this email already exists',
+  FIELD_REQUIRED = 'This field is required',
+  PLEASE_WAIT = 'Please wait...',
+  PASSWORDS_MUST_MATCH = 'Passwords must match',
 }

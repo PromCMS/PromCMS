@@ -1,6 +1,21 @@
+import { MESSAGES } from './texts';
+
 export const localizationLocalStorageKey = 'i18nextLng';
 export const localizationSessionStorageKey = 'i18nextLng';
 export const localizationCookieStorageKey = 'i18nextLng';
+
+export const defaultKeys = {
+  Empty: 'Empty',
+  // TODO: No items available
+  'No items yet...': 'No items yet...',
+  'Loading, please wait...': 'Loading, please wait...',
+  'Other info': 'Other info',
+  'Title here...': 'Title here...',
+  Yes: 'Yes',
+  No: 'No',
+};
+
+export type TranslationKeys = keyof typeof defaultKeys;
 
 export const defaultLanguagePacks = {
   cs: {
@@ -136,7 +151,6 @@ export const defaultLanguagePacks = {
       'Your new password again': 'Vaše nové heslo znovu',
       Send: 'Odeslat',
       'Login to my account': 'Přihlásit se do mého účtu',
-      'Passwords must match': 'Hesla se musí shodovat',
       Email: 'Email',
       Password: 'Heslo',
       'Forgot password?': 'Zapomenuté heslo',
@@ -177,7 +191,14 @@ export const defaultLanguagePacks = {
       'Clearing successful!': 'Obsah jednotky vymazán!',
       'Clearing singleton...': 'Vymazávám jednotku...',
       Singletons: 'Jednotky',
+      'Too short, minimum 6 characters': 'Minimum 6 znaků',
+      'New password again': 'Nové heslo znovu',
       'Created at:': 'Vytvořeno v',
+      [MESSAGES.PASSWORDS_MUST_MATCH]: 'Hesla se musí shodovat',
+      [MESSAGES.INVALID_OLD_PASSWORD]: 'Zadané staré heslo není platné',
     },
+  },
+  en: {
+    translation: defaultKeys,
   },
 };
