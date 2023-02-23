@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.9.0
+
+### Minor Changes
+
+- 5a41c92: Improve czech language admin translations
+
 ## 0.8.0
 
 ### Minor Changes
