@@ -26,7 +26,11 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
 
       c.build ??= {};
       c.build.outDir ??= '../public/dist';
-      c.publicDir ??= path.join(projectRoot, 'public');
+      // Serve static file on development but ignore in production build
+      c.publicDir ??=
+        envConfig.command === 'build'
+          ? false
+          : path.join(projectRoot, 'public');
       c.build.manifest = true;
       c.build.rollupOptions ??= {};
       c.build.rollupOptions.input ??= path.join(
