@@ -12,15 +12,14 @@ import {
   getEnvFilepath,
   getModuleFolderName,
   getWorkerJob,
-  isDirEmpty,
   loggedJobWorker,
   logSuccess,
 } from '@utils';
 import { LoggedWorkerJob } from '@custom-types';
 import generateCore from '../parts/generate-core-files.js';
-import { installPHPDeps } from '../parts/install-php-deps.js';
 import { generateProjectModule } from '../parts/generate-project-module.js';
 import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
+import { getCreateComposerJsonJob } from '../jobs/getCreateComposerJsonJob.js';
 import {
   formatGeneratorConfig,
   validateGeneratorConfig,
@@ -104,14 +103,8 @@ export class GenerateDevelopProgram extends Command {
           );
         },
       }),
-      getWorkerJob('Install PHP deps', {
-        // No need to install again when deps are present
-        skip:
-          (await isDirEmpty(path.join(developmentPHPAppPath, 'vendor'))) ===
-          false,
-        async job() {
-          await installPHPDeps(developmentPHPAppPath);
-        },
+      getCreateComposerJsonJob('Ensure composer.json', {
+        cwd: developmentPHPAppPath,
       }),
       getWorkerJob('Generate project module', {
         async job() {

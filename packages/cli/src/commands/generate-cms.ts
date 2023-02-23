@@ -13,13 +13,13 @@ import {
 } from '@utils';
 import { PACKAGE_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
 import generateCore from '@parts/generate-core-files';
-import { installPHPDeps } from '@parts/install-php-deps';
 import { generateProjectModule } from '@parts/generate-project-module';
 import { getGeneratorConfigData } from '../utils/getGeneratorConfigData.js';
 import { GENERATOR_FILENAME } from '@prom-cms/shared/generator';
 import rimraf from 'rimraf';
 import { getInstallNodeDepsJob } from '../jobs/getInstallNodeDepsJob.js';
 import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
+import { getCreateComposerJsonJob } from '../jobs/getCreateComposerJsonJob.js';
 import { SupportedPackageManagers } from '@custom-types';
 import generateModels from '@parts/generate-models';
 
@@ -31,7 +31,7 @@ const steps = [
   'resources',
   'module',
   'models',
-  'php-dependencies',
+  'composer-json',
 ] as const;
 const allowedSkipArguments = [
   ...steps,
@@ -159,6 +159,10 @@ export class GenerateCMSProgram extends Command {
         project,
         skip: skipArguments.includes('package-json'),
       }),
+      getCreateComposerJsonJob('Ensure composer.json', {
+        cwd: FINAL_PATH,
+        skip: skipArguments.includes('composer-json'),
+      }),
       getInstallNodeDepsJob('Install NODE dependencies', {
         packageManager: this.packageManager,
         cwd: FINAL_PATH,
@@ -237,13 +241,6 @@ export class GenerateCMSProgram extends Command {
             path.join(exportModulesRoot, moduleFolderName),
             generatorConfig.database
           );
-        },
-      }),
-      getWorkerJob('Install PHP dependencies', {
-        // Skip if defined through cli or if vendor folder is already there
-        skip: skipArguments.includes('php-dependencies'),
-        async job() {
-          await installPHPDeps(FINAL_PATH);
         },
       }),
     ];
