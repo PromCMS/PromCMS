@@ -1,5 +1,11 @@
 # @prom-cms/api-client
 
+## 0.7.0
+
+### Minor Changes
+
+- b084ac9: Implement password-reset into admin and api client
+
 ## 0.6.0
 
 ### Minor Changes

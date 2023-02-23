@@ -1,5 +1,16 @@
 # @prom-cms/cli
 
+## 0.17.0
+
+### Minor Changes
+
+- b084ac9: Generate composer.json in new step instead if template each time which may delete previous contents
+
+### Patch Changes
+
+- Updated dependencies [b084ac9]
+  - @prom-cms/admin@0.8.0
+
 ## 0.16.3
 
 ### Patch Changes
