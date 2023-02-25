@@ -22,7 +22,7 @@ export const getEntryUnderPageComponent = (
       <EntryUnderpageContextProvider viewType={viewType}>
         <entryUnderpageContext.Consumer>
           {({ onSubmit }) => (
-            <form autoComplete="off" onSubmit={onSubmit} className="flex">
+            <form autoComplete="off" onSubmit={onSubmit} className="lg:flex">
               <Wrapper>
                 <Breadcrumbs />
                 <Content>

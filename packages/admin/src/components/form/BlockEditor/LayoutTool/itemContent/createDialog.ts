@@ -14,17 +14,12 @@ const createDialog = ({
   onClose?: (event: { editorJSData: OutputData }) => void;
 }) => {
   const dialog = document.createElement('dialog');
-
-  dialog.style.maxWidth = '960px';
-  // Make be not able to click inner
-  dialog.style.padding = '0';
-  dialog.style.width = 'calc(100% - 64px)';
+  dialog.classList.add('editor-js--dialog--root');
 
   const editorJSHolder = document.createElement('div');
   const editorJSHolderID = uuidv4();
 
   editorJSHolder.id = editorJSHolderID;
-
   dialog.append(editorJSHolder);
 
   const editorJS = new EditorJS({
@@ -56,6 +51,18 @@ const createDialog = ({
   };
 
   dialog.addEventListener('close', handleDialogClose);
+
+  // Create and append close button
+  const closeButton = document.createElement('button');
+  closeButton.innerHTML =
+    '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-9 h-9 block"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
+  closeButton.classList.add('editor-js--dialog--close-button');
+
+  // Handle click
+  const handleCloseButtonClick = () => dialog.close();
+  closeButton.addEventListener('click', handleCloseButtonClick);
+
+  dialog.append(closeButton);
 
   return dialog;
 };

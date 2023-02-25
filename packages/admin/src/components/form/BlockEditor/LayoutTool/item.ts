@@ -18,7 +18,7 @@ interface RenderItemProps extends RenderContext {
 }
 
 const renderItem = ({ data, itemContentData, ...context }: RenderItemProps) => {
-  const wrapper = document.createElement('div');
+  const wrapper = document.createElement('section');
 
   wrapper.id = data.id;
   wrapper.className = data.className;
@@ -33,6 +33,8 @@ const renderItem = ({ data, itemContentData, ...context }: RenderItemProps) => {
       itemContentId: data.itemContentId,
     })
   );
+
+  wrapper.classList[editorJSData.blocks.length ? 'add' : 'remove']('has-items');
 
   return wrapper;
 };

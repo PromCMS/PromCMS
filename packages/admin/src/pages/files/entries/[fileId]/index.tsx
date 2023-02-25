@@ -42,6 +42,7 @@ const FilePage: Page = () => {
           )}
         </Title>
       }
+      className="overflow-y-auto overflow-x-hidden"
     >
       {!isLoading && data && !!fileUrl ? (
         <>

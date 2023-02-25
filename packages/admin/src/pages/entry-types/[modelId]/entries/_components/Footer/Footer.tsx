@@ -1,6 +1,6 @@
 import { apiClient } from '@api';
+import { FloatingFooter } from '@components/editorialPage/FloatingFooter';
 import { MESSAGES } from '@constants';
-import { useAsideToggle } from '@hooks/useAsideToggle';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core';
@@ -10,14 +10,13 @@ import { useMemo } from 'react';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, Trash } from 'tabler-icons-react';
+import { Trash } from 'tabler-icons-react';
 import { useEntryUnderpageContext } from '../../_context';
 
 export const Footer: FC<{}> = () => {
   const { watch } = useFormContext();
   const formValues = watch();
   const { t } = useTranslation();
-  const { isOpen: asideOpen, setIsOpen: setAsideOpen } = useAsideToggle();
   const { itemData, currentView, exitView } = useEntryUnderpageContext();
   const currentModel = useCurrentModel();
   const currentUser = useCurrentUser();
@@ -94,11 +93,7 @@ export const Footer: FC<{}> = () => {
   };
 
   return (
-    <Paper
-      shadow="lg"
-      component="footer"
-      className="align-center container sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-between border-2 border-project-border p-3"
-    >
+    <FloatingFooter isSubmitting={formState.isSubmitting}>
       {currentView === 'update' &&
       currentModel &&
       currentUser?.can({
@@ -152,35 +147,7 @@ export const Footer: FC<{}> = () => {
         >
           {saveButtonText}
         </Button>
-        <Tooltip
-          withArrow
-          label={t('Toggle more options')}
-          position="top"
-          color="gray"
-        >
-          <ActionIcon
-            size="xl"
-            color="blue"
-            variant="light"
-            type="button"
-            className={clsx(formState.isSubmitting && '!cursor-progress')}
-            styles={{
-              root: {
-                width: 50,
-                height: 50,
-              },
-            }}
-            onClick={() => setAsideOpen((prev) => !prev)}
-          >
-            <ChevronLeft
-              className={clsx(
-                'aspect-square w-20 duration-150',
-                asideOpen && 'rotate-180'
-              )}
-            />
-          </ActionIcon>
-        </Tooltip>
       </div>
-    </Paper>
+    </FloatingFooter>
   );
 };

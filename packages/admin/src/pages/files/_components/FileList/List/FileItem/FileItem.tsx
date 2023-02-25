@@ -52,7 +52,7 @@ export const FileItem: FC<FileItemProps> = ({
           {isImage ? (
             <img
               alt="uploaded file"
-              className="absolute top-0 left-0 h-full w-full object-cover"
+              className="absolute top-0 left-0 h-full w-full object-cover rounded-lg"
               src={apiClient.files
                 .getAssetUrl(id, { w: '250', q: '60' })
                 .toString()}

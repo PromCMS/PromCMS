@@ -125,21 +125,55 @@ select {
   @apply mt-3 mb-5 flex gap-x-3 gap-y-5;
 }
 
+
 .editor-js__layout__item {
+  @apply min-h-[200px] w-full rounded-sm px-2;
+}
+
+.editor-js__layout__item:not(.has-items) {
   border: 2px dashed #dfdfdf;
-  @apply min-h-[200px] w-full bg-white py-1 px-3 rounded-lg;
+
+  @apply bg-white py-1;
+}
+
+.editor-js__layout__item.has-items {
+  @apply hover:ring-2 hover:ring-blue-700;
 }
 
 .editor-js__layout__item .codex-editor > .codex-editor__redactor {
   margin: 0 !important;
 }
 
-dialog {
-  @apply rounded-lg;
+dialog.editor-js--dialog--root, dialog.editor-js--dialog--root > div {
+  animation-fill-mode: forwards;
 }
 
-dialog > div {
-  padding: 40px 85px;
+dialog.editor-js--dialog--root {
+  @apply rounded-lg;
+  width: 100%;
+  height: calc(100% - 80px);
+  left: auto;
+  right: 0;
+  top: auto;
+  bottom: 0;
+  max-height: none;
+  border-radius: 0;
+  overflow: visible;
+  animation-duration: .6s;
+  animation-name: slideFromBottom;
+  max-width: none;
+  max-height: none;
+}
+
+dialog.editor-js--dialog--root > div {
+  padding: 20px 45px;
+  animation-delay: 100ms;
+  animation-duration: .8s;
+  animation-name: slideFromBottom;
+}
+
+.editor-js--dialog--close-button {
+  @apply absolute top-0 right-6 -translate-y-full bg-[#fff5f5] hover:bg-[#ffe3e3a6] rounded-lg -mt-4 cursor-pointer outline-none p-1.5 text-[#fa5252];
 }
 
 .codex-editor svg.icon-tabler {
@@ -189,3 +223,52 @@ h5.ce-header {
   background-clip: content-box;
   border-radius: 10px;
 }
+
+@media screen and (min-width: 920px) {
+  dialog.editor-js--dialog--root > div {
+    padding: 40px 85px;
+  }
+
+  dialog.editor-js--dialog--root {
+    animation-name: slideFromRight;
+  }
+
+  dialog.editor-js--dialog--root > div {
+    animation-name: slideFromRight;
+  }
+
+  dialog.editor-js--dialog--root {
+    width: 90%;
+    height: 100%;
+    top: 0;
+  }
+
+  .editor-js--dialog--close-button {
+    @apply top-0 right-auto -left-2 -translate-x-full translate-y-0 mt-2;
+  }
+}
+
+@keyframes slideFromRight {
+  from {
+    opacity: .3;
+    transform: translateX(20%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0%);
+  }
+}
+
+@keyframes slideFromBottom {
+  from {
+    opacity: .3;
+    transform: translateY(20%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+

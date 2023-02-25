@@ -2,7 +2,7 @@ import clsx from 'clsx';
 
 export const useClassNames = () => ({
   itemsWrap: clsx(
-    'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-7 items-start'
+    'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7 items-start'
   ),
   itemRoot: clsx('relative block group'),
   itemSquare: (isInteractible: boolean = true) =>

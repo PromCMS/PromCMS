@@ -7,11 +7,15 @@ export const AsideWrapper: FC<PropsWithChildren<{ isOpen: boolean }>> = ({
 }) => (
   <aside
     className={clsx(
-      'sticky top-0 z-10 transition-[width] duration-300 w-full xl:mx-9 xl:mt-0 mt-5',
-      isOpen ? 'w-[500px]' : 'h-0 w-0 overflow-hidden'
+      'sticky top-0 z-10 transition-[width] duration-300 w-full xl:mx-9 xl:mt-0 lg:mt-5 container mx-auto',
+      isOpen ? 'lg:w-[500px]' : 'lg:h-0 lg:w-0 lg:overflow-hidden'
     )}
   >
-    <div className={clsx('flex h-full w-[500px] flex-col gap-5 py-5 pl-8')}>
+    <div
+      className={clsx(
+        'flex h-full lg:w-[500px] flex-col gap-5 lg:pt-5 pb-5 lg:pl-8'
+      )}
+    >
       {children}
     </div>
   </aside>
