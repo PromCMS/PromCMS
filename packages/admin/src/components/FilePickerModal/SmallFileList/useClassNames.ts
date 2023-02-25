@@ -7,7 +7,7 @@ export const useClassNames = () => ({
   itemRoot: clsx('relative block group'),
   itemSquare: (isInteractible: boolean = true) =>
     clsx(
-      'aspect-[3/2] w-full rounded-lg bg-white shadow-md overflow-hidden relative',
+      'aspect-square sm:aspect-[3/2] w-full rounded-lg bg-white shadow-md overflow-hidden relative',
       isInteractible ? 'group-hover:shadow-lg duration-200' : 'cursor-default'
     ),
   itemLabel: clsx(

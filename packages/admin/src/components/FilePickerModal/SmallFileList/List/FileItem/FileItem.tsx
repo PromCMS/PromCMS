@@ -7,6 +7,7 @@ import { BackgroundImage, Tooltip, UnstyledButton } from '@mantine/core';
 import BackendImage, { getImageSrc } from '@components/BackendImage';
 import { Check } from 'tabler-icons-react';
 import { FileItem as FileItemType } from '@prom-cms/api-client';
+import { useMediaQuery } from '@mantine/hooks';
 
 const classNames = getClassnames();
 
@@ -19,6 +20,7 @@ export const FileItem: FC<FileItemProps> = ({ id, filename, mimeType }) => {
   const extension = filename.split('.').at(-1) || 'unknown';
   const type = mimeType?.split('/')?.[0] || 'unknown';
   const isImage = type === 'image';
+  const isMobile = useMediaQuery('(max-width: 640px)');
 
   const onPick = useCallback(() => {
     updateValue({
@@ -34,7 +36,7 @@ export const FileItem: FC<FileItemProps> = ({ id, filename, mimeType }) => {
 
   return (
     <UnstyledButton
-      className={clsx(classNames.itemRoot, 'group')}
+      className={clsx(classNames.itemRoot, 'group sm')}
       onClick={onPick}
       type="button"
       title={filename}
@@ -52,6 +54,7 @@ export const FileItem: FC<FileItemProps> = ({ id, filename, mimeType }) => {
                 className="shadow-md"
               />
             }
+            disabled={isMobile}
           >
             <BackgroundImage h="100%" src={getImageSrc(id)!} />
           </Tooltip.Floating>
