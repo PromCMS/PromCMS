@@ -1,74 +1,99 @@
 import { apiClient } from '@api';
+import { Image, ImageProps } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
-import { DetailedHTMLProps, ImgHTMLAttributes, useMemo, FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import { PhotoOff } from 'tabler-icons-react';
+import { useMemo, FC, forwardRef } from 'react';
 
-export interface BackendImageProps
-  extends Omit<
-    DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
-    'src'
-  > {
+export interface BackendImageProps extends Omit<ImageProps, 'src'> {
   imageId: ItemID | Record<string, string> | undefined;
   /**
    * @defaultValue 60
    */
   quality?: number;
+  /**
+   * @defaultValue false
+   */
+  previewOnHover?: boolean;
 }
 
-const BackendImage: FC<BackendImageProps> = ({
-  imageId,
-  className,
-  quality = 60,
-  width,
-  height,
-  ...rest
-}) => {
-  const { t } = useTranslation();
+export type GetImageSrcOptions = {
+  width?: number | string;
+  height?: number | string;
+  quality?: number;
+};
 
-  const imageSrc = useMemo(() => {
-    if (typeof imageId === 'object' && imageId.path) {
-      return imageId.path;
-    }
+const getNumericValue = (value?: any) => {
+  if (!value) {
+    return undefined;
+  }
 
-    const id = String(imageId);
+  return !Number.isNaN(Number(value)) && !value?.toString().includes('%')
+    ? Number(value)
+    : undefined;
+};
 
-    if (id === 'null' || id === 'undefined') {
-      return undefined;
-    }
+export const getImageSrc = (
+  imageInfo: ItemID | Record<string, string> | undefined,
+  options: GetImageSrcOptions = {}
+) => {
+  if (typeof imageInfo === 'object' && imageInfo.path) {
+    return imageInfo.path;
+  }
 
-    return String(id).startsWith('http')
-      ? String(id)
-      : apiClient.files
-          .getAssetUrl(
-            id,
-            Object.fromEntries(
-              Object.entries({ w: width, h: height, q: quality })
-                .filter(([_, value]) => !!value)
-                .map(([key, value]) => [key, String(value)])
-            )
-          )
-          .toString();
-  }, [imageId, width, height, quality]);
+  const id = String(imageInfo);
 
-  return !!imageSrc ? (
-    <img
-      src={imageSrc}
+  if (id === 'null' || id === 'undefined') {
+    return undefined;
+  }
+
+  // If somehow we get already madeup url
+  if (id.startsWith('http')) {
+    return id;
+  }
+
+  return apiClient.files
+    .getAssetUrl(
+      id,
+      Object.fromEntries(
+        Object.entries({
+          w: getNumericValue(options.width),
+          h: getNumericValue(options.height),
+          q: options.quality,
+        })
+          .filter(([_, value]) => !!value)
+          .map(([key, value]) => [key, String(value)])
+      )
+    )
+    .toString();
+};
+
+const BackendImage: FC<BackendImageProps> = forwardRef<
+  HTMLImageElement,
+  BackendImageProps
+>(function BackendImage(
+  { imageId, className, quality = 60, width, height, ...rest },
+  ref
+) {
+  const imageSrc = useMemo(
+    () => getImageSrc(imageId, { width, height, quality }),
+    [imageId, width, height, quality]
+  );
+
+  const image = (
+    <Image
+      ref={ref}
+      alt=""
+      src={typeof imageSrc === 'string' ? imageSrc : undefined}
       className={clsx(className)}
       width={width}
       height={height}
-      alt=""
+      withPlaceholder
+      fit="cover"
       {...rest}
     />
-  ) : (
-    <div
-      className="flex h-full w-full items-center justify-center bg-gray-50"
-      title={t('Empty')}
-    >
-      <PhotoOff size={30} />
-    </div>
   );
-};
+
+  return image;
+});
 
 export default BackendImage;

@@ -3,8 +3,8 @@ import { useCallback, useMemo, FC } from 'react';
 import { useClassNames as getClassnames } from '../../useClassNames';
 import { useSmallFileList } from '../../context';
 import clsx from 'clsx';
-import { UnstyledButton } from '@mantine/core';
-import BackendImage from '@components/BackendImage';
+import { BackgroundImage, Tooltip, UnstyledButton } from '@mantine/core';
+import BackendImage, { getImageSrc } from '@components/BackendImage';
 import { Check } from 'tabler-icons-react';
 import { FileItem as FileItemType } from '@prom-cms/api-client';
 
@@ -41,15 +41,23 @@ export const FileItem: FC<FileItemProps> = ({ id, filename, mimeType }) => {
     >
       <div className={classNames.itemSquare()}>
         {isImage ? (
-          <BackendImage
-            alt="uploaded file"
-            imageId={id}
-            className="absolute top-0 left-0 h-full w-full object-cover"
-            width={270}
-          />
+          <Tooltip.Floating
+            sx={{ padding: 0 }}
+            label={
+              <BackendImage
+                radius="md"
+                width={250}
+                imageId={id}
+                alt="Preview of image"
+                className="shadow-md"
+              />
+            }
+          >
+            <BackgroundImage h="100%" src={getImageSrc(id)!} />
+          </Tooltip.Floating>
         ) : (
           <div className="flex h-full w-full">
-            <p className="m-auto text-3xl font-bold text-gray-400">
+            <p className="m-auto text-3xl font-bold text-gray-400 no-underline">
               {extension}
             </p>
           </div>
