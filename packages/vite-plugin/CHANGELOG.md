@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.6.1
+
+### Patch Changes
+
+- 2320974: Fix some stuff and add more verbal error logging
+
 ## 0.6.0
 
 ### Minor Changes
