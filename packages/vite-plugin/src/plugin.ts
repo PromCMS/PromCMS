@@ -41,14 +41,14 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
     },
     async configureServer(server) {
       const serverPort = server.config.server.port! + 1;
-      const serverOrigin = `http://localhost:${serverPort}`;
+      const serverOrigin = `http://127.0.0.1:${serverPort}`;
       const { serverProcess } = await startPhpServer(serverPort);
       const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
       const htmlTransform = server.transformIndexHtml;
 
       // And then before starting your server...
       runBeforeExiting(async () => {
-        log('Cleaning up...');
+        log('Vite server closing, cleaning up...');
         if (serverProcess) {
           serverProcess.kill();
         }
@@ -94,7 +94,7 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
         }
 
         if (req.url.startsWith('/admin/assets')) {
-          const fileUrl = new URL(req.url, 'http://localhost');
+          const fileUrl = new URL(req.url, 'http://127.0.0.1');
           const filePath = path.join('public', fileUrl.pathname);
 
           // End if file does not exist
@@ -135,8 +135,9 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
 
             return;
           }
-        } catch (e) {
-          log('Failed middleware');
+        } catch (error) {
+          const message = (error as Error).message;
+          log(`Request to PHP server failed because: ${message}`);
         }
 
         next();
