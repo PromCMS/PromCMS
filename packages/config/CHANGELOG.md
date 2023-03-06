@@ -1,5 +1,11 @@
 # @prom-cms/config
 
+## 0.1.3
+
+### Patch Changes
+
+- 2320974: Fix missing dependency
+
 ## 0.1.2
 
 ### Patch Changes
