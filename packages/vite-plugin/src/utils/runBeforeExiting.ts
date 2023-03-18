@@ -1,6 +1,6 @@
 import { ExitSignals } from '../types';
 
-export const runBeforeExiting = (fun: Function) => {
+export const runBeforeExiting = (fun: (...args: any[]) => void) => {
   let wasCleanedUp = false;
   const exitSignals: ExitSignals[] = [
     'exit',
@@ -11,10 +11,10 @@ export const runBeforeExiting = (fun: Function) => {
   ];
 
   for (const signal of exitSignals) {
-    process.on(signal, async () => {
+    process.on(signal, async (...args) => {
       // eslint-disable-line @typescript-eslint/no-explicit-any
       if (!wasCleanedUp) {
-        await fun();
+        await fun(...args);
         wasCleanedUp = true;
       }
 

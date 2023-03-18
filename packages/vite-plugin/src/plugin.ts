@@ -47,7 +47,9 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
       const htmlTransform = server.transformIndexHtml;
 
       // And then before starting your server...
-      runBeforeExiting(async () => {
+      runBeforeExiting(async (...args) => {
+        // TODO: Make this message more clear on what happened
+        console.error(args);
         log('Vite server closing, cleaning up...');
         if (serverProcess) {
           serverProcess.kill();
