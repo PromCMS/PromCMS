@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.6.2
+
+### Patch Changes
+
+- 8d51ab7: Add logging on why php server closed
+
 ## 0.6.1
 
 ### Patch Changes
