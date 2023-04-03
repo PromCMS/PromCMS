@@ -19,7 +19,8 @@ export const prepareFieldsForMapper = (
       hide ||
       !editable ||
       (placement && admin?.editor?.placement !== placement) ||
-      columnName === 'is_published'
+      columnName === 'is_published' ||
+      columnName === 'coeditors'
     ) {
       continue;
     }

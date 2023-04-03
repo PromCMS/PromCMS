@@ -73,9 +73,9 @@ const Header: FC = () => {
             {items.map((item) => (
               <Item key={item.href} {...item} />
             ))}
-            {everything[index + 1]?.length && (
+            {everything[index + 1]?.length ? (
               <hr className="-mt-1 -mb-6 ml-auto h-0.5 w-full translate-x-1/2 border-none bg-gray-300" />
-            )}
+            ) : null}
           </Fragment>
         ))}
       </div>
@@ -128,7 +128,7 @@ const Header: FC = () => {
               {currentUser?.can({
                 action: 'read',
                 targetModel: 'users',
-              }) && (
+              }) ? (
                 <PopoverList.Item
                   icon={'Users'}
                   className="text-blue-500"
@@ -139,11 +139,11 @@ const Header: FC = () => {
                 >
                   {t('Users')}
                 </PopoverList.Item>
-              )}
+              ) : null}
               {currentUser?.can({
                 action: 'read',
                 targetModel: 'settings',
-              }) && (
+              }) ? (
                 <PopoverList.Item
                   icon={'Settings'}
                   className="text-blue-500"
@@ -154,7 +154,7 @@ const Header: FC = () => {
                 >
                   {t('Settings')}
                 </PopoverList.Item>
-              )}
+              ) : null}
               <PopoverList.Item
                 icon={'Logout'}
                 className="text-red-500"
