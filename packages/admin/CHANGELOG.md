@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.9.1
+
+### Patch Changes
+
+- 586f96a: Apply some fixes to admin: do not render coeditors field, because its handled in aside + fix menu that shows zero when there are no items in group
+
 ## 0.9.0
 
 ### Minor Changes
