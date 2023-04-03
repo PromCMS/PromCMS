@@ -78,9 +78,27 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
 
           // If its not an api request we use vite htmlTransform
           if (!clientReq.url?.startsWith('/api/')) {
-            body = Buffer.from(
-              await htmlTransform(clientReq.url ?? '/', body.toString())
-            );
+            try {
+              body = Buffer.from(
+                await htmlTransform(clientReq.url ?? '/', body.toString())
+              );
+            } catch (error) {
+              if (
+                error instanceof Error &&
+                error.message.startsWith(
+                  'Unable to parse HTML; parse5 error code unexpected-question-mark-instead-of-tag-name'
+                )
+              ) {
+                console.log('Some error happened on PHP server');
+                body = Buffer.from(body.toString());
+              } else {
+                console.error(
+                  'Error happened during transform of server response'
+                );
+                console.error(error);
+                body = Buffer.from('Some error happened');
+              }
+            }
           }
 
           const stream = Readable.from(body);
