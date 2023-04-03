@@ -1,5 +1,12 @@
 # @prom-cms/admin
 
+## 0.10.0
+
+### Minor Changes
+
+- d0e8bcd: Add own logo to admin and site icon.
+- a1eec1a: Update file inputs to select files instead of just images
+
 ## 0.9.1
 
 ### Patch Changes
