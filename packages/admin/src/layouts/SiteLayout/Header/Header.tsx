@@ -10,8 +10,9 @@ import BackendImage from '@components/BackendImage';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { Popover, Tooltip, UnstyledButton } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
-import { Briefcase, Home, Photo, Settings, Users } from 'tabler-icons-react';
+import { Home, Photo } from 'tabler-icons-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import logoImage from '../../../assets/logos/logo.svg';
 import { useDisclosure } from '@mantine/hooks';
 import clsx from 'clsx';
 
@@ -64,17 +65,23 @@ const Header: FC = () => {
 
   return (
     <header className={s.root}>
-      <div className={s.top}>
-        <Briefcase className="mx-auto h-10 w-10" />
+      <div className="flex items-center justify-center text-white py-4">
+        <a
+          href="/"
+          title={t('Go home')}
+          className="block mx-auto h-16 w-16 bg-white p-1 rounded-lg border shadow"
+        >
+          <img className="w-full h-full" src={logoImage} alt="" />
+        </a>
       </div>
-      <div className="grid gap-5 py-10">
+      <div className="grid gap-5 py-5">
         {allMenuItems.map((items, index, everything) => (
           <Fragment key={index}>
             {items.map((item) => (
               <Item key={item.href} {...item} />
             ))}
             {everything[index + 1]?.length ? (
-              <hr className="-mt-1 -mb-6 ml-auto h-0.5 w-full translate-x-1/2 border-none bg-gray-300" />
+              <hr className="-mt-0.5 -mb-6 ml-auto h-0.5 w-full translate-x-[70%] border-none bg-gray-300 opacity-70" />
             ) : null}
           </Fragment>
         ))}
