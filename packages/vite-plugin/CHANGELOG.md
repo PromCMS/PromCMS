@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.6.3
+
+### Patch Changes
+
+- c050f3a: Add more resiliency to vite plugin when transforming server responses. Now it wont stop vite server.
+
 ## 0.6.2
 
 ### Patch Changes
