@@ -1,16 +1,16 @@
+import ImageSelect from '@components/form/ImageSelect';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { columnTypeFileSchema } from '@prom-cms/shared';
 import { z } from 'zod';
-import { FileSelect } from '@components/form/FileSelect';
 
-export type NormalProps = {
+export type SmallImageProps = {
   name: string;
   errorMessage?: string;
   label?: string;
 } & z.infer<typeof columnTypeFileSchema>;
 
-export const Normal: FC<NormalProps> = ({
+export const SmallImage: FC<SmallImageProps> = ({
   name,
   label,
   errorMessage,
@@ -19,7 +19,7 @@ export const Normal: FC<NormalProps> = ({
   <Controller
     name={name}
     render={({ field: { onChange, value } }) => (
-      <FileSelect
+      <ImageSelect
         onChange={onChange}
         selected={String(value)}
         error={errorMessage}

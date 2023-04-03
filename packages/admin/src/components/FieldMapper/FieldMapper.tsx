@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { EnumSelect, RelationshipItemSelect } from './fields';
 import { BigImage } from './fields/file/BigImage';
 import { Normal } from './fields/file/Normal';
+import { SmallImage } from './fields/file/SmallImage';
 import { OpeningHours } from './fields/json/OpeningHours';
 import { Repeater } from './fields/json/Repeater';
 
@@ -105,6 +106,15 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
                         />
                       );
                       break;
+                    case 'small-image':
+                      result = (
+                        <SmallImage
+                          name={columnName}
+                          errorMessage={errorMessage}
+                          label={values.title}
+                          {...values}
+                        />
+                      );
                     case 'normal':
                       result = (
                         <Normal

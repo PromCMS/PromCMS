@@ -1,5 +1,5 @@
-import BackendImage from '@components/BackendImage';
 import { SmallFileList } from '@components/FilePickerModal/SmallFileList';
+import { MESSAGES } from '@constants';
 import { Button, Input, Popover } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
@@ -13,9 +13,11 @@ import {
   useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pencil, Photo } from 'tabler-icons-react';
+import { Pencil } from 'tabler-icons-react';
+import { MultipleItemDisplay } from './MultipleItemDisplay';
+import { SingleItemDisplay } from './SingleItemDisplay';
 
-export interface ImageSelectProps
+export interface FileSelectProps
   extends Omit<
     DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
     'value' | 'onChange' | 'multiple' | 'onBlur'
@@ -31,8 +33,8 @@ export interface ImageSelectProps
   onBlur?: () => void;
 }
 
-const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
-  function ImageSelect(
+const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
+  function FileSelect(
     {
       wrapperClassName,
       label,
@@ -74,22 +76,17 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
       <>
         <div className={clsx(wrapperClassName, className)}>
           <Input.Wrapper size="md" label={label} error={error}>
-            <div className="mt-1 flex items-center">
-              <div className="relative mr-6 aspect-square w-20 overflow-hidden rounded-lg">
-                {modalPickedFiles.length ? (
-                  <BackendImage
-                    width={80}
-                    quality={60}
-                    imageId={modalPickedFiles[0]}
-                    className="absolute h-full w-full object-cover object-center"
-                  />
+            <div className="mt-1 items-center">
+              <div
+                className={clsx(
+                  'relative mt-3 mb-5 overflow-hidden rounded-lg',
+                  multiple ? 'border-2 border-gray-100' : ''
+                )}
+              >
+                {multiple ? (
+                  <MultipleItemDisplay pickedFiles={modalPickedFiles} />
                 ) : (
-                  <div className="absolute flex h-full w-full bg-gray-200">
-                    <Photo
-                      size={40}
-                      className="icon icon-tabler icon-tabler-photo m-auto"
-                    />
-                  </div>
+                  <SingleItemDisplay pickedFileId={modalPickedFiles[0]} />
                 )}
               </div>
 
@@ -103,21 +100,17 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
               >
                 <Popover.Target>
                   <Button
-                    className="flex-none"
                     color="ghost"
                     leftIcon={<Pencil size={20} />}
                     size="md"
                     onClick={() => setModalOpen(true)}
                   >
-                    {t('Change')}
+                    {t(MESSAGES.EDIT)}
                   </Button>
                 </Popover.Target>
                 <Popover.Dropdown>
                   <SmallFileList
-                    where={{
-                      mimeType: { manipulator: 'LIKE', value: '%image%' },
-                    }}
-                    title={t('Choose an image')}
+                    title={t(MESSAGES.CHOOSE_A_FILE)}
                     triggerClose={onClose}
                     multiple={multiple}
                     pickedFiles={modalPickedFiles}
@@ -133,4 +126,4 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
   }
 );
 
-export default ImageSelect;
+export default FileSelect;

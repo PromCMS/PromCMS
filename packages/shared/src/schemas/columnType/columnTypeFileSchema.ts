@@ -20,7 +20,11 @@ export const columnTypeFileSchema = columnTypeBaseSchema.extend({
    * Admin settings
    */
   admin: columnTypeBaseAdminConfigSchema
-    .extend({ fieldType: z.enum(['normal', 'big-image']).default('normal') })
+    .extend({
+      fieldType: z
+        .enum(['normal', 'big-image', 'small-image'])
+        .default('normal'),
+    })
     .default({}),
 });
 

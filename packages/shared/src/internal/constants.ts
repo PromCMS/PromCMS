@@ -85,6 +85,26 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
               },
             },
           },
+          anotherFile: {
+            type: 'file',
+            title: 'Další soubor',
+            translations: false,
+            admin: {
+              isHidden: true,
+              editor: {
+                placement: FieldPlacements.ASIDE,
+              },
+            },
+          },
+
+          someFile: {
+            type: 'file',
+            title: 'Další soubory',
+            translations: false,
+            admin: {
+              isHidden: true,
+            },
+          },
           excerpt: {
             type: 'longText',
             title: 'Krátký popisek',
