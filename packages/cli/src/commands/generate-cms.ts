@@ -118,10 +118,6 @@ export class GenerateCMSProgram extends Command {
   };
 
   async run() {
-    logSuccess.apply(this, [
-      '🙇‍♂️ Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
-    ]);
-
     const FINAL_PATH = process.cwd();
     const generatorConfig = await getGeneratorConfigData(FINAL_PATH);
 

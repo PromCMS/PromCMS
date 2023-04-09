@@ -47,10 +47,6 @@ export class GenerateDevelopProgram extends Command {
   };
 
   async run() {
-    logSuccess.apply(this, [
-      'Hello, PROM developer! Sit back a few seconds while we prepare everything for you...',
-    ]);
-
     const envFilepath = await getEnvFilepath();
     const finalEnvFilePath = path.join(developmentPHPAppPath, '.env');
     const modulesRoot = path.join(developmentPHPAppPath, 'modules');

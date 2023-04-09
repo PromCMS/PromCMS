@@ -11,3 +11,4 @@ export * from './lowerCaseFirst.js';
 export * from './prettier.js';
 export * from './runPHPScript.js';
 export * from './stringifyJSONRecursive.js';
+export * from './tryFindGeneratorConfig.js';

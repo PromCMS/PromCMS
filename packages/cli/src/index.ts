@@ -6,7 +6,8 @@ import fs from 'fs-extra';
 import path from 'path';
 import { PACKAGE_ROOT } from '@constants';
 import { DbToolsMigrateProgram } from './commands/db-tools/migrate.js';
-import { UsersProgram } from './commands/users.js';
+import { Logger } from '@utils';
+import { UsersScaffoldCommand } from './commands/users/index.js';
 
 (async () => {
   const { version } = await fs.readJson(
@@ -19,11 +20,13 @@ import { UsersProgram } from './commands/users.js';
     version,
   });
 
+  Logger.info('🙇‍♂️ Hello, PROM developer!');
+
   await program
     .register(new GenerateDevelopProgram())
     .register(new GenerateCMSProgram())
     .register(new SeedDatabaseProgram())
     .register(new DbToolsMigrateProgram())
-    .register(new UsersProgram())
+    .register(new UsersScaffoldCommand())
     .runAndExit(process.argv);
 })();

@@ -20,12 +20,12 @@
     "prom-cli": "./bin/cli.cjs"
   },
   "scripts": {
-    "starter-commands": "node --loader=ts-node/esm --loader ./loader.mjs --experimental-specifier-resolution=node src/index.ts",
-    "generate:dev": "npm run starter-commands -- generate:develop",
-    "generate:cms": "npm run starter-commands -- generate-cms",
-    "regenerate:cms": "npm run starter-commands -- generate-cms --regenerate",
-    "db-tools:migrate": "npm run starter-commands -- db-tools:migrate",
-    "seed-database": "npm run starter-commands -- seed-database",
+    "start": "npm run build && node ./bin/cli.cjs",
+    "generate:dev": "npm run start -- generate:develop",
+    "generate:cms": "npm run start -- generate-cms",
+    "regenerate:cms": "npm run start -- generate-cms --regenerate",
+    "db-tools:migrate": "npm run start -- db-tools:migrate",
+    "seed-database": "npm run start -- seed-database",
     "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
@@ -43,6 +43,7 @@
   },
   "dependencies": {
     "@prom-cms/admin": "^0.10.0",
+    "zod": "^3.20.2",
     "@boost/cli": "^4.0.0",
     "@faker-js/faker": "^7.6.0",
     "@prom-cms/shared": "^1.9.4",
