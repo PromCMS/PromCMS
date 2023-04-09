@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.18.0
+
+### Minor Changes
+
+- ebcb8aa: Update user management commands. Now its possible to create, delete and change password on users.
+
 ## 0.17.2
 
 ### Patch Changes
