@@ -40,3 +40,4 @@ This will boost your performance a lot and you can focus on what really matters 
 ## More 😲
 
 * [Examples](./docs/examples/)
+* [CLI user management](./docs/cli/users.md)

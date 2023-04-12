@@ -11,40 +11,18 @@
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "paths": {
-      "@utils": [
-        "./utils/index.ts"
-      ],
-      "@custom-types": [
-        "./types.ts"
-      ],
-      "@constants": [
-        "./constants.ts"
-      ],
-      "@parts/generate-core-files": [
-        "./parts/generate-core-files.ts"
-      ],
-      "@parts/generate-models": [
-        "./parts/generate-models.ts"
-      ],
-      "@parts/generate-module": [
-        "./parts/generate-module.ts"
-      ],
-      "@parts/generate-project-module": [
-        "./parts/generate-project-module.ts"
-      ],
-      "@parts/install-php-deps": [
-        "./parts/install-php-deps.ts"
-      ],
-      "@components": [
-        "./components/index.ts"
-      ],
-    },
+      "@utils": ["./utils/index.ts"],
+      "@schemas": ["./schemas/index.ts"],
+      "@custom-types": ["./types.ts"],
+      "@constants": ["./constants.ts"],
+      "@parts/generate-core-files": ["./parts/generate-core-files.ts"],
+      "@parts/generate-models": ["./parts/generate-models.ts"],
+      "@parts/generate-module": ["./parts/generate-module.ts"],
+      "@parts/generate-project-module": ["./parts/generate-project-module.ts"],
+      "@parts/install-php-deps": ["./parts/install-php-deps.ts"],
+      "@components": ["./components/index.ts"]
+    }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

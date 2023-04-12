@@ -10,13 +10,14 @@ $appRoot = $arguments["cwd"];
 include_once $appRoot . '/vendor/autoload.php';
 
 $app = new App($appRoot);
-$userId = $arguments["id"];
+$userEmail = $arguments["email"];
 $app->init(true);
 
 try {
-  Users::getOneById($userId)->delete();
+  $users = new Users();
+  $users->query()->where(["email", "=", $userEmail])->getOne()->delete();
 
-  echo "User with id '$userId' has been deleted!";
+  echo "User with id '$userEmail' has been deleted!";
 
   exit(0);
 } catch (\Exception $ex) {

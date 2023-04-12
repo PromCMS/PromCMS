@@ -40,14 +40,13 @@ export const runPHPScript = ({
 
     child.stdout?.on('data', (data) => {
       messages += data;
-      console.log(data);
     });
 
     child.on('exit', function (code) {
       if (code === 0) {
-        resolve(true);
+        resolve(messages);
       } else {
-        reject(messages);
+        reject(new Error(messages));
       }
     });
   });

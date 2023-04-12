@@ -1,79 +1,95 @@
-import { Command } from '@boost/cli';
-import { runPHPScript, tryFindGeneratorConfig } from '@utils';
+import { modifiedParse, runPHPScript, tryFindGeneratorConfig } from '@utils';
 import { Input, PasswordInput, useProgram } from '@boost/cli/react';
 import path from 'path';
-import { USERS_SCRIPTS_ROOT } from '@constants';
+import { THANK_YOU_MESSAGE, USERS_SCRIPTS_ROOT } from '@constants';
 import { FC, useState } from 'react';
-import { ThanksMessage, WorkingMessage } from '@components';
+import { WorkingMessage } from '@components';
+import { UserCommandBase } from './internal/UserCommandBase.js';
+import { emailSchema } from '@schemas';
+import { Box } from 'ink';
 
 const Runtime: FC<{ cwd: string }> = ({ cwd }) => {
   const [isWorking, setIsWorking] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const { exit } = useProgram();
-  const [userId, setUserId] = useState('');
+  const { exit, log } = useProgram();
+  const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
 
-  const runPhp = async () => {
+  const execute = async () => {
     setIsWorking(true);
 
-    await runPHPScript({
-      path: path.join(USERS_SCRIPTS_ROOT, 'change-password.php'),
-      arguments: {
-        cwd,
-        id: userId,
-        password: newPassword,
-      },
-    });
+    try {
+      await runPHPScript({
+        path: path.join(USERS_SCRIPTS_ROOT, 'change-password.php'),
+        arguments: {
+          cwd,
+          email,
+          password: newPassword,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes('Entity is missing')
+      ) {
+        log.error(`User with email '${email}' does not exist`);
 
-    setIsWorking(false);
+        setIsWorking(false);
+        setIsDone(true);
+        exit();
+        return;
+      }
+
+      throw error;
+    }
+
     setIsDone(true);
+    setIsWorking(false);
 
-    setTimeout(() => {
-      exit();
-    }, 100);
+    log.info(`Password for user ${email} has been changed!`);
+    log.info(THANK_YOU_MESSAGE);
+
+    exit();
   };
 
   if (isDone) {
-    return <ThanksMessage />;
+    return null;
   }
 
   if (isWorking) {
     return <WorkingMessage />;
   }
 
-  if (!userId) {
-    return (
+  return (
+    <Box flexDirection="column">
       <Input
-        label="User id"
-        placeholder="some user id"
-        onSubmit={(value) => setUserId(value)}
+        label="User email"
+        placeholder="<some@email.com>"
+        validate={(value) => modifiedParse(emailSchema.parse, value)}
+        onSubmit={(value) => setEmail(value)}
       />
-    );
-  }
 
-  if (!newPassword) {
-    return (
-      <PasswordInput
-        label="New password"
-        placeholder="some-strong-password"
-        onSubmit={(value) => {
-          setNewPassword(value);
-          runPhp();
-        }}
-      />
-    );
-  }
-
-  return null;
+      {email ? (
+        <PasswordInput
+          label="New password"
+          placeholder="some-strong-password"
+          onSubmit={(value) => {
+            setNewPassword(value);
+            execute();
+          }}
+        />
+      ) : null}
+    </Box>
+  );
 };
 
-export class ChangePasswordUserProgram extends Command {
+export class ChangePasswordUserProgram extends UserCommandBase {
   static path: string = 'users:change-password';
   static description: string = 'User password change management through cli';
 
   run() {
-    const currentDir = process.cwd();
-    tryFindGeneratorConfig();
+    const currentDir = this.cwd || process.cwd();
+    tryFindGeneratorConfig(currentDir);
 
     return <Runtime cwd={currentDir} />;
   }

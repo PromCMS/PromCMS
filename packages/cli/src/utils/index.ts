@@ -1,6 +1,5 @@
 export * from './boost-cli/index.js';
 export * from './generateByTemplates.js';
-export * from './loadEnvVariables.js';
 export * from './getFilenameBase.js';
 export * from './getModuleFolderName.js';
 export * from './getTemplateFolder.js';
@@ -8,6 +7,8 @@ export * from './loggedJobWorker.js';
 export * from './isDirEmpty.js';
 export * from './logger.js';
 export * from './lowerCaseFirst.js';
+export * from './modifiedParse.js';
+export * from './pathToAbsolute.js';
 export * from './prettier.js';
 export * from './runPHPScript.js';
 export * from './stringifyJSONRecursive.js';
