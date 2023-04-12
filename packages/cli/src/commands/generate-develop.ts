@@ -6,10 +6,10 @@ import {
   developmentPHPAppPath,
   mockedGeneratorConfig,
 } from '@prom-cms/shared/internal';
+import findConfig from 'find-config';
 
 import {
   generateByTemplates,
-  getEnvFilepath,
   getModuleFolderName,
   getWorkerJob,
   loggedJobWorker,
@@ -22,6 +22,7 @@ import { getCreatePackageJsonJob } from '../jobs/getCreatePackageJsonJob.js';
 import { getCreateComposerJsonJob } from '../jobs/getCreateComposerJsonJob.js';
 import {
   formatGeneratorConfig,
+  GENERATOR_FILENAME__JSON,
   validateGeneratorConfig,
 } from '@prom-cms/shared/generator';
 import generateModels from '@parts/generate-models';
@@ -47,7 +48,7 @@ export class GenerateDevelopProgram extends Command {
   };
 
   async run() {
-    const envFilepath = await getEnvFilepath();
+    const envFilepath = findConfig('.env') ?? '.env';
     const finalEnvFilePath = path.join(developmentPHPAppPath, '.env');
     const modulesRoot = path.join(developmentPHPAppPath, 'modules');
 
@@ -63,10 +64,14 @@ export class GenerateDevelopProgram extends Command {
           await fs.remove(developmentPHPAppPath);
         },
       }),
-      getWorkerJob('Ensure project root', {
+      getWorkerJob('Ensure project root with config', {
         skip: await fs.pathExists(developmentPHPAppPath),
         job: async () => {
           await fs.ensureDir(developmentPHPAppPath);
+          await fs.writeJSON(
+            path.join(developmentPHPAppPath, GENERATOR_FILENAME__JSON),
+            generatorConfig
+          );
         },
       }),
       getCreatePackageJsonJob('Ensure package.json', {

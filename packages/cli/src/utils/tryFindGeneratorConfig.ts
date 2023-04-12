@@ -1,11 +1,9 @@
 import { findGeneratorConfig } from '@prom-cms/shared/generator';
 
-export const tryFindGeneratorConfig = (currentDir = process.cwd()) => {
+export const tryFindGeneratorConfig = (cwd: string) => {
   try {
-    findGeneratorConfig(currentDir);
+    findGeneratorConfig(cwd);
   } catch (error) {
-    throw new Error(
-      `⛔️ Current directory "${currentDir}" has no prom config.`
-    );
+    throw new Error(`⛔️ Current directory "${cwd}" has no prom config.`);
   }
 };

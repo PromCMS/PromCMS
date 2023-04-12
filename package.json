@@ -4,6 +4,7 @@
   "private": true,
   "description": "",
   "scripts": {
+    "prepare": "npm run generate:dev",
     "generate:dev": "npm run generate:dev -w @prom-cms/cli",
     "build:packages": "npx turbo run build --filter=./packages/*",
     "build:admin": "npx turbo run build --filter=@prom-cms/admin",
@@ -27,6 +28,7 @@
     "Ondřej Langr <hi@ondrejlangr.cz>"
   ],
   "devDependencies": {
+    "@swc/cli": "^0.1.62",
     "@changesets/cli": "^2.22.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-react": "^7.32.2",

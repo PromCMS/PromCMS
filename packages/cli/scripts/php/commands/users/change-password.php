@@ -11,24 +11,24 @@ $appRoot = $arguments["cwd"];
 include_once $appRoot . '/vendor/autoload.php';
 
 $app = new App($appRoot);
-$userId = $arguments["id"];
+$userEmail = $arguments["email"];
 $newPassword = $arguments["password"];
 $app->init(true);
 $passwordService = new PasswordService();
 
 try {
-  Users::getOneById($userId)->update([
+  $users = new Users();
+
+  $users->query()->where(["email", "=", $userEmail])->getOne()->update([
     'password' => $passwordService->generate($newPassword),
   ]);
-
-  echo "User with id '$userId' has been updated!";
 
   exit(0);
 } catch (\Exception $ex) {
 
   $message = $ex->getMessage();
   $trace = $ex->getTraceAsString();
-  echo "⛔️ An error happened: $message \n $trace";
+  echo "Error from PHP: $message \n $trace";
 
   exit(1);
 }

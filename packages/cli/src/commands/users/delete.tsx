@@ -1,40 +1,55 @@
-import { Command } from '@boost/cli';
-import { runPHPScript, tryFindGeneratorConfig } from '@utils';
+import { modifiedParse, runPHPScript, tryFindGeneratorConfig } from '@utils';
 import path from 'path';
-import { USERS_SCRIPTS_ROOT } from '@constants';
+import { THANK_YOU_MESSAGE, USERS_SCRIPTS_ROOT } from '@constants';
 import { FC, useState } from 'react';
-import { Input, Style, useProgram } from '@boost/cli/react';
-import { ThanksMessage, WorkingMessage } from '@components';
-import { z, ZodError } from 'zod';
+import { Input, useProgram, Confirm } from '@boost/cli/react';
+import { WorkingMessage } from '@components';
+import { UserCommandBase } from './internal/UserCommandBase.js';
+import { emailSchema } from '@schemas';
+import { Box } from 'ink';
 
 const Runtime: FC<{ cwd: string }> = ({ cwd }) => {
   const [isWorking, setIsWorking] = useState(false);
   const [isDone, setIsDone] = useState(false);
-  const { exit } = useProgram();
-  const [errorMessage, setErrorMessage] = useState('');
-  const [userId, setUserId] = useState('');
+  const { exit, log } = useProgram();
+  const [email, setEmail] = useState('');
 
-  const runPhp = async () => {
+  const execute = async () => {
     setIsWorking(true);
 
-    await runPHPScript({
-      path: path.join(USERS_SCRIPTS_ROOT, 'delete.php'),
-      arguments: {
-        cwd,
-        id: userId,
-      },
-    });
+    try {
+      await runPHPScript({
+        path: path.join(USERS_SCRIPTS_ROOT, 'delete.php'),
+        arguments: {
+          cwd,
+          email,
+        },
+      });
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message.includes('Entity is missing')
+      ) {
+        log.error(`User with email '${email}' does not exist`);
 
-    setIsWorking(false);
+        setIsWorking(false);
+        setIsDone(true);
+        exit();
+        return;
+      } else {
+        throw error;
+      }
+    }
+
     setIsDone(true);
-
-    setTimeout(() => {
-      exit();
-    }, 100);
+    setIsWorking(false);
+    log.info(`User ${email} successfully deleted!`);
+    log.info(THANK_YOU_MESSAGE);
+    exit();
   };
 
   if (isDone) {
-    return <ThanksMessage />;
+    return null;
   }
 
   if (isWorking) {
@@ -42,53 +57,39 @@ const Runtime: FC<{ cwd: string }> = ({ cwd }) => {
   }
 
   return (
-    <>
-      {errorMessage ? (
-        <Style bold type="failure">
-          {errorMessage}
-        </Style>
-      ) : null}
+    <Box flexDirection="column">
+      <Input
+        label="User email"
+        placeholder="<some@email.com>"
+        validate={(value) => modifiedParse(emailSchema.parse, value)}
+        onSubmit={(value) => setEmail(value)}
+      />
 
-      {!userId ? (
-        <Input
-          label="User id"
-          placeholder="some user id"
-          onSubmit={(incomingValue) => {
-            try {
-              setUserId(
-                String(
-                  z
-                    .string()
-                    .transform((value) => Number(value))
-                    .refine((value) => !Number.isNaN(value) && value >= 0)
-                    .parse(incomingValue)
-                )
-              );
-            } catch (error) {
-              if (error instanceof ZodError) {
-                setErrorMessage(error.errors.at(0)?.message ?? '');
+      {email ? (
+        <Confirm
+          label={`Do you really want to delete user "${email}"`}
+          onSubmit={(value) => {
+            if (!value) {
+              exit();
 
-                return;
-              }
-
-              throw error;
+              return;
             }
 
-            runPhp();
+            execute();
           }}
         />
       ) : null}
-    </>
+    </Box>
   );
 };
 
-export class DeleteUserProgram extends Command {
+export class DeleteUserProgram extends UserCommandBase {
   static path: string = 'users:delete';
   static description: string = 'User deletion management through cli';
 
   async run() {
-    const currentDir = process.cwd();
-    tryFindGeneratorConfig();
+    const currentDir = this.cwd || process.cwd();
+    tryFindGeneratorConfig(currentDir);
 
     return <Runtime cwd={currentDir} />;
   }
