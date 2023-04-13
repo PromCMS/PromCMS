@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.11.0
+
+### Minor Changes
+
+- e27be71: Udpate admin stylings
+
 ## 0.10.0
 
 ### Minor Changes
