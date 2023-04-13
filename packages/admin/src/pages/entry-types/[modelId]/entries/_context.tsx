@@ -11,6 +11,7 @@ import {
 import { EntryTypeUrlActionType } from '@custom-types';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import type { OutputData } from '@editorjs/editorjs';
 import { getModelItemSchema } from '@schemas';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { getObjectDiff } from '@utils';
@@ -52,6 +53,9 @@ export const entryUnderpageContext = createContext<IEntryUnderpageContext>({
 });
 
 export const useEntryUnderpageContext = () => useContext(entryUnderpageContext);
+
+const normalizeContent = (item: string | OutputData): OutputData =>
+  typeof item === 'string' ? JSON.parse(item) : item;
 
 export const EntryUnderpageContextProvider: FC<{
   viewType: EntryTypeUrlActionType;
@@ -108,7 +112,7 @@ export const EntryUnderpageContextProvider: FC<{
           Object.entries(itemData).filter(([_, data]) => data !== null)
         ),
         ...(itemData.content
-          ? { content: JSON.stringify(itemData.content) }
+          ? { content: normalizeContent(itemData.content) }
           : {}),
       });
 
@@ -116,8 +120,11 @@ export const EntryUnderpageContextProvider: FC<{
         for (const [fieldName, editorRef] of Object.entries(
           blockEditorRefs.refs.current
         )) {
+          console.log({
+            data: normalizeContent(itemData[fieldName]),
+          });
           if (itemData[fieldName]) {
-            editorRef?.blocks?.render(itemData[fieldName]);
+            editorRef?.blocks?.render(normalizeContent(itemData[fieldName]));
           }
         }
       }

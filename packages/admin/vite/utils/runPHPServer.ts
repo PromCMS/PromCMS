@@ -1,10 +1,10 @@
-import { execa, ExecaChildProcess } from "execa";
-import * as path from "node:path";
-import {watch} from 'chokidar';
-import { FSWatcher } from "node:fs";
+import { execa, ExecaChildProcess } from 'execa';
+import * as path from 'node:path';
+import { watch } from 'chokidar';
+import { FSWatcher } from 'node:fs';
 
 // @ts-ignore
-import { developmentPHPAppPath } from "@prom-cms/shared/internal"
+import { developmentPHPAppPath } from '@prom-cms/shared/internal';
 
 export const buildProject = (options) =>
   execa('npm', ['run', 'generate:dev'], {
@@ -12,25 +12,37 @@ export const buildProject = (options) =>
     ...options,
   });
 
-
-const getFileWatcher = ({ abortController: parentAbortController }: {abortController: AbortController}) => {
+const getFileWatcher = ({
+  abortController: parentAbortController,
+}: {
+  abortController: AbortController;
+}) => {
   let abortController: AbortController;
 
   // Catch parent aborter
   parentAbortController.signal.addEventListener('abort', () => {
     abortController?.abort();
-  })
-
-  const instance = watch('../../packages/cli/**/*', {
-    persistent: true,
-    cwd: process.cwd(),
   });
+
+  const instance = watch(
+    [
+      '../../packages/cli/src/**/*',
+      '../../packages/cli/scripts/**/*',
+      '../../packages/cli/templates/**/*',
+    ],
+    {
+      persistent: true,
+      cwd: process.cwd(),
+    }
+  );
 
   instance.on('change', async (path) => {
     // Abort previous
     if (abortController) {
       abortController.abort();
-      console.log(`New file changed - starting from the start 😪`);
+      console.log(
+        `File "${path}" has been changed - starting from the start 😪`
+      );
     } else {
       console.log(`Rebuilding...`);
     }
@@ -60,10 +72,13 @@ const getFileWatcher = ({ abortController: parentAbortController }: {abortContro
   return instance;
 };
 
-
 export const runPHPServer = async (
-  port: number, {abortController}: {abortController: AbortController}
-): Promise<{ serverProcess: ExecaChildProcess<string>, fileWatcher: FSWatcher }> => {
+  port: number,
+  { abortController }: { abortController: AbortController }
+): Promise<{
+  serverProcess: ExecaChildProcess<string>;
+  fileWatcher: FSWatcher;
+}> => {
   const { execa } = await import('execa');
   const fs = await import('fs');
 
@@ -71,7 +86,7 @@ export const runPHPServer = async (
     'php',
     ['-S', `127.0.0.1:${port}`, '-t', './public', './public/index.php'],
     {
-      cwd: developmentPHPAppPath
+      cwd: developmentPHPAppPath,
     }
   );
 
@@ -87,7 +102,7 @@ export const runPHPServer = async (
     fs.appendFileSync(path.join(process.cwd(), 'php-server-log.txt'), data)
   );
 
-  const fileWatcher = getFileWatcher({abortController})
+  const fileWatcher = getFileWatcher({ abortController });
 
   return { serverProcess, fileWatcher };
 };
