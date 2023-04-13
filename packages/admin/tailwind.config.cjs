@@ -5,10 +5,10 @@ module.exports = {
     container: {
       padding: {
         DEFAULT: '1rem',
-        sm: '4rem',
-        lg: '4rem',
-        xl: '4rem',
-        '2xl': '4rem',
+        sm: '4.2rem',
+        lg: '4.2rem',
+        xl: '4.2rem',
+        '2xl': '4.2rem',
       },
       screens: {
         sm: '600px',
