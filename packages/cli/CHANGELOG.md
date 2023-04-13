@@ -1,5 +1,15 @@
 # @prom-cms/cli
 
+## 0.19.0
+
+### Minor Changes
+
+- 6192a1e: Update user commands and add documentation. Also internally change build process for cli package from tsup to swc
+
+### Patch Changes
+
+- 2c9fe37: Fix missing psr/log dependency to still support 7.4 since we are are not yet ready for version 8
+
 ## 0.18.0
 
 ### Minor Changes
