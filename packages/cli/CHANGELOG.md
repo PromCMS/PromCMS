@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.19.2
+
+### Patch Changes
+
+- 1d16ebe: Add missing dependency "find-config" that has been missing
+
 ## 0.19.1
 
 ### Patch Changes
