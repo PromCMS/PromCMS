@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.12.0
+
+### Minor Changes
+
+- 56368ab: Ask user on system settings delete to prevent unwanted deletions
+
 ## 0.11.0
 
 ### Minor Changes
