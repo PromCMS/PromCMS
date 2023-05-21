@@ -1,6 +1,7 @@
 import { apiClient } from '@api';
 import BackendImage from '@components/BackendImage';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
+import { MESSAGES } from '@constants';
 import { Page } from '@custom-types';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { useModelItems } from '@hooks/useModelItems';
@@ -88,6 +89,10 @@ const UserProfileMainPage: Page = () => {
 
   const onDeleteClick = useCallback(
     (id: ItemID) => async () => {
+      if (!confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
+        return;
+      }
+
       try {
         reqNotification(
           {
