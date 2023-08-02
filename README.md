@@ -38,7 +38,13 @@ This will boost your performance a lot and you can focus on what really matters 
  
 > You may also find useful to seed your database with random data with `npx @prom-cms/cli seed-database` 😳
 
-## More 😲
+## More in Depth 😲
 
--   [CLI Package](./packages/cli/README.md)
-    -   [User Management](./docs/cli/users.md)
+-   [Admin Package](./packages/admin/README.md) - All source files of admin portal
+-   [Api Client Package](./packages/api-client/README.md)
+-   [CLI Package](./packages/cli/README.md) - Know your CLI for easier management of PromCMS projects
+-   [Config Package](./packages/config/README.md) - All internal configuration for typescript, prettier, tsup, etc...
+-   [In Page Editor Package](./packages/in-page-editor/README.md)
+-   [Schema Package](./packages/schema/README.md) - Know your powerful schema and use it to the fullest!
+-   [Shared Package](./packages/shared/README.md) - Internal helpers
+-   [Vite Plugin Package](./packages/vite-plugin/README.md) - Source files for vite plugin that manages development of PromCMS projects
