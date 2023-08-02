@@ -10,7 +10,7 @@ The general idea is that you provide config file with definitions on how should 
 
 This will boost your performance a lot and you can focus on what really matters - producing actual visible stuff 😉
 
-## How to use
+## Quick Start
 
 1. Create a root of your desired project 
     ```bash
@@ -25,6 +25,7 @@ This will boost your performance a lot and you can focus on what really matters 
     git init
     ```
 4. Create a config file `prom.generate-config.(cjs|mjs|js|ts|json)` with you definitions (in the same folder as your config)
+    - Config examples in [here](./docs/examples/) to get you started 🎉
 5. Generate CMS (still in the same folder as your config)
     ```bash
     npx @prom-cms/cli generate-cms
@@ -39,5 +40,5 @@ This will boost your performance a lot and you can focus on what really matters 
 
 ## More 😲
 
-* [Examples](./docs/examples/)
-* [CLI user management](./docs/cli/users.md)
+-   [CLI Package](./packages/cli/README.md)
+    -   [User Management](./docs/cli/users.md)

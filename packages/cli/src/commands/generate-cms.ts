@@ -6,7 +6,6 @@ import crypto from 'crypto';
 import {
   generateByTemplates,
   loggedJobWorker,
-  logSuccess,
   getWorkerJob,
   getFilenameBase,
   getModuleFolderName,
@@ -78,7 +77,6 @@ export class GenerateCMSProgram extends Command {
   static description: string = 'Controls a cms generator';
 
   // FLAGS
-  configPath: string;
   regenerate: boolean = false;
   skip: string = '';
   packageManager: SupportedPackageManagers | undefined;

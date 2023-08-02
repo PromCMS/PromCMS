@@ -1,5 +1,5 @@
 ---
-"@prom-cms/shared": patch
+"@prom-cms/shared": major
 "@prom-cms/admin": patch
 "@prom-cms/cli": patch
 ---
