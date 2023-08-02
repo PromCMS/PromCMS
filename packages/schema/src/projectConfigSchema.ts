@@ -28,3 +28,5 @@ export const projectConfigSchema = z.object({
    */
   security: projectSecurityConfigSchema.optional(),
 });
+
+export type ProjectConfig = z.infer<typeof projectConfigSchema>;

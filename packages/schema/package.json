@@ -1,11 +1,11 @@
 {
-  "name": "@prom-cms/shared",
-  "description": "Shared package for prom cms packages",
-  "version": "1.9.4",
+  "name": "@prom-cms/schema",
+  "description": "Schema package for prom cms packages",
+  "version": "0.0.0",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
-  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/shared/README.md",
+  "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/schema/README.md",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "module": "dist/index.js",
@@ -16,16 +16,6 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
-    },
-    "./generator": {
-      "import": "./dist/generator/index.js",
-      "require": "./dist/generator/index.cjs",
-      "types": "./dist/generator/index.d.ts"
-    },
-    "./internal": {
-      "import": "./dist/internal/index.js",
-      "require": "./dist/internal/index.cjs",
-      "types": "./dist/internal/index.d.ts"
     }
   },
   "files": [
@@ -54,7 +44,6 @@
   },
   "devDependencies": {
     "@types/find-config": "1.0.1",
-    "@prom-cms/schema": "^0.0.0",
     "vitest": "^0.24.3",
     "typescript": "^4.9.4",
     "find-config": "1.0.0",

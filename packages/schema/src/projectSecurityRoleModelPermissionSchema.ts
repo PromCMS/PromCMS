@@ -33,3 +33,7 @@ export const projectSecurityRoleModelPermissionSchema = z.object({
    */
   d: ZodSecurityOptionOptions.default(0),
 });
+
+export type ProjectSecurityRoleModelPermission = z.infer<
+  typeof projectSecurityRoleModelPermissionSchema
+>;

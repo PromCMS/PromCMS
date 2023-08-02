@@ -23,9 +23,9 @@ import { getCreateComposerJsonJob } from '../jobs/getCreateComposerJsonJob.js';
 import {
   formatGeneratorConfig,
   GENERATOR_FILENAME__JSON,
-  validateGeneratorConfig,
 } from '@prom-cms/shared/generator';
 import generateModels from '@parts/generate-models';
+import { validateGeneratorConfig } from '@prom-cms/schema';
 
 interface CustomOptions extends GlobalOptions {
   regenerate: boolean;

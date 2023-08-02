@@ -1,6 +1,5 @@
+import { FieldPlacements, GeneratorConfigInput } from '@prom-cms/schema';
 import kebabCase from 'lodash.kebabcase';
-import { FieldPlacements } from '../../index.js';
-import { GeneratorConfigInput } from '../../types/GeneratorConfig.js';
 
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();

@@ -1,7 +1,10 @@
+import {
+  FieldPlacements,
+  GeneratorConfigInput,
+  SecurityOptionOptions,
+} from '@prom-cms/schema';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { FieldPlacements, SecurityOptionOptions } from '../index.js';
-import { GeneratorConfigInput } from '../types/GeneratorConfig.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

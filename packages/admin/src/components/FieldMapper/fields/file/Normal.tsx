@@ -1,8 +1,8 @@
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
-import { columnTypeFileSchema } from '@prom-cms/shared';
 import { z } from 'zod';
 import { FileSelect } from '@components/form/FileSelect';
+import { columnTypeFileSchema } from '@prom-cms/schema';
 
 export type NormalProps = {
   name: string;

@@ -1,4 +1,5 @@
-import { ColumnType, PrimitiveTypes } from '../index.js';
+import { ColumnType } from '@prom-cms/schema';
+import { PrimitiveTypes } from '../index.js';
 
 export const convertColumnTypeToPrimitive = (
   type: ColumnType['type']

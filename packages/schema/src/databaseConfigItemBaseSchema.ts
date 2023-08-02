@@ -58,3 +58,9 @@ export const databaseConfigItemBaseSchema = z.object({
    */
   intl: z.boolean().default(true).optional(),
 });
+
+export type DatabaseConfigItemBase = z.infer<
+  typeof databaseConfigItemBaseSchema
+> & {
+  icon: keyof typeof iconSet;
+};

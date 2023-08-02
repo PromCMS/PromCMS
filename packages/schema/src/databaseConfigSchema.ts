@@ -8,3 +8,5 @@ export const databaseConfigSchema = z.object({
     .record(z.string().min(1), databaseConfigSingletonSchema)
     .optional(),
 });
+
+export type DatabaseConfig = z.infer<typeof databaseConfigSchema>;

@@ -1,6 +1,7 @@
 import { Checkbox, Collapse, Radio, Title } from '@mantine/core';
 import { randomId } from '@mantine/hooks';
-import { ApiResultModel, SecurityOptionOptions } from '@prom-cms/shared';
+import { SecurityOptionOptions } from '@prom-cms/schema';
+import { ApiResultModel } from '@prom-cms/shared';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -70,7 +71,7 @@ export const ModelPermissionToggles: FC<{
   return (
     <div>
       <Title mb="sm" order={5} className="text-blue-500">
-        <Icon size={17} className="mr-2 -mb-0.5" />
+        <Icon size={17} className="-mb-0.5 mr-2" />
         {t(modelName)}
       </Title>
 

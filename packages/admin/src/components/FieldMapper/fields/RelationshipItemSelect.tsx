@@ -1,6 +1,7 @@
 import { useModelItems } from '@hooks/useModelItems';
 import { Select, SelectItem } from '@mantine/core';
-import { ColumnTypeRelationship, UserRole } from '@prom-cms/shared';
+import { ColumnTypeRelationship } from '@prom-cms/schema';
+import { UserRole } from '@prom-cms/shared';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';

@@ -1,6 +1,6 @@
 import { BlockEditor } from '@components/form/BlockEditor';
 import { Checkbox, clsx, Input, Textarea, TextInput } from '@mantine/core';
-import { ColumnType, FieldPlacements } from '@prom-cms/shared';
+import { ColumnType, FieldPlacements } from '@prom-cms/schema';
 import { FC, Fragment } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

@@ -1,8 +1,5 @@
-import {
-  ApiResultModel,
-  ApiResultModelSingleton,
-  FieldPlacements,
-} from '@prom-cms/shared';
+import { FieldPlacements } from '@prom-cms/schema';
+import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/shared';
 
 export const prepareFieldsForMapper = (
   { columns }: ApiResultModel | ApiResultModelSingleton,

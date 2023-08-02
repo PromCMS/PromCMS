@@ -10,3 +10,5 @@ export const projectSecurityConfigSchema = z.object({
    */
   roles: z.array(projectSecurityRoleSchema).optional(),
 });
+
+export type ProjectSecurityConfig = z.infer<typeof projectSecurityConfigSchema>;
