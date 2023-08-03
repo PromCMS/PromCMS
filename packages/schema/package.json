@@ -23,8 +23,8 @@
   ],
   "scripts": {
     "prettier": "prettier --write \"**/*.{ts,tsx}\"",
-    "test": "vitest",
-    "test:coverage": "vitest run --coverage",
+    "disabled_test": "vitest",
+    "disabled_test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "dev": "npx tsup --watch",

@@ -1,8 +1,6 @@
+import { validateGeneratorConfig } from '@prom-cms/schema';
 import { describe, expect, it } from 'vitest';
-import {
-  formatGeneratorConfig,
-  validateGeneratorConfig,
-} from '../../../src/generator';
+import { formatGeneratorConfig } from '../../../src/generator';
 import { mockedGeneratorConfig } from '../../../src/internal';
 
 describe('findGeneratorConfig util', () => {
