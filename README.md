@@ -38,6 +38,11 @@ This will boost your performance a lot and you can focus on what really matters 
  
 > You may also find useful to seed your database with random data with `npx @prom-cms/cli seed-database` 😳
 
+## Guides
+
+1. [Get Started](./docs/guides/get-started.md)
+2. [Adding Routes](./docs/guides/adding-routes.md)
+
 ## More in Depth 😲
 
 -   [Admin Package](./packages/admin/README.md) - All source files of admin portal
