@@ -1,10 +1,13 @@
-import { capitalizeFirstLetter, GeneratorConfig } from '@prom-cms/shared';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
 import { formatCodeString, getTemplateFolder } from '@utils';
+import { GeneratorConfig } from '@prom-cms/schema';
 
-type ModelColumns = GeneratorConfig['database']['models'][string]['columns'];
+type ModelColumns = NonNullable<
+  GeneratorConfig['database']['models']
+>[string]['columns'];
 type SingletonColumns = NonNullable<
   GeneratorConfig['database']['singletons']
 >[string]['columns'];

@@ -1,5 +1,5 @@
 import { ActionIcon, clsx, Input, NumberInput, TextInput } from '@mantine/core';
-import { FieldPlacements, RepeaterAdminSchema } from '@prom-cms/shared';
+import { FieldPlacements, RepeaterAdminSchema } from '@prom-cms/schema';
 import { FC, Fragment, useMemo } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -33,15 +33,15 @@ export const Repeater: FC<{
     <Input.Wrapper size="md" label={label}>
       <div
         className={clsx([
-          'flex flex-col divide-y-2 divide-gray-100 mt-2',
+          'mt-2 flex flex-col divide-y-2 divide-gray-100',
           placement === FieldPlacements.MAIN &&
-            'border border-gray-200 bg-white rounded-lg p-5',
+            'rounded-lg border border-gray-200 bg-white p-5',
         ])}
       >
         {allFields.map((field, index) => (
           <div
             className={clsx(
-              'flex gap-3 w-full last:pb-0 first:pt-0',
+              'flex w-full gap-3 first:pt-0 last:pb-0',
               hasLabels ? 'py-3' : 'py-5'
             )}
             key={field.id}

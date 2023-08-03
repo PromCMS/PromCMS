@@ -1,10 +1,11 @@
-import { FieldPlacements, User } from '@prom-cms/shared';
+import { User } from '@prom-cms/shared';
 import { useMemo, VFC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import unset from 'lodash/unset';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { useData } from '../_context';
+import { FieldPlacements } from '@prom-cms/schema';
 
 export const UserUnderpageForm: VFC = () => {
   const { model } = useData();

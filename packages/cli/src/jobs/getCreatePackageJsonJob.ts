@@ -1,8 +1,8 @@
-import { ProjectConfig } from '@prom-cms/shared';
 import fs from 'fs-extra';
 import path from 'path';
 
 import { formatCodeString, getWorkerJob } from '@utils';
+import { ProjectConfig } from '@prom-cms/schema';
 
 const defaultPackageJsonContent = {
   name: '',

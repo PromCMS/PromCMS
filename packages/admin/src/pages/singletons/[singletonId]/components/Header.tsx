@@ -2,7 +2,7 @@ import useCurrentSingleton from '@hooks/useCurrentSingleton';
 import { Header as StyledHeader } from '@components/editorialPage/Header';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FieldPlacements } from '@prom-cms/shared';
+import { FieldPlacements } from '@prom-cms/schema';
 
 export const Header: FC = () => {
   const { name, title, columns } = useCurrentSingleton(true);

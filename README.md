@@ -10,7 +10,7 @@ The general idea is that you provide config file with definitions on how should 
 
 This will boost your performance a lot and you can focus on what really matters - producing actual visible stuff 😉
 
-## How to use
+## Quick Start
 
 1. Create a root of your desired project 
     ```bash
@@ -25,6 +25,7 @@ This will boost your performance a lot and you can focus on what really matters 
     git init
     ```
 4. Create a config file `prom.generate-config.(cjs|mjs|js|ts|json)` with you definitions (in the same folder as your config)
+    - Config examples in [here](./docs/examples/) to get you started 🎉
 5. Generate CMS (still in the same folder as your config)
     ```bash
     npx @prom-cms/cli generate-cms
@@ -37,7 +38,18 @@ This will boost your performance a lot and you can focus on what really matters 
  
 > You may also find useful to seed your database with random data with `npx @prom-cms/cli seed-database` 😳
 
-## More 😲
+## Guides
 
-* [Examples](./docs/examples/)
-* [CLI user management](./docs/cli/users.md)
+1. [Get Started](./docs/guides/get-started.md)
+2. [Adding Routes](./docs/guides/adding-routes.md)
+
+## More in Depth 😲
+
+-   [Admin Package](./packages/admin/README.md) - All source files of admin portal
+-   [Api Client Package](./packages/api-client/README.md)
+-   [CLI Package](./packages/cli/README.md) - Know your CLI for easier management of PromCMS projects
+-   [Config Package](./packages/config/README.md) - All internal configuration for typescript, prettier, tsup, etc...
+-   [In Page Editor Package](./packages/in-page-editor/README.md)
+-   [Schema Package](./packages/schema/README.md) - Know your powerful schema and use it to the fullest!
+-   [Shared Package](./packages/shared/README.md) - Internal helpers
+-   [Vite Plugin Package](./packages/vite-plugin/README.md) - Source files for vite plugin that manages development of PromCMS projects

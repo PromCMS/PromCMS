@@ -5,7 +5,8 @@ import { Trash, Plus } from 'tabler-icons-react';
 
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { capitalizeFirstLetter, FieldPlacements } from '@prom-cms/shared';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { FieldPlacements } from '@prom-cms/schema';
 
 export const DAYS_IN_WEEK = [
   'monday',
@@ -49,12 +50,12 @@ const RowSelect: FC<{ name: string }> = ({ name }) => {
   return (
     <>
       {allFields.map((field, index) => (
-        <div key={field.id} className="flex gap-5 items-center">
+        <div key={field.id} className="flex items-center gap-5">
           <Controller
             name={`${name}.${index}.from`}
             render={({ field: { value, onChange } }) => (
               <Select
-                className="sm:flex items-center sm:gap-3 [&>label]:flex-none"
+                className="items-center sm:flex sm:gap-3 [&>label]:flex-none"
                 label={t('From')}
                 placeholder={t('Pick time')}
                 value={value}
@@ -67,7 +68,7 @@ const RowSelect: FC<{ name: string }> = ({ name }) => {
             name={`${name}.${index}.to`}
             render={({ field: { value, onChange } }) => (
               <Select
-                className="sm:flex items-center sm:gap-3 [&>label]:flex-none"
+                className="items-center sm:flex sm:gap-3 [&>label]:flex-none"
                 label={t('To')}
                 placeholder={t('Pick time')}
                 value={value}
@@ -76,7 +77,7 @@ const RowSelect: FC<{ name: string }> = ({ name }) => {
               />
             )}
           />
-          <div className={'flex-none grid grid-cols-2'}>
+          <div className={'grid flex-none grid-cols-2'}>
             <ActionIcon
               size="xl"
               p="xs"
@@ -115,9 +116,9 @@ const Row: FC<{
   const value = watch(name);
 
   return (
-    <div className="min-h-[70px] flex flex-col lg:flex-row lg:justify-between py-5 gap-5 lg:gap-16">
-      <div className="flex lg:grid grid-cols-2 lg:pt-3.5 gap-8 justify-between">
-        <div className="uppercase font-medium text-gray-800">
+    <div className="flex min-h-[70px] flex-col gap-5 py-5 lg:flex-row lg:justify-between lg:gap-16">
+      <div className="flex grid-cols-2 justify-between gap-8 lg:grid lg:pt-3.5">
+        <div className="font-medium uppercase text-gray-800">
           {t(capitalizeFirstLetter(weekdayName))}
         </div>
         <Controller
@@ -159,9 +160,9 @@ export const OpeningHours: FC<{
     >
       <div
         className={clsx([
-          'grid divide-y-2 divide-gray-100 mt-2',
+          'mt-2 grid divide-y-2 divide-gray-100',
           placement === FieldPlacements.MAIN &&
-            'border border-gray-200 bg-white rounded-lg px-5',
+            'rounded-lg border border-gray-200 bg-white px-5',
         ])}
       >
         {DAYS_IN_WEEK.map((name) => (

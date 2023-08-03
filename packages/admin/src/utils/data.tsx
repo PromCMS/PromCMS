@@ -1,6 +1,6 @@
 import { TableViewCol } from '@components/TableView';
-import { DatabaseConfigModel } from '@prom-cms/shared';
 import { CUSTOM_MODELS } from '@constants';
+import { DatabaseConfigModel } from '@prom-cms/schema';
 import isEqual from 'lodash/isEqual';
 import { Check, X } from 'tabler-icons-react';
 

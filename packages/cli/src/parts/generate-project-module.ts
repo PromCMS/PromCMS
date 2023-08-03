@@ -5,7 +5,7 @@ import {
   lowerCaseFirst,
 } from '@utils';
 import generateModule from './generate-module.js';
-import { GeneratorConfig } from '@prom-cms/shared';
+import { GeneratorConfig } from '@prom-cms/schema';
 
 export const generateProjectModule = async (
   modulesRoot: string,

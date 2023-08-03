@@ -1,7 +1,7 @@
 import ImageSelect from '@components/form/ImageSelect';
+import { columnTypeFileSchema } from '@prom-cms/schema';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
-import { columnTypeFileSchema } from '@prom-cms/shared';
 import { z } from 'zod';
 
 export type SmallImageProps = {

@@ -22,3 +22,5 @@ export const projectSecurityRoleSchema = z.object({
    */
   hasAccessToAdmin: z.boolean().default(true),
 });
+
+export type ProjectSecurityRole = z.infer<typeof projectSecurityRoleSchema>;

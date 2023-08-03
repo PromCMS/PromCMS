@@ -1,6 +1,5 @@
+import { FieldPlacements, GeneratorConfigInput } from '@prom-cms/schema';
 import kebabCase from 'lodash.kebabcase';
-import { FieldPlacements } from '../../index.js';
-import { GeneratorConfigInput } from '../../types/GeneratorConfig.js';
 
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
@@ -160,7 +159,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
       {} as typeof model.columns
     );
 
-    (isSingleton ? singletons! : models)[modelKey] = {
+    ((isSingleton ? singletons! : models) ?? {})[modelKey] = {
       softDelete: false,
       timestamp: false,
       sorting: false,

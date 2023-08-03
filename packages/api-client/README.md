@@ -1,6 +1,8 @@
+<center>
 # PromCMS JS API Client
 
 This is a javascript api client for your apps that use PROM CMS.
+</center>
 
 ## Installation
 

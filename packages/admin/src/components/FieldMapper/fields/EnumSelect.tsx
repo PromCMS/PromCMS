@@ -1,5 +1,6 @@
 import { SelectItem, Select } from '@mantine/core';
-import { capitalizeFirstLetter, ColumnTypeEnum } from '@prom-cms/shared';
+import { ColumnTypeEnum } from '@prom-cms/schema';
+import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { FC, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

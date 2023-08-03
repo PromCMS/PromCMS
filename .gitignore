@@ -6,6 +6,7 @@ dev
 .env*
 .pnp
 .pnp.js
+.temp
 dist
 dist-ssr
 *.local

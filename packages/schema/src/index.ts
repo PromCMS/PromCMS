@@ -18,3 +18,5 @@ export * from './columnType/columnTypeRelationshipSchema.js';
 export * from './columnType/columnTypeSchema.js';
 export * from './columnType/columnTypeSlugSchema.js';
 export * from './columnType/columnTypeStringSchema.js';
+
+export * from './utils/validateGeneratorConfig.js';
