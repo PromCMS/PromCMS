@@ -159,7 +159,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
       {} as typeof model.columns
     );
 
-    (isSingleton ? singletons! : models)[modelKey] = {
+    ((isSingleton ? singletons! : models) ?? {})[modelKey] = {
       softDelete: false,
       timestamp: false,
       sorting: false,
