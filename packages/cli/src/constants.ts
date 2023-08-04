@@ -3,6 +3,9 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+export const MODULE_FOLDER_NAME = 'modules';
+export const MODELS_FOLDER_NAME = 'Models';
+
 export const THANK_YOU_MESSAGE = '✅ Done. Bye!';
 export const PACKAGE_ROOT = path.join(__dirname, '..');
 export const SCRIPTS_ROOT = path.join(PACKAGE_ROOT, 'scripts');

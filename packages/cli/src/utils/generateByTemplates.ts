@@ -1,7 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import ejs from 'ejs';
-import { formatCodeString } from '../utils/prettier.js';
+import { formatCodeString } from './formatCodeString.js';
 import { getTemplateFolder, Path } from './getTemplateFolder.js';
 
 export type GenerateByTemplatesOptions = {
