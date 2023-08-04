@@ -1,5 +1,16 @@
 # @prom-cms/api-client
 
+## 0.7.1
+
+### Patch Changes
+
+- 50a7cbf: Update documentation
+- Updated dependencies [d1d586c]
+- Updated dependencies [d1d586c]
+- Updated dependencies [50a7cbf]
+- Updated dependencies [50a7cbf]
+  - @prom-cms/shared@2.0.0
+
 ## 0.7.0
 
 ### Minor Changes
