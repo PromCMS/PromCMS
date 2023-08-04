@@ -45,9 +45,5 @@
     "rimraf": "3.0.2",
     "tsup": "^6.5.0",
     "turbo": "^1.6.3"
-  },
-  "overrides": {
-    "react": "^18.2.0",
-    "@types/react": "^18.0.24"
   }
 }
