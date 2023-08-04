@@ -69,14 +69,6 @@ const uploadFile = (version, fileContent) =>
       resolve(undefined);
     });
 
-    console.log({
-      connection: {
-        host: ftpConnectionURL.host,
-        port: Number(ftpConnectionURL.port || 21),
-        user: ftpConnectionURL.username,
-      },
-    });
-
     client.connect({
       host: ftpConnectionURL.host,
       port: Number(ftpConnectionURL.port || 21),
