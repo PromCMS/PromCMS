@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { lowerCaseFirst } from '../../src/utils';
+import { lowerCaseFirst } from '../../src/utils/lowerCaseFirst.js';
 
 describe('lowerCaseFirst utility function', () => {
   it('should format correctly', () => {

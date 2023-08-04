@@ -52,6 +52,7 @@ import { jsonFilepathOption } from '@options/jsonFilepathOption.js';
 
   projectCommand
     .command('create')
+    .option('--no-install', 'specify if install script should be run')
     .addOption(cleanOption)
     .addOption(cwdOption)
     .addOption(packageManagerOption)

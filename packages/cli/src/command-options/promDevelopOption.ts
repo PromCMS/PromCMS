@@ -1,8 +1,8 @@
 import { Option } from 'commander';
 
 export const promDevelopOption = new Option(
-  '-pd, --prom-develop',
-  'If creating of admin should be skipped'
+  '--prom-develop',
+  '!NOTICE - do not use outside of PromCMS root monorepo. '
 )
   .argParser((value) => {
     if (value) {

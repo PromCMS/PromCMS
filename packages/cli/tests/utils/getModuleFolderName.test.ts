@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getModuleFolderName } from '../../src/utils';
+import { getModuleFolderName } from '../../src/utils/getModuleFolderName.js';
 
 describe('getModuleFolderName utility function', () => {
   it('should format correctly', () => {

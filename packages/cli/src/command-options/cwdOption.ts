@@ -3,7 +3,10 @@ import fs from 'fs-extra';
 
 import { pathToAbsolute } from '@utils';
 
-export const cwdOption = new Option('-c, --cwd <string>', 'specify custom cwd')
+export const cwdOption = new Option(
+  '-c, --cwd <string>',
+  'specifies custom cwd'
+)
   .argParser((value) => {
     const desiredPath = pathToAbsolute(value);
 

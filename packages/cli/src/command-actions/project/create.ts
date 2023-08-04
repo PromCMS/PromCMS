@@ -22,6 +22,7 @@ type Options = {
   name: string;
   admin: boolean;
   clean?: boolean;
+  install: boolean;
   /**
    * Hidden option that is for doing special login inside prom monorepo
    */
@@ -31,7 +32,7 @@ type Options = {
 export const createProjectAction = async (
   optionsFromParameters: Partial<Options>
 ) => {
-  const { cwd, packageManager, name, admin, promDevelop, clean } =
+  const { cwd, packageManager, name, admin, promDevelop, clean, install } =
     await createPromptWithOverrides(
       [
         {
@@ -59,7 +60,7 @@ export const createProjectAction = async (
     if (clean) {
       await runWithProgress(fs.emptyDir(cwd), 'Cleaning cwd');
     } else {
-      throw new Error('⛔️ Final directory is not empty');
+      throw new Error(`⛔️ Final directory "${cwd}" is not empty`);
     }
   }
 
@@ -103,15 +104,17 @@ export const createProjectAction = async (
   // Now we get project config event though it's still the default one
   const generatorConfig = await getGeneratorConfigData(cwd);
 
-  await runWithProgress(
-    installNodeJsDeps({ cwd, packageManager }),
-    `Calling ${packageManager} to install Node.js deps`
-  );
+  if (install) {
+    await runWithProgress(
+      installNodeJsDeps({ cwd, packageManager }),
+      `Calling ${packageManager} to install Node.js deps`
+    );
 
-  await runWithProgress(
-    installPHPDeps({ cwd }),
-    'Calling composer to install PHP deps'
-  );
+    await runWithProgress(
+      installPHPDeps({ cwd }),
+      'Calling composer to install PHP deps'
+    );
+  }
 
   const { createdAt: moduleCreatedAt } = await runWithProgress(
     createProjectModule({ cwd, config: generatorConfig }),

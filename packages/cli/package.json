@@ -22,8 +22,8 @@
   "scripts": {
     "prestart": "npm run build",
     "start": "node ./bin/cli.js",
-    "project:create": "npm run start -- project create -n \"Prom Test Project\" -cl -pd -a false -p npm -c ../../node_modules/.prom-cms/php-app",
-    "project:update": "npm run start -- project update -a false --cwd ../../node_modules/.prom-cms/php-app",
+    "project:create": "npm run start -- project create --prom-develop -cl -p npm -n \"Prom Test Project\" --no-admin --cwd ../../node_modules/.prom-cms/php-app",
+    "project:update": "npm run start -- project update --no-admin --cwd ../../node_modules/.prom-cms/php-app",
     "test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
@@ -52,7 +52,6 @@
     "dayjs": "^1.11.6",
     "dotenv": "^10.0.0",
     "ejs": "^3.1.8",
-    "enquirer": "^2.3.6",
     "execa": "^6.1.0",
     "find-config": "^1.0.0",
     "fs-extra": "^10.1.0",

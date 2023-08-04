@@ -1,8 +1,6 @@
 import { Option } from 'commander';
 
 export const adminOption = new Option(
-  '-a, --admin [boolean]',
-  'If creating of admin should be done'
-)
-  .argParser((value) => value === 'true')
-  .default('true');
+  '--no-admin',
+  'specifies if admin source files should be created or not'
+);

@@ -4,7 +4,7 @@ import fs from 'fs-extra';
 
 export const jsonFilepathOption = new Option(
   '-f, --file <filePath>',
-  'Specify filepath of exported .json file'
+  'specifies filepath of exported .json file'
 ).argParser((value) => {
   const desiredFile = pathToAbsolute(value);
 

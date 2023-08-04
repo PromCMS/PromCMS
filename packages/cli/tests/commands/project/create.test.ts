@@ -3,16 +3,17 @@ import path from 'path';
 import fs from 'fs-extra';
 import { describe, beforeEach, it, afterAll, expect } from 'vitest';
 
-import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared/generator';
-import {
-  mockedGeneratorConfig,
-  monorepoRoot,
-} from '@prom-cms/shared/dist/internal/constants.js';
+import { monorepoRoot } from '@prom-cms/shared/dist/internal/constants.js';
 
-const TEST_FOLDER_PATH = path.join(monorepoRoot, 'node_modules', '.test-data');
+const TEST_FOLDER_PATH = path.join(
+  monorepoRoot,
+  'node_modules',
+  '.prom-cms',
+  'test-app'
+);
 describe('commands', () => {
   describe(
-    'generate-cms',
+    'project create',
     () => {
       beforeEach(async () => {
         await fs.ensureDir(TEST_FOLDER_PATH);
@@ -24,26 +25,24 @@ describe('commands', () => {
       });
 
       it('should run correctly and generate files', async () => {
-        // create config file
-        await fs.writeFile(
-          path.join(TEST_FOLDER_PATH, GENERATOR_FILENAME__JSON),
-          JSON.stringify(mockedGeneratorConfig)
-        );
-
-        await expect(async () =>
+        await expect(
           execa(
             'node',
             [
-              '../../packages/cli/bin/cli.cjs',
-              'generate-cms',
-              '--skip=dependency-install',
-              '--packageManager=npm',
+              path.join(monorepoRoot, 'packages/cli/bin/cli.js'),
+              'project',
+              'create',
+              '--packageManager',
+              'npm',
+              '--name',
+              'Test Project',
+              '--no-install',
             ],
             {
               cwd: TEST_FOLDER_PATH,
             }
           )
-        ).to.not.throw();
+        ).resolves.to.not.toThrow();
       });
     },
     {
