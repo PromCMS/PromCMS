@@ -1,5 +1,15 @@
 # @prom-cms/shared
 
+## 0.1.0
+
+### Minor Changes
+
+- 50a7cbf: Create package
+
+### Patch Changes
+
+- 50a7cbf: Update documentation
+
 ## 1.9.4
 
 ### Patch Changes

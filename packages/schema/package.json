@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/schema",
   "description": "Schema package for prom cms packages",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
@@ -51,6 +51,6 @@
     "tabler-icons-react": "^1.52.0",
     "@types/lodash.kebabcase": "^4.1.7",
     "chalk": "5.0.0",
-    "@prom-cms/config": "^0.1.1"
+    "@prom-cms/config": "^0.1.4"
   }
 }

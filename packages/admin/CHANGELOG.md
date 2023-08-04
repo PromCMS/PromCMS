@@ -1,5 +1,20 @@
 # @prom-cms/admin
 
+## 0.12.1
+
+### Patch Changes
+
+- 50a7cbf: Update documentation
+- 50a7cbf: Remove schemas into new @prom-cms/schema package and update imports accordingly
+- Updated dependencies [d1d586c]
+- Updated dependencies [d1d586c]
+- Updated dependencies [50a7cbf]
+- Updated dependencies [50a7cbf]
+- Updated dependencies [50a7cbf]
+  - @prom-cms/shared@2.0.0
+  - @prom-cms/api-client@0.7.1
+  - @prom-cms/schema@0.1.0
+
 ## 0.12.0
 
 ### Minor Changes

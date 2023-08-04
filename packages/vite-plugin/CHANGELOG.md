@@ -1,5 +1,11 @@
 # @prom-cms/vite-plugin
 
+## 0.6.4
+
+### Patch Changes
+
+- 50a7cbf: Update documentation
+
 ## 0.6.3
 
 ### Patch Changes

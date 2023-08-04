@@ -1,5 +1,20 @@
 # @prom-cms/shared
 
+## 2.0.0
+
+### Major Changes
+
+- d1d586c: Path to prom config has been changed to ".prom-cms/config.json" (or js,ts,etc...)
+- 50a7cbf: Remove schemas into new @prom-cms/schema package and update imports accordingly
+
+### Minor Changes
+
+- d1d586c: Rework @prom-cms/cli and change api. This change also includes removal of @boost/cli and its parts. Now cli package uses inquirer and commander for managing cli interactions.
+
+### Patch Changes
+
+- 50a7cbf: Update documentation
+
 ## 1.9.4
 
 ### Patch Changes

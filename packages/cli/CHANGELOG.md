@@ -1,5 +1,23 @@
 # @prom-cms/cli
 
+## 0.20.0
+
+### Minor Changes
+
+- d1d586c: Rework @prom-cms/cli and change api. This change also includes removal of @boost/cli and its parts. Now cli package uses inquirer and commander for managing cli interactions.
+
+### Patch Changes
+
+- 50a7cbf: Update documentation
+- 50a7cbf: Remove schemas into new @prom-cms/schema package and update imports accordingly
+- Updated dependencies [d1d586c]
+- Updated dependencies [d1d586c]
+- Updated dependencies [50a7cbf]
+- Updated dependencies [50a7cbf]
+  - @prom-cms/shared@2.0.0
+  - @prom-cms/config@0.1.4
+  - @prom-cms/admin@0.12.1
+
 ## 0.19.3
 
 ### Patch Changes
