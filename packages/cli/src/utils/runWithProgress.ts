@@ -9,6 +9,9 @@ export const runWithProgress = async <T extends Promise<any>>(
 ): Promise<Awaited<T>> => {
   let index = 0;
 
+  // this is just for the case that promise is completed really fast
+  Logger.success(message);
+
   // start progress
   const interval = setInterval(() => {
     const frame = FRAMES[(index = ++index % FRAMES.length)];

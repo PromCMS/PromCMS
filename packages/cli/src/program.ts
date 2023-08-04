@@ -11,7 +11,7 @@ import { updateProjectAction } from '@actions/project/update.js';
 
 import { cwdOption } from '@options/cwdOption.js';
 import { packageManagerOption } from '@options/packageManagerOption.js';
-import { noAdminOption } from '@options/noAdminOption.js';
+import { adminOption } from '@options/adminOption.js';
 import { promDevelopOption } from '@options/promDevelopOption.js';
 import { cleanOption } from '@options/cleanOption.js';
 import { migrateDatabaseAction } from '@actions/db/migrate.js';
@@ -55,7 +55,7 @@ import { jsonFilepathOption } from '@options/jsonFilepathOption.js';
     .addOption(cleanOption)
     .addOption(cwdOption)
     .addOption(packageManagerOption)
-    .addOption(noAdminOption)
+    .addOption(adminOption)
     .addOption(promDevelopOption)
     .addOption(projectNameOption)
     .action(createProjectAction);
@@ -64,7 +64,7 @@ import { jsonFilepathOption } from '@options/jsonFilepathOption.js';
     .command('update')
     .addOption(cwdOption)
     .addOption(packageManagerOption)
-    .addOption(noAdminOption)
+    .addOption(adminOption)
     .action(updateProjectAction);
 
   const dbCommand = program.command('db');

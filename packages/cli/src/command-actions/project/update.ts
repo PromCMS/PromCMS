@@ -11,11 +11,11 @@ import { createAdminFiles } from '@jobs/create-admin-files.js';
 
 type Options = {
   cwd: string;
-  noAdmin?: boolean;
+  admin: boolean;
 };
 
 export const updateProjectAction = async (options: Options) => {
-  const { cwd, noAdmin } = options;
+  const { cwd, admin } = options;
 
   const generatorConfig = await getGeneratorConfigData(cwd);
   const rootModuleName = getModuleFolderName(generatorConfig.project.name);
@@ -45,7 +45,7 @@ export const updateProjectAction = async (options: Options) => {
     Logger.info(`Module created at ${moduleCreatedAt}`);
   }
 
-  if (noAdmin !== true) {
+  if (admin) {
     await runWithProgress(
       fs.remove(path.join(cwd, 'public', 'admin')),
       'Deleting old admin'

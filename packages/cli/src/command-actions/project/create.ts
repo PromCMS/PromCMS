@@ -20,7 +20,7 @@ type Options = {
   packageManager: typeof SUPPORTED_PACKAGE_MANAGERS[number];
   cwd: string;
   name: string;
-  noAdmin?: boolean;
+  admin: boolean;
   promDevelop?: boolean;
   clean?: boolean;
 };
@@ -28,7 +28,7 @@ type Options = {
 export const createProjectAction = async (
   optionsFromParameters: Partial<Options>
 ) => {
-  const { cwd, packageManager, name, noAdmin, promDevelop, clean } =
+  const { cwd, packageManager, name, admin, promDevelop, clean } =
     await createPromptWithOverrides(
       [
         {
@@ -52,16 +52,12 @@ export const createProjectAction = async (
       optionsFromParameters
     );
 
-  if (await fs.pathExists(cwd)) {
-    if ((await isDirEmpty(cwd)) == false) {
-      if (clean) {
-        runWithProgress(fs.emptyDir(cwd), 'Cleaning cwd');
-      } else {
-        throw new Error('⛔️ Final directory is not empty');
-      }
+  if ((await fs.pathExists(cwd)) && (await isDirEmpty(cwd)) == false) {
+    if (clean) {
+      await runWithProgress(fs.emptyDir(cwd), 'Cleaning cwd');
+    } else {
+      throw new Error('⛔️ Final directory is not empty');
     }
-  } else {
-    await fs.ensureDir(cwd);
   }
 
   if (promDevelop) {
@@ -70,7 +66,7 @@ export const createProjectAction = async (
     const dotenvFinalFilepath = path.join(cwd, '.env');
 
     if (await fs.pathExists(dotenvFilepath)) {
-      runWithProgress(
+      await runWithProgress(
         fs.createSymlink(dotenvFilepath, dotenvFinalFilepath, 'file'),
         'Make symlink of .env variable file from project root'
       );
@@ -84,7 +80,7 @@ export const createProjectAction = async (
       '*': {
         project: {
           name,
-          slug: slugify.default(name),
+          slug: slugify.default(name, { lower: true, trim: true }),
           security: {
             secret: crypto.randomBytes(20).toString('hex'),
           },
@@ -126,7 +122,7 @@ export const createProjectAction = async (
     'Add default models, if any'
   );
 
-  if (noAdmin !== true) {
+  if (admin) {
     await runWithProgress(createAdminFiles({ cwd }), 'Add admin dashboard');
   }
 
