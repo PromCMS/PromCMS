@@ -21,8 +21,11 @@ type Options = {
   cwd: string;
   name: string;
   admin: boolean;
-  promDevelop?: boolean;
   clean?: boolean;
+  /**
+   * Hidden option that is for doing special login inside prom monorepo
+   */
+  promDevelop?: boolean;
 };
 
 export const createProjectAction = async (

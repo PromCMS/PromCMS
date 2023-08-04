@@ -16,19 +16,9 @@ This will boost your performance a lot and you can focus on what really matters 
     ```bash
     mkdir test-project && cd ./test-project
     ```
-2. **Optional:** Initialize your npm project to create package.json
-    ```base
-    npm init
-    ```
-3. **Optional:** Initialize git with 
-    ```
-    git init
-    ```
-4. Create a config file `prom.generate-config.(cjs|mjs|js|ts|json)` with you definitions (in the same folder as your config)
-    - Config examples in [here](./docs/examples/) to get you started 🎉
-5. Generate CMS (still in the same folder as your config)
+5. Generate project with one command in current directory (still in the same folder as your config)
     ```bash
-    npx @prom-cms/cli generate-cms
+    npx @prom-cms/cli project create
     ```
 6. Now your project is prepared, ready to go and you can start your dev server 🎉
     ```bash
