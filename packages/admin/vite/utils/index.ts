@@ -1,2 +1,2 @@
-export * from "./runBeforeExiting"
-export * from "./runPHPServer"
+export * from './runBeforeExiting';
+export * from './runPHPServer';

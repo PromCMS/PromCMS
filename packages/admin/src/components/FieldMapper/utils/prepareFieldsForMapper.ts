@@ -5,7 +5,7 @@ export const prepareFieldsForMapper = (
   { columns }: ApiResultModel | ApiResultModelSingleton,
   placement?: FieldPlacements
 ) => {
-  const fieldRows: (ReturnType<typeof columns['get']> & {
+  const fieldRows: (ReturnType<(typeof columns)['get']> & {
     columnName: string;
   })[][] = [];
 

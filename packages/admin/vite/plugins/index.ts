@@ -1,1 +1,1 @@
-export * from "./phpServer"
+export * from './phpServer';

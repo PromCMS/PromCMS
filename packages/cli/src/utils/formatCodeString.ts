@@ -16,7 +16,9 @@ export const formatCodeString = async (content: string, filename: string) => {
 
   let result = content;
   // TODO import from config package
-  const { default: config } = await import("@prom-cms/config/default.prettier.js");
+  const { default: config } = await import(
+    '@prom-cms/config/default.prettier.js'
+  );
 
   result = await prettier.format(result, {
     ...config,
