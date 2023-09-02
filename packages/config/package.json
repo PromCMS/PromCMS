@@ -2,9 +2,11 @@
   "name": "@prom-cms/config",
   "version": "0.1.4",
   "type": "module",
+  "dependencies": {
+    "@prettier/plugin-php": "^0.19.3"
+  },
   "devDependencies": {
     "vitest": "^0.24.3",
-    "@prettier/plugin-php": "^0.19.3",
     "execa": "^6.1.0",
     "vite-tsconfig-paths": "^3.5.2",
     "@vitejs/plugin-react": "^2.2.0"
