@@ -15,11 +15,10 @@ export const formatCodeString = async (content: string, filename: string) => {
   }
 
   let result = content;
-  const { default: config } = await import(
-    `file:///${path.resolve(PACKAGE_ROOT, '.prettierrc.cjs')}`
-  );
+  // TODO import from config package
+  const { default: config } = await import("@prom-cms/config/default.prettier.js");
 
-  result = prettier.format(result, {
+  result = await prettier.format(result, {
     ...config,
     filepath: filename,
   });
