@@ -1,5 +1,11 @@
 # @prom-cms/config
 
+## 0.1.5
+
+### Patch Changes
+
+- b43d7ce: Move @prettier/plugin-php to dependencies from devDependencies, because this plugin is needed in active runtime
+
 ## 0.1.4
 
 ### Patch Changes
