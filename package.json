@@ -2,6 +2,7 @@
   "name": "prom-cms",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "description": "",
   "scripts": {
     "prepare": "npm run build",
@@ -28,22 +29,22 @@
     "Ondřej Langr <hi@ondrejlangr.cz>"
   ],
   "devDependencies": {
+    "@changesets/cli": "^2.26.2",
+    "@prettier/plugin-php": "^0.20.1",
     "@swc/cli": "^0.1.62",
-    "@changesets/cli": "^2.22.0",
-    "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint": "^8.33.0",
-    "@prettier/plugin-php": "0.17.6",
     "@swc/core": "^1.3.21",
+    "@types/ftp": "^0.3.33",
     "@vitest/coverage-c8": "^0.25.3",
     "caniuse-lite": "^1.0.30001387",
     "del-cli": "4.0.1",
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.2",
     "ftp": "^0.3.10",
-    "@types/ftp": "^0.3.33",
-    "zod-to-json-schema": "^3.21.4",
-    "prettier": "2.7.1",
+    "prettier": "^3.0.3",
     "rimraf": "3.0.2",
     "tsup": "^6.5.0",
-    "turbo": "^1.6.3"
+    "turbo": "^1.6.3",
+    "zod-to-json-schema": "^3.21.4"
   }
 }
