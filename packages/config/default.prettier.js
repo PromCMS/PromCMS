@@ -1,4 +1,4 @@
-import prettierPhpPlugin from '@prettier/plugin-php';
+import * as prettierPluginPhp from '@prettier/plugin-php';
 
 export default {
   trailingComma: 'es5',
@@ -6,7 +6,7 @@ export default {
   semi: true,
   singleQuote: true,
   jsxSingleQuote: false,
-  plugins: [prettierPhpPlugin],
+  plugins: [prettierPluginPhp],
   phpVersion: '8.2',
 
   overrides: [
@@ -37,7 +37,7 @@ export default {
         parser: 'php',
         phpVersion: '8.0',
         tabWidth: 2,
-        plugins: [prettierPhpPlugin],
+        plugins: [prettierPluginPhp],
       },
     },
   ],
