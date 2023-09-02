@@ -22,7 +22,7 @@
     "dist"
   ],
   "scripts": {
-    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
+    "prettier": "prettier --config \"../../prettier.config.js\" --ignore-path \"../../.prettierignore\" --write \"**/*.{ts,tsx}\" ",
     "disabled_test": "vitest",
     "disabled_test:coverage": "vitest run --coverage",
     "clean": "rimraf dist",

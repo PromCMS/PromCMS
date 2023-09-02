@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "test": "echo \"TODO: add tests!\"",
-    "prettier": "prettier --write \"**/*.{ts,tsx}\"",
+    "prettier": "prettier --config \"../../prettier.config.js\" --ignore-path \"../../.prettierignore\" --write \"**/*.{ts,tsx}\" ",
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "dev": "npx tsup --watch",

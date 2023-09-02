@@ -17,7 +17,7 @@ import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared/generator';
 import { mockedGeneratorConfig } from '@prom-cms/shared/internal';
 
 type Options = {
-  packageManager: typeof SUPPORTED_PACKAGE_MANAGERS[number];
+  packageManager: (typeof SUPPORTED_PACKAGE_MANAGERS)[number];
   cwd: string;
   name: string;
   admin: boolean;

@@ -1,13 +1,13 @@
-const prettierPhpPlugin = require('@prettier/plugin-php');
+import * as prettierPluginPhp from '@prettier/plugin-php';
 
-module.exports = {
+export default {
   trailingComma: 'es5',
   tabWidth: 2,
   semi: true,
   singleQuote: true,
   jsxSingleQuote: false,
-  plugins: [prettierPhpPlugin],
-  phpVersion: '7.4',
+  plugins: [prettierPluginPhp],
+  phpVersion: '8.2',
 
   overrides: [
     {
@@ -35,9 +35,9 @@ module.exports = {
       files: ['*.php', '*.php.ejs'],
       options: {
         parser: 'php',
-        phpVersion: '7.4',
+        phpVersion: '8.0',
         tabWidth: 2,
-        plugins: [prettierPhpPlugin],
+        plugins: [prettierPluginPhp],
       },
     },
   ],

@@ -19,9 +19,8 @@ export const getGeneratorConfigData = async (root?: string) => {
       content = await import(`file:///${filepath}`);
     } catch (error) {
       throw new Error(
-        `Failed to load prom config at: ${filepath}, because ${
-          (error as Error)?.message
-        }`
+        `Failed to load prom config at: ${filepath}, because ${(error as Error)
+          ?.message}`
       );
     }
 

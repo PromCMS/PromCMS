@@ -289,8 +289,10 @@ const TableView: FC<TableViewProps> & {
                           [
                             ordering && { fieldName: 'ordering_drag' },
                             ...filteredCols,
-                          ].filter((field) => !!field) as
-                            | (TableViewCol | { fieldName: string })[]
+                          ].filter((field) => !!field) as (
+                            | TableViewCol
+                            | { fieldName: string }
+                          )[]
                         ).map(({ fieldName }) => (
                           <td key={fieldName} className="py-3 px-5">
                             <TableSkeleton />
