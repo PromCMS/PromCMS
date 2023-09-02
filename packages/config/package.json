@@ -1,6 +1,6 @@
 {
   "name": "@prom-cms/config",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "type": "module",
   "dependencies": {
     "@prettier/plugin-php": "^0.20.1"

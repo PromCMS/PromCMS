@@ -1,5 +1,17 @@
 # @prom-cms/cli
 
+## 0.20.1
+
+### Patch Changes
+
+- 04b3fc0: Update prettier and its plugins and also simplify overall structure of prettier config by removing config per project and creating one root config for entire repo
+- 04b3fc0: Switch PHP version to version 8.2 in templates, config and Dockerfile
+- Updated dependencies [04b3fc0]
+- Updated dependencies [04b3fc0]
+- Updated dependencies [04b3fc0]
+  - @prom-cms/config@0.1.6
+  - @prom-cms/admin@0.12.2
+
 ## 0.20.0
 
 ### Minor Changes

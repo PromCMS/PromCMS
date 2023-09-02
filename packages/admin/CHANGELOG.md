@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.12.2
+
+### Patch Changes
+
+- 04b3fc0: Update prettier and its plugins and also simplify overall structure of prettier config by removing config per project and creating one root config for entire repo
+
 ## 0.12.1
 
 ### Patch Changes
