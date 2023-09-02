@@ -6,7 +6,7 @@ export type InstallPHPDepsOptions = {
 
 export const installPHPDeps = async ({ cwd }: InstallPHPDepsOptions) => {
   const depsList = ['prom-cms/core', 'rakit/validation'];
-  const devDepsList = ['fakerphp/faker:^1.9.1', 'psr/log:^1'];
+  const devDepsList = ['fakerphp/faker:^1.23.0', 'psr/log:^3'];
 
   await execa('composer', ['require', ...depsList], {
     cwd,

@@ -3,7 +3,7 @@
   "version": "0.1.5",
   "type": "module",
   "dependencies": {
-    "@prettier/plugin-php": "^0.19.3"
+    "@prettier/plugin-php": "^0.20.1"
   },
   "devDependencies": {
     "vitest": "^0.24.3",
