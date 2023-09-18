@@ -27,7 +27,7 @@ export const createProjectModule = async ({
     '*': {
       project: config.project,
       views: {
-        prefix: lowerCaseFirst(moduleName),
+        prefix: moduleName,
       },
     },
   });

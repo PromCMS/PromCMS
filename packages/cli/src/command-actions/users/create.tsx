@@ -34,7 +34,9 @@ export const createUserCommandAction = async (
         type: 'input',
         validate(value) {
           try {
-            return nameSchema.parse(value);
+            nameSchema.parse(value);
+
+            return true;
           } catch (error) {
             if (error instanceof ZodError) {
               return (
@@ -52,7 +54,9 @@ export const createUserCommandAction = async (
         type: 'input',
         validate: (value) => {
           try {
-            return emailSchema.parse(value);
+            emailSchema.parse(value);
+
+            return true;
           } catch (error) {
             if (error instanceof ZodError) {
               return (

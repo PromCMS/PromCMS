@@ -25,7 +25,9 @@ export const changeUserPasswordCommandAction = async (
         type: 'input',
         validate: (value) => {
           try {
-            return emailSchema.parse(value);
+            emailSchema.parse(value);
+
+            return true;
           } catch (error) {
             if (error instanceof ZodError) {
               return (
