@@ -1,5 +1,11 @@
 # @prom-cms/config
 
+## 0.1.7
+
+### Patch Changes
+
+- c27d058: Fix prettier config as having import causes issue since v3
+
 ## 0.1.6
 
 ### Patch Changes

@@ -1,5 +1,15 @@
 # @prom-cms/vite-plugin
 
+## 0.7.0
+
+### Minor Changes
+
+- c27d058: Fix local development by using startPHPServer from vite-plugin package inside admin and updating commands. Now this startPHPServer is exported from vite-plugin package
+
+### Patch Changes
+
+- c27d058: Add host "0.0.0.0" to support all kinds of localhost usages (custom local domains in host file for example)
+
 ## 0.6.4
 
 ### Patch Changes

@@ -1,5 +1,19 @@
 # @prom-cms/cli
 
+## 0.20.2
+
+### Patch Changes
+
+- c27d058: Fix user actions by updating validate function as that validate must return true incase of success and false or string incase of fail.
+
+  Furthermore create-project-module job should not format module name to lowercase.
+
+- Updated dependencies [c27d058]
+- Updated dependencies [c27d058]
+- Updated dependencies [c27d058]
+  - @prom-cms/admin@0.12.3
+  - @prom-cms/config@0.1.7
+
 ## 0.20.1
 
 ### Patch Changes

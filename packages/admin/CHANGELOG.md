@@ -1,5 +1,12 @@
 # @prom-cms/admin
 
+## 0.12.3
+
+### Patch Changes
+
+- c27d058: Fix admin system-settings by using useFieldArray for lists view
+- c27d058: Fix local development by using startPHPServer from vite-plugin package inside admin and updating commands. Now this startPHPServer is exported from vite-plugin package
+
 ## 0.12.2
 
 ### Patch Changes
