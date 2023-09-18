@@ -1,8 +1,16 @@
 import { Plugin as VitePlugin } from 'vite';
+// @ts-ignore
 import httpProxy from 'http-proxy';
+// TODO: rework plugin to export this byitself or just use plugin as is
+import { utils as vitePromUtils } from '@prom-cms/vite-plugin';
 import { Readable } from 'node:stream';
 
-import { runBeforeExiting, runPHPServer } from '../utils';
+import { runBeforeExiting } from '../utils';
+import { watchFiles } from '../utils/watchFiles';
+
+// @ts-ignore
+import { developmentPHPAppPath } from '@prom-cms/shared/internal';
+import { existsSync } from 'node:fs';
 
 const isAdminRoute = (url: string) =>
   url === '/admin' || url.startsWith('/admin/');
@@ -10,18 +18,30 @@ const isAdminRoute = (url: string) =>
 export const phpServerVitePlugin = (): VitePlugin => ({
   name: 'prom-internal-dev-server',
   async configureServer(server) {
+    // TODO: Check for empty?
+    if (!existsSync(developmentPHPAppPath)) {
+      // TODO: run this automatically?
+      throw new Error(
+        'PromCMS development app not created yet - run "npm run generate:dev"'
+      );
+    }
+
     const abortController = new AbortController();
     const phpServerPort = server.config.server.port! + 1;
-    const serverOrigin = `http://localhost:${phpServerPort}`;
-    const { serverProcess, fileWatcher } = await runPHPServer(phpServerPort, {
-      abortController,
+    const serverOrigin = `http://127.0.0.1:${phpServerPort}`;
+    const serverProcess = vitePromUtils.startPHPServer({
+      port: phpServerPort,
+      cwd: developmentPHPAppPath,
     });
+    const fileWatcher = watchFiles({ abortController });
     const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
     const htmlTransform = server.transformIndexHtml;
 
     // And then before starting your server...
     runBeforeExiting(async (...rest) => {
-      console.log('Cleaning up...');
+      console.error(rest);
+      console.log('Vite server closing, cleaning up...');
+
       abortController.abort();
       await fileWatcher.close();
 

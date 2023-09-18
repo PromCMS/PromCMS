@@ -72,6 +72,7 @@
   "devDependencies": {
     "@babel/eslint-parser": "",
     "@prom-cms/config": "*",
+    "@prom-cms/vite-plugin": "*",
     "@types/find-config": "1.0.1",
     "chokidar": "^3.5.3",
     "execa": "^6.1.0",

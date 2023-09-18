@@ -7,7 +7,7 @@ export const configValue = {
   entry: ['src'],
   splitting: false,
   sourcemap: true,
-  clean: true,
+  clean: false,
   outDir: 'dist',
   dts: true,
   format: 'esm',
