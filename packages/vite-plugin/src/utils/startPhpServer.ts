@@ -1,16 +1,20 @@
 import fs from 'fs-extra';
-import type { ExecaChildProcess } from 'execa';
+import { execa, type ExecaChildProcess } from 'execa';
 import path from 'path';
 
-export const startPhpServer = async (
-  port: number
-): Promise<{ serverProcess: ExecaChildProcess<string> }> => {
-  const { execa } = await import('execa');
+export interface StartPHPServerOptions {
+  port: number;
+  cwd?: string;
+}
 
+export const startPHPServer = ({
+  port,
+  cwd = process.cwd(),
+}: StartPHPServerOptions): ExecaChildProcess<string> => {
   const serverProcess = execa(
     'php',
     ['-S', `127.0.0.1:${port}`, '-t', './public', './public/index.php'],
-    { cwd: process.cwd() }
+    { cwd }
   );
 
   if (!serverProcess.stderr) {
@@ -22,12 +26,11 @@ export const startPhpServer = async (
 
   // Log what happens on server
   serverProcess.stderr.on('data', function (data) {
-    const root = process.cwd();
-    const projectRoot = path.join(root, '.temp');
+    const projectRoot = path.join(cwd, '.temp');
 
-    fs.ensureDir(projectRoot);
+    fs.ensureDirSync(projectRoot);
     fs.appendFileSync(path.join(projectRoot, 'log.txt'), data);
   });
 
-  return { serverProcess };
+  return serverProcess;
 };

@@ -6,7 +6,7 @@
   "description": "",
   "scripts": {
     "prepare": "npm run build",
-    "generate:dev": "npm run generate:dev -w @prom-cms/cli",
+    "generate:dev": "npm run project:create -w @prom-cms/cli",
     "build:packages": "npx turbo run build --filter=./packages/*",
     "build:admin": "npx turbo run build --filter=@prom-cms/admin",
     "build": "npm run build:packages",

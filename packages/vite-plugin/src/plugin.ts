@@ -3,7 +3,7 @@ import path from 'path';
 import httpProxy from 'http-proxy';
 
 import { runBeforeExiting } from './utils/runBeforeExiting';
-import { startPhpServer } from './utils/startPhpServer';
+import { startPHPServer } from './utils/startPhpServer';
 import fs from 'fs-extra';
 import mime from 'mime';
 import { Readable } from 'stream';
@@ -42,7 +42,7 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
     async configureServer(server) {
       const serverPort = server.config.server.port! + 1;
       const serverOrigin = `http://127.0.0.1:${serverPort}`;
-      const { serverProcess } = await startPhpServer(serverPort);
+      const serverProcess = startPHPServer({ port: serverPort });
       const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
       const htmlTransform = server.transformIndexHtml;
 
