@@ -8,7 +8,7 @@ import {
 } from '@mantine/core';
 import { useInputState } from '@mantine/hooks';
 import { VFC } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ChevronDown, ChevronUp, Plus, Trash } from 'tabler-icons-react';
 
@@ -20,16 +20,18 @@ interface DndListHandleProps {
 }
 
 export const List: VFC = () => {
-  const { register, watch, setValue } = useFormContext();
+  const { register } = useFormContext();
+  const { append, remove, fields, move } = useFieldArray<{
+    content: { data: DndListHandleProps['data'] };
+  }>({
+    name: 'content.data',
+    shouldUnregister: true,
+  });
   const [stringValue, setStringValue] = useInputState('');
-  const data: DndListHandleProps['data'] = watch('content.data', []);
   const { t } = useTranslation();
 
-  const onDeleteClick = (id: string) => () => {
-    setValue(
-      'content.data',
-      data.filter((item) => item.id !== id)
-    );
+  const onDeleteClick = (id: number) => () => {
+    remove(id);
   };
 
   const onAdd = () => {
@@ -40,7 +42,7 @@ export const List: VFC = () => {
     // Generate unique id
     const id =
       Date.now().toString(36) + Math.random().toString(36).substring(2);
-    setValue(`content.data[${(data || []).length}]`, {
+    append({
       id,
       value: stringValue,
     });
@@ -48,14 +50,10 @@ export const List: VFC = () => {
   };
 
   const onChangePlace = (direction: 'up' | 'down', id: string) => () => {
-    const newData = [...data];
-    const index = newData.findIndex(({ id: key }) => key === id);
+    const index = fields.findIndex(({ id: key }) => key === id);
 
     const nextIndex = direction === 'up' ? index - 1 : index + 1;
-    // Swap entries
-    [newData[index], newData[nextIndex]] = [newData[nextIndex], newData[index]];
-
-    setValue('content.data', newData);
+    move(index, nextIndex);
   };
 
   return (
@@ -77,8 +75,8 @@ export const List: VFC = () => {
         />
         <Input.Wrapper label={t('Items')} mt="lg">
           <SimpleGrid cols={1}>
-            {!!data && Array.isArray(data) ? (
-              data.map((item, index) => (
+            {!!fields && Array.isArray(fields) && fields.length ? (
+              fields.map((item, index) => (
                 <div key={item.id} className={'flex items-center'}>
                   <div className="mr-1 flex">
                     <ActionIcon
@@ -88,7 +86,7 @@ export const List: VFC = () => {
                       <ChevronUp size={18} />
                     </ActionIcon>
                     <ActionIcon
-                      disabled={(data || []).length - 1 === index}
+                      disabled={(fields || []).length - 1 === index}
                       onClick={onChangePlace('down', item.id)}
                     >
                       <ChevronDown size={18} />
@@ -96,15 +94,15 @@ export const List: VFC = () => {
                   </div>
                   <TextInput
                     className="w-full"
-                    {...register(`content.data[${index}].value`)}
+                    {...register(`content.data.${index}.value`)}
                   />
-                  {/*<ActionIcon
+                  <ActionIcon
                     ml="md"
                     color="red"
-                    onClick={onDeleteClick(item.id)}
+                    onClick={onDeleteClick(index)}
                   >
                     <Trash />
-              </ActionIcon>*/}
+                  </ActionIcon>
                 </div>
               ))
             ) : (
