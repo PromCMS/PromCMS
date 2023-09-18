@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.20.3
+
+### Patch Changes
+
+- 25c9887: Fix project update command to take correct root module instead of root
+
 ## 0.20.2
 
 ### Patch Changes
