@@ -21,6 +21,7 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
       c.base ??= envConfig.mode === 'development' ? '/' : '/dist/';
 
       c.server ??= {};
+      c.server.host ??= '0.0.0.0';
       c.server.port ??= 3000;
       c.server.strictPort = true;
 
