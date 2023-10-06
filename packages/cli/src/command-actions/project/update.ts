@@ -22,12 +22,12 @@ export const updateProjectAction = async (options: Options) => {
   const rootModulePath = path.join(cwd, MODULE_FOLDER_NAME, rootModuleName);
   const rootModelsPath = path.join(rootModulePath, MODELS_FOLDER_NAME);
 
-  if (await fs.pathExists(rootModulePath)) {
+  if (await fs.pathExists(rootModelsPath)) {
     await runWithProgress(fs.emptyDir(rootModelsPath), 'Deleting old models');
 
     await runWithProgress(
       generateModels({
-        moduleRoot: rootModelsPath,
+        moduleRoot: rootModulePath,
         config: generatorConfig,
       }),
       'Create models anew'
