@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.20.4
+
+### Patch Changes
+
+- 6fb5aaa: Fix project update command incorrectly generating models, by fixing passes path into module instead of models
+
 ## 0.20.3
 
 ### Patch Changes
