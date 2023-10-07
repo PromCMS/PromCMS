@@ -1,9 +1,8 @@
 import { apiClient } from '@api';
 import { Page } from '@custom-types';
+import { ChangePasswordErrorCode } from '@prom-cms/api-client';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { Button, Modal, PasswordInput, Title } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
 import axios from 'axios';
 import * as yup from 'yup';
 import { useCallback } from 'react';
@@ -12,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { t } from 'i18next';
 import { MESSAGES } from '@constants';
-import { toastedPromise } from '@utils';
+import { isApiResponse, toastedPromise } from '@utils';
 
 type FormValues = {
   newPassword: string;
@@ -65,18 +64,16 @@ export const ChangePasswordPage: Page = () => {
 
         navigate('/logout');
       } catch (e) {
-        if (axios.isAxiosError(e)) {
-          if (e.response?.data && 'code' in e.response?.data) {
-            const code:
-              | 'new-password-invalid'
-              | 'old-password-invalid'
-              | 'missing-body-values' = e.response?.data.code;
+        if (
+          axios.isAxiosError(e) &&
+          isApiResponse<unknown, ChangePasswordErrorCode>(e.response)
+        ) {
+          const { code } = e.response?.data;
 
-            if (code === 'old-password-invalid') {
-              setError('oldPassword', {
-                message: MESSAGES.INVALID_OLD_PASSWORD,
-              });
-            }
+          if (code === 'old-password-invalid') {
+            setError('oldPassword', {
+              message: MESSAGES.INVALID_OLD_PASSWORD,
+            });
           }
         }
 

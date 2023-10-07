@@ -14,7 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import type { OutputData } from '@editorjs/editorjs';
 import { getModelItemSchema } from '@schemas';
 import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { getObjectDiff } from '@utils';
+import { getObjectDiff, isApiResponse } from '@utils';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { ReactElement } from 'react';
@@ -22,7 +22,7 @@ import { useCallback } from 'react';
 import { useSettings } from '@hooks/useSettings';
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
-import { ResultItem } from '@prom-cms/api-client';
+import { ResultItem, EntityDuplicateErrorCode } from '@prom-cms/api-client';
 import { apiClient } from '@api';
 import { pageUrls } from '@constants';
 import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
@@ -190,7 +190,11 @@ export const EntryUnderpageContextProvider: FC<{
           }
         );
       } catch (e) {
-        if (axios.isAxiosError(e) && e.response?.data?.code === 900409) {
+        if (
+          axios.isAxiosError(e) &&
+          isApiResponse(e.response) &&
+          e.response.data.code === EntityDuplicateErrorCode
+        ) {
           // TODO: add type
           const fieldNames = e.response.data.data;
           if (Array.isArray(fieldNames) && fieldNames.length) {

@@ -13,9 +13,9 @@ import {
 } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useCurrentSingletonData } from './useCurrentSingletonData';
-import { ResultItem } from '@prom-cms/api-client';
+import { ResultItem, EntityDuplicateErrorCode } from '@prom-cms/api-client';
 import useCurrentSingleton from '@hooks/useCurrentSingleton';
-import { getObjectDiff, toastedPromise } from '@utils';
+import { getObjectDiff, isApiResponse, toastedPromise } from '@utils';
 import { useTranslation } from 'react-i18next';
 import { apiClient } from '@api';
 import { useQueryClient } from '@tanstack/react-query';
@@ -136,7 +136,11 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         }
       );
     } catch (e) {
-      if (axios.isAxiosError(e) && e.response?.data?.code === 900409) {
+      if (
+        axios.isAxiosError(e) &&
+        isApiResponse(e.response) &&
+        e.response?.data?.code === EntityDuplicateErrorCode
+      ) {
         // TODO: add types
         const fieldNames = e.response.data.data;
         if (Array.isArray(fieldNames) && fieldNames.length) {

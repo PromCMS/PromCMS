@@ -11,7 +11,7 @@ import { MESSAGES } from '@constants';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '@api';
-import { createLogger } from '@utils';
+import { createLogger, isApiResponse } from '@utils';
 
 interface LoginFormValues {
   email: string;
@@ -68,8 +68,11 @@ export const Form: FC = () => {
           logger.error(`Failed login because of ${(e as Error).message}`);
 
           let message = MESSAGES.LOGIN_INVALID_CREDENTIALS;
-          if (axios.isAxiosError(e) && e.response?.data?.code) {
-            const code: LoginFailedResponseCodes = e.response.data.code;
+          if (
+            axios.isAxiosError(e) &&
+            isApiResponse<unknown, LoginFailedResponseCodes>(e.response)
+          ) {
+            const { code } = e.response.data;
 
             switch (code) {
               case 'user-state-blocked':
