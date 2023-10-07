@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.12.5
+
+### Patch Changes
+
+- 907154e: Filter out hidden or disabled models in site context so user does not get shown any models that should not be shown visually as they might not work through admin.
+
 ## 0.12.4
 
 ### Patch Changes
