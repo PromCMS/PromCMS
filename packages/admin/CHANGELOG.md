@@ -1,5 +1,17 @@
 # @prom-cms/admin
 
+## 0.12.4
+
+### Patch Changes
+
+- 0c8e327: Update vite to latest and axios to 0.27 and add missing dependency on axios to admin package.
+- 071f54f: Fix typings and usages of axios to use new utility types for error codes
+- Updated dependencies [415628e]
+- Updated dependencies [0c8e327]
+- Updated dependencies [2fbdc3b]
+  - @prom-cms/api-client@0.8.0
+  - @prom-cms/schema@0.2.0
+
 ## 0.12.3
 
 ### Patch Changes

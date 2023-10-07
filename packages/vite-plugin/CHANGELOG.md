@@ -1,5 +1,12 @@
 # @prom-cms/vite-plugin
 
+## 0.7.1
+
+### Patch Changes
+
+- e750d2a: Use vite logger instead of custom implementation
+- 0c8e327: Update vite to latest and axios to 0.27 and add missing dependency on axios to admin package.
+
 ## 0.7.0
 
 ### Minor Changes
