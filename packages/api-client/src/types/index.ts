@@ -1,3 +1,5 @@
+export * from './ChangePasswordErrorCode';
+export * from './EntityDuplicateErrorCode';
 export * from './FileInput';
 export * from './FileItem';
 export * from './PagedResponse';
