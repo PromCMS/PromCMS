@@ -1,0 +1,123 @@
+// Vitest Snapshot v1
+
+exports[`jobs > generateModels > should run correctly and generate files 1`] = `
+"<?php
+
+use PromCMS\\\\Core\\\\Database\\\\Model;
+use PromCMS\\\\Core\\\\Database\\\\SingletonModel;
+use PromCMS\\\\Core\\\\Database\\\\ModelResult;
+
+class First extends Model
+{
+  protected string $tableName = 'first';
+  protected bool $softDelete = false;
+
+  protected bool $timestamps = true;
+  protected bool $translations = true;
+  protected bool $enabled = true;
+  protected array $adminSettings = ['hidden' => true];
+
+  public static array $tableColumns = [
+    'col' => [
+      'title' => 'New',
+      'hide' => false,
+      'required' => false,
+      'unique' => false,
+      'editable' => true,
+      'translations' => true,
+      'admin' => [
+        'isHidden' => false,
+        'editor' => ['placement' => 'main'],
+        'fieldType' => 'normal',
+      ],
+      'type' => 'string',
+    ],
+  ];
+
+  static bool $ignoreSeeding = false;
+
+  static string $modelIcon = 'Article';
+
+  public function getSummary()
+  {
+    return (object) [
+      'isSingleton' => $this instanceof SingletonModel,
+      'tableName' => $this->getTableName(),
+      'icon' => self::$modelIcon,
+      'title' => isset(self::$title) ? self::$title : null,
+      'ignoreSeeding' => self::$ignoreSeeding,
+      'columns' => static::$tableColumns,
+      'hasTimestamps' => $this->hasTimestamps(),
+      'hasSoftDelete' => $this->hasSoftDelete(),
+      'admin' => self::$adminSettings,
+      'enabled' => self::$enabled,
+      'ownable' => true,
+      'hasOrdering' => false,
+      'isDraftable' => false,
+      'isSharable' => true,
+    ];
+  }
+}
+"
+`;
+
+exports[`jobs > generateModels > should run correctly and generate files 2`] = `
+"<?php
+
+use PromCMS\\\\Core\\\\Database\\\\Model;
+use PromCMS\\\\Core\\\\Database\\\\SingletonModel;
+use PromCMS\\\\Core\\\\Database\\\\ModelResult;
+
+class Second extends Model
+{
+  protected string $tableName = 'second_table_name';
+  protected bool $softDelete = false;
+
+  protected bool $timestamps = true;
+  protected bool $translations = true;
+  protected bool $enabled = false;
+  protected array $adminSettings = ['hidden' => false];
+
+  public static array $tableColumns = [
+    'col' => [
+      'title' => 'Newo',
+      'hide' => false,
+      'required' => false,
+      'unique' => false,
+      'editable' => true,
+      'translations' => true,
+      'admin' => [
+        'isHidden' => false,
+        'editor' => ['placement' => 'main'],
+        'fieldType' => 'normal',
+      ],
+      'type' => 'string',
+    ],
+  ];
+
+  static bool $ignoreSeeding = false;
+
+  static string $modelIcon = 'Article';
+
+  public function getSummary()
+  {
+    return (object) [
+      'isSingleton' => $this instanceof SingletonModel,
+      'tableName' => $this->getTableName(),
+      'icon' => self::$modelIcon,
+      'title' => isset(self::$title) ? self::$title : null,
+      'ignoreSeeding' => self::$ignoreSeeding,
+      'columns' => static::$tableColumns,
+      'hasTimestamps' => $this->hasTimestamps(),
+      'hasSoftDelete' => $this->hasSoftDelete(),
+      'admin' => self::$adminSettings,
+      'enabled' => self::$enabled,
+      'ownable' => true,
+      'hasOrdering' => false,
+      'isDraftable' => false,
+      'isSharable' => true,
+    ];
+  }
+}
+"
+`;

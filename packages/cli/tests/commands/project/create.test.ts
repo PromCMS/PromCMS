@@ -16,8 +16,8 @@ describe('commands', () => {
     'project create',
     () => {
       beforeEach(async () => {
+        await fs.remove(TEST_FOLDER_PATH);
         await fs.ensureDir(TEST_FOLDER_PATH);
-        await fs.emptyDir(TEST_FOLDER_PATH);
       });
 
       afterAll(async () => {

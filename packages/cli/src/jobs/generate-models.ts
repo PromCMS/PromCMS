@@ -5,6 +5,7 @@ import ejs from 'ejs';
 import { formatCodeString, getTemplateFolder } from '@utils';
 import { GeneratorConfig } from '@prom-cms/schema';
 import { MODELS_FOLDER_NAME } from '@constants';
+import slugify from 'slugify';
 
 type ModelColumns = NonNullable<
   GeneratorConfig['database']['models']
@@ -103,6 +104,14 @@ const generateModels = async ({
       isSingleton,
       ...currentModel,
       columnCasts: getColumnCasts(currentModel.columns),
+      tableName:
+        'tableName' in currentModel
+          ? currentModel.tableName
+          : slugify.default(capitalizedModelName, {
+              replacement: '_',
+              lower: true,
+              trim: true,
+            }),
       events: {
         shouldInclude() {
           return (

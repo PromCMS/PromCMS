@@ -1,5 +1,35 @@
 <?php
 
+<% 
+
+function valueToPHPValue (value) {
+  const typeOfValue = typeof value;
+
+  if (typeOfValue === 'number' || typeOfValue === 'boolean') {
+    return `${String(value)}`;
+  }
+
+  if (typeOfValue === 'object') {
+    if (Array.isArray(value)) {
+      return `[${value.map(valueToPHPValue).join(', ')}]`;
+    } else if (!!value && value.constructor === Object) {
+      let finalPHPArray = '['; 
+        
+      for (const [itemKey, itemValue] of Object.entries(value)) {
+        finalPHPArray += `"${itemKey}" => ${valueToPHPValue(itemValue)},`;
+      }
+
+      finalPHPArray += ']';
+
+      return finalPHPArray;
+    }
+  }
+
+  return `"${String(value)}"`;
+}
+
+%>
+
 use PromCMS\Core\Database\Model;
 use PromCMS\Core\Database\SingletonModel;
 use PromCMS\Core\Database\ModelResult;
@@ -9,13 +39,15 @@ use PromCMS\Core\Database\ModelResult;
 class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
 {
   <% if (isSingleton) { %>
-    protected string $name = '<%- name %>';
+  protected string  $name           = <%- valueToPHPValue(name) %>;
   <% } else { %>
-    protected string $tableName = '<%- tableName %>';
-    protected bool $softDelete = <%- typeof softDelete !== 'undefined' && softDelete ? 'true' : 'false' %>;
+  protected string  $tableName      = <%- valueToPHPValue(tableName) %>;
+  protected bool    $softDelete     = <%- valueToPHPValue(typeof softDelete !== 'undefined' && softDelete) %>;
   <% } %>
-  protected bool $timestamps = <%- timestamp ? 'true' : 'false' %>;
-  protected bool $translations = <%- intl ? 'true' : 'false' %>;
+  protected bool    $timestamps     = <%- valueToPHPValue(timestamp) %>;
+  protected bool    $translations   = <%- valueToPHPValue(intl) %>;
+  protected bool    $enabled        = <%- valueToPHPValue(enabled) %>;
+  protected array   $adminSettings  = <%- valueToPHPValue(admin) %>;
 
   <%# Column casts %> 
   <% if (columnCasts.length) { %>
@@ -38,12 +70,11 @@ class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
   ];
   
   <%# Custom model info not tied to PromCMS\Core\Database\Model perse %> 
-  static bool $ignoreSeeding = <%- ignoreSeeding ? 'true' : 'false' %>;
+  static bool $ignoreSeeding = <%- valueToPHPValue(ignoreSeeding) %>;
   <% if (typeof title !== "undefined") { %>
     static string $title = '<%- title %>';
   <% } %>
   static string $modelIcon = '<%- icon %>';
-  static $adminSettings = [];
 
   <%# Listeners #%> 
   <% if (events.shouldInclude()) { %>
@@ -90,10 +121,11 @@ class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
       'icon'            => self::$modelIcon,
       'title'           => isset(self::$title) ? self::$title : null,
       'ignoreSeeding'   => self::$ignoreSeeding,
-      'admin'           => self::$adminSettings,
       'columns'         => static::$tableColumns,
       'hasTimestamps'   => $this->hasTimestamps(),
       'hasSoftDelete'   => $this->hasSoftDelete(),
+      'admin'           => self::$adminSettings,
+      'enabled'         => self::$enabled,
       'ownable'         => <%- !isSingleton && ownable ? 'true' : 'false' %>,
       'hasOrdering'     => <%- !isSingleton && sorting ? 'true' : 'false' %>,
       'isDraftable'     => <%- !isSingleton && draftable ? 'true' : 'false' %>,

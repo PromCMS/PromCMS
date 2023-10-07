@@ -7,5 +7,5 @@ export const generatorConfigSchema = z.object({
   database: databaseConfigSchema,
 });
 
-export type GeneratorConfig = z.infer<typeof generatorConfigSchema>;
+export type GeneratorConfig = z.output<typeof generatorConfigSchema>;
 export type GeneratorConfigInput = z.input<typeof generatorConfigSchema>;
