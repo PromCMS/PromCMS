@@ -1,4 +1,4 @@
-import type { Plugin } from 'vite';
+import type { Logger, Plugin } from 'vite';
 import path from 'path';
 import httpProxy from 'http-proxy';
 
@@ -8,11 +8,10 @@ import fs from 'fs-extra';
 import mime from 'mime';
 import { Readable } from 'stream';
 
-const log = (inp: string) => console.log(`[proms-cms-vite] ${inp}`);
-
 export const promCmsVitePlugin = async (): Promise<Plugin> => {
   const projectRoot = process.cwd();
   const { default: fetch } = await import('node-fetch');
+  let logger: Logger | undefined;
 
   return {
     name: 'prom-cms-vite-plugin',
@@ -40,6 +39,9 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
         '/index.ts'
       );
     },
+    configResolved: (config) => {
+      logger = config.logger;
+    },
     async configureServer(server) {
       const serverPort = server.config.server.port! + 1;
       const serverOrigin = `http://127.0.0.1:${serverPort}`;
@@ -50,8 +52,11 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
       // And then before starting your server...
       runBeforeExiting(async (...args) => {
         // TODO: Make this message more clear on what happened
-        console.error(args);
-        log('Vite server closing, cleaning up...');
+        logger?.error(args.toString(), { timestamp: true });
+        // TODO: use viteConfig.logger instead
+        logger?.info('Vite server closing, cleaning up...', {
+          timestamp: true,
+        });
         if (serverProcess) {
           serverProcess.kill();
         }
@@ -90,13 +95,20 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
                   'Unable to parse HTML; parse5 error code unexpected-question-mark-instead-of-tag-name'
                 )
               ) {
-                console.log('Some error happened on PHP server');
+                logger?.error('Some error happened on PHP server', {
+                  timestamp: true,
+                  error,
+                });
                 body = Buffer.from(body.toString());
               } else {
-                console.error(
-                  'Error happened during transform of server response'
+                logger?.error(
+                  'Error happened during transform of server response',
+                  { timestamp: true, error: error as any }
                 );
-                console.error(error);
+                logger?.error(String(error), {
+                  timestamp: true,
+                  error: error as any,
+                });
                 body = Buffer.from('Some error happened');
               }
             }
@@ -158,7 +170,10 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
           }
         } catch (error) {
           const message = (error as Error).message;
-          log(`Request to PHP server failed because: ${message}`);
+          logger?.error(`Request to PHP server failed because: ${message}`, {
+            timestamp: true,
+            error: error as Error,
+          });
         }
 
         next();
