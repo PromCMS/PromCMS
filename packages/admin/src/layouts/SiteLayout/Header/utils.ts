@@ -26,6 +26,10 @@ export const useConstructedMenuItems = () => {
         ...Object.entries({ ...singletons, ...models })
           .filter(([modelKey]) => !modelIsCustom(modelKey || ''))
           .filter(
+            ([_modelKey, modelInfo]) =>
+              !modelInfo.admin.hidden && modelInfo.enabled
+          )
+          .filter(
             ([modelKey, model]) =>
               currentUser.can({ action: 'read', targetModel: modelKey }) &&
               (model.isSingleton
