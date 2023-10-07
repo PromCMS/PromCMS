@@ -1,5 +1,15 @@
 # @prom-cms/api-client
 
+## 0.8.0
+
+### Minor Changes
+
+- 415628e: Add new utility types for error codes that come from API.
+
+### Patch Changes
+
+- 0c8e327: Update vite to latest and axios to 0.27 and add missing dependency on axios to admin package.
+
 ## 0.7.1
 
 ### Patch Changes
