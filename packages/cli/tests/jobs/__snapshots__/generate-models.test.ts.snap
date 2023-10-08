@@ -14,8 +14,8 @@ class First extends Model
 
   protected bool $timestamps = true;
   protected bool $translations = true;
-  protected bool $enabled = true;
-  protected array $adminSettings = ['hidden' => true];
+  protected static bool $enabled = true;
+  protected static array $adminSettings = ['hidden' => true];
 
   public static array $tableColumns = [
     'col' => [
@@ -75,8 +75,8 @@ class Second extends Model
 
   protected bool $timestamps = true;
   protected bool $translations = true;
-  protected bool $enabled = false;
-  protected array $adminSettings = ['hidden' => false];
+  protected static bool $enabled = false;
+  protected static array $adminSettings = ['hidden' => false];
 
   public static array $tableColumns = [
     'col' => [

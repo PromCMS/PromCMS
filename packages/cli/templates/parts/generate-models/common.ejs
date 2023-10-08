@@ -46,8 +46,8 @@ class <%- modelName %> extends <%- isSingleton ? "SingletonModel" : "Model" %>
   <% } %>
   protected bool    $timestamps     = <%- valueToPHPValue(timestamp) %>;
   protected bool    $translations   = <%- valueToPHPValue(intl) %>;
-  protected bool    $enabled        = <%- valueToPHPValue(enabled) %>;
-  protected array   $adminSettings  = <%- valueToPHPValue(admin) %>;
+  protected static bool    $enabled        = <%- valueToPHPValue(enabled) %>;
+  protected static array   $adminSettings  = <%- valueToPHPValue(admin) %>;
 
   <%# Column casts %> 
   <% if (columnCasts.length) { %>
