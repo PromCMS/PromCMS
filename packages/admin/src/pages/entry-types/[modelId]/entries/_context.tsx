@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 import { EntryTypeUrlActionType } from '@custom-types';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, UseFormProps } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import type { OutputData } from '@editorjs/editorjs';
 import { getModelItemSchema } from '@schemas';
@@ -27,6 +27,7 @@ import { apiClient } from '@api';
 import { pageUrls } from '@constants';
 import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
+import { logger } from '@logger';
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType;
@@ -75,16 +76,29 @@ export const EntryUnderpageContextProvider: FC<{
     isLoading: itemIsLoading,
     key: modelItemQueryKey,
   } = useCurrentModelItem(language);
-  const schema = useMemo(
-    () =>
-      currentModel && getModelItemSchema(currentModel, viewType === 'update'),
-    [currentModel, viewType]
-  );
+
+  const resolver = useMemo<
+    UseFormProps<Record<string, any>>['resolver']
+  >(() => {
+    if (!currentModel) {
+      return undefined;
+    }
+    const schema = getModelItemSchema(currentModel, viewType === 'update');
+
+    return async (data, context, options) => {
+      const result = await yupResolver(schema)(data, context, options);
+      logger.warning('Validating form:');
+      logger.warning({ data, result });
+
+      return result;
+    };
+  }, [currentModel, viewType]);
+
   const formMethods = useForm<Record<string, any>>({
     defaultValues: constructDefaultFormValues(currentModel),
     reValidateMode: 'onChange',
     mode: 'onTouched',
-    resolver: schema && yupResolver(schema),
+    resolver,
   });
   const queryClient = useQueryClient();
   const { setError } = formMethods;

@@ -19,6 +19,7 @@
       "@constants": ["./misc/constants"],
       "@events": ["./misc/events"],
       "@hooks/*": ["./misc/hooks/*"],
+      "@logger": ["./misc/logger"],
       "@layouts": ["./layouts"]
     },
     "jsx": "preserve"
