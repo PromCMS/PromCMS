@@ -14,7 +14,6 @@ declare global {
 
 const createLogger = <T extends (...args: any) => any>(fnc: T) => {
   const name = fnc.name;
-  console.log({ name });
 
   return (...params: Parameters<T>) => {
     window.application ??= {
