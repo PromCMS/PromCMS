@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.21.1
+
+### Patch Changes
+
+- acffe6f: Release fix for cli package. This release fixes incorrectly released package.
+
 ## 0.21.0
 
 ### Minor Changes
