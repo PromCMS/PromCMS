@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.12.6
+
+### Patch Changes
+
+- a51ee57: Implement logging on admin for developers to debug on unwanted behavior. This logs are always attached to window.application.logs property and can also be projected into console itself when `debug` search param is present in current url. This logging is used for when entry form is being validated.
+
 ## 0.12.5
 
 ### Patch Changes
