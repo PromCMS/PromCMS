@@ -11,7 +11,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { FormProvider, useForm, UseFormProps } from 'react-hook-form';
 import { useCurrentSingletonData } from './useCurrentSingletonData';
 import { ResultItem, EntityDuplicateErrorCode } from '@prom-cms/api-client';
 import useCurrentSingleton from '@hooks/useCurrentSingleton';
@@ -24,6 +24,7 @@ import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 import { getModelItemSchema } from '@schemas';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
+import { logger } from '@logger';
 
 export type SingletonPageContext = {
   setLanguage: Dispatch<SetStateAction<SingletonPageContext['language']>>;
@@ -45,15 +46,29 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
   const blockEditorRefs = useBlockEditorRefs();
   const settings = useSettings();
   const singleton = useCurrentSingleton(true);
-  const schema = useMemo(
-    () => singleton && getModelItemSchema(singleton, true),
-    [singleton]
-  );
+
+  const resolver = useMemo<
+    UseFormProps<Record<string, any>>['resolver']
+  >(() => {
+    if (!singleton) {
+      return undefined;
+    }
+    const schema = getModelItemSchema(singleton, true);
+
+    return async (data, context, options) => {
+      const result = await yupResolver(schema)(data, context, options);
+      logger.warning('Validating form:');
+      logger.warning({ data, result });
+
+      return result;
+    };
+  }, [singleton]);
+
   const formMethods = useForm<Record<string, any>>({
     defaultValues: constructDefaultFormValues(singleton),
     reValidateMode: 'onChange',
     mode: 'onTouched',
-    resolver: schema && yupResolver(schema),
+    resolver,
   });
   const { t } = useTranslation();
   const [language, setLanguage] = useState(settings?.i18n?.default);
