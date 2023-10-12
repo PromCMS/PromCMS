@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 0.2.1
+
+### Patch Changes
+
+- 0bb8014: Fix incorrectly made property non static for model.
+
 ## 0.2.0
 
 ### Minor Changes
