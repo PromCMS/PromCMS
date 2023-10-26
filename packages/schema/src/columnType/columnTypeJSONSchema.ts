@@ -40,6 +40,7 @@ export type RepeaterAdminSchema = z.infer<typeof repeaterAdminSchema>;
 
 export const columnTypeJSONSchema = columnTypeBaseSchema.extend({
   type: z.enum(['json']),
+  default: z.string().optional(),
 
   admin: z
     .discriminatedUnion('fieldType', [repeaterAdminSchema, basicAdminSchema])
