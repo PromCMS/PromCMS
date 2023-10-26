@@ -44,6 +44,13 @@ export const columnTypeBaseSchema = z.object({
   admin: columnTypeBaseAdminConfigSchema.default({}),
 
   description: z.string().optional(),
+
+  /**
+   * Controls the lifetime of data inside every entry.
+   * If false field can be updated as per usual.
+   * If true then field is omitted from updating after entry is created.
+   */
+  readonly: z.boolean().default(false),
 });
 
 export type ColumnTypeBase = z.infer<typeof columnTypeBaseSchema>;
