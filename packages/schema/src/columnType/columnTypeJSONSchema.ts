@@ -5,7 +5,7 @@ import { columnTypeNumberSchema } from './columnTypeNumberSchema.js';
 import { columnTypeStringSchema } from './columnTypeStringSchema.js';
 
 const basicAdminSchema = columnTypeBaseAdminConfigSchema.extend({
-  fieldType: z.enum(['blockEditor', 'jsonEditor', 'openingHours']),
+  fieldType: z.enum(['blockEditor', 'jsonEditor', 'openingHours', 'color']),
 });
 
 const basicExtend = z.object({ title: z.string().optional() });
