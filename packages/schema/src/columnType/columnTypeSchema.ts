@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { columnTypeBooleanSchema } from './columnTypeBooleanSchema.js';
+import { columnTypeEmailSchema } from './columnTypeEmailSchema.js';
 import { columnTypeEnumSchema } from './columnTypeEnumSchema.js';
 import { columnTypeFileSchema } from './columnTypeFileSchema.js';
 import { columnTypeJSONSchema } from './columnTypeJSONSchema.js';
@@ -21,6 +22,7 @@ export const columnTypeSchema = z.union([
   columnTypeSlugSchema,
   columnTypeBooleanSchema,
   columnTypeUrlSchema,
+  columnTypeEmailSchema,
 ]);
 
 export type ColumnType = z.infer<typeof columnTypeSchema>;
