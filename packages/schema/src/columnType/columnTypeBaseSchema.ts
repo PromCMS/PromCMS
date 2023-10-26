@@ -42,6 +42,8 @@ export const columnTypeBaseSchema = z.object({
    * Admin settings
    */
   admin: columnTypeBaseAdminConfigSchema.default({}),
+
+  description: z.string().optional(),
 });
 
 export type ColumnTypeBase = z.infer<typeof columnTypeBaseSchema>;
