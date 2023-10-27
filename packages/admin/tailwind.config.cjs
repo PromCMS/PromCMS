@@ -1,6 +1,19 @@
-/** @type {import('tailwindcss/tailwind-config').TailwindConfig} */
+/** @type {import('tailwindcss').Config["safelist"]} */
+const safelist = [];
+
+const MAX_SIZE = 12;
+const iterableAry = [...new Array(MAX_SIZE).fill(true)].map(
+  (_, index) => index + 1
+);
+
+safelist.push({
+  pattern: new RegExp(`w-(${iterableAry.join('|')})/12`, 'g'),
+});
+
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx,vue,css,scss,yaml}'],
+  content: ['./src/**/*.{js,jsx,ts,tsx,css,scss}'],
+  safelist: safelist,
   theme: {
     container: {
       padding: {
