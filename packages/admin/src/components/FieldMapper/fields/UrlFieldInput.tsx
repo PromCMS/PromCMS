@@ -3,7 +3,7 @@ import { Input, Select, SelectProps } from '@mantine/core';
 import { ColumnTypeUrl } from '@prom-cms/schema';
 import clsx from 'clsx';
 import { ChangeEventHandler, FC, useCallback, useMemo } from 'react';
-import { useController, useFormState } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 const PROTOCOL_SPLIT = '://';
 

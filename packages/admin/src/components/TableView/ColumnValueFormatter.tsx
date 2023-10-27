@@ -66,6 +66,15 @@ export const ColumnValueFormatter: FC<TableViewCol & { value: any }> = memo(
         ) : (
           <X className="text-red-600" />
         );
+
+      case 'url':
+        if (column.value) {
+          return (
+            <a href={column.value} target="_blank">
+              {column.value}
+            </a>
+          );
+        }
       // fallback to normal return
       default:
         break;
