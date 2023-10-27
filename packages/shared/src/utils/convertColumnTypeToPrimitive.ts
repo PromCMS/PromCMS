@@ -13,18 +13,13 @@ export const convertColumnTypeToPrimitive = (
     case 'boolean':
       primitiveType = 'boolean';
       break;
-    case 'json':
-    case 'longText':
-    case 'string':
-    case 'enum':
-    case 'password':
-    case 'slug':
-      primitiveType = 'string';
-      break;
     case 'number':
     case 'relationship':
     case 'file':
       primitiveType = 'number';
+      break;
+    default:
+      primitiveType = 'string';
       break;
   }
 

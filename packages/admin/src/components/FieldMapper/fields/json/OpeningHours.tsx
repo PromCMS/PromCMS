@@ -36,7 +36,10 @@ const timeOptions = [...new Array(HOURS_IN_A_DAY * numberOfHourSlices)].map(
   }
 );
 
-const RowSelect: FC<{ name: string }> = ({ name }) => {
+const RowSelect: FC<{ name: string; disabled?: boolean }> = ({
+  name,
+  disabled,
+}) => {
   const { t } = useTranslation();
   const { fields, append, remove } = useFieldArray({
     name,
@@ -61,6 +64,7 @@ const RowSelect: FC<{ name: string }> = ({ name }) => {
                 value={value}
                 onChange={onChange}
                 data={timeOptions}
+                disabled={disabled}
               />
             )}
           />
@@ -74,6 +78,7 @@ const RowSelect: FC<{ name: string }> = ({ name }) => {
                 value={value}
                 onChange={onChange}
                 data={timeOptions}
+                disabled={disabled}
               />
             )}
           />
@@ -84,12 +89,13 @@ const RowSelect: FC<{ name: string }> = ({ name }) => {
               variant="subtle"
               color="blue"
               onClick={() => append({})}
+              disabled={disabled}
             >
               <Plus />
             </ActionIcon>
 
             <ActionIcon
-              disabled={index === 0}
+              disabled={index === 0 || disabled}
               className={clsx(index == 0 && 'opacity-0')}
               size="xl"
               p="xs"
@@ -109,7 +115,8 @@ const RowSelect: FC<{ name: string }> = ({ name }) => {
 const Row: FC<{
   name: string;
   weekdayName: string;
-}> = ({ name, weekdayName }) => {
+  disabled?: boolean;
+}> = ({ name, weekdayName, disabled }) => {
   const { t } = useTranslation();
   const formContext = useFormContext();
   const { watch } = formContext;
@@ -127,6 +134,7 @@ const Row: FC<{
             <Checkbox
               checked={value === false}
               label={t('Closed')}
+              disabled={disabled}
               onChange={(event) =>
                 onChange(event.currentTarget.checked ? false : [])
               }
@@ -135,7 +143,9 @@ const Row: FC<{
         />
       </div>
       <div className="grid gap-5">
-        {Array.isArray(value) ? <RowSelect name={name} /> : null}
+        {Array.isArray(value) ? (
+          <RowSelect disabled={disabled} name={name} />
+        ) : null}
       </div>
     </div>
   );
@@ -145,7 +155,8 @@ export const OpeningHours: FC<{
   name: string;
   label?: string;
   placement: FieldPlacements;
-}> = ({ name: parentFieldName, label, placement }) => {
+  disabled?: boolean;
+}> = ({ name: parentFieldName, label, placement, disabled }) => {
   const formContext = useFormContext();
   const errorMessage = useMemo(
     () => formContext.formState.errors[parentFieldName]?.message,
@@ -170,6 +181,7 @@ export const OpeningHours: FC<{
             key={name}
             weekdayName={name}
             name={`${parentFieldName}.data.${name}`}
+            disabled={disabled}
           />
         ))}
       </div>

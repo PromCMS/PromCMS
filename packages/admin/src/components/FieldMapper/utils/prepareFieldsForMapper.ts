@@ -5,31 +5,34 @@ export const prepareFieldsForMapper = (
   { columns }: ApiResultModel | ApiResultModelSingleton,
   placement?: FieldPlacements
 ) => {
-  const fieldRows: (ReturnType<(typeof columns)['get']> & {
+  const fields: (ReturnType<(typeof columns)['get']> & {
     columnName: string;
-  })[][] = [];
+  })[] = [];
 
   for (const [columnName, column] of columns) {
-    const { hide, editable, admin } = column;
+    const columnWithFieldName = column as typeof column & {
+      columnName?: string;
+    };
+
+    const { hide, editable, admin } = columnWithFieldName;
 
     if (
       hide ||
       !editable ||
       (placement && admin?.editor?.placement !== placement) ||
+      columnWithFieldName.admin.isHidden ||
       columnName === 'is_published' ||
       columnName === 'coeditors'
     ) {
       continue;
     }
 
-    fieldRows.push([
-      // TODO: Extend this when we will support grouped fields
-      {
-        ...column,
-        columnName,
-      },
-    ]);
+    columnWithFieldName.columnName = columnName;
+
+    fields.push(
+      columnWithFieldName as typeof columnWithFieldName & { columnName: string }
+    );
   }
 
-  return fieldRows;
+  return fields;
 };

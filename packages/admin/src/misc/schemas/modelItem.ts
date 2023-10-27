@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import type { ApiResultModel } from '@prom-cms/shared';
 import { convertColumnTypeToPrimitive } from '@prom-cms/shared';
 import * as yup from 'yup';
@@ -137,6 +138,26 @@ export const getModelItemSchema = (
                   );
                 }),
             });
+          } else if (column.admin.fieldType === 'color') {
+            columnShape = yup.object({
+              value: yup
+                .string()
+                .matches(
+                  /^#(?:[0-9a-fA-F]{3}){1,2}$/,
+                  MESSAGES.MUST_BE_VALID_COLOR
+                ),
+            });
+          } else if (column.admin.fieldType === 'linkButton') {
+            columnShape = yup.object({
+              href: yup
+                .string()
+                .matches(
+                  /(([a-zA-Z]{1,}):\/\/)?(www.)?([a-z0-9]+(\.[a-z]{2,}){1,3})?(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                  MESSAGES.MUST_BE_VALID_URL
+                ),
+              label: yup.string().optional(),
+              action: yup.string().optional(),
+            });
           } else {
             columnShape = yup[convertColumnTypeToPrimitive(column.type)]();
           }
@@ -147,8 +168,22 @@ export const getModelItemSchema = (
               : yup[convertColumnTypeToPrimitive(column.type)]();
         }
 
+        if (column.type === 'email') {
+          columnShape = (columnShape as yup.StringSchema).email(
+            MESSAGES.MUST_BE_VALID_EMAIL
+          );
+        }
+
+        if (column.type === 'url') {
+          // TODO: Support domainless url (eg: /somethings/something)
+          columnShape = (columnShape as yup.StringSchema).matches(
+            /(([a-zA-Z]{1,}):\/\/)(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+            MESSAGES.MUST_BE_VALID_URL
+          );
+        }
+
         if (column.required && !ignoreRequired) {
-          columnShape = columnShape.required('This is a required field.');
+          columnShape = columnShape.required(MESSAGES.FIELD_REQUIRED);
         } else {
           columnShape = columnShape.nullable().notRequired();
         }

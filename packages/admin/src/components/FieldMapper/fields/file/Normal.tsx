@@ -8,12 +8,14 @@ export type NormalProps = {
   name: string;
   errorMessage?: string;
   label?: string;
+  disabled?: boolean;
 } & z.infer<typeof columnTypeFileSchema>;
 
 export const Normal: FC<NormalProps> = ({
   name,
   label,
   errorMessage,
+  disabled,
   ...rest
 }) => (
   <Controller
@@ -24,6 +26,7 @@ export const Normal: FC<NormalProps> = ({
         selected={String(value)}
         error={errorMessage}
         label={label}
+        disabled={disabled}
         {...(rest as any)}
       />
     )}

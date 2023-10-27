@@ -10,7 +10,8 @@ export const Repeater: FC<{
   label: string;
   columns: RepeaterAdminSchema['columns'];
   placement: FieldPlacements;
-}> = ({ name, label, columns, placement }) => {
+  disabled?: boolean;
+}> = ({ name, label, columns, placement, disabled }) => {
   const { formState, register } =
     useFormContext<Record<string, string | boolean | number>>();
   const { t } = useTranslation();
@@ -78,6 +79,7 @@ export const Repeater: FC<{
                           error={errorMessage}
                           value={value}
                           className="w-full"
+                          disabled={disabled}
                         />
                       )}
                     />
@@ -92,6 +94,7 @@ export const Repeater: FC<{
                       error={errorMessage}
                       className="w-full"
                       labelProps={labelProps}
+                      disabled={disabled}
                       {...register(columnFieldName)}
                     />
                   );
@@ -112,12 +115,13 @@ export const Repeater: FC<{
                   variant="subtle"
                   color="blue"
                   onClick={() => insert(index + 1, {})}
+                  disabled={disabled}
                 >
                   <Plus />
                 </ActionIcon>
 
                 <ActionIcon
-                  disabled={index === 0}
+                  disabled={index === 0 || disabled}
                   className={clsx(index == 0 && 'opacity-0')}
                   size="xl"
                   p="xs"

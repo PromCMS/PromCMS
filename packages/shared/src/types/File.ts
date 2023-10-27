@@ -1,4 +1,5 @@
 export interface File {
+  id: string;
   filename: string;
   filepath: string;
   created_at: string;

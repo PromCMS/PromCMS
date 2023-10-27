@@ -27,9 +27,10 @@ class First extends Model
       'translations' => true,
       'admin' => [
         'isHidden' => false,
-        'editor' => ['placement' => 'main'],
+        'editor' => ['placement' => 'main', 'width' => 12],
         'fieldType' => 'normal',
       ],
+      'readonly' => false,
       'type' => 'string',
     ],
   ];
@@ -88,9 +89,10 @@ class Second extends Model
       'translations' => true,
       'admin' => [
         'isHidden' => false,
-        'editor' => ['placement' => 'main'],
+        'editor' => ['placement' => 'main', 'width' => 12],
         'fieldType' => 'normal',
       ],
+      'readonly' => false,
       'type' => 'string',
     ],
   ];

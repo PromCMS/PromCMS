@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { TableView, TableViewCol, TableViewProps } from '@components/TableView';
 import { useModelItems } from '@hooks/useModelItems';
 import useCurrentModel from '@hooks/useCurrentModel';
-import { formatApiModelResultToTableView, modelIsCustom } from '@utils';
+import { modelIsCustom } from '@utils';
 import { ItemID } from '@prom-cms/shared';
 import { MESSAGES, pageUrls } from '@constants';
 import NotFoundPage from '@pages/404';
@@ -16,6 +16,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Page } from '@custom-types';
 import { ResultItem } from '@prom-cms/api-client';
 import { apiClient } from '@api';
+import { formatApiModelResultToTableView } from '@components/TableView/_utils';
 
 const EntryTypeUnderpage: Page = ({}) => {
   const navigate = useNavigate();

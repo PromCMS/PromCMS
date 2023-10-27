@@ -12,7 +12,7 @@ export const AsideFields: FC<{
   const { t } = useTranslation();
 
   const groupedFields = useMemo<
-    Array<ColumnType & { columnName: string }>[] | undefined
+    Array<ColumnType & { columnName: string }> | undefined
   >(() => {
     if (!model) return;
 

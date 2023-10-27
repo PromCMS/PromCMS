@@ -1,38 +1,5 @@
-import { TableViewCol } from '@components/TableView';
 import { CUSTOM_MODELS } from '@constants';
-import { DatabaseConfigModel } from '@prom-cms/schema';
 import isEqual from 'lodash/isEqual';
-import { Check, X } from 'tabler-icons-react';
-
-export const formatApiModelResultToTableView = (
-  model: DatabaseConfigModel
-): TableViewCol[] =>
-  [...model.columns].map(([columnKey, columnInfo]) => ({
-    fieldName: columnKey,
-    title: columnInfo.title,
-    show: !(
-      columnInfo.hide ||
-      columnInfo.type === 'slug' ||
-      columnInfo.type === 'json' ||
-      columnInfo.admin?.isHidden ||
-      false
-    ),
-    // TODO make new formatter
-    /*...(columnInfo.type === 'json' && {
-      formatter(value) {
-        return JSON.stringify(value || {})
-      },
-    }),*/
-    ...(columnInfo.type === 'boolean' && {
-      formatter(values) {
-        return values[columnKey] ? (
-          <Check className="text-green-400" />
-        ) : (
-          <X className="text-red-400" />
-        );
-      },
-    }),
-  }));
 
 export const getObjectDiff = (
   originalObject: any,

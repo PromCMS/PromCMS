@@ -14,7 +14,7 @@ export const DynamicFormFields: FC<DynamicFormFieldsProps> = ({
   const { formState } = useFormContext();
 
   const groupedFields = useMemo<
-    Array<ColumnType & { columnName: string }>[] | undefined
+    Array<ColumnType & { columnName: string }> | undefined
   >(() => {
     if (!modelInfo) return;
 
@@ -24,7 +24,7 @@ export const DynamicFormFields: FC<DynamicFormFieldsProps> = ({
   if (!groupedFields) return null;
 
   return (
-    <div className="mb-10 flex min-h-screen flex-col gap-5 sm:gap-8">
+    <div className="mb-10 flex min-h-screen flex-wrap gap-y-6 -mx-2">
       <FieldMapper type={FieldPlacements.MAIN} fields={groupedFields} />
       {formState.isSubmitting && (
         <div className="absolute inset-0 cursor-progress bg-white/20 backdrop-blur-[2px]" />

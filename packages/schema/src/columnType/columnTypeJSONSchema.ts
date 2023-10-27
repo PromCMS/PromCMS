@@ -5,7 +5,13 @@ import { columnTypeNumberSchema } from './columnTypeNumberSchema.js';
 import { columnTypeStringSchema } from './columnTypeStringSchema.js';
 
 const basicAdminSchema = columnTypeBaseAdminConfigSchema.extend({
-  fieldType: z.enum(['blockEditor', 'jsonEditor', 'openingHours']),
+  fieldType: z.enum([
+    'blockEditor',
+    'jsonEditor',
+    'openingHours',
+    'color',
+    'linkButton',
+  ]),
 });
 
 const basicExtend = z.object({ title: z.string().optional() });
@@ -40,6 +46,7 @@ export type RepeaterAdminSchema = z.infer<typeof repeaterAdminSchema>;
 
 export const columnTypeJSONSchema = columnTypeBaseSchema.extend({
   type: z.enum(['json']),
+  default: z.string().optional(),
 
   admin: z
     .discriminatedUnion('fieldType', [repeaterAdminSchema, basicAdminSchema])
