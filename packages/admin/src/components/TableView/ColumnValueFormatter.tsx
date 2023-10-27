@@ -49,12 +49,21 @@ export const ColumnValueFormatter: FC<TableViewCol & { value: any }> = memo(
         }
         break;
       case 'json':
-        if (column.admin.fieldType === 'color') {
+        if (column.admin.fieldType === 'color' && column.value.value) {
           return (
             <div
               className="w-8 h-8 rounded-full"
               style={{ background: column.value.value }}
             ></div>
+          );
+        } else if (
+          column.admin.fieldType === 'linkButton' &&
+          column.value.href
+        ) {
+          return (
+            <a href={column.value.href} target="_blank">
+              {column.value.label ?? column.value.href}
+            </a>
           );
         } else if (column.value) {
           return <p className={classNames.tableDataParagraph}>...</p>;

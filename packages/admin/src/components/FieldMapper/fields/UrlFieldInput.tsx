@@ -155,7 +155,7 @@ export const UrlFieldInput: FC<
         ) : null}
         <Input
           type={allowedDomains?.length ? 'text' : 'url'}
-          placeholder={t(inputPlaceholder)}
+          placeholder={inputPlaceholder}
           // @ts-ignore
           value={fieldValue}
           classNames={{

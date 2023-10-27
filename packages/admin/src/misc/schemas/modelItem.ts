@@ -147,6 +147,17 @@ export const getModelItemSchema = (
                   MESSAGES.MUST_BE_VALID_COLOR
                 ),
             });
+          } else if (column.admin.fieldType === 'linkButton') {
+            columnShape = yup.object({
+              href: yup
+                .string()
+                .matches(
+                  /(([a-zA-Z]{1,}):\/\/)?(www.)?([a-z0-9]+(\.[a-z]{2,}){1,3})?(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+                  MESSAGES.MUST_BE_VALID_URL
+                ),
+              label: yup.string().optional(),
+              action: yup.string().optional(),
+            });
           } else {
             columnShape = yup[convertColumnTypeToPrimitive(column.type)]();
           }
@@ -172,7 +183,7 @@ export const getModelItemSchema = (
         }
 
         if (column.required && !ignoreRequired) {
-          columnShape = columnShape.required('This is a required field.');
+          columnShape = columnShape.required(MESSAGES.FIELD_REQUIRED);
         } else {
           columnShape = columnShape.nullable().notRequired();
         }

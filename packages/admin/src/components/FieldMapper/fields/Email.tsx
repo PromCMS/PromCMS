@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { Input, Select, SelectProps } from '@mantine/core';
 import { ColumnTypeEmail } from '@prom-cms/schema';
 import { ChangeEventHandler, FC, useCallback, useMemo } from 'react';
@@ -76,6 +77,7 @@ export const Email: FC<
             onBlur={field.onBlur}
             onChange={handleDomainChange}
             disabled={disabled}
+            placeholder={t(MESSAGES.CHOOSE)}
           />
         ) : null}
       </div>

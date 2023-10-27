@@ -52,4 +52,10 @@ export enum MESSAGES {
   MUST_BE_VALID_EMAIL = 'Must be a valid email',
   MUST_BE_VALID_URL = 'Must be a valid url',
   CHOOSE = 'Choose',
+  NOT_SELECTED = 'Not selected',
+  SOME_TEXT = 'Some text',
+  ACTION_ON_CLICK = 'Action on click',
+  NO_ACTION = 'No action',
+  OPEN_IN_NEW_TAB = 'Open in a new tab',
+  DOWNLOAD = 'Download',
 }

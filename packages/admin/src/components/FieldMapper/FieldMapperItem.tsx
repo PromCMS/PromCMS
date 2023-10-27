@@ -15,13 +15,13 @@ import {
   clsx,
   ColorInput,
   Input,
-  Select,
   Textarea,
   TextInput,
 } from '@mantine/core';
 import { Controller } from 'react-hook-form';
 import { Email } from './fields/Email';
 import { UrlFieldInput } from './fields/UrlFieldInput';
+import { JsonFieldInputAsLinkButton } from './fields/json/JsonFieldInputAsLinkButton';
 
 export const FieldMapperItem: FC<
   { placement: FieldPlacements; columnName: string } & ColumnType
@@ -172,6 +172,11 @@ export const FieldMapperItem: FC<
 
     case 'json':
       switch (admin.fieldType) {
+        case 'linkButton':
+          result = (
+            <JsonFieldInputAsLinkButton disabled={disabled} {...values} />
+          );
+          break;
         case 'blockEditor':
           result = <BlockEditor name={columnName} disabled={disabled} />;
           break;
@@ -212,7 +217,7 @@ export const FieldMapperItem: FC<
             />
           );
           break;
-        case 'jsonEditor':
+        default:
           result = (
             <Textarea
               autosize
