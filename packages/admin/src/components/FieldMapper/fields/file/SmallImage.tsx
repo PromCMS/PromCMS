@@ -8,12 +8,14 @@ export type SmallImageProps = {
   name: string;
   errorMessage?: string;
   label?: string;
+  disabled?: boolean;
 } & z.infer<typeof columnTypeFileSchema>;
 
 export const SmallImage: FC<SmallImageProps> = ({
   name,
   label,
   errorMessage,
+  disabled,
   ...rest
 }) => (
   <Controller
@@ -24,6 +26,7 @@ export const SmallImage: FC<SmallImageProps> = ({
         selected={String(value)}
         error={errorMessage}
         label={label}
+        disabled={disabled}
         {...(rest as any)}
       />
     )}

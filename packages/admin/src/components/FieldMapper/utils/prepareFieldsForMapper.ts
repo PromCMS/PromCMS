@@ -16,6 +16,7 @@ export const prepareFieldsForMapper = (
       hide ||
       !editable ||
       (placement && admin?.editor?.placement !== placement) ||
+      column.admin.isHidden ||
       columnName === 'is_published' ||
       columnName === 'coeditors'
     ) {

@@ -46,4 +46,10 @@ export enum MESSAGES {
   PAGINATION_CONTENT = 'Showing {{from}} to {{to}} of {{total}} entries',
   NO_SELECTED_FILES = 'No selected files yet',
   NO_SELECTED_FILE = 'No selected file yet',
+  VIEW_FILE = 'View file',
+  EMPTY_VALUE = 'Empty value',
+  MUST_BE_VALID_COLOR = 'Must be valid hexadecimal color',
+  MUST_BE_VALID_EMAIL = 'Must be a valid email',
+  MUST_BE_VALID_URL = 'Must be a valid url',
+  CHOOSE = 'Choose',
 }

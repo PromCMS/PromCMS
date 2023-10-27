@@ -93,8 +93,6 @@ class TagsTool implements BlockTool {
       }
     };
 
-    console.log({ d: this });
-
     // Render react controller
     ReactDom.createRoot(this.nodes.reactElement!).render(
       <TagsToolView

@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 export interface RelationshipItemSelectProps extends ColumnTypeRelationship {
   columnName: string;
   error: string;
+  disabled?: boolean;
 }
 
 export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
@@ -18,6 +19,7 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
   error,
   targetModel,
   labelConstructor,
+  disabled,
 }) => {
   const { t } = useTranslation();
   const { data, isError, isLoading } = useModelItems<UserRole>(targetModel, {});
@@ -45,7 +47,7 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
           className="w-full"
           placeholder={t('Select an option')}
           shadow="xl"
-          disabled={isError || isLoading}
+          disabled={isError || isLoading || disabled}
           error={error}
         />
       )}

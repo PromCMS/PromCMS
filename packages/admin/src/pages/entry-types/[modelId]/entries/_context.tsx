@@ -134,9 +134,6 @@ export const EntryUnderpageContextProvider: FC<{
         for (const [fieldName, editorRef] of Object.entries(
           blockEditorRefs.refs.current
         )) {
-          console.log({
-            data: normalizeContent(itemData[fieldName]),
-          });
           if (itemData[fieldName]) {
             editorRef?.blocks?.render(normalizeContent(itemData[fieldName]));
           }

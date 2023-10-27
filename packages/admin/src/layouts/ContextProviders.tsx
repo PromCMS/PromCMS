@@ -39,8 +39,6 @@ if (!i18next.isInitialized) {
 
   i18next.on('languageChanged', (nextLanguage) => dayjs.locale(nextLanguage));
 
-  console.log(i18next.language);
-
   dayjs.locale(i18next.language);
 }
 

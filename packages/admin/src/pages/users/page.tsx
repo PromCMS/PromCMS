@@ -7,12 +7,12 @@ import { UserPlus } from 'tabler-icons-react';
 import { MESSAGES } from '@constants';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { formatApiModelResultToTableView } from '@utils';
 import { Button } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Page } from '@custom-types';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '@api';
+import { formatApiModelResultToTableView } from '@components/TableView/_utils';
 
 const UsersListPage: Page = () => {
   const navigate = useNavigate();

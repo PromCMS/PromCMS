@@ -41,7 +41,6 @@ export const ChangePasswordPage: Page = () => {
   const { handleSubmit, formState, register, setError } = formMethods;
 
   const onClose = useCallback(() => {
-    console.log('On navigate');
     navigate(-1);
   }, [navigate]);
 

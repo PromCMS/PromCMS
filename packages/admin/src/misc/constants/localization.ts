@@ -34,6 +34,7 @@ export const defaultLanguagePacks = {
       [MESSAGES.NAME]: 'Název',
       [MESSAGES.NO_SELECTED_FILES]: 'Nebyly zatím vybrány žádné soubory',
       [MESSAGES.NO_SELECTED_FILE]: 'Nebyl zatím vybrán žádný soubor',
+      [MESSAGES.VIEW_FILE]: 'Zobrazit soubor',
       'Change image': 'Změnit obrázek',
       'Set image': 'Nastavit obrázek',
       From: 'Od',
@@ -224,6 +225,9 @@ export const defaultLanguagePacks = {
         'Toto je překlad pro vybraný jazyk',
       [MESSAGES.ADD_CONTRIBUTOR_TEXT]:
         'Přidejte kontributory společně s jejich povoleními',
+      [MESSAGES.EMPTY_VALUE]: 'Prázdná hodnota',
+      'john-doe@example.com': 'jan-ukazka@test.cz',
+      'john-doe': 'jan-ukazka',
     },
   },
   en: {

@@ -10,17 +10,22 @@ export interface BackendImageProps
     DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
     'src'
   > {
-  imageId: ItemID | Record<string, string> | undefined;
+  imageId: ItemID | Record<string, string> | undefined | null;
   /**
    * @defaultValue 60
    */
   quality?: number;
+  /**
+   * @defaultValue 30
+   */
+  iconSize?: number;
 }
 
 const BackendImage: FC<BackendImageProps> = ({
   imageId,
   className,
   quality = 60,
+  iconSize = 30,
   width,
   height,
   ...rest
@@ -28,7 +33,7 @@ const BackendImage: FC<BackendImageProps> = ({
   const { t } = useTranslation();
 
   const imageSrc = useMemo(() => {
-    if (typeof imageId === 'object' && imageId.path) {
+    if (typeof imageId === 'object' && imageId?.path) {
       return imageId.path;
     }
 
@@ -63,10 +68,15 @@ const BackendImage: FC<BackendImageProps> = ({
     />
   ) : (
     <div
-      className="flex h-full w-full items-center justify-center bg-gray-50"
+      className={clsx(
+        'flex items-center justify-center bg-gray-50',
+        !className?.includes('w-') ? 'w-full' : '',
+        !className?.includes('h-') ? 'h-full' : '',
+        className
+      )}
       title={t('Empty')}
     >
-      <PhotoOff size={30} />
+      <PhotoOff size={iconSize} className="my-2" />
     </div>
   );
 };

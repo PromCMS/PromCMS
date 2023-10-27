@@ -32,17 +32,16 @@ import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
 import { PagedResponse } from '@prom-cms/api-client';
 import { SelectProps } from '@mantine/core/lib/Select/Select';
 import { MESSAGES } from '@constants';
+import { ColumnValueFormatter } from './ColumnValueFormatter';
+import { ColumnType } from '@prom-cms/schema';
 
 export type TableViewItem = { id: string | number; [x: string]: any };
 
-export type TableViewCol = {
+export type TableViewCol = ColumnType & {
   title: string;
   fieldName: string;
   show?: boolean;
-  formatter?: <T extends TableViewItem>(
-    data: T,
-    columnInfo: Omit<TableViewCol, 'formatter'>
-  ) => any;
+  type: ColumnType['type'];
 };
 
 export interface TableViewProps {
@@ -138,9 +137,10 @@ const TableView: FC<TableViewProps> & {
     [onEditAction, onDeleteAction, onDuplicateAction]
   );
 
-  const filteredCols = useMemo(() => {
-    return columns.filter(({ show }) => show === undefined || show);
-  }, [columns]);
+  const filteredCols = useMemo(
+    () => columns.filter(({ show }) => show === undefined || show),
+    [columns]
+  );
 
   const hasActions = onEditAction || onDeleteAction;
   const normalCellsWidth = useMemo(() => {
@@ -203,25 +203,21 @@ const TableView: FC<TableViewProps> & {
                         id={itemData.id}
                         toggled={!!ordering}
                       >
-                        {filteredCols.map(({ formatter, title, fieldName }) => (
+                        {filteredCols.map((column) => (
                           <td
                             style={{
                               width:
-                                fieldName === 'id' ? 100 : normalCellsWidth,
+                                column.fieldName === 'id'
+                                  ? 100
+                                  : normalCellsWidth,
                             }}
-                            key={fieldName}
+                            key={column.fieldName}
                             className={classNames.tableData}
                           >
-                            {formatter ? (
-                              formatter(itemData, { title, fieldName })
-                            ) : (
-                              <p
-                                className={classNames.tableDataParagraph}
-                                title={itemData[fieldName]}
-                              >
-                                {itemData[fieldName]}
-                              </p>
-                            )}
+                            <ColumnValueFormatter
+                              value={itemData[column.fieldName]}
+                              {...column}
+                            />
                           </td>
                         ))}
                         {hasActions && (

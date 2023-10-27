@@ -7,9 +7,14 @@ const LazyEditor = lazy(async () => await import('./LazyEditor'));
 
 export type BlockEditorProps = LazyEditorProps & {
   name: string;
+  disabled?: boolean;
 };
 
-export const BlockEditor: FC<BlockEditorProps> = ({ name, ...props }) => {
+export const BlockEditor: FC<BlockEditorProps> = ({
+  name,
+  disabled,
+  ...props
+}) => {
   const { control } = useFormContext();
   const { t } = useTranslation();
 
@@ -19,6 +24,7 @@ export const BlockEditor: FC<BlockEditorProps> = ({ name, ...props }) => {
     []
   );
 
+  // TODO: implement disabled
   return (
     <Controller
       control={control}
