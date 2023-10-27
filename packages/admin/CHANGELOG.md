@@ -1,5 +1,27 @@
 # @prom-cms/admin
 
+## 0.13.0
+
+### Minor Changes
+
+- d7e0891: Add linkButton to json column type
+- d7e0891: Implement width of each field for admin
+
+### Patch Changes
+
+- d7e0891: Update admin according to new schema changes and support new column types
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+- Updated dependencies [d7e0891]
+  - @prom-cms/schema@0.3.0
+  - @prom-cms/shared@2.1.0
+
 ## 0.12.6
 
 ### Patch Changes

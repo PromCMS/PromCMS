@@ -1,5 +1,18 @@
 # @prom-cms/shared
 
+## 0.3.0
+
+### Minor Changes
+
+- d7e0891: Add new admin.fieldType "color" for "repeater" column type
+- d7e0891: Add new column type "email"
+- d7e0891: Adds description into column base schema. This is used not only in admin under each field but also in database if that is supported.
+- d7e0891: Add linkButton to json column type
+- d7e0891: Adds readonly to all column types. If true, column data are ommited from update. In admin the field is rendered but is disabled
+- d7e0891: Implement width of each field for admin
+- d7e0891: Adds new column type URL
+- d7e0891: Adds min and max option for nubmer schema to control inputs to number column even more
+
 ## 0.2.1
 
 ### Patch Changes
