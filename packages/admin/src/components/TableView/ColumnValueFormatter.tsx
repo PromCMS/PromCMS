@@ -1,5 +1,5 @@
 import BackendImage from '@components/BackendImage';
-import { FC, Fragment, memo, Suspense } from 'react';
+import { FC, Fragment, memo, Suspense, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, X } from 'tabler-icons-react';
 import Mustache from 'mustache';
@@ -8,39 +8,37 @@ import { TableViewCol } from './TableView';
 import { useClassNames } from './useClassNames';
 import { MESSAGES, pageUrls } from '@constants';
 import { useTranslation } from 'react-i18next';
-import { QueryFunction, useQuery } from '@tanstack/react-query';
 import { ColumnTypeRelationship } from '@prom-cms/schema';
-import { apiClient } from '@api';
-import { ResultItem } from '@prom-cms/api-client';
 import { Skeleton } from '@mantine/core';
+import { useModelItem } from '@hooks/useModelItem';
 
 type ColumnValueFormatterProps = TableViewCol & { value: any };
-
-const fetcher: QueryFunction<
-  ResultItem,
-  [baseKey: string, targetModel: string, itemId: any]
-> = async ({ queryKey, signal }) => {
-  const [, targetModel, itemId] = queryKey;
-  return apiClient.entries
-    .getOne(targetModel, itemId, { signal })
-    .then((res) => res.data.data);
-};
 
 const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
   column
 ) => {
-  const { data } = useQuery({
-    queryKey: ['relationship-item', column.targetModel, column.value],
-    queryFn: fetcher,
-    suspense: true,
-    refetchInterval: 0,
-    refetchOnReconnect: false,
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-    refetchIntervalInBackground: false,
-  });
+  const { data } = useModelItem(
+    column.targetModel,
+    column.value,
+    {
+      params: { unstable_fetchReferences: true },
+    },
+    {
+      suspense: true,
+      refetchInterval: 0,
+      refetchOnReconnect: false,
+      refetchOnMount: true,
+      refetchOnWindowFocus: false,
+      refetchIntervalInBackground: false,
+    }
+  );
 
-  return <p>{Mustache.render(column.labelConstructor, data)}</p>;
+  const text = useMemo(
+    () => Mustache.render(column.labelConstructor, data),
+    [data, column.labelConstructor]
+  );
+
+  return <p>{text}</p>;
 };
 
 export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(

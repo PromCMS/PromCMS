@@ -11,7 +11,10 @@ export const useModelItems = <T extends ResultItem>(
   const fetcher = useCallback(
     () =>
       apiClient.entries
-        .getMany<T>(modelName!, axiosConfig!)
+        .getMany<T>(modelName!, {
+          ...axiosConfig,
+          params: { ...axiosConfig?.params, unstable_fetchReferences: true },
+        })
         .then(({ data }) => data),
     [modelName, axiosConfig]
   );
