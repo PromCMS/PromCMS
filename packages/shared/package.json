@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/shared",
   "description": "Shared package for prom cms packages",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/find-config": "1.0.1",
-    "@prom-cms/schema": "^0.2.0",
+    "@prom-cms/schema": "^0.3.0",
     "vitest": "^0.24.3",
     "typescript": "^4.9.4",
     "find-config": "1.0.0",

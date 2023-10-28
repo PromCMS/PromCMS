@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 2.1.0
+
+### Minor Changes
+
+- d7e0891: Add id to type file and simplify convertColumnTypeToPrimitive function to always return "string" if it encounters field that it does not know or should straight up be string
+
 ## 2.0.0
 
 ### Major Changes
