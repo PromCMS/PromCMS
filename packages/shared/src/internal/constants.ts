@@ -150,7 +150,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
           },
           category: {
             type: 'relationship',
-            labelConstructor: 'name',
+            labelConstructor: '{{name}}',
             targetModel: 'contactPositions',
             title: 'Kategorie',
             fill: false,

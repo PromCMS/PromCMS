@@ -99,7 +99,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
         editable: false,
         type: 'relationship',
         targetModel: 'user',
-        labelConstructor: 'name',
+        labelConstructor: '{{name}}',
         fill: false,
         translations: false,
         admin: {
@@ -112,7 +112,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
         editable: false,
         type: 'relationship',
         targetModel: 'user',
-        labelConstructor: 'name',
+        labelConstructor: '{{name}}',
         fill: false,
         translations: false,
         admin: {

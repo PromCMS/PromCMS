@@ -1,13 +1,49 @@
 import BackendImage from '@components/BackendImage';
-import { FC, Fragment, memo } from 'react';
+import { FC, Fragment, memo, Suspense } from 'react';
 import { Link } from 'react-router-dom';
 import { Check, X } from 'tabler-icons-react';
+import Mustache from 'mustache';
+
 import { TableViewCol } from './TableView';
 import { useClassNames } from './useClassNames';
 import { MESSAGES, pageUrls } from '@constants';
 import { useTranslation } from 'react-i18next';
+import { QueryFunction, useQuery } from '@tanstack/react-query';
+import { ColumnTypeRelationship } from '@prom-cms/schema';
+import { apiClient } from '@api';
+import { ResultItem } from '@prom-cms/api-client';
+import { Skeleton } from '@mantine/core';
 
-export const ColumnValueFormatter: FC<TableViewCol & { value: any }> = memo(
+type ColumnValueFormatterProps = TableViewCol & { value: any };
+
+const fetcher: QueryFunction<
+  ResultItem,
+  [baseKey: string, targetModel: string, itemId: any]
+> = async ({ queryKey, signal }) => {
+  const [, targetModel, itemId] = queryKey;
+  return apiClient.entries
+    .getOne(targetModel, itemId, { signal })
+    .then((res) => res.data.data);
+};
+
+const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
+  column
+) => {
+  const { data } = useQuery({
+    queryKey: ['relationship-item', column.targetModel, column.value],
+    queryFn: fetcher,
+    suspense: true,
+    refetchInterval: 0,
+    refetchOnReconnect: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
+    refetchIntervalInBackground: false,
+  });
+
+  return <p>{Mustache.render(column.labelConstructor, data)}</p>;
+};
+
+export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
   function ColumnValueFormatter(column) {
     const classNames = useClassNames();
     const { t } = useTranslation();
@@ -75,6 +111,19 @@ export const ColumnValueFormatter: FC<TableViewCol & { value: any }> = memo(
         ) : (
           <X className="text-red-600" />
         );
+
+      case 'relationship':
+        if (column.value) {
+          return (
+            <Suspense
+              fallback={<Skeleton height="1.2rem" className="max-w-[100px]" />}
+            >
+              <LazyRelationshipItem {...column} />
+            </Suspense>
+          );
+        }
+
+        break;
 
       case 'url':
         if (column.value) {
