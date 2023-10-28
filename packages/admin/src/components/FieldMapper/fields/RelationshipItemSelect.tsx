@@ -2,6 +2,7 @@ import { useModelItems } from '@hooks/useModelItems';
 import { Select, SelectItem } from '@mantine/core';
 import { ColumnTypeRelationship } from '@prom-cms/schema';
 import { UserRole } from '@prom-cms/shared';
+import Mustache from 'mustache';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
@@ -26,10 +27,9 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
 
   const values = useMemo<SelectItem[]>(
     () =>
-      (data?.data ?? []).map(({ id, ...rest }) => ({
-        value: String(id),
-        // TODO: make label constructor
-        label: t(rest[labelConstructor]),
+      (data?.data ?? []).map((entry) => ({
+        value: String(entry.id),
+        label: Mustache.render(labelConstructor, entry),
       })),
     [data, t, labelConstructor]
   );
