@@ -5,13 +5,15 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { FirstStep } from '.';
 import { loginFormSchema } from '../_schema';
 import { ItemID, LoginFailedResponseCodes, UserRole } from '@prom-cms/shared';
-import { Trans, useTranslation } from 'react-i18next';
-import { Button, Paper, Title } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
+import { Button, Image, Paper, Title } from '@mantine/core';
 import { MESSAGES } from '@constants';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { apiClient } from '@api';
 import { createLogger, isApiResponse } from '@utils';
+import logoImage from '../../../assets/logos/logo.svg';
+import clsx from 'clsx';
 
 interface LoginFormValues {
   email: string;
@@ -100,12 +102,20 @@ export const Form: FC = () => {
 
   return (
     <FormProvider {...formMethods}>
-      <div className="flex min-h-screen w-full">
-        <div className="m-auto w-full max-w-lg">
-          <Title className="mb-3 ml-5 text-2xl font-semibold">
-            <Trans i18nKey="Log in (step ...)" values={{ humanStep }}>
-              {`Log in (step <strong>{{ humanStep }}</strong>).`}
-            </Trans>
+      <div className="flex flex-col min-h-screen w-full">
+        <Image
+          height={50}
+          width={50}
+          src={logoImage}
+          alt=""
+          fit="contain"
+          classNames={{
+            imageWrapper: clsx('p-5'),
+          }}
+        />
+        <div className="m-auto w-full max-w-md">
+          <Title className="text-2xl font-semibold mb-3 ">
+            {t(MESSAGES.LOGIN_TO_MY_ACCOUNT)}
           </Title>
           <form onSubmit={handleSubmit(onSubmitCallback)}>
             <Paper shadow="xl" p="md" withBorder className="w-full">

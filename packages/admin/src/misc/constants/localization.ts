@@ -152,7 +152,7 @@ export const defaultLanguagePacks = {
       'Your new password': 'Vaše nové heslo',
       'Your new password again': 'Vaše nové heslo znovu',
       Send: 'Odeslat',
-      'Login to my account': 'Přihlásit se do mého účtu',
+      [MESSAGES.LOGIN_TO_MY_ACCOUNT]: 'Přihlásit se do mého účtu',
       Email: 'Email',
       Password: 'Heslo',
       'Forgot password?': 'Zapomenuté heslo',

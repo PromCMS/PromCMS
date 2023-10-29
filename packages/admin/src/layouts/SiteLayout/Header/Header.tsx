@@ -8,7 +8,7 @@ import { Item as ItemProps, useConstructedMenuItems } from './utils';
 import { useTranslation } from 'react-i18next';
 import BackendImage from '@components/BackendImage';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { Popover, Tooltip, UnstyledButton } from '@mantine/core';
+import { Image, Popover, Tooltip, UnstyledButton } from '@mantine/core';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Home, Photo } from 'tabler-icons-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -69,9 +69,18 @@ const Header: FC = () => {
         <a
           href="/"
           title={t('Go home')}
-          className="block mx-auto h-16 w-16 bg-white p-1 rounded-lg border shadow"
+          className="block mx-auto bg-white p-1 rounded-lg border shadow"
         >
-          <img className="w-full h-full" src={logoImage} alt="" />
+          <Image
+            height={50}
+            width={50}
+            src={logoImage}
+            alt=""
+            fit="contain"
+            classNames={{
+              imageWrapper: clsx('w-full h-full'),
+            }}
+          />
         </a>
       </div>
       <div className="grid gap-5 py-5">

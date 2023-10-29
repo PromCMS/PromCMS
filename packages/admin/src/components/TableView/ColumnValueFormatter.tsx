@@ -83,7 +83,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
         }
         break;
       case 'json':
-        if (column.admin.fieldType === 'color' && column.value.value) {
+        if (column.admin.fieldType === 'color' && column.value?.value) {
           return (
             <div
               className="w-8 h-8 rounded-full"
@@ -92,7 +92,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
           );
         } else if (
           column.admin.fieldType === 'linkButton' &&
-          column.value.href
+          column.value?.href
         ) {
           return (
             <a href={column.value.href} target="_blank">
@@ -100,7 +100,14 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
             </a>
           );
         } else if (column.value) {
-          return <p className={classNames.tableDataParagraph}>...</p>;
+          return (
+            <p
+              title={JSON.stringify(column.value)}
+              className={classNames.tableDataParagraph}
+            >
+              {'{'} ... {'}'}
+            </p>
+          );
         }
         break;
       case 'boolean':
