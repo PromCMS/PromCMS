@@ -122,7 +122,7 @@ export const Repeater: FC<{
 
               return <Fragment key={columnKey}>{result}</Fragment>;
             })}
-            {readonly ? (
+            {!readonly ? (
               <Input.Wrapper
                 label={hasLabels ? t('Actions') : undefined}
                 labelProps={{ className: 'opacity-0' }}
