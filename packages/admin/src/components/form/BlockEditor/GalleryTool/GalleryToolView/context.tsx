@@ -1,6 +1,12 @@
-import { SmallFileListProps } from '@components/FilePickerModal/SmallFileList';
+import { FilePickerProps } from '@components/form/FilePicker';
 import { ItemID } from '@prom-cms/shared';
-import { PropsWithChildren, useCallback, useEffect, useReducer } from 'react';
+import {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+} from 'react';
 import { FC, useContext } from 'react';
 import { createContext } from 'react';
 import { GalleryToolData } from '../GalleryTool';
@@ -13,7 +19,7 @@ type ContextData = GalleryToolData & {
     value: string
   ) => void;
   readOnly: boolean;
-  addFile: SmallFileListProps['onChange'];
+  setFiles: FilePickerProps['onChange'];
   changeLabel: (value: string) => void;
 };
 
@@ -22,7 +28,7 @@ const GalleryToolViewContext = createContext<ContextData>({
   label: '',
   changeMetadata: () => {},
   removeFile: () => {},
-  addFile: () => {},
+  setFiles: () => {},
   changeLabel: () => {},
   readOnly: false,
 });
@@ -56,20 +62,29 @@ export const GalleryToolViewContextProvider: FC<
     onDataChange(state);
   }, [state, onDataChange]);
 
-  const addFile = useCallback<SmallFileListProps['onChange']>(
+  const setFiles = useCallback<ContextData['setFiles']>(
     (itemIds) =>
       setState(({ fileIds = [], ...restState }) => {
-        const stateFileIds = fileIds.map(({ id }) => id);
+        const newFiles: typeof fileIds = [];
 
-        fileIds = fileIds.filter(({ id }) => itemIds.includes(id));
+        if (itemIds) {
+          for (const itemId of itemIds) {
+            const existingItem = fileIds.find(
+              ({ id }) => itemId === String(id)
+            );
 
-        // If they are already selected then there is no point in adding them again
-        const newItemIds = itemIds.filter(
-          (currentId) => !stateFileIds.includes(currentId)
-        );
-        fileIds.push(...newItemIds.map((id) => ({ id })));
+            newFiles.push(
+              existingItem || {
+                id: itemId,
+              }
+            );
+          }
+        }
 
-        return { ...restState, fileIds };
+        return {
+          ...restState,
+          fileIds: newFiles,
+        };
       }),
     []
   );
@@ -103,14 +118,17 @@ export const GalleryToolViewContextProvider: FC<
 
   return (
     <GalleryToolViewContext.Provider
-      value={{
-        ...state,
-        readOnly,
-        changeMetadata,
-        removeFile,
-        addFile,
-        changeLabel: onTextInput,
-      }}
+      value={useMemo(
+        () => ({
+          ...state,
+          readOnly,
+          changeMetadata,
+          removeFile,
+          setFiles,
+          changeLabel: onTextInput,
+        }),
+        [state, readOnly, changeMetadata, removeFile, onTextInput, setFiles]
+      )}
     >
       {children}
     </GalleryToolViewContext.Provider>

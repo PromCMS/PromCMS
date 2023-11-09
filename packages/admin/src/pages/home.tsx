@@ -46,18 +46,18 @@ const MainPage: Page = () => {
         </Trans>
       </h1>
       <hr className="mt-7 h-0.5 w-full border-0 bg-project-border" />
-      <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4">
+      <div className="mt-10 grid grid-cols-2 gap-5 sm:grid-cols-4 md:grid-cols-6">
         {menuItems.normalItems
           .filter(({ href }) => href !== '/')
           .map((itemInfo) => (
             <Link
               to={itemInfo.href}
-              className="group flex aspect-square rounded-2xl shadow-lg shadow-blue-200 hover:no-underline hover:scale-105"
+              className="group flex aspect-square rounded-2xl shadow-lg shadow-blue-200 hover:no-underline hover:scale-105 duration-150"
               key={itemInfo.href}
             >
               <div className="m-auto text-center">
                 <itemInfo.icon className="mx-auto aspect-square h-12 w-12 text-gray-400 duration-150 group-hover:text-blue-500" />
-                <span className="mt-3 block text-xl font-semibold">
+                <span className="mt-3 block text-lg font-semibold">
                   {t(capitalizeFirstLetter(itemInfo.label, false))}
                 </span>
               </div>

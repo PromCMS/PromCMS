@@ -1,6 +1,6 @@
 import BackendImage from '@components/BackendImage';
-import { SmallFileList } from '@components/FilePickerModal/SmallFileList';
-import { Button, Input, Popover } from '@mantine/core';
+import { Button, Input } from '@mantine/core';
+import { useToggle } from '@mantine/hooks';
 import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
 import {
@@ -10,10 +10,10 @@ import {
   ReactElement,
   useCallback,
   useMemo,
-  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil, Photo } from 'tabler-icons-react';
+import { FilePicker, FilePickerProps } from './FilePicker';
 
 export interface ImageSelectProps
   extends Omit<
@@ -31,6 +31,7 @@ export interface ImageSelectProps
   onBlur?: () => void;
 }
 
+// TODO: probably deprecate this and use normal FileSelect instead?
 const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
   function ImageSelect(
     {
@@ -45,28 +46,29 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
     },
     ref
   ) {
-    const [modalOpen, setModalOpen] = useState(false);
+    const [pickerOpen, togglePickerOpen] = useToggle();
     const { t } = useTranslation();
 
-    const onChangeCallback = useCallback(
-      (ids: ItemID[]) => {
-        onChange(!multiple ? ids[0] || null : ids);
-      },
-      [onChange, multiple]
-    );
+    const onChangeCallback = useCallback<FilePickerProps['onChange']>(
+      (nextValue) => {
+        if (multiple) {
+          onChange(nextValue);
 
-    const onClose = useCallback(() => {
-      setModalOpen(false);
-      if (onBlur) onBlur();
-    }, [onBlur, setModalOpen]);
+          return;
+        }
+
+        // We pick last, because FilePicker component has always array - if user picks other then there will be two values in the array
+        onChange(nextValue?.at(-1) ?? null);
+        if (onBlur) onBlur();
+      },
+      [onChange, multiple, onBlur]
+    );
 
     const modalPickedFiles = useMemo(
       () =>
-        selected === null || selected === undefined || selected === 'undefined'
-          ? []
-          : Array.isArray(selected)
-          ? selected
-          : [selected],
+        (Array.isArray(selected) ? selected : [selected]).filter(
+          Boolean
+        ) as string[],
       [selected]
     );
 
@@ -92,42 +94,29 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                   </div>
                 )}
               </div>
-
-              <Popover
-                withArrow
-                opened={modalOpen}
-                onClose={onClose}
-                withinPortal={false}
-                width={590}
-                position="bottom-end"
+              <Button
+                className="flex-none"
+                color="ghost"
+                leftIcon={<Pencil size={20} />}
+                size="md"
+                onClick={() => togglePickerOpen()}
               >
-                <Popover.Target>
-                  <Button
-                    className="flex-none"
-                    color="ghost"
-                    leftIcon={<Pencil size={20} />}
-                    size="md"
-                    onClick={() => setModalOpen(true)}
-                  >
-                    {t('Change')}
-                  </Button>
-                </Popover.Target>
-                <Popover.Dropdown>
-                  <SmallFileList
-                    where={{
-                      mimeType: { manipulator: 'LIKE', value: '%image%' },
-                    }}
-                    title={t('Choose an image')}
-                    triggerClose={onClose}
-                    multiple={multiple}
-                    pickedFiles={modalPickedFiles}
-                    onChange={onChangeCallback}
-                  />
-                </Popover.Dropdown>
-              </Popover>
+                {t('Change')}
+              </Button>
             </div>
           </Input.Wrapper>
         </div>
+        <FilePicker
+          isOpen={pickerOpen}
+          closeOnPick={!multiple}
+          onChange={onChangeCallback}
+          onClose={() => togglePickerOpen()}
+          value={modalPickedFiles}
+          title={t('Choose an image')}
+          fileQueryParameters={{
+            where: { mimeType: { manipulator: 'LIKE', value: '%image%' } },
+          }}
+        />
       </>
     );
   }

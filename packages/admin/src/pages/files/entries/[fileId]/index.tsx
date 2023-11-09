@@ -7,12 +7,13 @@ import { apiClient } from '@api';
 import { useMemo } from 'react';
 import { CopyToClipboard } from './components';
 import BackendImage from '@components/BackendImage';
+import { FileItem } from '@prom-cms/api-client';
 
 const FilePage: Page = () => {
   const { t } = useTranslation();
   const { fileId } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading } = useModelItem('files', fileId as string);
+  const { data, isLoading } = useModelItem<FileItem>('files', fileId as string);
 
   const fileUrl = useMemo(
     () => !!fileId && apiClient.files.getAssetUrl(fileId!),
@@ -21,11 +22,26 @@ const FilePage: Page = () => {
 
   const isImage = useMemo(() => data?.mimeType?.startsWith('image/'), [data]);
 
+  const handleClose = () => {
+    if (!data) {
+      return;
+    }
+
+    const folderName = data.filepath.split('/').slice(0, -1).join('/');
+    let pathname = '/files';
+
+    if (folderName) {
+      pathname += `?folder=/${folderName}`;
+    }
+
+    navigate(pathname);
+  };
+
   return (
     <Drawer
       size="xl"
       opened={true}
-      onClose={() => navigate(-1)}
+      onClose={handleClose}
       padding="xl"
       position="right"
       closeButtonLabel={t('Close')}

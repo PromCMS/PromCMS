@@ -1,10 +1,18 @@
-import { useCallback, useState, VFC } from 'react';
+import { FC, useCallback, useState } from 'react';
 import { Menu } from './Menu';
-import { FileListContextProvider } from './context';
+import { FileListContextProvider, FileListProviderProps } from './context';
 import { UploadFilesModal } from './UploadFilesModal';
 import { List } from './List';
 
-export const FileList: VFC = () => {
+export type FileListProps = FileListProviderProps;
+
+export const FileList: FC<FileListProps> = ({
+  currentFolder,
+  onFolderChange,
+  selectedFileIds,
+  onToggleSelectedFile,
+  fileQueryParameters,
+}) => {
   const [uploadFileModalOpen, setUploadFileModalOpen] =
     useState<boolean>(false);
 
@@ -37,7 +45,13 @@ export const FileList: VFC = () => {
   );
 
   return (
-    <FileListContextProvider>
+    <FileListContextProvider
+      currentFolder={currentFolder}
+      onFolderChange={onFolderChange}
+      selectedFileIds={selectedFileIds}
+      onToggleSelectedFile={onToggleSelectedFile}
+      fileQueryParameters={fileQueryParameters}
+    >
       <div onDragOver={onDragOver} onDrop={onDrop}>
         <Menu />
         <List />

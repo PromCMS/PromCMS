@@ -1,6 +1,6 @@
-import { SmallFileList } from '@components/FilePickerModal/SmallFileList';
 import { MESSAGES } from '@constants';
 import { Button, Input, Popover } from '@mantine/core';
+import { useToggle } from '@mantine/hooks';
 import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
 import {
@@ -10,10 +10,10 @@ import {
   ReactElement,
   useCallback,
   useMemo,
-  useState,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil } from 'tabler-icons-react';
+import { FilePicker, FilePickerProps } from '../FilePicker';
 import { MultipleItemDisplay } from './MultipleItemDisplay';
 import { SingleItemDisplay } from './SingleItemDisplay';
 
@@ -47,28 +47,29 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
     },
     ref
   ) {
-    const [modalOpen, setModalOpen] = useState(false);
+    const [pickerOpen, togglePickerOpen] = useToggle();
     const { t } = useTranslation();
 
-    const onChangeCallback = useCallback(
-      (ids: ItemID[]) => {
-        onChange(!multiple ? ids[0] || null : ids);
-      },
-      [onChange, multiple]
-    );
+    const onChangeCallback = useCallback<FilePickerProps['onChange']>(
+      (nextValue) => {
+        if (multiple) {
+          onChange(nextValue);
 
-    const onClose = useCallback(() => {
-      setModalOpen(false);
-      if (onBlur) onBlur();
-    }, [onBlur, setModalOpen]);
+          return;
+        }
+
+        // We pick last, because FilePicker component has always array - if user picks other then there will be two values in the array
+        onChange(nextValue?.at(-1) ?? null);
+        if (onBlur) onBlur();
+      },
+      [onChange, multiple, onBlur]
+    );
 
     const modalPickedFiles = useMemo(
       () =>
-        selected === null || selected === undefined || selected === 'undefined'
-          ? []
-          : Array.isArray(selected)
-          ? selected
-          : [selected],
+        (Array.isArray(selected) ? selected : [selected]).filter(
+          Boolean
+        ) as string[],
       [selected]
     );
 
@@ -90,37 +91,25 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
                 )}
               </div>
 
-              <Popover
-                withArrow
-                opened={modalOpen}
-                onClose={onClose}
-                withinPortal={false}
-                width={590}
-                position="bottom-end"
+              <Button
+                color="ghost"
+                leftIcon={<Pencil size={20} />}
+                size="md"
+                onClick={() => togglePickerOpen()}
               >
-                <Popover.Target>
-                  <Button
-                    color="ghost"
-                    leftIcon={<Pencil size={20} />}
-                    size="md"
-                    onClick={() => setModalOpen(true)}
-                  >
-                    {t(MESSAGES.EDIT)}
-                  </Button>
-                </Popover.Target>
-                <Popover.Dropdown>
-                  <SmallFileList
-                    title={t(MESSAGES.CHOOSE_A_FILE)}
-                    triggerClose={onClose}
-                    multiple={multiple}
-                    pickedFiles={modalPickedFiles}
-                    onChange={onChangeCallback}
-                  />
-                </Popover.Dropdown>
-              </Popover>
+                {t(MESSAGES.EDIT)}
+              </Button>
             </div>
           </Input.Wrapper>
         </div>
+        <FilePicker
+          isOpen={pickerOpen}
+          closeOnPick={!multiple}
+          onChange={onChangeCallback}
+          onClose={() => togglePickerOpen()}
+          value={modalPickedFiles}
+          title={t(MESSAGES.CHOOSE_A_FILE)}
+        />
       </>
     );
   }

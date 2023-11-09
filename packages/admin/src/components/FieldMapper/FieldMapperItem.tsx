@@ -4,9 +4,7 @@ import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { EnumSelect, RelationshipItemSelect } from './fields';
-import { BigImage } from './fields/file/BigImage';
-import { Normal } from './fields/file/Normal';
-import { SmallImage } from './fields/file/SmallImage';
+import { BigImagePicker } from './fields/BigImagePicker';
 import { OpeningHours } from './fields/json/OpeningHours';
 import { Repeater } from './fields/json/Repeater';
 import { BlockEditor } from '@components/form/BlockEditor';
@@ -22,6 +20,8 @@ import { Controller } from 'react-hook-form';
 import { Email } from './fields/Email';
 import { UrlFieldInput } from './fields/UrlFieldInput';
 import { JsonFieldInputAsLinkButton } from './fields/json/JsonFieldInputAsLinkButton';
+import ImageSelect from '@components/form/ImageSelect';
+import { FileSelect } from '@components/form/FileSelect';
 
 export const FieldMapperItem: FC<
   { placement: FieldPlacements; columnName: string } & ColumnType
@@ -116,7 +116,7 @@ export const FieldMapperItem: FC<
       switch (values.admin.fieldType) {
         case 'big-image':
           result = (
-            <BigImage
+            <BigImagePicker
               name={columnName}
               errorMessage={errorMessage}
               label={values.title}
@@ -127,22 +127,34 @@ export const FieldMapperItem: FC<
           break;
         case 'small-image':
           result = (
-            <SmallImage
+            <Controller
               name={columnName}
-              errorMessage={errorMessage}
-              label={values.title}
-              disabled={disabled}
-              {...values}
+              render={({ field: { onChange, value } }) => (
+                <ImageSelect
+                  onChange={onChange}
+                  selected={value ? String(value) : null}
+                  error={errorMessage}
+                  label={values.title}
+                  disabled={disabled}
+                  {...values}
+                />
+              )}
             />
           );
         case 'normal':
           result = (
-            <Normal
+            <Controller
               name={columnName}
-              errorMessage={errorMessage}
-              label={values.title}
-              disabled={disabled}
-              {...values}
+              render={({ field: { onChange, value } }) => (
+                <FileSelect
+                  onChange={onChange}
+                  selected={value ? String(value) : null}
+                  error={errorMessage}
+                  label={values.title}
+                  disabled={disabled}
+                  {...values}
+                />
+              )}
             />
           );
           break;

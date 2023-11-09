@@ -59,4 +59,5 @@ export enum MESSAGES {
   OPEN_IN_NEW_TAB = 'Open in a new tab',
   DOWNLOAD = 'Download',
   LOGIN_TO_MY_ACCOUNT = 'Login to my account',
+  SELECT = 'Select',
 }

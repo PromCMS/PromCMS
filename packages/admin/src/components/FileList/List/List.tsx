@@ -1,5 +1,5 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { useCallback, FC } from 'react';
+import { useCallback, FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFileListContext } from '../context';
 import { useClassNames } from '../useClassNames';
@@ -14,8 +14,6 @@ import {
 } from '@mantine/notifications';
 import { Transition } from '@mantine/core';
 import { apiClient } from '@api';
-import { ResultItem } from '@prom-cms/api-client';
-import { File } from '@prom-cms/shared';
 
 export const List: FC = () => {
   const {
@@ -28,6 +26,8 @@ export const List: FC = () => {
     workingFolders,
     mutateFiles,
     mutateFolders,
+    onToggleSelectedFile,
+    selectedFileIds,
   } = useFileListContext();
   const notifications = useNotifications();
   const classNames = useClassNames();
@@ -147,8 +147,10 @@ export const List: FC = () => {
             {files?.files &&
               files.files.map((fileInfo) => (
                 <FileItem
-                  key={(fileInfo as ResultItem & File).id}
+                  key={fileInfo.id}
                   onDeleteClick={onFileDeleteClick}
+                  isPicked={selectedFileIds?.includes(String(fileInfo.id))}
+                  onTogglePick={onToggleSelectedFile}
                   {...fileInfo}
                 />
               ))}

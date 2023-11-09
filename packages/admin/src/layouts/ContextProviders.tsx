@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/en';
 import 'dayjs/locale/cs';
 import 'dayjs/locale/de';
+import { NotificationsProvider } from '@mantine/notifications';
 
 const defaultQueryFn = async ({ queryKey }: QueryFunctionContext<any>) => {
   return apiClient.entries
@@ -67,7 +68,9 @@ const ContextProviders: FC<PropsWithChildren> = ({ children }) => (
     <ThemeProvider>
       <I18nextProvider i18n={i18next}>
         <LanguageLoader />
-        {children}
+        <NotificationsProvider position="top-right">
+          {children}
+        </NotificationsProvider>
       </I18nextProvider>
     </ThemeProvider>
   </QueryClientProvider>

@@ -1,15 +1,33 @@
+import { FileList } from '@components/FileList';
 import { Page } from '@custom-types';
 import { useModelInfo } from '@hooks/useModelInfo';
+import { useRouterQuery } from '@hooks/useRouterQuery';
 import { PageLayout } from '@layouts';
 import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import NotFoundPage from '../404';
-import { FileList } from './_components';
 
 const FilesPage: Page = () => {
   const { t } = useTranslation();
   const model = useModelInfo('files');
+
+  const currentFolder = useRouterQuery('folder');
+  const currentPath = useMemo(
+    () => (currentFolder || '/').replaceAll('//', '/'),
+    [currentFolder]
+  );
+  const navigate = useNavigate();
+
+  const handleFolderChange = useCallback(
+    (value: string) => {
+      navigate({
+        search: `?folder=${value}`,
+      });
+    },
+    [navigate]
+  );
 
   if (!model)
     return <NotFoundPage text={t('This model with this id does not exist.')} />;
@@ -21,7 +39,10 @@ const FilesPage: Page = () => {
           {t(capitalizeFirstLetter(model.tableName || ''))}
         </h1>
       </div>
-      <FileList />
+      <FileList
+        currentFolder={currentPath}
+        onFolderChange={handleFolderChange}
+      />
       <Outlet />
     </PageLayout>
   );

@@ -1,5 +1,5 @@
-import { useFileList } from '@components/FilePickerModal/SmallFileList/List/hooks';
 import { MESSAGES } from '@constants';
+import { useFileList } from '@hooks/useFileList';
 import { Table } from '@mantine/core';
 import { ItemID } from '@prom-cms/shared';
 import { FC } from 'react';

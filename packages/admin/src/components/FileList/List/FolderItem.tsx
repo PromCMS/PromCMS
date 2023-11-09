@@ -56,7 +56,7 @@ export const FolderItem: VFC<FolderItemProps> = ({
         className={clsx(classNames.itemSquare(), 'flex cursor-pointer')}
         onClick={onFolderClick}
       >
-        <CustomFolderIcon className="m-auto block h-28 w-28 text-blue-500" />
+        <CustomFolderIcon className="m-auto block h-16 w-16 text-blue-500" />
       </div>
       <h3
         className={clsx(classNames.itemLabel, 'cursor-pointer text-left')}
@@ -67,15 +67,15 @@ export const FolderItem: VFC<FolderItemProps> = ({
       <div className="absolute top-0 right-0 m-2.5">
         <ActionIcon
           onClick={onFolderDeleteClick}
-          size={45}
-          color={'red'}
-          className="border-2 border-project-border bg-white"
+          size={36}
+          color="red"
+          className="border-2 border-red-200 bg-white"
           disabled={
             workingFolders[folderPath]?.type === 'deleting' ||
             workingFolders[folderPath]?.type === 'uploading'
           }
         >
-          <Trash size={25} />
+          <Trash size={20} />
         </ActionIcon>
       </div>
     </div>

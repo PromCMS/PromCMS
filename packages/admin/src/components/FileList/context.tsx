@@ -1,7 +1,7 @@
 import { apiClient } from '@api';
 import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder';
-import { useRouterQuery } from '@hooks/useRouterQuery';
 import { showNotification, updateNotification } from '@mantine/notifications';
+import { FileItem, QueryParams } from '@prom-cms/api-client';
 import { createLogger } from '@utils';
 import { t } from 'i18next';
 import {
@@ -14,7 +14,6 @@ import {
   useReducer,
 } from 'react';
 import { DropzoneRootProps, useDropzone } from 'react-dropzone';
-import { useNavigate } from 'react-router-dom';
 import { UploadingFiles } from './types';
 import { formatDroppedFiles } from './utils';
 
@@ -39,6 +38,12 @@ export interface IFileListContext {
   files: UseFileFolderData | undefined;
   mutateFiles: ReturnType<typeof useFileFolder>['mutateFiles'];
   mutateFolders: ReturnType<typeof useFileFolder>['mutateFolders'];
+  selectedFileIds?: FileItem['id'][];
+  onToggleSelectedFile?: (
+    selectedFileId: FileItem['id'],
+    isSelected: boolean
+  ) => void;
+
   openFilePicker: () => void;
   getDropZoneRootProps: <T extends DropzoneRootProps>(
     config: T | undefined
@@ -86,16 +91,25 @@ function reducer<T extends keyof IFileListContextValues>(
 
 const logger = createLogger('FileListContextProvider');
 
-export const FileListContextProvider: FC<PropsWithChildren> = ({
+export interface FileListProviderProps
+  extends Pick<IFileListContext, 'onToggleSelectedFile' | 'selectedFileIds'> {
+  currentFolder: string;
+  onFolderChange: (nextFolderPath: string) => void;
+  fileQueryParameters?: Pick<QueryParams, 'where'>;
+}
+
+export const FileListContextProvider: FC<
+  PropsWithChildren<FileListProviderProps>
+> = ({
   children,
+  currentFolder,
+  onFolderChange,
+  onToggleSelectedFile,
+  selectedFileIds,
+  fileQueryParameters,
 }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const currentFolder = useRouterQuery('folder');
-  const navigate = useNavigate();
-  const currentPath = useMemo(
-    () => ((currentFolder as string) || '/').replaceAll('//', '/'),
-    [currentFolder]
-  );
+
   const {
     data: filesAndFolders,
     isError,
@@ -103,26 +117,23 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
     mutateFiles,
     mutateFolders,
     refetchFiles,
-  } = useFileFolder(currentPath);
+  } = useFileFolder(currentFolder, fileQueryParameters?.where);
 
   const updateValue: IFileListContext['updateValue'] = useCallback(
     (name, value) => {
       if (name === 'currentPath') {
-        navigate({
-          search: `?folder=${value}`,
-        });
-
+        onFolderChange(String(value));
         return;
       }
 
       dispatch({ name, value });
     },
-    [dispatch, navigate]
+    [dispatch]
   );
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      let files = formatDroppedFiles(currentPath, acceptedFiles);
+      let files = formatDroppedFiles(currentFolder, acceptedFiles);
 
       updateValue('uploadingFiles', files);
 
@@ -141,7 +152,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
 
         // Upload
         try {
-          await apiClient.files.create(file, { root: currentPath });
+          await apiClient.files.create(file, { root: currentFolder });
         } catch (e) {
           isError = true;
           updateNotification({
@@ -175,7 +186,7 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
         });
       }
     },
-    [updateValue, currentPath, mutateFiles]
+    [updateValue, currentFolder, mutateFiles]
   );
 
   const {
@@ -191,6 +202,8 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
   const contextValue = useMemo(
     () => ({
       ...state,
+      onToggleSelectedFile,
+      selectedFileIds,
       files: filesAndFolders,
       isError,
       isLoading,
@@ -198,7 +211,8 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
       openFilePicker: open,
       getDropZoneRootProps,
       getDropZoneInputProps,
-      currentPath,
+      // TODO: rename
+      currentPath: currentFolder,
       mutateFiles,
       mutateFolders,
     }),
@@ -210,10 +224,12 @@ export const FileListContextProvider: FC<PropsWithChildren> = ({
       open,
       getDropZoneRootProps,
       getDropZoneInputProps,
-      currentPath,
+      currentFolder,
       mutateFiles,
       mutateFolders,
       state,
+      onToggleSelectedFile,
+      selectedFileIds,
     ]
   );
 

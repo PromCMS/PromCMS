@@ -1,4 +1,4 @@
-import { FileItem } from '@prom-cms/api-client';
+import { FileItem, QueryParams } from '@prom-cms/api-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 import { useFolders } from './useFolders';
@@ -9,8 +9,12 @@ export interface UseFileFolderData {
   folders?: string[];
 }
 
-export const useFileFolder = (currentPath: string) => {
+export const useFileFolder = (
+  currentPath: string,
+  where?: QueryParams['where']
+) => {
   const client = useQueryClient();
+  // Implement type filter
   const {
     data: filesRes,
     isError,
@@ -18,7 +22,12 @@ export const useFileFolder = (currentPath: string) => {
     key: filesQueryKey,
     refetch: refetchFiles,
   } = useModelItems<FileItem>('files', {
-    params: { path: currentPath, limit: 9999 },
+    params: {
+      path: currentPath,
+      limit: 9999,
+      // FIXME: Kinda broken types
+      where: where as any,
+    },
   });
 
   const {
