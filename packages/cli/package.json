@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/cli",
   "description": "PromCMS cli package",
-  "version": "0.21.2",
+  "version": "0.21.3",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
@@ -44,9 +44,9 @@
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
-    "@prom-cms/admin": "^0.13.0",
+    "@prom-cms/admin": "^0.14.0",
     "@prom-cms/config": "^0.1.7",
-    "@prom-cms/shared": "^2.1.0",
+    "@prom-cms/shared": "^3.0.0",
     "chalk": "^5.1.2",
     "commander": "^11.0.0",
     "dayjs": "^1.11.6",

@@ -1,5 +1,17 @@
 # @prom-cms/api-client
 
+## 0.9.0
+
+### Minor Changes
+
+- 5137fad: POSSIBLE BREAKING: Added `unstable_fetchReferences` property to each request config in api-client and uses this property in admin useModelItems and columnValueFormatter so its accessible with the use of labelConstructor.
+- 5137fad: Adds new property to result item as each result can have this property when combined with specific query parameter.
+
+### Patch Changes
+
+- Updated dependencies [2ad5366]
+  - @prom-cms/shared@3.0.0
+
 ## 0.8.0
 
 ### Minor Changes

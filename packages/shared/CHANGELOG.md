@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 3.0.0
+
+### Major Changes
+
+- 2ad5366: BREAKING: labelConstructor under relationship column will now support mustache templating in admin.
+
 ## 2.1.0
 
 ### Minor Changes
