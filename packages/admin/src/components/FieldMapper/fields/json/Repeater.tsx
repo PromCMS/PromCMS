@@ -11,7 +11,8 @@ export const Repeater: FC<{
   columns: RepeaterAdminSchema['columns'];
   placement: FieldPlacements;
   disabled?: boolean;
-}> = ({ name, label, columns, placement, disabled }) => {
+  readonly?: boolean;
+}> = ({ name, label, columns, placement, disabled, readonly }) => {
   const { formState, register } =
     useFormContext<Record<string, string | boolean | number>>();
   const { t } = useTranslation();
@@ -103,36 +104,38 @@ export const Repeater: FC<{
 
               return <Fragment key={columnKey}>{result}</Fragment>;
             })}
-            <Input.Wrapper
-              label={hasLabels ? t('Actions') : undefined}
-              labelProps={{ className: 'opacity-0' }}
-              className="flex-none"
-            >
-              <div className="grid grid-cols-2">
-                <ActionIcon
-                  size="xl"
-                  p="xs"
-                  variant="subtle"
-                  color="blue"
-                  onClick={() => insert(index + 1, {})}
-                  disabled={disabled}
-                >
-                  <Plus />
-                </ActionIcon>
+            {readonly ? (
+              <Input.Wrapper
+                label={hasLabels ? t('Actions') : undefined}
+                labelProps={{ className: 'opacity-0' }}
+                className="flex-none"
+              >
+                <div className="grid grid-cols-2">
+                  <ActionIcon
+                    size="xl"
+                    p="xs"
+                    variant="subtle"
+                    color="blue"
+                    onClick={() => insert(index + 1, {})}
+                    disabled={disabled}
+                  >
+                    <Plus />
+                  </ActionIcon>
 
-                <ActionIcon
-                  disabled={index === 0 || disabled}
-                  className={clsx(index == 0 && 'opacity-0')}
-                  size="xl"
-                  p="xs"
-                  variant="subtle"
-                  color="red"
-                  onClick={() => remove(index)}
-                >
-                  <Trash />
-                </ActionIcon>
-              </div>
-            </Input.Wrapper>
+                  <ActionIcon
+                    disabled={index === 0 || disabled}
+                    className={clsx(index == 0 && 'opacity-0')}
+                    size="xl"
+                    p="xs"
+                    variant="subtle"
+                    color="red"
+                    onClick={() => remove(index)}
+                  >
+                    <Trash />
+                  </ActionIcon>
+                </div>
+              </Input.Wrapper>
+            ) : null}
           </div>
         ))}
       </div>

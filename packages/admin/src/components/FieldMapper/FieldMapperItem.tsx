@@ -226,6 +226,7 @@ export const FieldMapperItem: FC<
               columns={(values.admin as any).columns as any}
               placement={placement}
               disabled={disabled}
+              readonly={readonly}
             />
           );
           break;
