@@ -1,5 +1,25 @@
 # @prom-cms/admin
 
+## 0.14.0
+
+### Minor Changes
+
+- b91004a: Possible Breaking: Introduces different image picker to image and file components. Now there is a slideover that shows classic file library that is from file library page. Changes made to file library page will reflect changes made to file picker view from slideover.
+- 2ad5366: BREAKING: labelConstructor under relationship column will now support mustache templating in admin.
+- 5137fad: POSSIBLE BREAKING: Added `unstable_fetchReferences` property to each request config in api-client and uses this property in admin useModelItems and columnValueFormatter so its accessible with the use of labelConstructor.
+
+### Patch Changes
+
+- 803ad43: Fixing column value formatter for table view to not use error boundary for relations and if there is an error the show X icon
+- e4f7eaa: Redirect user out of login when he is already logged in.
+- 3545cb5: Update design of login page and improve loading screen.
+- b047a2a: Hide action buttons for repeater column render of json field
+- Updated dependencies [2ad5366]
+- Updated dependencies [5137fad]
+- Updated dependencies [5137fad]
+  - @prom-cms/shared@3.0.0
+  - @prom-cms/api-client@0.9.0
+
 ## 0.13.0
 
 ### Minor Changes
