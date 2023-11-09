@@ -1,5 +1,12 @@
 # @prom-cms/cli
 
+## 0.21.4
+
+### Patch Changes
+
+- Updated dependencies [db47c6c]
+  - @prom-cms/admin@0.15.0
+
 ## 0.21.3
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @prom-cms/admin
 
+## 0.15.0
+
+### Minor Changes
+
+- db47c6c: Add support for relationship field in repeater
+
+### Patch Changes
+
+- Updated dependencies [db47c6c]
+  - @prom-cms/schema@0.4.0
+
 ## 0.14.0
 
 ### Minor Changes

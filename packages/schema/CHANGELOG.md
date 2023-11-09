@@ -1,5 +1,11 @@
 # @prom-cms/shared
 
+## 0.4.0
+
+### Minor Changes
+
+- db47c6c: Add support for relationship field in repeater
+
 ## 0.3.0
 
 ### Minor Changes
