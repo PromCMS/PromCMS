@@ -35,7 +35,7 @@ const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
   );
 
   const text = useMemo(
-    () => Mustache.render(column.labelConstructor, data),
+    () => (data ? Mustache.render(column.labelConstructor, data) : ''),
     [data, column.labelConstructor]
   );
 
