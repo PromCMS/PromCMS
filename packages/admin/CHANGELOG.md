@@ -1,5 +1,12 @@
 # @prom-cms/admin
 
+## 0.15.1
+
+### Patch Changes
+
+- a94dce5: Fix admin when relation does not exist it throws when rendering mustache by bypassing rendering altogether
+- 83dd3ec: Fix admin not rendering action on repeater json field when readonly is true
+
 ## 0.15.0
 
 ### Minor Changes
