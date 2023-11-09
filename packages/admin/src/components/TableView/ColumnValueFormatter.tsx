@@ -17,7 +17,7 @@ type ColumnValueFormatterProps = TableViewCol & { value: any };
 const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
   column
 ) => {
-  const { data } = useModelItem(
+  const { data, error } = useModelItem(
     column.targetModel,
     column.value,
     {
@@ -25,6 +25,7 @@ const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
     },
     {
       suspense: true,
+      useErrorBoundary: false,
       refetchInterval: 0,
       refetchOnReconnect: false,
       refetchOnMount: true,
@@ -37,6 +38,10 @@ const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
     () => Mustache.render(column.labelConstructor, data),
     [data, column.labelConstructor]
   );
+
+  if (error) {
+    return <X className="text-red-600" />;
+  }
 
   return <p>{text}</p>;
 };
