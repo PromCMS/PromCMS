@@ -4,6 +4,7 @@ import { FC, Fragment, useMemo } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash } from 'tabler-icons-react';
+import { RelationshipItemSelect } from '../RelationshipItemSelect';
 
 export const Repeater: FC<{
   name: string;
@@ -97,6 +98,23 @@ export const Repeater: FC<{
                       labelProps={labelProps}
                       disabled={disabled}
                       {...register(columnFieldName)}
+                    />
+                  );
+                  break;
+
+                case 'relationship':
+                  result = (
+                    <RelationshipItemSelect
+                      error={errorMessage}
+                      disabled={disabled}
+                      admin={{
+                        editor: { placement: FieldPlacements.MAIN, width: 12 },
+                        isHidden: false,
+                      }}
+                      columnName={columnFieldName}
+                      unique={false}
+                      translations={false}
+                      {...columnInfo}
                     />
                   );
                   break;

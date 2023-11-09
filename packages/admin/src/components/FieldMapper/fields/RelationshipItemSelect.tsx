@@ -8,10 +8,12 @@ import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-export interface RelationshipItemSelectProps extends ColumnTypeRelationship {
+export interface RelationshipItemSelectProps
+  extends Omit<ColumnTypeRelationship, 'title'> {
   columnName: string;
   error: string;
   disabled?: boolean;
+  title?: string;
 }
 
 export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({

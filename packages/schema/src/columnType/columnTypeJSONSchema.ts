@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { columnTypeBaseAdminConfigSchema } from './columnTypeBaseAdminConfigSchema.js';
 import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 import { columnTypeNumberSchema } from './columnTypeNumberSchema.js';
+import { columnTypeRelationshipSchema } from './columnTypeRelationshipSchema.js';
 import { columnTypeStringSchema } from './columnTypeStringSchema.js';
 
 const basicAdminSchema = columnTypeBaseAdminConfigSchema.extend({
@@ -29,6 +30,7 @@ export const repeaterAdminSchema = columnTypeBaseAdminConfigSchema.extend({
       z.discriminatedUnion('type', [
         // Updated string schema
         columnTypeStringSchema.omit(basicOmit).merge(basicExtend),
+        columnTypeRelationshipSchema.omit(basicOmit).merge(basicExtend),
 
         // Updated number schema
         columnTypeNumberSchema
