@@ -1,5 +1,16 @@
 # @prom-cms/admin
 
+## 0.16.0
+
+### Minor Changes
+
+- 7687a35: Show user that file upload failed and why to help user understand why their file upload has failed.
+
+### Patch Changes
+
+- Updated dependencies [7687a35]
+  - @prom-cms/api-client@0.10.0
+
 ## 0.15.1
 
 ### Patch Changes
