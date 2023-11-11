@@ -1,5 +1,11 @@
 # @prom-cms/api-client
 
+## 0.10.0
+
+### Minor Changes
+
+- 7687a35: Add support for 415 and 413 status code when uploading files fails. This helps user understand more on what happened on server during failed uploads.
+
 ## 0.9.0
 
 ### Minor Changes
