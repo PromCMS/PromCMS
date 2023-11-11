@@ -1,7 +1,13 @@
 import { apiClient } from '@api';
+import { MESSAGES } from '@constants';
 import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder';
 import { showNotification, updateNotification } from '@mantine/notifications';
-import { FileItem, QueryParams } from '@prom-cms/api-client';
+import {
+  FileItem,
+  FileTooLargeError,
+  QueryParams,
+  UnsupportedFileExtensionError,
+} from '@prom-cms/api-client';
 import { createLogger } from '@utils';
 import { t } from 'i18next';
 import {
@@ -137,35 +143,44 @@ export const FileListContextProvider: FC<
 
       updateValue('uploadingFiles', files);
 
-      const notificationId = 'on-drop-file-info';
+      const rootNotificationId = 'on-drop-file-info';
 
       showNotification({
-        id: notificationId,
-        message: <>{t('Working')}</>,
-        title: t('Uploading files...').toString(),
+        id: rootNotificationId,
+        title: t(MESSAGES.UPLOADING).toString(),
+        message: t(MESSAGES.UPLOADING_FILES).toString(),
         color: 'blue',
         autoClose: false,
       });
 
       for (const { key: filePath, file } of files) {
-        let isError = false;
-
-        // Upload
         try {
           await apiClient.files.create(file, { root: currentFolder });
-        } catch (e) {
-          isError = true;
-          updateNotification({
-            id: notificationId,
-            message: <>{t('Error')}</>,
-            title: t('An error happened').toString(),
+        } catch (error) {
+          let reason = t(MESSAGES.FILE_CANNOT_BE_UPLOADED).toString();
+
+          if (error instanceof FileTooLargeError) {
+            reason += ' ';
+            reason += t(MESSAGES.FILE_TOO_LARGE).toString();
+          } else if (error instanceof UnsupportedFileExtensionError) {
+            reason += ' ';
+            reason += t(MESSAGES.FILE_EXTENSION_UNSUPPORTED)
+              .toString()
+              .replaceAll(
+                '{{extension}}',
+                file.name.split('.').at(-1) ?? 'extension'
+              );
+          }
+
+          showNotification({
+            id: `failed-upload-${file.name}`,
+            title: t(MESSAGES.UPLOADING_FAILED).toString(),
+            message: reason.replaceAll('{{fileName}}', file.name ?? 'file'),
             color: 'red',
-            autoClose: 2000,
+            autoClose: 8000,
           });
 
-          logger.error(
-            `An error happened during onDrop creation: ${(e as Error).message}`
-          );
+          logger.error(error as Error);
         }
 
         // Update files folder here
@@ -176,15 +191,15 @@ export const FileListContextProvider: FC<
 
         // Refetch them
         await refetchFiles();
-
-        updateNotification({
-          id: notificationId,
-          message: <>{t('Success')}</>,
-          title: t('All files has been uploaded').toString(),
-          color: 'green',
-          autoClose: 2000,
-        });
       }
+
+      updateNotification({
+        id: rootNotificationId,
+        title: <>{t(MESSAGES.UPLOADING_FINISHED)}</>,
+        message: t(MESSAGES.ALL_FILES_HAS_BEEN_PROCESSED).toString(),
+        color: 'green',
+        autoClose: 3000,
+      });
     },
     [updateValue, currentFolder, mutateFiles]
   );

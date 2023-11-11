@@ -128,7 +128,6 @@ export const defaultLanguagePacks = {
       'Update an entry': 'Upravit položku',
       'Create an entry': 'Vytvořit položku',
       'Working...': 'Pracuji...',
-      'Uploading files...': 'Nahrávám soubory...',
       'An error happened...': 'Stala se neočekávaná chyba',
       Success: 'Úspěch',
       'All files has been uploaded': 'Všechny soubory byly úspěšně nahrány',
@@ -237,6 +236,19 @@ export const defaultLanguagePacks = {
       [MESSAGES.NO_ACTION]: 'Žádná akce',
       [MESSAGES.OPEN_IN_NEW_TAB]: 'Otevřít na nové záložce',
       [MESSAGES.DOWNLOAD]: 'Stáhnout',
+
+      [MESSAGES.ALL_FILES_HAS_BEEN_PROCESSED]:
+        'Všechny soubory byly zpracovány!',
+      [MESSAGES.UPLOADING_FINISHED]: 'Nahrávání bylo dokončeno!',
+      [MESSAGES.FILE_CANNOT_BE_UPLOADED]:
+        'Soubor {{fileName}} nemůže být nahrán!',
+      [MESSAGES.FILE_TOO_LARGE]: '{{fileName}} je moc velký!',
+      [MESSAGES.FILE_EXTENSION_UNSUPPORTED]: '{{extension}} není podporováno!',
+
+      [MESSAGES.UPLOADING_FILES]: 'Nahrávám soubory...',
+      [MESSAGES.UPLOADING_FAILED]: 'Chyba nahrávání',
+      [MESSAGES.UPLOADING]: 'Nahrávám',
+      [MESSAGES.STARTED_UPLOADING]: 'Začínám nahrávání',
     },
   },
   en: {

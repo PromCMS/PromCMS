@@ -60,4 +60,14 @@ export enum MESSAGES {
   DOWNLOAD = 'Download',
   LOGIN_TO_MY_ACCOUNT = 'Login to my account',
   SELECT = 'Select',
+
+  UPLOADING = 'Uploading',
+  UPLOADING_FILES = 'Uploading files...',
+  STARTED_UPLOADING = 'Started uploading',
+  ALL_FILES_HAS_BEEN_PROCESSED = 'All files has been processed',
+  UPLOADING_FINISHED = 'Uploading Finished!',
+  UPLOADING_FAILED = 'Uploading Failed!',
+  FILE_CANNOT_BE_UPLOADED = '{{fileName}} cannot be uploaded!',
+  FILE_TOO_LARGE = '{{fileName}} is too large!',
+  FILE_EXTENSION_UNSUPPORTED = '{{extension}} is not supported!',
 }
