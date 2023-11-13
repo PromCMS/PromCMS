@@ -1,4 +1,6 @@
 import { Button, Code, Paper, Title } from '@mantine/core';
+import NotFoundPage from '@pages/404';
+import { AxiosError } from 'axios';
 import { Component, PropsWithChildren } from 'react';
 
 class ErrorBoundary extends Component<
@@ -24,6 +26,13 @@ class ErrorBoundary extends Component<
   }
 
   render() {
+    if (
+      this.state.errorInfo instanceof AxiosError &&
+      this.state.errorInfo.response?.status === 404
+    ) {
+      return <NotFoundPage />;
+    }
+
     if (this.state.hasError) {
       return (
         <div className="flex min-h-screen">

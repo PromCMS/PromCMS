@@ -121,14 +121,7 @@ export const EntryUnderpageContextProvider: FC<{
 
   useEffect(() => {
     if (itemData) {
-      formMethods.reset({
-        ...Object.fromEntries(
-          Object.entries(itemData).filter(([_, data]) => data !== null)
-        ),
-        ...(itemData.content
-          ? { content: normalizeContent(itemData.content) }
-          : {}),
-      });
+      formMethods.reset(itemData);
 
       if (blockEditorRefs.refs.current) {
         for (const [fieldName, editorRef] of Object.entries(
