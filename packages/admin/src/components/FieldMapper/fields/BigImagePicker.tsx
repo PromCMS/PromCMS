@@ -128,10 +128,10 @@ export const BigImagePicker: FC<BigImageProps> = ({
             <div className="h-[50vh] w-full relative">
               {modalPickedFiles.length ? (
                 <BackendImage
-                  width={1600}
+                  width={900}
                   quality={75}
                   imageId={modalPickedFiles[0]}
-                  className="absolute h-full w-full object-cover object-center rounded-lg overflow-hidden"
+                  className="absolute h-full w-full object-contain object-center rounded-lg overflow-hidden"
                 />
               ) : (
                 <div className="absolute top-0 left-0 h-full w-full bg-gray-200 rounded-lg overflow-hidden" />

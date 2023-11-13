@@ -61,7 +61,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
                 width={56}
                 iconSize={20}
                 imageId={column.value}
-                className="absolute top-0 left-0 w-full h-full object-cover rounded-lg"
+                className="absolute top-0 left-0 w-full h-full object-contain rounded-lg"
               />
             </div>
           );
@@ -91,7 +91,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
         if (column.admin.fieldType === 'color' && column.value?.value) {
           return (
             <div
-              className="w-8 h-8 rounded-full"
+              className="w-8 h-8 rounded-full shadow-md border border-gray-200"
               style={{ background: column.value.value }}
             ></div>
           );

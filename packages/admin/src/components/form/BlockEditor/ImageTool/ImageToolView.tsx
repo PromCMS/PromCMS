@@ -51,7 +51,7 @@ export const ImageToolView: FC<{
           <BackendImage
             width={1500}
             imageId={state.fileId}
-            className="absolute top-0 left-0 h-full w-full rounded-lg object-cover"
+            className="absolute top-0 left-0 h-full w-full rounded-lg object-contain"
           />
         ) : (
           <div className="absolute top-0 left-0 h-full w-full rounded-lg bg-gray-200 object-cover" />

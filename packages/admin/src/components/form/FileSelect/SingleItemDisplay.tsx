@@ -10,7 +10,7 @@ const ImageOrExtension: FC<File> = ({ filename, mimeType, id }) => {
   if (mimeType?.includes('image')) {
     return (
       <BackendImage
-        className="absolute w-full h-full top-0 left-0 object-cover"
+        className="absolute w-full h-full top-0 left-0 object-contain"
         width={40}
         imageId={id}
       />

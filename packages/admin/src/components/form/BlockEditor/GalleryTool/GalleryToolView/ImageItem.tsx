@@ -24,7 +24,7 @@ export const ImageItem: FC<ImageInfo> = ({ id, description, title }) => {
         imageId={id}
         width={290}
         quality={60}
-        className="absolute top-0 left-0 h-full w-full overflow-hidden rounded-xl object-cover object-center"
+        className="absolute top-0 left-0 h-full w-full overflow-hidden rounded-xl object-contain object-center"
       />
       {!readOnly && (
         <div className="absolute right-0 bottom-0 m-3 flex gap-3">

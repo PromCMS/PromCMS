@@ -83,7 +83,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                     width={80}
                     quality={60}
                     imageId={modalPickedFiles[0]}
-                    className="absolute h-full w-full object-cover object-center"
+                    className="absolute h-full w-full object-contain object-center"
                   />
                 ) : (
                   <div className="absolute flex h-full w-full bg-gray-200">
