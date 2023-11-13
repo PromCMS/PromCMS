@@ -1,5 +1,8 @@
-import { getEntryUnderPageComponent } from '../_utils';
+import { FC } from 'react';
+import { EntryPageContent } from '../_components/EntryPageContent';
 
-const EntryUnderPage = getEntryUnderPageComponent('update');
+const EntryUnderPage: FC = () => {
+  return <EntryPageContent viewType="update" />;
+};
 
 export default EntryUnderPage;

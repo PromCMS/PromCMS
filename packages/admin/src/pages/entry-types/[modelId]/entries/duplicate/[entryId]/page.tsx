@@ -1,5 +1,8 @@
-import { getEntryUnderPageComponent } from '../../_utils';
+import { FC } from 'react';
+import { EntryPageContent } from '../../_components/EntryPageContent';
 
-const EntryDuplicateUnderPage = getEntryUnderPageComponent('create');
+const EntryDuplicateUnderPage: FC = () => {
+  return <EntryPageContent viewType="create" />;
+};
 
 export default EntryDuplicateUnderPage;
