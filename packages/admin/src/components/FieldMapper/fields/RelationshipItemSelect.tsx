@@ -1,12 +1,15 @@
+import { MESSAGES, pageUrls } from '@constants';
 import { useModelItems } from '@hooks/useModelItems';
-import { Select, SelectItem } from '@mantine/core';
+import { Select, SelectItem, Text } from '@mantine/core';
 import { ColumnTypeRelationship } from '@prom-cms/schema';
 import { UserRole } from '@prom-cms/shared';
 import Mustache from 'mustache';
 import { useMemo } from 'react';
 import { FC } from 'react';
-import { Controller } from 'react-hook-form';
+import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { ExternalLink } from 'tabler-icons-react';
 
 export interface RelationshipItemSelectProps
   extends Omit<ColumnTypeRelationship, 'title'> {
@@ -24,9 +27,12 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
   labelConstructor,
   disabled,
 }) => {
+  const { field } = useController<Record<string, string>>({
+    name: columnName,
+  });
   const { t } = useTranslation();
-  const { data, isError, isLoading } = useModelItems<UserRole>(targetModel, {});
 
+  const { data, isError, isLoading } = useModelItems<UserRole>(targetModel, {});
   const values = useMemo<SelectItem[]>(
     () =>
       (data?.data ?? []).map((entry) => ({
@@ -37,22 +43,30 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
   );
 
   return (
-    <Controller
-      name={columnName}
-      render={({ field: { onChange, value } }) => (
-        <Select
-          data={values}
-          key={columnName}
-          label={title}
-          value={String(value)}
-          onChange={onChange}
-          className="w-full"
-          placeholder={t('Select an option')}
-          shadow="xl"
-          disabled={isError || isLoading || disabled}
-          error={error}
-        />
-      )}
-    />
+    <div>
+      <Select
+        data={values}
+        key={columnName}
+        label={title}
+        value={field.value ?? null}
+        onChange={field.onChange}
+        className="w-full"
+        placeholder={t('Select an option')}
+        shadow="xl"
+        disabled={isError || isLoading || disabled}
+        error={error}
+      />
+      {field.value && !Array.isArray(field.value) ? (
+        <Link
+          target="_blank"
+          to={pageUrls.entryTypes(targetModel).view(field.value)}
+        >
+          <Text size="sm" color="blue">
+            <ExternalLink size={15} className="mr-1 relative top-0.5" />
+            {MESSAGES.SHOW_SELECTED_ITEM}
+          </Text>
+        </Link>
+      ) : null}
+    </div>
   );
 };
