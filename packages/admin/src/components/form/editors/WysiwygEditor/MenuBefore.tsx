@@ -1,4 +1,4 @@
-import { EDITOR_MESSAGES, MESSAGES } from '@constants';
+import { EDITOR_MESSAGES, MESSAGES, SIMPLE_WORDS } from '@constants';
 import { ActionIcon, Divider, Tooltip } from '@mantine/core';
 import { useCurrentEditor } from '@tiptap/react';
 import clsx from 'clsx';
@@ -184,7 +184,7 @@ export const MenuBefore: FC = () => {
         icon={Link}
         active={editor?.isActive('link')}
         onClick={setLink}
-        label={t(EDITOR_MESSAGES.LINK)}
+        label={t(SIMPLE_WORDS.LINK)}
       />
       <Action
         onClick={() => editor?.chain().toggleBlockquote().run()}

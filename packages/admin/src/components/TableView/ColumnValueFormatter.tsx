@@ -1,7 +1,7 @@
 import BackendImage from '@components/BackendImage';
 import { FC, Fragment, memo, Suspense, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { Check, X } from 'tabler-icons-react';
+import { Check, Eye, X } from 'tabler-icons-react';
 import Mustache from 'mustache';
 
 import { TableViewCol } from './TableView';
@@ -9,8 +9,9 @@ import { useClassNames } from './useClassNames';
 import { MESSAGES, pageUrls } from '@constants';
 import { useTranslation } from 'react-i18next';
 import { ColumnTypeRelationship } from '@prom-cms/schema';
-import { Skeleton } from '@mantine/core';
+import { ActionIcon, Drawer, Skeleton, Tooltip } from '@mantine/core';
 import { useModelItem } from '@hooks/useModelItem';
+import { useDisclosure } from '@mantine/hooks';
 
 type ColumnValueFormatterProps = TableViewCol & { value: any };
 
@@ -44,6 +45,42 @@ const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
   }
 
   return <p>{text}</p>;
+};
+
+const LongTextItem: FC<{ value: string }> = ({ value }) => {
+  const { t } = useTranslation();
+  const [opened, { open, close }] = useDisclosure(false);
+
+  return (
+    <>
+      <Drawer
+        opened={opened}
+        onClose={close}
+        title={t(MESSAGES.CONTENT)}
+        position="bottom"
+        classNames={{
+          header: 'container mx-auto border-b border-gray-300 py-3',
+          title: 'text-xl',
+          body: 'container mx-auto',
+        }}
+      >
+        <div
+          className="wysiwyg-editor"
+          dangerouslySetInnerHTML={{ __html: value }}
+        ></div>
+      </Drawer>
+      <Tooltip
+        multiline
+        withArrow
+        withinPortal
+        label={t(MESSAGES.PREVIEW_CONTENT)}
+      >
+        <ActionIcon onClick={open}>
+          <Eye />
+        </ActionIcon>
+      </Tooltip>
+    </>
+  );
 };
 
 export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
@@ -142,6 +179,11 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
               {column.value}
             </a>
           );
+        }
+
+      case 'longText':
+        if (column.value) {
+          return <LongTextItem value={column.value} />;
         }
       // fallback to normal return
       default:
