@@ -22,6 +22,7 @@ import { UrlFieldInput } from './fields/UrlFieldInput';
 import { JsonFieldInputAsLinkButton } from './fields/json/JsonFieldInputAsLinkButton';
 import ImageSelect from '@components/form/ImageSelect';
 import { FileSelect } from '@components/form/FileSelect';
+import { WysiwygEditor } from '@components/form/editors/WysiwygEditor';
 
 export const FieldMapperItem: FC<
   { placement: FieldPlacements; columnName: string } & ColumnType
@@ -75,17 +76,31 @@ export const FieldMapperItem: FC<
       break;
 
     case 'longText':
-      result = (
-        <Textarea
-          autosize
-          minRows={7}
-          label={title}
-          className="w-full"
-          error={errorMessage}
-          disabled={disabled}
-          {...register(columnName)}
-        />
-      );
+      switch (admin.fieldType) {
+        case 'normal':
+          result = (
+            <Textarea
+              autosize
+              minRows={7}
+              label={title}
+              className="w-full"
+              error={errorMessage}
+              disabled={disabled}
+              {...register(columnName)}
+            />
+          );
+          break;
+
+        case 'wysiwyg':
+          result = (
+            <WysiwygEditor
+              label={title}
+              disabled={disabled}
+              name={columnName}
+            />
+          );
+          break;
+      }
       break;
 
     case 'enum':

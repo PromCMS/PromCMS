@@ -70,5 +70,48 @@ module.exports = {
   corePlugins: {
     preflight: false,
   },
-  plugins: [],
+  plugins: [
+    {
+      handler({ addBase, theme }) {
+        addBase({
+          '.wysiwyg-editor': {
+            ul: {
+              listStyle: 'disc',
+              paddingLeft: '1.5rem',
+              margin: '0.7rem 0',
+            },
+            ol: {
+              listStyle: 'list',
+              paddingLeft: '1.5rem',
+              margin: '0.7rem 0',
+            },
+            a: {
+              color: theme('colors.sky.400'),
+            },
+            blockquote: {
+              fontWeight: 500,
+              fonStyle: 'italic',
+              color: theme('colors.gray.700'),
+              borderLeftWidth: '0.25rem',
+              borderLeftColor: theme('colors.gray.300'),
+              marginTop: '1.6em',
+              marginBottom: '1.6em',
+              paddingLeft: '1em',
+            },
+          },
+          '.tiptap': {
+            'p.is-editor-empty': {
+              '&:first-child::before': {
+                color: '#adb5bd',
+                content: 'attr(data-placeholder)',
+                float: 'left',
+                height: 0,
+                pointerEvents: 'none',
+              },
+            },
+          },
+        });
+      },
+    },
+  ],
 };

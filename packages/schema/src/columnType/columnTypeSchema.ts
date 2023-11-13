@@ -4,6 +4,7 @@ import { columnTypeEmailSchema } from './columnTypeEmailSchema.js';
 import { columnTypeEnumSchema } from './columnTypeEnumSchema.js';
 import { columnTypeFileSchema } from './columnTypeFileSchema.js';
 import { columnTypeJSONSchema } from './columnTypeJSONSchema.js';
+import { columnTypeLongTextSchema } from './columnTypeLongTextSchema.js';
 import { columnTypeNormalSchema } from './columnTypeNormalSchema.js';
 import { columnTypeNumberSchema } from './columnTypeNumberSchema.js';
 import { columnTypeRelationshipSchema } from './columnTypeRelationshipSchema.js';
@@ -14,6 +15,7 @@ import { columnTypeUrlSchema } from './columnTypeUrlSchema.js';
 export const columnTypeSchema = z.union([
   columnTypeNormalSchema,
   columnTypeJSONSchema,
+  columnTypeLongTextSchema,
   columnTypeStringSchema,
   columnTypeEnumSchema,
   columnTypeFileSchema,

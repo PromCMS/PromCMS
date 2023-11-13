@@ -13,6 +13,7 @@ export * from './columnType/columnTypeEmailSchema.js';
 export * from './columnType/columnTypeEnumSchema.js';
 export * from './columnType/columnTypeFileSchema.js';
 export * from './columnType/columnTypeJSONSchema.js';
+export * from './columnType/columnTypeLongTextSchema.js';
 export * from './columnType/columnTypeNormalSchema.js';
 export * from './columnType/columnTypeNumberSchema.js';
 export * from './columnType/columnTypeRelationshipSchema.js';
