@@ -69,7 +69,7 @@ export const Form: FC = () => {
         } catch (e) {
           logger.error(`Failed login because of ${(e as Error).message}`);
 
-          let message = MESSAGES.LOGIN_INVALID_CREDENTIALS;
+          let message: string = MESSAGES.LOGIN_INVALID_CREDENTIALS;
           if (
             axios.isAxiosError(e) &&
             isApiResponse<unknown, LoginFailedResponseCodes>(e.response)

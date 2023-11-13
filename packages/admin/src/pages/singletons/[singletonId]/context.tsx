@@ -65,7 +65,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
   }, [singleton]);
 
   const formMethods = useForm<Record<string, any>>({
-    defaultValues: constructDefaultFormValues(singleton),
+    defaultValues: constructDefaultFormValues(singleton, singleton ?? {}),
     reValidateMode: 'onChange',
     mode: 'onTouched',
     resolver,

@@ -90,7 +90,7 @@ module.exports = {
             },
             blockquote: {
               fontWeight: 500,
-              fonStyle: 'italic',
+              fontStyle: 'italic',
               color: theme('colors.gray.700'),
               borderLeftWidth: '0.25rem',
               borderLeftColor: theme('colors.gray.300'),
