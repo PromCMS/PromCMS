@@ -7,7 +7,6 @@ export const EDITOR_MESSAGES = {
   PLACEHOLDER_PARAGRAPH: 'Start writing here...',
   BOLD: 'Bold',
   ITALIC: 'Italic',
-  LINK: 'Link',
   BLOCKQUOTE: 'Blockquote',
   UNDO: 'Undo',
   REDO: 'Redo',

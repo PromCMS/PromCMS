@@ -7,7 +7,8 @@ import { useTranslation } from 'react-i18next';
 const languages: SelectItem[] = [
   { value: 'en', label: '🇬🇧 English' },
   { value: 'cs', label: '🇨🇿 Česky' },
-  // { value: 'de', label: '🇩🇪 German' },
+  { value: 'de', label: '🇩🇪 German' },
+  { value: 'sk', label: '🇸🇰 Slovensky' },
 ];
 
 export const LanguageSelect = () => {

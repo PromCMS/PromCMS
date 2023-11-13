@@ -1,4 +1,4 @@
-import { MESSAGES } from './texts';
+import { EDITOR_MESSAGES, MESSAGES, SIMPLE_WORDS } from './texts';
 
 export const localizationLocalStorageKey = 'i18nextLng';
 export const localizationSessionStorageKey = 'i18nextLng';
@@ -177,7 +177,7 @@ export const defaultLanguagePacks = {
       'Update done!': 'Úspěšně upraveno!',
       'Full name': 'Plné jméno',
       'Change email': 'Změnit heslo',
-      'Admin language': 'Heslo rozhraní',
+      'Admin language': 'Jazyk rozhraní',
       'Saving, please wait...': 'Ukládám změny, strpení prosím...',
       'Key translated!': 'Klíč přeložen',
       'Key deleted!': 'Klíč odstraněn',
@@ -249,6 +249,32 @@ export const defaultLanguagePacks = {
       [MESSAGES.UPLOADING_FAILED]: 'Chyba nahrávání',
       [MESSAGES.UPLOADING]: 'Nahrávám',
       [MESSAGES.STARTED_UPLOADING]: 'Začínám nahrávání',
+
+      // Simple words
+      [SIMPLE_WORDS.LINK]: 'Odkaz',
+
+      // Editor
+      [EDITOR_MESSAGES.PLACEHOLDER_PARAGRAPH]: 'Jaký je titulek?',
+      [EDITOR_MESSAGES.PLACEHOLDER_TITLE]: 'Začněte psát zde...',
+      [EDITOR_MESSAGES.BOLD]: 'Tučné',
+      [EDITOR_MESSAGES.ITALIC]: 'Italic',
+      [EDITOR_MESSAGES.BLOCKQUOTE]: 'Citace',
+      [EDITOR_MESSAGES.UNDO]: 'Vrátit',
+      [EDITOR_MESSAGES.REDO]: 'Předělat',
+      [EDITOR_MESSAGES.CLEAR_ALL_FORMATTING]: 'Vyčistit formátování textu',
+      [EDITOR_MESSAGES.BULLET_LIST]: 'Seznam',
+      [EDITOR_MESSAGES.ORDERED_LIST]: 'Řazený seznam',
+      [EDITOR_MESSAGES.HEADING_LEVEL_1]: 'Velký napis',
+      [EDITOR_MESSAGES.HEADING_LEVEL_2]: 'Podnadpis',
+      [EDITOR_MESSAGES.HEADING_LEVEL_3]: 'Nadpis úrovně 3',
+      [EDITOR_MESSAGES.HEADING_LEVEL_4]: 'Nadpis úrovně 4',
+      [EDITOR_MESSAGES.HEADING_LEVEL_5]: 'Nadpis úrovně 5',
+      [EDITOR_MESSAGES.HEADING_LEVEL_6]: 'Nadpis úrovně 6',
+      [EDITOR_MESSAGES.TEXT_ALIGN_LEFT]: 'Řadit vlevo',
+      [EDITOR_MESSAGES.TEXT_ALIGN_CENTER]: 'Řadit doprostřed',
+      [EDITOR_MESSAGES.TEXT_ALIGN_RIGHT]: 'Řadit doprava',
+      [EDITOR_MESSAGES.TEXT_ALIGN_JUSTIFY]: 'Volné zarovnání textu',
+      [EDITOR_MESSAGES.ENTER_YOUR_LINK]: 'Zadejte váš odkaz',
     },
   },
   en: {
