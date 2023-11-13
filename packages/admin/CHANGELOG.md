@@ -1,5 +1,23 @@
 # @prom-cms/admin
 
+## 0.17.0
+
+### Minor Changes
+
+- 852b797: Wrap entire app with suspense and allow useCurrentModelItem to throw suspense. Also update entry underpage to show 404 when entry is not found.
+- 9ee9d53: Adds wysiwyg editor for longText field type. This editor is created with the help of awesome TipTap library
+- 1dae955: Allows user to go to linked item from relationship field
+
+### Patch Changes
+
+- 3bf57b1: Get rid of ugly implementation of getEntryUnderPageComponent and update it to be more reacty. This is also preparation for rewrite.
+- d335fe2: Show entire image instead of allowing image to scale to parent size for image fields.
+- 2c81aa9: Update localizations for czech language and allow germany + slovak language in admin language select
+- 87c21e9: Allow users to preview content from longText even from list
+- fb2915f: Bugfix inifinite rerender and add czech localizations.
+- Updated dependencies [9ee9d53]
+  - @prom-cms/schema@0.5.0
+
 ## 0.16.0
 
 ### Minor Changes
