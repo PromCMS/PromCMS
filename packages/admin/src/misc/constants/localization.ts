@@ -249,9 +249,12 @@ export const defaultLanguagePacks = {
       [MESSAGES.UPLOADING_FAILED]: 'Chyba nahrávání',
       [MESSAGES.UPLOADING]: 'Nahrávám',
       [MESSAGES.STARTED_UPLOADING]: 'Začínám nahrávání',
+      [MESSAGES.PREVIEW_CONTENT]: 'Ukázat obsah',
+      [MESSAGES.SHOW_SELECTED_ITEM]: 'Ukázat vybraný prvek',
 
       // Simple words
       [SIMPLE_WORDS.LINK]: 'Odkaz',
+      [SIMPLE_WORDS.CONTENT]: 'Obsah',
 
       // Editor
       [EDITOR_MESSAGES.PLACEHOLDER_PARAGRAPH]: 'Jaký je titulek?',

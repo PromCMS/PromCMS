@@ -26,29 +26,31 @@ const useCurrentModelItem = (language?: string) => {
     modelInfo?.name,
     (entryId as string) || undefined,
     axiosConfig,
-    {
-      ...queryConfig,
-      select(originalData) {
-        const newData = {
-          ...Object.fromEntries(
-            Object.entries(originalData).filter(([_, data]) => data !== null)
-          ),
-        };
+    useMemo(
+      () => ({
+        ...queryConfig,
+        select(originalData) {
+          // TODO: this is uqly and backend generally should return already transformed json
+          for (const [fieldKey, { type }] of [
+            ...(modelInfo?.columns.entries() ?? []),
+          ]) {
+            const value = originalData[fieldKey];
+            if (value === null) {
+              delete originalData[fieldKey];
+              continue;
+            }
 
-        // TODO: this is uqly and backend generally should return already transformed json
-        for (const fieldKey of [...(modelInfo?.columns.entries() ?? [])]
-          .filter(([, { type }]) => type === 'json')
-          .map(([key]) => key)) {
-          const value = newData[fieldKey];
-          if (value) {
-            newData[fieldKey] =
-              typeof value === 'string' ? JSON.parse(value) : value;
+            if (type === 'json' && value) {
+              (originalData as any)[fieldKey] =
+                typeof value === 'string' ? JSON.parse(value) : value;
+            }
           }
-        }
 
-        return newData as typeof originalData;
-      },
-    }
+          return originalData as typeof originalData;
+        },
+      }),
+      [modelInfo?.columns]
+    )
   );
 };
 

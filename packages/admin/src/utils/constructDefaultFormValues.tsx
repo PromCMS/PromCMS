@@ -4,19 +4,21 @@ import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/shared';
 /**
  * Takes care of special fields that need special default values to be working
  */
-export const constructDefaultFormValues = (
-  singleton: ApiResultModel | ApiResultModelSingleton
+export const constructDefaultFormValues = <T extends Record<string, any>>(
+  singleton: ApiResultModel | ApiResultModelSingleton,
+  originalData: T
 ) => {
-  const result = {};
+  const result = originalData;
 
   for (const [columnKey, columnInfo] of singleton.columns) {
-    if (columnInfo.type == 'json') {
+    const value = result[columnKey];
+    if (columnInfo.type == 'json' && !value) {
       if (columnInfo.admin.fieldType === 'openingHours') {
-        result[columnKey] = {
+        (result as any)[columnKey] = {
           data: Object.fromEntries(DAYS_IN_WEEK.map((value) => [value, false])),
         };
       } else if (columnInfo.admin.fieldType === 'repeater') {
-        result[columnKey] = {
+        (result as any)[columnKey as any] = {
           data: [],
         };
       }

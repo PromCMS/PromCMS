@@ -34,7 +34,7 @@ export interface IEntryUnderpageContext {
   exitView: () => void;
   itemIsError: boolean;
   itemIsLoading: boolean;
-  itemData?: ResultItem | undefined;
+  itemData?: Omit<ResultItem, 'id'> | undefined;
   itemIsMissing: boolean;
   mutateItem: (values: ResultItem) => ResultItem | undefined;
   onSubmit: (values: any) => Promise<void>;
@@ -95,7 +95,7 @@ export const EntryUnderpageContextProvider: FC<{
   }, [currentModel, viewType]);
 
   const formMethods = useForm<Record<string, any>>({
-    defaultValues: constructDefaultFormValues(currentModel),
+    defaultValues: constructDefaultFormValues(currentModel, itemData ?? {}),
     reValidateMode: 'onChange',
     mode: 'onTouched',
     resolver,
@@ -121,8 +121,6 @@ export const EntryUnderpageContextProvider: FC<{
 
   useEffect(() => {
     if (itemData) {
-      formMethods.reset(itemData);
-
       if (blockEditorRefs.refs.current) {
         for (const [fieldName, editorRef] of Object.entries(
           blockEditorRefs.refs.current
@@ -239,7 +237,7 @@ export const EntryUnderpageContextProvider: FC<{
       exitView: () => {
         navigate(pageUrls.entryTypes(currentModel?.name as string).list);
       },
-      itemData: updatedItemData as ResultItem,
+      itemData: updatedItemData,
       itemIsError,
       itemIsLoading: viewType === 'update' ? itemIsLoading : false,
       itemIsMissing: !updatedItemData,

@@ -1,5 +1,6 @@
 export const SIMPLE_WORDS = {
   LINK: 'Link',
+  CONTENT: 'Content',
 };
 
 export const EDITOR_MESSAGES = {
@@ -29,6 +30,8 @@ export const EDITOR_MESSAGES = {
 export const MESSAGES = {
   ...SIMPLE_WORDS,
   ...EDITOR_MESSAGES,
+  PREVIEW_CONTENT: 'Preview content',
+  SHOW_SELECTED_ITEM: 'Show selected item',
   ON_DELETE_REQUEST_PROMPT: 'Are you sure you want to delete this item?',
   INVALID_OLD_PASSWORD: 'Your old password is invalid',
   ERROR_BASIC: 'An error happened',
