@@ -7,12 +7,12 @@ import { EnumSelect, RelationshipItemSelect } from './fields';
 import { BigImagePicker } from './fields/BigImagePicker';
 import { OpeningHours } from './fields/json/OpeningHours';
 import { Repeater } from './fields/json/Repeater';
-import { BlockEditor } from '@components/form/BlockEditor';
 import {
   Checkbox,
   clsx,
   ColorInput,
   Input,
+  JsonInput,
   Textarea,
   TextInput,
 } from '@mantine/core';
@@ -23,6 +23,7 @@ import { JsonFieldInputAsLinkButton } from './fields/json/JsonFieldInputAsLinkBu
 import ImageSelect from '@components/form/ImageSelect';
 import { FileSelect } from '@components/form/FileSelect';
 import { WysiwygEditor } from '@components/form/editors/WysiwygEditor';
+import { BlockEditor } from '@components/form/editors/BlockEditor';
 
 export const FieldMapperItem: FC<
   { placement: FieldPlacements; columnName: string } & ColumnType
@@ -46,7 +47,7 @@ export const FieldMapperItem: FC<
           <div className="relative w-full">
             <input
               className={clsx(
-                'w-full !border-b-2 border-project-border bg-transparent pb-5 text-5xl font-bold outline-none duration-200 focus:border-blue-500'
+                'w-full !border-b-2 border-project-border bg-transparent pb-2 mb-4 text-5xl font-bold outline-none duration-200 focus:border-blue-500'
               )}
               placeholder={t('Title here...')}
               disabled={disabled}
@@ -77,7 +78,16 @@ export const FieldMapperItem: FC<
 
     case 'longText':
       switch (admin.fieldType) {
-        case 'normal':
+        case 'wysiwyg':
+          result = (
+            <WysiwygEditor
+              label={title}
+              disabled={disabled}
+              name={columnName}
+            />
+          );
+          break;
+        default:
           result = (
             <Textarea
               autosize
@@ -87,16 +97,6 @@ export const FieldMapperItem: FC<
               error={errorMessage}
               disabled={disabled}
               {...register(columnName)}
-            />
-          );
-          break;
-
-        case 'wysiwyg':
-          result = (
-            <WysiwygEditor
-              label={title}
-              disabled={disabled}
-              name={columnName}
             />
           );
           break;
@@ -247,14 +247,21 @@ export const FieldMapperItem: FC<
           break;
         default:
           result = (
-            <Textarea
-              autosize
-              minRows={7}
-              label={title}
-              className="w-full"
-              error={errorMessage}
-              disabled={disabled}
-              {...register(columnName)}
+            <Controller
+              name={columnName}
+              render={({ field }) => (
+                <JsonInput
+                  autosize
+                  label={title}
+                  minRows={4}
+                  className="w-full"
+                  error={errorMessage}
+                  disabled={disabled}
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                />
+              )}
             />
           );
           break;

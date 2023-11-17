@@ -22,19 +22,19 @@ const FieldMapper: FC<FieldMapperProps> = ({
   const formState = useFormState();
 
   return (
-    <div className={clsx('space-y-4 sm:-ml-4', className)} {...rest}>
-      {fields.map((field) => {
-        const width = field.admin.editor.width ?? 12;
-
-        return (
-          <div
-            key={field.columnName}
-            className={clsx(`sm:float-left sm:field-mapper-item-${width}`)}
-          >
-            <FieldMapperItem placement={placement} {...field} />
-          </div>
-        );
-      })}
+    <div className={clsx('space-y-4 sm:-ml-4 flow-root', className)} {...rest}>
+      {fields.map((field) => (
+        <div
+          key={field.columnName}
+          className={clsx(
+            `sm:float-left sm:field-mapper-item-${
+              field.admin.editor.width ?? 12
+            }`
+          )}
+        >
+          <FieldMapperItem placement={placement} {...field} />
+        </div>
+      ))}
       <LoadingOverlay visible={formState.isSubmitting} zIndex={20} />
     </div>
   );
