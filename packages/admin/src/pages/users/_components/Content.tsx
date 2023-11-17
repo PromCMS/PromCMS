@@ -71,7 +71,7 @@ export const Content: FC = () => {
           ]}
         />
         <div className="mt-10 items-start justify-between xl:flex">
-          <div className="relative -mx-3 grid w-full max-w-4xl gap-5 px-3">
+          <div className="relative grid w-full gap-5">
             <Header />
             <UserUnderpageForm />
           </div>

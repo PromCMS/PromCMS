@@ -1,6 +1,4 @@
-import { User } from '@prom-cms/shared';
 import { useMemo, VFC } from 'react';
-import { useFormContext } from 'react-hook-form';
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import unset from 'lodash/unset';
 import { useCurrentUser } from '@hooks/useCurrentUser';
@@ -10,7 +8,6 @@ import { FieldPlacements } from '@prom-cms/schema';
 export const UserUnderpageForm: VFC = () => {
   const { model } = useData();
   const currentUser = useCurrentUser();
-  const { formState } = useFormContext<User>();
 
   const groupedFields = useMemo(() => {
     if (!model) return;
@@ -26,15 +23,11 @@ export const UserUnderpageForm: VFC = () => {
     return prepareFieldsForMapper(newModel, FieldPlacements.MAIN);
   }, [model, currentUser]);
 
-  return (
-    <>
-      {groupedFields && (
-        <FieldMapper type={FieldPlacements.MAIN} fields={groupedFields} />
-      )}
-
-      {formState.isSubmitting && (
-        <div className="absolute inset-0 cursor-progress bg-white/20 backdrop-blur-[2px]" />
-      )}
-    </>
-  );
+  return groupedFields ? (
+    <FieldMapper
+      className="-mx-2"
+      type={FieldPlacements.MAIN}
+      fields={groupedFields}
+    />
+  ) : null;
 };

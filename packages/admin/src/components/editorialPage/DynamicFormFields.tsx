@@ -24,11 +24,10 @@ export const DynamicFormFields: FC<DynamicFormFieldsProps> = ({
   if (!groupedFields) return null;
 
   return (
-    <div className="mb-10 flex min-h-screen flex-wrap gap-y-6 -mx-2">
-      <FieldMapper type={FieldPlacements.MAIN} fields={groupedFields} />
-      {formState.isSubmitting && (
-        <div className="absolute inset-0 cursor-progress bg-white/20 backdrop-blur-[2px]" />
-      )}
-    </div>
+    <FieldMapper
+      className="mb-10 min-h-screen"
+      type={FieldPlacements.MAIN}
+      fields={groupedFields}
+    />
   );
 };
