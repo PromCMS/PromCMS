@@ -49,7 +49,13 @@ const Action = forwardRef<
     },
     ref
   ) => (
-    <Tooltip disabled={disabled} label={label} withArrow transition="scale">
+    <Tooltip
+      disabled={disabled}
+      label={label}
+      withArrow
+      withinPortal
+      transition="scale"
+    >
       <ActionIcon
         ref={ref}
         variant="filled"
