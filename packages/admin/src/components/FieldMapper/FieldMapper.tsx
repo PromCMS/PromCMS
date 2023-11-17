@@ -22,14 +22,14 @@ const FieldMapper: FC<FieldMapperProps> = ({
   const formState = useFormState();
 
   return (
-    <div className={clsx('space-y-6', className)} {...rest}>
+    <div className={clsx('space-y-4 sm:-ml-4', className)} {...rest}>
       {fields.map((field) => {
         const width = field.admin.editor.width ?? 12;
 
         return (
           <div
             key={field.columnName}
-            className={clsx('px-2', width === 12 ? 'w-full' : `w-${width}/12`)}
+            className={clsx(`sm:float-left sm:field-mapper-item-${width}`)}
           >
             <FieldMapperItem placement={placement} {...field} />
           </div>

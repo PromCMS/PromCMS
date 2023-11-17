@@ -10,6 +10,11 @@ safelist.push({
   pattern: new RegExp(`w-(${iterableAry.join('|')})/12`, 'g'),
 });
 
+safelist.push({
+  pattern: new RegExp(`field-mapper-item-(${iterableAry.join('|')})`, 'g'),
+  variants: ['sm'],
+});
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,css,scss}'],
@@ -72,7 +77,21 @@ module.exports = {
   },
   plugins: [
     {
-      handler({ addBase, theme }) {
+      handler({ addBase, theme, addUtilities }) {
+        /**
+         * @type {import('tailwindcss/types/config').CSSRuleObject}
+         */
+        const utilities = {};
+
+        for (const currentWidth of iterableAry) {
+          utilities[`.field-mapper-item-${currentWidth}`] = {
+            width: `calc(${(100 / 12) * Number(currentWidth)}% - 1rem)`,
+            marginLeft: '1rem',
+          };
+        }
+
+        addUtilities(utilities);
+
         addBase({
           '.wysiwyg-editor': {
             ul: {
