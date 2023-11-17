@@ -16,7 +16,7 @@ import EntryDuplicateUnderPage from '@pages/entry-types/[modelId]/entries/duplic
 import UserProfileMainPage from '@pages/settings/system';
 import { ProfileSettingsPage } from '@pages/settings/profile/page';
 import UserRolesPage from '@pages/settings/user-roles/page';
-import { lazy, Suspense } from 'react';
+import { lazy, StrictMode, Suspense } from 'react';
 import { Loader } from '@components/SiteLoader';
 import { CreateTranslationSettings } from '@pages/settings/translations/[lang]/keys/create';
 import { GlobalContextProvider } from '@contexts/GlobalContext';
@@ -43,134 +43,136 @@ const LazySingletonPage = lazy(
 
 export function App() {
   return (
-    <Suspense fallback={<Loader fullScreen={false} />}>
-      <GlobalContextProvider>
-        <BlockEditorRefsProvider>
-          <ContextProviders>
-            <Routes>
-              <Route path="login" element={<LoginPage />} />
-              <Route path="reset-password" element={<ResetPasswordPage />} />
-              <Route
-                path="finalize-registration"
-                element={<FinalizeRegistrationPage />}
-              />
-              <Route path="logout" element={<LogoutPage />} />
-              <Route path="/" element={<SiteLayout />}>
-                <Route index element={<MainPage />} />
+    <StrictMode>
+      <Suspense fallback={<Loader fullScreen={false} />}>
+        <GlobalContextProvider>
+          <BlockEditorRefsProvider>
+            <ContextProviders>
+              <Routes>
+                <Route path="login" element={<LoginPage />} />
+                <Route path="reset-password" element={<ResetPasswordPage />} />
                 <Route
-                  path="files"
-                  element={
-                    <Suspense fallback={<Loader fullScreen={false} />}>
-                      <LazyFilesPage />
-                    </Suspense>
-                  }
-                >
-                  <Route path="entries">
+                  path="finalize-registration"
+                  element={<FinalizeRegistrationPage />}
+                />
+                <Route path="logout" element={<LogoutPage />} />
+                <Route path="/" element={<SiteLayout />}>
+                  <Route index element={<MainPage />} />
+                  <Route
+                    path="files"
+                    element={
+                      <Suspense fallback={<Loader fullScreen={false} />}>
+                        <LazyFilesPage />
+                      </Suspense>
+                    }
+                  >
+                    <Route path="entries">
+                      <Route
+                        path=":fileId"
+                        element={
+                          <Suspense fallback={<Loader fullScreen={false} />}>
+                            <LazyFilePage />
+                          </Suspense>
+                        }
+                      />
+                    </Route>
+                  </Route>
+                  <Route path="entry-types/:modelId">
                     <Route
-                      path=":fileId"
+                      index
                       element={
                         <Suspense fallback={<Loader fullScreen={false} />}>
-                          <LazyFilePage />
+                          <LazyEntryTypeUnderpage />
+                        </Suspense>
+                      }
+                    />
+                    <Route path="entries">
+                      <Route path="create" element={<CreateEntryPage />} />
+                      <Route path=":entryId" element={<EntryUnderPage />} />
+                      <Route
+                        path="duplicate/:entryId"
+                        element={<EntryDuplicateUnderPage />}
+                      />
+                    </Route>
+                  </Route>
+                  <Route path="singletons">
+                    <Route
+                      path=":singletonId"
+                      element={
+                        <Suspense fallback={<Loader fullScreen={false} />}>
+                          <LazySingletonPage />
+                        </Suspense>
+                      }
+                    />
+                  </Route>
+                  <Route
+                    path="settings"
+                    element={
+                      <Suspense fallback={<Loader fullScreen={false} />}>
+                        <LazyProfileLayout />
+                      </Suspense>
+                    }
+                  >
+                    <Route path="profile">
+                      <Route path="" element={<ProfileSettingsPage />} />
+                      <Route
+                        path="password/change"
+                        element={<ChangePasswordPage />}
+                      />
+                    </Route>
+                    <Route path="system" element={<UserProfileMainPage />} />
+                    <Route path="roles" element={<UserRolesPage />} />
+                    <Route
+                      path="translations/:lang"
+                      element={
+                        <Suspense fallback={<Loader fullScreen={false} />}>
+                          <LazyGeneralTranslationsPage />
+                        </Suspense>
+                      }
+                    >
+                      <Route
+                        path="keys/create"
+                        element={<CreateTranslationSettings />}
+                      />
+                    </Route>
+                  </Route>
+                  <Route path="users">
+                    <Route
+                      index
+                      element={
+                        <Suspense fallback={<Loader fullScreen={false} />}>
+                          <LazyUsersListPage />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path="invite"
+                      element={
+                        <Suspense fallback={<Loader fullScreen={false} />}>
+                          <LazyCreateUserPage />
+                        </Suspense>
+                      }
+                    />
+                    <Route
+                      path=":userId"
+                      element={
+                        <Suspense fallback={<Loader fullScreen={false} />}>
+                          <LazyUserUnderPage />
                         </Suspense>
                       }
                     />
                   </Route>
                 </Route>
-                <Route path="entry-types/:modelId">
-                  <Route
-                    index
-                    element={
-                      <Suspense fallback={<Loader fullScreen={false} />}>
-                        <LazyEntryTypeUnderpage />
-                      </Suspense>
-                    }
-                  />
-                  <Route path="entries">
-                    <Route path="create" element={<CreateEntryPage />} />
-                    <Route path=":entryId" element={<EntryUnderPage />} />
-                    <Route
-                      path="duplicate/:entryId"
-                      element={<EntryDuplicateUnderPage />}
-                    />
-                  </Route>
-                </Route>
-                <Route path="singletons">
-                  <Route
-                    path=":singletonId"
-                    element={
-                      <Suspense fallback={<Loader fullScreen={false} />}>
-                        <LazySingletonPage />
-                      </Suspense>
-                    }
-                  />
-                </Route>
-                <Route
-                  path="settings"
-                  element={
-                    <Suspense fallback={<Loader fullScreen={false} />}>
-                      <LazyProfileLayout />
-                    </Suspense>
-                  }
-                >
-                  <Route path="profile">
-                    <Route path="" element={<ProfileSettingsPage />} />
-                    <Route
-                      path="password/change"
-                      element={<ChangePasswordPage />}
-                    />
-                  </Route>
-                  <Route path="system" element={<UserProfileMainPage />} />
-                  <Route path="roles" element={<UserRolesPage />} />
-                  <Route
-                    path="translations/:lang"
-                    element={
-                      <Suspense fallback={<Loader fullScreen={false} />}>
-                        <LazyGeneralTranslationsPage />
-                      </Suspense>
-                    }
-                  >
-                    <Route
-                      path="keys/create"
-                      element={<CreateTranslationSettings />}
-                    />
-                  </Route>
-                </Route>
-                <Route path="users">
-                  <Route
-                    index
-                    element={
-                      <Suspense fallback={<Loader fullScreen={false} />}>
-                        <LazyUsersListPage />
-                      </Suspense>
-                    }
-                  />
-                  <Route
-                    path="invite"
-                    element={
-                      <Suspense fallback={<Loader fullScreen={false} />}>
-                        <LazyCreateUserPage />
-                      </Suspense>
-                    }
-                  />
-                  <Route
-                    path=":userId"
-                    element={
-                      <Suspense fallback={<Loader fullScreen={false} />}>
-                        <LazyUserUnderPage />
-                      </Suspense>
-                    }
-                  />
-                </Route>
-              </Route>
-              <Route path="*" element={<NotFoundPage />} />
-            </Routes>
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
 
-            <div id="popover-root"></div>
-            <div id="modal-root"></div>
-            <div id="slide-over-root"></div>
-          </ContextProviders>
-        </BlockEditorRefsProvider>
-      </GlobalContextProvider>
-    </Suspense>
+              <div id="popover-root"></div>
+              <div id="modal-root"></div>
+              <div id="slide-over-root"></div>
+            </ContextProviders>
+          </BlockEditorRefsProvider>
+        </GlobalContextProvider>
+      </Suspense>
+    </StrictMode>
   );
 }
