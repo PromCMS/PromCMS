@@ -15,6 +15,11 @@ safelist.push({
   variants: ['sm'],
 });
 
+safelist.push({
+  pattern: new RegExp(`grid-cols-(${iterableAry.join('|')})`, 'g'),
+  variants: ['sm'],
+});
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,css,scss}'],
@@ -32,8 +37,6 @@ module.exports = {
         sm: '600px',
         md: '728px',
         lg: '984px',
-        xl: '1024px',
-        '2xl': '1290px',
       },
     },
     fontFamily: {
@@ -119,13 +122,32 @@ module.exports = {
             },
           },
           '.tiptap': {
-            'p.is-editor-empty': {
-              '&:first-child::before': {
-                color: '#adb5bd',
-                content: 'attr(data-placeholder)',
-                float: 'left',
-                height: 0,
-                pointerEvents: 'none',
+            '&:focus': {
+              outline: 'none',
+            },
+            '.ProseMirror-gapcursor:after': {
+              top: '-2px',
+              width: '1px',
+              height: '20px!important',
+              borderRight: '1px solid black',
+            },
+            'div[data-layout-root]': {
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              gap: theme('spacing.2'),
+              margin: ` ${theme('spacing.2')} 0`,
+              minHeight: '10rem',
+            },
+            '&:not(.ProseMirror-focused)': {
+              'p.is-editor-empty': {
+                '&:first-child::before': {
+                  color: '#adb5bd',
+                  content: 'attr(data-placeholder)',
+                  float: 'left',
+                  height: 0,
+                  pointerEvents: 'none',
+                },
               },
             },
           },

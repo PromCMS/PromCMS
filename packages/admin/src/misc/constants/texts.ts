@@ -1,6 +1,10 @@
 export const SIMPLE_WORDS = {
   LINK: 'Link',
   CONTENT: 'Content',
+  DELETE: 'Delete',
+  PHOTO: 'Photo',
+  PHOTO_ALBUM: 'Photo album',
+  CLOSE: 'Close',
 };
 
 export const EDITOR_MESSAGES = {

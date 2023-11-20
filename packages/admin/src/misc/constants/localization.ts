@@ -257,8 +257,8 @@ export const defaultLanguagePacks = {
       [SIMPLE_WORDS.CONTENT]: 'Obsah',
 
       // Editor
-      [EDITOR_MESSAGES.PLACEHOLDER_PARAGRAPH]: 'Jaký je titulek?',
-      [EDITOR_MESSAGES.PLACEHOLDER_TITLE]: 'Začněte psát zde...',
+      [EDITOR_MESSAGES.PLACEHOLDER_PARAGRAPH]: 'Začněte psát',
+      [EDITOR_MESSAGES.PLACEHOLDER_TITLE]: 'Jaký je titulek?',
       [EDITOR_MESSAGES.BOLD]: 'Tučné',
       [EDITOR_MESSAGES.ITALIC]: 'Italic',
       [EDITOR_MESSAGES.BLOCKQUOTE]: 'Citace',
