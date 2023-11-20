@@ -1,5 +1,5 @@
 import { ItemID, User, UserRole } from '@prom-cms/shared';
-import axios from 'axios';
+import axios, { CanceledError } from 'axios';
 import { apiClient } from '@api';
 import { API_CURRENT_USER_URL, API_SETTINGS_URL } from '@constants';
 import {
@@ -122,6 +122,10 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
         setIsBooting(false);
       } catch (e) {
+        if (e instanceof CanceledError) {
+          return;
+        }
+
         if (axios.isAxiosError(e)) {
           if (e.response?.status === 401) {
             // TODO: Apply first url to login page so we can then take user to that page
@@ -136,6 +140,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
             // TODO: Make this a better message to some component/page
             alert('Looks like API is not working, please tell your developer');
           }
+
           setIsBooting(false);
         }
       }

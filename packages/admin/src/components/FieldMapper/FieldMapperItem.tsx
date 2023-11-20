@@ -43,19 +43,20 @@ export const FieldMapperItem: FC<
     case 'number':
       if (type === 'string' && admin.fieldType === 'heading') {
         result = (
-          <div className="relative w-full">
+          <div className="relative w-full mb-4 ">
             <input
               className={clsx(
-                'w-full !border-b-2 border-project-border bg-transparent pb-5 text-5xl font-bold outline-none duration-200 focus:border-blue-500'
+                clsx(
+                  'w-full !border-b-2 border-project-border bg-transparent pb-2 text-5xl font-bold outline-none duration-200',
+                  errorMessage ? 'border-red-500' : 'focus:border-blue-500'
+                )
               )}
               placeholder={t('Title here...')}
               disabled={disabled}
               {...register(columnName)}
             />
-            {formState.errors?.[columnName]?.message ? (
-              <small className="font-bold text-red-500">
-                {formState.errors[columnName]!.message}
-              </small>
+            {errorMessage ? (
+              <small className="font-bold text-red-500">{errorMessage}</small>
             ) : null}
           </div>
         );
