@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.17.2
+
+### Patch Changes
+
+- 2c7e03d: Fix RelationshipItemSelect not taking full width and repeater field showing empty fields on readonly. Now it shows just message to let user know that its empty.
+
 ## 0.17.1
 
 ### Patch Changes
