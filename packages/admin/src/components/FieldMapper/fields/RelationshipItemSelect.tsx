@@ -43,12 +43,12 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
   );
 
   return (
-    <div>
+    <div className="w-full">
       <Select
         data={values}
         key={columnName}
         label={title}
-        value={field.value ?? null}
+        value={field.value ? String(field.value) : null}
         onChange={field.onChange}
         className="w-full"
         placeholder={t('Select an option')}

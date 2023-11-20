@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { ActionIcon, clsx, Input, NumberInput, TextInput } from '@mantine/core';
 import { FieldPlacements, RepeaterAdminSchema } from '@prom-cms/schema';
 import { FC, Fragment, useMemo } from 'react';
@@ -27,8 +28,8 @@ export const Repeater: FC<{
     [columns]
   );
   const allFields = useMemo(
-    () => (fields.length ? fields : [{ id: 'default' }]),
-    [fields]
+    () => (fields.length ? fields : readonly ? [] : [{ id: 'default' }]),
+    [fields, readonly]
   );
   const entriesArray = useMemo(() => Array.from(columns.entries()), [columns]);
 
@@ -156,6 +157,7 @@ export const Repeater: FC<{
             ) : null}
           </div>
         ))}
+        {!allFields?.length ? <p>{t(MESSAGES.EMPTY_VALUE)}</p> : null}
       </div>
     </Input.Wrapper>
   );
