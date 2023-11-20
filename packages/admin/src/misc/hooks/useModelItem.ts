@@ -2,7 +2,15 @@ import { useCallback, useMemo } from 'react';
 import { ResultItem } from '@prom-cms/api-client';
 import { ItemID } from '@prom-cms/shared';
 import { useQuery } from '@tanstack/react-query';
+import edjsHTML from 'editorjs-html';
 import { apiClient } from '@api';
+
+// TODO: Support others
+const editorJsBlockRulesParser = {
+  image: function customParser(block) {
+    return `<img />`;
+  },
+};
 
 export const useModelItem = <T extends ResultItem>(
   modelName: string | undefined,
@@ -24,5 +32,28 @@ export const useModelItem = <T extends ResultItem>(
     ...queryConfig,
   });
 
-  return useMemo(() => ({ ...response, key }), [key, response]);
+  return useMemo(() => {
+    const { data } = response;
+
+    for (const [fieldKey, fieldValue] of Object.entries(data ?? {})) {
+      if (typeof fieldValue !== 'object' || fieldValue === null) {
+        continue;
+      }
+
+      // Support editorjs into tiptap
+      if (
+        'blocks' in fieldValue &&
+        'time' in fieldValue &&
+        'version' in fieldValue
+      ) {
+        const edjsParser = edjsHTML(editorJsBlockRulesParser);
+        const html = edjsParser.parse(fieldValue);
+
+        // @ts-ignore -- okay for this case
+        data[fieldKey] = html;
+      }
+    }
+
+    return { ...response, key };
+  }, [key, response]);
 };
