@@ -1,5 +1,12 @@
 # @prom-cms/admin
 
+## 0.17.1
+
+### Patch Changes
+
+- 0c0ff85: Updates styling of title field so underline is red when field has error
+- 0c0ff85: Prevents navigation of user to login page when booting request is canceled
+
 ## 0.17.0
 
 ### Minor Changes
