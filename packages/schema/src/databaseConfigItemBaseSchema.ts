@@ -64,7 +64,7 @@ export const databaseConfigItemBaseSchema = z.object({
     .record(columnTypeSchema)
     .transform((columns) => new Map(Object.entries(columns))),
 
-  // TODO: rename this into "localizations" in the next major release
+  // TODO: Remove this altogether since localizations should be set per field
   /**
    * Toggles the multi language functionality for current model
    *
