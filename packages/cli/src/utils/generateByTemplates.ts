@@ -69,7 +69,10 @@ export const generateByTemplates = async (
     }
 
     try {
-      result = await formatCodeString(result, finalFilename);
+      result = await formatCodeString(
+        result.replaceAll(/^\s*[\r\n]/gm, ''),
+        finalFilename
+      );
     } catch (e) {
       console.log(
         `An error happened during formating of ${finalFilename}: ${e as Error}`
