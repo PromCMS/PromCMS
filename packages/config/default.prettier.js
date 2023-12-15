@@ -4,7 +4,7 @@ export default {
   semi: true,
   singleQuote: true,
   jsxSingleQuote: false,
-  plugins: ['@prettier/plugin-php'],
+  plugins: ['@prettier/plugin-php', '@prettier/plugin-xml'],
   phpVersion: '8.2',
 
   overrides: [
