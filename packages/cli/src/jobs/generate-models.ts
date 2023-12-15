@@ -1,26 +1,15 @@
 import { capitalizeFirstLetter } from '@prom-cms/shared';
-import fs from 'fs-extra';
 import path from 'path';
-import ejs from 'ejs';
-import { formatCodeString, getTemplateFolder } from '@utils';
-import { GeneratorConfig } from '@prom-cms/schema';
-import { MODELS_FOLDER_NAME } from '@constants';
+import { generateByTemplates, getModuleFolderName } from '@utils';
+import {
+  ColumnType,
+  DatabaseConfigModel,
+  DatabaseConfigSingleton,
+  GeneratorConfig,
+} from '@prom-cms/schema';
+import { promColumnTypeToPropelType } from '@constants';
 import slugify from 'slugify';
-
-type ModelColumns = NonNullable<
-  GeneratorConfig['database']['models']
->[string]['columns'];
-type SingletonColumns = NonNullable<
-  GeneratorConfig['database']['singletons']
->[string]['columns'];
-
-type ColumnType = NonNullable<
-  ReturnType<(SingletonColumns | ModelColumns)['get']>
->['type'];
-
-const columnCasts: Partial<{ [key in ColumnType]: string }> = {
-  json: 'array',
-};
+import { PropelColumnAttributes, PropelTableAttributes } from '@custom-types';
 
 const recursivePrintObject = (obj: object | Map<any, any> | []) => {
   let result = ``;
@@ -60,143 +49,180 @@ const recursivePrintObject = (obj: object | Map<any, any> | []) => {
   return `[${result}]`;
 };
 
-const getColumnCasts = (columns?: SingletonColumns | ModelColumns) => {
-  const casts: [string, string][] = [];
+export type GenerateDevelopModelsOptions = {
+  config: GeneratorConfig;
+  appRoot: string;
+};
 
-  for (const [columnKey, { type }] of (columns || new Map()) as NonNullable<
-    typeof columns
-  >) {
-    if (!columnCasts[type]) {
-      continue;
+export const generateModels = async function genereateDevelopmentCoreModels({
+  config,
+  appRoot,
+}: GenerateDevelopModelsOptions) {
+  const isModelSingleton = (modelName: string) => {
+    const { singletons } = config.database;
+    return singletons && modelName in singletons;
+  };
+
+  const getTableNameForModel = (
+    modelName: string,
+    currentModel: DatabaseConfigModel | DatabaseConfigSingleton
+  ) => {
+    const capitalizedModelName = capitalizeFirstLetter(modelName, false);
+
+    const tableName =
+      'tableName' in currentModel
+        ? currentModel.tableName
+        : slugify.default(capitalizedModelName, {
+            replacement: '_',
+            lower: true,
+            trim: true,
+          });
+
+    if (isModelSingleton(modelName)) {
+      return `singleton_${tableName}`;
     }
 
-    casts.push([columnKey, columnCasts[type]!]);
+    return tableName;
+  };
+
+  for (const [modelName, model] of Object.entries({
+    ...config.database.models,
+    ...config.database.singletons,
+  })) {
+    const isSingleton = isModelSingleton(modelName);
+
+    for (const [columnName, column] of model.columns) {
+      if (column.type === 'slug') {
+        model.columns[column.of].primaryString = true;
+      }
+    }
   }
 
-  return casts;
-};
-
-export type GenerateModelsOptions = {
-  moduleRoot: string;
-  config: GeneratorConfig;
-};
-
-/**
- * Creates a models by provided config
- */
-const generateModels = async ({
-  config,
-  moduleRoot,
-}: GenerateModelsOptions) => {
-  const modelsRoot = path.join(moduleRoot, MODELS_FOLDER_NAME);
-  const templatesRoot = getTemplateFolder('parts.generate-models');
-  const { models: modelsFromConfig, singletons } = config.database;
-
-  // FIXME: Keys from singletons will override some duplicates in models
-  const models = { ...modelsFromConfig, ...singletons };
-
-  for (const [modelKey, currentModel] of Object.entries(models)) {
-    const capitalizedModelName = capitalizeFirstLetter(modelKey, false);
-    const isSingleton = singletons && modelKey in singletons;
-
-    const info = {
-      modelName: capitalizedModelName,
-      isSingleton,
-      ...currentModel,
-      columnCasts: getColumnCasts(currentModel.columns),
-      tableName:
-        'tableName' in currentModel
-          ? currentModel.tableName
-          : slugify.default(capitalizedModelName, {
-              replacement: '_',
-              lower: true,
-              trim: true,
-            }),
-      events: {
-        shouldInclude() {
-          return (
-            this.beforeSave.shouldInclude() || this.afterCreated.shouldInclude()
-          );
-        },
-        beforeSave: {
-          shouldInclude() {
-            return this.slugify;
-          },
-
-          slugify: !![...currentModel.columns].find(
-            ([_colKey, col]) => col.type === 'slug'
-          ),
-        },
-        afterCreated: {
-          shouldInclude() {
-            return this.ordering;
-          },
-
-          ordering: 'sorting' in currentModel && currentModel.sorting,
+  // Module
+  await generateByTemplates('parts.generate-models', appRoot, {
+    '*': {
+      projectNameAsFolderName: getModuleFolderName(config.project.name),
+      path,
+      config: {
+        ...config,
+        project: {
+          ...config.project,
+          root: appRoot,
         },
       },
-      formattedColumns: [...currentModel.columns].reduce(
-        (finalTransformedColumns, [currentColumnKey, currentColumn]) => {
-          const transformedSettings: string[] = [];
+      capitalizeFirstLetter,
+      isModelSingleton,
+      objectToXmlAttributes(
+        propertiesAsObject: Record<string, any> | undefined
+      ) {
+        if (!propertiesAsObject) {
+          return '';
+        }
 
-          // Some column types are special and need some special logic
-          // we offload that logic outside of those that are simple values
-          const commonSettingsKeys = Object.keys(currentColumn).filter(
-            (settingKey) => !['enum'].includes(settingKey)
-          );
-          for (const settingsKey of commonSettingsKeys) {
-            // translates to php-like structure
-            // We also use String here since we may also encounter some boolean values which we just translate to its string
-            const settingValue = currentColumn[settingsKey];
+        return Object.entries(propertiesAsObject)
+          .map(([name, value]) => `${name}="${value}"`)
+          .join(' ');
+      },
+      getUniqueColumnNames(
+        model: DatabaseConfigModel | DatabaseConfigSingleton
+      ) {
+        const { columns } = model;
+        const result: string[] = [];
 
-            let formattedValue = '';
-            switch (typeof settingValue) {
-              case 'boolean':
-              case 'number':
-                formattedValue = String(settingValue);
-                break;
-              case 'object':
-                formattedValue = recursivePrintObject(settingValue);
-                break;
-              default:
-                formattedValue = `'${String(settingValue)}'`;
-                break;
-            }
-
-            transformedSettings.push(`'${settingsKey}' => ${formattedValue}`);
+        for (const [columnName, column] of columns) {
+          if (column.unique) {
+            result.push(columnName);
           }
+        }
 
-          // We now take care of those special column types
+        return result;
+      },
+      getLocalizedColumnNames(
+        model: DatabaseConfigModel | DatabaseConfigSingleton
+      ) {
+        const { columns } = model;
+        const result: string[] = [];
 
-          // we know for sure that enum column type has enum setting key
-          if (currentColumn.type === 'enum') {
-            transformedSettings.push(
-              `'enum' => ['${currentColumn.enum.join("', '")}']`
+        for (const [columnName, column] of columns) {
+          if (column.translations) {
+            result.push(columnName);
+          }
+        }
+
+        return result;
+      },
+      getColumnToPropelAttributes(columnName: string, column: ColumnType) {
+        const attributes = new Map<PropelColumnAttributes, string>([
+          ['name', columnName],
+          ['type', promColumnTypeToPropelType[column.type]],
+          ['required', String(column.required)],
+
+          ['prom.editable', String(column.editable)],
+          ['prom.hide', String(column.hide)],
+          ['prom.title', column.title],
+          ['prom.type', column.type],
+          ['prom.readonly', String(column.readonly)],
+          ['prom.adminMetadata.isHidden', String(column.admin.isHidden)],
+          [
+            'prom.adminMetadata.editor.placement',
+            column.admin.editor.placement,
+          ],
+          [
+            'prom.adminMetadata.editor.width',
+            String(column.admin.editor.width),
+          ],
+        ]);
+
+        switch (column.type) {
+          case 'enum':
+            attributes.set('valueSet', column.enum.join(','));
+            break;
+
+          case 'number':
+            attributes.set(
+              'autoIncrement',
+              String(column.autoIncrement ?? false)
             );
-          }
+            break;
 
-          finalTransformedColumns.set(currentColumnKey, transformedSettings);
+          case 'relationship':
+            attributes.set(
+              'prom.labelConstructor',
+              String(column.labelConstructor)
+            );
+            break;
+        }
 
-          return finalTransformedColumns;
-        },
-        new Map<string, string[]>()
-      ),
-    };
+        if ('default' in column && column.default !== undefined) {
+          attributes.set('defaultValue', String(column.default));
+        }
 
-    // Module
-    const moduleFilename = `${capitalizedModelName}.model.php`;
-    const moduleTemplateString = fs.readFileSync(
-      path.join(templatesRoot, 'common.ejs'),
-      'utf-8'
-    );
-    const moduleFilepath = path.join(modelsRoot, moduleFilename);
-    const moduleResult = await formatCodeString(
-      ejs.render(moduleTemplateString, info),
-      moduleFilename
-    );
-    await fs.ensureFile(moduleFilepath);
-    await fs.writeFile(moduleFilepath, moduleResult);
-  }
+        if (column.primaryKey !== undefined) {
+          attributes.set('primaryKey', String(column.primaryKey));
+        }
+
+        return Object.fromEntries(attributes.entries());
+      },
+      getModelToPropelTableAttributes(
+        modelName: string,
+        model: DatabaseConfigModel | DatabaseConfigSingleton
+      ) {
+        const attributes = new Map<PropelTableAttributes, string>([
+          ['name', getTableNameForModel(modelName, model)!],
+          ['phpName', capitalizeFirstLetter(modelName, false)],
+          ['prom.ignoreSeeding', String(model.ignoreSeeding)],
+          ['prom.title', model.title ?? ''],
+          ['prom.preset', model.preset ?? ''],
+          ['prom.adminMetadata.icon', model.icon],
+        ]);
+
+        return Object.fromEntries(attributes.entries());
+      },
+      getTableNameForModel,
+    },
+  });
+
+  // TODO: run vendor/bin/propel model:build after schema is created, but make sure that its installed first
 };
 
 export default generateModels;

@@ -1,0 +1,27 @@
+{
+    "propel": {
+        "paths": {
+            "schemaDir": ".\/.prom-cms\/propel",
+            "phpDir": ".",
+            "phpConfDir": ".\/.prom-cms\/propel\/config",
+            "migrationDir": ".\/.prom-cms\/propel\/migrations",
+            "sqlDir": ".\/.prom-cms\/propel\/sql"        
+        },
+        "generator": {
+            "namespaceAutoPackage": false
+        },
+        "database": {
+            "connections": {
+                "default": {
+                    "adapter": "sqlite",
+                    "dsn": "sqlite:<%- path.join(config.project.root, ".database", "app.sq3") %>",
+                    "user": "root",
+                    "password": null,
+                    "settings": {
+                        "charset": "utf8"
+                    }
+                }
+            }
+        }
+    }
+}
