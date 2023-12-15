@@ -1,6 +1,7 @@
 export * from './databaseConfigItemBaseSchema.js';
 export * from './databaseConfigModelSchema.js';
 export * from './databaseConfigSchema.js';
+export * from './databaseConfigSingletonSchema.js';
 export * from './generatorConfigSchema.js';
 export * from './projectConfigSchema.js';
 export * from './projectSecurityConfigSchema.js';

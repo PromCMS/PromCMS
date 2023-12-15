@@ -51,6 +51,11 @@ export const columnTypeBaseSchema = z.object({
    * If true then field is omitted from updating after entry is created.
    */
   readonly: z.boolean().default(false),
+
+  /**
+   * Specifies if current column is a primaryKey
+   */
+  primaryKey: z.boolean().default(false),
 });
 
 export type ColumnTypeBase = z.infer<typeof columnTypeBaseSchema>;
