@@ -123,8 +123,12 @@ export const createProjectAction = async (
 
   Logger.info(`Module created at ${moduleCreatedAt}`);
 
+  const generateModelsOptions = {
+    moduleRoot: moduleCreatedAt,
+    config: generatorConfig,
+  };
   await runWithProgress(
-    generateModels({ moduleRoot: moduleCreatedAt, config: generatorConfig }),
+    generateModels({ ...generateModelsOptions, appRoot: cwd }),
     'Add default models, if any'
   );
 

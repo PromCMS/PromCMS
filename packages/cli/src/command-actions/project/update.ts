@@ -25,11 +25,13 @@ export const updateProjectAction = async (options: Options) => {
   if (await fs.pathExists(rootModelsPath)) {
     await runWithProgress(fs.emptyDir(rootModelsPath), 'Deleting old models');
 
+    const generateModelsOptions = {
+      moduleRoot: rootModulePath,
+      config: generatorConfig,
+    };
+
     await runWithProgress(
-      generateModels({
-        moduleRoot: rootModulePath,
-        config: generatorConfig,
-      }),
+      generateModels({ ...generateModelsOptions, appRoot: cwd }),
       'Create models anew'
     );
   } else {
