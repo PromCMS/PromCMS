@@ -1,3 +1,4 @@
+import { GeneratorConfig } from '@prom-cms/schema';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -18,3 +19,32 @@ export const USERS_SCRIPTS_ROOT = path.join(
 export const PROJECT_ROOT = path.join(PACKAGE_ROOT, '..', '..');
 export const TEMPLATES_ROOT = path.join(PACKAGE_ROOT, 'templates');
 export const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'npm', 'pnpm'] as const;
+
+type ModelColumns = NonNullable<
+  GeneratorConfig['database']['models']
+>[string]['columns'];
+type SingletonColumns = NonNullable<
+  GeneratorConfig['database']['singletons']
+>[string]['columns'];
+type ColumnTypeAsString = NonNullable<
+  ReturnType<(SingletonColumns | ModelColumns)['get']>
+>['type'];
+
+export const promColumnTypeToPropelType: Record<ColumnTypeAsString, string> = {
+  boolean: 'BOOLEAN',
+  date: 'DATE',
+  dateTime: 'TIMESTAMP',
+  email: 'CHAR',
+  enum: 'ENUM',
+  // TODO - this should be relationship
+  file: '',
+  json: 'ARRAY',
+  longText: 'LONGVARCHAR',
+  number: 'INTEGER',
+  password: 'VARCHAR',
+  // TODO - this should be assigned dinamically based on related field
+  relationship: 'VARCHAR',
+  slug: '',
+  string: 'VARCHAR',
+  url: 'VARCHAR',
+};
