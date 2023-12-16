@@ -38,7 +38,7 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "execa": "^6.1.0",
+    "execa": "^8.0.1",
     "http-proxy": "^1.18.1",
     "mime": "^3.0.0",
     "node-fetch": "^3.2.10",
