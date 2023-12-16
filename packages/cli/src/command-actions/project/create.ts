@@ -84,6 +84,7 @@ export const createProjectAction = async (
       '*': {
         project: {
           name,
+          root: cwd,
           slug: slugify.default(name, { lower: true, trim: true }),
           security: {
             secret: crypto.randomBytes(20).toString('hex'),

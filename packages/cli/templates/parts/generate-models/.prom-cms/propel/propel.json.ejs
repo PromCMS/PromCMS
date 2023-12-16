@@ -12,15 +12,17 @@
         },
         "database": {
             "connections": {
-                "default": {
-                    "adapter": "sqlite",
-                    "dsn": "sqlite:<%- path.join(config.project.root, ".database", "app.sq3") %>",
-                    "user": "root",
-                    "password": null,
-                    "settings": {
-                        "charset": "utf8"
-                    }
-                }
+                <% config.database.connections.forEach((connection, index, items) => { %>
+                    "<%- connection.name %>": {
+                        "adapter": <%- JSON.stringify(connection.adapter) %>,
+                        "dsn": <%- JSON.stringify(connection.dsn) %>,
+                        "user": <%- JSON.stringify(connection.user) %>,
+                        "password": <%- JSON.stringify(connection.password) %>,
+                        "settings": {
+                            "charset": "utf8"
+                        }
+                    }<% if (index !== items.length-1) { %>,<% } %>
+                <% }) %>
             }
         }
     }

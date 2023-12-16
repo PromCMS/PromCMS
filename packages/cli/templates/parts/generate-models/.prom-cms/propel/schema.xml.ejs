@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<database name="bookstore" defaultIdMethod="native" namespace="PromCMS\Modules\<%- projectNameAsFolderName %>\Models">
+<database <%- objectToXmlAttributes(getDatabasePropelAttributes()) %>>
   <% Object.entries({ ...config.database.models, ...config.database.singletons }).forEach(([modelName, model]) => { %>
     <table <%- objectToXmlAttributes(getModelToPropelTableAttributes(modelName, model)) %>>
       <% for (const [columnName, column] of model.columns) { %>

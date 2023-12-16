@@ -1,3 +1,4 @@
+export * from './databaseConfigConnectionSchema.js';
 export * from './databaseConfigItemBaseSchema.js';
 export * from './databaseConfigModelSchema.js';
 export * from './databaseConfigSchema.js';

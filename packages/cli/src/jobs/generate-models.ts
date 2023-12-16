@@ -8,8 +8,11 @@ import {
   GeneratorConfig,
 } from '@prom-cms/schema';
 import { promColumnTypeToPropelType } from '@constants';
-import slugify from 'slugify';
-import { PropelColumnAttributes, PropelTableAttributes } from '@custom-types';
+import {
+  PropelColumnAttributes,
+  PropelDatabaseAttributes,
+  PropelTableAttributes,
+} from '@custom-types';
 
 const recursivePrintObject = (obj: object | Map<any, any> | []) => {
   let result = ``;
@@ -58,40 +61,32 @@ export const generateModels = async function genereateDevelopmentCoreModels({
   config,
   appRoot,
 }: GenerateDevelopModelsOptions) {
-  const isModelSingleton = (modelName: string) => {
+  const isModelSingleton = (
+    model: DatabaseConfigModel | DatabaseConfigSingleton
+  ) => {
     const { singletons } = config.database;
-    return singletons && modelName in singletons;
+    return (
+      singletons &&
+      singletons.find((singleton) => singleton.tableName === model.tableName)
+    );
   };
+  const projectNameAsFolderName = getModuleFolderName(config.project.name);
 
   const getTableNameForModel = (
-    modelName: string,
     currentModel: DatabaseConfigModel | DatabaseConfigSingleton
   ) => {
-    const capitalizedModelName = capitalizeFirstLetter(modelName, false);
-
-    const tableName =
-      'tableName' in currentModel
-        ? currentModel.tableName
-        : slugify.default(capitalizedModelName, {
-            replacement: '_',
-            lower: true,
-            trim: true,
-          });
-
-    if (isModelSingleton(modelName)) {
-      return `singleton_${tableName}`;
+    if (isModelSingleton(currentModel)) {
+      return `singleton_${currentModel.tableName}`;
     }
 
-    return tableName;
+    return currentModel.tableName;
   };
 
-  for (const [modelName, model] of Object.entries({
-    ...config.database.models,
-    ...config.database.singletons,
-  })) {
-    const isSingleton = isModelSingleton(modelName);
-
-    for (const [columnName, column] of model.columns) {
+  for (const model of [
+    ...(config.database.models ?? []),
+    ...(config.database.singletons ?? []),
+  ]) {
+    for (const column of model.columns) {
       if (column.type === 'slug') {
         model.columns[column.of].primaryString = true;
       }
@@ -101,7 +96,7 @@ export const generateModels = async function genereateDevelopmentCoreModels({
   // Module
   await generateByTemplates('parts.generate-models', appRoot, {
     '*': {
-      projectNameAsFolderName: getModuleFolderName(config.project.name),
+      projectNameAsFolderName,
       path,
       config: {
         ...config,
@@ -129,9 +124,9 @@ export const generateModels = async function genereateDevelopmentCoreModels({
         const { columns } = model;
         const result: string[] = [];
 
-        for (const [columnName, column] of columns) {
+        for (const column of columns) {
           if (column.unique) {
-            result.push(columnName);
+            result.push(column.name);
           }
         }
 
@@ -143,13 +138,20 @@ export const generateModels = async function genereateDevelopmentCoreModels({
         const { columns } = model;
         const result: string[] = [];
 
-        for (const [columnName, column] of columns) {
-          if (column.translations) {
-            result.push(columnName);
+        for (const column of columns) {
+          if (column.localized) {
+            result.push(column.name);
           }
         }
 
         return result;
+      },
+      getDatabasePropelAttributes(): PropelDatabaseAttributes {
+        return {
+          name: config.database.connections.at(0).name,
+          defaultIdMethod: 'native',
+          namespace: `PromCMS\\Modules\\${projectNameAsFolderName}\\Models`,
+        };
       },
       getColumnToPropelAttributes(columnName: string, column: ColumnType) {
         const attributes = new Map<PropelColumnAttributes, string>([
@@ -157,7 +159,6 @@ export const generateModels = async function genereateDevelopmentCoreModels({
           ['type', promColumnTypeToPropelType[column.type]],
           ['required', String(column.required)],
 
-          ['prom.editable', String(column.editable)],
           ['prom.hide', String(column.hide)],
           ['prom.title', column.title],
           ['prom.type', column.type],
@@ -208,12 +209,13 @@ export const generateModels = async function genereateDevelopmentCoreModels({
         model: DatabaseConfigModel | DatabaseConfigSingleton
       ) {
         const attributes = new Map<PropelTableAttributes, string>([
-          ['name', getTableNameForModel(modelName, model)!],
+          ['name', getTableNameForModel(model)!],
           ['phpName', capitalizeFirstLetter(modelName, false)],
           ['prom.ignoreSeeding', String(model.ignoreSeeding)],
           ['prom.title', model.title ?? ''],
           ['prom.preset', model.preset ?? ''],
-          ['prom.adminMetadata.icon', model.icon],
+          ['prom.adminMetadata.icon', model.admin.icon],
+          ['prom.adminMetadata.hidden', String(model.admin.hidden)],
         ]);
 
         return Object.fromEntries(attributes.entries());

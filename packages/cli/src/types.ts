@@ -4,6 +4,22 @@ export type MaybePromise<T> = Promise<T> | T;
 export type SupportedPackageManagers =
   (typeof SUPPORTED_PACKAGE_MANAGERS)[number];
 
+export type PropelDatabaseAttributes = {
+  name: string;
+  defaultIdMethod: 'native' | 'none';
+  package?: string;
+  schema?: string;
+  namespace?: string;
+  baseClass?: string;
+  basePeer?: string;
+  /**
+   * @default "underscore"
+   */
+  defaultPhpNamingMethod?: 'nochange' | 'underscore' | 'phpname' | 'clean';
+  heavyIndexing?: true | false;
+  tablePrefix?: string;
+};
+
 export type PropelColumnAttributes =
   | 'name'
   | 'phpName'
