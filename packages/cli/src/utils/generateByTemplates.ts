@@ -69,7 +69,10 @@ export const generateByTemplates = async (
       throw e;
     }
 
-    const filepath = path.join(endFolderPath, templateFilename);
+    const filepath = path.join(
+      endFolderPath,
+      path.join(path.dirname(templateFilename), finalFilename)
+    );
     await fs.ensureFile(filepath);
     await fs.writeFile(filepath, result);
   }

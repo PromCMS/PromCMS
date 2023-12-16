@@ -4,13 +4,12 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import react from '@vitejs/plugin-react';
 import { visualizer } from 'rollup-plugin-visualizer';
 // @ts-ignore
-import { PORT as DEFAULT_PORT } from '@prom-cms/shared/internal';
 import { phpServerVitePlugin } from './plugins';
 
 export default defineConfig(({ mode, command }) => {
   const currentFolder = process.cwd();
   const env = loadEnv(mode, path.join(currentFolder, '..', '..'), '');
-  const { PORT = DEFAULT_PORT, ANALYZE = false } = env;
+  const { PORT = 3000, ANALYZE = false } = env;
   const APP_URL_PREFIX = '/admin/';
 
   return {

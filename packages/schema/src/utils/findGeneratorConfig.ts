@@ -1,16 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 
-import { supportedConfigExtensions } from '../../constants.js';
-import { replaceFileExtension } from '../../index.js';
-import { GENERATOR_FILENAME } from '../constants.js';
+import { createPromConfigPath } from './createPromConfigPath.js';
+
+const supportedConfigExtensions = ['json', 'js', 'cjs', 'mjs', 'ts'] as const;
 
 export const findGeneratorConfig = (root?: string) => {
   let filepath = '';
 
   supportedConfigExtensions.find((extension) => {
-    const filename = replaceFileExtension(GENERATOR_FILENAME, extension);
+    const filename = createPromConfigPath(extension);
     const expectedFilepath = path.join(root ?? '', filename);
+    console.log({ expectedFilepath });
 
     if (!fs.existsSync(expectedFilepath)) {
       return false;

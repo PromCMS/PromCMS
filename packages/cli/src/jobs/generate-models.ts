@@ -1,4 +1,3 @@
-import { capitalizeFirstLetter } from '@prom-cms/shared';
 import path from 'path';
 import { generateByTemplates, getModuleFolderName } from '@utils';
 import {
@@ -13,6 +12,8 @@ import {
   PropelDatabaseAttributes,
   PropelTableAttributes,
 } from '@custom-types';
+import camelCase from 'lodash/camelCase.js';
+import upperFirst from 'lodash/upperFirst.js';
 
 const recursivePrintObject = (obj: object | Map<any, any> | []) => {
   let result = ``;
@@ -105,7 +106,6 @@ export const generateModels = async function genereateDevelopmentCoreModels({
           root: appRoot,
         },
       },
-      capitalizeFirstLetter,
       isModelSingleton,
       objectToXmlAttributes(
         propertiesAsObject: Record<string, any> | undefined
@@ -148,14 +148,14 @@ export const generateModels = async function genereateDevelopmentCoreModels({
       },
       getDatabasePropelAttributes(): PropelDatabaseAttributes {
         return {
-          name: config.database.connections.at(0).name,
+          name: config.database.connections.at(0)!.name,
           defaultIdMethod: 'native',
           namespace: `PromCMS\\Modules\\${projectNameAsFolderName}\\Models`,
         };
       },
-      getColumnToPropelAttributes(columnName: string, column: ColumnType) {
+      getColumnToPropelAttributes(column: ColumnType) {
         const attributes = new Map<PropelColumnAttributes, string>([
-          ['name', columnName],
+          ['name', column.name],
           ['type', promColumnTypeToPropelType[column.type]],
           ['required', String(column.required)],
 
@@ -205,12 +205,11 @@ export const generateModels = async function genereateDevelopmentCoreModels({
         return Object.fromEntries(attributes.entries());
       },
       getModelToPropelTableAttributes(
-        modelName: string,
         model: DatabaseConfigModel | DatabaseConfigSingleton
       ) {
         const attributes = new Map<PropelTableAttributes, string>([
           ['name', getTableNameForModel(model)!],
-          ['phpName', capitalizeFirstLetter(modelName, false)],
+          ['phpName', upperFirst(camelCase(model.tableName))],
           ['prom.ignoreSeeding', String(model.ignoreSeeding)],
           ['prom.title', model.title ?? ''],
           ['prom.preset', model.preset ?? ''],

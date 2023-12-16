@@ -73,4 +73,5 @@ export type PropelTableAttributes =
   | 'prom.adminMetadata.icon'
   | 'prom.title'
   | 'prom.preset'
+  | 'prom.adminMetadata.hidden'
   | 'prom.ignoreSeeding';

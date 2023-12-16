@@ -1,125 +1,108 @@
 // Vitest Snapshot v1
 
 exports[`jobs > generateModels > should run correctly and generate files 1`] = `
-"<?php
-
-use PromCMS\\\\Core\\\\Database\\\\Model;
-use PromCMS\\\\Core\\\\Database\\\\SingletonModel;
-use PromCMS\\\\Core\\\\Database\\\\ModelResult;
-
-class First extends Model
-{
-  protected string $tableName = 'first';
-  protected bool $softDelete = false;
-
-  protected bool $timestamps = true;
-  protected bool $translations = true;
-  protected static bool $enabled = true;
-  protected static array $adminSettings = ['hidden' => true];
-
-  public static array $tableColumns = [
-    'col' => [
-      'title' => 'New',
-      'hide' => false,
-      'required' => false,
-      'unique' => false,
-      'editable' => true,
-      'translations' => true,
-      'admin' => [
-        'isHidden' => false,
-        'editor' => ['placement' => 'main', 'width' => 12],
-        'fieldType' => 'normal',
-      ],
-      'readonly' => false,
-      'type' => 'string',
-    ],
-  ];
-
-  static bool $ignoreSeeding = false;
-
-  static string $modelIcon = 'Article';
-
-  public function getSummary()
-  {
-    return (object) [
-      'isSingleton' => $this instanceof SingletonModel,
-      'tableName' => $this->getTableName(),
-      'icon' => self::$modelIcon,
-      'title' => isset(self::$title) ? self::$title : null,
-      'ignoreSeeding' => self::$ignoreSeeding,
-      'columns' => static::$tableColumns,
-      'hasTimestamps' => $this->hasTimestamps(),
-      'hasSoftDelete' => $this->hasSoftDelete(),
-      'admin' => self::$adminSettings,
-      'enabled' => self::$enabled,
-      'ownable' => true,
-      'hasOrdering' => false,
-      'isDraftable' => false,
-      'isSharable' => true,
-    ];
+"{
+  \\"propel\\": {
+    \\"paths\\": {
+      \\"schemaDir\\": \\"./.prom-cms/propel\\",
+      \\"phpDir\\": \\".\\",
+      \\"phpConfDir\\": \\"./.prom-cms/propel/config\\",
+      \\"migrationDir\\": \\"./.prom-cms/propel/migrations\\",
+      \\"sqlDir\\": \\"./.prom-cms/propel/sql\\"
+    },
+    \\"generator\\": {
+      \\"namespaceAutoPackage\\": false
+    },
+    \\"database\\": {
+      \\"connections\\": {
+        \\"default-connection\\": {
+          \\"adapter\\": \\"sqlite\\",
+          \\"dsn\\": \\"sqlite:/Users/daichi/Desktop/Work/prom-cms/prom/node_modules/.prom-cms/test-app/.database/application.sq3\\",
+          \\"user\\": \\"root\\",
+          \\"password\\": \\"root\\",
+          \\"settings\\": {
+            \\"charset\\": \\"utf8\\"
+          }
+        }
+      }
+    }
   }
 }
 "
 `;
 
 exports[`jobs > generateModels > should run correctly and generate files 2`] = `
-"<?php
-
-use PromCMS\\\\Core\\\\Database\\\\Model;
-use PromCMS\\\\Core\\\\Database\\\\SingletonModel;
-use PromCMS\\\\Core\\\\Database\\\\ModelResult;
-
-class Second extends Model
-{
-  protected string $tableName = 'second_table_name';
-  protected bool $softDelete = false;
-
-  protected bool $timestamps = true;
-  protected bool $translations = true;
-  protected static bool $enabled = false;
-  protected static array $adminSettings = ['hidden' => false];
-
-  public static array $tableColumns = [
-    'col' => [
-      'title' => 'Newo',
-      'hide' => false,
-      'required' => false,
-      'unique' => false,
-      'editable' => true,
-      'translations' => true,
-      'admin' => [
-        'isHidden' => false,
-        'editor' => ['placement' => 'main', 'width' => 12],
-        'fieldType' => 'normal',
-      ],
-      'readonly' => false,
-      'type' => 'string',
-    ],
-  ];
-
-  static bool $ignoreSeeding = false;
-
-  static string $modelIcon = 'Article';
-
-  public function getSummary()
-  {
-    return (object) [
-      'isSingleton' => $this instanceof SingletonModel,
-      'tableName' => $this->getTableName(),
-      'icon' => self::$modelIcon,
-      'title' => isset(self::$title) ? self::$title : null,
-      'ignoreSeeding' => self::$ignoreSeeding,
-      'columns' => static::$tableColumns,
-      'hasTimestamps' => $this->hasTimestamps(),
-      'hasSoftDelete' => $this->hasSoftDelete(),
-      'admin' => self::$adminSettings,
-      'enabled' => self::$enabled,
-      'ownable' => true,
-      'hasOrdering' => false,
-      'isDraftable' => false,
-      'isSharable' => true,
-    ];
-  }
-}
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" ?>
+<database
+  name=\\"default-connection\\"
+  defaultIdMethod=\\"native\\"
+  namespace=\\"PromCMS\\\\Modules\\\\\\\\Models\\"
+>
+    <table
+    name=\\"first\\"
+    phpName=\\"First\\"
+    prom.ignoreSeeding=\\"false\\"
+    prom.title=\\"\\"
+    prom.preset=\\"\\"
+    prom.adminMetadata.icon=\\"Article\\"
+    prom.adminMetadata.hidden=\\"true\\"
+  >
+            <column
+      name=\\"col\\"
+      type=\\"VARCHAR\\"
+      required=\\"true\\"
+      prom.hide=\\"false\\"
+      prom.title=\\"New\\"
+      prom.type=\\"string\\"
+      prom.readonly=\\"false\\"
+      prom.adminMetadata.isHidden=\\"false\\"
+      prom.adminMetadata.editor.placement=\\"main\\"
+      prom.adminMetadata.editor.width=\\"12\\"
+      primaryKey=\\"false\\"
+    />
+            <column
+      name=\\"bola\\"
+      type=\\"BOOLEAN\\"
+      required=\\"true\\"
+      prom.hide=\\"false\\"
+      prom.title=\\"Boolean Column\\"
+      prom.type=\\"boolean\\"
+      prom.readonly=\\"false\\"
+      prom.adminMetadata.isHidden=\\"false\\"
+      prom.adminMetadata.editor.placement=\\"main\\"
+      prom.adminMetadata.editor.width=\\"12\\"
+      defaultValue=\\"false\\"
+      primaryKey=\\"false\\"
+    />
+        <behavior name=\\"i18n\\">
+          <parameter name=\\"i18n_columns\\" value=\\"bola\\" />
+        </behavior>
+      <behavior name=\\"prom_model\\" />
+    </table>
+    <table
+    name=\\"second_table_name\\"
+    phpName=\\"SecondTableName\\"
+    prom.ignoreSeeding=\\"false\\"
+    prom.title=\\"\\"
+    prom.preset=\\"\\"
+    prom.adminMetadata.icon=\\"Article\\"
+    prom.adminMetadata.hidden=\\"false\\"
+  >
+            <column
+      name=\\"col\\"
+      type=\\"VARCHAR\\"
+      required=\\"true\\"
+      prom.hide=\\"false\\"
+      prom.title=\\"Newo\\"
+      prom.type=\\"string\\"
+      prom.readonly=\\"false\\"
+      prom.adminMetadata.isHidden=\\"false\\"
+      prom.adminMetadata.editor.placement=\\"main\\"
+      prom.adminMetadata.editor.width=\\"12\\"
+      primaryKey=\\"false\\"
+    />
+      <behavior name=\\"prom_model\\" />
+    </table>
+</database>
 "
 `;

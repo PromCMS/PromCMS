@@ -2,15 +2,15 @@ import { execa } from 'execa';
 import path from 'path';
 import fs from 'fs-extra';
 import { describe, beforeEach, it, afterAll, expect } from 'vitest';
-
-import { monorepoRoot } from '@prom-cms/shared/dist/internal/constants.js';
+import { MONOREPO_ROOT } from '@constants';
 
 const TEST_FOLDER_PATH = path.join(
-  monorepoRoot,
+  MONOREPO_ROOT,
   'node_modules',
   '.prom-cms',
   'test-app'
 );
+
 describe('commands', () => {
   describe(
     'project create',
@@ -29,7 +29,7 @@ describe('commands', () => {
           execa(
             'node',
             [
-              path.join(monorepoRoot, 'packages/cli/bin/cli.js'),
+              path.join(MONOREPO_ROOT, 'packages/cli/bin/cli.js'),
               'project',
               'create',
               '--packageManager',
@@ -37,6 +37,7 @@ describe('commands', () => {
               '--name',
               'Test Project',
               '--no-install',
+              '--clean',
             ],
             {
               cwd: TEST_FOLDER_PATH,

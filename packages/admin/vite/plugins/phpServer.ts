@@ -9,11 +9,21 @@ import { runBeforeExiting } from '../utils';
 import { watchFiles } from '../utils/watchFiles';
 
 // @ts-ignore
-import { developmentPHPAppPath } from '@prom-cms/shared/internal';
 import { existsSync } from 'node:fs';
+import * as path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const isAdminRoute = (url: string) =>
   url === '/admin' || url.startsWith('/admin/');
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+export const monorepoRoot = path.join(__dirname, '..', '..', '..', '..');
+export const developmentPHPAppPath = path.join(
+  monorepoRoot,
+  'node_modules',
+  '.prom-cms',
+  'php-app'
+);
 
 export const phpServerVitePlugin = (): VitePlugin => ({
   name: 'prom-internal-dev-server',

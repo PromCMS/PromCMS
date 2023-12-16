@@ -16,16 +16,6 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
-    },
-    "./generator": {
-      "import": "./dist/generator/index.js",
-      "require": "./dist/generator/index.cjs",
-      "types": "./dist/generator/index.d.ts"
-    },
-    "./internal": {
-      "import": "./dist/internal/index.js",
-      "require": "./dist/internal/index.cjs",
-      "types": "./dist/internal/index.d.ts"
     }
   },
   "files": [

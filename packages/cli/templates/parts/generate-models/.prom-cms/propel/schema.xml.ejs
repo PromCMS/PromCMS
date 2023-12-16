@@ -1,37 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <database <%- objectToXmlAttributes(getDatabasePropelAttributes()) %>>
-  <% Object.entries({ ...config.database.models, ...config.database.singletons }).forEach(([modelName, model]) => { %>
-    <table <%- objectToXmlAttributes(getModelToPropelTableAttributes(modelName, model)) %>>
-      <% for (const [columnName, column] of model.columns) { %>
+  <% const models = [...config.database.models ?? [], ...config.database.singletons ?? []] %>
+  <% for (const model of models) { %>
+    <table <%- objectToXmlAttributes(getModelToPropelTableAttributes(model)) %>>
+      <% for (const column of model.columns) { %>
         <% if (column.type === "slug") { %>
           <behavior name="sluggable" />
         <% } else { %>
-            <column <%- objectToXmlAttributes(getColumnToPropelAttributes(columnName, column)) %> />
+            <column <%- objectToXmlAttributes(getColumnToPropelAttributes(column)) %> />
             <% if (column.type === "relationship") { %>
               <foreign-key foreignTable="<%- column.targetModel %>">
-                <reference local="<%- columnName %>" foreign="<%- column.foreignKey %>"/>
+                <reference local="<%- column.name %>" foreign="<%- column.foreignKey %>"/>
               </foreign-key>
             <% } %>
         <% } %> 
-        
-        <% const uniqueColumnNames = getUniqueColumnNames(model) %>
-        <% if (uniqueColumnNames.length) { %>
-          <unique name="/UniqueSet<%- projectNameAsFolderName %>/">
-            <% for( const uniqueColumnName of uniqueColumnNames) { %>
-              <unique-column name="/<%- uniqueColumnName %>/" />
-            <% } %>
-          </unique>
-        <% } %>
+      <% } %>
 
-        <% const localizedColumnNames = getLocalizedColumnNames(model) %>
-        <% if (localizedColumnNames.length) { %>
-          <behavior name="i18n">
-            <parameter name="i18n_columns" value="<%- localizedColumnNames.join(', ') %>" />
-          </behavior>
-        <% } %>
+      <% const uniqueColumnNames = getUniqueColumnNames(model) %>
+      <% if (uniqueColumnNames.length) { %>
+        <unique name="/UniqueSet<%- projectNameAsFolderName %>/">
+          <% for( const uniqueColumnName of uniqueColumnNames) { %>
+            <unique-column name="/<%- uniqueColumnName %>/" />
+          <% } %>
+        </unique>
+      <% } %>
+
+      <% const localizedColumnNames = getLocalizedColumnNames(model) %>
+      <% if (localizedColumnNames.length) { %>
+        <behavior name="i18n">
+          <parameter name="i18n_columns" value="<%- localizedColumnNames.join(', ') %>" />
+        </behavior>
+      <% } %>
+
+      <% const isSortingEnabled = model.sorting %>
+      <% if (isSortingEnabled) { %>
+        <behavior name="sortable">
+         <parameter name="rank_column" value="order" />
+        </behavior>
       <% } %>
 
       <behavior name="prom_model" />
     </table>
-  <% }) %>
+  <% } %>
 </database>

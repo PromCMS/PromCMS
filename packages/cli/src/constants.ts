@@ -19,16 +19,15 @@ export const USERS_SCRIPTS_ROOT = path.join(
 export const PROJECT_ROOT = path.join(PACKAGE_ROOT, '..', '..');
 export const TEMPLATES_ROOT = path.join(PACKAGE_ROOT, 'templates');
 export const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'npm', 'pnpm'] as const;
+export const MONOREPO_ROOT = path.join(__dirname, '..', '..', '..');
 
 type ModelColumns = NonNullable<
   GeneratorConfig['database']['models']
->[string]['columns'];
+>[number]['columns'];
 type SingletonColumns = NonNullable<
   GeneratorConfig['database']['singletons']
->[string]['columns'];
-type ColumnTypeAsString = NonNullable<
-  ReturnType<(SingletonColumns | ModelColumns)['get']>
->['type'];
+>[number]['columns'];
+type ColumnTypeAsString = (SingletonColumns | ModelColumns)[number]['type'];
 
 export const promColumnTypeToPropelType: Record<ColumnTypeAsString, string> = {
   boolean: 'BOOLEAN',

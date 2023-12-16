@@ -1,4 +1,4 @@
-import { findGeneratorConfig } from '@prom-cms/shared/generator';
+import { findGeneratorConfig } from '@prom-cms/schema';
 
 export const tryFindGeneratorConfig = (cwd: string) => {
   try {

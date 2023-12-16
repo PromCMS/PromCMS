@@ -13,8 +13,7 @@ import { createProjectModule } from '@jobs/create-project-module.js';
 import { getGeneratorConfigData } from '@utils/getGeneratorConfigData.js';
 import generateModels from '@jobs/generate-models.js';
 import { createAdminFiles } from '@jobs/create-admin-files.js';
-import { GENERATOR_FILENAME__JSON } from '@prom-cms/shared/generator';
-import { mockedGeneratorConfig } from '@prom-cms/shared/internal';
+import { createPromConfigPath, mockedGeneratorConfig } from '@prom-cms/schema';
 
 type Options = {
   packageManager: (typeof SUPPORTED_PACKAGE_MANAGERS)[number];
@@ -97,7 +96,7 @@ export const createProjectAction = async (
 
   if (promDevelop) {
     await fs.writeJSON(
-      path.join(cwd, GENERATOR_FILENAME__JSON),
+      path.join(cwd, createPromConfigPath('json')),
       mockedGeneratorConfig
     );
   }
