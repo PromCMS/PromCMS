@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs-extra';
 import { describe, beforeEach, it, afterAll, expect } from 'vitest';
-import generateModels from '../../src/jobs/generate-models.js';
+import createPropelConfig from '../../src/jobs/create-propel-config.js';
 
 import { z } from 'zod';
 import { MONOREPO_ROOT } from '@constants';
@@ -23,14 +23,14 @@ describe('jobs', () => {
     await fs.remove(TEST_FOLDER_PATH);
   });
 
-  describe('generateModels', () => {
+  describe('createPropelConfig', () => {
     it('should run correctly and generate files', async () => {
       const root = path.join(TEST_FOLDER_PATH, 'modules', 'test');
       await fs.ensureDir(root);
 
-      await generateModels({
+      await createPropelConfig({
         config: {
-          project: { name: '', url: '' },
+          project: { name: 'Testing Project', url: '' },
           database: databaseConfigSchema.parse({
             connections: [
               {
@@ -75,8 +75,6 @@ describe('jobs', () => {
       const expectedFiles = [
         path.join(TEST_FOLDER_PATH, '.prom-cms/propel/propel.json'),
         path.join(TEST_FOLDER_PATH, '.prom-cms/propel/schema.xml'),
-        // path.join(root, MODELS_FOLDER_NAME, 'First.model.php'),
-        // path.join(root, MODELS_FOLDER_NAME, 'Second.model.php'),
       ];
 
       for (const filePath of expectedFiles) {

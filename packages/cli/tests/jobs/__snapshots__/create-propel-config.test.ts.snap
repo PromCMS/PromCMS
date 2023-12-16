@@ -1,11 +1,11 @@
 // Vitest Snapshot v1
 
-exports[`jobs > generateModels > should run correctly and generate files 1`] = `
+exports[`jobs > createPropelConfig > should run correctly and generate files 1`] = `
 "{
   \\"propel\\": {
     \\"paths\\": {
       \\"schemaDir\\": \\"./.prom-cms/propel\\",
-      \\"phpDir\\": \\".\\",
+      \\"phpDir\\": \\"./modules/Testing/Models\\",
       \\"phpConfDir\\": \\"./.prom-cms/propel/config\\",
       \\"migrationDir\\": \\"./.prom-cms/propel/migrations\\",
       \\"sqlDir\\": \\"./.prom-cms/propel/sql\\"
@@ -31,12 +31,12 @@ exports[`jobs > generateModels > should run correctly and generate files 1`] = `
 "
 `;
 
-exports[`jobs > generateModels > should run correctly and generate files 2`] = `
+exports[`jobs > createPropelConfig > should run correctly and generate files 2`] = `
 "<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" ?>
 <database
   name=\\"default-connection\\"
   defaultIdMethod=\\"native\\"
-  namespace=\\"PromCMS\\\\Modules\\\\\\\\Models\\"
+  namespace=\\"PromCMS\\\\Modules\\\\Testing\\\\Models\\"
 >
     <table
     name=\\"first\\"

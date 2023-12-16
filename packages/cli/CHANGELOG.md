@@ -40,7 +40,6 @@
 - Updated dependencies [3545cb5]
 - Updated dependencies [b047a2a]
   - @prom-cms/admin@0.14.0
-  - @prom-cms/shared@3.0.0
 
 ## 0.21.2
 
@@ -51,7 +50,6 @@
 - Updated dependencies [d7e0891]
 - Updated dependencies [d7e0891]
   - @prom-cms/admin@0.13.0
-  - @prom-cms/shared@2.1.0
 
 ## 0.21.1
 
@@ -123,7 +121,6 @@
 - Updated dependencies [d1d586c]
 - Updated dependencies [50a7cbf]
 - Updated dependencies [50a7cbf]
-  - @prom-cms/shared@2.0.0
   - @prom-cms/config@0.1.4
   - @prom-cms/admin@0.12.1
 
@@ -206,7 +203,6 @@
 - Updated dependencies [988227f]
 - Updated dependencies [4e5e9fe]
   - @prom-cms/admin@0.6.0
-  - @prom-cms/shared@1.9.4
 
 ## 0.16.1
 
@@ -230,7 +226,6 @@
 - Updated dependencies [a3ee34f]
 - Updated dependencies [9e24657]
 - Updated dependencies [c4341e7]
-  - @prom-cms/shared@1.9.3
   - @prom-cms/admin@0.4.0
 
 ## 0.15.6
@@ -266,8 +261,6 @@
 ### Patch Changes
 
 - df425e2: Fix findGeneratorConfig, loadRootEnv, getEnvFilepath by not importing it dynamically but statically
-- Updated dependencies [df425e2]
-  - @prom-cms/shared@1.9.2
 
 ## 0.15.1
 
@@ -278,7 +271,6 @@
 - Updated dependencies [9ce049f]
 - Updated dependencies [9ce049f]
   - @prom-cms/config@0.1.1
-  - @prom-cms/shared@1.9.1
   - @prom-cms/admin@0.3.1
 
 ## 0.15.0
@@ -303,8 +295,6 @@
 ### Patch Changes
 
 - Updated dependencies [999c46c]
-- Updated dependencies [b61ac1d]
-  - @prom-cms/shared@1.9.0
 
 ## 0.13.0
 
@@ -321,8 +311,6 @@
 
 - Updated dependencies [8dc8c0f]
 - Updated dependencies [8dc8c0f]
-- Updated dependencies [8dc8c0f]
-  - @prom-cms/shared@1.8.0
 
 ## 0.12.0
 
@@ -334,8 +322,6 @@
 ### Patch Changes
 
 - Updated dependencies [f04b0c3]
-- Updated dependencies [ebb67aa]
-  - @prom-cms/shared@1.7.0
 
 ## 0.11.0
 
@@ -343,11 +329,6 @@
 
 - c5bdfa2: Remove generation of core module.
 - 0dabd83: Add vite logic for development and production of resulted project
-
-### Patch Changes
-
-- Updated dependencies [c5bdfa2]
-  - @prom-cms/shared@1.6.0
 
 ## 0.10.0
 
@@ -365,8 +346,6 @@
 ### Patch Changes
 
 - Updated dependencies [a551401]
-- Updated dependencies [9589ec6]
-  - @prom-cms/shared@1.5.0
 
 ## 0.8.0
 
@@ -380,8 +359,6 @@
 - 44fae0c: Fix build by updating prettier and applying to files
 - Updated dependencies [493a220]
 - Updated dependencies [9b60d7c]
-- Updated dependencies [44fae0c]
-  - @prom-cms/shared@1.4.0
 
 ## 0.7.0
 
@@ -403,8 +380,6 @@
 ### Patch Changes
 
 - Updated dependencies [376ccbf]
-- Updated dependencies [0ad043f]
-  - @prom-cms/shared@1.3.0
 
 ## 0.5.1
 
@@ -417,11 +392,6 @@
 ### Minor Changes
 
 - 286655f: Change build process to turbo and babel with tsup
-
-### Patch Changes
-
-- Updated dependencies [286655f]
-  - @prom-cms/shared@1.2.0
 
 ## 0.4.1
 
@@ -474,8 +444,3 @@
 ### Minor Changes
 
 - 133ff38: Initial automatic release
-
-### Patch Changes
-
-- Updated dependencies [133ff38]
-  - @prom-cms/shared@1.0.0

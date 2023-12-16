@@ -6,12 +6,7 @@ export type InstallPHPDepsOptions = {
 
 export const installPHPDeps = async ({ cwd }: InstallPHPDepsOptions) => {
   const depsList = ['prom-cms/core:dev-develop'];
-  const devDepsList = [
-    'fakerphp/faker',
-    'phpunit/phpunit',
-    'fakerphp/faker',
-    'spatie/phpunit-watcher',
-  ];
+  const devDepsList = ['fakerphp/faker', 'phpunit/phpunit'];
 
   await execa('composer', ['require', ...depsList], {
     cwd,
