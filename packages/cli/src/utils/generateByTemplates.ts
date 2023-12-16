@@ -3,6 +3,7 @@ import path from 'path';
 import ejs from 'ejs';
 import { formatCodeString } from './formatCodeString.js';
 import { getTemplateFolder, Path } from './getTemplateFolder.js';
+import { glob } from 'glob';
 
 export type GenerateByTemplatesOptions = {
   /**
@@ -23,32 +24,20 @@ export const generateByTemplates = async (
   /**
    * An object which keys should be the result filename, '*' for every file or nothing to render template without data as is
    */
-  templateData?: Record<string, any>,
-  options?: GenerateByTemplatesOptions
+  templateData?: Record<string, any>
 ) => {
   // Account for absolute path - aka recursive print we do at the end of this function
   const templateFolderPath = path.isAbsolute(templatePath)
     ? templatePath
     : getTemplateFolder(templatePath);
 
-  const folders = (
-    await fs.readdir(templateFolderPath, { withFileTypes: true })
-  )
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
+  const templateFiles = await glob('**/*.ejs', {
+    dot: true,
+    cwd: templateFolderPath,
+  });
 
-  const files = (await fs.readdir(templateFolderPath, { withFileTypes: true }))
-    .filter((dirent) => dirent.isFile())
-    .filter((dirent) =>
-      options?.filter
-        ? options?.filter(path.basename(dirent.name, '.ejs'))
-        : true
-    )
-    .map((dirent) => dirent.name);
-
-  for (const templateFilename of files) {
+  for (const templateFilename of templateFiles) {
     const finalFilename = path.parse(templateFilename).name;
-
     const rawString = fs.readFileSync(
       path.join(templateFolderPath, templateFilename),
       'utf-8'
@@ -80,17 +69,8 @@ export const generateByTemplates = async (
       throw e;
     }
 
-    const filepath = path.join(endFolderPath, finalFilename);
+    const filepath = path.join(endFolderPath, templateFilename);
     await fs.ensureFile(filepath);
     await fs.writeFile(filepath, result);
-  }
-
-  for (const folderName of folders) {
-    await generateByTemplates(
-      // internally we print files recursively
-      path.join(templateFolderPath, folderName) as any,
-      path.join(endFolderPath, folderName),
-      templateData
-    );
   }
 };
