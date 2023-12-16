@@ -4,8 +4,15 @@ export default {
   semi: true,
   singleQuote: true,
   jsxSingleQuote: false,
-  plugins: ['@prettier/plugin-php', '@prettier/plugin-xml'],
+  plugins: [
+    '@prettier/plugin-php',
+    '@prettier/plugin-xml',
+    '@trivago/prettier-plugin-sort-imports',
+  ],
   phpVersion: '8.2',
+  importOrder: ['<THIRD_PARTY_MODULES>', '^@prom-cms/(.*)$', '^[./]'],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
 
   overrides: [
     {
