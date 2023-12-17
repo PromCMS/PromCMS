@@ -1,19 +1,20 @@
-import path from 'path';
-import { generateByTemplates, getModuleFolderName } from '@utils';
-import {
-  ColumnType,
-  DatabaseConfigModel,
-  DatabaseConfigSingleton,
-  GeneratorConfig,
-} from '@prom-cms/schema';
 import { promColumnTypeToPropelType } from '@constants';
 import {
   PropelColumnAttributes,
   PropelDatabaseAttributes,
   PropelTableAttributes,
 } from '@custom-types';
+import { generateByTemplates, getModuleFolderName } from '@utils';
 import camelCase from 'lodash/camelCase.js';
 import upperFirst from 'lodash/upperFirst.js';
+import path from 'path';
+
+import {
+  ColumnType,
+  DatabaseConfigModel,
+  DatabaseConfigSingleton,
+  GeneratorConfig,
+} from '@prom-cms/schema';
 
 const recursivePrintObject = (obj: object | Map<any, any> | []) => {
   let result = ``;
@@ -89,7 +90,15 @@ export async function createPropelConfig({
   ]) {
     for (const column of model.columns) {
       if (column.type === 'slug') {
-        model.columns[column.of].primaryString = true;
+        const columnOf = model.columns.find(
+          (currentColumn) => currentColumn.name === column.of
+        );
+
+        if (!columnOf || columnOf.type !== 'string') {
+          continue;
+        }
+
+        columnOf.primaryString = true;
       }
     }
   }
