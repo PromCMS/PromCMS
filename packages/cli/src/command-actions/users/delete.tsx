@@ -1,10 +1,10 @@
-import { THANK_YOU_MESSAGE, USERS_SCRIPTS_ROOT } from '@constants';
+import { THANK_YOU_MESSAGE } from '@constants';
 import { emailSchema } from '@schemas';
-import { Logger, runPHPScript, tryFindGeneratorConfig } from '@utils';
+import { Logger, tryFindGeneratorConfig } from '@utils';
 import { createPromptWithOverrides } from '@utils/createPromptWithOverrides.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
+import { execa } from 'execa';
 import inquirer from 'inquirer';
-import path from 'path';
 import { ZodError } from 'zod';
 
 type Options = {
@@ -57,13 +57,7 @@ export const deleteUserCommandAction = async (
 
   try {
     await runWithProgress(
-      runPHPScript({
-        path: path.join(USERS_SCRIPTS_ROOT, 'delete.php'),
-        arguments: {
-          cwd,
-          email,
-        },
-      }),
+      execa('vendor/bin/prom-cms', [`users:delete`, '--email', email], { cwd }),
       'Connect and delete user'
     );
   } catch (error) {

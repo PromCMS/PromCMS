@@ -1,9 +1,9 @@
-import { THANK_YOU_MESSAGE, USERS_SCRIPTS_ROOT } from '@constants';
+import { THANK_YOU_MESSAGE } from '@constants';
 import { emailSchema } from '@schemas';
-import { Logger, runPHPScript, tryFindGeneratorConfig } from '@utils';
+import { Logger, tryFindGeneratorConfig } from '@utils';
 import { createPromptWithOverrides } from '@utils/createPromptWithOverrides.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
-import path from 'path';
+import { execa } from 'execa';
 import { ZodError, z } from 'zod';
 
 const nameSchema = z
@@ -74,15 +74,19 @@ export const createUserCommandAction = async (
 
   try {
     await runWithProgress(
-      runPHPScript({
-        path: path.join(USERS_SCRIPTS_ROOT, 'create.php'),
-        arguments: {
-          cwd,
+      execa(
+        'vendor/bin/prom-cms',
+        [
+          `users:create`,
+          '--email',
           email,
+          '--password',
           password,
+          '--name',
           name,
-        },
-      }),
+        ],
+        { cwd }
+      ),
       'Connect and create new user'
     );
   } catch (error) {
