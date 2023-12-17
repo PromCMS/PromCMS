@@ -1,12 +1,12 @@
-import type { Logger, Plugin } from 'vite';
-import path from 'path';
-import httpProxy from 'http-proxy';
-
-import { runBeforeExiting } from './utils/runBeforeExiting';
-import { startPHPServer } from './utils/startPhpServer';
 import fs from 'fs-extra';
+import httpProxy from 'http-proxy';
 import mime from 'mime';
+import path from 'path';
 import { Readable } from 'stream';
+import type { Logger, Plugin } from 'vite';
+
+import { runBeforeExiting } from './runBeforeExiting.js';
+import { startPHPServer } from './startPhpServer.js';
 
 export const promCmsVitePlugin = async (): Promise<Plugin> => {
   const projectRoot = process.cwd();

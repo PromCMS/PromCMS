@@ -1,5 +1,5 @@
+import { type ExecaChildProcess, execa } from 'execa';
 import fs from 'fs-extra';
-import { execa, type ExecaChildProcess } from 'execa';
 import path from 'path';
 
 export interface StartPHPServerOptions {

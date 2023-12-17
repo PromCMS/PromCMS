@@ -38,7 +38,7 @@ This will boost your performance a lot and you can focus on what really matters 
 -   [Admin Package](./packages/admin/README.md) - All source files of admin portal
 -   [Api Client Package](./packages/api-client/README.md)
 -   [CLI Package](./packages/cli/README.md) - Know your CLI for easier management of PromCMS projects
--   [Config Package](./packages/config/README.md) - All internal configuration for typescript, prettier, tsup, etc...
+-   [Config Package](./packages/config/README.md) - All internal configuration for typescript, prettier, etc...
 -   [In Page Editor Package](./packages/in-page-editor/README.md)
 -   [Schema Package](./packages/schema/README.md) - Know your powerful schema and use it to the fullest!
 -   [Shared Package](./packages/shared/README.md) - Internal helpers

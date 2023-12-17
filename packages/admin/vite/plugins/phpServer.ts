@@ -1,17 +1,17 @@
-import { Plugin as VitePlugin } from 'vite';
 // @ts-ignore
 import httpProxy from 'http-proxy';
-// TODO: rework plugin to export this byitself or just use plugin as is
-import { utils as vitePromUtils } from '@prom-cms/vite-plugin';
-import { Readable } from 'node:stream';
-
-import { runBeforeExiting } from '../utils';
-import { watchFiles } from '../utils/watchFiles';
-
 // @ts-ignore
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
+import { Readable } from 'node:stream';
 import { fileURLToPath } from 'node:url';
+import { Plugin as VitePlugin } from 'vite';
+
+// TODO: rework plugin to export this byitself or just use plugin as is
+import { startPHPServer } from '@prom-cms/vite-plugin';
+
+import { runBeforeExiting } from '../utils';
+import { watchFiles } from '../utils/watchFiles';
 
 const isAdminRoute = (url: string) =>
   url === '/admin' || url.startsWith('/admin/');
@@ -39,7 +39,7 @@ export const phpServerVitePlugin = (): VitePlugin => ({
     const abortController = new AbortController();
     const phpServerPort = server.config.server.port! + 1;
     const serverOrigin = `http://127.0.0.1:${phpServerPort}`;
-    const serverProcess = vitePromUtils.startPHPServer({
+    const serverProcess = startPHPServer({
       port: phpServerPort,
       cwd: developmentPHPAppPath,
     });

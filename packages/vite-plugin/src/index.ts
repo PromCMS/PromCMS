@@ -1,2 +1,3 @@
-export * from './plugin';
-export * as utils from './utils';
+export * from './plugin.js';
+export * from './runBeforeExiting.js';
+export * from './startPhpServer.js';

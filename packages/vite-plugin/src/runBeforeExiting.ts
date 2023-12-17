@@ -1,4 +1,4 @@
-import { ExitSignals } from '../types';
+import { ExitSignals } from './types.js';
 
 export const runBeforeExiting = (fun: (...args: any[]) => void) => {
   let wasCleanedUp = false;
