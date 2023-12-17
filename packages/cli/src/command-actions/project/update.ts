@@ -1,13 +1,12 @@
-import fs from 'fs-extra';
-import path from 'path';
-
 import { MODELS_FOLDER_NAME, MODULE_FOLDER_NAME } from '@constants';
+import { createAdminFiles } from '@jobs/create-admin-files.js';
 import { createProjectModule } from '@jobs/create-project-module.js';
-import { getModuleFolderName, Logger } from '@utils';
+import generateModels from '@jobs/generate-models.js';
+import { Logger, getModuleFolderName } from '@utils';
 import { getGeneratorConfigData } from '@utils/getGeneratorConfigData.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
-import generateModels from '@jobs/generate-models.js';
-import { createAdminFiles } from '@jobs/create-admin-files.js';
+import fs from 'fs-extra';
+import path from 'path';
 
 type Options = {
   cwd: string;
@@ -21,9 +20,13 @@ export const updateProjectAction = async (options: Options) => {
   const rootModuleName = getModuleFolderName(generatorConfig.project.name);
   const rootModulePath = path.join(cwd, MODULE_FOLDER_NAME, rootModuleName);
   const rootModelsPath = path.join(rootModulePath, MODELS_FOLDER_NAME);
+  const propelDirectory = path.join(cwd, '.prom-cms', 'propel');
 
   if (await fs.pathExists(rootModelsPath)) {
-    await runWithProgress(fs.emptyDir(rootModelsPath), 'Deleting old models');
+    await runWithProgress(
+      Promise.all([fs.emptyDir(rootModelsPath), fs.remove(propelDirectory)]),
+      'Deleting old models'
+    );
 
     const generateModelsOptions = {
       moduleRoot: rootModulePath,
