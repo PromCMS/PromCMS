@@ -3,10 +3,11 @@ import { Page } from '@custom-types';
 import { useModelInfo } from '@hooks/useModelInfo';
 import { useRouterQuery } from '@hooks/useRouterQuery';
 import { PageLayout } from '@layouts';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { upperFirst } from '@mantine/hooks';
 import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
+
 import NotFoundPage from '../404';
 
 const FilesPage: Page = () => {
@@ -36,7 +37,7 @@ const FilesPage: Page = () => {
     <PageLayout>
       <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
         <h1 className="text-3xl font-semibold capitalize">
-          {t(capitalizeFirstLetter(model.tableName || ''))}
+          {t(upperFirst(model.tableName || ''))}
         </h1>
       </div>
       <FileList

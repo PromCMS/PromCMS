@@ -1,13 +1,13 @@
-import { ColumnType, FieldPlacements } from '@prom-cms/schema';
 import clsx from 'clsx';
 import { FC } from 'react';
+
+import { ColumnType, FieldPlacements } from '@prom-cms/schema';
+
 import { FieldMapperItem } from './FieldMapperItem';
 
 export interface FieldMapperProps {
   type: FieldPlacements;
-  fields: (ColumnType & {
-    columnName: string;
-  })[];
+  fields: ColumnType[];
 }
 
 const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
@@ -18,7 +18,7 @@ const FieldMapper: FC<FieldMapperProps> = ({ fields, type: placement }) => {
 
         return (
           <div
-            key={field.columnName}
+            key={field.name}
             className={clsx('px-2', width === 12 ? 'w-full' : `w-${width}/12`)}
           >
             <FieldMapperItem placement={placement} {...field} />

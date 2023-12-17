@@ -1,5 +1,4 @@
 import { FilePickerProps } from '@components/form/FilePicker';
-import { ItemID } from '@prom-cms/shared';
 import {
   PropsWithChildren,
   useCallback,
@@ -9,6 +8,9 @@ import {
 } from 'react';
 import { FC, useContext } from 'react';
 import { createContext } from 'react';
+
+import { ItemID } from '@prom-cms/api-client';
+
 import { GalleryToolData } from '../GalleryTool';
 
 type ContextData = GalleryToolData & {

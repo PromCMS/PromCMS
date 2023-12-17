@@ -1,7 +1,8 @@
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
 import { Header as StyledHeader } from '@components/editorialPage/Header';
+import useCurrentSingleton from '@hooks/useCurrentSingleton';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { FieldPlacements } from '@prom-cms/schema';
 
 export const Header: FC = () => {
@@ -11,10 +12,9 @@ export const Header: FC = () => {
   const hasHeading = useMemo(
     () =>
       columns &&
-      !!Object.entries(Object.fromEntries(columns)).find(
-        ([_, data]) =>
+      !!columns.find(
+        (data) =>
           !data.hide &&
-          data.editable &&
           data.admin.editor.placement === FieldPlacements.MAIN &&
           data.type === 'string' &&
           data.admin.fieldType === 'heading'

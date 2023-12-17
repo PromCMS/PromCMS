@@ -1,10 +1,10 @@
-import { Logger, runPHPScript, tryFindGeneratorConfig } from '@utils';
-import path from 'path';
 import { THANK_YOU_MESSAGE, USERS_SCRIPTS_ROOT } from '@constants';
-import { z, ZodError } from 'zod';
 import { emailSchema } from '@schemas';
+import { Logger, runPHPScript, tryFindGeneratorConfig } from '@utils';
 import { createPromptWithOverrides } from '@utils/createPromptWithOverrides.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
+import path from 'path';
+import { ZodError, z } from 'zod';
 
 const nameSchema = z
   .string()
@@ -25,7 +25,7 @@ type Options = {
 export const createUserCommandAction = async (
   optionsFromParameters: Options
 ) => {
-  tryFindGeneratorConfig(optionsFromParameters.cwd);
+  await tryFindGeneratorConfig(optionsFromParameters.cwd);
 
   const { cwd, email, password, name } = await createPromptWithOverrides(
     [

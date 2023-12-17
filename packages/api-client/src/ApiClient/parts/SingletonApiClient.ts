@@ -1,5 +1,10 @@
-import { ApiResultModelSingleton, ApiResultSingletons } from '@prom-cms/shared';
-import { Response, ResultItem, RichAxiosRequestConfig } from '../../types';
+import {
+  ApiResultModelSingleton,
+  ApiResultSingletons,
+  Response,
+  ResultItem,
+  RichAxiosRequestConfig,
+} from '../../types';
 import { formatColumns } from '../../utils/formatColumns';
 import { ApiClientBase } from '../ApiClientBase';
 

@@ -1,15 +1,20 @@
-import { object, string, number } from 'yup';
+import { MESSAGES } from '@constants';
+import { z } from 'zod';
 
-export const updateUserSchema = object().shape({
-  email: string().email('This is not valid email').optional().nullable(),
-  name: string().optional().nullable(),
-  role: number().optional().nullable(),
+export const updateUserSchema = z.object({
+  email: z.string().email('This is not valid email').optional().nullable(),
+  name: z.string().optional().nullable(),
+  role: z.number().optional().nullable(),
 });
 
-export const createUserSchema = object().shape({
-  email: string()
-    .email('This is not valid email')
-    .required('This field is required'),
-  name: string().required('This field is required'),
-  role: number().optional().nullable(),
+export const createUserSchema = z.object({
+  email: z
+    .string({
+      required_error: MESSAGES.FIELD_REQUIRED,
+    })
+    .email('This is not valid email'),
+  name: z.string({
+    required_error: MESSAGES.FIELD_REQUIRED,
+  }),
+  role: z.number().optional().nullable(),
 });

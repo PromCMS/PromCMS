@@ -1,18 +1,20 @@
 import { MESSAGES } from '@constants';
-import { Button, Input, Popover } from '@mantine/core';
+import { Button, Input } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
-import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
 import {
   DetailedHTMLProps,
-  forwardRef,
   InputHTMLAttributes,
   ReactElement,
+  forwardRef,
   useCallback,
   useMemo,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil } from 'tabler-icons-react';
+
+import { ItemID } from '@prom-cms/api-client';
+
 import { FilePicker, FilePickerProps } from '../FilePicker';
 import { MultipleItemDisplay } from './MultipleItemDisplay';
 import { SingleItemDisplay } from './SingleItemDisplay';

@@ -1,11 +1,10 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { replaceFileExtension, supportedConfigExtensions } from '../../../src';
 import fs from 'fs-extra';
 import path from 'path';
-import {
-  GENERATOR_FILENAME,
-  findGeneratorConfig,
-} from '../../../src/generator';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+
+import { createPromConfigPath } from '../../src/utils/createPromConfigPath';
+import { supportedConfigExtensions } from '../../src/utils/findGeneratorConfig';
+import { findGeneratorConfig } from '../../src/utils/findGeneratorConfig';
 
 const testFolderPath = path.join(
   __dirname,
@@ -34,7 +33,7 @@ describe('findGeneratorConfig util', () => {
     'should find correctly and return path of said config for extension %s',
     async (extension) => {
       // create a config file
-      const filename = replaceFileExtension(GENERATOR_FILENAME, extension);
+      const filename = createPromConfigPath(extension);
       const filePath = path.join(testFolderPath, filename);
 
       // Create it

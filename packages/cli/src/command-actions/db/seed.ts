@@ -1,14 +1,14 @@
+import { SCRIPTS_ROOT } from '@constants';
 import { Logger, tryFindGeneratorConfig } from '@utils';
 import child_process from 'child_process';
 import path from 'path';
-import { SCRIPTS_ROOT } from '@constants';
 
 type Options = {
   cwd: string;
 };
 
 export const seedDatabaseAction = async ({ cwd }: Options) => {
-  tryFindGeneratorConfig(cwd);
+  await tryFindGeneratorConfig(cwd);
 
   Logger.info(`Running PromCMS seeding on app in "${cwd}"...`);
   let messages = '';

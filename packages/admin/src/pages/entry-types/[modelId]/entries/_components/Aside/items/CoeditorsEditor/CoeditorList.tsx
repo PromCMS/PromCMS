@@ -1,9 +1,11 @@
 import { useModelItems } from '@hooks/useModelItems';
 import { ActionIcon, Text } from '@mantine/core';
-import { ItemID, User } from '@prom-cms/shared';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Trash } from 'tabler-icons-react';
+
+import { ItemID, User } from '@prom-cms/api-client';
+
 import { loadingPlaceholder } from './constants';
 
 const Item: FC<User & { onItemDelete: (id: ItemID) => void }> = ({

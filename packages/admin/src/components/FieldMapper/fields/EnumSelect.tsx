@@ -1,6 +1,6 @@
 import { SelectItem, Select } from '@mantine/core';
+import { upperFirst } from '@mantine/hooks';
 import { ColumnTypeEnum } from '@prom-cms/schema';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { FC, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -24,7 +24,7 @@ export const EnumSelect: FC<EnumSelectProps> = ({
     () =>
       enumValue.map((enumKey) => ({
         value: enumKey,
-        label: t(capitalizeFirstLetter(enumKey)),
+        label: t(upperFirst(enumKey)),
       })),
     [enumValue, t]
   );

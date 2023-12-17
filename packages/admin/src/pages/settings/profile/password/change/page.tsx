@@ -1,17 +1,18 @@
 import { apiClient } from '@api';
+import { MESSAGES } from '@constants';
 import { Page } from '@custom-types';
-import { ChangePasswordErrorCode } from '@prom-cms/api-client';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Modal, PasswordInput, Title } from '@mantine/core';
+import { isApiResponse, toastedPromise } from '@utils';
 import axios from 'axios';
-import * as yup from 'yup';
+import { t } from 'i18next';
 import { useCallback } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { t } from 'i18next';
-import { MESSAGES } from '@constants';
-import { isApiResponse, toastedPromise } from '@utils';
+import { z } from 'zod';
+
+import { ChangePasswordErrorCode } from '@prom-cms/api-client';
 
 type FormValues = {
   newPassword: string;
@@ -19,17 +20,23 @@ type FormValues = {
   newPasswordAgain: string;
 };
 
-const schema = yupResolver(
-  yup.object({
-    newPassword: yup
-      .string()
-      .min(6, t('Too short, minimum 6 characters'))
-      .required(t(MESSAGES.FIELD_REQUIRED)),
-    newPasswordAgain: yup
-      .string()
-      .oneOf([yup.ref('newPassword'), null], MESSAGES.PASSWORDS_MUST_MATCH),
-    oldPassword: yup.string().required(t(MESSAGES.FIELD_REQUIRED)),
-  })
+const schema = zodResolver(
+  z
+    .object({
+      newPassword: z
+        .string({ required_error: MESSAGES.FIELD_REQUIRED })
+        .min(6, t('Too short, minimum 6 characters')),
+      newPasswordAgain: z.string(),
+      oldPassword: z.string({ required_error: MESSAGES.FIELD_REQUIRED }),
+    })
+    .superRefine((value, ctx) => {
+      if (value.newPassword !== value.newPasswordAgain) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: MESSAGES.PASSWORDS_MUST_MATCH,
+        });
+      }
+    })
 );
 
 export const ChangePasswordPage: Page = () => {
@@ -97,7 +104,7 @@ export const ChangePasswordPage: Page = () => {
             <PasswordInput
               label={t(MESSAGES.OLD_PASSWORD)}
               className="w-full"
-              error={formState.errors.oldPassword?.message}
+              error={t(formState.errors.oldPassword?.message ?? '')}
               autoComplete="current-password"
               {...register('oldPassword')}
             />
@@ -105,14 +112,14 @@ export const ChangePasswordPage: Page = () => {
             <PasswordInput
               label={t(MESSAGES.NEW_PASSWORD)}
               className="w-full"
-              error={formState.errors.newPassword?.message}
+              error={t(formState.errors.newPassword?.message ?? '')}
               autoComplete="new-password"
               {...register('newPassword')}
             />
             <PasswordInput
               label={t(MESSAGES.NEW_PASSWORD_AGAIN)}
               className="w-full"
-              error={formState.errors.newPasswordAgain?.message}
+              error={t(formState.errors.newPasswordAgain?.message ?? '')}
               autoComplete="off"
               {...register('newPasswordAgain')}
             />

@@ -1,33 +1,34 @@
-import useCurrentModel from '@hooks/useCurrentModel';
-import useCurrentModelItem from '@hooks/useCurrentModelItem';
-import {
-  createContext,
-  FC,
-  useContext,
-  useMemo,
-  useEffect,
-  useState,
-} from 'react';
-import { EntryTypeUrlActionType } from '@custom-types';
-import { FormProvider, useForm, UseFormProps } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import type { OutputData } from '@editorjs/editorjs';
-import { getModelItemSchema } from '@schemas';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { getObjectDiff, isApiResponse } from '@utils';
-import axios from 'axios';
-import { useTranslation } from 'react-i18next';
-import { ReactElement } from 'react';
-import { useCallback } from 'react';
-import { useSettings } from '@hooks/useSettings';
-import { useNavigate } from 'react-router-dom';
-import { useQueryClient } from '@tanstack/react-query';
-import { ResultItem, EntityDuplicateErrorCode } from '@prom-cms/api-client';
 import { apiClient } from '@api';
 import { pageUrls } from '@constants';
 import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
-import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
+import { EntryTypeUrlActionType } from '@custom-types';
+import type { OutputData } from '@editorjs/editorjs';
+import { zodResolver } from '@hookform/resolvers/zod';
+import useCurrentModel from '@hooks/useCurrentModel';
+import useCurrentModelItem from '@hooks/useCurrentModelItem';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { useSettings } from '@hooks/useSettings';
 import { logger } from '@logger';
+import { getModelItemSchema } from '@schemas';
+import { useQueryClient } from '@tanstack/react-query';
+import { getObjectDiff, isApiResponse } from '@utils';
+import axios from 'axios';
+import {
+  FC,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { ReactElement } from 'react';
+import { useCallback } from 'react';
+import { FormProvider, UseFormProps, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
+
+import { EntityDuplicateErrorCode, ResultItem } from '@prom-cms/api-client';
 
 export interface IEntryUnderpageContext {
   currentView: EntryTypeUrlActionType;
@@ -86,7 +87,7 @@ export const EntryUnderpageContextProvider: FC<{
     const schema = getModelItemSchema(currentModel, viewType === 'update');
 
     return async (data, context, options) => {
-      const result = await yupResolver(schema)(data, context, options);
+      const result = await zodResolver(schema)(data, context, options);
       logger.warning('Validating form:');
       logger.warning({ data, result });
 
@@ -201,7 +202,14 @@ export const EntryUnderpageContextProvider: FC<{
           const fieldNames = e.response.data.data;
           if (Array.isArray(fieldNames) && fieldNames.length) {
             for (const fieldName of fieldNames) {
-              const fieldInfo = currentModel?.columns.get(fieldName);
+              const fieldInfo = currentModel?.columns.find(
+                (column) => column.name === fieldName
+              );
+
+              if (!fieldInfo) {
+                continue;
+              }
+
               let variableFieldName = fieldName;
 
               if (fieldName === 'slug' && fieldInfo?.type === 'slug') {

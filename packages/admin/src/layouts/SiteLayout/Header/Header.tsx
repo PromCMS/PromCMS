@@ -1,20 +1,20 @@
-import { FC, Fragment, useMemo, useState } from 'react';
-import { useGlobalContext } from '@contexts/GlobalContext';
-import s from './header.module.scss';
-import Skeleton from '@components/Skeleton';
-import PopoverList from '@components/PopoverList';
-import { getInitials } from '@utils';
-import { Item as ItemProps, useConstructedMenuItems } from './utils';
-import { useTranslation } from 'react-i18next';
 import BackendImage from '@components/BackendImage';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { Image, Popover, Tooltip, UnstyledButton } from '@mantine/core';
+import PopoverList from '@components/PopoverList';
+import Skeleton from '@components/Skeleton';
+import { useGlobalContext } from '@contexts/GlobalContext';
 import { useCurrentUser } from '@hooks/useCurrentUser';
-import { Home, Photo } from 'tabler-icons-react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logoImage from '../../../assets/logos/logo.svg';
-import { useDisclosure } from '@mantine/hooks';
+import { Image, Popover, Tooltip, UnstyledButton } from '@mantine/core';
+import { upperFirst, useDisclosure } from '@mantine/hooks';
+import { getInitials } from '@utils';
 import clsx from 'clsx';
+import { FC, Fragment, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Home, Photo } from 'tabler-icons-react';
+
+import logoImage from '../../../assets/logos/logo.svg';
+import s from './header.module.scss';
+import { Item as ItemProps, useConstructedMenuItems } from './utils';
 
 const defaultMenuItems: ItemProps[] = [
   { label: 'Home', href: '/', icon: Home },
@@ -30,7 +30,7 @@ const Item: FC<ItemProps> = ({ href, label, isSingleton, icon: Icon }) => {
       withinPortal
       withArrow
       offset={-25}
-      label={t(capitalizeFirstLetter(label, true))}
+      label={t(upperFirst(label))}
       position="right"
       color="gray"
     >

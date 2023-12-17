@@ -1,15 +1,16 @@
+import fs from 'fs-extra';
+import tsNode from 'ts-node';
+
 import {
   findGeneratorConfig,
   formatGeneratorConfig,
   validateGeneratorConfig,
 } from '@prom-cms/schema';
 
-import fs from 'fs-extra';
-import tsNode from 'ts-node';
 import { isModule } from './isModule.js';
 
 export const getGeneratorConfigData = async (root?: string) => {
-  const filepath = findGeneratorConfig(root);
+  const filepath = await findGeneratorConfig(root);
   let content;
 
   if (isModule(filepath)) {

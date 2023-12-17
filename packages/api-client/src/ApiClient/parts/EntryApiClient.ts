@@ -1,5 +1,7 @@
-import { ApiResultModel, ApiResultModels, ItemID } from '@prom-cms/shared';
 import {
+  ApiResultModel,
+  ApiResultModels,
+  ItemID,
   PagedResponse,
   Response,
   ResultItem,

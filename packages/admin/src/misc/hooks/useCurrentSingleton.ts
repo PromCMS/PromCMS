@@ -1,6 +1,8 @@
-import { ApiResultModelSingleton } from '@prom-cms/shared';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { ApiResultModelSingleton } from '@prom-cms/api-client';
+
 import { useSingletonInfo } from './useSingletonInfo';
 
 export type RichApiResultModelSingleton = ApiResultModelSingleton & {

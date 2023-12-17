@@ -1,6 +1,7 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { ApiResultModelSingleton } from '@prom-cms/shared';
 import { useMemo } from 'react';
+
+import { ApiResultModelSingleton } from '@prom-cms/api-client';
 
 export const useSingletonInfo = <T extends ApiResultModelSingleton | undefined>(
   name: string

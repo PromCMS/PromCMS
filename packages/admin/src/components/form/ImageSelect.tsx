@@ -1,7 +1,7 @@
 import BackendImage from '@components/BackendImage';
 import { Button, Input } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
-import { ItemID } from '@prom-cms/shared';
+import { ItemID } from '@prom-cms/api-client';
 import clsx from 'clsx';
 import {
   DetailedHTMLProps,

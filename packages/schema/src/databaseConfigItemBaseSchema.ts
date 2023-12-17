@@ -66,9 +66,7 @@ export const databaseConfigItemBaseSchema = z.object({
   /**
    * Table columns
    */
-  columns: z
-    .array(columnTypeSchema)
-    .min(1, 'Atleast one column must be defined'),
+  columns: z.array(columnTypeSchema),
 });
 
 export type DatabaseConfigItemBase = z.infer<

@@ -5,8 +5,8 @@ import { Trash, Plus } from 'tabler-icons-react';
 
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
 import { FieldPlacements } from '@prom-cms/schema';
+import { upperFirst } from '@mantine/hooks';
 
 export const DAYS_IN_WEEK = [
   'monday',
@@ -126,7 +126,7 @@ const Row: FC<{
     <div className="flex min-h-[70px] flex-col gap-5 py-5 lg:flex-row lg:justify-between lg:gap-16">
       <div className="flex grid-cols-2 justify-between gap-8 lg:grid lg:pt-3.5">
         <div className="font-medium uppercase text-gray-800">
-          {t(capitalizeFirstLetter(weekdayName))}
+          {t(upperFirst(weekdayName))}
         </div>
         <Controller
           name={name}
