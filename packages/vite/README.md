@@ -1,5 +1,5 @@
 <center>
-# @prom-cms/config
+# @prom-cms/vite
 </center>
 
 TBD

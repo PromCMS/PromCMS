@@ -79,9 +79,8 @@
     "tabler-icons-react": "^1.55.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "",
-    "@prom-cms/config": "*",
-    "@prom-cms/vite-plugin": "*",
+    "@babel/eslint-parser": "^7.23.3",
+    "@prom-cms/vite": "^0.0.0",
     "@types/find-config": "1.0.1",
     "@types/fs-extra": "9.0.13",
     "@types/lodash.find": "^4.6.6",

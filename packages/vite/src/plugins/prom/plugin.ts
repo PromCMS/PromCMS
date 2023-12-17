@@ -1,6 +1,8 @@
+import { watch } from 'chokidar';
 import fs from 'fs-extra';
 import httpProxy from 'http-proxy';
 import mime from 'mime';
+import fetch from 'node-fetch';
 import path from 'path';
 import { Readable } from 'stream';
 import type { Logger, Plugin } from 'vite';
@@ -8,10 +10,32 @@ import type { Logger, Plugin } from 'vite';
 import { runBeforeExiting } from './runBeforeExiting.js';
 import { startPHPServer } from './startPhpServer.js';
 
-export const promCmsVitePlugin = async (): Promise<Plugin> => {
+export type VitePromPluginOptions = {
+  onExit?: () => void | Promise<void>;
+  watchFiles?: {
+    files: string[];
+    onChange: (options: {
+      logger?: Logger;
+      type: 'add' | 'change' | 'remove';
+      fileInfo: { filePath: string; stats?: fs.Stats };
+    }) => void | Promise<void>;
+  };
+};
+
+export const plugin = (options?: VitePromPluginOptions): Plugin => {
   const projectRoot = process.cwd();
-  const { default: fetch } = await import('node-fetch');
   let logger: Logger | undefined;
+  const projectPackageJsonPath = path.join(projectRoot, 'package.json');
+
+  if (!fs.pathExistsSync(projectPackageJsonPath)) {
+    throw new Error('Could not find package json in current working directory');
+  }
+
+  const projectPackageJson = fs.readJsonSync(
+    path.join(projectRoot, 'package.json')
+  );
+  const currentPackageName = projectPackageJson.name;
+  const currentPackageIsPromAdmin = currentPackageName === '@prom-cms/admin';
 
   return {
     name: 'prom-cms-vite-plugin',
@@ -33,11 +57,14 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
           : path.join(projectRoot, 'public');
       c.build.manifest = true;
       c.build.rollupOptions ??= {};
-      c.build.rollupOptions.input ??= path.join(
-        projectRoot,
-        c.root,
-        '/index.ts'
-      );
+
+      if (!currentPackageIsPromAdmin) {
+        c.build.rollupOptions.input ??= path.join(
+          projectRoot,
+          c.root,
+          '/index.ts'
+        );
+      }
     },
     configResolved: (config) => {
       logger = config.logger;
@@ -57,10 +84,34 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
         logger?.info('Vite server closing, cleaning up...', {
           timestamp: true,
         });
+        await Promise.resolve(options?.onExit?.());
+
         if (serverProcess) {
           serverProcess.kill();
         }
       });
+
+      if (options?.watchFiles) {
+        const instance = watch(options.watchFiles.files, {
+          persistent: true,
+          cwd: projectRoot,
+        });
+
+        instance.on('change', (path, stats) => {
+          options.watchFiles?.onChange?.({
+            logger,
+            type: 'change',
+            fileInfo: { filePath: path, stats },
+          });
+        });
+        instance.on('add', (path, stats) => {
+          options.watchFiles?.onChange?.({
+            logger,
+            type: 'add',
+            fileInfo: { filePath: path, stats },
+          });
+        });
+      }
 
       proxy.on('proxyRes', (proxyRes, clientReq, clientRes) => {
         var bodyChunks: any[] = [];
@@ -126,7 +177,8 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
           return;
         }
 
-        if (req.url.startsWith('/admin/assets')) {
+        // Take care of admin assets only for promcms instances
+        if (req.url.startsWith('/admin/assets') && !currentPackageIsPromAdmin) {
           const fileUrl = new URL(req.url, 'http://127.0.0.1');
           const filePath = path.join('public', fileUrl.pathname);
 
@@ -153,31 +205,34 @@ export const promCmsVitePlugin = async (): Promise<Plugin> => {
         });
       });
 
-      // We catch all routes and check if they need to be proxied to PHP server first
-      server.middlewares.use(async (req, res, next) => {
-        try {
-          const requestUrl = new URL(req.url!, serverOrigin);
-          const checkPage = await fetch(requestUrl.toString(), {
-            method: req.method,
-          });
-
-          if (checkPage.status !== 404) {
-            proxy.web(req, res, {
-              target: serverOrigin,
+      if (!currentPackageIsPromAdmin) {
+        // TODO: this is kind of bad since server gets two requests instead of one
+        // We catch all routes and check if they need to be proxied to PHP server first
+        server.middlewares.use(async (req, res, next) => {
+          try {
+            const requestUrl = new URL(req.url!, serverOrigin);
+            const checkPage = await fetch(requestUrl.toString(), {
+              method: req.method,
             });
 
-            return;
-          }
-        } catch (error) {
-          const message = (error as Error).message;
-          logger?.error(`Request to PHP server failed because: ${message}`, {
-            timestamp: true,
-            error: error as Error,
-          });
-        }
+            if (checkPage.status !== 404) {
+              proxy.web(req, res, {
+                target: serverOrigin,
+              });
 
-        next();
-      });
+              return;
+            }
+          } catch (error) {
+            const message = (error as Error).message;
+            logger?.error(`Request to PHP server failed because: ${message}`, {
+              timestamp: true,
+              error: error as Error,
+            });
+          }
+
+          next();
+        });
+      }
     },
   };
 };

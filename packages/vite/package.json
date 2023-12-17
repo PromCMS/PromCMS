@@ -1,27 +1,34 @@
 {
-  "name": "@prom-cms/vite-plugin",
-  "description": "A vite tools package for prom-cms projects",
-  "version": "0.7.1",
-  "type": "module",
+  "name": "@prom-cms/vite",
+  "description": "A vite tools package for PromCMS projects",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/vite-plugin/README.md",
   "license": "MIT",
-  "main": "dist/index.cjs",
-  "typings": "dist/index.d.ts",
-  "module": "dist/index.js",
-  "source": "src/index.ts",
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.js",
   "exports": {
     "./*": "./*",
     "./package.json": "./package.json",
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs",
+      "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./config": {
+      "import": "./dist/config/index.js",
+      "require": "./dist/config/index.js",
+      "types": "./dist/config/index.d.ts"
+    },
+    "./plugins": {
+      "import": "./dist/plugins/index.js",
+      "require": "./dist/plugins/index.js",
+      "types": "./dist/plugins/index.d.ts"
     }
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "test": "echo \"TODO: add tests!\"",
     "prettier": "prettier --config \"../../prettier.config.js\" --ignore-path \"../../.prettierignore\" --write \"**/*.{ts,tsx}\" ",
@@ -48,6 +55,9 @@
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
+    "vitest": "^0.24.3",
+    "vite-tsconfig-paths": "^3.5.2",
+    "@vitejs/plugin-react": "^2.2.0",
     "typescript": "^4.9.4",
     "@types/mime": "^3.0.1",
     "@types/http-proxy": "^1.17.9",

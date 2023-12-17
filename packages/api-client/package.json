@@ -35,8 +35,7 @@
     "@prom-cms/schema": "0.5.0"
   },
   "devDependencies": {
-    "typescript": "^4.9.4",
-    "@prom-cms/config": "*"
+    "typescript": "^4.9.4"
   },
   "peerDependencies": {
     "axios": "^0.27"

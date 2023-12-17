@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "@types/find-config": "1.0.1",
-    "@prom-cms/config": "*",
     "typescript": "^4.9.4"
   }
 }
