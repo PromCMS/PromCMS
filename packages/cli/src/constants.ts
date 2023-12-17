@@ -1,6 +1,7 @@
-import { GeneratorConfig } from '@prom-cms/schema';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+import { GeneratorConfig } from '@prom-cms/schema';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -36,14 +37,14 @@ export const promColumnTypeToPropelType: Record<ColumnTypeAsString, string> = {
   email: 'CHAR',
   enum: 'ENUM',
   // TODO - this should be relationship
-  file: '',
+  file: 'INTEGER',
   json: 'ARRAY',
   longText: 'LONGVARCHAR',
   number: 'INTEGER',
   password: 'VARCHAR',
   // TODO - this should be assigned dinamically based on related field
   relationship: 'VARCHAR',
-  slug: '',
+  slug: 'VARCHAR',
   string: 'VARCHAR',
   url: 'VARCHAR',
 };

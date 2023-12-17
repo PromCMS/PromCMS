@@ -148,7 +148,11 @@ export async function createPropelConfig({
         const result: string[] = [];
 
         for (const column of columns) {
-          if (column.localized) {
+          if (
+            column.localized &&
+            // Slug type is kind of broken and does not seem to work
+            column.type !== 'slug'
+          ) {
             result.push(column.name);
           }
         }
@@ -192,6 +196,13 @@ export async function createPropelConfig({
             attributes.set(
               'autoIncrement',
               String(column.autoIncrement ?? false)
+            );
+            break;
+
+          case 'string':
+            attributes.set(
+              'primaryString',
+              String(column.primaryString ?? false)
             );
             break;
 

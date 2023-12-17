@@ -1,5 +1,5 @@
-import { GeneratorConfigInput } from '../generatorConfigSchema.js';
 import { FieldPlacements } from '../columnType/columnTypeBaseAdminConfigSchema.js';
+import { GeneratorConfigInput } from '../generatorConfigSchema.js';
 
 const simplifyProjectName = (name: string) =>
   name.replaceAll(' ', '-').toLocaleLowerCase();
@@ -153,6 +153,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
       required: false,
       autoIncrement: true,
       unique: true,
+      primaryKey: true,
       admin: {
         isHidden: true,
       },

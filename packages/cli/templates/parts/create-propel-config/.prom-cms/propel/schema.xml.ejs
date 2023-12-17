@@ -4,23 +4,23 @@
   <% for (const model of models) { %>
     <table <%- objectToXmlAttributes(getModelToPropelTableAttributes(model)) %>>
       <% for (const column of model.columns) { %>
-        <% if (column.type === "slug") { %>
-          <behavior name="sluggable" />
-        <% } else { %>
-            <column <%- objectToXmlAttributes(getColumnToPropelAttributes(column)) %> />
-            <% if (column.type === "relationship") { %>
-              <foreign-key foreignTable="<%- column.targetModel %>">
-                <reference local="<%- column.name %>" foreign="<%- column.foreignKey %>"/>
-              </foreign-key>
-            <% } %>
-        <% } %> 
+        <column <%- objectToXmlAttributes(getColumnToPropelAttributes(column)) %> />
+        <% if (column.type === "relationship") { %>
+          <foreign-key foreignTable="<%- column.targetModel %>">
+            <reference local="<%- column.name %>" foreign="<%- column.foreignKey %>"/>
+          </foreign-key>
+        <% } else if (column.type === "slug") { %>
+          <behavior name="sluggable" >
+            <parameter name="slug_column" value="<%- column.name %>" />
+          </behavior>
+        <% } %>
       <% } %>
 
       <% const uniqueColumnNames = getUniqueColumnNames(model) %>
       <% if (uniqueColumnNames.length) { %>
-        <unique name="/UniqueSet<%- projectNameAsFolderName %>/">
+        <unique name="UniqueSet<%- projectNameAsFolderName %>">
           <% for( const uniqueColumnName of uniqueColumnNames) { %>
-            <unique-column name="/<%- uniqueColumnName %>/" />
+            <unique-column name="<%- uniqueColumnName %>" />
           <% } %>
         </unique>
       <% } %>
