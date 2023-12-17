@@ -2,6 +2,7 @@ import { THANK_YOU_MESSAGE } from '@constants';
 import { emailSchema } from '@schemas';
 import { Logger, tryFindGeneratorConfig } from '@utils';
 import { createPromptWithOverrides } from '@utils/createPromptWithOverrides.js';
+import { ensurePromCoreVersion } from '@utils/ensurePromCoreVersion.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
 import { execa } from 'execa';
 import { ZodError } from 'zod';
@@ -16,6 +17,7 @@ export const changeUserPasswordCommandAction = async (
   optionsFromParameters: Options
 ) => {
   await tryFindGeneratorConfig(optionsFromParameters.cwd);
+  await ensurePromCoreVersion(optionsFromParameters.cwd);
 
   const { cwd, email, password } = await createPromptWithOverrides(
     [

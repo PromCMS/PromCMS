@@ -3,6 +3,7 @@ import { createAdminFiles } from '@jobs/create-admin-files.js';
 import { createProjectModule } from '@jobs/create-project-module.js';
 import generateModels from '@jobs/generate-models.js';
 import { Logger, getModuleFolderName } from '@utils';
+import { ensurePromCoreVersion } from '@utils/ensurePromCoreVersion.js';
 import { getGeneratorConfigData } from '@utils/getGeneratorConfigData.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
 import fs from 'fs-extra';
@@ -16,8 +17,11 @@ type Options = {
 export const updateProjectAction = async (options: Options) => {
   const { cwd, admin } = options;
 
+  // Vadation block
   const generatorConfig = await getGeneratorConfigData(cwd);
+  await ensurePromCoreVersion(cwd);
   const rootModuleName = getModuleFolderName(generatorConfig.project.name);
+
   const rootModulePath = path.join(cwd, MODULE_FOLDER_NAME, rootModuleName);
   const rootModelsPath = path.join(rootModulePath, MODELS_FOLDER_NAME);
   const propelDirectory = path.join(cwd, '.prom-cms', 'propel');

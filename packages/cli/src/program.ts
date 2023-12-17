@@ -1,23 +1,18 @@
-import fs from 'fs-extra';
-import path from 'path';
-import { PACKAGE_ROOT } from '@constants';
-import { Command } from 'commander';
-
-import { deleteUserCommandAction } from '@actions/users/delete.js';
-import { createUserCommandAction } from '@actions/users/create.js';
-import { changeUserPasswordCommandAction } from '@actions/users/change-password.js';
 import { createProjectAction } from '@actions/project/create.js';
 import { updateProjectAction } from '@actions/project/update.js';
-
+import { changeUserPasswordCommandAction } from '@actions/users/change-password.js';
+import { createUserCommandAction } from '@actions/users/create.js';
+import { deleteUserCommandAction } from '@actions/users/delete.js';
+import { PACKAGE_ROOT } from '@constants';
+import { adminOption } from '@options/adminOption.js';
+import { cleanOption } from '@options/cleanOption.js';
 import { cwdOption } from '@options/cwdOption.js';
 import { packageManagerOption } from '@options/packageManagerOption.js';
-import { adminOption } from '@options/adminOption.js';
-import { promDevelopOption } from '@options/promDevelopOption.js';
-import { cleanOption } from '@options/cleanOption.js';
-import { migrateDatabaseAction } from '@actions/db/migrate.js';
-import { seedDatabaseAction } from '@actions/db/seed.js';
 import { projectNameOption } from '@options/projectNameOption.js';
-import { jsonFilepathOption } from '@options/jsonFilepathOption.js';
+import { promDevelopOption } from '@options/promDevelopOption.js';
+import { Command } from 'commander';
+import fs from 'fs-extra';
+import path from 'path';
 
 (async () => {
   const { version } = await fs.readJson(
@@ -67,21 +62,6 @@ import { jsonFilepathOption } from '@options/jsonFilepathOption.js';
     .addOption(packageManagerOption)
     .addOption(adminOption)
     .action(updateProjectAction);
-
-  const dbCommand = program.command('db');
-
-  dbCommand
-    .command('migrate')
-    .description('Helps you migrate from MySQL or MariaDB')
-    .addOption(cwdOption)
-    .action(migrateDatabaseAction);
-
-  dbCommand
-    .command('seed')
-    .description('Helps you seed database with random data')
-    .addOption(cwdOption)
-    .addOption(jsonFilepathOption)
-    .action(seedDatabaseAction);
 
   await program.parseAsync(process.argv);
 })();
