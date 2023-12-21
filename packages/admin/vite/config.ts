@@ -71,7 +71,7 @@ export default defineConfig(({ mode, command }) => {
     plugins,
     base: APP_URL_PREFIX,
     define: {
-      APP_URL_PREFIX,
+      __APP_URL_PREFIX__: JSON.stringify(APP_URL_PREFIX),
       'process.env': {},
     },
     root: 'src',
