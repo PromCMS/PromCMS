@@ -7,7 +7,12 @@ import { createLogger, isApiResponse } from '@utils';
 import axios from 'axios';
 import clsx from 'clsx';
 import { FC } from 'react';
-import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import {
+  FormProvider,
+  SubmitHandler,
+  useForm,
+  useWatch,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -44,9 +49,11 @@ export const Form: FC = () => {
     },
   });
 
-  const { watch, handleSubmit, formState, setError } = formMethods;
-  const step = watch('step');
-  const humanStep = step + 1;
+  const { handleSubmit, formState, setError } = formMethods;
+  const step = useWatch({
+    name: 'step',
+    control: formMethods.control,
+  });
 
   const onSubmitCallback: SubmitHandler<LoginFormValues> = async ({
     password,
