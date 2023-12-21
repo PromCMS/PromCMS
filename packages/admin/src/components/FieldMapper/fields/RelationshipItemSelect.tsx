@@ -1,8 +1,8 @@
 import { MESSAGES, pageUrls } from '@constants';
 import { useModelItems } from '@hooks/useModelItems';
 import { Select, SelectItem, Text } from '@mantine/core';
+import { UserRole } from '@prom-cms/api-client';
 import { ColumnTypeRelationship } from '@prom-cms/schema';
-import { UserRole } from '@prom-cms/shared';
 import Mustache from 'mustache';
 import { useMemo } from 'react';
 import { FC } from 'react';

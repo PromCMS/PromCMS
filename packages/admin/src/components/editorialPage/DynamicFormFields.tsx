@@ -1,7 +1,8 @@
-import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/shared';
+import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import { FC, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
-import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
+
+import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/api-client';
 import { ColumnType, FieldPlacements } from '@prom-cms/schema';
 
 export interface DynamicFormFieldsProps {
@@ -13,9 +14,7 @@ export const DynamicFormFields: FC<DynamicFormFieldsProps> = ({
 }) => {
   const { formState } = useFormContext();
 
-  const groupedFields = useMemo<
-    Array<ColumnType & { columnName: string }> | undefined
-  >(() => {
+  const groupedFields = useMemo<ColumnType[] | undefined>(() => {
     if (!modelInfo) return;
 
     return prepareFieldsForMapper(modelInfo, FieldPlacements.MAIN);

@@ -1,15 +1,150 @@
 import { MESSAGES } from '@constants';
-import type { ApiResultModel } from '@prom-cms/shared';
-import { convertColumnTypeToPrimitive } from '@prom-cms/shared';
-import * as yup from 'yup';
+import { z } from 'zod';
 
-type RepeaterRawData = null | undefined | { data?: Record<string, any>[] };
+import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/api-client';
+import { ColumnType } from '@prom-cms/schema';
 
+export type PrimitiveTypes = 'number' | 'string' | 'boolean' | 'date';
+
+const convertColumnTypeToPrimitive = (
+  type: ColumnType['type']
+): PrimitiveTypes => {
+  let primitiveType;
+
+  switch (type) {
+    case 'date':
+      primitiveType = 'date';
+      break;
+    case 'boolean':
+      primitiveType = 'boolean';
+      break;
+    case 'number':
+    case 'relationship':
+    case 'file':
+      primitiveType = 'number';
+      break;
+    default:
+      primitiveType = 'string';
+      break;
+  }
+
+  return primitiveType;
+};
+
+z.string({
+  required_error: MESSAGES.FIELD_REQUIRED,
+});
+
+const urlSchema = z
+  .string()
+  .regex(
+    /(([a-zA-Z]{1,}):\/\/)(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+    MESSAGES.MUST_BE_VALID_URL
+  );
+
+const coeditorsSchema = z
+  .record(z.any())
+  .transform((originalValue) =>
+    Array.isArray(originalValue)
+      ? { ...originalValue.filter((val) => val !== null) }
+      : Object.fromEntries(
+          Object.entries(originalValue).filter((_, val) => val !== null)
+        )
+  );
+
+const emailSchema = z.string().email(MESSAGES.MUST_BE_VALID_EMAIL);
+
+const jsonRepeaterSchema = z
+  .object({
+    data: z.array(z.record(z.any())).optional(),
+  })
+  .transform((originalValue) => {
+    if (
+      typeof originalValue !== 'object' ||
+      !Array.isArray(originalValue.data)
+    ) {
+      return null;
+    }
+
+    const { data } = originalValue;
+
+    return {
+      ...originalValue,
+      data: data.filter(
+        (value) =>
+          !!Object.values(value).filter(
+            (value) => value !== undefined && value !== null
+          ).length
+      ),
+    };
+  });
+
+const daySchema = z
+  .boolean()
+  .transform((value) => (value === false ? false : undefined))
+  .or(z.array(z.object({ from: z.string(), to: z.string() })))
+  .optional();
+
+const jsonLinkButtonSchema = z.object({
+  href: z
+    .string()
+    .regex(
+      /(([a-zA-Z]{1,}):\/\/)?(www.)?([a-z0-9]+(\.[a-z]{2,}){1,3})?(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      MESSAGES.MUST_BE_VALID_URL
+    ),
+  label: z.string().optional(),
+  action: z.string().optional(),
+});
+
+const jsonOpeningHoursSchema = z.object({
+  data: z
+    .object({
+      monday: daySchema,
+      tuesday: daySchema,
+      wednesday: daySchema,
+      thursday: daySchema,
+      friday: daySchema,
+      saturday: daySchema,
+      sunday: daySchema,
+    })
+    .optional()
+    .transform((originalValue) => {
+      if (originalValue === undefined) {
+        return null;
+      }
+
+      return Object.fromEntries(
+        Object.entries<{ from?: string; to?: string }[] | false>(originalValue)
+          .map(([key, values]) => [
+            key,
+            Array.isArray(values)
+              ? (values || []).filter((value) => !!value.from && !!value.to)
+              : values,
+          ])
+          .filter(([key, value]) => value === false || !!value?.length)
+      );
+    }),
+});
+
+const jsonColorSchema = z.object({
+  value: z
+    .string()
+    .regex(/^#(?:[0-9a-fA-F]{3}){1,2}$/, MESSAGES.MUST_BE_VALID_COLOR),
+});
+
+const relatedFieldSchema = z
+  .number()
+  .or(z.object({ id: z.number().or(z.string()) }))
+  .transform((value) =>
+    typeof value === 'object' ? Number(value.id) : Number(value)
+  );
+
+// TODO: this should be moved to backend and client should only fetch json schemas
 export const getModelItemSchema = (
   /**
    * config to read from
    */
-  config: ApiResultModel,
+  config: ApiResultModel | ApiResultModelSingleton,
   /**
    * If required logic should be included, useful when you want to return schema for update query
    */
@@ -17,183 +152,65 @@ export const getModelItemSchema = (
 ) => {
   const { columns } = config;
 
-  const yupShape = Object.keys(Object.fromEntries(columns))
-    .filter((columnKey) => !columns.get(columnKey)!.hide)
+  const shape = columns
+    .filter((column) => !column.hide && !column.admin.isHidden)
     .reduce(
-      (shape, columnKey) => {
-        const column = columns.get(columnKey)!;
-        let columnShape;
+      (shape, column) => {
+        let columnShape: z.ZodTypeAny =
+          z[convertColumnTypeToPrimitive(column.type)]();
 
-        if (column.editable === false) {
+        if (column.readonly === true) {
           return shape;
         }
 
-        if (column.type === 'file') {
-          const base = yup[
-            convertColumnTypeToPrimitive(column.type)
-          ]().transform((_, originalValue) =>
-            originalValue === null
-              ? null
-              : typeof originalValue === 'object'
-              ? Number(originalValue.id)
-              : Number(originalValue)
-          );
+        switch (column.type) {
+          case 'file':
+            const base = relatedFieldSchema;
 
-          columnShape = column.multiple ? yup.array(base) : base;
-        } else if (column.type === 'json') {
-          if (columnKey === 'coeditors') {
-            columnShape = yup
-              .object()
-              .transform((_, originalValue) =>
-                originalValue !== null && originalValue !== undefined
-                  ? Array.isArray(originalValue)
-                    ? { ...originalValue.filter((val) => val !== null) }
-                    : Object.fromEntries(
-                        Object.entries(originalValue).filter(
-                          (_, val) => val !== null
-                        )
-                      )
-                  : null
-              );
-          } else if (column.admin.fieldType === 'repeater') {
-            columnShape = yup
-              .object({
-                data: yup.array(yup.object()).optional(),
-              })
-              .transform((_, originalValue: RepeaterRawData) => {
-                if (
-                  originalValue === null ||
-                  originalValue === undefined ||
-                  typeof originalValue !== 'object' ||
-                  !Array.isArray(originalValue.data)
-                ) {
-                  return null;
-                }
-
-                const { data } = originalValue;
-
-                return {
-                  ...originalValue,
-                  data: data.filter(
-                    (value) =>
-                      !!Object.values(value).filter(
-                        (value) => value !== undefined && value !== null
-                      ).length
-                  ),
-                };
-              });
-          } else if (column.admin.fieldType === 'openingHours') {
-            const day = yup.lazy((value, options) => {
-              switch (typeof value) {
-                case 'boolean':
-                  return yup
-                    .boolean()
-                    .transform((_value, originalValue) =>
-                      originalValue === false ? false : undefined
-                    )
-                    .optional();
-                default:
-                  return yup
-                    .array(yup.object({ from: yup.string(), to: yup.string() }))
-                    .optional();
+            columnShape = column.multiple ? z.array(base) : base;
+            break;
+          case 'json':
+            if (column.name === 'coeditors') {
+              columnShape = coeditorsSchema;
+            } else {
+              switch (column.admin.fieldType) {
+                case 'repeater':
+                  columnShape = jsonRepeaterSchema;
+                  break;
+                case 'openingHours':
+                  columnShape = jsonOpeningHoursSchema;
+                  break;
+                case 'color':
+                  columnShape = jsonColorSchema;
+                  break;
+                case 'linkButton':
+                  columnShape = jsonLinkButtonSchema;
+                  break;
               }
-            });
-
-            columnShape = yup.object({
-              data: yup
-                .object({
-                  monday: day,
-                  tuesday: day,
-                  wednesday: day,
-                  thursday: day,
-                  friday: day,
-                  saturday: day,
-                  sunday: day,
-                })
-                .optional()
-                .transform((_, originalValue) => {
-                  if (
-                    originalValue === null ||
-                    originalValue === undefined ||
-                    typeof originalValue !== 'object'
-                  ) {
-                    return null;
-                  }
-
-                  return Object.fromEntries(
-                    Object.entries<{ from?: string; to?: string }[] | false>(
-                      originalValue
-                    )
-                      .map(([key, values]) => [
-                        key,
-                        Array.isArray(values)
-                          ? (values || []).filter(
-                              (value) => !!value.from && !!value.to
-                            )
-                          : values,
-                      ])
-                      .filter(
-                        ([key, value]) => value === false || !!value?.length
-                      )
-                  );
-                }),
-            });
-          } else if (column.admin.fieldType === 'color') {
-            columnShape = yup.object({
-              value: yup
-                .string()
-                .matches(
-                  /^#(?:[0-9a-fA-F]{3}){1,2}$/,
-                  MESSAGES.MUST_BE_VALID_COLOR
-                ),
-            });
-          } else if (column.admin.fieldType === 'linkButton') {
-            columnShape = yup.object({
-              href: yup
-                .string()
-                .matches(
-                  /(([a-zA-Z]{1,}):\/\/)?(www.)?([a-z0-9]+(\.[a-z]{2,}){1,3})?(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-                  MESSAGES.MUST_BE_VALID_URL
-                ),
-              label: yup.string().optional(),
-              action: yup.string().optional(),
-            });
-          } else {
-            columnShape = yup[convertColumnTypeToPrimitive(column.type)]();
-          }
-        } else {
-          columnShape =
-            column.type === 'enum'
-              ? yup.mixed().oneOf(column.enum)
-              : yup[convertColumnTypeToPrimitive(column.type)]();
+            }
+            break;
+          case 'email':
+            columnShape = emailSchema;
+            break;
+          case 'url':
+            // TODO: Support domainless url (eg: /somethings/something)
+            columnShape = urlSchema;
+            break;
+          case 'enum':
+            columnShape = z.enum(column.enum as any);
+            break;
         }
 
-        if (column.type === 'email') {
-          columnShape = (columnShape as yup.StringSchema).email(
-            MESSAGES.MUST_BE_VALID_EMAIL
-          );
+        if (!column.required && ignoreRequired) {
+          columnShape = columnShape.nullish().optional();
         }
 
-        if (column.type === 'url') {
-          // TODO: Support domainless url (eg: /somethings/something)
-          columnShape = (columnShape as yup.StringSchema).matches(
-            /(([a-zA-Z]{1,}):\/\/)(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
-            MESSAGES.MUST_BE_VALID_URL
-          );
-        }
-
-        if (column.required && !ignoreRequired) {
-          columnShape = columnShape.required(MESSAGES.FIELD_REQUIRED);
-        } else {
-          columnShape = columnShape.nullable().notRequired();
-        }
-
-        shape[columnKey] = columnShape;
+        shape[column.name] = columnShape;
 
         return shape;
       },
       {} as Record<string, any>
     );
 
-  return yup.object(yupShape).noUnknown();
+  return z.object(shape).strict();
 };

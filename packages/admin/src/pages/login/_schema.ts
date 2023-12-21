@@ -1,24 +1,31 @@
 import { MESSAGES } from '@constants';
-import { number, object, string } from 'yup';
+import { z } from 'zod';
 
-export const loginFormSchema = object()
-  .shape({
-    step: number().required(),
-    password: string().when('step', {
-      is: 0,
-      then: string().required(MESSAGES.PLEASE_ENTER_PASSWORD),
-    }),
-    email: string()
-      .email()
-      .when('step', {
-        is: 0,
-        then: string().required(MESSAGES.PLEASE_ENTER_EMAIL),
-      }),
-    token: string().when('step', {
-      is: 2,
-      then: string()
-        .required(MESSAGES.PLEASE_ENTER_MFA_TOKEN)
+export const loginFormSchema = z.discriminatedUnion('step', [
+  z
+    .object({
+      step: z.literal(0),
+      password: z.string({ required_error: MESSAGES.PLEASE_ENTER_PASSWORD }),
+      email: z.string({ required_error: MESSAGES.PLEASE_ENTER_EMAIL }),
+      token: z.string().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      step: z.literal(2),
+      password: z.string().optional(),
+      email: z.string().optional(),
+      token: z
+        .string({ required_error: MESSAGES.PLEASE_ENTER_MFA_TOKEN })
         .length(6, MESSAGES.MFA_TOKEN_SHORT),
-    }),
-  })
-  .noUnknown();
+    })
+    .strict(),
+  z
+    .object({
+      step: z.number(),
+      password: z.string().optional(),
+      email: z.string().optional(),
+      token: z.string().optional(),
+    })
+    .strict(),
+]);

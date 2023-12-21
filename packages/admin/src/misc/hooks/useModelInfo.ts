@@ -1,6 +1,7 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { ApiResultModel } from '@prom-cms/shared';
 import { useMemo } from 'react';
+
+import { ApiResultModel } from '@prom-cms/api-client';
 
 export const useModelInfo = <T extends ApiResultModel | undefined>(
   modelName: string

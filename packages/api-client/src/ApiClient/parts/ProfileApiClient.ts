@@ -1,5 +1,4 @@
-import { User } from '@prom-cms/shared';
-import { Response } from '../../types';
+import { Response, User } from '../../types';
 import { ApiClientBase } from '../ApiClientBase';
 
 export class ProfileApiClient extends ApiClientBase {

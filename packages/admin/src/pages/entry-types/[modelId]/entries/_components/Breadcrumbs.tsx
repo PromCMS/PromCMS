@@ -2,9 +2,10 @@ import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
 import { pageUrls } from '@constants';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { Skeleton } from '@mantine/core';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
+import { upperFirst } from '@mantine/hooks';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useEntryUnderpageContext } from '../_context';
 
 export const Breadcrumbs: FC = () => {
@@ -19,9 +20,7 @@ export const Breadcrumbs: FC = () => {
         { content: t('Entry types') as string },
         {
           isLinkTo: pageUrls.entryTypes(model?.name as string).list,
-          content: t(
-            capitalizeFirstLetter(model?.title || model?.name || '')
-          ) as string,
+          content: t(upperFirst(model?.title || model?.name || '')) as string,
         },
         {
           content: t(currentView == 'update' ? 'Update' : 'Create') as string,

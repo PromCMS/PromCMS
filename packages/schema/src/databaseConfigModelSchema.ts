@@ -4,12 +4,6 @@ import { databaseConfigItemBaseSchema } from './databaseConfigItemBaseSchema.js'
 
 export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
   /**
-   * Custom table name to model
-   * @default string Key of this object
-   */
-  tableName: z.string().min(1).optional(),
-
-  /**
    * If generated table have entries with soft-delete
    *
    * @defaultValue false

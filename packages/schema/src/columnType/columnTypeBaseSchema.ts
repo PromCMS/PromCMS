@@ -4,21 +4,19 @@ import { columnTypeBaseAdminConfigSchema } from './columnTypeBaseAdminConfigSche
 export const columnTypeBaseSchema = z.object({
   /**
    * Human readable title. Defaults to the column key of this object
-   * @default string {keyOfThisObject}
    */
   title: z.string(),
 
   /**
-   * Decides if column should be visible in api response and returned from eloquent.
-   * @default false
+   * Column name in database and api responses
    */
-  hide: z.boolean().default(false),
+  name: z.string(),
 
   /**
    * Decides if column should be required or not
-   * @default false
+   * @default true
    */
-  required: z.boolean().default(false),
+  required: z.boolean().default(true),
 
   /**
    * Determines if column should be unique across table
@@ -27,16 +25,10 @@ export const columnTypeBaseSchema = z.object({
   unique: z.boolean().default(false),
 
   /**
-   * Determines if column should be editable.
-   * @default true
-   */
-  editable: z.boolean().default(true),
-
-  /**
    * If current field can be translated
-   * @default true;
+   * @default false;
    */
-  translations: z.boolean().default(true),
+  localized: z.boolean().default(false),
 
   /**
    * Admin settings
@@ -51,6 +43,17 @@ export const columnTypeBaseSchema = z.object({
    * If true then field is omitted from updating after entry is created.
    */
   readonly: z.boolean().default(false),
+
+  /**
+   * Decides if column should be visible in api response and returned.
+   * @default false
+   */
+  hide: z.boolean().default(false),
+
+  /**
+   * Specifies if current column is a primaryKey
+   */
+  primaryKey: z.boolean().default(false),
 });
 
 export type ColumnTypeBase = z.infer<typeof columnTypeBaseSchema>;

@@ -1,4 +1,4 @@
-# @prom-cms/shared
+# @prom-cms/schema
 
 ## 0.5.0
 

@@ -1,0 +1,108 @@
+// Vitest Snapshot v1
+
+exports[`jobs > createPropelConfig > should run correctly and generate files 1`] = `
+"{
+  \\"propel\\": {
+    \\"paths\\": {
+      \\"schemaDir\\": \\"./.prom-cms/propel\\",
+      \\"phpDir\\": \\"./modules/Testing/Models\\",
+      \\"phpConfDir\\": \\"./.prom-cms/propel/config\\",
+      \\"migrationDir\\": \\"./.prom-cms/propel/migrations\\",
+      \\"sqlDir\\": \\"./.prom-cms/propel/sql\\"
+    },
+    \\"generator\\": {
+      \\"namespaceAutoPackage\\": false
+    },
+    \\"database\\": {
+      \\"connections\\": {
+        \\"default-connection\\": {
+          \\"adapter\\": \\"sqlite\\",
+          \\"dsn\\": \\"sqlite:/Users/daichi/Desktop/Work/prom-cms/prom/node_modules/.prom-cms/test-app/.database/application.sq3\\",
+          \\"user\\": \\"root\\",
+          \\"password\\": \\"root\\",
+          \\"settings\\": {
+            \\"charset\\": \\"utf8\\"
+          }
+        }
+      }
+    }
+  }
+}
+"
+`;
+
+exports[`jobs > createPropelConfig > should run correctly and generate files 2`] = `
+"<?xml version=\\"1.0\\" encoding=\\"UTF-8\\" ?>
+<database
+  name=\\"default-connection\\"
+  defaultIdMethod=\\"native\\"
+  namespace=\\"PromCMS\\\\Modules\\\\Testing\\\\Models\\"
+>
+    <table
+    name=\\"first\\"
+    phpName=\\"First\\"
+    prom.ignoreSeeding=\\"false\\"
+    prom.title=\\"\\"
+    prom.preset=\\"\\"
+    prom.adminMetadata.icon=\\"Article\\"
+    prom.adminMetadata.hidden=\\"true\\"
+  >
+            <column
+      name=\\"col\\"
+      type=\\"VARCHAR\\"
+      required=\\"true\\"
+      prom.hide=\\"false\\"
+      prom.title=\\"New\\"
+      prom.type=\\"string\\"
+      prom.readonly=\\"false\\"
+      prom.adminMetadata.isHidden=\\"false\\"
+      prom.adminMetadata.editor.placement=\\"main\\"
+      prom.adminMetadata.editor.width=\\"12\\"
+      primaryKey=\\"false\\"
+    />
+            <column
+      name=\\"bola\\"
+      type=\\"BOOLEAN\\"
+      required=\\"true\\"
+      prom.hide=\\"false\\"
+      prom.title=\\"Boolean Column\\"
+      prom.type=\\"boolean\\"
+      prom.readonly=\\"false\\"
+      prom.adminMetadata.isHidden=\\"false\\"
+      prom.adminMetadata.editor.placement=\\"main\\"
+      prom.adminMetadata.editor.width=\\"12\\"
+      defaultValue=\\"false\\"
+      primaryKey=\\"false\\"
+    />
+        <behavior name=\\"i18n\\">
+          <parameter name=\\"i18n_columns\\" value=\\"bola\\" />
+        </behavior>
+      <behavior name=\\"prom_model\\" />
+    </table>
+    <table
+    name=\\"second_table_name\\"
+    phpName=\\"SecondTableName\\"
+    prom.ignoreSeeding=\\"false\\"
+    prom.title=\\"\\"
+    prom.preset=\\"\\"
+    prom.adminMetadata.icon=\\"Article\\"
+    prom.adminMetadata.hidden=\\"false\\"
+  >
+            <column
+      name=\\"col\\"
+      type=\\"VARCHAR\\"
+      required=\\"true\\"
+      prom.hide=\\"false\\"
+      prom.title=\\"Newo\\"
+      prom.type=\\"string\\"
+      prom.readonly=\\"false\\"
+      prom.adminMetadata.isHidden=\\"false\\"
+      prom.adminMetadata.editor.placement=\\"main\\"
+      prom.adminMetadata.editor.width=\\"12\\"
+      primaryKey=\\"false\\"
+    />
+      <behavior name=\\"prom_model\\" />
+    </table>
+</database>
+"
+`;

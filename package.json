@@ -43,7 +43,6 @@
     "ftp": "^0.3.10",
     "prettier": "^3.0.3",
     "rimraf": "3.0.2",
-    "tsup": "^6.5.0",
     "turbo": "^1.6.3",
     "zod-to-json-schema": "^3.21.4"
   }

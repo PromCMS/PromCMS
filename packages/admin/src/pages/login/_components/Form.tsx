@@ -1,19 +1,25 @@
+import { apiClient } from '@api';
+import { MESSAGES } from '@constants';
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Image, Paper, Title } from '@mantine/core';
+import { createLogger, isApiResponse } from '@utils';
+import axios from 'axios';
+import clsx from 'clsx';
 import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { FirstStep } from '.';
-import { loginFormSchema } from '../_schema';
-import { ItemID, LoginFailedResponseCodes, UserRole } from '@prom-cms/shared';
 import { useTranslation } from 'react-i18next';
-import { Button, Image, Paper, Title } from '@mantine/core';
-import { MESSAGES } from '@constants';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { apiClient } from '@api';
-import { createLogger, isApiResponse } from '@utils';
+
+import {
+  ItemID,
+  LoginFailedResponseCodes,
+  UserRole,
+} from '@prom-cms/api-client';
+
+import { FirstStep } from '.';
 import logoImage from '../../../assets/logos/logo.svg';
-import clsx from 'clsx';
+import { loginFormSchema } from '../_schema';
 
 interface LoginFormValues {
   email: string;
@@ -29,7 +35,7 @@ export const Form: FC = () => {
   const { t } = useTranslation();
   const { updateValue } = useGlobalContext();
   const formMethods = useForm<LoginFormValues>({
-    resolver: yupResolver(loginFormSchema),
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       step: 0,
       email: '',

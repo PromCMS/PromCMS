@@ -1,8 +1,8 @@
 import type { API, BlockTool } from '@editorjs/editorjs';
 import * as iconSet from 'tabler-icons-react';
-import { ItemID } from '@prom-cms/shared';
 import ReactDom from 'react-dom/client';
 import { ButtonLinkView } from './ButtonLinkView';
+import { ItemID } from '@prom-cms/api-client';
 export interface ButtonLinkToolData {
   linkTo: string;
   label?: string;

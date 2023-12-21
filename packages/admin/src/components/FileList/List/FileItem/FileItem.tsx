@@ -1,4 +1,3 @@
-import { ItemID } from '@prom-cms/shared';
 import {
   AnchorHTMLAttributes,
   ChangeEventHandler,
@@ -11,8 +10,7 @@ import {
 import { useClassNames as getClassnames } from '../../useClassNames';
 import { ActionIcon, Checkbox } from '@mantine/core';
 import { Trash } from 'tabler-icons-react';
-import { Link } from 'react-router-dom';
-import { FileItem as FileItemType } from '@prom-cms/api-client';
+import { FileItem as FileItemType, ItemID } from '@prom-cms/api-client';
 import { apiClient } from '@api';
 import { pageUrls } from '@constants';
 import { IFileListContext } from '@components/FileList/context';

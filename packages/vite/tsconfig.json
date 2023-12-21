@@ -1,0 +1,19 @@
+{
+  "extends": "../../default.tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "noEmit": false,
+    "target": "ESNEXT",
+    "module": "esnext",
+    "moduleResolution": "nodenext",
+    "isolatedModules": false
+  },
+  "include": [
+    "src/**/*"
+  ], 
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

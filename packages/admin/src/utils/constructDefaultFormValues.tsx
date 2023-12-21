@@ -1,5 +1,5 @@
 import { DAYS_IN_WEEK } from '@components/FieldMapper/fields/json/OpeningHours';
-import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/shared';
+import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/api-client';
 
 /**
  * Takes care of special fields that need special default values to be working
@@ -10,15 +10,16 @@ export const constructDefaultFormValues = <T extends Record<string, any>>(
 ) => {
   const result = originalData;
 
-  for (const [columnKey, columnInfo] of singleton.columns) {
-    const value = result[columnKey];
+  for (const columnInfo of singleton.columns) {
+    const value = result[columnInfo.name];
+
     if (columnInfo.type == 'json' && !value) {
       if (columnInfo.admin.fieldType === 'openingHours') {
-        (result as any)[columnKey] = {
+        (result as any)[columnInfo.name] = {
           data: Object.fromEntries(DAYS_IN_WEEK.map((value) => [value, false])),
         };
       } else if (columnInfo.admin.fieldType === 'repeater') {
-        (result as any)[columnKey as any] = {
+        (result as any)[columnInfo.name as any] = {
           data: [],
         };
       }

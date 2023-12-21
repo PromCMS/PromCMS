@@ -1,33 +1,28 @@
+import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/api-client';
 import { FieldPlacements } from '@prom-cms/schema';
-import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/shared';
 
 export const prepareFieldsForMapper = (
   { columns }: ApiResultModel | ApiResultModelSingleton,
   placement?: FieldPlacements
 ) => {
-  const fields: (ReturnType<(typeof columns)['get']> & {
-    columnName: string;
-  })[] = [];
+  const fields: (typeof columns)[number][] = [];
 
-  for (const [columnName, column] of columns) {
+  for (const column of columns) {
     const columnWithFieldName = column as typeof column & {
       columnName?: string;
     };
 
-    const { hide, editable, admin } = columnWithFieldName;
+    const { hide, admin } = columnWithFieldName;
 
     if (
       hide ||
-      !editable ||
       (placement && admin?.editor?.placement !== placement) ||
       columnWithFieldName.admin.isHidden ||
-      columnName === 'is_published' ||
-      columnName === 'coeditors'
+      column.name === 'is_published' ||
+      column.name === 'coeditors'
     ) {
       continue;
     }
-
-    columnWithFieldName.columnName = columnName;
 
     fields.push(
       columnWithFieldName as typeof columnWithFieldName & { columnName: string }

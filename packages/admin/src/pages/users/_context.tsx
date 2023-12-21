@@ -1,17 +1,18 @@
 import { pageUrls } from '@constants';
 import { useModelInfo } from '@hooks/useModelInfo';
 import { useUser } from '@hooks/useUser';
-import { ApiResultModel, User } from '@prom-cms/shared';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   FC,
-  createContext,
-  useContext,
   PropsWithChildren,
+  createContext,
   useCallback,
+  useContext,
   useEffect,
 } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
+import { ApiResultModel, User } from '@prom-cms/api-client';
 
 type View = 'create' | 'update';
 

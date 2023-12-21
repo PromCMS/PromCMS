@@ -1,10 +1,10 @@
+import { pageUrls } from '@constants';
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { useMemo } from 'react';
-import { modelIsCustom } from '@utils';
 import { useCurrentUser } from '@hooks/useCurrentUser';
+import { modelIsCustom } from '@utils';
+import { useMemo } from 'react';
 import { Icon } from 'tabler-icons-react';
 import * as iconSet from 'tabler-icons-react';
-import { pageUrls } from '@constants';
 
 export type Item = {
   label: string;
@@ -25,10 +25,7 @@ export const useConstructedMenuItems = () => {
         ...finalValue,
         ...Object.entries({ ...singletons, ...models })
           .filter(([modelKey]) => !modelIsCustom(modelKey || ''))
-          .filter(
-            ([_modelKey, modelInfo]) =>
-              !modelInfo.admin.hidden && modelInfo.enabled
-          )
+          .filter(([_modelKey, modelInfo]) => !modelInfo.admin.hidden)
           .filter(
             ([modelKey, model]) =>
               currentUser.can({ action: 'read', targetModel: modelKey }) &&

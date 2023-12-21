@@ -1,8 +1,8 @@
-import { useCallback, useMemo } from 'react';
-import { ResultItem } from '@prom-cms/api-client';
-import { ItemID } from '@prom-cms/shared';
-import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@api';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useMemo } from 'react';
+
+import { ItemID, ResultItem } from '@prom-cms/api-client';
 
 export const useModelItem = <T extends ResultItem>(
   modelName: string | undefined,

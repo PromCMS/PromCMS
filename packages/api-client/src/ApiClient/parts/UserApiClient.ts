@@ -1,5 +1,10 @@
-import { ItemID, User } from '@prom-cms/shared';
-import { PagedResponse, QueryParams, Response } from '../../types';
+import {
+  ItemID,
+  PagedResponse,
+  QueryParams,
+  Response,
+  User,
+} from '../../types';
 import { formatQueryParams } from '../../utils';
 import { ApiClientBase } from '../ApiClientBase';
 import { EntryApiClient } from './EntryApiClient';

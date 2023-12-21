@@ -1,22 +1,22 @@
-import { PageLayout } from '@layouts';
-import { useEffect, useMemo, useState } from 'react';
+import { apiClient } from '@api';
 import { TableView, TableViewCol, TableViewProps } from '@components/TableView';
-import { useModelItems } from '@hooks/useModelItems';
-import useCurrentModel from '@hooks/useCurrentModel';
-import { modelIsCustom } from '@utils';
-import { ItemID } from '@prom-cms/shared';
+import { formatApiModelResultToTableView } from '@components/TableView/_utils';
 import { MESSAGES, pageUrls } from '@constants';
-import NotFoundPage from '@pages/404';
-import { useTranslation } from 'react-i18next';
+import { Page } from '@custom-types';
+import useCurrentModel from '@hooks/useCurrentModel';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { useModelItems } from '@hooks/useModelItems';
+import { PageLayout } from '@layouts';
 import { Button } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { Plus } from 'tabler-icons-react';
+import NotFoundPage from '@pages/404';
+import { modelIsCustom } from '@utils';
+import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Page } from '@custom-types';
-import { ResultItem } from '@prom-cms/api-client';
-import { apiClient } from '@api';
-import { formatApiModelResultToTableView } from '@components/TableView/_utils';
+import { Plus } from 'tabler-icons-react';
+
+import { ItemID, ResultItem } from '@prom-cms/api-client';
 
 const EntryTypeUnderpage: Page = ({}) => {
   const navigate = useNavigate();

@@ -25,23 +25,21 @@ const basicOmit = {
 
 export const repeaterAdminSchema = columnTypeBaseAdminConfigSchema.extend({
   fieldType: z.enum(['repeater']),
-  columns: z
-    .record(
-      z.discriminatedUnion('type', [
-        // Updated string schema
-        columnTypeStringSchema.omit(basicOmit).merge(basicExtend),
-        columnTypeRelationshipSchema.omit(basicOmit).merge(basicExtend),
+  columns: z.array(
+    z.discriminatedUnion('type', [
+      // Updated string schema
+      columnTypeStringSchema.omit(basicOmit).merge(basicExtend),
+      columnTypeRelationshipSchema.omit(basicOmit).merge(basicExtend),
 
-        // Updated number schema
-        columnTypeNumberSchema
-          .omit({
-            ...basicOmit,
-            translations: true,
-          })
-          .merge(basicExtend),
-      ])
-    )
-    .transform((columns) => new Map(Object.entries(columns))),
+      // Updated number schema
+      columnTypeNumberSchema
+        .omit({
+          ...basicOmit,
+          translations: true,
+        })
+        .merge(basicExtend),
+    ])
+  ),
 });
 
 export type RepeaterAdminSchema = z.infer<typeof repeaterAdminSchema>;

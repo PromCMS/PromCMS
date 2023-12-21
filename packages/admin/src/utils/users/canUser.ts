@@ -1,4 +1,4 @@
-import { UserRole } from '@prom-cms/shared';
+import { UserRole } from '@prom-cms/api-client';
 
 type ActionType = 'create' | 'read' | 'update' | 'delete';
 

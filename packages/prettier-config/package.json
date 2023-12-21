@@ -1,0 +1,19 @@
+{
+  "name": "@prom-cms/prettier-config",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "index.js",
+  "module": "index.js",
+  "exports": {
+    "./*": "./*",
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./index.js"
+    }
+  },
+  "dependencies": {
+    "@prettier/plugin-php": "^0.20.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@prettier/plugin-xml": "^3.2.2"
+  }
+}

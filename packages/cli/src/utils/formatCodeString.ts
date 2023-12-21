@@ -1,11 +1,15 @@
 import prettier from 'prettier';
-import path from 'path';
-import { PACKAGE_ROOT } from '@constants';
 
 export const formatCodeString = async (content: string, filename: string) => {
-  const ignoreFileParts = ['.gitignore', '.htaccess', 'Dockerfile', '.env'];
+  const ignoreFileParts = [
+    '.gitignore',
+    '.htaccess',
+    'Dockerfile',
+    '.env',
+    '.DS_Store',
+  ];
 
-  const ignoreFileExtensions = ['.yml', '.yaml', '.twig', '.md'];
+  const ignoreFileExtensions = ['.twig', '.md'];
 
   if (
     ignoreFileParts.find((part) => filename.includes(part)) ||
@@ -16,9 +20,7 @@ export const formatCodeString = async (content: string, filename: string) => {
 
   let result = content;
   // TODO import from config package
-  const { default: config } = await import(
-    '@prom-cms/config/default.prettier.js'
-  );
+  const { default: config } = await import('@prom-cms/prettier-config');
 
   result = await prettier.format(result, {
     ...config,

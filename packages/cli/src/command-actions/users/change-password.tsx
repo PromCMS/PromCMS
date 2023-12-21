@@ -1,10 +1,11 @@
-import { Logger, runPHPScript, tryFindGeneratorConfig } from '@utils';
-import path from 'path';
-import { THANK_YOU_MESSAGE, USERS_SCRIPTS_ROOT } from '@constants';
+import { THANK_YOU_MESSAGE } from '@constants';
 import { emailSchema } from '@schemas';
+import { Logger, tryFindGeneratorConfig } from '@utils';
 import { createPromptWithOverrides } from '@utils/createPromptWithOverrides.js';
-import { ZodError } from 'zod';
+import { ensurePromCoreVersion } from '@utils/ensurePromCoreVersion.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
+import { execa } from 'execa';
+import { ZodError } from 'zod';
 
 type Options = {
   cwd: string;
@@ -15,8 +16,6 @@ type Options = {
 export const changeUserPasswordCommandAction = async (
   optionsFromParameters: Options
 ) => {
-  tryFindGeneratorConfig(optionsFromParameters.cwd);
-
   const { cwd, email, password } = await createPromptWithOverrides(
     [
       { name: 'password', type: 'password' },
@@ -45,14 +44,11 @@ export const changeUserPasswordCommandAction = async (
 
   try {
     await runWithProgress(
-      runPHPScript({
-        path: path.join(USERS_SCRIPTS_ROOT, 'change-password.php'),
-        arguments: {
-          cwd,
-          email,
-          password,
-        },
-      }),
+      execa(
+        'vendor/bin/prom-cms',
+        [`users:change-password`, '--email', email, '--password', password],
+        { cwd }
+      ),
       'Connect and change password for user'
     );
   } catch (error) {

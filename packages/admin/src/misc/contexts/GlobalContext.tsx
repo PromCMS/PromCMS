@@ -1,18 +1,19 @@
-import { ItemID, User, UserRole } from '@prom-cms/shared';
-import axios, { CanceledError } from 'axios';
 import { apiClient } from '@api';
 import { API_CURRENT_USER_URL, API_SETTINGS_URL } from '@constants';
+import axios, { CanceledError } from 'axios';
 import {
-  createContext,
   FC,
   PropsWithChildren,
+  createContext,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import { ItemID, User, UserRole } from '@prom-cms/api-client';
 
 type DataFromAxios<T extends (...any) => Promise<Record<any, any>>> = Awaited<
   ReturnType<T>

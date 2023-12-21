@@ -8,43 +8,7 @@ This is a cli package of PromCMS that makes things happen.
 
 ### `db`
 
-Move quick in your database layer with the help of CLI
-
-#### `db migrate`
-
-Let's you migrate from MySQL (or MariaDB) export file (**.json**) and converts your data into PromCMS own database. 
-
-##### 🔯 Parameters
-
-- `--cwd`/`-c` 
-    - **String** (default: current cwd), optional
-    - Path to PromCMS project
-
-- `--file`/`-f` 
-    - **String**, required
-    - Path to a json file that contains all of your exported data
-
-##### 😎 Examples
-
-`npx @prom-cms/cli db migrate --file export.json`
-
-> ⛔️ This does not handle creating models for you. You have to define models first in "`.prom-cms/config.(json|js|ts|mjs|cjs)`" and then run this tool.
-
-#### `db seed`
-
-Let's you seed database with random data based on column types and settings
-
-##### 🔯 Parameters
-
-- `--cwd`/`-c` 
-    - **String** (default: current cwd), optional
-    - Path to PromCMS project
-
-##### 😎 Examples
-
-- Seed project on cwd: `npx @prom-cms/cli db seed`
-
-- Seed project on custom folder relative to cwd: `npx @prom-cms/cli db seed --cwd ../../test-folder/here`
+TBD
 
 ### `users`
 

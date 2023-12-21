@@ -1,6 +1,8 @@
 import type { API, BlockTool } from '@editorjs/editorjs';
-import { ItemID } from '@prom-cms/shared';
 import ReactDom from 'react-dom/client';
+
+import { ItemID } from '@prom-cms/api-client';
+
 import { ImageToolView } from './GalleryToolView';
 
 export interface ImageInfo {

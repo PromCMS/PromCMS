@@ -1,9 +1,11 @@
-import useCurrentModel from '@hooks/useCurrentModel';
 import { Header as StyledHeader } from '@components/editorialPage/Header';
+import useCurrentModel from '@hooks/useCurrentModel';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useEntryUnderpageContext } from '../../_context';
+
 import { FieldPlacements } from '@prom-cms/schema';
+
+import { useEntryUnderpageContext } from '../../_context';
 
 export const Header: FC = () => {
   const { currentView } = useEntryUnderpageContext();
@@ -12,10 +14,9 @@ export const Header: FC = () => {
   const hasHeading = useMemo(
     () =>
       model?.columns &&
-      !!Object.entries(Object.fromEntries(model?.columns)).find(
-        ([_, data]) =>
+      !!model?.columns.find(
+        (data) =>
           !data.hide &&
-          data.editable &&
           data.admin.editor.placement === FieldPlacements.MAIN &&
           data.type === 'string' &&
           data.admin.fieldType === 'heading'
