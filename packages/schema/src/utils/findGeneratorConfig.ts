@@ -8,14 +8,20 @@ export const supportedConfigExtensions = [
   'ts',
 ] as const;
 
-export const findGeneratorConfig = async (root?: string) => {
+const cache = new Map<string, string>();
+
+export const findGeneratorConfig = async (root: string): Promise<string> => {
   const fs = await import('node:fs');
   const path = await import('node:path');
   let filepath = '';
 
+  if (cache.has(root)) {
+    return cache.get(root)!;
+  }
+
   supportedConfigExtensions.find((extension) => {
     const filename = createPromConfigPath(extension);
-    const expectedFilepath = path.join(root ?? '', filename);
+    const expectedFilepath = path.join(root, filename);
 
     if (!fs.existsSync(expectedFilepath)) {
       return false;
@@ -28,6 +34,8 @@ export const findGeneratorConfig = async (root?: string) => {
   if (!filepath) {
     throw new Error(`⛔️ Provided directory "${root}" has no prom config.`);
   }
+
+  cache.set(root, filepath);
 
   return filepath;
 };

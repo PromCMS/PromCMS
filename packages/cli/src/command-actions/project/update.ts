@@ -19,7 +19,7 @@ export const updateProjectAction = async (options: Options) => {
 
   // Vadation block
   const generatorConfig = await getGeneratorConfigData(cwd);
-  await ensurePromCoreVersion(cwd);
+  // TODO: Load dotenv
   const rootModuleName = getModuleFolderName(generatorConfig.project.name);
 
   const rootModulePath = path.join(cwd, MODULE_FOLDER_NAME, rootModuleName);

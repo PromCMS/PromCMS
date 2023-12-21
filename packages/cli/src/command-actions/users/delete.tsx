@@ -16,9 +16,6 @@ type Options = {
 export const deleteUserCommandAction = async (
   optionsFromParameters: Options
 ) => {
-  await tryFindGeneratorConfig(optionsFromParameters.cwd);
-  await ensurePromCoreVersion(optionsFromParameters.cwd);
-
   const { cwd, email } = await createPromptWithOverrides(
     [
       {

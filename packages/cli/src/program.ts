@@ -10,16 +10,32 @@ import { cwdOption } from '@options/cwdOption.js';
 import { packageManagerOption } from '@options/packageManagerOption.js';
 import { projectNameOption } from '@options/projectNameOption.js';
 import { promDevelopOption } from '@options/promDevelopOption.js';
+import { ensurePromCoreVersion } from '@utils/ensurePromCoreVersion.js';
 import { Command } from 'commander';
 import fs from 'fs-extra';
 import path from 'path';
+
+import { findGeneratorConfig } from '@prom-cms/schema';
 
 (async () => {
   const { version } = await fs.readJson(
     path.join(PACKAGE_ROOT, 'package.json')
   );
 
-  const program = new Command('@prom-cms/cli').version(version);
+  const program = new Command('@prom-cms/cli')
+    .version(version)
+    .hook('preAction', async (command, action) => {
+      const parentName = action.parent?.name();
+      const currentName = action.name();
+      const cwd = action.getOptionValue('cwd');
+
+      if (!(currentName === 'create' && parentName === 'project') && cwd) {
+        await Promise.all([
+          ensurePromCoreVersion(cwd),
+          findGeneratorConfig(cwd),
+        ]);
+      }
+    });
 
   const usersCommand = program
     .command('users')

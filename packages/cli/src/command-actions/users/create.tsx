@@ -26,9 +26,6 @@ type Options = {
 export const createUserCommandAction = async (
   optionsFromParameters: Options
 ) => {
-  await tryFindGeneratorConfig(optionsFromParameters.cwd);
-  await ensurePromCoreVersion(optionsFromParameters.cwd);
-
   const { cwd, email, password, name } = await createPromptWithOverrides(
     [
       {
