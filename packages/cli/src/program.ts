@@ -11,6 +11,7 @@ import { packageManagerOption } from '@options/packageManagerOption.js';
 import { projectNameOption } from '@options/projectNameOption.js';
 import { promDevelopOption } from '@options/promDevelopOption.js';
 import { ensurePromCoreVersion } from '@utils/ensurePromCoreVersion.js';
+import { loadDotEnv } from '@utils/loadDotEnv.js';
 import { Command } from 'commander';
 import fs from 'fs-extra';
 import path from 'path';
@@ -34,6 +35,7 @@ import { findGeneratorConfig } from '@prom-cms/schema';
           ensurePromCoreVersion(cwd),
           findGeneratorConfig(cwd),
         ]);
+        loadDotEnv(cwd);
       }
     });
 

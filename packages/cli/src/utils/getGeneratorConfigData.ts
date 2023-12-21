@@ -9,7 +9,7 @@ import {
 
 import { isModule } from './isModule.js';
 
-export const getGeneratorConfigData = async (root?: string) => {
+export const getGeneratorConfigData = async (root: string) => {
   const filepath = await findGeneratorConfig(root);
   let content;
 

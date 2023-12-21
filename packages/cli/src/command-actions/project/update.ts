@@ -3,7 +3,6 @@ import { createAdminFiles } from '@jobs/create-admin-files.js';
 import { createProjectModule } from '@jobs/create-project-module.js';
 import generateModels from '@jobs/generate-models.js';
 import { Logger, getModuleFolderName } from '@utils';
-import { ensurePromCoreVersion } from '@utils/ensurePromCoreVersion.js';
 import { getGeneratorConfigData } from '@utils/getGeneratorConfigData.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
 import fs from 'fs-extra';
