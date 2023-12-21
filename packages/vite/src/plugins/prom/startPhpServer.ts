@@ -24,6 +24,10 @@ export const startPHPServer = ({
   // Ensure encoding
   serverProcess.stderr.setEncoding('utf8');
 
+  serverProcess.on('close', (code) => {
+    console.log({ code });
+  });
+
   // Log what happens on server
   serverProcess.stderr.on('data', function (data) {
     const projectRoot = path.join(cwd, '.temp');

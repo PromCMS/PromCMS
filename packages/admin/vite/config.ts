@@ -19,12 +19,12 @@ export default defineConfig(({ mode, command }) => {
   ];
 
   if (command === 'serve') {
-    let abortController: AbortController;
+    let abortController: AbortController | undefined;
 
     plugins.push(
       promPlugin({
         onExit() {
-          abortController.abort();
+          abortController?.abort();
         },
         watchFiles: {
           files: [],
