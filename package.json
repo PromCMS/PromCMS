@@ -5,6 +5,7 @@
   "type": "module",
   "description": "",
   "scripts": {
+    "reinstall": "rm -rf **/node_modules package-lock.json && npm i",
     "prepare": "npm run build",
     "generate:dev": "npm run project:create -w @prom-cms/cli",
     "build:packages": "npx turbo run build --filter=./packages/*",
