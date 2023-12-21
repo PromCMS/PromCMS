@@ -1,4 +1,4 @@
-import { ItemID } from '@prom-cms/shared';
+import { ItemID } from '@prom-cms/api-client';
 
 export type NodeAttrs = {
   fileId?: ItemID;
