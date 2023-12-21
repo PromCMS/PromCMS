@@ -1,9 +1,5 @@
 import path from 'path';
-import {
-  generateByTemplates,
-  getModuleFolderName,
-  lowerCaseFirst,
-} from '@utils';
+import { generateByTemplates, getModuleFolderName } from '@utils';
 import generateModule from './generate-module.js';
 import { GeneratorConfig } from '@prom-cms/schema';
 import { MODULE_FOLDER_NAME } from '@constants';

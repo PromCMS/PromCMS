@@ -1,10 +1,11 @@
-import { Logger, runPHPScript, tryFindGeneratorConfig } from '@utils';
-import path from 'path';
-import { THANK_YOU_MESSAGE, USERS_SCRIPTS_ROOT } from '@constants';
-import { z, ZodError } from 'zod';
+import { THANK_YOU_MESSAGE } from '@constants';
 import { emailSchema } from '@schemas';
+import { Logger, tryFindGeneratorConfig } from '@utils';
 import { createPromptWithOverrides } from '@utils/createPromptWithOverrides.js';
+import { ensurePromCoreVersion } from '@utils/ensurePromCoreVersion.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
+import { execa } from 'execa';
+import { ZodError, z } from 'zod';
 
 const nameSchema = z
   .string()
@@ -25,8 +26,6 @@ type Options = {
 export const createUserCommandAction = async (
   optionsFromParameters: Options
 ) => {
-  tryFindGeneratorConfig(optionsFromParameters.cwd);
-
   const { cwd, email, password, name } = await createPromptWithOverrides(
     [
       {
@@ -74,15 +73,19 @@ export const createUserCommandAction = async (
 
   try {
     await runWithProgress(
-      runPHPScript({
-        path: path.join(USERS_SCRIPTS_ROOT, 'create.php'),
-        arguments: {
-          cwd,
+      execa(
+        'vendor/bin/prom-cms',
+        [
+          `users:create`,
+          '--email',
           email,
+          '--password',
           password,
+          '--name',
           name,
-        },
-      }),
+        ],
+        { cwd }
+      ),
       'Connect and create new user'
     );
   } catch (error) {

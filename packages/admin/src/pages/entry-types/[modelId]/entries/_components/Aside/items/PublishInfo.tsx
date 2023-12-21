@@ -4,12 +4,14 @@ import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { useUser } from '@hooks/useUser';
 import { Skeleton, SkeletonProps } from '@mantine/core';
-import { ItemID } from '@prom-cms/shared';
 import { dynamicDayjs } from '@utils';
 import clsx from 'clsx';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+
+import { ItemID } from '@prom-cms/api-client';
+
 import { useEntryUnderpageContext } from '../../../_context';
 
 const TextSkeleton: FC<SkeletonProps> = ({ className, ...rest }) => (

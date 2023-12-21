@@ -1,30 +1,32 @@
+import { apiClient } from '@api';
+import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
+import { zodResolver } from '@hookform/resolvers/zod';
+import useCurrentSingleton from '@hooks/useCurrentSingleton';
 import { useSettings } from '@hooks/useSettings';
+import { logger } from '@logger';
+import { getModelItemSchema } from '@schemas';
+import { useQueryClient } from '@tanstack/react-query';
+import { getObjectDiff, isApiResponse, toastedPromise } from '@utils';
+import axios from 'axios';
 import {
-  createContext,
   Dispatch,
   FC,
   PropsWithChildren,
   SetStateAction,
+  createContext,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from 'react';
-import { FormProvider, useForm, UseFormProps } from 'react-hook-form';
-import { useCurrentSingletonData } from './useCurrentSingletonData';
-import { ResultItem, EntityDuplicateErrorCode } from '@prom-cms/api-client';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
-import { getObjectDiff, isApiResponse, toastedPromise } from '@utils';
+import { FormProvider, UseFormProps, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { apiClient } from '@api';
-import { useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
-import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
-import { getModelItemSchema } from '@schemas';
-import { yupResolver } from '@hookform/resolvers/yup';
 import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
-import { logger } from '@logger';
+
+import { EntityDuplicateErrorCode, ResultItem } from '@prom-cms/api-client';
+
+import { useCurrentSingletonData } from './useCurrentSingletonData';
 
 export type SingletonPageContext = {
   setLanguage: Dispatch<SetStateAction<SingletonPageContext['language']>>;
@@ -56,7 +58,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
     const schema = getModelItemSchema(singleton, true);
 
     return async (data, context, options) => {
-      const result = await yupResolver(schema)(data, context, options);
+      const result = await zodResolver(schema)(data, context, options);
       logger.warning('Validating form:');
       logger.warning({ data, result });
 
@@ -153,7 +155,14 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         const fieldNames = e.response.data.data;
         if (Array.isArray(fieldNames) && fieldNames.length) {
           for (const fieldName of fieldNames) {
-            const fieldInfo = singleton?.columns?.get(fieldName);
+            const fieldInfo = singleton?.columns?.find(
+              (column) => column.name === fieldName
+            );
+
+            if (!fieldInfo) {
+              continue;
+            }
+
             let variableFieldName = fieldName;
 
             if (fieldName === 'slug' && fieldInfo?.type === 'slug') {

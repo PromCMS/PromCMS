@@ -1,16 +1,16 @@
 import { LoadingOverlay } from '@mantine/core';
-import { ColumnType, FieldPlacements } from '@prom-cms/schema';
 import clsx from 'clsx';
 import { DetailedHTMLProps, FC, HTMLAttributes } from 'react';
 import { useFormState } from 'react-hook-form';
+
+import { ColumnType, FieldPlacements } from '@prom-cms/schema';
+
 import { FieldMapperItem } from './FieldMapperItem';
 
 export interface FieldMapperProps
   extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   type: FieldPlacements;
-  fields: (ColumnType & {
-    columnName: string;
-  })[];
+  fields: ColumnType[];
 }
 
 const FieldMapper: FC<FieldMapperProps> = ({
@@ -25,7 +25,7 @@ const FieldMapper: FC<FieldMapperProps> = ({
     <div className={clsx('space-y-4 sm:-ml-4 flow-root', className)} {...rest}>
       {fields.map((field) => (
         <div
-          key={field.columnName}
+          key={field.name}
           className={clsx(
             `sm:float-left sm:field-mapper-item-${
               field.admin.editor.width ?? 12

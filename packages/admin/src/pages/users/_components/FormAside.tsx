@@ -1,19 +1,21 @@
-import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
+import { apiClient } from '@api';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
-import clsx from 'clsx';
+import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
+import { AsideWrapper } from '@components/editorialPage/AsideWrapper';
 import { MESSAGES } from '@constants';
-import { useMemo, FC } from 'react';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { ActionIcon, Button, SimpleGrid } from '@mantine/core';
+import { useSetState } from '@mantine/hooks';
+import { getObjectDiff } from '@utils';
+import clsx from 'clsx';
+import { FC, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { getObjectDiff } from '@utils';
-import { ActionIcon, Button, SimpleGrid } from '@mantine/core';
-import { UserStates } from '@prom-cms/shared';
-import { useSetState } from '@mantine/hooks';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { useCurrentUser } from '@hooks/useCurrentUser';
 import { Trash } from 'tabler-icons-react';
-import { apiClient } from '@api';
-import { AsideWrapper } from '@components/editorialPage/AsideWrapper';
+
+import { UserStates } from '@prom-cms/api-client';
+
 import { useData } from '../_context';
 
 const TextSkeleton: FC<SkeltonProps> = ({ className, ...rest }) => (

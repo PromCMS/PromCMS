@@ -1,9 +1,12 @@
-import { ActionIcon, clsx, Input, NumberInput, TextInput } from '@mantine/core';
-import { FieldPlacements, RepeaterAdminSchema } from '@prom-cms/schema';
+import { MESSAGES } from '@constants';
+import { ActionIcon, Input, NumberInput, TextInput, clsx } from '@mantine/core';
 import { FC, Fragment, useMemo } from 'react';
 import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash } from 'tabler-icons-react';
+
+import { FieldPlacements, RepeaterAdminSchema } from '@prom-cms/schema';
+
 import { RelationshipItemSelect } from '../RelationshipItemSelect';
 
 export const Repeater: FC<{
@@ -27,8 +30,8 @@ export const Repeater: FC<{
     [columns]
   );
   const allFields = useMemo(
-    () => (fields.length ? fields : [{ id: 'default' }]),
-    [fields]
+    () => (fields.length ? fields : readonly ? [] : [{ id: 'default' }]),
+    [fields, readonly]
   );
   const entriesArray = useMemo(() => Array.from(columns.entries()), [columns]);
 
@@ -113,8 +116,8 @@ export const Repeater: FC<{
                       }}
                       columnName={columnFieldName}
                       unique={false}
-                      translations={false}
                       {...columnInfo}
+                      localized={false}
                     />
                   );
                   break;
@@ -156,6 +159,7 @@ export const Repeater: FC<{
             ) : null}
           </div>
         ))}
+        {!allFields?.length ? <p>{t(MESSAGES.EMPTY_VALUE)}</p> : null}
       </div>
     </Input.Wrapper>
   );

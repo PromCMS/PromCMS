@@ -7,17 +7,19 @@ import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import {
   ActionIcon,
   Button,
-  createStyles,
   Group,
   LoadingOverlay,
   Pagination,
   Table,
+  createStyles,
 } from '@mantine/core';
-import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
+
+import { ItemID } from '@prom-cms/api-client';
+
 import { Drawer } from './_components';
 
 const useStyles = createStyles(() => ({

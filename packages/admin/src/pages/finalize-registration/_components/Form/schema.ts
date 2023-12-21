@@ -1,11 +1,20 @@
-import { object, string, ref } from 'yup';
+import { MESSAGES } from '@constants';
+import { z } from 'zod';
 
-export const finalizeRegistrationFormSchema = object()
-  .shape({
-    new_password: string().required('This field is required'),
-    confirmed_new_password: string()
-      .required('This field is required')
-      .oneOf([ref('new_password'), null], 'Passwords must match'),
-    token: string().required('This field is required'),
+export const finalizeRegistrationFormSchema = z
+  .object({
+    new_password: z.string({ required_error: MESSAGES.FIELD_REQUIRED }),
+    confirmed_new_password: z.string({
+      required_error: MESSAGES.FIELD_REQUIRED,
+    }),
+    token: z.string({ required_error: MESSAGES.FIELD_REQUIRED }),
   })
-  .noUnknown();
+  .strict()
+  .superRefine((value, ctx) => {
+    if (value.new_password !== value.confirmed_new_password) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: MESSAGES.PASSWORDS_MUST_MATCH,
+      });
+    }
+  });

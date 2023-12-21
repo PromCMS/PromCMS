@@ -1,18 +1,19 @@
+import { apiClient } from '@api';
 import { TableView, TableViewCol } from '@components/TableView';
+import { formatApiModelResultToTableView } from '@components/TableView/_utils';
+import { MESSAGES } from '@constants';
+import { Page } from '@custom-types';
+import { useCurrentUser } from '@hooks/useCurrentUser';
 import { useModelInfo } from '@hooks/useModelInfo';
 import { useModelItems } from '@hooks/useModelItems';
 import { PageLayout } from '@layouts';
-import { ApiResultModel, ItemID } from '@prom-cms/shared';
-import { UserPlus } from 'tabler-icons-react';
-import { MESSAGES } from '@constants';
+import { Button } from '@mantine/core';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mantine/core';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { Page } from '@custom-types';
 import { useNavigate } from 'react-router-dom';
-import { apiClient } from '@api';
-import { formatApiModelResultToTableView } from '@components/TableView/_utils';
+import { UserPlus } from 'tabler-icons-react';
+
+import { ApiResultModel, ItemID } from '@prom-cms/api-client';
 
 const UsersListPage: Page = () => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import defaults from '@prom-cms/config/default.prettier.js';
+import defaults from '@prom-cms/prettier-config';
 
 export default {
   tailwindConfig: './tailwind.config.cjs',

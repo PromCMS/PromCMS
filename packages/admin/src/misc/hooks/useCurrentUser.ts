@@ -1,7 +1,8 @@
 import { useGlobalContext } from '@contexts/GlobalContext';
-import { User, UserRole } from '@prom-cms/shared';
-import { canUser, CanUserOptions } from '@utils';
+import { CanUserOptions, canUser } from '@utils';
 import { useMemo } from 'react';
+
+import { User, UserRole } from '@prom-cms/api-client';
 
 export const useCurrentUser = () => {
   const { currentUserIsAdmin, currentUser } = useGlobalContext();

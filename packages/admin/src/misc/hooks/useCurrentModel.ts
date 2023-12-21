@@ -1,6 +1,8 @@
-import { ApiResultModel } from '@prom-cms/shared';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
+
+import { ApiResultModel } from '@prom-cms/api-client';
+
 import { useModelInfo } from './useModelInfo';
 
 export type RichApiResultModel = ApiResultModel & {

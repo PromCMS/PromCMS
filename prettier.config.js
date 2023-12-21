@@ -1,1 +1,1 @@
-export { default } from '@prom-cms/config/default.prettier.js';
+export { default } from '@prom-cms/prettier-config';

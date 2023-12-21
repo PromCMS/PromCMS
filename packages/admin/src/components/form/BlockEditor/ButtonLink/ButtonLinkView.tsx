@@ -1,18 +1,19 @@
 import { Button as CustomButton } from '@components/Button';
 import ImageSelect from '@components/form/ImageSelect';
 import { Checkbox, Group, Text, TextInput, Title } from '@mantine/core';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
-import { FC, forwardRef, useEffect, useMemo, useState, VFC } from 'react';
+import { upperFirst } from '@mantine/hooks';
+import { FC, forwardRef, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from 'tabler-icons-react';
 import * as iconSet from 'tabler-icons-react';
-import { ButtonLinkToolData } from './ButtonLink';
+
 import ContextProviders from '../../../../layouts/ContextProviders';
+import { ButtonLinkToolData } from './ButtonLink';
 
 const selectData = Object.entries(iconSet).map(([iconName, icon]) => ({
   icon,
   value: iconName,
-  label: capitalizeFirstLetter(iconName),
+  label: upperFirst(iconName),
 }));
 
 const SelectItem = forwardRef<HTMLDivElement, { icon: Icon; label: string }>(

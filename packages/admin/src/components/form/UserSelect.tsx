@@ -8,7 +8,7 @@ import {
   Skeleton,
   Text,
 } from '@mantine/core';
-import { User, UserRole } from '@prom-cms/shared';
+import { User, UserRole } from '@prom-cms/api-client';
 import { forwardRef } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';

@@ -1,25 +1,27 @@
-import { FC } from 'react';
-import { FormProvider, useForm } from 'react-hook-form';
+import { apiClient } from '@api';
+import { CUSTOM_MODELS } from '@constants';
+import { useGlobalContext } from '@contexts/GlobalContext';
+import { useModelItem } from '@hooks/useModelItem';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import {
   Button,
   Drawer as MantineDrawer,
   DrawerProps as MantineDrawerProps,
   SimpleGrid,
-  Textarea,
   TextInput,
+  Textarea,
   Title,
 } from '@mantine/core';
-import { ItemID } from '@prom-cms/shared';
-import { useTranslation } from 'react-i18next';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { useGlobalContext } from '@contexts/GlobalContext';
+import { FC } from 'react';
 import { Fragment } from 'react';
-import { ModelPermissionToggles } from './ModelPermissionToggles';
 import { useEffect } from 'react';
-import { useModelItem } from '@hooks/useModelItem';
 import { useMemo } from 'react';
-import { CUSTOM_MODELS } from '@constants';
-import { apiClient } from '@api';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { ItemID } from '@prom-cms/api-client';
+
+import { ModelPermissionToggles } from './ModelPermissionToggles';
 
 export const Drawer: FC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }

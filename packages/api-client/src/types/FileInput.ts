@@ -1,5 +1,5 @@
-import { File } from '@prom-cms/shared';
+import { FileItem } from './FileItem';
 
-export type FileInput = Pick<File, 'private' | 'description'> & {
+export type FileInput = Pick<FileItem, 'private' | 'description'> & {
   root: string;
 };

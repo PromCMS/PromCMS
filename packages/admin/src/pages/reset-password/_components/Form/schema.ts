@@ -1,19 +1,34 @@
-import { object, string, ref } from 'yup';
+import { MESSAGES } from '@constants';
+import { z } from 'zod';
 
-export const initializeResetPasswordFormSchema = object()
-  .shape({
-    email: string()
-      .email('Please enter valid email address')
-      .required('Dont forget to include this value'),
+export const initializeResetPasswordFormSchema = z
+  .object({
+    email: z
+      .string({
+        required_error: MESSAGES.FIELD_REQUIRED,
+      })
+      .email('Please enter valid email address'),
   })
-  .noUnknown();
+  .strict();
 
-export const finalizeResetPasswordFormSchema = object()
-  .shape({
-    new_password: string().required('Dont forget to include this value'),
-    confirmed_new_password: string()
-      .required('Dont forget to include this value')
-      .oneOf([ref('new_password'), null], 'Passwords must match'),
-    token: string().required('Dont forget to include this value'),
+export const finalizeResetPasswordFormSchema = z
+  .object({
+    new_password: z.string({
+      required_error: MESSAGES.FIELD_REQUIRED,
+    }),
+    confirmed_new_password: z.string({
+      required_error: MESSAGES.FIELD_REQUIRED,
+    }),
+    token: z.string({
+      required_error: MESSAGES.FIELD_REQUIRED,
+    }),
   })
-  .noUnknown();
+  .strict()
+  .superRefine((value, ctx) => {
+    if (value.new_password !== value.confirmed_new_password) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: MESSAGES.PASSWORDS_MUST_MATCH,
+      });
+    }
+  });

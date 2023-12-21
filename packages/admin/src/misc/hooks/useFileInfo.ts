@@ -1,14 +1,15 @@
 import { apiClient } from '@api';
-import { File, ItemID } from '@prom-cms/shared';
 import { useQuery } from '@tanstack/react-query';
+
+import { FileItem, ItemID } from '@prom-cms/api-client';
 
 export const useFileInfo = (
   fileId?: ItemID,
-  queryConfig?: Parameters<typeof useQuery<File>>['2']
+  queryConfig?: Parameters<typeof useQuery<FileItem>>['2']
 ) => {
   const shouldFetch = fileId !== undefined && fileId !== 'undefined';
 
-  return useQuery<File>(
+  return useQuery<FileItem>(
     ['files', fileId],
     ({ queryKey }) =>
       apiClient.files

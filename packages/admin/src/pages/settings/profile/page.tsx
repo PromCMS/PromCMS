@@ -1,19 +1,21 @@
+import { apiClient } from '@api';
 import ImageSelect from '@components/form/ImageSelect';
+import { MESSAGES } from '@constants';
 import { useGlobalContext } from '@contexts/GlobalContext';
+import { Page } from '@custom-types';
+import { Button, TextInput } from '@mantine/core';
+import { showNotification, updateNotification } from '@mantine/notifications';
+import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
 import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { getObjectDiff } from '@utils';
-import { User } from '@prom-cms/shared';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { Button, TextInput, Input } from '@mantine/core';
-import { Lock } from 'tabler-icons-react';
-import { Page } from '@custom-types';
-import { apiClient } from '@api';
-import { LanguageSelect } from './_components';
 import { useNavigate } from 'react-router-dom';
-import { MESSAGES } from '@constants';
+import { Lock } from 'tabler-icons-react';
+
+import { User } from '@prom-cms/api-client';
+
+import { LanguageSelect } from './_components';
 
 const Row: FC<
   DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>

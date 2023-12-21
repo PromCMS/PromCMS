@@ -1,8 +1,9 @@
-import { ItemID, Settings } from '@prom-cms/shared';
 import {
+  ItemID,
   PagedResponse,
   Response,
   RichAxiosRequestConfig,
+  Settings,
   SettingsItem,
 } from '../../types';
 import { ApiClientBase } from '../ApiClientBase';

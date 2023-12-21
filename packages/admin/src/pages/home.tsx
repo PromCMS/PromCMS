@@ -1,13 +1,14 @@
+import { MESSAGES } from '@constants';
 import { useGlobalContext } from '@contexts/GlobalContext';
+import { Page } from '@custom-types';
 import { PageLayout } from '@layouts';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
-import dayjs from 'dayjs';
 import { useConstructedMenuItems } from '@layouts';
+import { upperFirst } from '@mantine/hooks';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { Page } from '@custom-types';
 import { Link } from 'react-router-dom';
-import { MESSAGES } from '@constants';
+
 const dateFormat = 'dddd DD. MMMM YYYY';
 
 const MainPage: Page = () => {
@@ -31,9 +32,9 @@ const MainPage: Page = () => {
         <Trans
           t={t}
           i18nKey={MESSAGES.TODAY_IS_DATE}
-          values={{ date: capitalizeFirstLetter(currentTime) }}
+          values={{ date: upperFirst(currentTime) }}
         >
-          Today is {{ date: capitalizeFirstLetter(currentTime) }}
+          Today is {{ date: upperFirst(currentTime) }}
         </Trans>
       </div>
       <h1 className="mt-16 text-4xl font-semibold text-blue-400">
@@ -58,7 +59,7 @@ const MainPage: Page = () => {
               <div className="m-auto text-center">
                 <itemInfo.icon className="mx-auto aspect-square h-12 w-12 text-gray-400 duration-150 group-hover:text-blue-500" />
                 <span className="mt-3 block text-lg font-semibold">
-                  {t(capitalizeFirstLetter(itemInfo.label, false))}
+                  {t(upperFirst(itemInfo.label))}
                 </span>
               </div>
             </Link>

@@ -9,7 +9,6 @@ import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications'
 import {
   ActionIcon,
   Button,
-  createStyles,
   Divider,
   Grid,
   Group,
@@ -17,14 +16,17 @@ import {
   Pagination,
   Paper,
   Textarea,
+  createStyles,
 } from '@mantine/core';
-import { ItemID } from '@prom-cms/shared';
 import clsx from 'clsx';
 import { Fragment } from 'react';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
-import { Drawer, CopyName } from './_components';
+
+import { ItemID } from '@prom-cms/api-client';
+
+import { CopyName, Drawer } from './_components';
 
 const useStyles = createStyles(() => ({
   root: {

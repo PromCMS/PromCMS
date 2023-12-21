@@ -1,18 +1,19 @@
-import { ItemID, User, UserRole } from '@prom-cms/shared';
-import axios from 'axios';
 import { apiClient } from '@api';
 import { API_CURRENT_USER_URL, API_SETTINGS_URL } from '@constants';
+import axios, { CanceledError } from 'axios';
 import {
-  createContext,
   FC,
   PropsWithChildren,
+  createContext,
   useContext,
   useEffect,
   useState,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+
+import { ItemID, User, UserRole } from '@prom-cms/api-client';
 
 type DataFromAxios<T extends (...any) => Promise<Record<any, any>>> = Awaited<
   ReturnType<T>
@@ -122,6 +123,10 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
         setIsBooting(false);
       } catch (e) {
+        if (e instanceof CanceledError) {
+          return;
+        }
+
         if (axios.isAxiosError(e)) {
           if (e.response?.status === 401) {
             // TODO: Apply first url to login page so we can then take user to that page
@@ -136,6 +141,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
             // TODO: Make this a better message to some component/page
             alert('Looks like API is not working, please tell your developer');
           }
+
           setIsBooting(false);
         }
       }

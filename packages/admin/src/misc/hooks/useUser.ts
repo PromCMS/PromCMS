@@ -1,7 +1,8 @@
 import { apiClient } from '@api';
-import { ItemID, User } from '@prom-cms/shared';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+
+import { ItemID, User } from '@prom-cms/api-client';
 
 const fetcher = (id: ItemID | undefined) => () =>
   apiClient.users.getOne(id!).then(({ data }) => data.data);

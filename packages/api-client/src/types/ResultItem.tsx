@@ -1,4 +1,4 @@
-import type { ItemID } from '@prom-cms/shared';
+import { ItemID } from './ItemID';
 
 export interface ResultItem {
   /**

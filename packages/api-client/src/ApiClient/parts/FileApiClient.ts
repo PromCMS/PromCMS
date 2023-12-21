@@ -1,10 +1,10 @@
-import { ItemID } from '@prom-cms/shared';
 import {
   QueryParams,
   Response,
   FileInput,
   PagedResponse,
   FileItem,
+  ItemID,
 } from '../../types';
 import { formatQueryParams } from '../../utils';
 import { ApiClientBase } from '../ApiClientBase';

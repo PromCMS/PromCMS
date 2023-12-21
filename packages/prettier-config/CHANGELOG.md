@@ -1,0 +1,1 @@
+# @prom-cms/prettier-config

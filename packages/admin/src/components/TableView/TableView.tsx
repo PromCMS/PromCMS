@@ -1,17 +1,6 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
-import { ItemID } from '@prom-cms/shared';
-import clsx from 'clsx';
-import {
-  PropsWithChildren,
-  useCallback,
-  useMemo,
-  FC,
-  DetailedHTMLProps,
-  HTMLAttributes,
-} from 'react';
-import { Trans, useTranslation } from 'react-i18next';
-import { createIterativeArray } from '@utils';
+import { MESSAGES } from '@constants';
 import {
   ActionIcon,
   Group,
@@ -20,20 +9,32 @@ import {
   Select,
   SelectItem,
 } from '@mantine/core';
+import { SelectProps } from '@mantine/core/lib/Select/Select';
+import { createIterativeArray } from '@utils';
+import clsx from 'clsx';
+import {
+  DetailedHTMLProps,
+  FC,
+  HTMLAttributes,
+  PropsWithChildren,
+  useCallback,
+  useMemo,
+} from 'react';
+import { useState } from 'react';
 import {
   DragDropContext,
   DragDropContextProps,
   Draggable,
   Droppable,
 } from 'react-beautiful-dnd';
-import { useClassNames } from './useClassNames';
-import { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
-import { PagedResponse } from '@prom-cms/api-client';
-import { SelectProps } from '@mantine/core/lib/Select/Select';
-import { MESSAGES } from '@constants';
-import { ColumnValueFormatter } from './ColumnValueFormatter';
+
+import { ItemID, PagedResponse } from '@prom-cms/api-client';
 import { ColumnType } from '@prom-cms/schema';
+
+import { ColumnValueFormatter } from './ColumnValueFormatter';
+import { useClassNames } from './useClassNames';
 
 export type TableViewItem = { id: string | number; [x: string]: any };
 

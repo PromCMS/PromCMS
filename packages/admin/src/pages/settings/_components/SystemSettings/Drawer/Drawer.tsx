@@ -1,4 +1,9 @@
-import { useEffect, useState, FC } from 'react';
+import { apiClient } from '@api';
+import { LanguageSelect } from '@components/form/LanguageSelect';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { useModelItem } from '@hooks/useModelItem';
+import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { useSettings } from '@hooks/useSettings';
 import {
   Button,
   Drawer as MantineDrawer,
@@ -9,18 +14,15 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
-import { useModelItem } from '@hooks/useModelItem';
-import { ItemID } from '@prom-cms/shared';
+import { FC, useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { ItemID } from '@prom-cms/api-client';
+
+import { Image } from './contentTypes/Image';
 import { List } from './contentTypes/List';
 import { Textarea } from './contentTypes/Textarea';
-import { Image } from './contentTypes/Image';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { useTranslation } from 'react-i18next';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { LanguageSelect } from '@components/form/LanguageSelect';
-import { useSettings } from '@hooks/useSettings';
-import { apiClient } from '@api';
 
 export const Drawer: FC<
   Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }

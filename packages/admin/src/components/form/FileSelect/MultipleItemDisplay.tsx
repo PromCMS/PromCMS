@@ -1,9 +1,10 @@
 import { MESSAGES } from '@constants';
 import { useFileList } from '@hooks/useFileList';
 import { Table } from '@mantine/core';
-import { ItemID } from '@prom-cms/shared';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { ItemID } from '@prom-cms/api-client';
 
 export const MultipleItemDisplay: FC<{ pickedFiles: ItemID[] }> = ({
   pickedFiles,

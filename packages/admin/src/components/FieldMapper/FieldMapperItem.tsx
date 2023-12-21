@@ -1,34 +1,36 @@
-import { useEntryUnderpageContext } from '@pages/entry-types/[modelId]/entries/_context';
-import { ColumnType, FieldPlacements } from '@prom-cms/schema';
-import { FC } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { EnumSelect, RelationshipItemSelect } from './fields';
-import { BigImagePicker } from './fields/BigImagePicker';
-import { OpeningHours } from './fields/json/OpeningHours';
-import { Repeater } from './fields/json/Repeater';
+import { FileSelect } from '@components/form/FileSelect';
+import ImageSelect from '@components/form/ImageSelect';
+import { BlockEditor } from '@components/form/editors/BlockEditor';
+import { WysiwygEditor } from '@components/form/editors/WysiwygEditor';
 import {
   Checkbox,
-  clsx,
   ColorInput,
   Input,
   JsonInput,
-  Textarea,
   TextInput,
+  Textarea,
+  clsx,
 } from '@mantine/core';
+import { useEntryUnderpageContext } from '@pages/entry-types/[modelId]/entries/_context';
+import { FC } from 'react';
+import { useFormContext } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { ColumnType, FieldPlacements } from '@prom-cms/schema';
+
+import { EnumSelect, RelationshipItemSelect } from './fields';
+import { BigImagePicker } from './fields/BigImagePicker';
 import { Email } from './fields/Email';
 import { UrlFieldInput } from './fields/UrlFieldInput';
 import { JsonFieldInputAsLinkButton } from './fields/json/JsonFieldInputAsLinkButton';
-import ImageSelect from '@components/form/ImageSelect';
-import { FileSelect } from '@components/form/FileSelect';
-import { WysiwygEditor } from '@components/form/editors/WysiwygEditor';
-import { BlockEditor } from '@components/form/editors/BlockEditor';
+import { OpeningHours } from './fields/json/OpeningHours';
+import { Repeater } from './fields/json/Repeater';
 
 export const FieldMapperItem: FC<
-  { placement: FieldPlacements; columnName: string } & ColumnType
+  { placement: FieldPlacements } & ColumnType
 > = ({ placement, ...values }) => {
-  const { title, type, columnName, admin, readonly } = values;
+  const { title, type, admin, readonly, name: columnName } = values;
   const { formState, register, control } =
     useFormContext<Record<string, string | boolean | number>>();
   const { t } = useTranslation();
@@ -44,19 +46,20 @@ export const FieldMapperItem: FC<
     case 'number':
       if (type === 'string' && admin.fieldType === 'heading') {
         result = (
-          <div className="relative w-full">
+          <div className="relative w-full mb-4 ">
             <input
               className={clsx(
-                'w-full !border-b-2 border-project-border bg-transparent pb-2 mb-4 text-5xl font-bold outline-none duration-200 focus:border-blue-500'
+                clsx(
+                  'w-full !border-b-2 border-project-border bg-transparent pb-2 text-5xl font-bold outline-none duration-200',
+                  errorMessage ? 'border-red-500' : 'focus:border-blue-500'
+                )
               )}
               placeholder={t('Title here...')}
               disabled={disabled}
               {...register(columnName)}
             />
-            {formState.errors?.[columnName]?.message ? (
-              <small className="font-bold text-red-500">
-                {formState.errors[columnName]!.message}
-              </small>
+            {errorMessage ? (
+              <small className="font-bold text-red-500">{errorMessage}</small>
             ) : null}
           </div>
         );
@@ -105,7 +108,12 @@ export const FieldMapperItem: FC<
 
     case 'enum':
       result = (
-        <EnumSelect error={errorMessage} disabled={disabled} {...values} />
+        <EnumSelect
+          error={errorMessage}
+          disabled={disabled}
+          columnName={columnName}
+          {...values}
+        />
       );
       break;
 
@@ -114,17 +122,26 @@ export const FieldMapperItem: FC<
         <RelationshipItemSelect
           error={errorMessage}
           disabled={disabled}
+          columnName={columnName}
           {...values}
         />
       );
       break;
 
     case 'email':
-      result = <Email disabled={disabled} {...values} />;
+      result = (
+        <Email disabled={disabled} columnName={columnName} {...values} />
+      );
       break;
 
     case 'url':
-      result = <UrlFieldInput disabled={disabled} {...values} />;
+      result = (
+        <UrlFieldInput
+          disabled={disabled}
+          columnName={columnName}
+          {...values}
+        />
+      );
       break;
 
     case 'file':
@@ -132,7 +149,6 @@ export const FieldMapperItem: FC<
         case 'big-image':
           result = (
             <BigImagePicker
-              name={columnName}
               errorMessage={errorMessage}
               label={values.title}
               disabled={disabled}
@@ -201,7 +217,11 @@ export const FieldMapperItem: FC<
       switch (admin.fieldType) {
         case 'linkButton':
           result = (
-            <JsonFieldInputAsLinkButton disabled={disabled} {...values} />
+            <JsonFieldInputAsLinkButton
+              disabled={disabled}
+              columnName={columnName}
+              {...values}
+            />
           );
           break;
         case 'blockEditor':

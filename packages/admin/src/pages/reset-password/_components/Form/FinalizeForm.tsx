@@ -1,15 +1,15 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import { apiClient } from '@api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Paper, PasswordInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import axios from 'axios';
 import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { Check, X } from 'tabler-icons-react';
 
 import { finalizeResetPasswordFormSchema } from './schema';
-import { useTranslation } from 'react-i18next';
-import { Button, Paper, PasswordInput } from '@mantine/core';
-import { Check, X } from 'tabler-icons-react';
-import { Link } from 'react-router-dom';
-import { apiClient } from '@api';
 
 type FormValues = {
   new_password: string;
@@ -20,7 +20,7 @@ type FormValues = {
 export const FinalizeForm: FC<{ token?: string }> = ({ token }) => {
   const { t } = useTranslation();
   const formMethods = useForm<FormValues>({
-    resolver: yupResolver(finalizeResetPasswordFormSchema),
+    resolver: zodResolver(finalizeResetPasswordFormSchema),
     defaultValues: {
       new_password: '',
       confirmed_new_password: '',

@@ -1,5 +1,5 @@
 import { apiClient } from '@api';
-import { ItemID } from '@prom-cms/shared';
+import { ItemID } from '@prom-cms/api-client';
 import clsx from 'clsx';
 import { DetailedHTMLProps, ImgHTMLAttributes, useMemo, FC } from 'react';
 import { useTranslation } from 'react-i18next';

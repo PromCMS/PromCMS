@@ -1,7 +1,6 @@
-import { Axios, AxiosRequestConfig } from 'axios';
-import { User } from '@prom-cms/shared';
+import { AxiosRequestConfig } from 'axios';
 
-import { Response } from '../../types';
+import { Response, User } from '../../types';
 import { ApiClientBase } from '../ApiClientBase';
 
 export class AuthApiClient extends ApiClientBase {

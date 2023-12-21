@@ -1,12 +1,13 @@
 import { DatabaseConfigModel } from '@prom-cms/schema';
+
 import { TableViewCol } from './TableView';
 
 export const formatApiModelResultToTableView = (
   model: DatabaseConfigModel
 ): TableViewCol[] =>
-  [...model.columns].map(([columnKey, columnInfo]) => ({
+  [...model.columns].map((columnInfo) => ({
     ...columnInfo,
-    fieldName: columnKey,
+    fieldName: columnInfo.name,
     title: columnInfo.title,
     show: !(
       columnInfo.hide ||

@@ -1,16 +1,17 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import Skeleton from '@components/Skeleton';
+import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { upperFirst } from '@mantine/hooks';
 import { createUserSchema, updateUserSchema } from '@schemas';
 import { FC, PropsWithChildren, useEffect } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { UserUnderpageForm } from './Form';
-import { Header } from './Header';
-import { capitalizeFirstLetter } from '@prom-cms/shared';
-import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
-import Skeleton from '@components/Skeleton';
-import { FormAside } from './FormAside';
-import { useOnSubmitCallback } from '../_hooks';
 import { useTranslation } from 'react-i18next';
+
 import { useData } from '../_context';
+import { useOnSubmitCallback } from '../_hooks';
+import { UserUnderpageForm } from './Form';
+import { FormAside } from './FormAside';
+import { Header } from './Header';
 
 const FormWrapper: FC<PropsWithChildren> = ({ children }) => {
   const { handleSubmit } = useFormContext();
@@ -33,8 +34,8 @@ export const Content: FC = () => {
     mode: 'onTouched',
     resolver:
       view === 'create'
-        ? yupResolver(createUserSchema)
-        : yupResolver(updateUserSchema),
+        ? zodResolver(createUserSchema)
+        : zodResolver(updateUserSchema),
   });
   const { reset } = formMethods;
 
@@ -51,7 +52,7 @@ export const Content: FC = () => {
           className="py-5"
           items={[
             {
-              content: t(capitalizeFirstLetter(model?.tableName || '')),
+              content: t(upperFirst(model?.tableName || '')),
               isLinkTo: `/${model?.tableName?.toLowerCase()}`,
             },
             { content: t(view == 'update' ? 'Update' : 'Create') as string },

@@ -13,11 +13,6 @@
 - 5137fad: POSSIBLE BREAKING: Added `unstable_fetchReferences` property to each request config in api-client and uses this property in admin useModelItems and columnValueFormatter so its accessible with the use of labelConstructor.
 - 5137fad: Adds new property to result item as each result can have this property when combined with specific query parameter.
 
-### Patch Changes
-
-- Updated dependencies [2ad5366]
-  - @prom-cms/shared@3.0.0
-
 ## 0.8.0
 
 ### Minor Changes
@@ -36,8 +31,6 @@
 - Updated dependencies [d1d586c]
 - Updated dependencies [d1d586c]
 - Updated dependencies [50a7cbf]
-- Updated dependencies [50a7cbf]
-  - @prom-cms/shared@2.0.0
 
 ## 0.7.0
 
@@ -55,8 +48,6 @@
 ### Patch Changes
 
 - Updated dependencies [999c46c]
-- Updated dependencies [b61ac1d]
-  - @prom-cms/shared@1.9.0
 
 ## 0.5.0
 
@@ -69,8 +60,6 @@
 
 - Updated dependencies [8dc8c0f]
 - Updated dependencies [8dc8c0f]
-- Updated dependencies [8dc8c0f]
-  - @prom-cms/shared@1.8.0
 
 ## 0.4.1
 
@@ -78,8 +67,6 @@
 
 - ebb67aa: Enable option for generating cms without admin as a CLI parameter
 - Updated dependencies [f04b0c3]
-- Updated dependencies [ebb67aa]
-  - @prom-cms/shared@1.7.0
 
 ## 0.4.0
 
@@ -90,8 +77,6 @@
 ### Patch Changes
 
 - Updated dependencies [a551401]
-- Updated dependencies [9589ec6]
-  - @prom-cms/shared@1.5.0
 
 ## 0.3.0
 
@@ -105,8 +90,6 @@
 - 44fae0c: Fix build by updating prettier and applying to files
 - Updated dependencies [493a220]
 - Updated dependencies [9b60d7c]
-- Updated dependencies [44fae0c]
-  - @prom-cms/shared@1.4.0
 
 ## 0.2.0
 
@@ -114,18 +97,8 @@
 
 - 286655f: Change build process to turbo and babel with tsup
 
-### Patch Changes
-
-- Updated dependencies [286655f]
-  - @prom-cms/shared@1.2.0
-
 ## 0.1.0
 
 ### Minor Changes
 
 - 133ff38: Initial automatic release
-
-### Patch Changes
-
-- Updated dependencies [133ff38]
-  - @prom-cms/shared@1.0.0

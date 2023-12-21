@@ -1,3 +1,4 @@
+import { MINIMUM_SUPPORTED_PROM_CORE_PHP } from '@constants';
 import { execa } from 'execa';
 
 export type InstallPHPDepsOptions = {
@@ -5,8 +6,8 @@ export type InstallPHPDepsOptions = {
 };
 
 export const installPHPDeps = async ({ cwd }: InstallPHPDepsOptions) => {
-  const depsList = ['prom-cms/core', 'rakit/validation'];
-  const devDepsList = ['fakerphp/faker:^1.23.0', 'psr/log:^3'];
+  const depsList = [`prom-cms/core:${MINIMUM_SUPPORTED_PROM_CORE_PHP}`];
+  const devDepsList = ['fakerphp/faker', 'phpunit/phpunit'];
 
   await execa('composer', ['require', ...depsList], {
     cwd,

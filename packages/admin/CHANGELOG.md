@@ -1,5 +1,36 @@
 # @prom-cms/admin
 
+## 0.17.2
+
+### Patch Changes
+
+- 2c7e03d: Fix RelationshipItemSelect not taking full width and repeater field showing empty fields on readonly. Now it shows just message to let user know that its empty.
+
+## 0.17.1
+
+### Patch Changes
+
+- 0c0ff85: Updates styling of title field so underline is red when field has error
+- 0c0ff85: Prevents navigation of user to login page when booting request is canceled
+
+## 0.17.0
+
+### Minor Changes
+
+- 852b797: Wrap entire app with suspense and allow useCurrentModelItem to throw suspense. Also update entry underpage to show 404 when entry is not found.
+- 9ee9d53: Adds wysiwyg editor for longText field type. This editor is created with the help of awesome TipTap library
+- 1dae955: Allows user to go to linked item from relationship field
+
+### Patch Changes
+
+- 3bf57b1: Get rid of ugly implementation of getEntryUnderPageComponent and update it to be more reacty. This is also preparation for rewrite.
+- d335fe2: Show entire image instead of allowing image to scale to parent size for image fields.
+- 2c81aa9: Update localizations for czech language and allow germany + slovak language in admin language select
+- 87c21e9: Allow users to preview content from longText even from list
+- fb2915f: Bugfix inifinite rerender and add czech localizations.
+- Updated dependencies [9ee9d53]
+  - @prom-cms/schema@0.5.0
+
 ## 0.16.0
 
 ### Minor Changes
@@ -46,7 +77,6 @@
 - Updated dependencies [2ad5366]
 - Updated dependencies [5137fad]
 - Updated dependencies [5137fad]
-  - @prom-cms/shared@3.0.0
   - @prom-cms/api-client@0.9.0
 
 ## 0.13.0
@@ -69,7 +99,6 @@
 - Updated dependencies [d7e0891]
 - Updated dependencies [d7e0891]
   - @prom-cms/schema@0.3.0
-  - @prom-cms/shared@2.1.0
 
 ## 0.12.6
 
@@ -119,7 +148,6 @@
 - Updated dependencies [50a7cbf]
 - Updated dependencies [50a7cbf]
 - Updated dependencies [50a7cbf]
-  - @prom-cms/shared@2.0.0
   - @prom-cms/api-client@0.7.1
   - @prom-cms/schema@0.1.0
 
@@ -182,8 +210,6 @@
 ### Patch Changes
 
 - d3ea1ec: Fix some react errors and fix bugs with editorjs on language change.
-- Updated dependencies [988227f]
-  - @prom-cms/shared@1.9.4
 
 ## 0.5.0
 
@@ -203,11 +229,6 @@
 - 9e24657: Add quote block
 - c4341e7: Update block tunes and add aligns of text
 
-### Patch Changes
-
-- Updated dependencies [1a4a7c4]
-  - @prom-cms/shared@1.9.3
-
 ## 0.3.2
 
 ### Patch Changes
@@ -219,8 +240,6 @@
 ### Patch Changes
 
 - 9ce049f: Update admin package exports to only export dist folder
-- Updated dependencies [9ce049f]
-  - @prom-cms/shared@1.9.1
 
 ## 0.3.0
 
@@ -241,7 +260,6 @@
 - Updated dependencies [999c46c]
 - Updated dependencies [b61ac1d]
   - @prom-cms/api-client@0.6.0
-  - @prom-cms/shared@1.9.0
 
 ## 0.1.0
 
@@ -257,4 +275,3 @@
 - Updated dependencies [8dc8c0f]
 - Updated dependencies [8dc8c0f]
   - @prom-cms/api-client@0.5.0
-  - @prom-cms/shared@1.8.0

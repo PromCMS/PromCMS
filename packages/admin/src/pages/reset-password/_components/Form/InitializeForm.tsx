@@ -1,15 +1,15 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import { apiClient } from '@api';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Paper, TextInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import axios from 'axios';
 import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import { Check } from 'tabler-icons-react';
 
 import { initializeResetPasswordFormSchema } from './schema';
-import { Trans, useTranslation } from 'react-i18next';
-import { Button, Paper, TextInput } from '@mantine/core';
-import { Check } from 'tabler-icons-react';
-import { Link } from 'react-router-dom';
-import { apiClient } from '@api';
 
 type FormValues = {
   email: string;
@@ -18,7 +18,7 @@ type FormValues = {
 export const InitializeForm: FC = () => {
   const { t } = useTranslation();
   const formMethods = useForm<FormValues>({
-    resolver: yupResolver(initializeResetPasswordFormSchema),
+    resolver: zodResolver(initializeResetPasswordFormSchema),
     defaultValues: {
       email: '',
     },

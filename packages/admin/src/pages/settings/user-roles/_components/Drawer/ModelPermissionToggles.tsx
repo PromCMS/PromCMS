@@ -1,11 +1,12 @@
 import { Checkbox, Collapse, Radio, Title } from '@mantine/core';
 import { randomId } from '@mantine/hooks';
-import { SecurityOptionOptions } from '@prom-cms/schema';
-import { ApiResultModel } from '@prom-cms/shared';
 import { FC } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as iconSet from 'tabler-icons-react';
+
+import { ApiResultModel } from '@prom-cms/api-client';
+import { SecurityOptionOptions } from '@prom-cms/schema';
 
 const options = [
   { label: 'Create', isSimple: true, key: randomId() },
