@@ -74,7 +74,6 @@
     "@prom-cms/vite": "^0.0.0",
     "@types/fs-extra": "9.0.13",
     "@types/inquirer": "^9.0.3",
-    "@types/prettier": "^3.0.0",
     "@types/rimraf": "^3.0.2",
     "tsc-alias": "^1.8.3",
     "tsconfig-paths": "3.12.0",
