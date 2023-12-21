@@ -1,5 +1,6 @@
 import react from '@vitejs/plugin-react';
 import { execa } from 'execa';
+import * as fs from 'fs-extra';
 import * as path from 'path';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { PluginOption, defineConfig, loadEnv } from 'vite';
@@ -7,9 +8,11 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 import { promPlugin } from '@prom-cms/vite';
 
-export default defineConfig(({ mode, command }) => {
+export default defineConfig(async ({ mode, command }) => {
   const currentFolder = process.cwd();
-  const env = loadEnv(mode, path.join(currentFolder, '..', '..'), '');
+  const repoRoot = path.join(currentFolder, '..', '..');
+
+  const env = loadEnv(mode, repoRoot, '');
   const { PORT = 3000, ANALYZE = false } = env;
   const APP_URL_PREFIX = '/admin/';
 
@@ -20,9 +23,31 @@ export default defineConfig(({ mode, command }) => {
 
   if (command === 'serve') {
     let abortController: AbortController | undefined;
+    const developmentProjectPath = path.join(
+      repoRoot,
+      'node_modules',
+      '.prom-cms',
+      'php-app'
+    );
+
+    if ((await fs.pathExists(developmentProjectPath)) === false) {
+      console.log(
+        `PromCMS testing project not present at ${developmentProjectPath}, creating it...`
+      );
+
+      await execa('npm', ['run', 'project:create'], {
+        cwd: path.join(repoRoot, 'packages', 'cli'),
+      });
+
+      console.log('Project created! Happy coding!');
+    }
 
     plugins.push(
       promPlugin({
+        paths: {
+          phpFiles: developmentProjectPath,
+          project: currentFolder,
+        },
         onExit() {
           abortController?.abort();
         },
@@ -68,6 +93,7 @@ export default defineConfig(({ mode, command }) => {
   }
 
   return {
+    clearScreen: false,
     plugins,
     base: APP_URL_PREFIX,
     define: {
