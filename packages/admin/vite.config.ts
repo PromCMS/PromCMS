@@ -30,7 +30,10 @@ export default defineConfig(async ({ mode, command }) => {
   ];
 
   if (command === 'serve') {
-    if ((await fs.pathExists(developmentProjectPath)) === false) {
+    if (
+      (await fs.pathExists(path.join(developmentProjectPath, 'vendor'))) ===
+      false
+    ) {
       console.log(
         `PromCMS testing project not present at ${developmentProjectPath}, creating it...`
       );
@@ -46,7 +49,7 @@ export default defineConfig(async ({ mode, command }) => {
   if (ANALYZE) {
     plugins.push(
       visualizer({
-        filename: './dev/stats.html',
+        filename: './.temp/stats.html',
         title: 'PromCMS Admin Visualizer',
         projectRoot,
       }) as unknown as Plugin
