@@ -12,7 +12,7 @@
     "dist"
   ],
   "scripts": {
-    "dev": "npx vite -c ./vite/config.ts",
+    "dev": "npx vite -c ./vite.config.ts",
     "build": "npx tsc --noEmit && cross-env ANALYZE=true vite build --emptyOutDir -c ./vite.config.ts",
     "preview": "vite preview",
     "prettier": "prettier --config \"../../prettier.config.js\" --ignore-path \"../../.prettierignore\" --write \"**/*.{ts,tsx}\" "
