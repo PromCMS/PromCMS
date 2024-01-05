@@ -12,9 +12,8 @@
     "dist"
   ],
   "scripts": {
-    "dev": "npx vite -c ./vite/config.ts",
-    "build": "npx tsc --noEmit && vite build --emptyOutDir -c ./vite/config.ts",
-    "build:analyze": "tsc && cross-env ANALYZE=true vite build",
+    "dev": "npx vite -c ./vite.config.ts",
+    "build": "npx tsc --noEmit && cross-env ANALYZE=true vite build --emptyOutDir -c ./vite.config.ts",
     "preview": "vite preview",
     "prettier": "prettier --config \"../../prettier.config.js\" --ignore-path \"../../.prettierignore\" --write \"**/*.{ts,tsx}\" "
   },
@@ -80,7 +79,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@prom-cms/vite": "^0.5.0",
+    "@prom-cms/vite": "^0.0.0",
     "@types/find-config": "1.0.1",
     "@types/fs-extra": "9.0.13",
     "@types/lodash.find": "^4.6.6",
@@ -102,7 +101,7 @@
     "mime": "^3.0.0",
     "postcss": "^8.4.4",
     "prettier-plugin-tailwindcss": "^0.5.4",
-    "rollup-plugin-visualizer": "~5.7.1",
+    "rollup-plugin-visualizer": "^5.11.0",
     "tailwindcss": "^3.2.4",
     "typescript": "^4.9.4",
     "vite": "^5.0.10",

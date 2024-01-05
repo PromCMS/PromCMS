@@ -11,6 +11,7 @@ import { runBeforeExiting } from './runBeforeExiting.js';
 import { startPHPServer } from './startPhpServer.js';
 
 export type VitePromPluginOptions = {
+  paths?: { project?: string; phpFiles?: string };
   onExit?: () => void | Promise<void>;
   watchFiles?: {
     files: string[];
@@ -23,7 +24,7 @@ export type VitePromPluginOptions = {
 };
 
 export const plugin = (options?: VitePromPluginOptions): Plugin => {
-  const projectRoot = process.cwd();
+  const projectRoot = options?.paths?.project ?? process.cwd();
   let logger: Logger | undefined;
   const projectPackageJsonPath = path.join(projectRoot, 'package.json');
 
@@ -72,7 +73,10 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
     async configureServer(server) {
       const serverPort = server.config.server.port! + 1;
       const serverOrigin = `http://127.0.0.1:${serverPort}`;
-      const serverProcess = startPHPServer({ port: serverPort });
+      const serverProcess = startPHPServer({
+        port: serverPort,
+        cwd: options?.paths?.phpFiles,
+      });
       const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
       const htmlTransform = server.transformIndexHtml;
 
@@ -172,13 +176,16 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
 
       // Take care of admin on development - this is cared for in production of each app by apache
       server.middlewares.use(async (req, res, next) => {
-        if (!req.url?.startsWith('/admin')) {
+        if (req.url?.startsWith('/admin')) {
           next();
           return;
         }
 
         // Take care of admin assets only for promcms instances
-        if (req.url.startsWith('/admin/assets') && !currentPackageIsPromAdmin) {
+        if (
+          req.url?.startsWith('/admin/assets') &&
+          !currentPackageIsPromAdmin
+        ) {
           const fileUrl = new URL(req.url, 'http://127.0.0.1');
           const filePath = path.join('public', fileUrl.pathname);
 
