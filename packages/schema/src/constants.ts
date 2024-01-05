@@ -1,5 +1,5 @@
-import { GeneratorConfigInput } from './generatorConfigSchema.js';
 import { FieldPlacements } from './columnType/columnTypeBaseAdminConfigSchema.js';
+import { GeneratorConfigInput } from './generatorConfigSchema.js';
 import { SecurityOptionOptions } from './projectSecurityRoleModelPermissionSchema.js';
 
 export const mockedGeneratorConfig: GeneratorConfigInput = {
@@ -24,7 +24,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
       {
         name: 'base-connection',
         adapter: 'sqlite',
-        dsn: 'sqlite:./database/sq.3',
+        dsn: 'sqlite:./database/sqlite.3',
         user: '',
         password: '',
       },
@@ -67,7 +67,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
             name: 'showInMenu',
             type: 'boolean',
             title: 'Zobrazit v menu',
-            default: false,
+            defaultValue: false,
             admin: {
               editor: {
                 placement: FieldPlacements.ASIDE,

@@ -57,7 +57,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
           name: 'content',
           title: 'Content',
           type: 'json',
-          default: '{}',
+          defaultValue: '[]',
           localized: true,
           admin: {
             fieldType: 'blockEditor',
@@ -106,7 +106,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
         name: 'coeditors',
         title: 'Coeditors',
         type: 'json',
-        default: '{}',
+        defaultValue: '[]',
         required: false,
         admin: {
           fieldType: 'jsonEditor',
@@ -121,9 +121,8 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
         title: 'Created by',
         readonly: true,
         type: 'relationship',
-        targetModel: 'user',
+        targetModelTableName: 'user',
         labelConstructor: '{{name}}',
-        fill: false,
         required: false,
         admin: {
           isHidden: true,
@@ -135,29 +134,14 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
         title: 'Updated by',
         readonly: true,
         type: 'relationship',
-        targetModel: 'user',
+        targetModelTableName: 'user',
         labelConstructor: '{{name}}',
-        fill: false,
         required: false,
         admin: {
           isHidden: true,
         },
       });
     }
-
-    model.columns.unshift({
-      name: 'id',
-      title: 'ID',
-      type: 'number',
-      readonly: true,
-      required: false,
-      autoIncrement: true,
-      unique: true,
-      primaryKey: true,
-      admin: {
-        isHidden: true,
-      },
-    });
 
     // Iterate over all of columns that user provided
     model.columns = model.columns.map((column) => ({
