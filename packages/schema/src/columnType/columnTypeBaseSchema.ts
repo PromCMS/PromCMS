@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { columnTypeBaseAdminConfigSchema } from './columnTypeBaseAdminConfigSchema.js';
 
 export const columnTypeBaseSchema = z.object({
@@ -19,10 +20,10 @@ export const columnTypeBaseSchema = z.object({
   required: z.boolean().default(true),
 
   /**
-   * Determines if column should be unique across table
+   * Determines if column should be unique across table, if is a string then its considered as part of a unique group
    * @default false
    */
-  unique: z.boolean().default(false),
+  unique: z.boolean().or(z.string()).default(false),
 
   /**
    * If current field can be translated
@@ -49,11 +50,6 @@ export const columnTypeBaseSchema = z.object({
    * @default false
    */
   hide: z.boolean().default(false),
-
-  /**
-   * Specifies if current column is a primaryKey
-   */
-  primaryKey: z.boolean().default(false),
 });
 
 export type ColumnTypeBase = z.infer<typeof columnTypeBaseSchema>;

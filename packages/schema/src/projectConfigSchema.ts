@@ -14,19 +14,14 @@ export const projectConfigSchema = z.object({
   slug: z.string().describe('A project slug').optional(),
 
   /**
-   * Final project url
+   * Final project url, accepts pathname if app should accept requests from subpath
    */
-  url: z.string().describe('Final project url'),
-
-  /**
-   * If final project will be hosted on different folder that in the root
-   */
-  prefix: z
+  url: z
     .string()
+    .url('Not a valid url')
     .describe(
-      'If final project will be hosted on different folder that in the root'
-    )
-    .optional(),
+      'Final project url, accepts pathname if app should accept requests from subpath'
+    ),
 
   /**
    * Projects security config
