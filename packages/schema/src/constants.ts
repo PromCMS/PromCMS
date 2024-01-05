@@ -28,12 +28,12 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
     ],
     models: [
       {
+        title: 'Články',
         tableName: 'posts',
         timestamp: true,
         sorting: true,
         draftable: true,
         preset: 'post',
-        title: 'Články',
         admin: {
           icon: 'Archive',
         },
@@ -52,6 +52,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
         ],
       },
       {
+        title: 'Stránky',
         tableName: 'pages',
         timestamp: true,
         sorting: true,
@@ -130,7 +131,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
     singletons: [
       {
         tableName: 'frontpage',
-
+        title: 'Hlavní stránka',
         admin: { icon: 'Archive' },
         preset: 'post',
         columns: [

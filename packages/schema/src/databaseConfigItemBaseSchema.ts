@@ -7,12 +7,7 @@ const keys = Object.keys(iconSet);
 
 export const databaseConfigItemBaseSchema = z.object({
   tableName: z.string().min(1).describe('Table name for entry type'),
-
-  title: z
-    .string()
-    .min(1)
-    .describe('Human readable form of current model')
-    .optional(),
+  title: z.string().min(1).describe('Human readable form of current model'),
 
   /**
    * Columns preset, useful when you want to build something basic:
