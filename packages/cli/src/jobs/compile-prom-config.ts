@@ -51,7 +51,7 @@ export const compilePromConfig = async ({
   config,
   appRoot,
 }: CompilePromConfigOptions) => {
-  const filepath = path.join(appRoot, '.prom-cms', 'compiled', 'config.php');
+  const filepath = path.join(appRoot, '.prom-cms', 'parsed', 'config.php');
 
   let contents = `<?php\n
 /**
