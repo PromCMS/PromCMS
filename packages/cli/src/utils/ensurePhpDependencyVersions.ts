@@ -13,13 +13,13 @@ export type EnsurePhpVersion = {
 
 const composerJsonSchema = z
   .object({
-    dependencies: z.record(z.string()).optional(),
-    devDependencies: z.record(z.string()).optional(),
+    require: z.record(z.string()).optional(),
+    ['require-dev']: z.record(z.string()).optional(),
   })
   .superRefine((value, ctx) => {
     if (
-      (!value.dependencies || !Object.entries(value.dependencies).length) &&
-      (!value.devDependencies || !Object.entries(value.devDependencies).length)
+      (!value.require || !Object.entries(value.require).length) &&
+      (!value['require-dev'] || !Object.entries(value['require-dev']).length)
     ) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -46,9 +46,9 @@ export const ensurePhpDependencyVersions = async (
   const composerJson = composerJsonSchema.parse(
     await fs.readJson(composerJsonPathname)
   );
-  const { dependencies, devDependencies } = composerJson;
+  const { require: requireList, 'require-dev': requireListDev } = composerJson;
 
-  const allDeps = { ...(dependencies ?? {}), ...(devDependencies ?? {}) };
+  const allDeps = { ...(requireList ?? {}), ...(requireListDev ?? {}) };
   const rules = new Map(
     options.versions.map((item) => [item.packageName, item.minimalVersion])
   );

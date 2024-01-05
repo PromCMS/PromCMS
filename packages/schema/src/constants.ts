@@ -1,5 +1,5 @@
-import { GeneratorConfigInput } from './generatorConfigSchema.js';
 import { FieldPlacements } from './columnType/columnTypeBaseAdminConfigSchema.js';
+import { GeneratorConfigInput } from './generatorConfigSchema.js';
 import { SecurityOptionOptions } from './projectSecurityRoleModelPermissionSchema.js';
 
 export const mockedGeneratorConfig: GeneratorConfigInput = {

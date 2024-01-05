@@ -102,7 +102,18 @@ export const createProjectAction = async (
   if (promDevelop) {
     await fs.writeJSON(
       path.join(tempBuildFolder, createPromConfigPath('json')),
-      mockedGeneratorConfig
+      {
+        ...mockedGeneratorConfig,
+        database: {
+          ...mockedGeneratorConfig.database,
+          connections: [
+            {
+              ...mockedGeneratorConfig.database.connections.at(0),
+              dsn: `sqlite:${path.join(cwd, 'database', 'sq.3')}`,
+            },
+          ],
+        },
+      }
     );
   }
 
