@@ -24,8 +24,10 @@ export const useConstructedMenuItems = () => {
       finalValue = [
         ...finalValue,
         ...Object.entries({ ...singletons, ...models })
-          .filter(([modelKey]) => !modelIsCustom(modelKey || ''))
-          .filter(([_modelKey, modelInfo]) => !modelInfo.admin.hidden)
+          .filter(
+            ([modelKey, modelInfo]) =>
+              !modelIsCustom(modelKey || '') && !modelInfo.admin.isHidden
+          )
           .filter(
             ([modelKey, model]) =>
               currentUser.can({ action: 'read', targetModel: modelKey }) &&
