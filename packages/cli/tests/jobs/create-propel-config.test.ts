@@ -1,11 +1,12 @@
-import path from 'path';
-import fs from 'fs-extra';
-import { describe, beforeEach, it, afterAll, expect } from 'vitest';
-import createPropelConfig from '../../src/jobs/create-propel-config.js';
-
-import { z } from 'zod';
 import { MONOREPO_ROOT } from '@constants';
+import fs from 'fs-extra';
+import path from 'path';
+import { afterAll, beforeEach, describe, expect, it } from 'vitest';
+import { z } from 'zod';
+
 import { databaseConfigSchema } from '@prom-cms/schema';
+
+import createPropelConfig from '../../src/jobs/create-propel-config.js';
 
 const TEST_FOLDER_PATH = path.join(
   MONOREPO_ROOT,
@@ -30,25 +31,22 @@ describe('jobs', () => {
 
       await createPropelConfig({
         config: {
-          project: { name: 'Testing Project', url: '' },
+          project: { name: 'Testing Project', url: '', languages: ['en'] },
           database: databaseConfigSchema.parse({
             connections: [
               {
-                adapter: 'sqlite',
-                dsn: `sqlite:${path.join(
+                name: 'default-connection',
+                uri: `sqlite:${path.join(
                   TEST_FOLDER_PATH,
                   '.database',
                   'application.sq3'
                 )}`,
-                name: 'default-connection',
-                password: 'root',
-                user: 'root',
               },
             ],
             models: [
               {
                 tableName: 'first',
-                admin: { hidden: true, icon: 'Article' },
+                admin: { isHidden: true, icon: 'Article' },
                 columns: [
                   { name: 'col', type: 'string', title: 'New' },
                   {
@@ -56,7 +54,7 @@ describe('jobs', () => {
                     type: 'boolean',
                     localized: true,
                     title: 'Boolean Column',
-                    default: false,
+                    defaultValue: false,
                   },
                 ],
               },

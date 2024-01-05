@@ -23,10 +23,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
     connections: [
       {
         name: 'base-connection',
-        adapter: 'sqlite',
-        dsn: 'sqlite:./database/sqlite.3',
-        user: '',
-        password: '',
+        uri: 'sqlite:./database/sqlite.3',
       },
     ],
     models: [
