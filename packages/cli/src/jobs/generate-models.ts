@@ -3,9 +3,9 @@ import path from 'node:path';
 
 import { GeneratorConfig } from '@prom-cms/schema';
 
-import createPropelConfig from './create-propel-config.js';
 import { installPHPDeps } from './install-php-deps.js';
 import { $ } from "execa";
+import { compilePromConfig } from "./compile-prom-config.js";
 
 export type GenerateDevelopModelsOptions = {
   config: GeneratorConfig;
@@ -38,7 +38,7 @@ export const generateModels = async function genereateDevelopmentCoreModels(
 ) {
   const { appRoot } = options;
 
-  await Promise.all([addComposerScripts(options), createPropelConfig(options)]);
+  await Promise.all([addComposerScripts(options), compilePromConfig(options)]);
 
   await installPHPDeps({ cwd: appRoot });
   await $({
