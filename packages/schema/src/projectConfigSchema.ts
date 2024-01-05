@@ -27,6 +27,8 @@ export const projectConfigSchema = z.object({
    * Projects security config
    */
   security: projectSecurityConfigSchema.optional(),
+
+  languages: z.array(z.string()).min(1).default(['en']),
 });
 
 export type ProjectConfig = z.infer<typeof projectConfigSchema>;
