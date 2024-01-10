@@ -1,1 +1,1 @@
-export { default as default } from '@prom-cms/config/default.vitest.mjs';
+export { vitestConfig as default } from '@prom-cms/vite';

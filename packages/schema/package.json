@@ -30,7 +30,10 @@
     "build": "npm run build:package && npm run build:types && npm run build:types:aliases",
     "build:package": "swc ./src -d dist",
     "build:types": "tsc",
-    "build:types:aliases": "tsc-alias"
+    "build:types:aliases": "tsc-alias",
+    "test": "vitest",
+    "test:dev": "vitest --update",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -42,6 +45,7 @@
   },
   "dependencies": {
     "lodash.kebabcase": "^4.1.1",
+    "slugify": "^1.6.6",
     "zod": "^3.20.2"
   },
   "devDependencies": {
