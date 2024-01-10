@@ -1,5 +1,4 @@
 export * from './generateByTemplates.js';
-export * from './getModuleFolderName.js';
 export * from './getTemplateFolder.js';
 export * from './isDirEmpty.js';
 export * from './logger.js';

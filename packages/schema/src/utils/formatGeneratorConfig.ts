@@ -1,8 +1,10 @@
+import isString from 'lodash/isString.js';
+import slugify from 'slugify';
+
 import { FieldPlacements } from '../columnType/columnTypeBaseAdminConfigSchema.js';
 import { GeneratorConfigInput } from '../generatorConfigSchema.js';
-
-const simplifyProjectName = (name: string) =>
-  name.replaceAll(' ', '-').toLocaleLowerCase();
+import { SecurityOptionOptions } from '../projectSecurityRoleModelPermissionSchema.js';
+import { nameToPhpClassName } from './nameToPhpClassName.js';
 
 export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
   if (!config) throw 'No config provided to "formatGeneratorConfig" function';
@@ -189,19 +191,24 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
         const updatedPerms = Object.entries(modelPermissions).map(
           ([key, values]) => [
             key,
-            {
-              c: 0,
-              r: 0,
-              u: 0,
-              d: 0,
-              ...values,
-            },
+            isString(values)
+              ? values
+              : {
+                  c: SecurityOptionOptions.DISABLED,
+                  r: SecurityOptionOptions.DISABLED,
+                  u: SecurityOptionOptions.DISABLED,
+                  d: SecurityOptionOptions.DISABLED,
+                  ...values,
+                },
           ]
         );
 
         return {
           hasAccessToAdmin: true,
           ...rest,
+          slug:
+            rest.slug ??
+            slugify.default(rest.name, { lower: true, trim: true }),
           modelPermissions: Object.fromEntries(updatedPerms),
         };
       }),
@@ -212,7 +219,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
     ...config,
     database: { ...databaseConfig, models, singletons },
     project: {
-      slug: simplifyProjectName(config.project.name || ''),
+      slug: nameToPhpClassName(config.project.name || ''),
       ...config.project,
     },
   };

@@ -1,11 +1,9 @@
+import { formatCodeString, getTemplateFolder } from '@utils';
+import ejs from 'ejs';
 import fs from 'fs-extra';
 import path from 'path';
-import ejs from 'ejs';
-import {
-  formatCodeString,
-  getModuleFolderName,
-  getTemplateFolder,
-} from '@utils';
+
+import { nameToPhpClassName } from '@prom-cms/schema/dist/index.js';
 
 /**
  * Creates a PromCMS module to specified directory with bootstrapped content.
@@ -18,7 +16,7 @@ const generateModule = async (
   _pluginName: string,
   { description, author }: { description?: string; author?: string } = {}
 ) => {
-  const pluginName = getModuleFolderName(_pluginName);
+  const pluginName = nameToPhpClassName(_pluginName);
   const pluginRoot = path.join(pluginsRoot, pluginName);
 
   await fs.emptyDir(pluginRoot);

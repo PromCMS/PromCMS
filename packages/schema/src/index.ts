@@ -28,4 +28,5 @@ export * from './columnType/columnTypeUrlSchema.js';
 export * from './utils/createPromConfigPath.js';
 export * from './utils/findGeneratorConfig.js';
 export * from './utils/formatGeneratorConfig.js';
+export * from './utils/nameToPhpClassName.js';
 export * from './utils/validateGeneratorConfig.js';
