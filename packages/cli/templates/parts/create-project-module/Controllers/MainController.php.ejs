@@ -1,0 +1,23 @@
+<?php
+// Here is your basic controller file
+
+namespace PromCMS\Modules\<%- project.slug %>\Controllers;
+
+use PromCMS\Core\Http\Routing\AsRoute;
+use PromCMS\Core\Services\RenderingService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+
+class MainController {
+  // To register this method as route handler then use AsRoute as defined here
+  #[AsRoute('GET', '/')]
+  // To use middleware then use WithMiddleware attribute with the className which implements Psr\Http\Server\MiddlewareInterface
+  // #[WithMiddleware(YouCustomMiddleware::class)]
+  function mainpage(
+    ServerRequestInterface $request, 
+    ResponseInterface $response, 
+    RenderingService $rendering
+  ): ResponseInterface {
+    return $rendering->render($response, "@modules:<%= views.prefix %>/pages/home.twig");
+  }
+}

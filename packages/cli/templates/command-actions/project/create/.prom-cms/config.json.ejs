@@ -8,10 +8,7 @@
     connections: [
       {
         name: 'default-connection',
-        adapter: 'sqlite',
-        dsn: 'sqlite:<%= project.root %>/.database/application.sq3',
-        user: 'root',
-        password: null
+        uri: 'pdo-sqlite:///.database/application.sqlite',
       }
     ]
   }
