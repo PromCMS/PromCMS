@@ -1,38 +1,40 @@
 import { z } from 'zod';
 
 export enum SecurityOptionOptions {
-  ALLOW_EVERYTHING = 'allow-everything',
+  ALLOW_ALL = 'allow-all',
   ALLOW_OWN = 'allow-own',
-  DISABLED = 0,
+  DISABLED = 'deny',
 }
 
 const ZodSecurityOptionOptions = z.nativeEnum(SecurityOptionOptions);
 
-export const projectSecurityRoleModelPermissionSchema = z.object({
-  /**
-   * Create
-   * @default false;
-   */
-  c: ZodSecurityOptionOptions.default(0),
+export const projectSecurityRoleModelPermissionSchema = z
+  .object({
+    /**
+     * Create
+     * @default 'deny';
+     */
+    c: ZodSecurityOptionOptions.default(SecurityOptionOptions.DISABLED),
 
-  /**
-   * Read
-   * @default false;
-   */
-  r: ZodSecurityOptionOptions.default(0),
+    /**
+     * Read
+     * @default 'deny';
+     */
+    r: ZodSecurityOptionOptions.default(SecurityOptionOptions.DISABLED),
 
-  /**
-   * Update
-   * @default false;
-   */
-  u: ZodSecurityOptionOptions.default(0),
+    /**
+     * Update
+     * @default 'deny';
+     */
+    u: ZodSecurityOptionOptions.default(SecurityOptionOptions.DISABLED),
 
-  /**
-   * Delete
-   * @default false;
-   */
-  d: ZodSecurityOptionOptions.default(0),
-});
+    /**
+     * Delete
+     * @default 'deny';
+     */
+    d: ZodSecurityOptionOptions.default(SecurityOptionOptions.DISABLED),
+  })
+  .or(z.enum(['allow-all', 'deny']));
 
 export type ProjectSecurityRoleModelPermission = z.infer<
   typeof projectSecurityRoleModelPermissionSchema

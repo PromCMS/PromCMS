@@ -79,71 +79,71 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
       );
     }
 
-    if (isDraftable) {
-      model.columns.push({
-        name: 'is_published',
-        title: 'Is published',
-        type: 'boolean',
-        unique: false,
-      });
-    }
+    // if (isDraftable) {
+    //   model.columns.push({
+    //     name: 'is_published',
+    //     title: 'Is published',
+    //     type: 'boolean',
+    //     unique: false,
+    //   });
+    // }
 
-    if (isSortable) {
-      model.columns.push({
-        name: 'order',
-        title: 'Order',
-        type: 'number',
-        unique: false,
-        autoIncrement: true,
-        required: false,
-        readonly: true,
-        admin: {
-          isHidden: true,
-        },
-      });
-    }
+    // if (isSortable) {
+    //   model.columns.push({
+    //     name: 'order',
+    //     title: 'Order',
+    //     type: 'number',
+    //     unique: false,
+    //     autoIncrement: true,
+    //     required: false,
+    //     readonly: true,
+    //     admin: {
+    //       isHidden: true,
+    //     },
+    //   });
+    // }
 
-    if (isSharable) {
-      model.columns.push({
-        name: 'coeditors',
-        title: 'Coeditors',
-        type: 'json',
-        defaultValue: '[]',
-        required: false,
-        admin: {
-          fieldType: 'jsonEditor',
-          isHidden: true,
-        },
-      });
-    }
+    // if (isSharable) {
+    //   model.columns.push({
+    //     name: 'coeditors',
+    //     title: 'Coeditors',
+    //     type: 'json',
+    //     defaultValue: '[]',
+    //     required: false,
+    //     admin: {
+    //       fieldType: 'jsonEditor',
+    //       isHidden: true,
+    //     },
+    //   });
+    // }
 
-    if (isOwnable) {
-      model.columns.push({
-        name: 'created_by',
-        title: 'Created by',
-        readonly: true,
-        type: 'relationship',
-        targetModelTableName: 'user',
-        labelConstructor: '{{name}}',
-        required: false,
-        admin: {
-          isHidden: true,
-        },
-      });
+    // if (isOwnable) {
+    //   model.columns.push({
+    //     name: 'created_by',
+    //     title: 'Created by',
+    //     readonly: true,
+    //     type: 'relationship',
+    //     targetModelTableName: 'user',
+    //     labelConstructor: '{{name}}',
+    //     required: false,
+    //     admin: {
+    //       isHidden: true,
+    //     },
+    //   });
 
-      model.columns.push({
-        name: 'updated_by',
-        title: 'Updated by',
-        readonly: true,
-        type: 'relationship',
-        targetModelTableName: 'user',
-        labelConstructor: '{{name}}',
-        required: false,
-        admin: {
-          isHidden: true,
-        },
-      });
-    }
+    //   model.columns.push({
+    //     name: 'updated_by',
+    //     title: 'Updated by',
+    //     readonly: true,
+    //     type: 'relationship',
+    //     targetModelTableName: 'user',
+    //     labelConstructor: '{{name}}',
+    //     required: false,
+    //     admin: {
+    //       isHidden: true,
+    //     },
+    //   });
+    // }
 
     // Iterate over all of columns that user provided
     model.columns = model.columns.map((column) => ({

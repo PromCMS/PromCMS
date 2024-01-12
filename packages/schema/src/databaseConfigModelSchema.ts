@@ -1,5 +1,6 @@
 import * as iconSet from 'tabler-icons-react';
 import { z } from 'zod';
+
 import { databaseConfigItemBaseSchema } from './databaseConfigItemBaseSchema.js';
 
 export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
@@ -39,5 +40,7 @@ export const databaseConfigModelSchema = databaseConfigItemBaseSchema.extend({
 });
 
 export type DatabaseConfigModel = z.infer<typeof databaseConfigModelSchema> & {
-  icon: keyof typeof iconSet;
+  admin: {
+    icon: keyof typeof iconSet;
+  };
 };

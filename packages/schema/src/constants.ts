@@ -10,9 +10,10 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
       roles: [
         {
           name: 'Editor',
+          slug: 'editor',
           modelPermissions: {
             posts: {
-              u: SecurityOptionOptions.ALLOW_EVERYTHING,
+              u: SecurityOptionOptions.ALLOW_ALL,
             },
           },
         },
@@ -23,7 +24,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
     connections: [
       {
         name: 'base-connection',
-        uri: 'sqlite:./database/sqlite.3',
+        uri: 'pdo-sqlite:///.database/database.sqlite',
       },
     ],
     models: [

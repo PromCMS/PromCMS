@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { projectSecurityRoleModelPermissionSchema } from './projectSecurityRoleModelPermissionSchema.js';
 
 export const projectSecurityRoleSchema = z.object({
@@ -6,13 +7,26 @@ export const projectSecurityRoleSchema = z.object({
    * Role name
    */
   name: z.string(),
+  /**
+   * Role slug
+   */
+  slug: z.string(),
 
   /**
    * Model permissions
    */
   modelPermissions: z.record(
-    z.enum(['users', 'userRoles', 'files']).or(z.string()),
+    z
+      .enum([
+        'prom__users',
+        'prom__files',
+        'prom__settings',
+        'prom__general_translations',
+      ])
+      .or(z.string()),
     projectSecurityRoleModelPermissionSchema
+      .or(z.enum(['allow-all', 'deny']))
+      .default('deny')
   ),
 
   /**
