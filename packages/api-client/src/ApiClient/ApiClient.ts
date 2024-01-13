@@ -1,32 +1,31 @@
-import axios, { Axios, AxiosRequestConfig, AxiosError } from 'axios';
+import axios, { Axios, AxiosError, AxiosRequestConfig } from 'axios';
+
 import {
   HTTP_STATUS_CODE_FILE_TOO_LARGE,
   HTTP_STATUS_CODE_UNSUPPORTED_FILE_EXTENSION,
 } from '../constants';
-import { UnsupportedFileExtensionError } from '../exceptions/UnsupportedFileExtensionError';
 import { FileTooLargeError } from '../exceptions/FileTooLargeError';
-
-import { AuthApiClient } from './parts/AuthApiClient';
-import { EntryApiClient } from './parts/EntryApiClient';
-import { FileApiClient } from './parts/FileApiClient';
-import { FolderApiClient } from './parts/FolderApiClient';
-import { GeneralTranslationsApiClient } from './parts/GeneralTranslationsApiClient';
-import { ProfileApiClient } from './parts/ProfileApiClient';
-import { SettingsApiClient } from './parts/SettingsApiClient';
-import { SingletonApiClient } from './parts/SingletonApiClient';
-import { UserApiClient } from './parts/UserApiClient';
+import { UnsupportedFileExtensionError } from '../exceptions/UnsupportedFileExtensionError';
+import { AuthPart } from './internal/AuthPart';
+import { EntriesPart } from './internal/EntriesPart';
+import { GeneralTranslationsPart } from './internal/GeneralTranslationsPart';
+import { LibraryPart } from './internal/LibraryPart';
+import { ProfilePart } from './internal/ProfilePart';
+import { SettingsPart } from './internal/SettingsPart';
+import { SingletonsPart } from './internal/SingletonsPart';
+import { UsersPart } from './internal/UsersPart';
 
 export class ApiClient {
   private axios: Axios;
-  auth: AuthApiClient;
-  entries: EntryApiClient;
-  files: FileApiClient;
-  folders: FolderApiClient;
-  profile: ProfileApiClient;
-  settings: SettingsApiClient;
-  singletons: SingletonApiClient;
-  users: UserApiClient;
-  generalTranslations: GeneralTranslationsApiClient;
+
+  readonly auth: AuthPart;
+  readonly entries: EntriesPart;
+  readonly library: LibraryPart;
+  readonly profile: ProfilePart;
+  readonly settings: SettingsPart;
+  readonly singletons: SingletonsPart;
+  readonly users: UsersPart;
+  readonly generalTranslations: GeneralTranslationsPart;
 
   constructor(config?: AxiosRequestConfig) {
     this.axios = axios.create(config);
@@ -48,15 +47,14 @@ export class ApiClient {
       return Promise.reject(finalError);
     });
 
-    this.auth = new AuthApiClient(this.axios);
-    this.entries = new EntryApiClient(this.axios);
-    this.files = new FileApiClient(this.axios);
-    this.folders = new FolderApiClient(this.axios);
-    this.profile = new ProfileApiClient(this.axios);
-    this.settings = new SettingsApiClient(this.axios);
-    this.singletons = new SingletonApiClient(this.axios);
-    this.users = new UserApiClient(this.axios);
-    this.generalTranslations = new GeneralTranslationsApiClient(this.axios);
+    this.auth = new AuthPart(this.axios);
+    this.entries = new EntriesPart(this.axios);
+    this.library = new LibraryPart(this.axios);
+    this.profile = new ProfilePart(this.axios);
+    this.settings = new SettingsPart(this.axios);
+    this.singletons = new SingletonsPart(this.axios);
+    this.users = new UsersPart(this.axios);
+    this.generalTranslations = new GeneralTranslationsPart(this.axios);
   }
 
   getAxios() {

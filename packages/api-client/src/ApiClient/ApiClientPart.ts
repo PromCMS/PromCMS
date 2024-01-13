@@ -1,9 +1,11 @@
-import { Axios } from 'axios';
+import { Axios, AxiosResponse } from 'axios';
+
 import { RichAxiosRequestConfig } from '../types';
 import { formatQueryParams } from '../utils';
 
-export class ApiClientBase {
-  axios: Axios;
+export abstract class ApiClientPart {
+  protected basePathname: string = '/api';
+  protected axios: Axios;
 
   constructor(axiosClient: Axios) {
     this.axios = axiosClient;
@@ -19,5 +21,14 @@ export class ApiClientBase {
         ...(config?.language && { lang: config.language }),
       }),
     };
+  }
+
+  protected request<T = any, R = AxiosResponse<T, any>, D = any>(
+    config: RichAxiosRequestConfig<D>
+  ): Promise<R> {
+    return this.axios.request({
+      ...this.formatAxiosConfig(config),
+      baseURL: (config.baseURL ?? '') + this.basePathname,
+    });
   }
 }

@@ -1,9 +1,9 @@
 import { AxiosRequestConfig } from 'axios';
 
 import { Response, User } from '../../types';
-import { ApiClientBase } from '../ApiClientBase';
+import { ApiClientPart } from '../ApiClientPart';
 
-export class AuthApiClient extends ApiClientBase {
+export class AuthPart extends ApiClientPart {
   login(
     props: { email: string; password: string },
     config?: AxiosRequestConfig

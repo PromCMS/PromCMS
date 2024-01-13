@@ -1,13 +1,15 @@
-import { ItemID } from './ItemID.js';
-import { ProjectSecurityRoleModelPermission } from '@prom-cms/schema';
+import { ProjectSecurityRole } from '@prom-cms/schema';
 
 export type UserRole = {
-  id: ItemID;
+  id: string;
+  /**
+   * @deprecated
+   */
   slug: string;
   label: string;
   description?: string;
-  permissions?: {
+  permissions: {
     hasAccessToAdmin: boolean;
-    models: ProjectSecurityRoleModelPermission;
+    entities: ProjectSecurityRole['modelPermissions'];
   };
 };
