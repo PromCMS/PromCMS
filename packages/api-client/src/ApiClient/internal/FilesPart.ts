@@ -34,6 +34,9 @@ export class FilesPart extends ApiClientPart {
     return this.request<Response<FileItem>>({
       method: 'GET',
       url: `/items/${fileId}`,
+      headers: {
+        Accept: 'application/json',
+      },
     });
   }
 
