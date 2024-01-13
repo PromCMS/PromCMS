@@ -19,7 +19,7 @@ export class SingletonsPart extends ApiClientPart {
   }
 
   private createdEntities = new Map<string, SingletonByTableNamePart>();
-  entity(tableName: string) {
+  for(tableName: string) {
     if (!this.createdEntities.has(tableName)) {
       this.createdEntities.set(
         tableName,

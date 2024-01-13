@@ -29,7 +29,7 @@ export const InitializeForm: FC = () => {
 
   const onSubmitCallback: SubmitHandler<FormValues> = async ({ email }) => {
     try {
-      await apiClient.users.requestPasswordReset(email);
+      await apiClient.profile.requestPasswordReset(email);
     } catch (e) {
       if (axios.isAxiosError(e)) {
         showNotification({

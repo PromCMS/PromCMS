@@ -7,7 +7,7 @@ import {
   useNotifications,
 } from '@mantine/notifications';
 import axios from 'axios';
-import { FC, useCallback, useMemo } from 'react';
+import { FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useFileListContext } from '../context';
@@ -61,7 +61,7 @@ export const List: FC = () => {
         });
 
         try {
-          await apiClient.folders.delete(path);
+          await apiClient.library.folders.delete(path);
           mutateFolders((folders) => {
             return folders?.filter((folder) => folder !== folderName);
           });
@@ -104,7 +104,7 @@ export const List: FC = () => {
   const onFileDeleteClick: FileItemProps['onDeleteClick'] = useCallback(
     async (id) => {
       if (confirm(t('Do you really want to delete this file?'))) {
-        await apiClient.files.delete(id);
+        await apiClient.library.files.delete(id);
         mutateFiles((memory) => {
           if (!memory) return memory;
 

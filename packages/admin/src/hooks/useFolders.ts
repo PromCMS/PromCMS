@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 const fetcher = (path: string) => () => {
-  return apiClient.folders.getMany(path).then((data) => data.data.data);
+  return apiClient.library.folders.getMany(path).then((data) => data.data.data);
 };
 
 export const useFolders = (path: string) => {

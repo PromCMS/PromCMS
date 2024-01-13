@@ -1,9 +1,5 @@
 import { apiClient } from '@api';
-import {
-  API_CURRENT_USER_URL,
-  API_SETTINGS_URL,
-  BASE_PROM_ENTITY_TABLE_NAMES,
-} from '@constants';
+import { API_CURRENT_USER_URL, API_SETTINGS_URL } from '@constants';
 import axios, { CanceledError } from 'axios';
 import {
   FC,
@@ -25,8 +21,8 @@ type DataFromAxios<T extends (...any) => Promise<Record<any, any>>> = Awaited<
 
 export interface IGlobalContext {
   currentUser?: Omit<User, 'role'> & { role: UserRole };
-  models?: DataFromAxios<typeof apiClient.entries.aboutAll>;
-  singletons?: DataFromAxios<typeof apiClient.singletons.aboutAll>;
+  models?: DataFromAxios<typeof apiClient.entries.getInfo>;
+  singletons?: DataFromAxios<typeof apiClient.singletons.getInfo>;
   updateValue<T extends keyof Omit<IGlobalContext, 'updateValue'>>(
     key: T,
     value?: IGlobalContext[T]
@@ -82,11 +78,11 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const getModels = async () => {
       setIsBooting(true);
       const [modelsQuery, settingsRes, singletonsRes] = await Promise.all([
-        apiClient.entries.aboutAll({ cancelToken: cancelToken.token }),
+        apiClient.entries.getInfo({ cancelToken: cancelToken.token }),
         apiClient.getAxios().get(API_SETTINGS_URL, {
           cancelToken: cancelToken.token,
         }),
-        apiClient.singletons.aboutAll({ cancelToken: cancelToken.token }),
+        apiClient.singletons.getInfo({ cancelToken: cancelToken.token }),
       ]);
 
       setSettings(settingsRes.data.data);
@@ -115,8 +111,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
           });
 
         const loggedInUser = loggedInUserQuery.data.data as User;
-        const currentUserRoleQuery = await apiClient.entries.getOne<UserRole>(
-          BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES,
+        const currentUserRoleQuery = await apiClient.userRoles.getOne(
           loggedInUser.role as ItemID
         );
 

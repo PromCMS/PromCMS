@@ -34,7 +34,7 @@ export const Form: FC<{ token?: string }> = ({ token }) => {
     ...values
   }) => {
     try {
-      await apiClient.users.finalizePasswordReset(values);
+      await apiClient.profile.finalizePasswordReset(values);
     } catch (e) {
       if (axios.isAxiosError(e)) {
         if (e.response?.status) {

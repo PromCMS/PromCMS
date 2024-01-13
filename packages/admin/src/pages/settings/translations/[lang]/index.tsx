@@ -76,11 +76,7 @@ export const GeneralTranslationsSettings: Page = () => {
         successMessage: t('Key translated!'),
       },
       async () => {
-        await apiClient.generalTranslations.updateTranslation(
-          key,
-          data![key],
-          lang!
-        );
+        await apiClient.generalTranslations.update(key, data![key], lang!);
         await refetch();
         setIsUpdating(false);
         setUserIsNotTyping();
@@ -112,7 +108,7 @@ export const GeneralTranslationsSettings: Page = () => {
             successMessage: t('Key deleted!'),
           },
           async () => {
-            await apiClient.generalTranslations.deleteKey(id);
+            await apiClient.generalTranslations.delete(id);
             await refetch();
           }
         );

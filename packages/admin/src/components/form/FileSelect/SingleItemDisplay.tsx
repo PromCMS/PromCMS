@@ -1,6 +1,6 @@
 import BackendImage from '@components/BackendImage';
 import { MESSAGES } from '@constants';
-import { useFileInfo } from 'hooks/useFileInfo';
+import { useFile } from '@hooks/useFile';
 import { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { QuestionMark } from 'tabler-icons-react';
@@ -25,7 +25,7 @@ export const SingleItemDisplay: FC<{ pickedFileId?: ItemID }> = ({
   pickedFileId,
 }) => {
   const { t } = useTranslation();
-  const { data } = useFileInfo(pickedFileId);
+  const { data } = useFile(pickedFileId);
 
   return (
     <div className="flex items-center gap-5">

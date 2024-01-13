@@ -171,18 +171,17 @@ export const EntryUnderpageContextProvider: FC<{
 
               const {
                 data: { data },
-              } = await apiClient.entries.update(
-                modelName,
-                itemId,
-                finalValues,
-                {
+              } = await apiClient.entries
+                .for(modelName)
+                .update(itemId, finalValues, {
                   language,
-                }
-              );
+                });
 
               mutateItemInCache(data);
             } else if (viewType === 'create') {
-              const result = await apiClient.entries.create(modelName, values);
+              const result = await apiClient.entries
+                .for(modelName)
+                .create(values);
 
               if (!result?.data) {
                 throw new Error('No data has been received');

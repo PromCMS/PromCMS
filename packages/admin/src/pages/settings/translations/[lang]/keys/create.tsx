@@ -32,7 +32,7 @@ export const CreateTranslationSettings: Page = () => {
           successMessage: t('Translation key successfully created'),
         },
         async () => {
-          await apiClient.generalTranslations.updateTranslation(
+          await apiClient.generalTranslations.update(
             values.key,
             values.value,
             lang!

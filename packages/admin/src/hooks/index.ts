@@ -6,7 +6,6 @@ export * from './useCurrentModelItem';
 export * from './useCurrentSingleton';
 export * from './useCurrentUser';
 export * from './useFileFolder';
-export * from './useFileInfo';
 export * from './useFolders';
 export * from './useGeneralTranslations';
 export * from './useModelInfo';

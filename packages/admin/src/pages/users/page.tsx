@@ -65,10 +65,7 @@ const UsersListPage: Page = () => {
   const onItemDeleteRequest = userCanEdit
     ? async (id: ItemID) => {
         if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-          await apiClient.entries.delete(
-            BASE_PROM_ENTITY_TABLE_NAMES.USERS,
-            id
-          );
+          await apiClient.users.delete(id);
           mutate();
         }
       }

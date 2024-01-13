@@ -84,8 +84,8 @@ export const FileItem: FC<FileItemProps> = ({
             <img
               alt="uploaded file"
               className="absolute top-0 left-0 h-full w-full object-cover"
-              src={apiClient.files
-                .getAssetUrl(fileInfo.id, { w: '250', q: '60' })
+              src={apiClient.library.files
+                .getUrl(fileInfo.id, { w: '250', q: '60' })
                 .toString()}
             />
           ) : (

@@ -13,6 +13,7 @@ import { LibraryPart } from './internal/LibraryPart';
 import { ProfilePart } from './internal/ProfilePart';
 import { SettingsPart } from './internal/SettingsPart';
 import { SingletonsPart } from './internal/SingletonsPart';
+import { UserRolesPart } from './internal/UserRolesPart';
 import { UsersPart } from './internal/UsersPart';
 
 export class ApiClient {
@@ -25,6 +26,7 @@ export class ApiClient {
   readonly settings: SettingsPart;
   readonly singletons: SingletonsPart;
   readonly users: UsersPart;
+  readonly userRoles: UserRolesPart;
   readonly generalTranslations: GeneralTranslationsPart;
 
   constructor(config?: AxiosRequestConfig) {
@@ -54,6 +56,7 @@ export class ApiClient {
     this.settings = new SettingsPart(this.axios);
     this.singletons = new SingletonsPart(this.axios);
     this.users = new UsersPart(this.axios);
+    this.userRoles = new UserRolesPart(this.axios);
     this.generalTranslations = new GeneralTranslationsPart(this.axios);
   }
 

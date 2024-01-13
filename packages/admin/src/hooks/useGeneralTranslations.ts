@@ -9,7 +9,7 @@ export const useGeneralTranslations = (
   const fetcher = useCallback(
     () =>
       apiClient.generalTranslations
-        .getMany(language)
+        .getManyForLanguage(language)
         .then(({ data }) => data.data),
     [language]
   );

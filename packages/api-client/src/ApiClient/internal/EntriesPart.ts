@@ -19,7 +19,7 @@ export class EntriesPart extends ApiClientPart {
   }
 
   private createdEntities = new Map<string, EntryByTableNamePart>();
-  entity(tableName: string) {
+  for(tableName: string) {
     if (!this.createdEntities.has(tableName)) {
       this.createdEntities.set(
         tableName,

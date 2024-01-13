@@ -157,7 +157,7 @@ export const FileListContextProvider: FC<
 
       for (const { key: filePath, file } of files) {
         try {
-          await apiClient.files.create(file, { root: currentFolder });
+          await apiClient.library.files.create(file, { root: currentFolder });
         } catch (error) {
           let reason = t(MESSAGES.FILE_CANNOT_BE_UPLOADED).toString();
 

@@ -48,7 +48,7 @@ export const PublishInfo: FC = () => {
   const { t } = useTranslation();
   const currentModel = useCurrentModel();
 
-  if (!currentModel?.hasTimestamps && !currentModel?.ownable) {
+  if (!currentModel?.timestamp && !currentModel?.ownable) {
     return null;
   }
 
@@ -57,7 +57,7 @@ export const PublishInfo: FC = () => {
       {currentView === 'update' && (
         <div className="w-full px-4 py-5">
           <ul className="flex list-disc flex-col gap-2 pl-5">
-            {currentModel?.hasTimestamps && (
+            {currentModel?.timestamp && (
               <>
                 <li>
                   {t('Updated at')}:{' '}

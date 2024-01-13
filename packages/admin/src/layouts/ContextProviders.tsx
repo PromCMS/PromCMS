@@ -20,18 +20,18 @@ import {
   useTranslation,
 } from 'react-i18next';
 
-const defaultQueryFn = async ({ queryKey }: QueryFunctionContext<any>) => {
-  return apiClient.entries
-    .getOne(queryKey[0], queryKey[1])
-    .then(({ data }) => data.data);
-};
+// const defaultQueryFn = async ({ queryKey }: QueryFunctionContext<any>) => {
+//   return apiClient.entries
+//     .getOne(queryKey[0], queryKey[1])
+//     .then(({ data }) => data.data);
+// };
 
 const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryFn: defaultQueryFn,
-    },
-  },
+  // defaultOptions: {
+  //   queries: {
+  //     queryFn: defaultQueryFn,
+  //   },
+  // },
 });
 
 if (!i18next.isInitialized) {

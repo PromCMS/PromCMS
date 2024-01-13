@@ -57,8 +57,7 @@ export const Form: FC = () => {
       const {
         data: { data: user },
       } = await apiClient.auth.login({ password, email });
-      const currentUserRoleQuery = await apiClient.entries.getOne<UserRole>(
-        'userRoles',
+      const currentUserRoleQuery = await apiClient.userRoles.getOne(
         user.role as ItemID
       );
 

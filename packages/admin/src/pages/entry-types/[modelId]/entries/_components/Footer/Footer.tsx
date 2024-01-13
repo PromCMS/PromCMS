@@ -35,7 +35,7 @@ export const Footer: FC<{}> = () => {
   const onItemDeleteRequest = async () => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
       exitView();
-      await apiClient.entries.delete(currentModel?.name!, itemData?.id!);
+      await apiClient.entries.for(currentModel?.name!).delete(itemData?.id!);
     }
   };
 
@@ -69,7 +69,7 @@ export const Footer: FC<{}> = () => {
     let text = '';
 
     // We dont have to compute more so we end prematurely
-    if (!currentModel?.isDraftable) return text;
+    if (!currentModel?.draftable) return text;
 
     if (currentView === 'create') {
       if (formState.isSubmitting) {
@@ -129,7 +129,7 @@ export const Footer: FC<{}> = () => {
         <span></span>
       )}
       <div className="flex items-center gap-3">
-        {currentModel?.isDraftable && (
+        {currentModel?.draftable && (
           <Button
             size="sm"
             variant="white"

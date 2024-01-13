@@ -26,7 +26,7 @@ export const NewFolderCreator: FC<{ styles: any }> = ({ styles = {} }) => {
 
   const onSubmit = async ({ name }) => {
     try {
-      await apiClient.folders.create(`${currentPath}/${name}`);
+      await apiClient.library.folders.create(`${currentPath}/${name}`);
       await refetchFolders();
       updateValue('showNewFolderCreator', false);
     } catch (e) {

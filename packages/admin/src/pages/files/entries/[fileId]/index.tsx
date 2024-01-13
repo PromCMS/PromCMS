@@ -1,13 +1,11 @@
 import { apiClient } from '@api';
 import BackendImage from '@components/BackendImage';
 import { Page } from '@custom-types';
+import { useFile } from '@hooks/useFile';
 import { Divider, Drawer, Input, Title } from '@mantine/core';
-import { useModelItem } from 'hooks/useModelItem';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import { FileItem } from '@prom-cms/api-client';
 
 import { CopyToClipboard } from './components';
 
@@ -15,10 +13,10 @@ const FilePage: Page = () => {
   const { t } = useTranslation();
   const { fileId } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading } = useModelItem<FileItem>('files', fileId as string);
+  const { data, isLoading } = useFile(fileId as string);
 
   const fileUrl = useMemo(
-    () => !!fileId && apiClient.files.getAssetUrl(fileId!),
+    () => !!fileId && apiClient.library.files.getUrl(fileId!),
     [fileId]
   );
 

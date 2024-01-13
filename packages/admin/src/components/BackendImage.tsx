@@ -46,8 +46,8 @@ const BackendImage: FC<BackendImageProps> = ({
 
     return String(id).startsWith('http')
       ? String(id)
-      : apiClient.files
-          .getAssetUrl(
+      : apiClient.library.files
+          .getUrl(
             id,
             Object.fromEntries(
               Object.entries({ w: width, h: height, q: quality })

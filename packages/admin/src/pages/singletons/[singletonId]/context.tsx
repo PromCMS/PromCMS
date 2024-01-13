@@ -139,9 +139,11 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
 
           const {
             data: { data: updateResult },
-          } = await apiClient.singletons.update(singletonName, finalValues, {
-            language,
-          });
+          } = await apiClient.singletons
+            .for(singletonName)
+            .update(finalValues, {
+              language,
+            });
 
           mutateItemInCache(updateResult);
         }
@@ -193,7 +195,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         async () => {
           const {
             data: { data: result },
-          } = await apiClient.singletons.clear(singleton?.key!);
+          } = await apiClient.singletons.for(singleton?.key!).clear();
 
           if (blockEditorRefs.refs.current) {
             for (const editorRef of Object.values(

@@ -68,7 +68,7 @@ const EntryTypeUnderpage: Page = ({}) => {
 
     if (fromId !== toId) {
       handlers.reorder({ from: source.index, to: destination.index });
-      await apiClient.entries.swap(model!.name, {
+      await apiClient.entries.for(model!.name).swap({
         fromId,
         toId,
       });
@@ -93,7 +93,7 @@ const EntryTypeUnderpage: Page = ({}) => {
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-            await apiClient.entries.delete(model.name, id);
+            await apiClient.entries.for(model.name).delete(id);
             mutate();
           }
         }
