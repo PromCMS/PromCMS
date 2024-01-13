@@ -1,8 +1,9 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { LanguageSelect } from '@components/form/LanguageSelect';
-import { useGlobalContext } from '@contexts/GlobalContext';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useEntryUnderpageContext } from '../../../_context';
 
 export const Internationalization: FC = () => {

@@ -1,4 +1,4 @@
-import { useGlobalContext } from '@contexts/GlobalContext';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import { useMemo } from 'react';
 
 import { ApiResultModelSingleton } from '@prom-cms/api-client';

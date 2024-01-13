@@ -1,12 +1,12 @@
-import { useTranslation } from 'react-i18next';
-import { getObjectDiff } from '@utils';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import axios from 'axios';
-import { useFormContext } from 'react-hook-form';
-import { MESSAGES, pageUrls } from '@constants';
-import { useNavigate } from 'react-router-dom';
 import { apiClient } from '@api';
+import { MESSAGES, pageUrls } from '@constants';
 import { useData } from '@pages/users/_context';
+import { getObjectDiff } from '@utils';
+import axios from 'axios';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
+import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 export const useOnSubmitCallback = () => {
   const navigate = useNavigate();

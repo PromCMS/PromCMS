@@ -1,11 +1,8 @@
 import { apiClient } from '@api';
 import BackendImage from '@components/BackendImage';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { MESSAGES } from '@constants';
+import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { Page } from '@custom-types';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useModelItems } from '@hooks/useModelItems';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import {
   ActionIcon,
   Button,
@@ -19,6 +16,9 @@ import {
   createStyles,
 } from '@mantine/core';
 import clsx from 'clsx';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useModelItems } from 'hooks/useModelItems';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import { Fragment } from 'react';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -55,7 +55,7 @@ const UserProfileMainPage: Page = () => {
     isLoading,
     isRefetching,
     isError,
-  } = useModelItems('settings', {
+  } = useModelItems(BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS, {
     params: { page: currentPage },
   });
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
@@ -65,15 +65,15 @@ const UserProfileMainPage: Page = () => {
 
   const currentUserCanCreate = currentUser?.can({
     action: 'create',
-    targetModel: 'settings',
+    targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
   });
   const currentUserCanEdit = currentUser?.can({
     action: 'update',
-    targetModel: 'settings',
+    targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
   });
   const currentUserCanDelete = currentUser?.can({
     action: 'delete',
-    targetModel: 'settings',
+    targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
   });
 
   const onModalClose = () => {

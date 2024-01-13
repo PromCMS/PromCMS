@@ -1,4 +1,3 @@
-import { CUSTOM_MODELS } from '@constants';
 import isEqual from 'lodash/isEqual';
 
 export const getObjectDiff = (
@@ -20,7 +19,7 @@ export const getObjectDiff = (
 };
 
 export const modelIsCustom = (modelName: string) =>
-  CUSTOM_MODELS.includes(modelName);
+  modelName.startsWith('prom__');
 
 export const generateUuid = () =>
   Date.now().toString(36) + Math.random().toString(36).substring(2);

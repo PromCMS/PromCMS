@@ -1,3 +1,7 @@
+import { apiClient } from '@api';
+import { IFileListContext } from '@components/FileList/context';
+import { pageUrls } from '@constants';
+import { ActionIcon, Checkbox } from '@mantine/core';
 import {
   AnchorHTMLAttributes,
   ChangeEventHandler,
@@ -7,13 +11,11 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { useClassNames as getClassnames } from '../../useClassNames';
-import { ActionIcon, Checkbox } from '@mantine/core';
 import { Trash } from 'tabler-icons-react';
+
 import { FileItem as FileItemType, ItemID } from '@prom-cms/api-client';
-import { apiClient } from '@api';
-import { pageUrls } from '@constants';
-import { IFileListContext } from '@components/FileList/context';
+
+import { useClassNames as getClassnames } from '../../useClassNames';
 
 const classNames = getClassnames();
 

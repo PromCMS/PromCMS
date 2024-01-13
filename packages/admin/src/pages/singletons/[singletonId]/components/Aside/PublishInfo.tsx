@@ -1,10 +1,11 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
 import { Skeleton, SkeletonProps } from '@mantine/core';
 import { dynamicDayjs } from '@utils';
 import clsx from 'clsx';
+import useCurrentSingleton from 'hooks/useCurrentSingleton';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useSingletonPageContext } from '../../context';
 
 const TextSkeleton: FC<SkeletonProps> = ({ className, ...rest }) => (
@@ -21,7 +22,7 @@ export const PublishInfo: FC = () => {
   const { t } = useTranslation();
   const singleton = useCurrentSingleton();
 
-  if (!singleton?.hasTimestamps) {
+  if (!singleton?.timestamp) {
     return null;
   }
 

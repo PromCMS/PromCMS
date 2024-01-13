@@ -1,6 +1,9 @@
-import { FileItem, QueryParams } from '@prom-cms/api-client';
+import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
+
+import { FileItem, QueryParams } from '@prom-cms/api-client';
+
 import { useFolders } from './useFolders';
 import { useModelItems } from './useModelItems';
 
@@ -21,7 +24,7 @@ export const useFileFolder = (
     isLoading,
     key: filesQueryKey,
     refetch: refetchFiles,
-  } = useModelItems<FileItem>('files', {
+  } = useModelItems<FileItem>(BASE_PROM_ENTITY_TABLE_NAMES.FILES, {
     params: {
       path: currentPath,
       limit: 9999,

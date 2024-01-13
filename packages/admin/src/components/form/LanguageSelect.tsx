@@ -1,6 +1,6 @@
 import { Flag } from '@components/Flag';
-import { useSettings } from '@hooks/useSettings';
 import { Group, Select, SelectItem, SelectProps, Text } from '@mantine/core';
+import { useSettings } from 'hooks/useSettings';
 import { ComponentPropsWithoutRef, FC, forwardRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Hash } from 'tabler-icons-react';

@@ -1,25 +1,24 @@
-import { FC, PropsWithChildren, useEffect } from 'react';
+import { apiClient } from '@api';
+import ThemeProvider from '@components/ThemeProvider';
+import { localizationConfig } from '@config';
+import { NotificationsProvider } from '@mantine/notifications';
 import {
   QueryClient,
   QueryClientProvider,
   QueryFunctionContext,
 } from '@tanstack/react-query';
+import dayjs from 'dayjs';
+import 'dayjs/locale/cs';
+import 'dayjs/locale/de';
+import 'dayjs/locale/en';
 import i18next from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
-import { localizationConfig } from '@config';
-import ThemeProvider from '@components/ThemeProvider';
-import { apiClient } from '@api';
+import { FC, PropsWithChildren } from 'react';
 import {
   I18nextProvider,
   initReactI18next,
   useTranslation,
 } from 'react-i18next';
-import dayjs from 'dayjs';
-
-import 'dayjs/locale/en';
-import 'dayjs/locale/cs';
-import 'dayjs/locale/de';
-import { NotificationsProvider } from '@mantine/notifications';
 
 const defaultQueryFn = async ({ queryKey }: QueryFunctionContext<any>) => {
   return apiClient.entries

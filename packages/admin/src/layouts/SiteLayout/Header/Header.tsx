@@ -1,12 +1,13 @@
 import BackendImage from '@components/BackendImage';
 import PopoverList from '@components/PopoverList';
 import Skeleton from '@components/Skeleton';
-import { useGlobalContext } from '@contexts/GlobalContext';
-import { useCurrentUser } from '@hooks/useCurrentUser';
+import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { Image, Popover, Tooltip, UnstyledButton } from '@mantine/core';
 import { upperFirst, useDisclosure } from '@mantine/hooks';
 import { getInitials } from '@utils';
 import clsx from 'clsx';
+import { useGlobalContext } from 'contexts/GlobalContext';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 import { FC, Fragment, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -143,7 +144,7 @@ const Header: FC = () => {
               </PopoverList.Item>
               {currentUser?.can({
                 action: 'read',
-                targetModel: 'users',
+                targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
               }) ? (
                 <PopoverList.Item
                   icon={'Users'}
@@ -158,7 +159,7 @@ const Header: FC = () => {
               ) : null}
               {currentUser?.can({
                 action: 'read',
-                targetModel: 'settings',
+                targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
               }) ? (
                 <PopoverList.Item
                   icon={'Settings'}

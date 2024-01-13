@@ -1,9 +1,10 @@
-import { FC } from 'react';
-import { Header } from './Header';
-import { useGlobalContext } from '@contexts/GlobalContext';
-import { Loader } from '../../components/SiteLoader';
-import { Outlet } from 'react-router-dom';
 import ErrorBoundary from '@components/ErrorBoundary';
+import { useGlobalContext } from 'contexts/GlobalContext';
+import { FC } from 'react';
+import { Outlet } from 'react-router-dom';
+
+import { Loader } from '../../components/SiteLoader';
+import { Header } from './Header';
 
 const SiteLayout: FC = () => {
   const { isBooting } = useGlobalContext();

@@ -1,6 +1,6 @@
 import { MESSAGES } from '@constants';
-import { useFileList } from '@hooks/useFileList';
 import { Table } from '@mantine/core';
+import { useFileList } from 'hooks/useFileList';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 

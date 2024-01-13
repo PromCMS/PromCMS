@@ -1,8 +1,8 @@
 import BackendImage from '@components/BackendImage';
 import { MESSAGES, pageUrls } from '@constants';
-import { useModelItem } from '@hooks/useModelItem';
 import { ActionIcon, Drawer, Skeleton, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useModelItem } from 'hooks/useModelItem';
 import Mustache from 'mustache';
 import { FC, Fragment, Suspense, memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,9 +22,7 @@ const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
   const { data, error } = useModelItem(
     column.targetModelTableName,
     column.value,
-    {
-      params: { unstable_fetchReferences: true },
-    },
+    undefined,
     {
       suspense: true,
       useErrorBoundary: false,

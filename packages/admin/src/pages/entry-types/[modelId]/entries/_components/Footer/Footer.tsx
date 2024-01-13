@@ -1,16 +1,17 @@
 import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
-import { useAsideToggle } from '@hooks/useAsideToggle';
-import useCurrentModel from '@hooks/useCurrentModel';
-import { useCurrentUser } from '@hooks/useCurrentUser';
 import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
+import { useAsideToggle } from 'hooks/useAsideToggle';
+import useCurrentModel from 'hooks/useCurrentModel';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, Trash } from 'tabler-icons-react';
+
 import { useEntryUnderpageContext } from '../../_context';
 
 export const Footer: FC<{}> = () => {
@@ -103,7 +104,7 @@ export const Footer: FC<{}> = () => {
       currentModel &&
       currentUser?.can({
         action: 'create',
-        targetModel: currentModel?.name,
+        targetEntityTableName: currentModel?.name,
       }) ? (
         <Tooltip withArrow label={t('Delete')} position="top" color="gray">
           <ActionIcon

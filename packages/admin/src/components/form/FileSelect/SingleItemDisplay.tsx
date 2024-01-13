@@ -1,6 +1,6 @@
 import BackendImage from '@components/BackendImage';
 import { MESSAGES } from '@constants';
-import { useFileInfo } from '@hooks/useFileInfo';
+import { useFileInfo } from 'hooks/useFileInfo';
 import { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { QuestionMark } from 'tabler-icons-react';

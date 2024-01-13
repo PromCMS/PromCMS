@@ -1,5 +1,5 @@
 import { Header as StyledHeader } from '@components/editorialPage/Header';
-import useCurrentModel from '@hooks/useCurrentModel';
+import useCurrentModel from 'hooks/useCurrentModel';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

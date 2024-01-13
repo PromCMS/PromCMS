@@ -1,5 +1,6 @@
-import axios, { AxiosError } from 'axios';
 import { userHasBeenLoggedOff } from '@events';
+import axios, { AxiosError } from 'axios';
+
 import { ApiClient } from '@prom-cms/api-client';
 
 export const apiClient = new ApiClient({

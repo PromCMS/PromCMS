@@ -1,6 +1,7 @@
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { Loader } from '@components/SiteLoader';
 import { Page } from '@custom-types';
+import { useGlobalContext } from 'contexts/GlobalContext';
+
 import { Form } from './_components';
 
 const ResetPasswordPage: Page = () => {

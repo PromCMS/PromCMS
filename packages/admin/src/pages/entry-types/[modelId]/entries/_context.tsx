@@ -1,18 +1,18 @@
 import { apiClient } from '@api';
 import { pageUrls } from '@constants';
-import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 import { EntryTypeUrlActionType } from '@custom-types';
 import type { OutputData } from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
-import useCurrentModel from '@hooks/useCurrentModel';
-import useCurrentModelItem from '@hooks/useCurrentModelItem';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { useSettings } from '@hooks/useSettings';
 import { logger } from '@logger';
 import { getModelItemSchema } from '@schemas';
 import { useQueryClient } from '@tanstack/react-query';
 import { getObjectDiff, isApiResponse } from '@utils';
 import axios from 'axios';
+import { useBlockEditorRefs } from 'contexts/BlockEditorContext';
+import useCurrentModel from 'hooks/useCurrentModel';
+import useCurrentModelItem from 'hooks/useCurrentModelItem';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
+import { useSettings } from 'hooks/useSettings';
 import {
   FC,
   createContext,

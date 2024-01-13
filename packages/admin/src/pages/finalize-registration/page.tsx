@@ -1,8 +1,9 @@
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { Loader } from '@components/SiteLoader';
-import NotFoundPage from '../404';
 import { Page } from '@custom-types';
-import { useRouterQuery } from '@hooks/useRouterQuery';
+import { useGlobalContext } from 'contexts/GlobalContext';
+import { useRouterQuery } from 'hooks/useRouterQuery';
+
+import NotFoundPage from '../404';
 import { Form } from './_components';
 
 const FinalizeRegistrationPage: Page = () => {

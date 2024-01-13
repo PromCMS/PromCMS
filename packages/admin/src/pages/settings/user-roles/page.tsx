@@ -1,9 +1,7 @@
 import { apiClient } from '@api';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { useGlobalContext } from '@contexts/GlobalContext';
+import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { Page } from '@custom-types';
-import { useModelItems } from '@hooks/useModelItems';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import {
   ActionIcon,
   Button,
@@ -14,6 +12,9 @@ import {
   createStyles,
 } from '@mantine/core';
 import clsx from 'clsx';
+import { useGlobalContext } from 'contexts/GlobalContext';
+import { useModelItems } from 'hooks/useModelItems';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Edit, Plus, Trash } from 'tabler-icons-react';
@@ -43,7 +44,7 @@ const UserRolesPage: Page = () => {
     isLoading,
     isError,
     isRefetching,
-  } = useModelItems('userRoles', {
+  } = useModelItems(BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES, {
     params: { page: currentPage },
   });
   const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();

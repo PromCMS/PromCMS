@@ -1,8 +1,5 @@
 import { apiClient } from '@api';
 import { CUSTOM_MODELS } from '@constants';
-import { useGlobalContext } from '@contexts/GlobalContext';
-import { useModelItem } from '@hooks/useModelItem';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import {
   Button,
   Drawer as MantineDrawer,
@@ -12,6 +9,9 @@ import {
   Textarea,
   Title,
 } from '@mantine/core';
+import { useGlobalContext } from 'contexts/GlobalContext';
+import { useModelItem } from 'hooks/useModelItem';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import { FC } from 'react';
 import { Fragment } from 'react';
 import { useEffect } from 'react';

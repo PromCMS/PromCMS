@@ -1,24 +1,25 @@
-import { FC, useEffect, useRef, useState } from 'react';
 import EditorJS, { EditorConfig, LogLevels } from '@editorjs/editorjs';
+import Embed from '@editorjs/embed';
+import Header from '@editorjs/header';
+import List from '@editorjs/list';
+import Marker from '@editorjs/marker';
+import ParagraphTool from '@editorjs/paragraph';
+import Quote from '@editorjs/quote';
 import Table from '@editorjs/table';
 import Underline from '@editorjs/underline';
-import Marker from '@editorjs/marker';
-import List from '@editorjs/list';
+import { useBlockEditorRefs } from 'contexts/BlockEditorContext';
 import ChangeCase from 'editorjs-change-case';
-import Header from '@editorjs/header';
-import Quote from '@editorjs/quote';
-import ParagraphTool from '@editorjs/paragraph';
-import { ImageTool } from './ImageTool';
-import { generateLayoutConfig } from './utils';
+import { FC, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { GalleryTool } from './GalleryTool';
-import Embed from '@editorjs/embed';
-import { ButtonLinkTool } from './ButtonLink';
-import { TagsTool } from './TagsTool';
-import { LinkInlineTool } from './LinkInlineTool';
-import { DynamicBlockTool } from './DynamicBlockTool';
-import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
+
 import AlignmentTool from './AlignmentTool';
+import { ButtonLinkTool } from './ButtonLink';
+import { DynamicBlockTool } from './DynamicBlockTool';
+import { GalleryTool } from './GalleryTool';
+import { ImageTool } from './ImageTool';
+import { LinkInlineTool } from './LinkInlineTool';
+import { TagsTool } from './TagsTool';
+import { generateLayoutConfig } from './utils';
 
 export const EDITOR_HOLDER_ID = 'editor-content';
 

@@ -1,9 +1,9 @@
 import { MESSAGES } from '@constants';
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { Page } from '@custom-types';
 import { PageLayout } from '@layouts';
 import { useConstructedMenuItems } from '@layouts';
 import { upperFirst } from '@mantine/hooks';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';

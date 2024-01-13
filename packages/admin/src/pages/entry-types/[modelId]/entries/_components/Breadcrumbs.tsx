@@ -1,8 +1,8 @@
 import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
 import { pageUrls } from '@constants';
-import useCurrentModel from '@hooks/useCurrentModel';
 import { Skeleton } from '@mantine/core';
 import { upperFirst } from '@mantine/hooks';
+import useCurrentModel from 'hooks/useCurrentModel';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 

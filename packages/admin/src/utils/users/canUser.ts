@@ -1,21 +1,25 @@
 import { UserRole } from '@prom-cms/api-client';
+import { SecurityOptionOptions } from '@prom-cms/schema';
 
 type ActionType = 'create' | 'read' | 'update' | 'delete';
 
 export interface CanUserOptions<T = ActionType | ActionType[]> {
   userRole: UserRole;
   action: T;
-  targetModel: string;
+  targetEntityTableName: string;
 }
 
 export function canUser<T extends ActionType | ActionType[]>({
   userRole,
   action,
-  targetModel,
+  targetEntityTableName,
 }: CanUserOptions<T>) {
-  const isAdmin = userRole.id === 0;
-  const accessPermissionValue = (key: string): boolean =>
-    isAdmin || (userRole.permissions?.models?.[targetModel]?.[key] ?? false);
+  const accessPermissionValue = (key: string): boolean => {
+    return (
+      (userRole.permissions.entities?.[targetEntityTableName]?.[key] ??
+        SecurityOptionOptions.DISABLED) !== SecurityOptionOptions.DISABLED
+    );
+  };
 
   if (Array.isArray(action)) {
     return Object.fromEntries(

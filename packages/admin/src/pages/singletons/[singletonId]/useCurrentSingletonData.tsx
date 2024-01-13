@@ -1,8 +1,9 @@
 import { apiClient } from '@api';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
-import { ResultItem } from '@prom-cms/api-client';
 import { useQuery } from '@tanstack/react-query';
+import useCurrentSingleton from 'hooks/useCurrentSingleton';
 import { useCallback, useMemo } from 'react';
+
+import { ResultItem } from '@prom-cms/api-client';
 
 export const useCurrentSingletonData = <T extends ResultItem>(
   axiosConfig?: Parameters<typeof apiClient.entries.getMany<T>>['1'],

@@ -1,13 +1,14 @@
+import { apiClient } from '@api';
 import axios from 'axios';
 import clsx from 'clsx';
-import { useEffect, FC } from 'react';
+import { useFileFolder } from 'hooks/useFileFolder';
+import { FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { FolderPlus } from 'tabler-icons-react';
+
 import { useFileListContext } from '../../context';
 import { useClassNames } from '../../useClassNames';
-import { FolderPlus } from 'tabler-icons-react';
-import { apiClient } from '@api';
-import { useFileFolder } from '@hooks/useFileFolder';
 
 export const NewFolderCreator: FC<{ styles: any }> = ({ styles = {} }) => {
   const { updateValue, currentPath } = useFileListContext();

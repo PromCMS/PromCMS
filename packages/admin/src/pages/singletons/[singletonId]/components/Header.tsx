@@ -1,5 +1,5 @@
 import { Header as StyledHeader } from '@components/editorialPage/Header';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
+import useCurrentSingleton from 'hooks/useCurrentSingleton';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 

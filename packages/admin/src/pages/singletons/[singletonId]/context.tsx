@@ -1,13 +1,13 @@
 import { apiClient } from '@api';
-import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 import { zodResolver } from '@hookform/resolvers/zod';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
-import { useSettings } from '@hooks/useSettings';
 import { logger } from '@logger';
 import { getModelItemSchema } from '@schemas';
 import { useQueryClient } from '@tanstack/react-query';
 import { getObjectDiff, isApiResponse, toastedPromise } from '@utils';
 import axios from 'axios';
+import { useBlockEditorRefs } from 'contexts/BlockEditorContext';
+import useCurrentSingleton from 'hooks/useCurrentSingleton';
+import { useSettings } from 'hooks/useSettings';
 import {
   Dispatch,
   FC,
@@ -55,6 +55,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
     if (!singleton) {
       return undefined;
     }
+
     const schema = getModelItemSchema(singleton, true);
 
     return async (data, context, options) => {

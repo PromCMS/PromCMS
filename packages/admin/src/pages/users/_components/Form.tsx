@@ -1,5 +1,6 @@
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
-import { useCurrentUser } from '@hooks/useCurrentUser';
+import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 import { FC, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 
@@ -21,7 +22,10 @@ export const UserUnderpageForm: FC = () => {
 
     if (
       roleColumnIndex > -1 &&
-      !currentUser?.can({ action: 'update', targetModel: 'users' })
+      !currentUser?.can({
+        action: 'update',
+        targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
+      })
     ) {
       model.columns = model.columns.splice(roleColumnIndex, 1);
     }

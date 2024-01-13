@@ -80,7 +80,7 @@ export const MESSAGES = {
   CREATE_TRANSLATION_KEY: 'Create translation key',
   CREATE_TRANSLATION_KEY_VALUE_DESC:
     'This is a translation value for current language',
-  PAGINATION_CONTENT: 'Showing {{from}} to {{to}} of {{total}} entries',
+  PAGINATION_CONTENT: 'Showing page {{current_page}} out of {{last_page}}',
   NO_SELECTED_FILES: 'No selected files yet',
   NO_SELECTED_FILE: 'No selected file yet',
   VIEW_FILE: 'View file',

@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
 import { MESSAGES } from '@constants';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import TextAlign from '@tiptap/extension-text-align';
 import StarterKit from '@tiptap/starter-kit';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const useExtensions = () => {
   const { t } = useTranslation();

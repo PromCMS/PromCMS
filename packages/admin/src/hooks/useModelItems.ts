@@ -1,7 +1,8 @@
-import { PagedResponse, ResultItem } from '@prom-cms/api-client';
-import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@api';
+import { useQuery } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
+
+import { PagedResponse, ResultItem } from '@prom-cms/api-client';
 
 export const useModelItems = <T extends ResultItem>(
   modelName: string | undefined,
@@ -11,10 +12,7 @@ export const useModelItems = <T extends ResultItem>(
   const fetcher = useCallback(
     () =>
       apiClient.entries
-        .getMany<T>(modelName!, {
-          ...axiosConfig,
-          params: { ...axiosConfig?.params, unstable_fetchReferences: true },
-        })
+        .getMany<T>(modelName!, axiosConfig)
         .then(({ data }) => data),
     [modelName, axiosConfig]
   );

@@ -1,11 +1,11 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { MESSAGES, pageUrls } from '@constants';
-import useCurrentModel from '@hooks/useCurrentModel';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useUser } from '@hooks/useUser';
 import { Skeleton, SkeletonProps } from '@mantine/core';
 import { dynamicDayjs } from '@utils';
 import clsx from 'clsx';
+import useCurrentModel from 'hooks/useCurrentModel';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useUser } from 'hooks/useUser';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';

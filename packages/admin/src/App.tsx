@@ -1,27 +1,26 @@
+import { Loader } from '@components/SiteLoader';
 import { SiteLayout } from '@layouts';
-import ContextProviders from './layouts/ContextProviders';
-import { Routes, Route } from 'react-router-dom';
-
-import './assets/globals.css';
-
-import MainPage from '@pages/home';
 import NotFoundPage from '@pages/404';
+import EntryUnderPage from '@pages/entry-types/[modelId]/entries/[entryId]/page';
+import CreateEntryPage from '@pages/entry-types/[modelId]/entries/create/page';
+import EntryDuplicateUnderPage from '@pages/entry-types/[modelId]/entries/duplicate/[entryId]/page';
+import FinalizeRegistrationPage from '@pages/finalize-registration/page';
+import MainPage from '@pages/home';
 import LoginPage from '@pages/login/page';
 import LogoutPage from '@pages/logout';
-import FinalizeRegistrationPage from '@pages/finalize-registration/page';
 import ResetPasswordPage from '@pages/reset-password/page';
-import CreateEntryPage from '@pages/entry-types/[modelId]/entries/create/page';
-import EntryUnderPage from '@pages/entry-types/[modelId]/entries/[entryId]/page';
-import EntryDuplicateUnderPage from '@pages/entry-types/[modelId]/entries/duplicate/[entryId]/page';
-import UserProfileMainPage from '@pages/settings/system';
 import { ProfileSettingsPage } from '@pages/settings/profile/page';
-import UserRolesPage from '@pages/settings/user-roles/page';
-import { lazy, Suspense } from 'react';
-import { Loader } from '@components/SiteLoader';
-import { CreateTranslationSettings } from '@pages/settings/translations/[lang]/keys/create';
-import { GlobalContextProvider } from '@contexts/GlobalContext';
-import { BlockEditorRefsProvider } from '@contexts/BlockEditorContext';
 import { ChangePasswordPage } from '@pages/settings/profile/password/change/page';
+import UserProfileMainPage from '@pages/settings/system';
+import { CreateTranslationSettings } from '@pages/settings/translations/[lang]/keys/create';
+import UserRolesPage from '@pages/settings/user-roles/page';
+import { BlockEditorRefsProvider } from 'contexts/BlockEditorContext';
+import { GlobalContextProvider } from 'contexts/GlobalContext';
+import { Suspense, lazy } from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+import './assets/globals.css';
+import ContextProviders from './layouts/ContextProviders';
 
 const LazyFilesPage = lazy(() => import('@pages/files/page'));
 const LazyFilePage = lazy(() => import('@pages/files/entries/[fileId]'));

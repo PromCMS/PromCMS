@@ -1,9 +1,12 @@
+import { MESSAGES, pageUrls } from '@constants';
 import { PageLayout } from '@layouts';
-import { FC, useMemo } from 'react';
-import clsx from 'clsx';
-import { useTranslation } from 'react-i18next';
 import { Button } from '@mantine/core';
-import { useCurrentUser } from '@hooks/useCurrentUser';
+import clsx from 'clsx';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useSettings } from 'hooks/useSettings';
+import { FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   Icon,
   LanguageHiragana,
@@ -11,9 +14,6 @@ import {
   UserCircle,
   UserExclamation,
 } from 'tabler-icons-react';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useSettings } from '@hooks/useSettings';
-import { MESSAGES, pageUrls } from '@constants';
 
 const LeftAside: FC = () => {
   let navigate = useNavigate();
@@ -40,7 +40,7 @@ const LeftAside: FC = () => {
           title: MESSAGES.USER_ROLES,
           url: '/settings/roles',
           Icon: UserExclamation,
-          canBeShown: currentUser?.role.id === 0,
+          canBeShown: currentUser?.role.slug === 'admin',
         },
         {
           title: MESSAGES.SYSTEM_SETTINGS,
@@ -48,7 +48,7 @@ const LeftAside: FC = () => {
           Icon: Settings,
           canBeShown: !!currentUser?.can({
             action: 'read',
-            targetModel: 'settings',
+            targetEntityTableName: 'prom__settings',
           }),
         },
         {

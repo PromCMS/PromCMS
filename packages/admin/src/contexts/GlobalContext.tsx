@@ -1,5 +1,9 @@
 import { apiClient } from '@api';
-import { API_CURRENT_USER_URL, API_SETTINGS_URL } from '@constants';
+import {
+  API_CURRENT_USER_URL,
+  API_SETTINGS_URL,
+  BASE_PROM_ENTITY_TABLE_NAMES,
+} from '@constants';
 import axios, { CanceledError } from 'axios';
 import {
   FC,
@@ -112,7 +116,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
         const loggedInUser = loggedInUserQuery.data.data as User;
         const currentUserRoleQuery = await apiClient.entries.getOne<UserRole>(
-          'userRoles',
+          BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES,
           loggedInUser.role as ItemID
         );
 
@@ -188,7 +192,7 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
       currentUser,
       updateValue,
       isBooting: isBooting || !i18n.isInitialized,
-      currentUserIsAdmin: !!(currentUser?.role && currentUser.role.id === 0),
+      currentUserIsAdmin: !!(currentUser?.role.slug === 'admin'),
       isLoggedIn: !!currentUser,
       settings,
     }),

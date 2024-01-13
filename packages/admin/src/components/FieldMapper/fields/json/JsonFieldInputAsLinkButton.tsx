@@ -1,10 +1,11 @@
 import { MESSAGES } from '@constants';
 import { Group, Input, Select, TextInput } from '@mantine/core';
-import { ColumnTypeJSON } from '@prom-cms/schema';
 import { FC, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { AB, Check, Link } from 'tabler-icons-react';
+
+import { ColumnTypeJSON } from '@prom-cms/schema';
 
 // TODO: move this into declaration of column inside prom-cms schema
 const actionsToLabels = {

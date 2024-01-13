@@ -1,13 +1,15 @@
-import { useModelItem } from '@hooks/useModelItem';
-import { Divider, Drawer, Input, Title } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
-import { Page } from '@custom-types';
-import { useNavigate, useParams } from 'react-router-dom';
 import { apiClient } from '@api';
-import { useMemo } from 'react';
-import { CopyToClipboard } from './components';
 import BackendImage from '@components/BackendImage';
+import { Page } from '@custom-types';
+import { Divider, Drawer, Input, Title } from '@mantine/core';
+import { useModelItem } from 'hooks/useModelItem';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+
 import { FileItem } from '@prom-cms/api-client';
+
+import { CopyToClipboard } from './components';
 
 const FilePage: Page = () => {
   const { t } = useTranslation();

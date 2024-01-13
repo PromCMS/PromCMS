@@ -1,14 +1,15 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { UserSelect, UserSelectProps } from '@components/form/UserSelect';
-import { MESSAGES } from '@constants';
-import { useCurrentUser } from '@hooks/useCurrentUser';
+import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { Anchor, Button, Group, Popover } from '@mantine/core';
 import { useEntryUnderpageContext } from '@pages/entry-types/[modelId]/entries/_context';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useCallback, useState } from 'react';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'tabler-icons-react';
+
 import { CoeditorsList } from './CoeditorList';
 
 /**
@@ -41,7 +42,7 @@ export const CoeditorsEditor: FC = () => {
   if (
     !currentUser?.can({
       action: 'update',
-      targetModel: 'userRoles',
+      targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES,
     }) &&
     currentUser?.id !== itemData?.created_by
   ) {

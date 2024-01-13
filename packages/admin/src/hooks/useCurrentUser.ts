@@ -1,5 +1,5 @@
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { CanUserOptions, canUser } from '@utils';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import { useMemo } from 'react';
 
 import { User, UserRole } from '@prom-cms/api-client';

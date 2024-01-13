@@ -1,6 +1,4 @@
-import { MESSAGES } from '@constants';
-import { useModelItem } from '@hooks/useModelItem';
-import { useModelItems } from '@hooks/useModelItems';
+import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import {
   Autocomplete,
   AutocompleteItem,
@@ -8,10 +6,13 @@ import {
   Skeleton,
   Text,
 } from '@mantine/core';
-import { User, UserRole } from '@prom-cms/api-client';
+import { useModelItem } from 'hooks/useModelItem';
+import { useModelItems } from 'hooks/useModelItems';
 import { forwardRef } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { User, UserRole } from '@prom-cms/api-client';
 
 interface AutoCompleteItemProps extends User {}
 
@@ -22,7 +23,7 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, AutoCompleteItemProps>(
   ) {
     const { data, isLoading } = useModelItem<UserRole>(
       'userRoles',
-      role as number
+      typeof role === 'string' ? role : role.id
     );
 
     return (
@@ -55,7 +56,7 @@ export const UserSelect: FC<UserSelectProps> = ({
 }) => {
   const { t } = useTranslation();
   const { data } = useModelItems<User>(
-    'users',
+    BASE_PROM_ENTITY_TABLE_NAMES.USERS,
     {
       params: {
         limit: 5,

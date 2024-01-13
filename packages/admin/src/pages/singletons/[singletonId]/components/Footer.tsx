@@ -1,16 +1,16 @@
-import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
-import { useAsideToggle } from '@hooks/useAsideToggle';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
-import { useCurrentUser } from '@hooks/useCurrentUser';
 import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
+import { useAsideToggle } from 'hooks/useAsideToggle';
+import useCurrentSingleton from 'hooks/useCurrentSingleton';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, Trash } from 'tabler-icons-react';
+
 import { useSingletonPageContext } from '../context';
 
 export const Footer: FC<{}> = () => {
@@ -55,7 +55,7 @@ export const Footer: FC<{}> = () => {
     let text = '';
 
     // We dont have to compute more so we end prematurely
-    if (!currentModel?.isDraftable) return text;
+    if (!currentModel?.draftable) return text;
 
     if (!data) return text;
 
@@ -98,7 +98,7 @@ export const Footer: FC<{}> = () => {
         </ActionIcon>
       </Tooltip>
       <div className="flex items-center gap-3">
-        {currentModel?.isDraftable && (
+        {currentModel?.draftable && (
           <Button
             size="sm"
             variant="white"

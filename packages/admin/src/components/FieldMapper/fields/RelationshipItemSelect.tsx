@@ -1,6 +1,6 @@
 import { MESSAGES, pageUrls } from '@constants';
-import { useModelItems } from '@hooks/useModelItems';
 import { Select, SelectItem, Text } from '@mantine/core';
+import { useModelItems } from 'hooks/useModelItems';
 import Mustache from 'mustache';
 import { useMemo } from 'react';
 import { FC } from 'react';
@@ -40,7 +40,7 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
   const values = useMemo<SelectItem[]>(
     () =>
       (data?.data ?? []).map((entry) => ({
-        value: String(entry.id),
+        value: String(entry.slug),
         label: Mustache.render(labelConstructor, entry),
       })),
     [data, t, labelConstructor]
