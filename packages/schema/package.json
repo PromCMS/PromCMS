@@ -33,7 +33,10 @@
     "build:types:aliases": "tsc-alias",
     "test": "vitest",
     "test:dev": "vitest --update",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "dev": "concurrently --kill-others \"npm:dev:package\" \"npm:dev:package:types\"",
+    "dev:package": "npm run build:package -- --quiet --watch",
+    "dev:package:types": "npm run build:types -- --preserveWatchOutput --watch"
   },
   "repository": {
     "type": "git",

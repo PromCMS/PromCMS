@@ -21,7 +21,10 @@
     "build": "npm run build:package && npm run build:types && npm run build:types:aliases",
     "build:package": "swc ./src -d dist",
     "build:types": "tsc",
-    "build:types:aliases": "tsc-alias"
+    "build:types:aliases": "tsc-alias",
+    "dev": "concurrently --kill-others \"npm:dev:package\" \"npm:dev:package:types\"",
+    "dev:package": "npm run build:package -- --quiet --watch",
+    "dev:package:types": "npm run build:types -- --preserveWatchOutput --watch"
   },
   "repository": {
     "type": "git",
