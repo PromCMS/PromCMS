@@ -11,8 +11,12 @@ export class ProfilePart extends ApiClientPart {
   }
 
   update<T = User>(payload: Partial<Omit<T, 'id'>>) {
-    return this.axios.post<Response<T>>('/update', {
-      data: payload,
+    return this.request<Response<T>>({
+      method: 'POST',
+      url: '/update',
+      data: {
+        data: payload,
+      },
     });
   }
 
