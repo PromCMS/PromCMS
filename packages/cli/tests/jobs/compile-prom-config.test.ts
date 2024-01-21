@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { databaseConfigSchema } from '@prom-cms/schema';
 
-import createPropelConfig from '../../src/jobs/create-propel-config.js';
+import { compilePromConfig } from '../../src/jobs/compile-prom-config.js';
 
 const TEST_FOLDER_PATH = path.join(
   MONOREPO_ROOT,
@@ -24,28 +24,28 @@ describe('jobs', () => {
     await fs.remove(TEST_FOLDER_PATH);
   });
 
-  describe('createPropelConfig', () => {
+  describe('compilePromConfig', () => {
     it('should run correctly and generate files', async () => {
       const root = path.join(TEST_FOLDER_PATH, 'modules', 'test');
       await fs.ensureDir(root);
 
-      await createPropelConfig({
+      await compilePromConfig({
         config: {
           project: { name: 'Testing Project', url: '', languages: ['en'] },
           database: databaseConfigSchema.parse({
             connections: [
               {
                 name: 'default-connection',
-                uri: `sqlite:${path.join(
-                  TEST_FOLDER_PATH,
+                uri: `pdo-sqlite:///${path.join(
                   '.database',
-                  'application.sq3'
+                  'application.sqlite'
                 )}`,
               },
             ],
             models: [
               {
                 tableName: 'first',
+                title: 'First',
                 admin: { isHidden: true, icon: 'Article' },
                 columns: [
                   { name: 'col', type: 'string', title: 'New' },
@@ -59,6 +59,7 @@ describe('jobs', () => {
                 ],
               },
               {
+                title: 'Second',
                 admin: { icon: 'Article' },
                 tableName: 'second_table_name',
                 api: { enabled: false },
@@ -71,8 +72,7 @@ describe('jobs', () => {
       });
 
       const expectedFiles = [
-        path.join(TEST_FOLDER_PATH, '.prom-cms/propel/propel.json'),
-        path.join(TEST_FOLDER_PATH, '.prom-cms/propel/schema.xml'),
+        path.join(TEST_FOLDER_PATH, '.prom-cms/parsed/config.php'),
       ];
 
       for (const filePath of expectedFiles) {

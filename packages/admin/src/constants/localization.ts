@@ -1,4 +1,4 @@
-import { EDITOR_MESSAGES, MESSAGES, SIMPLE_WORDS } from './texts';
+import { EDITOR_MESSAGES, MESSAGES, PROM_TABLES, SIMPLE_WORDS } from './texts';
 
 export const localizationLocalStorageKey = 'i18nextLng';
 export const localizationSessionStorageKey = 'i18nextLng';
@@ -13,6 +13,7 @@ export const defaultKeys = {
   'Title here...': 'Title here...',
   Yes: 'Yes',
   No: 'No',
+  [PROM_TABLES.PROM_FILES]: 'Files',
 };
 
 export type TranslationKeys = keyof typeof defaultKeys;
@@ -41,6 +42,7 @@ export const defaultLanguagePacks = {
       'Pick time': 'Vybrat čas',
       To: 'Do',
       Files: 'Soubory',
+      [PROM_TABLES.PROM_FILES]: 'Soubory',
       Closed: 'Zavřeno',
       Monday: 'Pondělí',
       Tuesday: 'Úterý',

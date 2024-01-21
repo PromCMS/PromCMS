@@ -1,17 +1,9 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { Page } from '@custom-types';
-import {
-  Group,
-  LoadingOverlay,
-  Pagination,
-  Table,
-  createStyles,
-} from '@mantine/core';
+import { LoadingOverlay, Table, createStyles } from '@mantine/core';
 import clsx from 'clsx';
-import { useGlobalContext } from 'contexts/GlobalContext';
 import { useModelItems } from 'hooks/useModelItems';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const useStyles = createStyles(() => ({
@@ -22,20 +14,12 @@ const useStyles = createStyles(() => ({
   },
 }));
 
-const maxCols = 12;
-
 const UserRolesPage: Page = () => {
   const { classes } = useStyles();
   const { t } = useTranslation();
-  const { currentUserIsAdmin } = useGlobalContext();
-  const [currentPage, setCurrentPage] = useState(1);
   const { data, isLoading, isError, isRefetching } = useModelItems(
-    BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES,
-    {
-      params: { page: currentPage },
-    }
+    BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES
   );
-  const [setCreationMode] = useState(false);
 
   const ths = (
     <tr>
@@ -77,16 +61,6 @@ const UserRolesPage: Page = () => {
           <tbody>{rows}</tbody>
           <tfoot>{ths}</tfoot>
         </Table>
-        {data && (
-          <Group position="center" my="xl">
-            <Pagination
-              className="my-auto"
-              page={currentPage}
-              onChange={setCurrentPage}
-              total={data!.last_page}
-            />
-          </Group>
-        )}
       </div>
     </>
   );

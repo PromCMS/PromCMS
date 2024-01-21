@@ -23,7 +23,7 @@ export const createProjectModule = async ({
 
   await generateByTemplates('parts.create-project-module', createAt, {
     '*': {
-      project: config.project,
+      project: { ...config.project, slug: moduleName },
       views: {
         prefix: moduleName,
       },

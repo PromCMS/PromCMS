@@ -150,18 +150,16 @@ export const getModelItemSchema = (
    */
   ignoreRequired?: boolean
 ) => {
-  const { columns } = config;
+  const { columns, draftable } = config;
 
   const shape = columns
-    .filter((column) => !column.hide && !column.admin.isHidden)
+    .filter(
+      (column) => !column.hide && !column.admin.isHidden && !column.readonly
+    )
     .reduce(
       (shape, column) => {
         let columnShape: z.ZodTypeAny =
           z[convertColumnTypeToPrimitive(column.type)]();
-
-        if (column.readonly === true) {
-          return shape;
-        }
 
         switch (column.type) {
           case 'file':
@@ -176,6 +174,14 @@ export const getModelItemSchema = (
               switch (column.admin.fieldType) {
                 case 'repeater':
                   columnShape = jsonRepeaterSchema;
+                  break;
+                case 'blockEditor':
+                  columnShape = z
+                    .string()
+                    .or(z.record(z.any()))
+                    .transform((value) =>
+                      typeof value === 'string' ? JSON.parse(value) : value
+                    );
                   break;
                 case 'openingHours':
                   columnShape = jsonOpeningHoursSchema;
@@ -212,5 +218,9 @@ export const getModelItemSchema = (
       {} as Record<string, any>
     );
 
-  return z.object(shape).strict();
+  if (draftable) {
+    shape.is_published = z.boolean().default(false);
+  }
+
+  return z.object(shape);
 };

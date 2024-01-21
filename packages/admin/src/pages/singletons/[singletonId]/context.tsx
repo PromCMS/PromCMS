@@ -67,12 +67,6 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
     };
   }, [singleton]);
 
-  const formMethods = useForm<Record<string, any>>({
-    defaultValues: constructDefaultFormValues(singleton, singleton ?? {}),
-    reValidateMode: 'onChange',
-    mode: 'onTouched',
-    resolver,
-  });
   const { t } = useTranslation();
   const [language, setLanguage] = useState(settings?.i18n?.default);
   const queryClient = useQueryClient();
@@ -90,6 +84,12 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
       refetchIntervalInBackground: false,
     }
   );
+  const formMethods = useForm<Record<string, any>>({
+    defaultValues: constructDefaultFormValues(singleton, data ?? {}),
+    reValidateMode: 'onChange',
+    mode: 'onTouched',
+    resolver,
+  });
 
   const { handleSubmit, setError } = formMethods;
 
@@ -100,6 +100,8 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
 
   useEffect(() => {
     if (data) {
+      formMethods.reset(data);
+
       if (blockEditorRefs.refs.current) {
         for (const [fieldName, editorRef] of Object.entries(
           blockEditorRefs.refs.current
@@ -110,7 +112,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         }
       }
     }
-  }, [data, formMethods]);
+  }, [data, formMethods.reset]);
 
   const onSubmit = handleSubmit(async (values) => {
     const singletonName = singleton.key;
@@ -122,7 +124,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         await editorRef?.isReady;
 
         if (editorRef && 'save' in editorRef) {
-          values[key] = JSON.stringify(await editorRef.save());
+          values[key] = await editorRef.save();
         }
       }
     }

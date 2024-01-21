@@ -27,9 +27,15 @@ export const EDITOR_MESSAGES = {
   ENTER_YOUR_LINK: 'Enter your link',
 };
 
+export const PROM_TABLES = {
+  PROM_FILES: 'prom__files',
+  PROM_USERS: 'prom__users',
+};
+
 export const MESSAGES = {
   ...SIMPLE_WORDS,
   ...EDITOR_MESSAGES,
+  ...PROM_TABLES,
   PREVIEW_CONTENT: 'Preview content',
   SHOW_SELECTED_ITEM: 'Show selected item',
   ON_DELETE_REQUEST_PROMPT: 'Are you sure you want to delete this item?',

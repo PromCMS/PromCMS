@@ -145,7 +145,7 @@ export const EntryUnderpageContextProvider: FC<{
           await editorRef?.isReady;
 
           if (editorRef && 'save' in editorRef) {
-            values[key] = JSON.stringify(await editorRef.save());
+            values[key] = await editorRef.save();
           }
         }
       }

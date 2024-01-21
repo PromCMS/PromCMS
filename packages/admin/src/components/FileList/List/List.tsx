@@ -110,7 +110,10 @@ export const List: FC = () => {
 
           return {
             ...memory,
-            data: memory.data.filter((file) => file.id !== id),
+            data: {
+              ...memory.data,
+              data: memory.data.data.filter((file) => file.id !== id),
+            },
           };
         });
       }

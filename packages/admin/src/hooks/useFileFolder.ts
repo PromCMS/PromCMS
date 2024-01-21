@@ -1,11 +1,10 @@
-import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
-import { useQueryClient } from '@tanstack/react-query';
+import { apiClient } from '@api';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useMemo } from 'react';
 
 import { FileItem, QueryParams } from '@prom-cms/api-client';
 
 import { useFolders } from './useFolders';
-import { useModelItems } from './useModelItems';
 
 export interface UseFileFolderData {
   files?: FileItem[];
@@ -17,21 +16,24 @@ export const useFileFolder = (
   where?: QueryParams['where']
 ) => {
   const client = useQueryClient();
+  const key = useMemo(
+    () => ['files', currentPath, where],
+    [currentPath, where]
+  );
   // Implement type filter
   const {
     data: filesRes,
     isError,
     isLoading,
-    key: filesQueryKey,
     refetch: refetchFiles,
-  } = useModelItems<FileItem>(BASE_PROM_ENTITY_TABLE_NAMES.FILES, {
-    params: {
+  } = useQuery(key, () =>
+    apiClient.library.files.getMany({
       path: currentPath,
       limit: 9999,
       // FIXME: Kinda broken types
       where: where as any,
-    },
-  });
+    })
+  );
 
   const {
     data: foldersRes,
@@ -45,9 +47,8 @@ export const useFileFolder = (
       param: Parameters<
         typeof client.setQueryData<NonNullable<typeof filesRes>>
       >['1']
-    ) =>
-      client.setQueryData<NonNullable<typeof filesRes>>(filesQueryKey, param),
-    [client, filesQueryKey]
+    ) => client.setQueryData<NonNullable<typeof filesRes>>(key, param),
+    [client, key]
   );
   const mutateFolders = useCallback(
     (
@@ -63,9 +64,9 @@ export const useFileFolder = (
   return useMemo(
     () => ({
       data:
-        filesRes?.data || foldersRes
+        filesRes?.data.data || foldersRes
           ? {
-              files: filesRes?.data,
+              files: filesRes?.data.data,
               folders: foldersRes,
             }
           : undefined,

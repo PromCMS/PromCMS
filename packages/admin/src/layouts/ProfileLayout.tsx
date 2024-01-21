@@ -1,117 +1,14 @@
-import { MESSAGES, pageUrls } from '@constants';
+import { MESSAGES } from '@constants';
 import { PageLayout } from '@layouts';
-import { Button } from '@mantine/core';
-import clsx from 'clsx';
-import { useCurrentUser } from 'hooks/useCurrentUser';
-import { useSettings } from 'hooks/useSettings';
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import {
-  Icon,
-  LanguageHiragana,
-  Settings,
-  UserCircle,
-  UserExclamation,
-} from 'tabler-icons-react';
-
-const LeftAside: FC = () => {
-  let navigate = useNavigate();
-  const settings = useSettings();
-  const { pathname } = useLocation();
-  const { t } = useTranslation();
-  const currentUser = useCurrentUser();
-
-  const items = useMemo(() => {
-    if (!settings || !currentUser) {
-      return [];
-    }
-
-    return (
-      [
-        { title: 'Profile', url: '/settings/profile', Icon: UserCircle },
-        /*{
-          title: 'Authentication',
-          url: '/settings/password',
-          Icon: Lock,
-          canBeShown: () => false,
-        },*/
-        {
-          title: MESSAGES.USER_ROLES,
-          url: '/settings/roles',
-          Icon: UserExclamation,
-          canBeShown: currentUser?.role.slug === 'admin',
-        },
-        {
-          title: MESSAGES.SYSTEM_SETTINGS,
-          url: '/settings/system',
-          Icon: Settings,
-          canBeShown: !!currentUser?.can({
-            action: 'read',
-            targetEntityTableName: 'prom__settings',
-          }),
-        },
-        {
-          title: MESSAGES.GENERAL_TRANSLATIONS,
-          url: pageUrls.settings.translations(settings?.i18n.languages[1]).list,
-          isInUrl(currentUrl) {
-            return currentUrl.startsWith(
-              pageUrls.settings
-                .translations(settings?.i18n.languages[1])
-                .list.replace(settings?.i18n.languages[1], '')
-            );
-          },
-          Icon: LanguageHiragana,
-          canBeShown: settings && settings.i18n.languages.length >= 2,
-        },
-      ] as {
-        title: string;
-        url: string;
-        Icon: Icon;
-        isInUrl?: (currentUrl: string) => boolean;
-        canBeShown?: boolean;
-      }[]
-    ).filter((item) => item.canBeShown || item.canBeShown === undefined);
-  }, [settings, currentUser]);
-
-  return (
-    <div className="h-full px-5 pt-6">
-      <nav className="mt-24 flex flex-none gap-3 lg:flex-col">
-        {items &&
-          items.map(({ url, title, Icon, isInUrl }) => (
-            <Button
-              key={url}
-              component="a"
-              size="lg"
-              variant="subtle"
-              color={pathname === url ? 'green' : 'blue'}
-              className={clsx(
-                (isInUrl === undefined ? pathname === url : isInUrl(pathname))
-                  ? 'border-green-300 underline'
-                  : 'border-blue-200',
-                'border-2 bg-white'
-              )}
-              styles={() => ({
-                inner: {
-                  justifyContent: 'space-between',
-                },
-              })}
-              leftIcon={<Icon className="mr-auto aspect-square w-6" />}
-              onClick={() => navigate(url, { replace: true })}
-            >
-              {t(title)}
-            </Button>
-          ))}
-      </nav>
-    </div>
-  );
-};
+import { Outlet } from 'react-router-dom';
 
 export const ProfileLayout: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <PageLayout withAside leftAside={<LeftAside />}>
+    <PageLayout>
       <PageLayout.Header title={t(MESSAGES.SETTINGS)} />
 
       <PageLayout.Section className="mt-5 min-h-[500px] justify-evenly lg:flex">

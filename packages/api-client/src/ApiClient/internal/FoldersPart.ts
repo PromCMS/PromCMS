@@ -2,7 +2,7 @@ import { Response } from '../../types';
 import { ApiClientPart } from '../ApiClientPart';
 
 export class FoldersPart extends ApiClientPart {
-  private baseUrl = '/api/library/folders';
+  private baseUrl = '/library/folders';
 
   async getMany(path: string) {
     return this.axios.get<Response<string[]>>(this.baseUrl, {

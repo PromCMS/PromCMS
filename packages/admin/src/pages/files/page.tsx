@@ -38,7 +38,7 @@ const FilesPage: Page = () => {
     <PageLayout>
       <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
         <h1 className="text-3xl font-semibold capitalize">
-          {t(upperFirst(model.tableName || ''))}
+          {t(model.tableName || '')}
         </h1>
       </div>
       <FileList

@@ -1,8 +1,9 @@
 import BackendImage from '@components/BackendImage';
 import PopoverList from '@components/PopoverList';
 import Skeleton from '@components/Skeleton';
-import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
-import { Image, Popover, Tooltip, UnstyledButton } from '@mantine/core';
+import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES, pageUrls } from '@constants';
+import { useSettings } from '@hooks/useSettings';
+import { Image, Menu, Popover, Tooltip, UnstyledButton } from '@mantine/core';
 import { upperFirst, useDisclosure } from '@mantine/hooks';
 import { getInitials } from '@utils';
 import clsx from 'clsx';
@@ -11,7 +12,16 @@ import { useCurrentUser } from 'hooks/useCurrentUser';
 import { FC, Fragment, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Home, Photo } from 'tabler-icons-react';
+import {
+  Home,
+  LanguageHiragana,
+  Logout,
+  Photo,
+  Settings,
+  User,
+  UserExclamation,
+  Users,
+} from 'tabler-icons-react';
 
 import logoImage from '../../../assets/logos/logo.svg';
 import s from './header.module.scss';
@@ -48,6 +58,8 @@ const Item: FC<ItemProps> = ({ href, label, isSingleton, icon: Icon }) => {
   );
 };
 
+const USER_MENU_ICON_SIZE = 16;
+
 const Header: FC = () => {
   const { isBooting } = useGlobalContext();
   const currentUser = useCurrentUser();
@@ -57,7 +69,7 @@ const Header: FC = () => {
   const { normalItems: normalMenuItems, singletonItems: singletonMenuItems } =
     useConstructedMenuItems();
   const { t } = useTranslation();
-  const [popoverOpened, { close, toggle }] = useDisclosure(false);
+  const settings = useSettings();
 
   const allMenuItems = useMemo(
     () => [defaultMenuItems, singletonMenuItems, normalMenuItems],
@@ -97,16 +109,15 @@ const Header: FC = () => {
         ))}
       </div>
       <div className={s.bottom}>
-        <Popover
+        <Menu
           withinPortal
-          opened={popoverOpened}
-          onClose={close}
           position="right-end"
-          offset={10}
+          withArrow
+          arrowPosition="center"
+          transition="pop"
         >
-          <Popover.Target>
+          <Menu.Target>
             <UnstyledButton
-              onClick={toggle}
               disabled={isBooting || !currentUser}
               sx={{
                 width: 60,
@@ -125,66 +136,87 @@ const Header: FC = () => {
                 />
               ) : (
                 <p className="m-auto text-lg font-bold tracking-wider text-black">
-                  {getInitials(currentUser?.name || '.. ..')}
+                  {getInitials(currentUser?.name || '-- --')}
                 </p>
               )}
             </UnstyledButton>
-          </Popover.Target>
-          <Popover.Dropdown>
-            <PopoverList>
-              <PopoverList.Item
-                icon={'User'}
-                className="text-blue-500"
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item
+              color="blue"
+              icon={<User size={USER_MENU_ICON_SIZE} />}
+              onClick={() => {
+                navigate('/settings/profile');
+              }}
+              className="font-semibold"
+            >
+              {t('Profile')}
+            </Menu.Item>
+            {settings && settings.i18n.languages.length >= 2 ? (
+              <Menu.Item
+                color="blue"
+                icon={<LanguageHiragana size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
-                  close();
-                  navigate('/settings/profile');
+                  navigate(
+                    pageUrls.settings.translations(settings?.i18n.languages[1])
+                      .list
+                  );
                 }}
               >
-                {t('Profile')}
-              </PopoverList.Item>
-              {currentUser?.can({
-                action: 'read',
-                targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
-              }) ? (
-                <PopoverList.Item
-                  icon={'Users'}
-                  className="text-blue-500"
-                  onClick={() => {
-                    close();
-                    navigate('/users');
-                  }}
-                >
-                  {t('Users')}
-                </PopoverList.Item>
-              ) : null}
-              {currentUser?.can({
-                action: 'read',
-                targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
-              }) ? (
-                <PopoverList.Item
-                  icon={'Settings'}
-                  className="text-blue-500"
-                  onClick={() => {
-                    close();
-                    navigate('/settings/system');
-                  }}
-                >
-                  {t('Settings')}
-                </PopoverList.Item>
-              ) : null}
-              <PopoverList.Item
-                icon={'Logout'}
-                className="text-red-500"
+                {t(MESSAGES.GENERAL_TRANSLATIONS)}
+              </Menu.Item>
+            ) : null}
+            {currentUser?.isAdmin ? (
+              <Menu.Item
+                color="orange"
+                icon={<UserExclamation size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
-                  close();
-                  navigate('/logout');
+                  navigate('/settings/roles');
                 }}
               >
-                {t('Log off')}
-              </PopoverList.Item>
-            </PopoverList>
-          </Popover.Dropdown>
-        </Popover>
+                {t(MESSAGES.USER_ROLES)}
+              </Menu.Item>
+            ) : null}
+            {currentUser?.can({
+              action: 'read',
+              targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
+            }) ? (
+              <Menu.Item
+                color="blue"
+                icon={<Users size={USER_MENU_ICON_SIZE} />}
+                onClick={() => {
+                  navigate('/users');
+                }}
+              >
+                {t('Users')}
+              </Menu.Item>
+            ) : null}
+            {currentUser?.can({
+              action: 'read',
+              targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
+            }) ? (
+              <Menu.Item
+                color="teal"
+                icon={<Settings size={USER_MENU_ICON_SIZE} />}
+                onClick={() => {
+                  navigate('/settings/system');
+                }}
+              >
+                {t('System settings')}
+              </Menu.Item>
+            ) : null}
+            <Menu.Divider />
+            <Menu.Item
+              color="red"
+              icon={<Logout size={USER_MENU_ICON_SIZE} />}
+              onClick={() => {
+                navigate('/logout');
+              }}
+            >
+              {t('Log off')}
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
       </div>
     </header>
   );
