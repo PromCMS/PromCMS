@@ -1,6 +1,6 @@
-import { BlockEditor } from '@components/form/BlockEditor';
 import { FileSelect } from '@components/form/FileSelect';
 import ImageSelect from '@components/form/ImageSelect';
+import { BlockEditor } from '@components/form/editors/BlockEditor';
 import { WysiwygEditor } from '@components/form/editors/WysiwygEditor';
 import {
   Checkbox,

@@ -1,10 +1,9 @@
 import BackendImage from '@components/BackendImage';
-import PopoverList from '@components/PopoverList';
 import Skeleton from '@components/Skeleton';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES, pageUrls } from '@constants';
 import { useSettings } from '@hooks/useSettings';
-import { Image, Menu, Popover, Tooltip, UnstyledButton } from '@mantine/core';
-import { upperFirst, useDisclosure } from '@mantine/hooks';
+import { Image, Menu, Tooltip, UnstyledButton } from '@mantine/core';
+import { upperFirst } from '@mantine/hooks';
 import { getInitials } from '@utils';
 import clsx from 'clsx';
 import { useGlobalContext } from 'contexts/GlobalContext';

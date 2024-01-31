@@ -1,9 +1,10 @@
 import { Input } from '@mantine/core';
-import { EditorProvider, EditorProviderProps } from '@tiptap/react';
 import { Editor as CoreEditor } from '@tiptap/core';
+import { EditorProvider, EditorProviderProps } from '@tiptap/react';
 import clsx from 'clsx';
 import { FC, useCallback, useEffect, useRef } from 'react';
-import { useController, useFormContext, useFormState } from 'react-hook-form';
+import { useController } from 'react-hook-form';
+
 import { MenuBefore } from './MenuBefore';
 import { useExtensions } from './useExtensions';
 

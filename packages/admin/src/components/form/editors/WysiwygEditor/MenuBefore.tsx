@@ -1,8 +1,7 @@
 import { EDITOR_MESSAGES, MESSAGES, SIMPLE_WORDS } from '@constants';
-import { ActionIcon, Divider, Tooltip } from '@mantine/core';
+import { Divider } from '@mantine/core';
 import { useCurrentEditor } from '@tiptap/react';
-import clsx from 'clsx';
-import { FC, MouseEventHandler, forwardRef, useCallback } from 'react';
+import { FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AlignCenter,
@@ -25,56 +24,7 @@ import {
   ListNumbers,
 } from 'tabler-icons-react';
 
-const Action = forwardRef<
-  HTMLButtonElement,
-  {
-    icon: Icon;
-    label: string;
-    active?: boolean;
-    className?: string;
-    onClick?: MouseEventHandler<HTMLButtonElement>;
-    disabled?: boolean;
-    canBeDisabled?: boolean;
-  }
->(
-  (
-    {
-      icon: Icon,
-      onClick,
-      active,
-      className,
-      label,
-      disabled,
-      canBeDisabled = true,
-    },
-    ref
-  ) => (
-    <Tooltip disabled={disabled} label={label} withArrow transition="scale">
-      <ActionIcon
-        ref={ref}
-        variant="filled"
-        color="blue"
-        disabled={disabled}
-        className={clsx(
-          active
-            ? 'bg-sky-100 text-sky-600'
-            : 'bg-white hover:bg-gray-50 text-gray-700',
-
-          active
-            ? canBeDisabled
-              ? 'hover:bg-red-200 hover:text-red-600'
-              : 'hover:bg-sky-100 hover:text-sky-600'
-            : '',
-          disabled ? 'cursor-not-allowed' : '',
-          className
-        )}
-        onClick={onClick}
-      >
-        <Icon className="w-3/4 h-3/4" />
-      </ActionIcon>
-    </Tooltip>
-  )
-);
+import { ActionButton } from '../_extensions/ActionButton';
 
 const ALLOWED_HEADING_LEVELS = [2, 3, 4] as const;
 const ALLOWED_TEXT_ALIGNS = ['left', 'center', 'right', 'justify'] as const;
@@ -126,31 +76,31 @@ export const MenuBefore: FC = () => {
 
   return (
     <div className="border-2 border-gray-100 border-b-0 rounded-t-lg p-1.5 bg-white sticky top-0 z-10 flex gap-1">
-      <Action
+      <ActionButton
         onClick={() => editor?.chain().focus().toggleBold()?.run()}
         icon={Bold}
         active={editor?.isActive('bold')}
         label={t(EDITOR_MESSAGES.BOLD)}
       />
-      <Action
+      <ActionButton
         onClick={() => editor?.chain().focus().toggleItalic()?.run()}
         icon={Italic}
         active={editor?.isActive('italic')}
         label={t(EDITOR_MESSAGES.ITALIC)}
       />
-      <Action
+      <ActionButton
         label={t(EDITOR_MESSAGES.CLEAR_ALL_FORMATTING)}
         icon={ClearFormatting}
         onClick={() => editor?.chain().focus().unsetAllMarks().run()}
       />
       {divider}
-      <Action
+      <ActionButton
         onClick={() => editor?.chain().focus().toggleBulletList()?.run()}
         icon={List}
         active={editor?.isActive('bulletList')}
         label={t(EDITOR_MESSAGES.BULLET_LIST)}
       />
-      <Action
+      <ActionButton
         onClick={() => editor?.chain().focus().toggleOrderedList()?.run()}
         icon={ListNumbers}
         active={editor?.isActive('orderedList')}
@@ -158,7 +108,7 @@ export const MenuBefore: FC = () => {
       />
       {divider}
       {ALLOWED_HEADING_LEVELS.map((level) => (
-        <Action
+        <ActionButton
           key={level}
           onClick={() =>
             editor?.chain().focus().toggleHeading({ level })?.run()
@@ -170,7 +120,7 @@ export const MenuBefore: FC = () => {
       ))}
       {divider}
       {ALLOWED_TEXT_ALIGNS.map((align) => (
-        <Action
+        <ActionButton
           canBeDisabled={false}
           key={align}
           onClick={() => editor?.chain().setTextAlign(align).run()}
@@ -180,26 +130,26 @@ export const MenuBefore: FC = () => {
         />
       ))}
       {divider}
-      <Action
+      <ActionButton
         icon={Link}
         active={editor?.isActive('link')}
         onClick={setLink}
         label={t(SIMPLE_WORDS.LINK)}
       />
-      <Action
+      <ActionButton
         onClick={() => editor?.chain().toggleBlockquote().run()}
         icon={Blockquote}
         active={editor?.isActive('blockquote')}
         label={t(EDITOR_MESSAGES.BLOCKQUOTE)}
       />
       {divider}
-      <Action
+      <ActionButton
         onClick={() => editor?.chain().undo()?.run()}
         icon={ArrowBackUp}
         disabled={!editor?.can().undo()}
         label={t(EDITOR_MESSAGES.UNDO)}
       />
-      <Action
+      <ActionButton
         onClick={() => editor?.chain().redo()?.run()}
         icon={ArrowForwardUp}
         disabled={!editor?.can().redo()}
@@ -207,7 +157,7 @@ export const MenuBefore: FC = () => {
       />
 
       {process.env.NODE_ENV !== 'production' ? (
-        <Action
+        <ActionButton
           onClick={() => console.log(editor?.getJSON())}
           icon={Bug}
           className="ml-auto"
