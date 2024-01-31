@@ -1,9 +1,9 @@
+import { MONOREPO_ROOT } from '@constants';
 import { execa } from 'execa';
-import path from 'path';
 import fs from 'fs-extra';
-import { describe, beforeEach, it, afterAll, expect } from 'vitest';
-import { MODULE_FOLDER_NAME, MONOREPO_ROOT } from '@constants';
 import { glob } from 'glob';
+import path from 'path';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 const TEST_FOLDER_PATH = path.join(
   MONOREPO_ROOT,

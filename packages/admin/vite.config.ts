@@ -35,7 +35,7 @@ export default defineConfig(async ({ mode, command }) => {
       false
     ) {
       console.log(
-        `PromCMS testing project not present at ${developmentProjectPath}, creating it...`
+        `PromCMS testing project not present at ${developmentProjectPath}, creating it please wait...`
       );
 
       await execa('npm', ['run', 'project:create'], {

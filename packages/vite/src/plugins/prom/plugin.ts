@@ -41,7 +41,7 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
   return {
     name: 'prom-cms-vite-plugin',
     config(c, envConfig) {
-      c.root ??= 'frontend-src';
+      c.root ??= path.join('src', 'frontend');
       c.base ??= envConfig.mode === 'development' ? '/' : '/dist/';
 
       c.server ??= {};
@@ -76,6 +76,7 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
       const serverProcess = startPHPServer({
         port: serverPort,
         cwd: options?.paths?.phpFiles,
+        logger,
       });
       const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
       const htmlTransform = server.transformIndexHtml;

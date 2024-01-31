@@ -206,7 +206,7 @@
             <div class="row {{gutterClassName}}">
               {% for col in filteredCols %}
                 <div class="{{colsWrapperClassNames}}">
-                  {% include 'components/BlocksRenderer.twig' with {blocks: col.blocks} %}
+                  {% include '@app/components/BlocksRenderer.twig' with {blocks: col.blocks} %}
                 </div>
               {% endfor %}
             </div>

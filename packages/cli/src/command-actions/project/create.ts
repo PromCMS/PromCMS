@@ -1,6 +1,5 @@
 import { PACKAGE_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
 import { createAdminFiles } from '@jobs/create-admin-files.js';
-import { createProjectModule } from '@jobs/create-project-module.js';
 import generateModels from '@jobs/generate-models.js';
 import { installNodeJsDeps } from '@jobs/install-node-deps.js';
 import { installPHPDeps } from '@jobs/install-php-deps.js';
@@ -96,7 +95,7 @@ export const createProjectAction = async (
         },
       },
     }),
-    'Scaffolding project'
+    'Scaffold project'
   );
 
   if (promDevelop) {
@@ -121,19 +120,8 @@ export const createProjectAction = async (
     );
   }
 
-  const { createdAt: moduleCreatedAt } = await runWithProgress(
-    createProjectModule({ cwd: tempBuildFolder, config: generatorConfig }),
-    'Add default module'
-  );
-
-  Logger.info(`Module created at ${moduleCreatedAt}`);
-
-  const generateModelsOptions = {
-    moduleRoot: moduleCreatedAt,
-    config: generatorConfig,
-  };
   await runWithProgress(
-    generateModels({ ...generateModelsOptions, appRoot: tempBuildFolder }),
+    generateModels({ config: generatorConfig, appRoot: tempBuildFolder }),
     'Generate models, if any'
   );
 

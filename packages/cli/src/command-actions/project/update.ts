@@ -1,14 +1,10 @@
-import { MODELS_FOLDER_NAME, MODULE_FOLDER_NAME } from '@constants';
 import { createAdminFiles } from '@jobs/create-admin-files.js';
-import { createProjectModule } from '@jobs/create-project-module.js';
 import generateModels from '@jobs/generate-models.js';
 import { Logger } from '@utils';
 import { getGeneratorConfigData } from '@utils/getGeneratorConfigData.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
 import fs from 'fs-extra';
 import path from 'path';
-
-import { nameToPhpClassName } from '@prom-cms/schema';
 
 type Options = {
   cwd: string;
@@ -21,36 +17,17 @@ export const updateProjectAction = async (options: Options) => {
   // Vadation block
   const generatorConfig = await getGeneratorConfigData(cwd);
   // TODO: Load dotenv
-  const rootModuleName = nameToPhpClassName(generatorConfig.project.name);
 
-  const rootModulePath = path.join(cwd, MODULE_FOLDER_NAME, rootModuleName);
-  const rootModelsPath = path.join(rootModulePath, MODELS_FOLDER_NAME);
+  // TODO: do we really need to delete those?
+  // await runWithProgress(
+  //   Promise.all([fs.emptyDir(rootModelsPath)]),
+  //   'Deleting old models'
+  // );
 
-  if (await fs.pathExists(rootModelsPath)) {
-    await runWithProgress(
-      Promise.all([fs.emptyDir(rootModelsPath)]),
-      'Deleting old models'
-    );
-
-    const generateModelsOptions = {
-      moduleRoot: rootModulePath,
-      config: generatorConfig,
-    };
-
-    await runWithProgress(
-      generateModels({ ...generateModelsOptions, appRoot: cwd }),
-      'Create models anew'
-    );
-  } else {
-    Logger.info(`No default module at "${rootModulePath}", creating a new one`);
-
-    const { createdAt: moduleCreatedAt } = await runWithProgress(
-      createProjectModule({ cwd, config: generatorConfig }),
-      'Add default module'
-    );
-
-    Logger.info(`Module created at ${moduleCreatedAt}`);
-  }
+  await runWithProgress(
+    generateModels({ config: generatorConfig, appRoot: cwd }),
+    'Create or updates models'
+  );
 
   if (admin) {
     await runWithProgress(

@@ -1,15 +1,16 @@
 import { type ExecaChildProcess, execa } from 'execa';
-import fs from 'fs-extra';
-import path from 'path';
+import { Logger } from 'vite';
 
 export interface StartPHPServerOptions {
   port: number;
   cwd?: string;
+  logger?: Logger;
 }
 
 export const startPHPServer = ({
   port,
   cwd = process.cwd(),
+  logger,
 }: StartPHPServerOptions): ExecaChildProcess<string> => {
   let lastLineFromProcess = '';
   const serverProcess = execa(
@@ -33,11 +34,7 @@ export const startPHPServer = ({
 
   // Log what happens on server
   serverProcess.stderr.on('data', function (data) {
-    const projectRoot = path.join(cwd, '.temp');
-
-    lastLineFromProcess = data;
-    fs.ensureDirSync(projectRoot);
-    fs.appendFileSync(path.join(projectRoot, 'log.txt'), data);
+    logger?.info(`[PHP Server] ${data}`);
   });
 
   return serverProcess;

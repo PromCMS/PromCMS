@@ -28,10 +28,10 @@
     }}
   </head>
   <body>
-    {% include '@modules:<%= views.prefix %>/layouts/site-layout/header.twig' %}
+    {% include '@app/layouts/site-layout/header.twig' %}
     <main>
       {{ block('content') }}
     </main>
-    {% include '@modules:<%= views.prefix %>/layouts/site-layout/footer.twig' %}
+    {% include '@app/layouts/site-layout/footer.twig' %}
   </body>
 </html>
