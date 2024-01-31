@@ -1,7 +1,7 @@
 import { pageUrls } from '@constants';
-import { useGlobalContext } from '@contexts/GlobalContext';
-import { useCurrentUser } from '@hooks/useCurrentUser';
 import { modelIsCustom } from '@utils';
+import { useGlobalContext } from 'contexts/GlobalContext';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useMemo } from 'react';
 import { Icon } from 'tabler-icons-react';
 import * as iconSet from 'tabler-icons-react';
@@ -24,23 +24,36 @@ export const useConstructedMenuItems = () => {
       finalValue = [
         ...finalValue,
         ...Object.entries({ ...singletons, ...models })
-          .filter(([modelKey]) => !modelIsCustom(modelKey || ''))
-          .filter(([_modelKey, modelInfo]) => !modelInfo.admin.hidden)
-          .filter(
-            ([modelKey, model]) =>
-              currentUser.can({ action: 'read', targetModel: modelKey }) &&
-              (model.isSingleton
-                ? currentUser.can({ action: 'update', targetModel: modelKey })
+          .filter(([modelKey, modelInfo]) => {
+            if (modelIsCustom(modelKey || '') || modelInfo.admin.isHidden) {
+              return false;
+            }
+
+            return (
+              currentUser.can({
+                action: 'read',
+                targetEntityTableName: modelKey,
+              }) &&
+              (modelKey in models === false
+                ? currentUser.can({
+                    action: 'update',
+                    targetEntityTableName: modelKey,
+                  })
                 : true)
-          )
-          .map(([modelKey, { icon, isSingleton, title }]) => ({
-            href: isSingleton
-              ? pageUrls.singletons.view(modelKey)
-              : pageUrls.entryTypes(modelKey).list,
-            icon: iconSet[icon],
-            label: title || modelKey,
-            isSingleton,
-          })),
+            );
+          })
+          .map(([modelKey, { title, admin }]) => {
+            const isSingleton = modelKey in models === false;
+
+            return {
+              href: isSingleton
+                ? pageUrls.singletons.view(modelKey)
+                : pageUrls.entryTypes(modelKey).list,
+              icon: iconSet[admin.icon],
+              label: title || modelKey,
+              isSingleton,
+            };
+          }),
       ].filter((item) => !!item.icon);
     }
 

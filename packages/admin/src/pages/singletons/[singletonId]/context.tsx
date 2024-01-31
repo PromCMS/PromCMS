@@ -1,13 +1,13 @@
 import { apiClient } from '@api';
-import { useBlockEditorRefs } from '@contexts/BlockEditorContext';
 import { zodResolver } from '@hookform/resolvers/zod';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
-import { useSettings } from '@hooks/useSettings';
 import { logger } from '@logger';
 import { getModelItemSchema } from '@schemas';
 import { useQueryClient } from '@tanstack/react-query';
 import { getObjectDiff, isApiResponse, toastedPromise } from '@utils';
 import axios from 'axios';
+import { useBlockEditorRefs } from 'contexts/BlockEditorContext';
+import useCurrentSingleton from 'hooks/useCurrentSingleton';
+import { useSettings } from 'hooks/useSettings';
 import {
   Dispatch,
   FC,
@@ -55,6 +55,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
     if (!singleton) {
       return undefined;
     }
+
     const schema = getModelItemSchema(singleton, true);
 
     return async (data, context, options) => {
@@ -66,12 +67,6 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
     };
   }, [singleton]);
 
-  const formMethods = useForm<Record<string, any>>({
-    defaultValues: constructDefaultFormValues(singleton, singleton ?? {}),
-    reValidateMode: 'onChange',
-    mode: 'onTouched',
-    resolver,
-  });
   const { t } = useTranslation();
   const [language, setLanguage] = useState(settings?.i18n?.default);
   const queryClient = useQueryClient();
@@ -89,6 +84,12 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
       refetchIntervalInBackground: false,
     }
   );
+  const formMethods = useForm<Record<string, any>>({
+    defaultValues: constructDefaultFormValues(singleton, data ?? {}),
+    reValidateMode: 'onChange',
+    mode: 'onTouched',
+    resolver,
+  });
 
   const { handleSubmit, setError } = formMethods;
 
@@ -99,6 +100,8 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
 
   useEffect(() => {
     if (data) {
+      formMethods.reset(data);
+
       if (blockEditorRefs.refs.current) {
         for (const [fieldName, editorRef] of Object.entries(
           blockEditorRefs.refs.current
@@ -109,7 +112,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         }
       }
     }
-  }, [data, formMethods]);
+  }, [data, formMethods.reset]);
 
   const onSubmit = handleSubmit(async (values) => {
     const singletonName = singleton.key;
@@ -121,7 +124,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         await editorRef?.isReady;
 
         if (editorRef && 'save' in editorRef) {
-          values[key] = JSON.stringify(await editorRef.save());
+          values[key] = await editorRef.save();
         }
       }
     }
@@ -138,9 +141,11 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
 
           const {
             data: { data: updateResult },
-          } = await apiClient.singletons.update(singletonName, finalValues, {
-            language,
-          });
+          } = await apiClient.singletons
+            .for(singletonName)
+            .update(finalValues, {
+              language,
+            });
 
           mutateItemInCache(updateResult);
         }
@@ -192,7 +197,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
         async () => {
           const {
             data: { data: result },
-          } = await apiClient.singletons.clear(singleton?.key!);
+          } = await apiClient.singletons.for(singleton?.key!).clear();
 
           if (blockEditorRefs.refs.current) {
             for (const editorRef of Object.values(

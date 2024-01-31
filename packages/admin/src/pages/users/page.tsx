@@ -1,13 +1,13 @@
 import { apiClient } from '@api';
 import { TableView, TableViewCol } from '@components/TableView';
 import { formatApiModelResultToTableView } from '@components/TableView/_utils';
-import { MESSAGES } from '@constants';
+import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { Page } from '@custom-types';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useModelInfo } from '@hooks/useModelInfo';
-import { useModelItems } from '@hooks/useModelItems';
 import { PageLayout } from '@layouts';
 import { Button } from '@mantine/core';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useModelInfo } from 'hooks/useModelInfo';
+import { useModelItems } from 'hooks/useModelItems';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -20,13 +20,15 @@ const UsersListPage: Page = () => {
   const { t } = useTranslation();
   const [page, setPage] = useState(1);
   const currentUser = useCurrentUser();
-  const model = useModelInfo<ApiResultModel>('users');
+  const model = useModelInfo<ApiResultModel>(
+    BASE_PROM_ENTITY_TABLE_NAMES.USERS
+  );
   const {
     data,
     isLoading,
     isError,
     refetch: mutate,
-  } = useModelItems('users', {
+  } = useModelItems(BASE_PROM_ENTITY_TABLE_NAMES.USERS, {
     params: {
       page,
     },
@@ -48,7 +50,7 @@ const UsersListPage: Page = () => {
 
   const userCanEdit = currentUser?.can({
     action: 'update',
-    targetModel: 'users',
+    targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
   });
 
   // Take care of user creation
@@ -63,7 +65,7 @@ const UsersListPage: Page = () => {
   const onItemDeleteRequest = userCanEdit
     ? async (id: ItemID) => {
         if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-          await apiClient.entries.delete('users', id);
+          await apiClient.users.delete(id);
           mutate();
         }
       }

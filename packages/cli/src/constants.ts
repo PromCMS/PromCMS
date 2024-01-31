@@ -22,7 +22,7 @@ export const TEMPLATES_ROOT = path.join(PACKAGE_ROOT, 'templates');
 export const SUPPORTED_PACKAGE_MANAGERS = ['yarn', 'npm', 'pnpm'] as const;
 export const MONOREPO_ROOT = path.join(__dirname, '..', '..', '..');
 
-export const MINIMUM_SUPPORTED_PROM_CORE_PHP = 'dev-develop';
+export const MINIMUM_SUPPORTED_PROM_CORE_PHP = 'dev-feature/doctrine-instead-propel';
 
 type ModelColumns = NonNullable<
   GeneratorConfig['database']['models']

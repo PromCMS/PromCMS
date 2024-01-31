@@ -1,6 +1,5 @@
 import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Button,
@@ -14,6 +13,7 @@ import {
 import { createLogger, isApiResponse } from '@utils';
 import axios from 'axios';
 import clsx from 'clsx';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import { FC } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -57,8 +57,7 @@ export const Form: FC = () => {
       const {
         data: { data: user },
       } = await apiClient.auth.login({ password, email });
-      const currentUserRoleQuery = await apiClient.entries.getOne<UserRole>(
-        'userRoles',
+      const currentUserRoleQuery = await apiClient.userRoles.getOne(
         user.role as ItemID
       );
 

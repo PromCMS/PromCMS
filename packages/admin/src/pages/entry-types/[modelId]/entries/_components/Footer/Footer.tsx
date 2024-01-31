@@ -1,16 +1,17 @@
 import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
-import { useAsideToggle } from '@hooks/useAsideToggle';
-import useCurrentModel from '@hooks/useCurrentModel';
-import { useCurrentUser } from '@hooks/useCurrentUser';
 import { ActionIcon, Button, Paper, Tooltip } from '@mantine/core';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
+import { useAsideToggle } from 'hooks/useAsideToggle';
+import useCurrentModel from 'hooks/useCurrentModel';
+import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, Trash } from 'tabler-icons-react';
+
 import { useEntryUnderpageContext } from '../../_context';
 
 export const Footer: FC<{}> = () => {
@@ -34,7 +35,7 @@ export const Footer: FC<{}> = () => {
   const onItemDeleteRequest = async () => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
       exitView();
-      await apiClient.entries.delete(currentModel?.name!, itemData?.id!);
+      await apiClient.entries.for(currentModel?.name!).delete(itemData?.id!);
     }
   };
 
@@ -68,7 +69,7 @@ export const Footer: FC<{}> = () => {
     let text = '';
 
     // We dont have to compute more so we end prematurely
-    if (!currentModel?.isDraftable) return text;
+    if (!currentModel?.draftable) return text;
 
     if (currentView === 'create') {
       if (formState.isSubmitting) {
@@ -103,7 +104,7 @@ export const Footer: FC<{}> = () => {
       currentModel &&
       currentUser?.can({
         action: 'create',
-        targetModel: currentModel?.name,
+        targetEntityTableName: currentModel?.name,
       }) ? (
         <Tooltip withArrow label={t('Delete')} position="top" color="gray">
           <ActionIcon
@@ -128,7 +129,7 @@ export const Footer: FC<{}> = () => {
         <span></span>
       )}
       <div className="flex items-center gap-3">
-        {currentModel?.isDraftable && (
+        {currentModel?.draftable && (
           <Button
             size="sm"
             variant="white"

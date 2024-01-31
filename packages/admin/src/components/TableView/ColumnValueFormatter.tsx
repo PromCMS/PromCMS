@@ -1,17 +1,18 @@
 import BackendImage from '@components/BackendImage';
-import { FC, Fragment, memo, Suspense, useMemo } from 'react';
+import { MESSAGES, pageUrls } from '@constants';
+import { ActionIcon, Drawer, Skeleton, Tooltip } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { useModelItem } from 'hooks/useModelItem';
+import Mustache from 'mustache';
+import { FC, Fragment, Suspense, memo, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Check, Eye, X } from 'tabler-icons-react';
-import Mustache from 'mustache';
+
+import { ColumnTypeRelationship } from '@prom-cms/schema';
 
 import { TableViewCol } from './TableView';
 import { useClassNames } from './useClassNames';
-import { MESSAGES, pageUrls } from '@constants';
-import { useTranslation } from 'react-i18next';
-import { ColumnTypeRelationship } from '@prom-cms/schema';
-import { ActionIcon, Drawer, Skeleton, Tooltip } from '@mantine/core';
-import { useModelItem } from '@hooks/useModelItem';
-import { useDisclosure } from '@mantine/hooks';
 
 type ColumnValueFormatterProps = TableViewCol & { value: any };
 
@@ -19,11 +20,9 @@ const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
   column
 ) => {
   const { data, error } = useModelItem(
-    column.targetModel,
+    column.targetModelTableName,
     column.value,
-    {
-      params: { unstable_fetchReferences: true },
-    },
+    undefined,
     {
       suspense: true,
       useErrorBoundary: false,

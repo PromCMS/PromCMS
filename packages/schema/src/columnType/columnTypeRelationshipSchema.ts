@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 
 export const columnTypeRelationshipSchema = columnTypeBaseSchema.extend({
@@ -7,7 +8,7 @@ export const columnTypeRelationshipSchema = columnTypeBaseSchema.extend({
   /**
    * Specify target model
    */
-  targetModel: z.string(), // TODO make verify target model if model exists
+  targetModelTableName: z.string(), // TODO make verify target model if model exists
 
   /**
    *
@@ -20,13 +21,6 @@ export const columnTypeRelationshipSchema = columnTypeBaseSchema.extend({
    * @default boolean false
    */
   multiple: z.boolean().default(false),
-
-  /**
-   * Specifies that the column will be filled with data if has connection to real target
-   *
-   * @default boolean true
-   */
-  fill: z.boolean().default(true),
 
   /**
    * Specify a field name that the target model has to hook on to

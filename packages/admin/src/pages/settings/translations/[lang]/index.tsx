@@ -2,9 +2,6 @@ import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { pageUrls } from '@constants';
 import { Page } from '@custom-types';
-import { useGeneralTranslations } from '@hooks/useGeneralTranslations';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { useSettings } from '@hooks/useSettings';
 import {
   ActionIcon,
   Button,
@@ -14,6 +11,9 @@ import {
   Textarea,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { useGeneralTranslations } from 'hooks/useGeneralTranslations';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
+import { useSettings } from 'hooks/useSettings';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -76,11 +76,7 @@ export const GeneralTranslationsSettings: Page = () => {
         successMessage: t('Key translated!'),
       },
       async () => {
-        await apiClient.generalTranslations.updateTranslation(
-          key,
-          data![key],
-          lang!
-        );
+        await apiClient.generalTranslations.update(key, data![key], lang!);
         await refetch();
         setIsUpdating(false);
         setUserIsNotTyping();
@@ -112,7 +108,7 @@ export const GeneralTranslationsSettings: Page = () => {
             successMessage: t('Key deleted!'),
           },
           async () => {
-            await apiClient.generalTranslations.deleteKey(id);
+            await apiClient.generalTranslations.delete(id);
             await refetch();
           }
         );

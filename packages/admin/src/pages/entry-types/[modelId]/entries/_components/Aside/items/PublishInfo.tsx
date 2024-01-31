@@ -1,11 +1,11 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { MESSAGES, pageUrls } from '@constants';
-import useCurrentModel from '@hooks/useCurrentModel';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useUser } from '@hooks/useUser';
 import { Skeleton, SkeletonProps } from '@mantine/core';
 import { dynamicDayjs } from '@utils';
 import clsx from 'clsx';
+import useCurrentModel from 'hooks/useCurrentModel';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useUser } from 'hooks/useUser';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -48,7 +48,7 @@ export const PublishInfo: FC = () => {
   const { t } = useTranslation();
   const currentModel = useCurrentModel();
 
-  if (!currentModel?.hasTimestamps && !currentModel?.ownable) {
+  if (!currentModel?.timestamp && !currentModel?.ownable) {
     return null;
   }
 
@@ -57,7 +57,7 @@ export const PublishInfo: FC = () => {
       {currentView === 'update' && (
         <div className="w-full px-4 py-5">
           <ul className="flex list-disc flex-col gap-2 pl-5">
-            {currentModel?.hasTimestamps && (
+            {currentModel?.timestamp && (
               <>
                 <li>
                   {t('Updated at')}:{' '}

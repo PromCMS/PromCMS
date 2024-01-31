@@ -1,8 +1,8 @@
 import { UnstyledButton } from '@mantine/core';
-import * as iconSet from 'tabler-icons-react';
 import clsx from 'clsx';
 import { MouseEventHandler } from 'react';
 import { DetailedHTMLProps, FC, HTMLAttributes } from 'react';
+import * as iconSet from 'tabler-icons-react';
 
 export interface PopoverListProps
   extends DetailedHTMLProps<
@@ -45,11 +45,10 @@ const PopoverListItem: FC<PopoverListItemProps> = ({
   );
 };
 
-const PopoverList: FC<PopoverListProps> & { Item: typeof PopoverListItem } = ({
-  children,
-  className,
-  ...rest
-}) => (
+const PopoverList: FC<PopoverListProps> & {
+  Item: typeof PopoverListItem;
+  Divider: typeof PopoverListDivider;
+} = ({ children, className, ...rest }) => (
   <ul
     className={clsx('-mx-2.5 list-none text-lg font-semibold', className)}
     {...rest}
@@ -58,6 +57,15 @@ const PopoverList: FC<PopoverListProps> & { Item: typeof PopoverListItem } = ({
   </ul>
 );
 
+const PopoverListDivider: FC = () => {
+  return (
+    <li>
+      <hr className="h-0.5 bg-gray-100 my-2 w-full" />
+    </li>
+  );
+};
+
 PopoverList.Item = PopoverListItem;
+PopoverList.Divider = PopoverListDivider;
 
 export default PopoverList;

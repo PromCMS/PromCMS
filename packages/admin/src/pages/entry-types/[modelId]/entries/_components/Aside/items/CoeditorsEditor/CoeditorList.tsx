@@ -1,5 +1,6 @@
-import { useModelItems } from '@hooks/useModelItems';
+import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { ActionIcon, Text } from '@mantine/core';
+import { useModelItems } from 'hooks/useModelItems';
 import { FC, useCallback } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Trash } from 'tabler-icons-react';
@@ -28,7 +29,7 @@ export const CoeditorsList: FC = () => {
   const sharedWithItems = watch('coeditors');
   const hasNoItems = !Object.keys(sharedWithItems || {}).length;
   const { data: coeditors, isLoading } = useModelItems<User>(
-    'users',
+    BASE_PROM_ENTITY_TABLE_NAMES.USERS,
     {
       params: {
         limit: 999,

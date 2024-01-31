@@ -1,25 +1,27 @@
 import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
-import { useFileFolder, UseFileFolderData } from '@hooks/useFileFolder';
 import { showNotification, updateNotification } from '@mantine/notifications';
-import {
-  FileItem,
-  FileTooLargeError,
-  QueryParams,
-  UnsupportedFileExtensionError,
-} from '@prom-cms/api-client';
 import { createLogger } from '@utils';
+import { UseFileFolderData, useFileFolder } from 'hooks/useFileFolder';
 import { t } from 'i18next';
 import {
-  createContext,
   FC,
   PropsWithChildren,
+  createContext,
   useCallback,
   useContext,
   useMemo,
   useReducer,
 } from 'react';
 import { DropzoneRootProps, useDropzone } from 'react-dropzone';
+
+import {
+  FileItem,
+  FileTooLargeError,
+  QueryParams,
+  UnsupportedFileExtensionError,
+} from '@prom-cms/api-client';
+
 import { UploadingFiles } from './types';
 import { formatDroppedFiles } from './utils';
 
@@ -155,7 +157,7 @@ export const FileListContextProvider: FC<
 
       for (const { key: filePath, file } of files) {
         try {
-          await apiClient.files.create(file, { root: currentFolder });
+          await apiClient.library.files.create(file, { root: currentFolder });
         } catch (error) {
           let reason = t(MESSAGES.FILE_CANNOT_BE_UPLOADED).toString();
 

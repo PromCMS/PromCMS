@@ -1,12 +1,12 @@
 import { apiClient } from '@api';
 import ImageSelect from '@components/form/ImageSelect';
 import { MESSAGES } from '@constants';
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { Page } from '@custom-types';
 import { Button, TextInput } from '@mantine/core';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

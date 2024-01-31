@@ -1,9 +1,6 @@
 import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useModelItem } from '@hooks/useModelItem';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { useSettings } from '@hooks/useSettings';
+import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import {
   Button,
   Drawer as MantineDrawer,
@@ -14,6 +11,10 @@ import {
   TextInput,
   Title,
 } from '@mantine/core';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useModelItem } from 'hooks/useModelItem';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
+import { useSettings } from 'hooks/useSettings';
 import { FC, useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -32,9 +33,13 @@ export const Drawer: FC<
     settings?.i18n?.default
   );
   const currentUser = useCurrentUser();
-  const { data } = useModelItem('settings', optionToEdit, {
-    language,
-  });
+  const { data } = useModelItem(
+    BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
+    optionToEdit,
+    {
+      language,
+    }
+  );
   const { t } = useTranslation();
   const reqNotification = useRequestWithNotifications();
   const formMethods = useForm({
@@ -45,7 +50,7 @@ export const Drawer: FC<
 
   const currentUserCanCreate = currentUser?.can({
     action: 'create',
-    targetModel: 'settings',
+    targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
   });
 
   useEffect(() => {

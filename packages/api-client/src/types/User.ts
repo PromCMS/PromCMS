@@ -1,15 +1,16 @@
 import { ItemID } from './ItemID.js';
+import { ResultItem } from './ResultItem.js';
 import { UserRole } from './UserRole.js';
 import { UserStates } from './UserStates.js';
 
-export interface User {
-  id: ItemID;
+export interface User extends ResultItem {
   name: string;
-  password: string;
+  firstname: string;
+  lastname: string;
+  password?: string;
   email: string;
-  role: number | UserRole;
+  role: string | UserRole;
   /** Avatar url */
   avatar: string;
   state: UserStates;
-  [x: string]: any;
 }

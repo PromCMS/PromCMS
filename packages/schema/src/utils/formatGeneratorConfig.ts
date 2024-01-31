@@ -1,8 +1,10 @@
+import isString from 'lodash/isString.js';
+import slugify from 'slugify';
+
 import { FieldPlacements } from '../columnType/columnTypeBaseAdminConfigSchema.js';
 import { GeneratorConfigInput } from '../generatorConfigSchema.js';
-
-const simplifyProjectName = (name: string) =>
-  name.replaceAll(' ', '-').toLocaleLowerCase();
+import { SecurityOptionOptions } from '../projectSecurityRoleModelPermissionSchema.js';
+import { nameToPhpClassName } from './nameToPhpClassName.js';
 
 export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
   if (!config) throw 'No config provided to "formatGeneratorConfig" function';
@@ -57,7 +59,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
           name: 'content',
           title: 'Content',
           type: 'json',
-          default: '{}',
+          defaultValue: '[]',
           localized: true,
           admin: {
             fieldType: 'blockEditor',
@@ -77,87 +79,71 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
       );
     }
 
-    if (isDraftable) {
-      model.columns.push({
-        name: 'is_published',
-        title: 'Is published',
-        type: 'boolean',
-        unique: false,
-      });
-    }
+    // if (isDraftable) {
+    //   model.columns.push({
+    //     name: 'is_published',
+    //     title: 'Is published',
+    //     type: 'boolean',
+    //     unique: false,
+    //   });
+    // }
 
-    if (isSortable) {
-      model.columns.push({
-        name: 'order',
-        title: 'Order',
-        type: 'number',
-        unique: false,
-        autoIncrement: true,
-        required: false,
-        readonly: true,
-        admin: {
-          isHidden: true,
-        },
-      });
-    }
+    // if (isSortable) {
+    //   model.columns.push({
+    //     name: 'order',
+    //     title: 'Order',
+    //     type: 'number',
+    //     unique: false,
+    //     autoIncrement: true,
+    //     required: false,
+    //     readonly: true,
+    //     admin: {
+    //       isHidden: true,
+    //     },
+    //   });
+    // }
 
-    if (isSharable) {
-      model.columns.push({
-        name: 'coeditors',
-        title: 'Coeditors',
-        type: 'json',
-        default: '{}',
-        required: false,
-        admin: {
-          fieldType: 'jsonEditor',
-          isHidden: true,
-        },
-      });
-    }
+    // if (isSharable) {
+    //   model.columns.push({
+    //     name: 'coeditors',
+    //     title: 'Coeditors',
+    //     type: 'json',
+    //     defaultValue: '[]',
+    //     required: false,
+    //     admin: {
+    //       fieldType: 'jsonEditor',
+    //       isHidden: true,
+    //     },
+    //   });
+    // }
 
-    if (isOwnable) {
-      model.columns.push({
-        name: 'created_by',
-        title: 'Created by',
-        readonly: true,
-        type: 'relationship',
-        targetModel: 'user',
-        labelConstructor: '{{name}}',
-        fill: false,
-        required: false,
-        admin: {
-          isHidden: true,
-        },
-      });
+    // if (isOwnable) {
+    //   model.columns.push({
+    //     name: 'created_by',
+    //     title: 'Created by',
+    //     readonly: true,
+    //     type: 'relationship',
+    //     targetModelTableName: 'user',
+    //     labelConstructor: '{{name}}',
+    //     required: false,
+    //     admin: {
+    //       isHidden: true,
+    //     },
+    //   });
 
-      model.columns.push({
-        name: 'updated_by',
-        title: 'Updated by',
-        readonly: true,
-        type: 'relationship',
-        targetModel: 'user',
-        labelConstructor: '{{name}}',
-        fill: false,
-        required: false,
-        admin: {
-          isHidden: true,
-        },
-      });
-    }
-
-    model.columns.unshift({
-      name: 'id',
-      title: 'ID',
-      type: 'number',
-      readonly: true,
-      required: false,
-      autoIncrement: true,
-      unique: true,
-      primaryKey: true,
-      admin: {
-        isHidden: true,
-      },
-    });
+    //   model.columns.push({
+    //     name: 'updated_by',
+    //     title: 'Updated by',
+    //     readonly: true,
+    //     type: 'relationship',
+    //     targetModelTableName: 'user',
+    //     labelConstructor: '{{name}}',
+    //     required: false,
+    //     admin: {
+    //       isHidden: true,
+    //     },
+    //   });
+    // }
 
     // Iterate over all of columns that user provided
     model.columns = model.columns.map((column) => ({
@@ -205,19 +191,24 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
         const updatedPerms = Object.entries(modelPermissions).map(
           ([key, values]) => [
             key,
-            {
-              c: 0,
-              r: 0,
-              u: 0,
-              d: 0,
-              ...values,
-            },
+            isString(values)
+              ? values
+              : {
+                  c: SecurityOptionOptions.DISABLED,
+                  r: SecurityOptionOptions.DISABLED,
+                  u: SecurityOptionOptions.DISABLED,
+                  d: SecurityOptionOptions.DISABLED,
+                  ...values,
+                },
           ]
         );
 
         return {
           hasAccessToAdmin: true,
           ...rest,
+          slug:
+            rest.slug ??
+            slugify.default(rest.name, { lower: true, trim: true }),
           modelPermissions: Object.fromEntries(updatedPerms),
         };
       }),
@@ -228,7 +219,7 @@ export const formatGeneratorConfig = async (config: GeneratorConfigInput) => {
     ...config,
     database: { ...databaseConfig, models, singletons },
     project: {
-      slug: simplifyProjectName(config.project.name || ''),
+      slug: nameToPhpClassName(config.project.name || ''),
       ...config.project,
     },
   };

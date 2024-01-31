@@ -3,14 +3,14 @@ import { TableView, TableViewCol, TableViewProps } from '@components/TableView';
 import { formatApiModelResultToTableView } from '@components/TableView/_utils';
 import { MESSAGES, pageUrls } from '@constants';
 import { Page } from '@custom-types';
-import useCurrentModel from '@hooks/useCurrentModel';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useModelItems } from '@hooks/useModelItems';
 import { PageLayout } from '@layouts';
 import { Button } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import NotFoundPage from '@pages/404';
 import { modelIsCustom } from '@utils';
+import useCurrentModel from 'hooks/useCurrentModel';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useModelItems } from 'hooks/useModelItems';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -35,7 +35,7 @@ const EntryTypeUnderpage: Page = ({}) => {
     params: {
       page: page,
       limit: pageSize,
-      ...(model?.hasTimestamps ? { 'orderBy.created_at': 'desc' } : {}),
+      ...(model?.timestamp ? { 'orderBy.created_at': 'desc' } : {}),
     },
   });
   const { t } = useTranslation();
@@ -68,7 +68,7 @@ const EntryTypeUnderpage: Page = ({}) => {
 
     if (fromId !== toId) {
       handlers.reorder({ from: source.index, to: destination.index });
-      await apiClient.entries.swap(model!.name, {
+      await apiClient.entries.for(model!.name).swap({
         fromId,
         toId,
       });
@@ -89,11 +89,11 @@ const EntryTypeUnderpage: Page = ({}) => {
     model &&
     currentUser?.can({
       action: 'delete',
-      targetModel: model?.name,
+      targetEntityTableName: model?.name,
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-            await apiClient.entries.delete(model.name, id);
+            await apiClient.entries.for(model.name).delete(id);
             mutate();
           }
         }
@@ -103,7 +103,7 @@ const EntryTypeUnderpage: Page = ({}) => {
     model &&
     currentUser?.can({
       action: 'create',
-      targetModel: model?.name,
+      targetEntityTableName: model?.name,
     })
       ? async (id: ItemID) => {
           if (confirm(t(MESSAGES.ENTRY_ITEM_DUPLICATE))) {
@@ -142,7 +142,7 @@ const EntryTypeUnderpage: Page = ({}) => {
   </form>*/}
           {currentUser?.can({
             action: 'create',
-            targetModel: model.name,
+            targetEntityTableName: model.name,
           }) && (
             <Button
               color="green"
@@ -163,7 +163,7 @@ const EntryTypeUnderpage: Page = ({}) => {
         onEditAction={onEditRequest}
         onDeleteAction={onItemDeleteRequest}
         onDuplicateAction={onItemDuplicateRequest}
-        ordering={!!model.hasOrdering}
+        ordering={!!model.sorting}
         onDragEnd={onDragEnd}
         disabled={apiWorking}
       />

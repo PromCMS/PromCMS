@@ -1,9 +1,10 @@
-import { SelectItem, Select } from '@mantine/core';
+import { Select, SelectItem } from '@mantine/core';
 import { upperFirst } from '@mantine/hooks';
-import { ColumnTypeEnum } from '@prom-cms/schema';
 import { FC, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
+import { ColumnTypeEnum } from '@prom-cms/schema';
 
 export interface EnumSelectProps extends ColumnTypeEnum {
   columnName: string;
@@ -15,18 +16,18 @@ export const EnumSelect: FC<EnumSelectProps> = ({
   columnName,
   title,
   error,
-  enum: enumValue,
+  enum: enumOptions,
   disabled,
 }) => {
   const { t } = useTranslation();
 
   const enumValues = useMemo<SelectItem[]>(
     () =>
-      enumValue.map((enumKey) => ({
+      Object.values(enumOptions.values).map((enumKey) => ({
         value: enumKey,
         label: t(upperFirst(enumKey)),
       })),
-    [enumValue, t]
+    [enumOptions, t]
   );
 
   return (

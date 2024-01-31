@@ -9,7 +9,7 @@ export const formatCodeString = async (content: string, filename: string) => {
     '.DS_Store',
   ];
 
-  const ignoreFileExtensions = ['.twig', '.md'];
+  const ignoreFileExtensions = ['.twig', '.md', '.sqlite'];
 
   if (
     ignoreFileParts.find((part) => filename.includes(part)) ||

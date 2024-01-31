@@ -1,7 +1,12 @@
 import { MESSAGES } from '@constants';
 import { ActionIcon, Input, NumberInput, TextInput, clsx } from '@mantine/core';
 import { FC, Fragment, useMemo } from 'react';
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash } from 'tabler-icons-react';
 
@@ -33,7 +38,6 @@ export const Repeater: FC<{
     () => (fields.length ? fields : readonly ? [] : [{ id: 'default' }]),
     [fields, readonly]
   );
-  const entriesArray = useMemo(() => Array.from(columns.entries()), [columns]);
 
   return (
     <Input.Wrapper size="md" label={label}>
@@ -52,11 +56,11 @@ export const Repeater: FC<{
             )}
             key={field.id}
           >
-            {entriesArray.map(([columnKey, columnInfo]) => {
+            {columns.map((columnInfo) => {
               let result = <></>;
-              const columnFieldName = `${fieldName}.${index}.${columnKey}`;
+              const columnFieldName = `${fieldName}.${index}.${columnInfo.name}`;
               const errorMessage = t(
-                formState.errors[columnKey]?.message || ''
+                formState.errors[columnInfo.name]?.message || ''
               );
               const label =
                 columnInfo.title ||
@@ -123,7 +127,7 @@ export const Repeater: FC<{
                   break;
               }
 
-              return <Fragment key={columnKey}>{result}</Fragment>;
+              return <Fragment key={columnInfo.name}>{result}</Fragment>;
             })}
             {!readonly ? (
               <Input.Wrapper

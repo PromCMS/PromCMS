@@ -1,10 +1,10 @@
-import { useGlobalContext } from '@contexts/GlobalContext';
-import axios from 'axios';
-import { Loader } from '@components/SiteLoader';
 import { apiClient } from '@api';
+import { Loader } from '@components/SiteLoader';
+import { Page } from '@custom-types';
+import axios from 'axios';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Page } from '@custom-types';
 import { useNavigate } from 'react-router-dom';
 
 const LogoutPage: Page = () => {

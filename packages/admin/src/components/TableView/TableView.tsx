@@ -323,18 +323,17 @@ const Footer: FC<PropsWithChildren> = ({ children }) => (
 const Metadata: FC<
   Omit<PagedResponse<any>, 'data'> &
     DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
-> = ({ from, to, total, className, ...rest }) => (
+> = ({ current_page, last_page, total, className, ...rest }) => (
   <div
     className={clsx('xs:text-sm text-xs text-gray-900', className)}
     {...rest}
   >
     <Trans
       i18nKey={MESSAGES.PAGINATION_CONTENT}
-      from={from}
-      to={to}
-      total={total}
+      current_page={current_page}
+      last_page={last_page}
     >
-      Showing {{ from: from }} to {{ to: to }} of {{ total: total }} entries
+      Showing page {{ current_page }} out of {{ last_page }}
     </Trans>
   </div>
 );

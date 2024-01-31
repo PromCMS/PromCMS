@@ -2,9 +2,9 @@ import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { MESSAGES } from '@constants';
 import { Page } from '@custom-types';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
-import { useSettings } from '@hooks/useSettings';
 import { Button, Modal, TextInput, Title } from '@mantine/core';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
+import { useSettings } from 'hooks/useSettings';
 import { useCallback, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +32,7 @@ export const CreateTranslationSettings: Page = () => {
           successMessage: t('Translation key successfully created'),
         },
         async () => {
-          await apiClient.generalTranslations.updateTranslation(
+          await apiClient.generalTranslations.update(
             values.key,
             values.value,
             lang!

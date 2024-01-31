@@ -1,5 +1,6 @@
-import { useRouterQuery } from '@hooks/useRouterQuery';
+import { useRouterQuery } from 'hooks/useRouterQuery';
 import { FC } from 'react';
+
 import { FinalizeForm } from './FinalizeForm';
 import { InitializeForm } from './InitializeForm';
 

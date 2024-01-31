@@ -1,19 +1,20 @@
+import { apiClient } from '@api';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { useCallback, FC, useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useFileListContext } from '../context';
-import { useClassNames } from '../useClassNames';
-import { FileItemSkeleton, FileItem, FileItemProps } from './FileItem';
-import { FolderItem, FolderItemProps } from './FolderItem';
-import { NewFolderCreator } from './NewFolderCreator';
-import axios from 'axios';
+import { Transition } from '@mantine/core';
 import {
   showNotification,
   updateNotification,
   useNotifications,
 } from '@mantine/notifications';
-import { Transition } from '@mantine/core';
-import { apiClient } from '@api';
+import axios from 'axios';
+import { FC, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { useFileListContext } from '../context';
+import { useClassNames } from '../useClassNames';
+import { FileItem, FileItemProps, FileItemSkeleton } from './FileItem';
+import { FolderItem, FolderItemProps } from './FolderItem';
+import { NewFolderCreator } from './NewFolderCreator';
 
 export const List: FC = () => {
   const {
@@ -60,7 +61,7 @@ export const List: FC = () => {
         });
 
         try {
-          await apiClient.folders.delete(path);
+          await apiClient.library.folders.delete(path);
           mutateFolders((folders) => {
             return folders?.filter((folder) => folder !== folderName);
           });
@@ -103,13 +104,16 @@ export const List: FC = () => {
   const onFileDeleteClick: FileItemProps['onDeleteClick'] = useCallback(
     async (id) => {
       if (confirm(t('Do you really want to delete this file?'))) {
-        await apiClient.files.delete(id);
+        await apiClient.library.files.delete(id);
         mutateFiles((memory) => {
           if (!memory) return memory;
 
           return {
             ...memory,
-            data: memory.data.filter((file) => file.id !== id),
+            data: {
+              ...memory.data,
+              data: memory.data.data.filter((file) => file.id !== id),
+            },
           };
         });
       }

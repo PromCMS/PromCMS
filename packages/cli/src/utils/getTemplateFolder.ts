@@ -4,7 +4,6 @@ import path from 'path';
 export type Path =
   | 'command-actions.project.create'
   | 'parts.generate-core-files'
-  | 'parts.create-propel-config'
   | 'parts.generate-module'
   | 'parts.create-project-module';
 

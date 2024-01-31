@@ -2,13 +2,13 @@ import { apiClient } from '@api';
 import Skeleton, { SkeltonProps } from '@components/Skeleton';
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { AsideWrapper } from '@components/editorialPage/AsideWrapper';
-import { MESSAGES } from '@constants';
-import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
+import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { ActionIcon, Button, SimpleGrid } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
+import { useCurrentUser } from 'hooks/useCurrentUser';
+import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import { FC, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -70,7 +70,7 @@ export const FormAside: FC = () => {
           successMessage: t('User can now follow instruction in their email'),
         },
         async () => {
-          const { data } = await apiClient.users.requestPasswordReset(
+          const { data } = await apiClient.profile.requestPasswordReset(
             user!.email
           );
 
@@ -158,8 +158,8 @@ export const FormAside: FC = () => {
                   ? 'Creating...'
                   : 'Updating...'
                 : view === 'create'
-                ? 'Create'
-                : 'Update'
+                  ? 'Create'
+                  : 'Update'
             )}
           </Button>
         </div>
@@ -167,7 +167,7 @@ export const FormAside: FC = () => {
       {view === 'update' &&
         currentUser?.can({
           action: 'update',
-          targetModel: 'users',
+          targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
         }) && (
           <AsideItemWrap title={t('Actions')}>
             <SimpleGrid cols={1} className="p-5">

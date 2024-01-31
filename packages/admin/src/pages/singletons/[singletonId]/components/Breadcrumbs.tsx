@@ -1,5 +1,5 @@
 import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
-import useCurrentSingleton from '@hooks/useCurrentSingleton';
+import useCurrentSingleton from 'hooks/useCurrentSingleton';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 

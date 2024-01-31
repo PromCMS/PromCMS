@@ -1,9 +1,10 @@
 import { MESSAGES } from '@constants';
 import { Input, Select, SelectProps } from '@mantine/core';
-import { ColumnTypeEmail } from '@prom-cms/schema';
 import { ChangeEventHandler, FC, useCallback, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
+import { ColumnTypeEmail } from '@prom-cms/schema';
 
 export const Email: FC<
   { columnName: string; disabled?: boolean } & ColumnTypeEmail

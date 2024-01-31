@@ -10,9 +10,10 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
       roles: [
         {
           name: 'Editor',
+          slug: 'editor',
           modelPermissions: {
             posts: {
-              u: SecurityOptionOptions.ALLOW_EVERYTHING,
+              u: SecurityOptionOptions.ALLOW_ALL,
             },
           },
         },
@@ -23,20 +24,17 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
     connections: [
       {
         name: 'base-connection',
-        adapter: 'sqlite',
-        dsn: 'sqlite:./database/sq.3',
-        user: '',
-        password: '',
+        uri: 'pdo-sqlite:///.database/database.sqlite',
       },
     ],
     models: [
       {
+        title: 'Články',
         tableName: 'posts',
         timestamp: true,
         sorting: true,
         draftable: true,
         preset: 'post',
-        title: 'Články',
         admin: {
           icon: 'Archive',
         },
@@ -55,6 +53,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
         ],
       },
       {
+        title: 'Stránky',
         tableName: 'pages',
         timestamp: true,
         sorting: true,
@@ -67,7 +66,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
             name: 'showInMenu',
             type: 'boolean',
             title: 'Zobrazit v menu',
-            default: false,
+            defaultValue: false,
             admin: {
               editor: {
                 placement: FieldPlacements.ASIDE,
@@ -133,7 +132,7 @@ export const mockedGeneratorConfig: GeneratorConfigInput = {
     singletons: [
       {
         tableName: 'frontpage',
-
+        title: 'Hlavní stránka',
         admin: { icon: 'Archive' },
         preset: 'post',
         columns: [

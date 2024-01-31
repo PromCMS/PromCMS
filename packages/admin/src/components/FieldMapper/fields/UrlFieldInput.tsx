@@ -1,10 +1,12 @@
 import { MESSAGES } from '@constants';
 import { Input, Select, SelectProps } from '@mantine/core';
-import { ColumnTypeUrl } from '@prom-cms/schema';
 import clsx from 'clsx';
 import { ChangeEventHandler, FC, useCallback, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+
+import { ColumnTypeUrl } from '@prom-cms/schema';
+
 const PROTOCOL_SPLIT = '://';
 
 export const UrlFieldInput: FC<

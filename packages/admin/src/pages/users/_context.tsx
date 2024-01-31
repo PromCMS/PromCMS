@@ -1,7 +1,7 @@
-import { pageUrls } from '@constants';
-import { useModelInfo } from '@hooks/useModelInfo';
-import { useUser } from '@hooks/useUser';
+import { BASE_PROM_ENTITY_TABLE_NAMES, pageUrls } from '@constants';
 import { useQueryClient } from '@tanstack/react-query';
+import { useModelInfo } from 'hooks/useModelInfo';
+import { useUser } from 'hooks/useUser';
 import {
   FC,
   PropsWithChildren,
@@ -40,7 +40,9 @@ export const ContextProvider: FC<PropsWithChildren<{ view: View }>> = ({
 }) => {
   const navigate = useNavigate();
   const { userId } = useParams();
-  const model = useModelInfo('users') as ApiResultModel;
+  const model = useModelInfo(
+    BASE_PROM_ENTITY_TABLE_NAMES.USERS
+  ) as ApiResultModel;
   const currentUser = useUser(userId as string, {
     enabled: false,
   });

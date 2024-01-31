@@ -1,9 +1,10 @@
 import { apiClient } from '@api';
-import { ItemID } from '@prom-cms/api-client';
 import clsx from 'clsx';
-import { DetailedHTMLProps, ImgHTMLAttributes, useMemo, FC } from 'react';
+import { DetailedHTMLProps, FC, ImgHTMLAttributes, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PhotoOff } from 'tabler-icons-react';
+
+import { ItemID } from '@prom-cms/api-client';
 
 export interface BackendImageProps
   extends Omit<
@@ -45,8 +46,8 @@ const BackendImage: FC<BackendImageProps> = ({
 
     return String(id).startsWith('http')
       ? String(id)
-      : apiClient.files
-          .getAssetUrl(
+      : apiClient.library.files
+          .getUrl(
             id,
             Object.fromEntries(
               Object.entries({ w: width, h: height, q: quality })

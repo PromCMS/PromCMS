@@ -102,18 +102,7 @@ export const createProjectAction = async (
   if (promDevelop) {
     await fs.writeJSON(
       path.join(tempBuildFolder, createPromConfigPath('json')),
-      {
-        ...mockedGeneratorConfig,
-        database: {
-          ...mockedGeneratorConfig.database,
-          connections: [
-            {
-              ...mockedGeneratorConfig.database.connections.at(0),
-              dsn: `sqlite:${path.join(cwd, 'database', 'sq.3')}`,
-            },
-          ],
-        },
-      }
+      mockedGeneratorConfig
     );
   }
 
@@ -145,7 +134,7 @@ export const createProjectAction = async (
   };
   await runWithProgress(
     generateModels({ ...generateModelsOptions, appRoot: tempBuildFolder }),
-    'Add default models, if any'
+    'Generate models, if any'
   );
 
   if (admin) {

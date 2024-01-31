@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { columnTypeBaseAdminConfigSchema } from './columnTypeBaseAdminConfigSchema.js';
 import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 import { columnTypeNumberSchema } from './columnTypeNumberSchema.js';
@@ -46,7 +47,7 @@ export type RepeaterAdminSchema = z.infer<typeof repeaterAdminSchema>;
 
 export const columnTypeJSONSchema = columnTypeBaseSchema.extend({
   type: z.enum(['json']),
-  default: z.string().optional(),
+  defaultValue: z.string().optional(),
 
   admin: z
     .discriminatedUnion('fieldType', [repeaterAdminSchema, basicAdminSchema])

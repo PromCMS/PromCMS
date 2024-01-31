@@ -1,5 +1,5 @@
-import { z } from 'zod';
 import * as iconSet from 'tabler-icons-react';
+import { z } from 'zod';
 
 import { columnTypeSchema } from './columnType/columnTypeSchema.js';
 
@@ -7,12 +7,7 @@ const keys = Object.keys(iconSet);
 
 export const databaseConfigItemBaseSchema = z.object({
   tableName: z.string().min(1).describe('Table name for entry type'),
-
-  title: z
-    .string()
-    .min(1)
-    .describe('Human readable form of current model')
-    .optional(),
+  title: z.string().min(1).describe('Human readable form of current model'),
 
   /**
    * Columns preset, useful when you want to build something basic:
@@ -40,7 +35,7 @@ export const databaseConfigItemBaseSchema = z.object({
    * Admin config
    */
   admin: z.object({
-    hidden: z.boolean().default(false),
+    isHidden: z.boolean().default(false),
 
     /**
      * Generated icon for this model, is visible in admin

@@ -1,3 +1,7 @@
+import { apiClient } from '@api';
+import { IFileListContext } from '@components/FileList/context';
+import { pageUrls } from '@constants';
+import { ActionIcon, Checkbox } from '@mantine/core';
 import {
   AnchorHTMLAttributes,
   ChangeEventHandler,
@@ -7,13 +11,11 @@ import {
   useCallback,
   useRef,
 } from 'react';
-import { useClassNames as getClassnames } from '../../useClassNames';
-import { ActionIcon, Checkbox } from '@mantine/core';
 import { Trash } from 'tabler-icons-react';
+
 import { FileItem as FileItemType, ItemID } from '@prom-cms/api-client';
-import { apiClient } from '@api';
-import { pageUrls } from '@constants';
-import { IFileListContext } from '@components/FileList/context';
+
+import { useClassNames as getClassnames } from '../../useClassNames';
 
 const classNames = getClassnames();
 
@@ -82,8 +84,8 @@ export const FileItem: FC<FileItemProps> = ({
             <img
               alt="uploaded file"
               className="absolute top-0 left-0 h-full w-full object-cover"
-              src={apiClient.files
-                .getAssetUrl(fileInfo.id, { w: '250', q: '60' })
+              src={apiClient.library.files
+                .getUrl(fileInfo.id, { w: '250', q: '60' })
                 .toString()}
             />
           ) : (

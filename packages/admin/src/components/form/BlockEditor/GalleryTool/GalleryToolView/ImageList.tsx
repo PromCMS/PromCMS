@@ -6,8 +6,9 @@ import { useMemo } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus } from 'tabler-icons-react';
-import { useGalleryToolViewContext } from './context';
+
 import { ImageItem } from './ImageItem';
+import { useGalleryToolViewContext } from './context';
 
 export const ImageList: FC = () => {
   const { t } = useTranslation();

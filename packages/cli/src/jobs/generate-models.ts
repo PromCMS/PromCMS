@@ -1,34 +1,49 @@
-import { GeneratorConfig } from '@prom-cms/schema';
-import { $ } from 'execa';
 import fs from 'fs-extra';
 import path from 'node:path';
-import createPropelConfig from './create-propel-config.js';
+
+import { GeneratorConfig } from '@prom-cms/schema';
+
 import { installPHPDeps } from './install-php-deps.js';
+import { $ } from "execa";
+import { compilePromConfig } from "./compile-prom-config.js";
 
 export type GenerateDevelopModelsOptions = {
   config: GeneratorConfig;
   appRoot: string;
 };
 
-export const generateModels = async function genereateDevelopmentCoreModels({
-  config,
+const addComposerScripts = async ({
   appRoot,
-}: GenerateDevelopModelsOptions) {
-  const vendorPathname = path.join(appRoot, 'vendor');
-  if (
-    !(await fs.pathExists(vendorPathname)) ||
-    !(await fs.readdir(vendorPathname).then((items) => !!items.length))
-  ) {
-    await installPHPDeps({ cwd: appRoot });
-  }
+}: GenerateDevelopModelsOptions) => {
+  const filename = path.join(appRoot, 'composer.json');
+  const contents = await fs.readJSON(filename, {
+    encoding: 'utf8',
+  });
 
-  await createPropelConfig({ config, appRoot });
+  contents.scripts ??= {};
+
+  contents.scripts = {
+    ...contents.scripts,
+    'build-models': [
+      'vendor/bin/prom-cms models:create',
+      'composer dump-autoload',
+    ],
+  };
+
+  await fs.writeJSON(filename, contents);
+};
+
+export const generateModels = async function genereateDevelopmentCoreModels(
+  options: GenerateDevelopModelsOptions
+) {
+  const { appRoot } = options;
+
+  await Promise.all([addComposerScripts(options), compilePromConfig(options)]);
+
+  await installPHPDeps({ cwd: appRoot });
   await $({
     cwd: appRoot,
-  })`vendor/bin/propel config:convert --config-dir=./.prom-cms/propel`;
-  await $({
-    cwd: appRoot,
-  })`vendor/bin/propel model:build --config-dir=./.prom-cms/propel`;
+  })`composer run build-models`;
 };
 
 export default generateModels;

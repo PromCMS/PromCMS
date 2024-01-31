@@ -2,11 +2,13 @@ import { MODELS_FOLDER_NAME, MODULE_FOLDER_NAME } from '@constants';
 import { createAdminFiles } from '@jobs/create-admin-files.js';
 import { createProjectModule } from '@jobs/create-project-module.js';
 import generateModels from '@jobs/generate-models.js';
-import { Logger, getModuleFolderName } from '@utils';
+import { Logger } from '@utils';
 import { getGeneratorConfigData } from '@utils/getGeneratorConfigData.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
 import fs from 'fs-extra';
 import path from 'path';
+
+import { nameToPhpClassName } from '@prom-cms/schema';
 
 type Options = {
   cwd: string;
@@ -19,15 +21,14 @@ export const updateProjectAction = async (options: Options) => {
   // Vadation block
   const generatorConfig = await getGeneratorConfigData(cwd);
   // TODO: Load dotenv
-  const rootModuleName = getModuleFolderName(generatorConfig.project.name);
+  const rootModuleName = nameToPhpClassName(generatorConfig.project.name);
 
   const rootModulePath = path.join(cwd, MODULE_FOLDER_NAME, rootModuleName);
   const rootModelsPath = path.join(rootModulePath, MODELS_FOLDER_NAME);
-  const propelDirectory = path.join(cwd, '.prom-cms', 'propel');
 
   if (await fs.pathExists(rootModelsPath)) {
     await runWithProgress(
-      Promise.all([fs.emptyDir(rootModelsPath), fs.remove(propelDirectory)]),
+      Promise.all([fs.emptyDir(rootModelsPath)]),
       'Deleting old models'
     );
 

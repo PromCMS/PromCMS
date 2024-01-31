@@ -1,8 +1,10 @@
-import path from 'path';
-import { generateByTemplates, getModuleFolderName } from '@utils';
-import generateModule from './generate-module.js';
-import { GeneratorConfig } from '@prom-cms/schema';
 import { MODULE_FOLDER_NAME } from '@constants';
+import { generateByTemplates } from '@utils';
+import path from 'path';
+
+import { GeneratorConfig, nameToPhpClassName } from '@prom-cms/schema';
+
+import generateModule from './generate-module.js';
 
 export type CreateProjectModuleOptions = {
   cwd: string;
@@ -14,14 +16,14 @@ export const createProjectModule = async ({
   config,
 }: CreateProjectModuleOptions) => {
   const modulesRoot = path.join(cwd, MODULE_FOLDER_NAME);
-  const moduleName = getModuleFolderName(config.project.name);
+  const moduleName = nameToPhpClassName(config.project.name);
   const createAt = path.join(modulesRoot, moduleName);
 
   await generateModule(modulesRoot, moduleName);
 
   await generateByTemplates('parts.create-project-module', createAt, {
     '*': {
-      project: config.project,
+      project: { ...config.project, slug: moduleName },
       views: {
         prefix: moduleName,
       },

@@ -2,7 +2,7 @@ import { EDITOR_MESSAGES, MESSAGES, SIMPLE_WORDS } from '@constants';
 import { ActionIcon, Divider, Tooltip } from '@mantine/core';
 import { useCurrentEditor } from '@tiptap/react';
 import clsx from 'clsx';
-import { FC, forwardRef, MouseEventHandler, useCallback } from 'react';
+import { FC, MouseEventHandler, forwardRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   AlignCenter,

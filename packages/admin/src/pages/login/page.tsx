@@ -1,9 +1,10 @@
-import { useGlobalContext } from '@contexts/GlobalContext';
 import { Loader } from '@components/SiteLoader';
 import { Page } from '@custom-types';
-import { Form } from './_components';
-import { useNavigate } from 'react-router-dom';
+import { useGlobalContext } from 'contexts/GlobalContext';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { Form } from './_components';
 
 const LoginPage: Page = () => {
   const { isBooting, isLoggedIn } = useGlobalContext();
