@@ -1,5 +1,27 @@
 # @prom-cms/cli
 
+## 0.22.0
+
+### Minor Changes
+
+- f912b6c: BREAKING: Adds validation of prom-cms/core minimal version.
+- a735da6: BREAKING: Changes folder structure of output PromCMS instances. Previously each app had modules and functionality was defined into those separable pieces, but after usage reports it deemed to be unnecessary complexity. Newly each app has src where you strucure your php source code and there is src/frontend folder for frontend related javascript code.
+- f912b6c: Updates composer.json template to include autoload for modules for imporoved usages of php use and namespaces
+- f912b6c: BREAKING: Complete rewrite of internals to support new version of prom-core. This version uses propel as its corner stone for creating models and all things related to database in general. There are also new types and restructures between old packages and new packages.
+- f912b6c: Adds htaccess with "deny from all". This should improve security even more
+- f912b6c: BREAKING: Removes db group of commands entirely
+- e1b38bd: BREAKING: Updates templates to support new routing, removes old templates and make development as default
+- f912b6c: BREAKING: Use new commands from prom-core instead of in this repo as all thing related to managing application is placed in that and this cli serves as proxy for that
+
+### Patch Changes
+
+- f912b6c: Removes old vite plugin and config package and creates new @prom-cms/vite package containing everything related vite
+- f912b6c: Update vite to latest v5
+- bfc9af1: Fixes type definiions, schemas and components
+- bb26014: Removes rimraf as that is not used anywhere
+- Updated dependencies [f912b6c]
+  - @prom-cms/prettier-config@0.1.0
+
 ## 0.21.6
 
 ### Patch Changes

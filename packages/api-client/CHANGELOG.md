@@ -1,5 +1,20 @@
 # @prom-cms/api-client
 
+## 0.11.0
+
+### Minor Changes
+
+- f912b6c: BREAKING: Complete rewrite of internals to support new version of prom-core. This version uses propel as its corner stone for creating models and all things related to database in general. There are also new types and restructures between old packages and new packages.
+- e1b38bd: Updates api client to match latest api implementation
+
+### Patch Changes
+
+- Updated dependencies [f912b6c]
+- Updated dependencies [f912b6c]
+- Updated dependencies [f912b6c]
+- Updated dependencies [e1b38bd]
+  - @prom-cms/schema@0.6.0
+
 ## 0.10.0
 
 ### Minor Changes
