@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.1
+
+### Patch Changes
+
+- 803f384: Adds missing dependency "@prom-cms/schema"
+
 ## 0.22.0
 
 ### Minor Changes
