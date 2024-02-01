@@ -1,5 +1,17 @@
 # @prom-cms/schema
 
+## 0.6.0
+
+### Minor Changes
+
+- f912b6c: BREAKING: New required properties under database - "connections". Connections are specifications for connection to database inside your app. Each specification of connection can be granullary specified for each database (lets say you have two tables and each of one lives in different database). Also big new thing is removing keys of database tables/singletons/models and columns. Now keys can be defined in table and column item . This improves predicability of order in which are columns and tables created
+- f912b6c: BREAKING: Complete rewrite of internals to support new version of prom-core. This version uses propel as its corner stone for creating models and all things related to database in general. There are also new types and restructures between old packages and new packages.
+- e1b38bd: BREAKING: Updates schema to have some security properties required and includes default tables inside models
+
+### Patch Changes
+
+- f912b6c: Removes old vite plugin and config package and creates new @prom-cms/vite package containing everything related vite
+
 ## 0.5.0
 
 ### Minor Changes

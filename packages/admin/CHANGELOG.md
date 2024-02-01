@@ -1,5 +1,28 @@
 # @prom-cms/admin
 
+## 0.18.0
+
+### Minor Changes
+
+- a735da6: BREAKING: Changes folder structure of output PromCMS instances. Previously each app had modules and functionality was defined into those separable pieces, but after usage reports it deemed to be unnecessary complexity. Newly each app has src where you strucure your php source code and there is src/frontend folder for frontend related javascript code.
+- e1b38bd: Removes unused parts and fixes build after api change
+- f912b6c: BREAKING: Complete rewrite of internals to support new version of prom-core. This version uses propel as its corner stone for creating models and all things related to database in general. There are also new types and restructures between old packages and new packages.
+- bb26014: Rewrites BlockEditor from Editor.js to TipTap as that gives us more flexibility
+
+### Patch Changes
+
+- f912b6c: Update vite to latest v5
+- bfc9af1: Fixes type definiions, schemas and components
+- bb26014: Removes rimraf as that is not used anywhere
+- fb79ca8: Cleans dependencies and removes unused
+- Updated dependencies [f912b6c]
+- Updated dependencies [f912b6c]
+- Updated dependencies [f912b6c]
+- Updated dependencies [e1b38bd]
+- Updated dependencies [e1b38bd]
+  - @prom-cms/schema@0.6.0
+  - @prom-cms/api-client@0.11.0
+
 ## 0.17.2
 
 ### Patch Changes
