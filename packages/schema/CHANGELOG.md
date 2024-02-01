@@ -1,5 +1,11 @@
 # @prom-cms/schema
 
+## 0.6.1
+
+### Patch Changes
+
+- 5c64bd3: Moves dependency tabler-icons-react to normal dependencies as that is used during runtime
+
 ## 0.6.0
 
 ### Minor Changes
