@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.4
+
+### Patch Changes
+
+- 1b08529: Fixes versions
+
 ## 0.22.3
 
 ### Patch Changes
