@@ -33,9 +33,10 @@ export const startPHPServer = ({
   });
 
   // Log what happens on server
-  serverProcess.stderr.on('data', function (data) {
-    logger?.info(`[PHP Server] ${data}`);
-  });
+  // TODO - enable by some toggle
+  // serverProcess.stderr.on('data', function (data) {
+  //   logger?.info(`[PHP Server] ${data}`);
+  // });
 
   return serverProcess;
 };

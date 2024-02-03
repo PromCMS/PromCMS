@@ -4,9 +4,7 @@
     "rootDir": "src",
     "outDir": "dist",
     "noEmit": false,
-    "target": "ESNEXT",
-    "moduleResolution": "nodenext",
-    "module": "esnext"
+    "moduleResolution": "NodeNext",
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

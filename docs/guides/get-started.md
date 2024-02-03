@@ -4,9 +4,9 @@
     ```bash
     mkdir test-project && cd ./test-project
     ```
-2. **Optional:** Initialize your npm project to create package.json
+2. **Optional:** Initialize your pnpm project to create package.json
     ```base
-    npm init
+    pnpm init
     ```
 3. **Optional:** Initialize git with 
     ```
@@ -20,6 +20,6 @@
     ```
 6. Now your project is prepared, ready to go and you can start your dev server 🎉
     ```bash
-    npm run dev
+    pnpm run dev
     ```
 7. You can now go to [http://localhost:3000](http://localhost:3000)

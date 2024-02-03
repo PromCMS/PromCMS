@@ -14,9 +14,9 @@ export default defineConfig(async ({ mode, command }) => {
   const projectRoot = path.join(currentFolder, 'src');
   const developmentProjectPath = path.join(
     repoRoot,
-    'node_modules',
-    '.prom-cms',
-    'php-app'
+    'packages',
+    'cli',
+    '.dev'
   );
   let abortController: AbortController | undefined;
 
@@ -38,7 +38,7 @@ export default defineConfig(async ({ mode, command }) => {
         `PromCMS testing project not present at ${developmentProjectPath}, creating it please wait...`
       );
 
-      await execa('npm', ['run', 'project:create'], {
+      await execa('pnpm', ['run', 'project:create'], {
         cwd: path.join(repoRoot, 'packages', 'cli'),
       });
 
@@ -81,7 +81,7 @@ export default defineConfig(async ({ mode, command }) => {
           try {
             abortController = new AbortController();
 
-            await execa('npm', ['run', 'project:update'], {
+            await execa('pnpm', ['run', 'project:update'], {
               cwd: path.join(process.cwd(), '../../packages/cli'),
               signal: abortController.signal,
             });

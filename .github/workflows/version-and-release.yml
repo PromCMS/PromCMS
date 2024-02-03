@@ -15,7 +15,7 @@ jobs:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
-      - uses: n1hility/cancel-previous-runs@v2
+      - uses: n1hility/cancel-previous-runs@v3
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: version-and-release.yml
@@ -28,28 +28,33 @@ jobs:
         name: Cache
         with:
           path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Setup node 20
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm i
 
         # https://github.com/changesets/action
-      - name: Create Release Pull Request or Publish to npm
+      - name: Create Release Pull Request or Publish to node package registry
         uses: changesets/action@v1
         with:
-          publish: npm run release
-          version: npm run version-packages
+          publish: pnpm run release
+          version: pnpm run version-packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       
       - name: Update lockfile after version
-        run: npm i --package-lock-only
+        run: pnpm i --package-lock-only
 
       - name: Create JSON schema and upload
         run: node scripts/generate-schema-and-upload.mjs

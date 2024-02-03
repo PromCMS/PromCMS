@@ -81,6 +81,43 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
       const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
       const htmlTransform = server.transformIndexHtml;
 
+      const viteTransformHtml = async (
+        incomming: string,
+        incommingUrl: string
+      ) => {
+        let body: Buffer = Buffer.from('');
+        try {
+          body = Buffer.from(
+            await htmlTransform(incommingUrl ?? '/', incomming)
+          );
+        } catch (error) {
+          if (
+            error instanceof Error &&
+            error.message.startsWith(
+              'Unable to parse HTML; parse5 error code unexpected-question-mark-instead-of-tag-name'
+            )
+          ) {
+            logger?.error('Some error happened on PHP server', {
+              timestamp: true,
+              error,
+            });
+            body = Buffer.from(incomming);
+          } else {
+            logger?.error(
+              'Error happened during transform of server response',
+              { timestamp: true, error: error as any }
+            );
+            logger?.error(String(error), {
+              timestamp: true,
+              error: error as any,
+            });
+            body = Buffer.from('Some error happened');
+          }
+        }
+
+        return body;
+      };
+
       // And then before starting your server...
       runBeforeExiting(async (...args) => {
         // TODO: Make this message more clear on what happened
@@ -140,34 +177,10 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
 
           // If its not an api request we use vite htmlTransform
           if (!clientReq.url?.startsWith('/api/')) {
-            try {
-              body = Buffer.from(
-                await htmlTransform(clientReq.url ?? '/', body.toString())
-              );
-            } catch (error) {
-              if (
-                error instanceof Error &&
-                error.message.startsWith(
-                  'Unable to parse HTML; parse5 error code unexpected-question-mark-instead-of-tag-name'
-                )
-              ) {
-                logger?.error('Some error happened on PHP server', {
-                  timestamp: true,
-                  error,
-                });
-                body = Buffer.from(body.toString());
-              } else {
-                logger?.error(
-                  'Error happened during transform of server response',
-                  { timestamp: true, error: error as any }
-                );
-                logger?.error(String(error), {
-                  timestamp: true,
-                  error: error as any,
-                });
-                body = Buffer.from('Some error happened');
-              }
-            }
+            body = await viteTransformHtml(
+              body.toString(),
+              clientReq.url ?? '/'
+            );
           }
 
           const stream = Readable.from(body);
@@ -216,19 +229,60 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
       if (!currentPackageIsPromAdmin) {
         // TODO: this is kind of bad since server gets two requests instead of one
         // We catch all routes and check if they need to be proxied to PHP server first
-        server.middlewares.use(async (req, res, next) => {
+        server.middlewares.use(async (clientRequest, res, next) => {
           try {
-            const requestUrl = new URL(req.url!, serverOrigin);
-            const checkPage = await fetch(requestUrl.toString(), {
-              method: req.method,
+            const requestUrl = new URL(clientRequest.url!, serverOrigin);
+            const clientRequestBody = await new Promise<string>(
+              (resolve, reject) => {
+                let body = '';
+                clientRequest.on('data', (chunk) => {
+                  body += chunk;
+                });
+                clientRequest.on('end', () => {
+                  resolve(body);
+                });
+                clientRequest.on('error', () => {
+                  reject();
+                });
+              }
+            );
+
+            const phpServerResult = await fetch(requestUrl.toString(), {
+              method: clientRequest.method,
+              headers: new Headers(
+                Object.entries(clientRequest.headers)
+                  .map(([key, value]) => [
+                    key,
+                    Array.isArray(value) ? value.join(',') : value,
+                  ])
+                  .filter((item) => !item.filter(Boolean).length) as [
+                  string,
+                  string,
+                ][]
+              ),
+              body: clientRequestBody,
             });
 
-            if (checkPage.status !== 404) {
-              proxy.web(req, res, {
-                target: serverOrigin,
-              });
+            if (phpServerResult.status !== 404) {
+              const phpServerResponse = await phpServerResult.text();
+              const transformedResponse = await viteTransformHtml(
+                phpServerResponse,
+                clientRequest.url ?? '/'
+              );
+              await new Promise((resolve, reject) =>
+                res.write(transformedResponse, (error) => {
+                  if (error) {
+                    reject(error);
+                  } else {
+                    resolve(true);
+                  }
+                })
+              );
+              res.statusCode = phpServerResult.status;
 
-              return;
+              for (const [key, value] of phpServerResult.headers) {
+                res.setHeader(key, value);
+              }
             }
           } catch (error) {
             const message = (error as Error).message;

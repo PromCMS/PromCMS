@@ -5,8 +5,8 @@
     "outDir": "dist",
     "noEmit": false,
     "target": "ESNEXT",
-    "module": "esnext",
-    "moduleResolution": "nodenext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "isolatedModules": false
   },
   "include": [

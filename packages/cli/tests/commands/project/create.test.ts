@@ -34,7 +34,7 @@ describe('commands', () => {
               'project',
               'create',
               '--packageManager',
-              'npm',
+              'pnpm',
               '--name',
               'Test Project',
               '--clean',

@@ -5,9 +5,7 @@
     "baseUrl": "./src",
     "outDir": "dist",
     "noEmit": false,
-    "moduleResolution": "nodenext",
-    "target": "ESNEXT",
-    "module": "ES2020",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "paths": {

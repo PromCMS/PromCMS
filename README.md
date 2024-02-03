@@ -22,7 +22,7 @@ This will boost your performance a lot and you can focus on what really matters 
     ```
 6. Now your project is prepared, ready to go and you can start your dev server 🎉
     ```bash
-    npm run dev
+    pnpm run dev
     ```
 7. You can now go to [http://localhost:3000](http://localhost:3000) 🤯
  

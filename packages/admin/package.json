@@ -84,7 +84,7 @@
     "@types/fs-extra": "9.0.13",
     "@types/lodash.find": "^4.6.6",
     "@types/mustache": "^4.2.4",
-    "@types/node": "16.11.11",
+    "@types/node": "^20",
     "@types/react": "^18.0.24",
     "@types/lodash": "^4.14.202",
     "@types/react-beautiful-dnd": "13.1.2",
@@ -100,7 +100,7 @@
     "prettier-plugin-tailwindcss": "^0.5.4",
     "rollup-plugin-visualizer": "^5.11.0",
     "tailwindcss": "^3.2.4",
-    "typescript": "^4.9.4",
+    "typescript": "^5.3.3",
     "vite": "^5.0.10",
     "vite-tsconfig-paths": "^4.2.2"
   }
