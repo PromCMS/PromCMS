@@ -1,5 +1,13 @@
 # @prom-cms/cli
 
+## 0.22.2
+
+### Patch Changes
+
+- 7e2944a: Updates php plugin and try catches formatting of a file to not stop generating a project. Formatting is not really mandatory
+- Updated dependencies [7e2944a]
+  - @prom-cms/prettier-config@0.1.1
+
 ## 0.22.1
 
 ### Patch Changes
