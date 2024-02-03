@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.5
+
+### Patch Changes
+
+- de71dbc: Fixes json templates and wrongly missing quotes
+
 ## 0.22.4
 
 ### Patch Changes
