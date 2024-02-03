@@ -55,6 +55,7 @@
   "devDependencies": {
     "@types/find-config": "1.0.1",
     "vitest": "^0.24.3",
+    "tsc-alias": "^1.8.3",
     "typescript": "^5.3.3",
     "@prom-cms/vite": "^0.1.0",
     "find-config": "1.0.0",

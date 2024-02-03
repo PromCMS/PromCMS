@@ -319,6 +319,9 @@ importers:
         specifier: ^0.27
         version: 0.27.2
     devDependencies:
+      tsc-alias:
+        specifier: ^1.8.3
+        version: 1.8.8
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -429,6 +432,9 @@ importers:
       '@types/find-config':
         specifier: 1.0.1
         version: 1.0.1
+      tsc-alias:
+        specifier: ^1.8.3
+        version: 1.8.8
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -475,6 +481,9 @@ importers:
       find-config:
         specifier: 1.0.0
         version: 1.0.0
+      tsc-alias:
+        specifier: ^1.8.3
+        version: 1.8.8
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
@@ -515,6 +524,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.2.1
         version: 4.2.1(vite@5.0.12)
+      tsc-alias:
+        specifier: ^1.8.3
+        version: 1.8.8
       typescript:
         specifier: ^5.3.3
         version: 5.3.3
