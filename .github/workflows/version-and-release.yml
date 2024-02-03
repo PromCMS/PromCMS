@@ -57,7 +57,7 @@ jobs:
         run: pnpm i --frozen-lockfile=false
 
       - name: Create JSON schema and upload
-        run: node scripts/generate-schema-and-upload.mjs
+        run: node .github/scripts/generate-schema-and-upload.mjs
         env:
           PROM_FTP_CONNECTION_STRING: ${{ secrets.PROM_FTP_CONNECTION_STRING }}
        
