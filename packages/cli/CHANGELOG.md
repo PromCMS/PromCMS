@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.8
+
+### Patch Changes
+
+- 704d9f0: Fixes composer.json.ejs template
+
 ## 0.22.7
 
 ### Patch Changes
