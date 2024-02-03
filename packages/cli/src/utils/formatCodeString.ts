@@ -1,5 +1,7 @@
 import prettier from 'prettier';
 
+import { Logger } from './logger.js';
+
 export const formatCodeString = async (content: string, filename: string) => {
   const ignoreFileParts = [
     '.gitignore',
@@ -19,13 +21,19 @@ export const formatCodeString = async (content: string, filename: string) => {
   }
 
   let result = content;
-  // TODO import from config package
-  const { default: config } = await import('@prom-cms/prettier-config');
+  try {
+    const { default: config } = await import('@prom-cms/prettier-config');
 
-  result = await prettier.format(result, {
-    ...config,
-    filepath: filename,
-  });
+    result = await prettier.format(result, {
+      ...config,
+      filepath: filename,
+    });
+  } catch (error) {
+    Logger.error(
+      `Failed to format file "${filename}" (but still wrote it), because:`
+    );
+    console.log(error);
+  }
 
   return result;
 };
