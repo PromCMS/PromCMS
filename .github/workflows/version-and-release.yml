@@ -54,7 +54,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       
       - name: Update lockfile after version
-        run: pnpm i
+        run: pnpm i --frozen-lockfile=false
 
       - name: Create JSON schema and upload
         run: node scripts/generate-schema-and-upload.mjs
