@@ -453,6 +453,9 @@ importers:
 
   packages/schema:
     dependencies:
+      lodash.isstring:
+        specifier: ^4.0.1
+        version: 4.0.1
       lodash.kebabcase:
         specifier: ^4.1.1
         version: 4.1.1
@@ -472,6 +475,9 @@ importers:
       '@types/find-config':
         specifier: 1.0.1
         version: 1.0.1
+      '@types/lodash.isstring':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/lodash.kebabcase':
         specifier: ^4.1.7
         version: 4.1.9
@@ -4021,6 +4027,12 @@ packages:
       '@types/lodash': 4.14.202
     dev: true
 
+  /@types/lodash.isstring@4.0.9:
+    resolution: {integrity: sha512-sjGPpa15VBpMns/4s6Blm567JgxLVVu/eCYCe7h/TdQyPCz9lIhaLSISjN7ZC9cDXmUT2IM/4mNRw8OtYirziw==}
+    dependencies:
+      '@types/lodash': 4.14.202
+    dev: true
+
   /@types/lodash.kebabcase@4.1.9:
     resolution: {integrity: sha512-kPrrmcVOhSsjAVRovN0lRfrbuidfg0wYsrQa5IYuoQO1fpHHGSme66oyiYA/5eQPVl8Z95OA3HG0+d2SvYC85w==}
     dependencies:
@@ -7140,6 +7152,10 @@ packages:
 
   /lodash.isplainobject@4.0.6:
     resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==}
+    dev: false
+
+  /lodash.isstring@4.0.1:
+    resolution: {integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==}
     dev: false
 
   /lodash.kebabcase@4.1.1:
