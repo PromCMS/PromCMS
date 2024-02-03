@@ -59,7 +59,7 @@
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
-    "vitest": "^1.1.0",
+    "vitest": "^1.2.2",
     "vite-tsconfig-paths": "^4.2.2",
     "@vitejs/plugin-react": "^4.2.1",
     "tsc-alias": "^1.8.3",

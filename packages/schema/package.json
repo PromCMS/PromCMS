@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/find-config": "1.0.1",
-    "vitest": "^0.24.3",
+    "vitest": "^1.2.2",
     "tsc-alias": "^1.8.3",
     "typescript": "^5.3.3",
     "@types/lodash": "^4.14.202",
