@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/schema",
   "description": "Schema package for prom cms packages",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
@@ -58,7 +58,7 @@
     "tsc-alias": "^1.8.3",
     "typescript": "^5.3.3",
     "@types/lodash": "^4.14.202",
-    "@prom-cms/vite": "^0.1.0",
+    "@prom-cms/vite": "^0.2.0",
     "find-config": "1.0.0",
     "chalk": "5.0.0"
   }

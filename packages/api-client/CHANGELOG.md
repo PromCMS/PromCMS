@@ -1,5 +1,17 @@
 # @prom-cms/api-client
 
+## 0.11.1
+
+### Patch Changes
+
+- 5ee3550: Changes packages manager from npm to pnpm
+- 4b1f30b: Adds missing tsc-alias package
+- Updated dependencies [f8acbd1]
+- Updated dependencies [20a69e4]
+- Updated dependencies [5ee3550]
+- Updated dependencies [4b1f30b]
+  - @prom-cms/schema@0.6.2
+
 ## 0.11.0
 
 ### Minor Changes

@@ -1,5 +1,18 @@
 # @prom-cms/cli
 
+## 0.22.3
+
+### Patch Changes
+
+- 20a69e4: Updates vitest to latest
+- 5ee3550: Fixes template for starting prom-cms config
+- 5ee3550: Changes packages manager from npm to pnpm
+- Updated dependencies [f8acbd1]
+- Updated dependencies [20a69e4]
+- Updated dependencies [5ee3550]
+- Updated dependencies [4b1f30b]
+  - @prom-cms/schema@0.6.2
+
 ## 0.22.2
 
 ### Patch Changes
