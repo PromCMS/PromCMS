@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.6
+
+### Patch Changes
+
+- a5b7bf0: Fixes package.json.ejs template
+
 ## 0.22.5
 
 ### Patch Changes
