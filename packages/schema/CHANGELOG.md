@@ -1,5 +1,14 @@
 # @prom-cms/schema
 
+## 0.6.2
+
+### Patch Changes
+
+- f8acbd1: Adds missing package lodash.isstring
+- 20a69e4: Updates vitest to latest
+- 5ee3550: Changes packages manager from npm to pnpm
+- 4b1f30b: Adds missing tsc-alias package
+
 ## 0.6.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@prom-cms/admin",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "type": "module",
   "main": "./index.js",
   "exports": {
@@ -37,8 +37,8 @@
     "@mantine/hooks": "^5.10.2",
     "@mantine/notifications": "^5.10.2",
     "@popperjs/core": "2.11.0",
-    "@prom-cms/api-client": "^0.11.0",
-    "@prom-cms/schema": "^0.6.0",
+    "@prom-cms/api-client": "^0.11.1",
+    "@prom-cms/schema": "^0.6.2",
     "zod": "^3.20.2",
     "@svgr/webpack": "^6.1.2",
     "@tailwindcss/typography": "^0.5.10",
@@ -85,7 +85,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@prom-cms/vite": "^0.1.0",
+    "@prom-cms/vite": "^0.2.0",
     "@types/find-config": "1.0.1",
     "@types/fs-extra": "9.0.13",
     "@types/uuid": "^9.0.8",

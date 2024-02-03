@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/cli",
   "description": "PromCMS cli package",
-  "version": "0.22.2",
+  "version": "0.22.3",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
@@ -46,7 +46,7 @@
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
     "@prom-cms/prettier-config": "^0.1.1",
-    "@prom-cms/schema": "^0.6.0",
+    "@prom-cms/schema": "^0.6.2",
     "chalk": "^5.1.2",
     "lodash": "^4.17.21",
     "glob": "^10.3.10",
@@ -66,12 +66,12 @@
     "zod": "^3.20.2"
   },
   "devDependencies": {
-    "@prom-cms/admin": "^0.18.0",
+    "@prom-cms/admin": "^0.18.1",
     "@swc/core": "^1.3.41",
     "@types/ejs": "^3.1.1",
     "@types/lodash": "^4.14.202",
     "@types/find-config": "^1.0.1",
-    "@prom-cms/vite": "^0.1.0",
+    "@prom-cms/vite": "^0.2.0",
     "@types/fs-extra": "9.0.13",
     "@types/inquirer": "^9.0.3",
     "tsc-alias": "^1.8.3",

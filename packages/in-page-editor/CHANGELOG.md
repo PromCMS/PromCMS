@@ -1,5 +1,12 @@
 # @prom-cms/in-page-edit
 
+## 0.2.2
+
+### Patch Changes
+
+- 5ee3550: Changes packages manager from npm to pnpm
+- 4b1f30b: Adds missing tsc-alias package
+
 ## 0.2.1
 
 ### Patch Changes
