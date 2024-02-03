@@ -71,6 +71,8 @@
     "mustache": "^4.2.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.0",
+    "@tiptap/extension-dropcursor": "^2.2.1",
+    "@tiptap/extension-gapcursor": "^2.2.1",
     "react-dom": "18.2.0",
     "react-dropzone": "14.2.2",
     "react-hook-form": "7.34.0",
