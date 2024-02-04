@@ -47,8 +47,12 @@ export const createAdminFiles = async ({ cwd }: CreateAdminFilesOptions) => {
   await fs.ensureDir(adminFinalPath);
   await fs.emptyDir(adminFinalPath);
 
-  fs.copy(path.join(adminRoot, 'dist'), path.join(cwd, 'public', 'admin'), {
-    recursive: true,
-    overwrite: true,
-  });
+  await fs.copy(
+    path.join(adminRoot, 'dist'),
+    path.join(cwd, 'public', 'admin'),
+    {
+      recursive: true,
+      overwrite: true,
+    }
+  );
 };
