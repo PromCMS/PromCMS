@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.10
+
+### Patch Changes
+
+- 92369ed: Combines resolve package with fs pathexists
+
 ## 0.22.9
 
 ### Patch Changes
