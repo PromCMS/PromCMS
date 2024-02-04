@@ -358,6 +358,9 @@ importers:
       '@faker-js/faker':
         specifier: ^7.6.0
         version: 7.6.0
+      '@prom-cms/admin':
+        specifier: ^0.18.1
+        version: link:../admin
       '@prom-cms/prettier-config':
         specifier: ^0.1.1
         version: link:../prettier-config
@@ -419,9 +422,6 @@ importers:
         specifier: ^3.20.2
         version: 3.22.4
     devDependencies:
-      '@prom-cms/admin':
-        specifier: ^0.18.1
-        version: link:../admin
       '@prom-cms/vite':
         specifier: ^0.2.0
         version: link:../vite
