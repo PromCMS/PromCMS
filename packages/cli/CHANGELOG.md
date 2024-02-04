@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.12
+
+### Patch Changes
+
+- e252283: Adds missing await in create-admin-files
+
 ## 0.22.11
 
 ### Patch Changes
