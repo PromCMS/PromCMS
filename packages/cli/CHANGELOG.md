@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.11
+
+### Patch Changes
+
+- f7760ea: Moves admin in cli package to normal dependencies from devDependencies, because its used uring runtime
+
 ## 0.22.10
 
 ### Patch Changes
