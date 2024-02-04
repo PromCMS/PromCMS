@@ -1,5 +1,11 @@
 # @prom-cms/cli
 
+## 0.22.9
+
+### Patch Changes
+
+- a133740: Adds resolve package for resolving admin package as that suits better
+
 ## 0.22.8
 
 ### Patch Changes
