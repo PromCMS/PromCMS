@@ -13,7 +13,7 @@ export const installNodeJsDeps = async ({
   const devDeps = [
     'prettier-plugin-twig-melody',
     '@prettier/plugin-php',
-    '@prom-cms/vite-plugin',
+    '@prom-cms/vite',
     'vite',
     'vite-plugin-live-reload',
     'typescript',
