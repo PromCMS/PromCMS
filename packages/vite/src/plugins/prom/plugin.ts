@@ -1,10 +1,8 @@
 import { watch } from 'chokidar';
 import fs from 'fs-extra';
-import httpProxy from 'http-proxy';
 import mime from 'mime';
-import fetch from 'node-fetch';
+import fetch, { RequestInit } from 'node-fetch';
 import path from 'path';
-import { Readable } from 'stream';
 import type { Logger, Plugin } from 'vite';
 
 import { runBeforeExiting } from './runBeforeExiting.js';
@@ -78,7 +76,6 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
         cwd: options?.paths?.phpFiles,
         logger,
       });
-      const proxy = httpProxy.createProxyServer({ selfHandleResponse: true });
       const htmlTransform = server.transformIndexHtml;
 
       const viteTransformHtml = async (
@@ -155,52 +152,13 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
         });
       }
 
-      proxy.on('proxyRes', (proxyRes, clientReq, clientRes) => {
-        var bodyChunks: any[] = [];
-
-        proxyRes.on('data', function (chunk: any) {
-          bodyChunks.push(chunk);
-        });
-
-        proxyRes.on('end', async function () {
-          let body = Buffer.concat(bodyChunks);
-
-          // Flip headers
-          for (const [key, value] of Object.entries(proxyRes.headers)) {
-            if (value) {
-              clientRes.setHeader(key, value);
-            }
-          }
-
-          // Set a status code
-          clientRes.statusCode = proxyRes.statusCode ?? 500;
-
-          // If its not an api request we use vite htmlTransform
-          if (!clientReq.url?.startsWith('/api/')) {
-            body = await viteTransformHtml(
-              body.toString(),
-              clientReq.url ?? '/'
-            );
-          }
-
-          const stream = Readable.from(body);
-          stream.pipe(clientRes);
-        });
-      });
-
-      // Take care of admin on development - this is cared for in production of each app by apache
-      server.middlewares.use(async (req, res, next) => {
-        if (req.url?.startsWith('/admin')) {
-          next();
-          return;
-        }
-
-        // Take care of admin assets only for promcms instances
+      server.middlewares.use(async (clientRequest, res, next) => {
+        // Take care of admin assets only for PromCMS instances
         if (
-          req.url?.startsWith('/admin/assets') &&
+          clientRequest.url?.startsWith('/admin/assets') &&
           !currentPackageIsPromAdmin
         ) {
-          const fileUrl = new URL(req.url, 'http://127.0.0.1');
+          const fileUrl = new URL(clientRequest.url, 'http://127.0.0.1');
           const filePath = path.join('public', fileUrl.pathname);
 
           // End if file does not exist
@@ -219,82 +177,105 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
           });
 
           return file.pipe(res);
-        }
+        } else if (
+          !(
+            currentPackageIsPromAdmin && clientRequest.url?.startsWith('/admin')
+          ) &&
+          // This is just for development anyway
+          !clientRequest.url?.startsWith('/@vite')
+        ) {
+          const abortController = new AbortController();
+          const requestInit: RequestInit = {
+            signal: abortController.signal,
+            method: clientRequest.method,
+            headers: new Headers(
+              Object.entries(clientRequest.headers)
+                .map(([key, value]) => [
+                  key,
+                  Array.isArray(value) ? value.join(',') : value,
+                ])
+                .filter(([_key, value]) => value !== undefined) as [
+                string,
+                string,
+              ][]
+            ),
+          };
 
-        proxy.web(req, res, {
-          target: serverOrigin,
-        });
-      });
+          // Bubble up the abort of request to php server
+          // Find alternative
+          // clientRequest.on('close', () => {
+          //   abortController.abort();
+          // });
 
-      if (!currentPackageIsPromAdmin) {
-        // TODO: this is kind of bad since server gets two requests instead of one
-        // We catch all routes and check if they need to be proxied to PHP server first
-        server.middlewares.use(async (clientRequest, res, next) => {
           try {
-            const requestUrl = new URL(clientRequest.url!, serverOrigin);
-            const clientRequestBody = await new Promise<string>(
-              (resolve, reject) => {
-                let body = '';
-                clientRequest.on('data', (chunk) => {
-                  body += chunk;
-                });
-                clientRequest.on('end', () => {
-                  resolve(body);
-                });
-                clientRequest.on('error', () => {
-                  reject();
-                });
-              }
+            // GET and HEAD does not have any body
+            if (
+              clientRequest.method !== 'GET' &&
+              clientRequest.method !== 'HEAD'
+            ) {
+              requestInit.body = await new Promise<string>(
+                (resolve, reject) => {
+                  let body = '';
+                  clientRequest.on('data', (chunk) => {
+                    body += chunk;
+                  });
+                  clientRequest.on('end', () => {
+                    resolve(body);
+                  });
+                  clientRequest.on('error', () => {
+                    reject();
+                  });
+                  // clientRequest.on('close', () => {
+                  //   resolve(body);
+                  // });
+                }
+              );
+            }
+
+            const phpServerResult = await fetch(
+              new URL(clientRequest.url!, serverOrigin).toString(),
+              requestInit
             );
 
-            const phpServerResult = await fetch(requestUrl.toString(), {
-              method: clientRequest.method,
-              headers: new Headers(
-                Object.entries(clientRequest.headers)
-                  .map(([key, value]) => [
-                    key,
-                    Array.isArray(value) ? value.join(',') : value,
-                  ])
-                  .filter((item) => !item.filter(Boolean).length) as [
-                  string,
-                  string,
-                ][]
-              ),
-              body: clientRequestBody,
-            });
-
             if (phpServerResult.status !== 404) {
-              const phpServerResponse = await phpServerResult.text();
-              const transformedResponse = await viteTransformHtml(
-                phpServerResponse,
-                clientRequest.url ?? '/'
-              );
-              await new Promise((resolve, reject) =>
-                res.write(transformedResponse, (error) => {
-                  if (error) {
-                    reject(error);
-                  } else {
-                    resolve(true);
-                  }
-                })
-              );
+              const isHtmlResponse = (
+                phpServerResult.headers.get('content-type') ?? 'text/html'
+              ).includes('text/html');
+              let responseBody = isHtmlResponse
+                ? await viteTransformHtml(
+                    await phpServerResult.text(),
+                    clientRequest.url ?? '/'
+                  )
+                : await phpServerResult
+                    .blob()
+                    .then((result) => result.arrayBuffer())
+                    .then((arrayResult) => Buffer.from(arrayResult));
+
               res.statusCode = phpServerResult.status;
 
               for (const [key, value] of phpServerResult.headers) {
                 res.setHeader(key, value);
               }
+
+              return res.end(responseBody);
             }
           } catch (error) {
-            const message = (error as Error).message;
-            logger?.error(`Request to PHP server failed because: ${message}`, {
-              timestamp: true,
-              error: error as Error,
-            });
+            // No need to log on abort
+            if (!abortController.signal.aborted) {
+              const message = (error as Error).message;
+              logger?.error(
+                `Request to PHP server failed because: ${message}`,
+                {
+                  timestamp: true,
+                  error: error as Error,
+                }
+              );
+            }
           }
+        }
 
-          next();
-        });
-      }
+        next();
+      });
     },
   };
 };
