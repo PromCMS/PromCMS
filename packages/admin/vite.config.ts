@@ -6,7 +6,7 @@ import { visualizer } from 'rollup-plugin-visualizer';
 import { Plugin, PluginOption, defineConfig, loadEnv } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
-import { promPlugin } from '@prom-cms/vite';
+import { promPlugin } from '@prom-cms/vite/plugins';
 
 export default defineConfig(async ({ mode, command }) => {
   const currentFolder = process.cwd();
