@@ -81,8 +81,10 @@ const UsersListPage: Page = () => {
   return (
     <>
       <PageLayout>
-        <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
-          <h1 className="text-3xl font-semibold capitalize">{t('Users')}</h1>
+        <div className="flex w-full flex-col justify-between gap-5 pt-8 pb-7 md:flex-row">
+          <h1 className="text-4xl font-semibold capitalize my-0">
+            {t('Users')}
+          </h1>
           <div className="flex items-center gap-5">
             {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
               <Input

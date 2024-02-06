@@ -1,6 +1,5 @@
 import { AsideFields } from '@components/editorialPage/AsideFields';
 import { AsideWrapper } from '@components/editorialPage/AsideWrapper';
-import { useAsideToggle } from 'hooks/useAsideToggle';
 import useCurrentSingleton from 'hooks/useCurrentSingleton';
 import { FC } from 'react';
 
@@ -9,10 +8,9 @@ import { PublishInfo } from './PublishInfo';
 
 export const Aside: FC = () => {
   const singleton = useCurrentSingleton(true);
-  const { isOpen } = useAsideToggle();
 
   return (
-    <AsideWrapper isOpen={isOpen}>
+    <AsideWrapper isOpen>
       <PublishInfo />
       <Internationalization />
       <AsideFields model={singleton} />

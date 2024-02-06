@@ -5,6 +5,8 @@ export const SIMPLE_WORDS = {
   PHOTO: 'Photo',
   PHOTO_ALBUM: 'Photo album',
   CLOSE: 'Close',
+  GO_BACK: 'Go back',
+  LOG_OFF: 'Log off',
 };
 
 export const EDITOR_MESSAGES = {
@@ -40,6 +42,7 @@ export const MESSAGES = {
   ...SIMPLE_WORDS,
   ...EDITOR_MESSAGES,
   ...PROM_TABLES,
+  MY_PROFILE_BUTTON_TEXT: 'My profile',
   PREVIEW_CONTENT: 'Preview content',
   SHOW_SELECTED_ITEM: 'Show selected item',
   ON_DELETE_REQUEST_PROMPT: 'Are you sure you want to delete this item?',
@@ -47,6 +50,7 @@ export const MESSAGES = {
   ERROR_BASIC: 'An error happened',
   ARE_YOUR_REALLY_SURE: 'Are you really sure?',
   CHANGE_PASSWORD: 'Change password',
+  LOCALIZE: 'Localize',
   NEW_PASSWORD: 'New password',
   NEW_PASSWORD_AGAIN: 'New password again',
   OLD_PASSWORD: 'Old password',

@@ -1,5 +1,6 @@
 import { apiClient } from '@api';
 import { API_CURRENT_USER_URL, API_SETTINGS_URL } from '@constants';
+import { Alert, Dialog, Text } from '@mantine/core';
 import axios, { CanceledError } from 'axios';
 import {
   FC,
@@ -197,13 +198,22 @@ export const GlobalContextProvider: FC<PropsWithChildren> = ({ children }) => {
   return (
     <GlobalContext.Provider value={contextValue}>
       {children}
-      {isNotOnline && (
-        <div className="absolute inset-0 bg-white">
-          <p className="m-auto">
-            {t("It appears that you're not online, try again later...")}
+      {isNotOnline ? (
+        <Dialog
+          opened={isNotOnline}
+          size="lg"
+          className="rounded-prom bg-orange-100"
+        >
+          <Text size="md" mb="xs" fw={500} className="text-orange-700">
+            💬 {t('Network connection has been lost')}
+          </Text>
+          <p className="text-orange-700 opacity-75">
+            {t(
+              "It appears that you're not online, please connect back to a network before proceeding further..."
+            )}
           </p>
-        </div>
-      )}
+        </Dialog>
+      ) : null}
     </GlobalContext.Provider>
   );
 };

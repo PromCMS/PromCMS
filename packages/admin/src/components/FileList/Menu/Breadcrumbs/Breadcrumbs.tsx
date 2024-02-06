@@ -1,5 +1,6 @@
-import { useCallback, useMemo, VFC } from 'react';
+import { VFC, useCallback, useMemo } from 'react';
 import { Folders, Home } from 'tabler-icons-react';
+
 import { useFileListContext } from '../../context';
 import { Item } from './Item';
 
@@ -21,7 +22,7 @@ export const Breadcrumbs: VFC = () => {
   return (
     <nav
       role="navigation"
-      className="flex w-full items-center overflow-auto rounded-2xl border-2 border-project-border bg-white px-4"
+      className="flex w-full items-center overflow-auto rounded-prom border-2 border-project-border bg-white px-4"
     >
       <Item icon={Home} onClick={goToPath('/')} isLast={!pathPieces.length} />
       {pathPieces.map((folderName, index) => (

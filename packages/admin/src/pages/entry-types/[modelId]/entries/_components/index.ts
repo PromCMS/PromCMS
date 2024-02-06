@@ -1,4 +1,4 @@
 export * from './Aside';
-export * from './Footer';
+export * from './Menu';
 export * from './Header';
 export * from './Breadcrumbs';

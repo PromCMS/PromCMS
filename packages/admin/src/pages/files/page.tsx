@@ -1,8 +1,7 @@
 import { FileList } from '@components/FileList';
 import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { Page } from '@custom-types';
-import { PageLayout } from '@layouts';
-import { upperFirst } from '@mantine/hooks';
+import { PageLayout, UnderpageLayout } from '@layouts';
 import { useModelInfo } from 'hooks/useModelInfo';
 import { useRouterQuery } from 'hooks/useRouterQuery';
 import { useCallback, useMemo } from 'react';
@@ -35,18 +34,20 @@ const FilesPage: Page = () => {
     return <NotFoundPage text={t('This model with this id does not exist.')} />;
 
   return (
-    <PageLayout>
-      <div className="flex w-full flex-col justify-between gap-5 py-10 md:flex-row">
-        <h1 className="text-3xl font-semibold capitalize">
-          {t(model.tableName || '')}
-        </h1>
-      </div>
-      <FileList
-        currentFolder={currentPath}
-        onFolderChange={handleFolderChange}
-      />
-      <Outlet />
-    </PageLayout>
+    <UnderpageLayout>
+      <PageLayout>
+        <div className="flex w-full flex-col justify-between gap-5 pt-3 pb-4 md:flex-row">
+          <h1 className="text-3xl font-semibold capitalize my-0">
+            {t(model.tableName || '')}
+          </h1>
+        </div>
+        <FileList
+          currentFolder={currentPath}
+          onFolderChange={handleFolderChange}
+        />
+        <Outlet />
+      </PageLayout>
+    </UnderpageLayout>
   );
 };
 

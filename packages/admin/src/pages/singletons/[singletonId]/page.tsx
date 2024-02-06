@@ -2,6 +2,7 @@ import { Content } from '@components/editorialPage/Content';
 import { DynamicFormFields } from '@components/editorialPage/DynamicFormFields';
 import { Wrapper } from '@components/editorialPage/Wrapper';
 import { Page } from '@custom-types';
+import { UnderpageLayout } from '@layouts';
 import NotFoundPage from '@pages/404';
 import useCurrentSingleton from 'hooks/useCurrentSingleton';
 import { FC } from 'react';
@@ -23,15 +24,16 @@ const SingletonUnderpage: Page = ({}) => {
 
   return (
     <SingletonPageContextProvider>
-      <Wrapper>
-        <Breadcrumbs />
-        <Content>
-          <Header />
-          <Fields />
-          <Footer />
-        </Content>
-      </Wrapper>
-      <Aside />
+      <UnderpageLayout asideOutlet={<Aside />}>
+        <Wrapper>
+          <Breadcrumbs />
+          <Content>
+            <Header />
+            <Fields />
+            <Footer />
+          </Content>
+        </Wrapper>
+      </UnderpageLayout>
     </SingletonPageContextProvider>
   );
 };

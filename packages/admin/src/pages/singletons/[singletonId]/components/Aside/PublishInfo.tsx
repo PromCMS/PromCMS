@@ -1,4 +1,5 @@
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
+import { MESSAGES } from '@constants';
 import { Skeleton, SkeletonProps } from '@mantine/core';
 import { dynamicDayjs } from '@utils';
 import clsx from 'clsx';
@@ -27,7 +28,7 @@ export const PublishInfo: FC = () => {
   }
 
   return (
-    <AsideItemWrap className="!pt-0" title={t('Publish info')}>
+    <AsideItemWrap className="!pt-0" title={t(MESSAGES.PUBLISH_INFO)}>
       <div className="w-full px-4 py-5">
         <ul className="flex list-disc flex-col gap-2 pl-5">
           <li>

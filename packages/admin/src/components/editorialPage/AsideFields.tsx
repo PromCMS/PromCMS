@@ -24,7 +24,7 @@ export const AsideFields: FC<{
 
   return (
     <AsideItemWrap title={t('Other info')}>
-      <div className="mb-10 grid gap-5 p-4  sm:gap-8">
+      <div className="mb-5 grid gap-5 p-2">
         <FieldMapper type={FieldPlacements.ASIDE} fields={groupedFields} />
       </div>
     </AsideItemWrap>

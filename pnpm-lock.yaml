@@ -261,6 +261,9 @@ importers:
       '@babel/eslint-parser':
         specifier: ^7.23.3
         version: 7.23.10(@babel/core@7.23.9)(eslint@8.56.0)
+      '@prom-cms/prettier-config':
+        specifier: ^0.1.1
+        version: link:../prettier-config
       '@prom-cms/vite':
         specifier: ^0.2.0
         version: link:../vite

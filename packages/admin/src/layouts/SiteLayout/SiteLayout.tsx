@@ -4,7 +4,8 @@ import { FC } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { Loader } from '../../components/SiteLoader';
-import { Header } from './Header';
+import { AsideMenu } from './AsideMenu';
+import { TopMenu } from './TopMenu';
 
 const SiteLayout: FC = () => {
   const { isBooting } = useGlobalContext();
@@ -13,18 +14,30 @@ const SiteLayout: FC = () => {
     <>
       <Loader show={isBooting} />
 
-      {!isBooting && (
-        <div className="flex min-h-screen">
-          <Header />
-          <main className="relative w-full border-l-2 border-project-border bg-gray-50">
-            <ErrorBoundary>
-              <Outlet />
-            </ErrorBoundary>
-          </main>
-        </div>
-      )}
+      {}
 
-      {/*<Footer />*/}
+      {!isBooting && (
+        <>
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+            body {
+              background: gray;
+            }
+          `,
+            }}
+          ></style>
+          <TopMenu />
+          <div className="flex min-h-screen">
+            <AsideMenu />
+            <main className="relative w-full">
+              <ErrorBoundary>
+                <Outlet />
+              </ErrorBoundary>
+            </main>
+          </div>
+        </>
+      )}
     </>
   );
 };

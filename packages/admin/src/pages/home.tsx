@@ -1,13 +1,14 @@
 import { MESSAGES } from '@constants';
 import { Page } from '@custom-types';
 import { PageLayout } from '@layouts';
-import { useConstructedMenuItems } from '@layouts';
 import { upperFirst } from '@mantine/hooks';
 import { useGlobalContext } from 'contexts/GlobalContext';
 import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+
+import { useConstructedMenuItems } from '../layouts/SiteLayout/AsideMenu';
 
 const dateFormat = 'dddd DD. MMMM YYYY';
 

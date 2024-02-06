@@ -2,11 +2,12 @@ import { Content } from '@components/editorialPage/Content';
 import { DynamicFormFields } from '@components/editorialPage/DynamicFormFields';
 import { Wrapper } from '@components/editorialPage/Wrapper';
 import { EntryTypeUrlActionType } from '@custom-types';
+import { UnderpageLayout } from '@layouts';
 import NotFoundPage from '@pages/404';
 import useCurrentModel from 'hooks/useCurrentModel';
 import { FC } from 'react';
 
-import { Aside, Breadcrumbs, Footer, Header } from '../_components';
+import { Aside, Header, Menu } from '../_components';
 import {
   EntryUnderpageContextProvider,
   entryUnderpageContext,
@@ -24,16 +25,16 @@ export const EntryPageContent: FC<{ viewType: EntryTypeUrlActionType }> = ({
       <entryUnderpageContext.Consumer>
         {({ onSubmit }) => (
           <form autoComplete="off" onSubmit={onSubmit} className="flex">
-            <Wrapper>
-              <Breadcrumbs />
-              <Content>
-                <Header />
-                {/* We pass multiple refs */}
-                <DynamicFormFields modelInfo={model} />
-                <Footer />
-              </Content>
-            </Wrapper>
-            <Aside />
+            <UnderpageLayout asideOutlet={<Aside />}>
+              <Menu />
+              <Wrapper>
+                <Content>
+                  <Header />
+                  {/* We pass multiple refs */}
+                  <DynamicFormFields modelInfo={model} />
+                </Content>
+              </Wrapper>
+            </UnderpageLayout>
           </form>
         )}
       </entryUnderpageContext.Consumer>
