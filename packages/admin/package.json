@@ -65,6 +65,7 @@
     "i18next-http-backend": "1.4.0",
     "lodash.find": "^4.6.0",
     "uuid": "^9.0.1",
+    "zustand": "^4.5.0",
     "@tiptap/core": "^2.2.1",
     "prosemirror-model": "^1.19.4",
     "prosemirror-state": "^1.4.3",

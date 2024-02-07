@@ -42,6 +42,8 @@ export const MESSAGES = {
   ...SIMPLE_WORDS,
   ...EDITOR_MESSAGES,
   ...PROM_TABLES,
+  MORE_OPTIONS_BUTTON_TEXT: 'More options',
+  PURGE_DATA: 'Purge data',
   MY_PROFILE_BUTTON_TEXT: 'My profile',
   PREVIEW_CONTENT: 'Preview content',
   SHOW_SELECTED_ITEM: 'Show selected item',

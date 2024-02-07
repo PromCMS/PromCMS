@@ -4,28 +4,29 @@ import { useGlobalContext } from '@contexts/GlobalContext';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { useSettings } from '@hooks/useSettings';
-import {
-  ActionIcon,
-  Button,
-  Menu,
-  Skeleton,
-  UnstyledButton,
-} from '@mantine/core';
+import { ActionIcon, Button, Collapse, Menu, Skeleton } from '@mantine/core';
 import { getInitials } from '@utils';
 import clsx from 'clsx';
-import { FC, useState } from 'react';
+import { upperFirst } from 'lodash';
+import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
+  Home,
   LanguageHiragana,
   Logout,
   Menu2,
+  Photo,
   Settings,
   User,
   UserExclamation,
   Users,
+  X,
 } from 'tabler-icons-react';
+import { create as createStore } from 'zustand';
+
+import { ItemProps, useConstructedMenuItems } from './AsideMenu';
 
 const USER_MENU_ICON_SIZE = 16;
 
@@ -36,6 +37,56 @@ enum SUBMENU_NAMES {
   USER = 'user-submenu',
   CONFIG = 'config-submenu',
 }
+
+const defaultMenuItems: ItemProps[] = [
+  { label: 'Home', href: '/', icon: Home },
+  { label: 'Files', href: '/files', icon: Photo },
+];
+
+const useMobileMenuToggle = createStore<{
+  open: boolean;
+  toggleOpen: () => void;
+}>((set, get) => ({
+  open: false,
+  toggleOpen: () => set({ open: !get().open }),
+}));
+
+const MobileMenu: FC = () => {
+  const menuItems = useConstructedMenuItems();
+  const { t } = useTranslation();
+  const { open, toggleOpen } = useMobileMenuToggle();
+
+  const allMenuItems = useMemo(
+    () => [
+      ...defaultMenuItems,
+      ...menuItems.normalItems,
+      ...menuItems.singletonItems,
+    ],
+    [menuItems]
+  );
+
+  return (
+    <Collapse in={open}>
+      <div className="px-2 mb-4">
+        <div className="grid grid-cols-2 gap-2 sm:hidden">
+          {allMenuItems.map((itemInfo) => (
+            <Link
+              to={itemInfo.href}
+              className="group flex p-2 w-full rounded-prom shadow-sm duration-150 bg-white "
+              key={itemInfo.href}
+              onClick={toggleOpen}
+            >
+              <itemInfo.icon className="aspect-square h-7 w-7 text-gray-400 duration-150 group-hover:text-blue-500 p-1" />
+              <span className="mt-0.5 block font-semibold ml-3">
+                {t(upperFirst(itemInfo.label))}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </Collapse>
+  );
+};
 
 export const TopMenu: FC = () => {
   const { isBooting } = useGlobalContext();
@@ -48,6 +99,7 @@ export const TopMenu: FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const [openedSubmenus, setOpenedSubmenus] = useState<SUBMENU_NAMES[]>([]);
+  const mobileMenu = useMobileMenuToggle();
 
   const isEntryUnderpage = /\/entry-types\/.*/g.test(location.pathname);
 
@@ -75,11 +127,18 @@ export const TopMenu: FC = () => {
         <div className="w-11 hidden sm:block" />
         <ActionIcon
           className={clsx(
-            'relative flex w-9 h-9 overflow-hidden rounded-prom border border-gray-100 bg-white sm:hidden',
+            'relative flex w-9 h-9 overflow-hidden rounded-prom border sm:hidden',
             MENU_SUBITEM_CLASSNAMES
           )}
+          color={mobileMenu.open ? 'red' : 'white'}
+          variant={mobileMenu.open ? 'filled' : 'light'}
+          onClick={mobileMenu.toggleOpen}
         >
-          <Menu2 className="w-5 h-5" />
+          {mobileMenu.open ? (
+            <X className="w-5 h-5" />
+          ) : (
+            <Menu2 className="w-5 h-5" />
+          )}
         </ActionIcon>
         {isEntryUnderpage ? (
           <Button
@@ -103,6 +162,7 @@ export const TopMenu: FC = () => {
           position="bottom-end"
           arrowPosition="center"
           transition="pop"
+          shadow="xl"
           opened={openedSubmenus.includes(SUBMENU_NAMES.CONFIG)}
           onClose={() => toggleSubmenu(SUBMENU_NAMES.CONFIG)}
           onOpen={() => toggleSubmenu(SUBMENU_NAMES.CONFIG)}
@@ -178,12 +238,13 @@ export const TopMenu: FC = () => {
           position="bottom-end"
           arrowPosition="center"
           transition="pop"
+          shadow="xl"
           opened={openedSubmenus.includes(SUBMENU_NAMES.USER)}
           onClose={() => toggleSubmenu(SUBMENU_NAMES.USER)}
           onOpen={() => toggleSubmenu(SUBMENU_NAMES.USER)}
         >
           <Menu.Target>
-            <UnstyledButton
+            <ActionIcon
               disabled={isBooting || !currentUser}
               className={clsx(
                 'relative flex w-9 h-9 overflow-hidden rounded-prom border border-gray-100 bg-white',
@@ -206,7 +267,7 @@ export const TopMenu: FC = () => {
                   {getInitials(currentUser?.name || '-- --')}
                 </p>
               )}
-            </UnstyledButton>
+            </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
             <Menu.Item
@@ -233,6 +294,7 @@ export const TopMenu: FC = () => {
           </Menu.Dropdown>
         </Menu>
       </div>
+      <MobileMenu />
     </header>
   );
 };

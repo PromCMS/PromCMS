@@ -25,12 +25,11 @@ const SingletonUnderpage: Page = ({}) => {
   return (
     <SingletonPageContextProvider>
       <UnderpageLayout asideOutlet={<Aside />}>
+        <Footer />
         <Wrapper>
-          <Breadcrumbs />
           <Content>
             <Header />
             <Fields />
-            <Footer />
           </Content>
         </Wrapper>
       </UnderpageLayout>

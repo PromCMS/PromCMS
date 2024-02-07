@@ -3,7 +3,7 @@ import { TableView, TableViewCol, TableViewProps } from '@components/TableView';
 import { formatApiModelResultToTableView } from '@components/TableView/_utils';
 import { MESSAGES, pageUrls } from '@constants';
 import { Page } from '@custom-types';
-import { PageLayout } from '@layouts';
+import { PageLayout, UnderpageLayout } from '@layouts';
 import { Button } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import NotFoundPage from '@pages/404';
@@ -126,13 +126,14 @@ const EntryTypeUnderpage: Page = ({}) => {
     return <NotFoundPage text={t('This model with this id does not exist.')} />;
 
   return (
-    <PageLayout>
-      <div className="flex w-full flex-col justify-between gap-5 pt-8 pb-7 md:flex-row">
-        <h1 className="text-4xl font-semibold capitalize my-0">
-          {t(model.title ?? model.name)}
-        </h1>
-        <div className="flex items-center gap-5">
-          {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
+    <UnderpageLayout>
+      <PageLayout>
+        <div className="flex w-full flex-col justify-between gap-5 pt-8 pb-7 md:flex-row">
+          <h1 className="text-4xl font-semibold capitalize my-0">
+            {t(model.title ?? model.name)}
+          </h1>
+          <div className="flex items-center gap-5">
+            {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
             <Input
               placeholder="input..."
               className="w-full"
@@ -140,51 +141,52 @@ const EntryTypeUnderpage: Page = ({}) => {
               {...register('query')}
             />
   </form>*/}
-          {currentUser?.can({
-            action: 'create',
-            targetEntityTableName: model.name,
-          }) && (
-            <Button
-              color="green"
-              className=" items-center font-semibold uppercase"
-              size="md"
-              onClick={onCreateRequest}
-            >
-              <span className="hidden md:block">{t('Add new entry')}</span>
-              <Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
-            </Button>
-          )}
+            {currentUser?.can({
+              action: 'create',
+              targetEntityTableName: model.name,
+            }) && (
+              <Button
+                color="green"
+                className=" items-center font-semibold uppercase"
+                size="md"
+                onClick={onCreateRequest}
+              >
+                <span className="hidden md:block">{t('Add new entry')}</span>
+                <Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
-      <TableView
-        isLoading={isLoading || isError}
-        items={listItems}
-        columns={tableViewColumns}
-        onEditAction={onEditRequest}
-        onDeleteAction={onItemDeleteRequest}
-        onDuplicateAction={onItemDuplicateRequest}
-        ordering={!!model.sorting}
-        onDragEnd={onDragEnd}
-        disabled={apiWorking}
-      />
-      <TableView.Footer>
-        <TableView.PageSizeSelect
-          value={String(pageSize)}
-          onChange={(val) => {
-            setPageSize(val ? Number(val) : 20);
-          }}
+        <TableView
+          isLoading={isLoading || isError}
+          items={listItems}
+          columns={tableViewColumns}
+          onEditAction={onEditRequest}
+          onDeleteAction={onItemDeleteRequest}
+          onDuplicateAction={onItemDuplicateRequest}
+          ordering={!!model.sorting}
+          onDragEnd={onDragEnd}
+          disabled={apiWorking}
         />
-        {metadata && (
-          <TableView.Metadata className="mr-auto ml-5" {...metadata} />
-        )}
-        <TableView.Pagination
-          className="ml-auto"
-          total={data?.last_page || 1}
-          page={page}
-          onChange={setPage}
-        />
-      </TableView.Footer>
-    </PageLayout>
+        <TableView.Footer>
+          <TableView.PageSizeSelect
+            value={String(pageSize)}
+            onChange={(val) => {
+              setPageSize(val ? Number(val) : 20);
+            }}
+          />
+          {metadata && (
+            <TableView.Metadata className="mr-auto ml-5" {...metadata} />
+          )}
+          <TableView.Pagination
+            className="ml-auto"
+            total={data?.last_page || 1}
+            page={page}
+            onChange={setPage}
+          />
+        </TableView.Footer>
+      </PageLayout>
+    </UnderpageLayout>
   );
 };
 

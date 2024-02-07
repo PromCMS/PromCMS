@@ -1,12 +1,16 @@
 import { apiClient } from '@api';
-import { MESSAGES, pageUrls } from '@constants';
-import { ActionIcon, Button, Drawer, Paper, Tooltip } from '@mantine/core';
+import { MESSAGES } from '@constants';
+import {
+  ActionIcon,
+  Button,
+  Menu as MantineMenu,
+  Tooltip,
+} from '@mantine/core';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
-import { useAsideToggle } from 'hooks/useAsideToggle';
 import useCurrentModel from 'hooks/useCurrentModel';
 import { useCurrentUser } from 'hooks/useCurrentUser';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -14,14 +18,81 @@ import { Dots, Trash, World } from 'tabler-icons-react';
 
 import { useEntryUnderpageContext } from '../../_context';
 
-export const Menu: FC<{}> = () => {
-  const { watch } = useFormContext();
-  const formValues = watch();
+const MoreOptions: FC = () => {
+  const { formState } = useFormContext();
   const { t } = useTranslation();
-  const { isOpen: asideOpen, setIsOpen: setAsideOpen } = useAsideToggle();
   const { itemData, currentView, exitView } = useEntryUnderpageContext();
   const currentModel = useCurrentModel();
   const currentUser = useCurrentUser();
+  const [hideTooltip, setHideTooltip] = useState(false);
+
+  const showDeleteButton =
+    currentView === 'update' &&
+    currentModel &&
+    currentUser?.can({
+      action: 'create',
+      targetEntityTableName: currentModel?.name,
+    });
+
+  const onItemDeleteRequest = async () => {
+    if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
+      exitView();
+      await apiClient.entries.for(currentModel?.name!).delete(itemData?.id!);
+    }
+  };
+
+  return (
+    <MantineMenu
+      withArrow
+      arrowPosition="center"
+      position="bottom-end"
+      onOpen={() => setHideTooltip(true)}
+      onClose={() => setHideTooltip(false)}
+    >
+      <MantineMenu.Target>
+        <Tooltip
+          withArrow
+          label={t(MESSAGES.MORE_OPTIONS_BUTTON_TEXT)}
+          position="bottom-end"
+          arrowPosition="center"
+          color="gray"
+          disabled={hideTooltip}
+        >
+          <ActionIcon
+            size="xl"
+            color="gray"
+            variant="light"
+            type="button"
+            className={clsx(formState.isSubmitting && '!cursor-progress')}
+            loading={formState.isSubmitting}
+          >
+            <Dots className="aspect-square w-20 duration-150" />
+          </ActionIcon>
+        </Tooltip>
+      </MantineMenu.Target>
+      <MantineMenu.Dropdown>
+        {showDeleteButton ? (
+          <MantineMenu.Item
+            type="button"
+            onClick={onItemDeleteRequest}
+            color="red"
+            className={clsx(formState.isSubmitting && '!cursor-progress')}
+            icon={<Trash className="aspect-square w-4" />}
+          >
+            {t(MESSAGES.PURGE_DATA)}
+          </MantineMenu.Item>
+        ) : null}
+      </MantineMenu.Dropdown>
+    </MantineMenu>
+  );
+};
+
+export const Menu: FC = () => {
+  const { watch } = useFormContext();
+  const formValues = watch();
+  const { t } = useTranslation();
+  const { itemData, currentView } = useEntryUnderpageContext();
+  const currentModel = useCurrentModel();
   const { setValue, formState } = useFormContext();
 
   const isEdited = useMemo(
@@ -31,13 +102,6 @@ export const Menu: FC<{}> = () => {
         : true,
     [formValues, currentView, itemData]
   );
-
-  const onItemDeleteRequest = async () => {
-    if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-      exitView();
-      await apiClient.entries.for(currentModel?.name!).delete(itemData?.id!);
-    }
-  };
 
   const handleSaveButtonClick = () => {
     if (currentView === 'create') {
@@ -95,10 +159,7 @@ export const Menu: FC<{}> = () => {
   };
 
   return (
-    <Paper
-      component="footer"
-      className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-between p-2 rounded-prom bg-transparent"
-    >
+    <nav className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-between p-2 rounded-prom bg-transparent">
       <div className="flex gap-3 justify-center"></div>
 
       <div className="flex items-center gap-3">
@@ -129,14 +190,13 @@ export const Menu: FC<{}> = () => {
         <Tooltip
           withArrow
           label={t(MESSAGES.LOCALIZE)}
-          position="top"
+          position="bottom"
           color="gray"
         >
           <ActionIcon
             size="xl"
             type="button"
             loading={formState.isSubmitting}
-            onClick={onItemDeleteRequest}
             color="blue"
             variant="light"
             styles={{
@@ -150,61 +210,8 @@ export const Menu: FC<{}> = () => {
             <World className="aspect-square w-10" />
           </ActionIcon>
         </Tooltip>
-        {currentView === 'update' &&
-        currentModel &&
-        currentUser?.can({
-          action: 'create',
-          targetEntityTableName: currentModel?.name,
-        }) ? (
-          <Tooltip withArrow label={t('Delete')} position="top" color="gray">
-            <ActionIcon
-              size="xl"
-              type="button"
-              loading={formState.isSubmitting}
-              onClick={onItemDeleteRequest}
-              color="red"
-              variant="light"
-              styles={{
-                root: {
-                  width: 50,
-                  height: 50,
-                },
-              }}
-              className={clsx(formState.isSubmitting && '!cursor-progress')}
-            >
-              <Trash className="aspect-square w-10" />
-            </ActionIcon>
-          </Tooltip>
-        ) : null}
-        <Tooltip
-          withArrow
-          label={t('Toggle more options')}
-          position="top"
-          color="gray"
-        >
-          <ActionIcon
-            size="xl"
-            color="blue"
-            variant="light"
-            type="button"
-            className={clsx(formState.isSubmitting && '!cursor-progress')}
-            styles={{
-              root: {
-                width: 50,
-                height: 50,
-              },
-            }}
-            onClick={() => setAsideOpen((prev) => !prev)}
-          >
-            <Dots
-              className={clsx(
-                'aspect-square w-20 duration-150',
-                asideOpen && 'rotate-180'
-              )}
-            />
-          </ActionIcon>
-        </Tooltip>
+        <MoreOptions />
       </div>
-    </Paper>
+    </nav>
   );
 };

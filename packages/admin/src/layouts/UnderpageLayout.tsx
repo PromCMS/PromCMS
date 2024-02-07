@@ -8,8 +8,7 @@ export const UnderpageLayout: FC<
     <>
       <div
         className={clsx(
-          'bg-white shadow-md rounded-t-xl sm:rounded-none w-full h-full',
-          asideOutlet ? 'sm:rounded-tr-prom' : ''
+          'bg-white shadow-md rounded-t-xl sm:rounded-none w-full h-full sm:rounded-tr-prom'
         )}
       >
         {children}
