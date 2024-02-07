@@ -2,6 +2,7 @@ import { apiClient } from '@api';
 import ImageSelect from '@components/form/ImageSelect';
 import { MESSAGES } from '@constants';
 import { Page } from '@custom-types';
+import { UnderpageLayout } from '@layouts';
 import { Button, TextInput } from '@mantine/core';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { getObjectDiff } from '@utils';
@@ -81,40 +82,37 @@ export const ProfileSettingsPage: Page = () => {
     <FormProvider {...formMethods}>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="mt-6 grid w-full max-w-6xl gap-4 pb-5"
+        className="mt-6 w-full max-w-6xl gap-8 pb-5 flex flex-col md:flex-row"
         autoComplete="off"
       >
-        <Row>
-          <Controller
-            control={control}
-            name="avatar"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <ImageSelect
-                label={t('Avatar')}
-                className="w-full"
-                selected={value}
-                multiple={false}
-                onChange={(value) => value && onChange(value)}
-                onBlur={onBlur}
-              />
-            )}
-          />
-        </Row>
-        <Row>
-          <TextInput
-            label={t('Full name')}
-            className="w-full"
-            {...register('name')}
-          />
-        </Row>
-        <Row className="items-end">
-          <TextInput
-            disabled
-            label="Email"
-            className="w-full"
-            {...register('email')}
-          />
+        <Controller
+          control={control}
+          name="avatar"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <ImageSelect
+              label={t('Avatar')}
+              selected={value}
+              multiple={false}
+              onChange={(value) => value && onChange(value)}
+              onBlur={onBlur}
+            />
+          )}
+        />
+        <div className="grid gap-4 w-full">
+          <Row>
+            <TextInput
+              label={t('Full name')}
+              className="w-full"
+              {...register('name')}
+            />
+          </Row>
           <Row className="items-end">
+            <TextInput
+              disabled
+              label="Email"
+              className="w-full"
+              {...register('email')}
+            />
             <Button
               className="block mt-1"
               color="ghost"
@@ -125,20 +123,20 @@ export const ProfileSettingsPage: Page = () => {
               {t(MESSAGES.CHANGE_PASSWORD)}
             </Button>
           </Row>
-        </Row>
-        <Row className="items-end">
-          <LanguageSelect />
-        </Row>
-        <Button
-          className="mt-10 max-w-[150px]"
-          size="md"
-          color="success"
-          type="submit"
-          disabled={!canSubmit}
-          loading={formMethods.formState.isSubmitting}
-        >
-          {t('Save')}
-        </Button>
+          <Row className="items-end">
+            <LanguageSelect />
+          </Row>
+          <Button
+            className="mt-10 max-w-[150px]"
+            size="md"
+            color="success"
+            type="submit"
+            disabled={!canSubmit}
+            loading={formMethods.formState.isSubmitting}
+          >
+            {t('Save')}
+          </Button>
+        </div>
       </form>
     </FormProvider>
   );

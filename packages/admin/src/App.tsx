@@ -1,5 +1,5 @@
 import { Loader } from '@components/SiteLoader';
-import { SiteLayout } from '@layouts';
+import { SiteLayout, UnderpageLayout } from '@layouts';
 import NotFoundPage from '@pages/404';
 import EntryUnderPage from '@pages/entry-types/[modelId]/entries/[entryId]/page';
 import CreateEntryPage from '@pages/entry-types/[modelId]/entries/create/page';
@@ -107,7 +107,9 @@ export function App() {
                   path="settings"
                   element={
                     <Suspense fallback={<Loader fullScreen={false} />}>
-                      <LazyProfileLayout />
+                      <UnderpageLayout>
+                        <LazyProfileLayout />
+                      </UnderpageLayout>
                     </Suspense>
                   }
                 >

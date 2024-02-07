@@ -1,3 +1,4 @@
+import { ReactChildren } from '@custom-types';
 import clsx from 'clsx';
 import {
   DetailedHTMLProps,
@@ -5,7 +6,6 @@ import {
   HTMLAttributes,
   PropsWithChildren,
 } from 'react';
-import { ReactChildren } from '@custom-types';
 
 export interface PageLayoutProps {
   withAside?: boolean;
@@ -23,9 +23,9 @@ export interface SectionProps
 
 const Header: FC<HeaderProps> = ({ title }) => {
   return (
-    <header className="mt-6">
-      <h1 className="text-4xl font-semibold">{title}</h1>
-      <hr className="mt-4 border-t-4 border-gray-200" />
+    <header className="flex flex-col">
+      <h1 className="text-4xl font-semibold mt-6">{title}</h1>
+      <hr className="mt-4 border-t-4 border-gray-200 w-full" />
     </header>
   );
 };
@@ -37,13 +37,7 @@ const Section: FC<PropsWithChildren<SectionProps>> = ({
   ...rest
 }) => {
   return (
-    <section
-      className={clsx(
-        'rounded-xl border-2 border-project-border bg-white px-5 shadow-lg shadow-blue-100',
-        className
-      )}
-      {...rest}
-    >
+    <section className={clsx(className)} {...rest}>
       {title && (
         <>
           <h1 className="pt-5 pb-4 text-3xl">{title}</h1>
