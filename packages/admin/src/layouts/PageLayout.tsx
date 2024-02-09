@@ -1,19 +1,22 @@
-import { ReactChildren } from '@custom-types';
 import clsx from 'clsx';
 import {
   DetailedHTMLProps,
   FC,
   HTMLAttributes,
   PropsWithChildren,
+  ReactNode,
 } from 'react';
 
 export interface PageLayoutProps {
-  withAside?: boolean;
-  leftAside?: ReactChildren[] | ReactChildren;
+  rightAsideOutlet?: ReactNode;
 }
 
 export interface HeaderProps {
-  title?: string;
+  title?: ReactNode;
+  beforeOutlet?: ReactNode;
+  classNames?: {
+    wrapper?: string;
+  };
 }
 
 export interface SectionProps
@@ -21,11 +24,25 @@ export interface SectionProps
   title?: string;
 }
 
-const Header: FC<HeaderProps> = ({ title }) => {
+export interface ContentProps
+  extends DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement> {}
+
+const Header: FC<PropsWithChildren<HeaderProps>> = ({
+  children,
+  title,
+  beforeOutlet,
+  classNames,
+}) => {
   return (
-    <header className="flex flex-col">
-      <h1 className="text-4xl font-semibold mt-6">{title}</h1>
-      <hr className="mt-4 border-t-4 border-gray-200 w-full" />
+    <header className="max-w-[1760px] mx-auto">
+      <div className={classNames?.wrapper}>
+        {beforeOutlet}
+        {title ? (
+          <h1 className="text-4xl font-semibold mt-6">{title}</h1>
+        ) : null}
+        {children}
+      </div>
+      <hr className="mt-7 h-0.5 w-full border-0 bg-project-border" />
     </header>
   );
 };
@@ -49,35 +66,40 @@ const Section: FC<PropsWithChildren<SectionProps>> = ({
   );
 };
 
-export const PageLayout: FC<PropsWithChildren<PageLayoutProps>> & {
-  Header: typeof Header;
-  Section: typeof Section;
-} = ({ children, withAside, ...rest }) => {
-  return withAside ? (
-    <PageLayoutWithAside {...rest}>{children}</PageLayoutWithAside>
-  ) : (
-    <div className="container mx-auto mb-10">{children}</div>
+const Content: FC<PropsWithChildren<ContentProps>> = ({
+  children,
+  className,
+  title,
+  ...rest
+}) => {
+  return (
+    <section className={clsx('container mx-auto', className)} {...rest}>
+      {children}
+    </section>
   );
 };
 
-const useClassNames = () => ({
-  aside: clsx('w-full flex-none lg:max-w-xs'),
-});
-
-const PageLayoutWithAside: FC<PropsWithChildren<PageLayoutProps>> = ({
-  children,
-  leftAside,
-}) => {
-  const classNames = useClassNames();
-
+export const PageLayout: FC<PropsWithChildren<PageLayoutProps>> & {
+  Header: typeof Header;
+  Section: typeof Section;
+  Content: typeof Content;
+} = ({ children, rightAsideOutlet }) => {
   return (
-    <div className="flex flex-col justify-center lg:min-h-screen lg:flex-row">
-      <div className={classNames.aside}>{leftAside}</div>
-      <div className="container w-full">{children}</div>
-      <div className={clsx(classNames.aside, 'hidden 2xl:block')} />
+    <div className="flex min-h-screen">
+      <div
+        className={clsx(
+          'bg-white shadow-md rounded-t-xl sm:rounded-none w-full sm:rounded-tr-prom px-5'
+        )}
+      >
+        {children}
+      </div>
+      {rightAsideOutlet ? (
+        <aside className="flex-none ml-2 mr-2">{rightAsideOutlet}</aside>
+      ) : null}
     </div>
   );
 };
 
 PageLayout.Header = Header;
 PageLayout.Section = Section;
+PageLayout.Content = Content;

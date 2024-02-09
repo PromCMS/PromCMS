@@ -79,7 +79,9 @@
     "react-hook-form": "7.34.0",
     "react-i18next": "11.18.3",
     "react-popper": "~2.3.0",
-    "react-router-dom": "^6.3.0",
+    "@tanstack/react-router": "^1.15.19",
+    "@tanstack/router-devtools": "^1.15.21",
+    "@tanstack/router-vite-plugin": "^1.15.20",
     "sass": "~1.54.3",
     "svg-country-flags": "~1.2.10",
     "tabler-icons-react": "^1.55.0"

@@ -1,12 +1,12 @@
 import { MESSAGES, pageUrls } from '@constants';
 import { Select, SelectItem, Text } from '@mantine/core';
+import { Link } from '@tanstack/react-router';
 import { useModelItems } from 'hooks/useModelItems';
 import Mustache from 'mustache';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { ExternalLink } from 'tabler-icons-react';
 
 import { UserRole } from '@prom-cms/api-client';

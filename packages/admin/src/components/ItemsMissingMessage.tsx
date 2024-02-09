@@ -1,7 +1,8 @@
-import { QuestionMark } from 'tabler-icons-react';
+import { MESSAGES } from '@constants';
 import clsx from 'clsx';
 import { DetailedHTMLProps, HTMLAttributes, VFC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { QuestionMark } from 'tabler-icons-react';
 
 export type ItemsMissingMessageProps = DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
@@ -17,13 +18,16 @@ const ItemsMissingMessage: VFC<ItemsMissingMessageProps> = ({
   return (
     <div
       className={clsx(
-        'flex min-h-[300px] flex-col justify-center text-center text-xl font-semibold text-gray-400',
+        'flex flex-col justify-center text-center text-xl font-semibold text-gray-400',
         className
       )}
       {...rest}
     >
-      <QuestionMark size={40} className="mx-auto" />
-      <p>{t('No items yet...')}</p>
+      <QuestionMark
+        size={45}
+        className="mx-auto bg-white rounded-full shadow-lg p-2"
+      />
+      <p className="mt-2">{t(MESSAGES.NO_ITEMS_YET_PLACEHOLDER)}</p>
     </div>
   );
 };

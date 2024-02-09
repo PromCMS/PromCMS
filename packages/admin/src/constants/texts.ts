@@ -43,6 +43,7 @@ export const MESSAGES = {
   ...EDITOR_MESSAGES,
   ...PROM_TABLES,
   MORE_OPTIONS_BUTTON_TEXT: 'More options',
+  NO_ITEMS_YET_PLACEHOLDER: 'No items yet...',
   PURGE_DATA: 'Purge data',
   MY_PROFILE_BUTTON_TEXT: 'My profile',
   PREVIEW_CONTENT: 'Preview content',

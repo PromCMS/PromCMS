@@ -1,23 +1,26 @@
+import { useParams } from '@tanstack/react-router';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { ApiResultModelSingleton } from '@prom-cms/api-client';
 
+import { SingletonUnderpageRoute } from '../routes/_authorized/entities/singletons/$singletonId';
 import { useSingletonInfo } from './useSingletonInfo';
 
 export type RichApiResultModelSingleton = ApiResultModelSingleton & {
   key: string;
 };
 
+console.log({ SingletonUnderpageRoute });
+
 /**
  * Quick hook to access current singleton information on current route.
  * @returns A current model (taken from url) information if that singletonId exists
  */
-const useCurrentSingleton = <T extends boolean>(
+export const useCurrentSingleton = <T extends boolean>(
   // @ts-ignore
   strict: T = false
 ) => {
-  const { singletonId } = useParams();
+  const { singletonId } = useParams({ from: SingletonUnderpageRoute.id });
   const formattedModelName = useMemo(() => String(singletonId), [singletonId]);
   const modelInfo = useSingletonInfo(formattedModelName);
 

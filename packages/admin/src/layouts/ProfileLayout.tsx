@@ -1,8 +1,9 @@
 import { MESSAGES } from '@constants';
-import { PageLayout } from '@layouts';
+import { Outlet } from '@tanstack/react-router';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet } from 'react-router-dom';
+
+import { PageLayout } from './PageLayout';
 
 export const ProfileLayout: FC = () => {
   const { t } = useTranslation();

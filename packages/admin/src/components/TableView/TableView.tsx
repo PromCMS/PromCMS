@@ -158,7 +158,7 @@ const TableView: FC<TableViewProps> & {
     <>
       {/* @ts-ignore */}
       <DragDropContext onDragEnd={onDragEnd}>
-        <Paper withBorder shadow="sm" className={classNames.tableWrapper}>
+        <Paper withBorder className={classNames.tableWrapper}>
           <table className="min-w-full leading-normal">
             <thead>
               <tr>
@@ -273,7 +273,7 @@ const TableView: FC<TableViewProps> & {
                           (ordering ? 1 : 0)
                         }
                       >
-                        <ItemsMissingMessage />
+                        <ItemsMissingMessage className="min-h-80" />
                       </td>
                     </tr>
                   )}

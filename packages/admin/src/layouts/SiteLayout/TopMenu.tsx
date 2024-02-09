@@ -1,16 +1,15 @@
 import BackendImage from '@components/BackendImage';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES, pageUrls } from '@constants';
-import { useGlobalContext } from '@contexts/GlobalContext';
+import { useSettings } from '@contexts/SettingsContext';
 import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
-import { useSettings } from '@hooks/useSettings';
-import { ActionIcon, Button, Collapse, Menu, Skeleton } from '@mantine/core';
+import { ActionIcon, Button, Collapse, Menu } from '@mantine/core';
+import { Link, useRouter } from '@tanstack/react-router';
 import { getInitials } from '@utils';
 import clsx from 'clsx';
 import { upperFirst } from 'lodash';
 import { FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   Home,
@@ -28,10 +27,11 @@ import { create as createStore } from 'zustand';
 
 import { ItemProps, useConstructedMenuItems } from './AsideMenu';
 
-const USER_MENU_ICON_SIZE = 16;
+const USER_MENU_ICON_SIZE = 14;
 
-const MENU_SUBITEM_CLASSNAMES =
-  'group-hover:opacity-100 duration-150 sm:opacity-40';
+const MENU_SUBITEM_CLASSNAMES = clsx(
+  'group-hover:opacity-100 duration-150 sm:opacity-50 group-hover:blur-0 sm:blur-sm'
+);
 
 enum SUBMENU_NAMES {
   USER = 'user-submenu',
@@ -88,20 +88,39 @@ const MobileMenu: FC = () => {
   );
 };
 
-export const TopMenu: FC = () => {
-  const { isBooting } = useGlobalContext();
-  const currentUser = useCurrentUser();
+const BackButton = () => {
+  const router = useRouter();
   const currentModel = useCurrentModel();
-  const navigate = useNavigate();
+  const { t } = useTranslation();
+  return (
+    <Button
+      type="button"
+      color="red"
+      variant="subtle"
+      leftIcon={<ArrowLeft className="aspect-square" width={20} height={20} />}
+      onClick={() =>
+        router.navigate({
+          to: pageUrls.entryTypes(currentModel?.name as string).list,
+        })
+      }
+      className={MENU_SUBITEM_CLASSNAMES}
+    >
+      {t(MESSAGES.GO_BACK)}
+    </Button>
+  );
+};
+
+export const TopMenu: FC = () => {
+  const currentUser = useCurrentUser();
+  const router = useRouter();
   // TODO remove this and other loading stuff
   const [hasError, setError] = useState(false);
-  const settings = useSettings();
   const { t } = useTranslation();
-  const location = useLocation();
   const [openedSubmenus, setOpenedSubmenus] = useState<SUBMENU_NAMES[]>([]);
   const mobileMenu = useMobileMenuToggle();
+  const settings = useSettings();
 
-  const isEntryUnderpage = /\/entry-types\/.*/g.test(location.pathname);
+  const isEntryUnderpage = /\/entry-types\/.+/g.test(location.pathname);
 
   const toggleSubmenu = (submenu: SUBMENU_NAMES) =>
     setOpenedSubmenus((prevValue) => {
@@ -123,7 +142,7 @@ export const TopMenu: FC = () => {
         setOpenedSubmenus([]);
       }}
     >
-      <div className="flex p-2 gap-2">
+      <div className="flex p-2 py-4 gap-2">
         <div className="w-11 hidden sm:block" />
         <ActionIcon
           className={clsx(
@@ -140,22 +159,7 @@ export const TopMenu: FC = () => {
             <Menu2 className="w-5 h-5" />
           )}
         </ActionIcon>
-        {isEntryUnderpage ? (
-          <Button
-            type="button"
-            color="red"
-            variant="subtle"
-            leftIcon={
-              <ArrowLeft className="aspect-square" width={20} height={20} />
-            }
-            onClick={() =>
-              navigate(pageUrls.entryTypes(currentModel?.name as string).list)
-            }
-            className={MENU_SUBITEM_CLASSNAMES}
-          >
-            {t(MESSAGES.GO_BACK)}
-          </Button>
-        ) : null}
+        {isEntryUnderpage ? <BackButton /> : null}
         <div className="mr-auto" />
         <Menu
           withArrow
@@ -170,11 +174,11 @@ export const TopMenu: FC = () => {
           <Menu.Target>
             <ActionIcon
               className={clsx(
-                'ml-auto relative flex w-9 h-9 overflow-hidden rounded-prom border border-gray-100 bg-white',
+                'ml-auto relative flex w-9 h-9 sm:w-10 sm:h-10 overflow-hidden rounded-prom border border-gray-100 bg-white',
                 MENU_SUBITEM_CLASSNAMES
               )}
             >
-              <Settings className="w-5 h-5" />
+              <Settings className="w-6 h-6" />
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
@@ -186,7 +190,7 @@ export const TopMenu: FC = () => {
                 color="teal"
                 icon={<Settings size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
-                  navigate('/settings/system');
+                  router.navigate({ to: '/settings/system' });
                 }}
               >
                 {t('System settings')}
@@ -200,21 +204,22 @@ export const TopMenu: FC = () => {
                 color="blue"
                 icon={<Users size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
-                  navigate('/users');
+                  router.navigate({ to: '/users' });
                 }}
               >
                 {t('Users')}
               </Menu.Item>
             ) : null}
-            {settings && settings.i18n.languages.length >= 2 ? (
+            {(settings.application?.i18n?.languages.length ?? 0) >= 2 ? (
               <Menu.Item
                 color="blue"
                 icon={<LanguageHiragana size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
-                  navigate(
-                    pageUrls.settings.translations(settings?.i18n.languages[1])
-                      .list
-                  );
+                  router.navigate({
+                    to: pageUrls.settings.translations(
+                      settings?.application?.i18n.languages[1]!
+                    ).list,
+                  });
                 }}
               >
                 {t(MESSAGES.GENERAL_TRANSLATIONS)}
@@ -225,7 +230,7 @@ export const TopMenu: FC = () => {
                 color="orange"
                 icon={<UserExclamation size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
-                  navigate('/settings/roles');
+                  router.navigate({ to: '/settings/user-roles' });
                 }}
               >
                 {t(MESSAGES.USER_ROLES)}
@@ -245,15 +250,13 @@ export const TopMenu: FC = () => {
         >
           <Menu.Target>
             <ActionIcon
-              disabled={isBooting || !currentUser}
+              disabled={!currentUser}
               className={clsx(
-                'relative flex w-9 h-9 overflow-hidden rounded-prom border border-gray-100 bg-white',
+                'relative flex w-9 h-9 sm:w-10 sm:h-10 overflow-hidden rounded-prom border border-gray-100 bg-white',
                 MENU_SUBITEM_CLASSNAMES
               )}
             >
-              {isBooting ? (
-                <Skeleton className="absolute left-0 right-0 h-full w-full" />
-              ) : currentUser && currentUser.avatar && !hasError ? (
+              {currentUser && currentUser.avatar && !hasError ? (
                 <BackendImage
                   imageId={currentUser.avatar}
                   alt=""
@@ -263,7 +266,7 @@ export const TopMenu: FC = () => {
                   className="absolute top-0 left-0 h-full w-full object-cover"
                 />
               ) : (
-                <p className="m-auto font-bold text-[12px] tracking-wider text-black p-1">
+                <p className="m-auto font-bold text-[16px] tracking-wider text-black p-1">
                   {getInitials(currentUser?.name || '-- --')}
                 </p>
               )}
@@ -274,7 +277,7 @@ export const TopMenu: FC = () => {
               color="blue"
               icon={<User size={USER_MENU_ICON_SIZE} />}
               onClick={() => {
-                navigate('/settings/profile');
+                router.navigate({ to: '/settings/profile' });
               }}
               className="font-semibold"
             >
@@ -286,7 +289,7 @@ export const TopMenu: FC = () => {
               color="red"
               icon={<Logout size={USER_MENU_ICON_SIZE} />}
               onClick={() => {
-                navigate('/logout');
+                router.navigate({ to: '/logout' });
               }}
             >
               {t(MESSAGES.LOG_OFF)}

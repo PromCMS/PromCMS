@@ -1,3 +1,5 @@
+import type { Root } from 'react-dom/client';
+
 let shouldPassIntoConsole = false;
 
 if (typeof window !== 'undefined') {
@@ -8,7 +10,7 @@ if (typeof window !== 'undefined') {
 
 declare global {
   interface Window {
-    application?: { logs: Record<string, any[]> };
+    application?: { logs?: Record<string, any[]>; root?: Root };
   }
 }
 
@@ -16,10 +18,8 @@ const createLogger = <T extends (...args: any) => any>(fnc: T) => {
   const name = fnc.name;
 
   return (...params: Parameters<T>) => {
-    window.application ??= {
-      logs: {},
-    };
-
+    window.application ??= {};
+    window.application.logs ??= {};
     window.application.logs[name] ??= [];
     window.application.logs[name].push(params);
 

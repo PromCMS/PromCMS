@@ -2,11 +2,11 @@ import BackendImage from '@components/BackendImage';
 import { MESSAGES, pageUrls } from '@constants';
 import { ActionIcon, Drawer, Skeleton, Tooltip } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { Link } from '@tanstack/react-router';
 import { useModelItem } from 'hooks/useModelItem';
 import Mustache from 'mustache';
 import { FC, Fragment, Suspense, memo, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { Check, Eye, X } from 'tabler-icons-react';
 
 import { ColumnTypeRelationship } from '@prom-cms/schema';

@@ -1,24 +1,24 @@
 import { pageUrls } from '@constants';
+import { useEntities } from '@contexts/EntitiesContext';
 import { Image, Tooltip } from '@mantine/core';
 import { upperFirst } from '@mantine/hooks';
+import { Link, useRouter, useRouterState } from '@tanstack/react-router';
 import { modelIsCustom } from '@utils';
 import clsx from 'clsx';
-import { useGlobalContext } from 'contexts/GlobalContext';
-import { useCurrentUser } from 'hooks/useCurrentUser';
 import { FC, Fragment, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
 import * as iconSet from 'tabler-icons-react';
 import { Home, Photo } from 'tabler-icons-react';
 
 import logoImage from '../../assets/logos/logo.svg';
+import { useCurrentUser } from '../../hooks/useCurrentUser';
 
 const defaultMenuItems: ItemProps[] = [
   { label: 'Home', href: '/', icon: Home },
   { label: 'Files', href: '/files', icon: Photo },
 ];
 
-const MENU_ICON_SIZE = 28;
+const MENU_ICON_SIZE = 35;
 const LOGO_SIZE = 40;
 
 export type ItemProps = {
@@ -29,7 +29,7 @@ export type ItemProps = {
 };
 
 export const useConstructedMenuItems = () => {
-  const { models, singletons } = useGlobalContext();
+  const { models, singletons } = useEntities();
   const currentUser = useCurrentUser();
 
   const finalMenuItems = useMemo(() => {
@@ -83,7 +83,16 @@ export const useConstructedMenuItems = () => {
 
 const Item: FC<ItemProps> = ({ href, label, isSingleton, icon: Icon }) => {
   const { t } = useTranslation();
-  const { pathname } = useLocation();
+  const routerState = useRouterState();
+  const router = useRouter();
+
+  const currentLocation = routerState.location.pathname.replace(
+    router.basepath,
+    ''
+  );
+
+  const isCurrent =
+    href === '/' ? currentLocation === '/' : currentLocation.startsWith(href);
 
   return (
     <Tooltip
@@ -100,12 +109,14 @@ const Item: FC<ItemProps> = ({ href, label, isSingleton, icon: Icon }) => {
           'relative flex cursor-pointer p-1 text-xl text-gray-500 transition-all duration-100',
           isSingleton,
         ])}
-        data-is-active={
-          href === '/' ? pathname === '/' : pathname.startsWith(href)
-        }
+        data-is-active={isCurrent}
       >
         <Icon
-          className="m-auto"
+          className={clsx(
+            'm-auto p-1',
+            isCurrent ? 'bg-blue-100 rounded-prom text-blue-700' : ''
+          )}
+          strokeWidth={1.3}
           width={MENU_ICON_SIZE}
           height={MENU_ICON_SIZE}
         />
@@ -146,7 +157,7 @@ export const AsideMenu: FC = () => {
         </div>
       </a>
       <div className="h-full pr-2 pb-0">
-        <div className="sticky top-2 left-0 grid gap-2 bg-white border backdrop-blur-lg border-gray-100 rounded-prom shadow-lg p-2 items-center opacity-70 hover:opacity-100 duration-150">
+        <div className="sticky top-2 left-0 grid gap-2 bg-white border backdrop-blur-lg border-gray-100 rounded-prom shadow-lg p-1 items-center opacity-70 hover:opacity-100 duration-150">
           {allMenuItems.map((items, index) => (
             <Fragment key={index}>
               {items.map((item) => (

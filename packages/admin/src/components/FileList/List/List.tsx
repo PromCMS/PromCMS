@@ -1,6 +1,6 @@
 import { apiClient } from '@api';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { Transition } from '@mantine/core';
+import { Button, Transition } from '@mantine/core';
 import {
   showNotification,
   updateNotification,
@@ -29,6 +29,7 @@ export const List: FC = () => {
     mutateFolders,
     onToggleSelectedFile,
     selectedFileIds,
+    openFilePicker,
   } = useFileListContext();
   const notifications = useNotifications();
   const classNames = useClassNames();
@@ -131,49 +132,57 @@ export const List: FC = () => {
     );
   }
 
+  const showPlaceholder =
+    !files?.folders?.length && !files?.files?.length && !showNewFolderCreator;
+
   return (
-    <>
-      {files?.files?.length ||
-      files?.folders?.length ||
-      showNewFolderCreator ? (
-        <div className={classNames.itemsWrap}>
-          <>
-            {files?.folders &&
-              files.folders.map((folder) => (
-                <FolderItem
-                  key={folder}
-                  itemKey={folder}
-                  name={folder}
-                  onClick={onFolderClick}
-                  onDeleteClick={onFolderDeleteClick}
-                />
-              ))}
-            {files?.files &&
-              files.files.map((fileInfo) => (
-                <FileItem
-                  key={fileInfo.id}
-                  onDeleteClick={onFileDeleteClick}
-                  isPicked={selectedFileIds?.includes(String(fileInfo.id))}
-                  onTogglePick={onToggleSelectedFile}
-                  {...fileInfo}
-                />
-              ))}
-            <Transition
-              mounted={showNewFolderCreator}
-              transition="pop-top-left"
-              duration={200}
-              timingFunction="ease"
-            >
-              {(styles) => <NewFolderCreator styles={styles} />}
-            </Transition>
-            {Object.entries(uploadingFiles).map(([key]) => (
-              <FileItemSkeleton key={key} />
-            ))}
-          </>
-        </div>
-      ) : (
-        <ItemsMissingMessage />
-      )}
-    </>
+    <div className={classNames.itemsWrap}>
+      {files?.folders?.map((folder) => (
+        <FolderItem
+          key={folder}
+          itemKey={folder}
+          name={folder}
+          onClick={onFolderClick}
+          onDeleteClick={onFolderDeleteClick}
+        />
+      ))}
+      {files?.files?.map((fileInfo) => (
+        <FileItem
+          key={fileInfo.id}
+          onDeleteClick={onFileDeleteClick}
+          isPicked={selectedFileIds?.includes(String(fileInfo.id))}
+          onTogglePick={onToggleSelectedFile}
+          {...fileInfo}
+        />
+      ))}
+      <Transition
+        mounted={showNewFolderCreator}
+        transition="pop-top-left"
+        duration={200}
+        timingFunction="ease"
+      >
+        {(styles) => <NewFolderCreator styles={styles} />}
+      </Transition>
+      {Object.entries(uploadingFiles).map(([key]) => (
+        <FileItemSkeleton key={key} />
+      ))}
+      {showPlaceholder ? (
+        <>
+          <div className="col-span-full flex items-center bg-white backdrop-blur-md bg-opacity-40 rounded-prom shadow-xl py-20 border-2 border-dashed border-gray-300">
+            <div className="flex flex-col mx-auto">
+              <ItemsMissingMessage />
+              <div className="flex gap-5 mt-5">
+                <Button onClick={openFilePicker}>Add new file</Button>
+                <Button
+                  onClick={() => updateValue('showNewFolderCreator', true)}
+                >
+                  Add new folder
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : null}
+    </div>
   );
 };

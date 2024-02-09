@@ -1,27 +1,27 @@
-import { CanUserOptions, canUser } from '@utils';
-import { useGlobalContext } from 'contexts/GlobalContext';
+import { useAuth } from '@contexts/AuthContext';
+import { CanUserOptions, canUser, isAdminRole } from '@utils';
 import { useMemo } from 'react';
 
 import { User, UserRole } from '@prom-cms/api-client';
 
 export const useCurrentUser = () => {
-  const { currentUserIsAdmin, currentUser } = useGlobalContext();
+  const { user } = useAuth();
 
   return useMemo(
     () =>
-      currentUser && {
-        ...(currentUser as User & {
+      user && {
+        ...(user as User & {
           role: UserRole;
         }),
-        isAdmin: !!currentUserIsAdmin,
+        isAdmin: !!isAdminRole(user.role),
         can: (payload: Omit<CanUserOptions, 'userRole'>) =>
-          currentUser?.role
+          user?.role
             ? canUser({
-                userRole: currentUser.role as UserRole,
+                userRole: user.role as UserRole,
                 ...payload,
               })
             : false,
       },
-    [currentUser, currentUserIsAdmin]
+    [user]
   );
 };

@@ -1,6 +1,6 @@
 import { Flag } from '@components/Flag';
+import { useSettings } from '@contexts/SettingsContext';
 import { Group, Select, SelectItem, SelectProps, Text } from '@mantine/core';
-import { useSettings } from 'hooks/useSettings';
 import { ComponentPropsWithoutRef, FC, forwardRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Hash } from 'tabler-icons-react';
@@ -56,7 +56,7 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
       return undefined;
     }
 
-    return settings.i18n.languages.map((value) => {
+    return settings.application?.i18n.languages.map((value) => {
       const isDisabled = disabledOptions?.includes(value);
 
       return {

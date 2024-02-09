@@ -10,7 +10,6 @@ import {
   Textarea,
   clsx,
 } from '@mantine/core';
-import { useEntryUnderpageContext } from '@pages/entry-types/[modelId]/entries/_context';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
@@ -18,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ColumnType, FieldPlacements } from '@prom-cms/schema';
 
+import { useEntryUnderpageContext } from '../../routes/_authorized/entities/$modelId/$entryId/-context';
 import { EnumSelect, RelationshipItemSelect } from './fields';
 import { BigImagePicker } from './fields/BigImagePicker';
 import { Email } from './fields/Email';

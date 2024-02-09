@@ -1,5 +1,5 @@
+import { useParams } from '@tanstack/react-router';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
 
 import { ApiResultModel } from '@prom-cms/api-client';
 
@@ -17,7 +17,7 @@ const useCurrentModel = <T extends boolean>(
   // @ts-ignore
   strict: T = false
 ) => {
-  const { modelId } = useParams();
+  const { modelId } = useParams({});
   const formattedModelName = useMemo(() => String(modelId), [modelId]);
   const modelInfo = useModelInfo(formattedModelName);
 

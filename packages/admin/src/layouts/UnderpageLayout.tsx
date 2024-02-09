@@ -1,6 +1,11 @@
 import clsx from 'clsx';
 import { FC, PropsWithChildren, ReactNode } from 'react';
 
+/**
+ *
+ * @param param0 @deprecated
+ * @returns
+ */
 export const UnderpageLayout: FC<
   PropsWithChildren<{ asideOutlet?: ReactNode }>
 > = ({ children, asideOutlet }) => {

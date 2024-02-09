@@ -1,20 +1,28 @@
 import { apiClient } from '@api';
-import { useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
+import { QueryFunction, useQuery } from '@tanstack/react-query';
+import { queryClient } from 'queryClient';
 
 import { ItemID, User } from '@prom-cms/api-client';
 
-const fetcher = (id: ItemID | undefined) => () =>
-  apiClient.users.getOne(id!).then(({ data }) => data.data);
-export const useUser = (
+const fetcher: QueryFunction<User> = ({ queryKey }) =>
+  apiClient.users.getOne(queryKey[1] as ItemID).then(({ data }) => data.data);
+
+const getUseUserQueryKey = (
+  userId: ItemID | undefined
+): [string, string | number | undefined] => ['users', typeof userId];
+
+export function useUser(
   itemId: ItemID | undefined,
   config?: Parameters<typeof useQuery<User>>['2']
-) => {
-  const key = useMemo(() => ['users', itemId], [itemId]);
-  const result = useQuery<User>(key, fetcher(itemId), {
+) {
+  return useQuery<User>(getUseUserQueryKey(itemId), fetcher, {
     enabled: !!itemId,
     ...config,
   });
+}
 
-  return useMemo(() => ({ ...result, key }), [key, result]);
-};
+useUser.prefetch = (itemId: ItemID) =>
+  queryClient.prefetchQuery({
+    queryFn: fetcher,
+    queryKey: getUseUserQueryKey(itemId),
+  });

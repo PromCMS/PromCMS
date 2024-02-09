@@ -18,7 +18,7 @@ export const pageUrls = {
   },
   singletons: {
     view(name: string) {
-      return `/singletons/${name}`;
+      return `/entities/singletons/${name}`;
     },
   },
   files: {
@@ -34,19 +34,19 @@ export const pageUrls = {
       return `/files${urlParams.toString()}`;
     },
     view(id: ItemID) {
-      return `${this.list()}/entries/${id}`;
+      return `${this.list()}/${id}`;
     },
   },
   entryTypes: (name: string) => ({
-    list: `/entry-types/${name}`,
+    list: `/entities/${name}`,
     get create() {
-      return `${this.list}/entries/create`;
+      return `${this.list}/create`;
     },
     view(id: ItemID) {
-      return `${this.list}/entries/${id}`;
+      return `${this.list}/${id}`;
     },
     duplicate(id: ItemID) {
-      return `${this.list}/entries/duplicate/${id}`;
+      return `${this.list}/${id}/duplicate`;
     },
   }),
   settings: {
