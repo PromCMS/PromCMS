@@ -2,7 +2,6 @@ import { apiClient } from '@api';
 import { pageUrls } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
 import { EntryTypeUrlActionType } from '@custom-types';
-import type { OutputData } from '@editorjs/editorjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { logger } from '@logger';
 import { getModelItemSchema } from '@schemas';
@@ -10,7 +9,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { getObjectDiff, isApiResponse } from '@utils';
 import axios from 'axios';
-import { useBlockEditorRefs } from 'contexts/BlockEditorContext';
 import useCurrentModel from 'hooks/useCurrentModel';
 import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import {
@@ -57,14 +55,10 @@ export const entryUnderpageContext = createContext<IEntryUnderpageContext>({
 
 export const useEntryUnderpageContext = () => useContext(entryUnderpageContext);
 
-const normalizeContent = (item: string | OutputData): OutputData =>
-  typeof item === 'string' ? JSON.parse(item) : item;
-
 export const EntryUnderpageContextProvider: FC<{
   viewType: EntryTypeUrlActionType;
   children: ReactElement;
 }> = ({ children, viewType }) => {
-  const blockEditorRefs = useBlockEditorRefs();
   const settings = useSettings();
   const [language, setLanguage] = useState<string | undefined>(
     settings.application?.i18n?.default
@@ -121,35 +115,9 @@ export const EntryUnderpageContextProvider: FC<{
     return itemData;
   }, [itemData, viewType]);
 
-  useEffect(() => {
-    if (itemData) {
-      if (blockEditorRefs.refs.current) {
-        for (const [fieldName, editorRef] of Object.entries(
-          blockEditorRefs.refs.current
-        )) {
-          if (itemData[fieldName]) {
-            editorRef?.blocks?.render(normalizeContent(itemData[fieldName]));
-          }
-        }
-      }
-    }
-  }, [itemData, formMethods]);
-
   const onSubmit = useCallback(
     async (values) => {
       const modelName = (currentModel as NonNullable<typeof currentModel>).name;
-
-      if (blockEditorRefs.refs.current) {
-        for (const [key, editorRef] of Object.entries(
-          blockEditorRefs.refs.current
-        )) {
-          await editorRef?.isReady;
-
-          if (editorRef && 'save' in editorRef) {
-            values[key] = await editorRef.save();
-          }
-        }
-      }
 
       try {
         await reqNotification(

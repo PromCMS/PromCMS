@@ -65,39 +65,6 @@ importers:
 
   packages/admin:
     dependencies:
-      '@calumk/editorjs-columns':
-        specifier: ^0.2.4
-        version: 0.2.4
-      '@editorjs/editorjs':
-        specifier: ^2.26.5
-        version: 2.29.0
-      '@editorjs/embed':
-        specifier: ^2.5.3
-        version: 2.7.0
-      '@editorjs/header':
-        specifier: ^2.7.0
-        version: 2.8.1
-      '@editorjs/link':
-        specifier: ^2.5.0
-        version: 2.6.2
-      '@editorjs/list':
-        specifier: ^1.8.0
-        version: 1.9.0
-      '@editorjs/marker':
-        specifier: ^1.3.0
-        version: 1.4.0
-      '@editorjs/paragraph':
-        specifier: ^2.9.0
-        version: 2.11.3
-      '@editorjs/quote':
-        specifier: ^2.5.0
-        version: 2.6.0
-      '@editorjs/table':
-        specifier: ^2.2.0
-        version: 2.3.0
-      '@editorjs/underline':
-        specifier: ^1.1.0
-        version: 1.1.0
       '@emotion/react':
         specifier: ^11.9.3
         version: 11.11.3(@types/react@18.2.52)(react@18.2.0)
@@ -188,21 +155,9 @@ importers:
       dotenv:
         specifier: 10.0.0
         version: 10.0.0
-      editorjs-change-case:
-        specifier: 0.0.3
-        version: 0.0.3
       editorjs-html:
         specifier: ^3.4.3
         version: 3.4.3
-      editorjs-layout:
-        specifier: 1.2.3
-        version: 1.2.3
-      editorjs-text-alignment-blocktune:
-        specifier: 1.0.3
-        version: 1.0.3
-      editorjs-tooltip:
-        specifier: 1.1.3
-        version: 1.1.3
       i18next:
         specifier: 21.6.14
         version: 21.6.14
@@ -1949,14 +1904,6 @@ packages:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
 
-  /@calumk/editorjs-columns@0.2.4:
-    resolution: {integrity: sha512-qiHtdhW5/GEWwMjiFKTJceFkjw8YC++rUHe+BWezVZp85fxaG3INbfLjeyvneYG1jDzTeY1MeNsj/916mSiN3g==}
-    dependencies:
-      '@editorjs/editorjs': 2.29.0
-      sweetalert2: 11.10.4
-      uuid: 8.3.2
-    dev: false
-
   /@changesets/apply-release-plan@7.0.0:
     resolution: {integrity: sha512-vfi69JR416qC9hWmFGSxj7N6wA5J222XNBmezSVATPWDVPIF7gkd4d8CpbEbXmRWbVrkoli3oerGS6dcL/BGsQ==}
     dependencies:
@@ -2140,80 +2087,11 @@ packages:
       prettier: 2.8.8
     dev: true
 
-  /@codexteam/icons@0.0.4:
-    resolution: {integrity: sha512-V8N/TY2TGyas4wLrPIFq7bcow68b3gu8DfDt1+rrHPtXxcexadKauRJL6eQgfG7Z0LCrN4boLRawR4S9gjIh/Q==}
-    dev: false
-
-  /@codexteam/icons@0.0.5:
-    resolution: {integrity: sha512-s6H2KXhLz2rgbMZSkRm8dsMJvyUNZsEjxobBEg9ztdrb1B2H3pEzY6iTwI4XUPJWJ3c3qRKwV4TrO3J5jUdoQA==}
-    dev: false
-
-  /@codexteam/icons@0.0.6:
-    resolution: {integrity: sha512-L7Q5PET8PjKcBT5wp7VR+FCjwCi5PUp7rd/XjsgQ0CI5FJz0DphyHGRILMuDUdCW2MQT9NHbVr4QP31vwAkS/A==}
-    dev: false
-
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
-    dev: false
-
-  /@editorjs/editorjs@2.29.0:
-    resolution: {integrity: sha512-w2BVboSHokMBd/cAOZn0UU328o3gSZ8XUvFPA2e9+ciIGKILiRSPB70kkNdmhHkuNS3q2px+vdaIFaywBl7wGA==}
-    dev: false
-
-  /@editorjs/embed@2.7.0:
-    resolution: {integrity: sha512-FieA8YKnqAMX+4Ng6VeusuuuyMg1cX4vADoEKcQVM0LHy2hC17ztNGZh8UHEfrjUwbfJDSr/cPhT0LRGrwTd8g==}
-    dev: false
-
-  /@editorjs/header@2.8.1:
-    resolution: {integrity: sha512-y0HVXRP7m2W617CWo3fsb5HhXmSLaRpb9GzFx0Vkp/HEm9Dz5YO1s8tC7R8JD3MskwoYh7V0hRFQt39io/r6hA==}
-    dependencies:
-      '@codexteam/icons': 0.0.5
-    dev: false
-
-  /@editorjs/link@2.6.2:
-    resolution: {integrity: sha512-3cPx6M4ZvwDDvsi0E0fvMR3rvveAV/C0GRo1JLeZJ9cG9QgyoNolj4eu5Eqx3/r1XTC/he54qYEIZ/Dc4Lr4Ow==}
-    dependencies:
-      '@babel/runtime': 7.23.9
-      '@codexteam/icons': 0.0.4
-    dev: false
-
-  /@editorjs/list@1.9.0:
-    resolution: {integrity: sha512-BQEvZW4vi0O0dBvGNljiKxiE89vMSHoM2Tu2OzKUndoj7pY9AxqpgCh1qvwIVsJAlG4Lbt/vBFQilnoStMmI6A==}
-    dependencies:
-      '@codexteam/icons': 0.0.4
-    dev: false
-
-  /@editorjs/marker@1.4.0:
-    resolution: {integrity: sha512-5ipEXfL44jTTRzgNp/p/YjMO7jT08S5z4V8qA3FFJTfdhKgQyM3mvP1zpdYKw47ZZpVWMCncvk5Nto3BxihEtg==}
-    dependencies:
-      '@codexteam/icons': 0.0.5
-    dev: false
-
-  /@editorjs/paragraph@2.11.3:
-    resolution: {integrity: sha512-ON72lhvhgWzPrq4VXpHUeut9bsFeJgVATDeL850FVToOwYHKvdsNpfu0VgxEodhkXgzU/IGl4FzdqC2wd3AJUQ==}
-    dependencies:
-      '@codexteam/icons': 0.0.4
-    dev: false
-
-  /@editorjs/quote@2.6.0:
-    resolution: {integrity: sha512-8DiCMBT4n4UDV5bgzvfRH26HmL6YWddGC4+twvjhR+PzX0gwrnY8nFifvro79EeSqxwRtFjjlGnu5I0VTfw5aQ==}
-    dependencies:
-      '@codexteam/icons': 0.0.5
-    dev: false
-
-  /@editorjs/table@2.3.0:
-    resolution: {integrity: sha512-/dKE6A5FkukX/FpvIyQGsewwXglZk8YbXpEp9vkB6Ec4ETLeGJMxObCcYqbXqVod+IU/a1tFH+j3lsD8ASD41g==}
-    dependencies:
-      '@codexteam/icons': 0.0.6
-    dev: false
-
-  /@editorjs/underline@1.1.0:
-    resolution: {integrity: sha512-vQj2ROW1KreD31QHlhaPikmDJGWYzRBusN4Zyfwl9nIIQCByt4S8fZQpsrRvH4sct5mkirsHllNT00rJlqHK7Q==}
-    dependencies:
-      '@codexteam/icons': 0.0.6
     dev: false
 
   /@emotion/babel-plugin@11.11.0:
@@ -5313,26 +5191,8 @@ packages:
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
 
-  /editorjs-change-case@0.0.3:
-    resolution: {integrity: sha512-1g5RueRFLGsvKNiKdpq9nLgn0xeHylXmXJLMqqobAhB7uNJ7N978vN1mKGgMSThxi4y6mU45aNYhBJy9xQFrZA==}
-    dev: false
-
   /editorjs-html@3.4.3:
     resolution: {integrity: sha512-HMqQ3BCE98uhSpJsbfH0c3CoMctUMCHlap2Eq/7/VjaHas+g3IJqyf+ERtMByoQCzvcW22ISYaZEeE7rGkd8Xg==}
-    dev: false
-
-  /editorjs-layout@1.2.3:
-    resolution: {integrity: sha512-5c8TM89OhynlyWcj0Iuxndg3d2coQhBWbgRaHWeNJskclh8+TFXriRXrOFQJMwxJxogCa5lbq2wshTRFQX3cAg==}
-    dependencies:
-      '@editorjs/editorjs': 2.29.0
-    dev: false
-
-  /editorjs-text-alignment-blocktune@1.0.3:
-    resolution: {integrity: sha512-DAJ2LJP+WjETvU4lVOJCqZ1kZkKHp0GkujkqZgza9DRv7bO46m1M/s2d5Ba5hPFdmqk1vA/ci++MQXgWD7mWYw==}
-    dev: false
-
-  /editorjs-tooltip@1.1.3:
-    resolution: {integrity: sha512-eF6hLVRngqRu654/sHYvM0fza8AbS72txYkMH/ledaXwcWCTSeCBGJsRSqGYomsa7ALWs6OT+d0mrgQZezkeSQ==}
     dev: false
 
   /ee-first@1.1.1:
@@ -9251,10 +9111,6 @@ packages:
       stable: 0.1.8
     dev: false
 
-  /sweetalert2@11.10.4:
-    resolution: {integrity: sha512-MOVRuEW/yQsyzgkaiHqAJcYKxW3vhtE5o3Skp6vZdyJejCOWo4FOicbjRfvqHAXTyTMuwDHA+0lYbO6BiHl1Gw==}
-    dev: false
-
   /tabbable@6.2.0:
     resolution: {integrity: sha512-Cat63mxsVJlzYvN51JmVXIgNoUokrIaT2zLclCXjRd8boZ0004U4KCs/sToJ75C6sdlByWxpYnb5Boif1VSFew==}
     dev: false
@@ -9793,11 +9649,6 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
-
-  /uuid@8.3.2:
-    resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
-    hasBin: true
-    dev: false
 
   /uuid@9.0.1:
     resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
