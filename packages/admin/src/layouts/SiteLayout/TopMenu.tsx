@@ -1,7 +1,6 @@
 import BackendImage from '@components/BackendImage';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES, pageUrls } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
-import useCurrentModel from '@hooks/useCurrentModel';
 import { useCurrentUser } from '@hooks/useCurrentUser';
 import { ActionIcon, Button, Collapse, Menu } from '@mantine/core';
 import { Link, useRouter } from '@tanstack/react-router';
@@ -25,6 +24,7 @@ import {
 } from 'tabler-icons-react';
 import { create as createStore } from 'zustand';
 
+import useCurrentModel from '../../routes/_authorized/entities/$modelId/-useCurrentModel';
 import { ItemProps, useConstructedMenuItems } from './AsideMenu';
 
 const USER_MENU_ICON_SIZE = 14;

@@ -1,9 +1,10 @@
+import { useModelInfo } from '@hooks/useModelInfo';
 import { useParams } from '@tanstack/react-router';
 import { useMemo } from 'react';
 
 import { ApiResultModel } from '@prom-cms/api-client';
 
-import { useModelInfo } from './useModelInfo';
+import { EntityMainPageRoute } from './index';
 
 export type RichApiResultModel = ApiResultModel & {
   name: string;
@@ -17,7 +18,9 @@ const useCurrentModel = <T extends boolean>(
   // @ts-ignore
   strict: T = false
 ) => {
-  const { modelId } = useParams({});
+  const { modelId } = useParams({
+    from: EntityMainPageRoute.id,
+  });
   const formattedModelName = useMemo(() => String(modelId), [modelId]);
   const modelInfo = useModelInfo(formattedModelName);
 

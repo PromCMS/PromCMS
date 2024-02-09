@@ -8,7 +8,6 @@ import {
 } from '@mantine/core';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
-import useCurrentModel from 'hooks/useCurrentModel';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useMemo, useState } from 'react';
 import { FC } from 'react';
@@ -17,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import { Dots, Trash, World } from 'tabler-icons-react';
 
 import { useEntryUnderpageContext } from '../../-context';
+import useCurrentModel from '../../../-useCurrentModel';
 
 const MoreOptions: FC = () => {
   const { formState } = useFormContext();

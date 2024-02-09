@@ -3,7 +3,6 @@ import { DynamicFormFields } from '@components/editorialPage/DynamicFormFields';
 import { Wrapper } from '@components/editorialPage/Wrapper';
 import { EntryTypeUrlActionType } from '@custom-types';
 import { UnderpageLayout } from '@layouts/UnderpageLayout';
-import useCurrentModel from 'hooks/useCurrentModel';
 import { FC } from 'react';
 
 import { Aside, Header, Menu } from '.';
@@ -11,6 +10,7 @@ import {
   EntryUnderpageContextProvider,
   entryUnderpageContext,
 } from '../-context';
+import useCurrentModel from '../../-useCurrentModel';
 
 export const EntryPageContent: FC<{ viewType: EntryTypeUrlActionType }> = ({
   viewType,

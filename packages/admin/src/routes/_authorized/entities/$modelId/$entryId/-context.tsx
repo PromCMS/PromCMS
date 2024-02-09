@@ -9,7 +9,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import { getObjectDiff, isApiResponse } from '@utils';
 import axios from 'axios';
-import useCurrentModel from 'hooks/useCurrentModel';
 import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import {
   FC,
@@ -27,6 +26,7 @@ import { constructDefaultFormValues } from 'utils/constructDefaultFormValues';
 
 import { EntityDuplicateErrorCode, ResultItem } from '@prom-cms/api-client';
 
+import useCurrentModel from '../-useCurrentModel';
 import { useCurrentModelItem } from './-hooks';
 
 export interface IEntryUnderpageContext {

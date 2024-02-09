@@ -1,8 +1,8 @@
-import useCurrentModel from '@hooks/useCurrentModel';
 import { useModelItem } from '@hooks/useModelItem';
 import { useParams } from '@tanstack/react-router';
 import { useMemo } from 'react';
 
+import useCurrentModel from '../-useCurrentModel';
 import { EntityUnderpageRoute } from './index';
 
 const queryConfig = {

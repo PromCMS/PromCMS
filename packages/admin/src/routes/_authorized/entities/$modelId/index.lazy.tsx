@@ -7,7 +7,6 @@ import { Button } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { modelIsCustom } from '@utils';
-import useCurrentModel from 'hooks/useCurrentModel';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useModelItems } from 'hooks/useModelItems';
 import { useEffect, useMemo, useState } from 'react';
@@ -15,6 +14,8 @@ import { useTranslation } from 'react-i18next';
 import { Plus } from 'tabler-icons-react';
 
 import { ItemID, ResultItem } from '@prom-cms/api-client';
+
+import useCurrentModel from './-useCurrentModel';
 
 export const Route = createLazyFileRoute('/_authorized/entities/$modelId/')({
   component: EntityMainPage,

@@ -1,11 +1,11 @@
 import { Header as StyledHeader } from '@components/editorialPage/Header';
-import useCurrentModel from 'hooks/useCurrentModel';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { FieldPlacements } from '@prom-cms/schema';
 
 import { useEntryUnderpageContext } from '../../-context';
+import useCurrentModel from '../../../-useCurrentModel';
 
 export const Header: FC = () => {
   const { currentView } = useEntryUnderpageContext();

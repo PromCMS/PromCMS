@@ -10,7 +10,7 @@ export const Route = createFileRoute('/finalize-registration/')({
       .parse(search);
   },
   beforeLoad({ context, params }) {
-    if (context.auth?.user || !params.token) {
+    if (context.auth?.user || !(params as any).token) {
       throw redirect({
         to: '/',
       });
