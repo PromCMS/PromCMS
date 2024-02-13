@@ -1,26 +1,17 @@
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { PageLayout } from '@layouts/PageLayout';
-import { LoadingOverlay, Table, createStyles } from '@mantine/core';
+import { LoadingOverlay, Table } from '@mantine/core';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { useModelItems } from 'hooks/useModelItems';
 import { useTranslation } from 'react-i18next';
-
-const useStyles = createStyles(() => ({
-  root: {
-    td: {
-      verticalAlign: 'baseline',
-    },
-  },
-}));
 
 export const Route = createLazyFileRoute('/_authorized/settings/user-roles/')({
   component: Page,
 });
 
 function Page() {
-  const { classes } = useStyles();
   const { t } = useTranslation();
   const { data, isLoading, isError, isRefetching } = useModelItems(
     BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES
@@ -57,10 +48,10 @@ function Page() {
         <div className="relative min-h-[400px]">
           <LoadingOverlay
             visible={isLoading || isRefetching || isError}
-            overlayBlur={2}
+            overlayProps={{ blur: 2 }}
           />
           <Table
-            className={clsx(classes.root, '-mx-5 mt-5')}
+            className={clsx('-mx-5 mt-5')}
             horizontalSpacing="xl"
             verticalSpacing="sm"
           >

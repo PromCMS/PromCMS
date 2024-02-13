@@ -2,7 +2,7 @@ import { Content } from '@components/editorialPage/Content';
 import { DynamicFormFields } from '@components/editorialPage/DynamicFormFields';
 import { Wrapper } from '@components/editorialPage/Wrapper';
 import { EntryTypeUrlActionType } from '@custom-types';
-import { UnderpageLayout } from '@layouts/UnderpageLayout';
+import { PageLayout } from '@layouts/PageLayout';
 import { FC } from 'react';
 
 import { Aside, Header, Menu } from '.';
@@ -21,8 +21,8 @@ export const EntryPageContent: FC<{ viewType: EntryTypeUrlActionType }> = ({
     <EntryUnderpageContextProvider viewType={viewType}>
       <entryUnderpageContext.Consumer>
         {({ onSubmit }) => (
-          <form autoComplete="off" onSubmit={onSubmit} className="flex">
-            <UnderpageLayout asideOutlet={<Aside />}>
+          <form autoComplete="off" onSubmit={onSubmit}>
+            <PageLayout rightAsideOutlet={<Aside />}>
               <Menu />
               <Wrapper>
                 <Content>
@@ -31,7 +31,7 @@ export const EntryPageContent: FC<{ viewType: EntryTypeUrlActionType }> = ({
                   <DynamicFormFields modelInfo={model!} />
                 </Content>
               </Wrapper>
-            </UnderpageLayout>
+            </PageLayout>
           </form>
         )}
       </entryUnderpageContext.Consumer>

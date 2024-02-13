@@ -1,6 +1,6 @@
 import { Flag } from '@components/Flag';
 import { useSettings } from '@contexts/SettingsContext';
-import { Group, Select, SelectItem, SelectProps, Text } from '@mantine/core';
+import { ComboboxItem, Group, Select, SelectProps, Text } from '@mantine/core';
 import { ComponentPropsWithoutRef, FC, forwardRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Hash } from 'tabler-icons-react';
@@ -27,7 +27,7 @@ const SelectItemComponent = forwardRef<HTMLDivElement, ItemProps>(
   function SelectItem({ label, value, ...others }: ItemProps, ref) {
     return (
       <div ref={ref} {...others}>
-        <Group noWrap>
+        <Group>
           <Flag
             width={18}
             countryCode={languageCodeToFlagCode[value] ?? value}
@@ -51,7 +51,7 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
   const { t } = useTranslation();
   const settings = useSettings();
 
-  const formattedLanguages = useMemo<SelectItem[] | undefined>(() => {
+  const formattedLanguages = useMemo<ComboboxItem[] | undefined>(() => {
     if (!settings) {
       return undefined;
     }
@@ -74,11 +74,9 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
       data={formattedLanguages || []}
       label={t('Language')}
       placeholder={t('Select an option')}
-      shadow="xl"
       disabled={!settings || disabled}
-      itemComponent={SelectItemComponent}
       value={value}
-      icon={
+      leftSection={
         <Flag
           width={18}
           countryCode={(value && languageCodeToFlagCode[value]) || value}

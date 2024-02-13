@@ -21,7 +21,7 @@ export const Internationalization: FC = () => {
           value={language}
           onChange={(value) => value && setLanguage(value)}
           className="w-full"
-          shadow="xl"
+          comboboxProps={{ shadow: 'xl' }}
         />
       </div>
     </AsideItemWrap>

@@ -3,13 +3,13 @@ import Skeleton, { SkeltonProps } from '@components/Skeleton';
 import { MESSAGES } from '@constants';
 import {
   ActionIcon,
+  ComboboxItem,
   Group,
   Pagination,
   Paper,
   Select,
-  SelectItem,
+  SelectProps,
 } from '@mantine/core';
-import { SelectProps } from '@mantine/core/lib/Select/Select';
 import { createIterativeArray } from '@utils';
 import clsx from 'clsx';
 import {
@@ -82,7 +82,7 @@ const DynamicDraggable: FC<
           ref={provided.innerRef}
           {...provided.draggableProps}
         >
-          <td style={{ width: 40 }}>
+          <td style={{ width: 30 }}>
             <div {...provided.dragHandleProps}>
               <GripVertical size={18} />
             </div>
@@ -162,7 +162,7 @@ const TableView: FC<TableViewProps> & {
           <table className="min-w-full leading-normal">
             <thead>
               <tr>
-                {ordering && <th style={{ width: 40 }} />}
+                {ordering && <th style={{ width: 30 }} />}
                 {filteredCols.map(({ fieldName, title }) => (
                   <th
                     key={fieldName}
@@ -226,7 +226,7 @@ const TableView: FC<TableViewProps> & {
                             style={{ width: 150 }}
                             className={classNames.tableData}
                           >
-                            <Group spacing={5} position="right" noWrap>
+                            <Group gap="sm" justify="end">
                               {onDuplicateAction && (
                                 <ActionIcon
                                   onClick={onActionClick(
@@ -236,7 +236,7 @@ const TableView: FC<TableViewProps> & {
                                   title={t('Duplicate')}
                                   color={'blue'}
                                 >
-                                  <Copy className="w-5" />{' '}
+                                  <Copy className="w-4" />{' '}
                                 </ActionIcon>
                               )}
                               {onEditAction && (
@@ -245,7 +245,7 @@ const TableView: FC<TableViewProps> & {
                                   title={t('Edit')}
                                   color={'blue'}
                                 >
-                                  <Pencil className="w-5" />{' '}
+                                  <Pencil className="w-4" />{' '}
                                 </ActionIcon>
                               )}
                               {onDeleteAction && (
@@ -254,7 +254,7 @@ const TableView: FC<TableViewProps> & {
                                   title={t('Delete')}
                                   color={'red'}
                                 >
-                                  <Trash className="w-5" />{' '}
+                                  <Trash className="w-4" />{' '}
                                 </ActionIcon>
                               )}
                             </Group>
@@ -360,7 +360,7 @@ const PageSizeSelect: FC<
   const data = useMemo(() => {
     const label = t('items');
 
-    return options.map<SelectItem>((value) => ({
+    return options.map<ComboboxItem>((value) => ({
       value: String(value),
       label: `${value} ${label}`,
     }));

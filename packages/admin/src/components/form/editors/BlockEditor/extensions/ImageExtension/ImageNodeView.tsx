@@ -55,11 +55,11 @@ export const ImageNodeView: FC<
 
   return (
     <>
-      <NodeViewWrapper>
+      <NodeViewWrapper className="my-6">
         <div
           className={clsx(
-            'relative aspect-[2/1] w-full rounded-lg bg-white p-5 my-6',
-            props.selected ? 'ring-2 ring-blue-500' : 'cursor-pointer'
+            'relative aspect-[2/1] w-full rounded-lg bg-white dark:bg-transparent backdrop-blur-md p-5 border-2 border-blue-200 border-dashed',
+            props.selected ? '' : 'cursor-pointer'
           )}
         >
           {fileId ? (
@@ -72,9 +72,7 @@ export const ImageNodeView: FC<
               )}
             />
           ) : (
-            <div className="absolute top-0 left-0 h-full w-full rounded-lg bg-gray-200 object-cover">
-              invalid
-            </div>
+            <div className="absolute top-0 left-0 h-full w-full rounded-lg backdrop-blur-md object-cover"></div>
           )}
         </div>
         <StaticBubbleMenu open={props.selected}>

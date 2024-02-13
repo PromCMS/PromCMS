@@ -1,18 +1,21 @@
 import BackendImage from '@components/BackendImage';
 import { Button, Input } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
-import { ItemID } from '@prom-cms/api-client';
 import clsx from 'clsx';
 import {
   DetailedHTMLProps,
-  forwardRef,
   InputHTMLAttributes,
   ReactElement,
+  ReactNode,
+  forwardRef,
   useCallback,
   useMemo,
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil, Photo } from 'tabler-icons-react';
+
+import { ItemID } from '@prom-cms/api-client';
+
 import { FilePicker, FilePickerProps } from './FilePicker';
 
 export interface ImageSelectProps
@@ -26,6 +29,18 @@ export interface ImageSelectProps
   touched?: boolean;
   multiple?: boolean;
   wrapperClassName?: string;
+  classNames?: {
+    wrapper?: string;
+    imageWrapper?: string;
+  };
+  imageWrapperProps?: {
+    disableStyles?: boolean;
+  };
+  imageProps?: {
+    width?: number;
+    quality?: number;
+  };
+  placeholderElement?: ReactNode;
   selected: ItemID | ItemID[] | undefined | null;
   onChange: (newValue: ItemID | ItemID[] | null) => void;
   onBlur?: () => void;
@@ -43,6 +58,10 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
       onBlur,
       multiple,
       error,
+      classNames,
+      imageWrapperProps,
+      placeholderElement,
+      imageProps,
     },
     ref
   ) {
@@ -76,28 +95,36 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
       <>
         <div className={clsx(wrapperClassName, className)}>
           <Input.Wrapper size="md" label={label} error={error}>
-            <div className="mt-1 flex items-center">
-              <div className="relative mr-6 aspect-square w-20 overflow-hidden rounded-lg">
+            <div className={clsx('flex items-center', classNames?.wrapper)}>
+              <div
+                className={clsx(
+                  !imageWrapperProps?.disableStyles
+                    ? 'relative mr-6 aspect-square w-20 overflow-hidden rounded-lg'
+                    : '',
+                  classNames?.imageWrapper
+                )}
+              >
                 {modalPickedFiles.length ? (
                   <BackendImage
-                    width={80}
-                    quality={60}
+                    width={imageProps?.width ?? 80}
+                    quality={imageProps?.quality ?? 60}
                     imageId={modalPickedFiles[0]}
                     className="absolute h-full w-full object-contain object-center"
                   />
                 ) : (
                   <div className="absolute flex h-full w-full bg-gray-200">
-                    <Photo
-                      size={40}
-                      className="icon icon-tabler icon-tabler-photo m-auto"
-                    />
+                    {placeholderElement ?? (
+                      <Photo
+                        size={40}
+                        className="icon icon-tabler icon-tabler-photo m-auto"
+                      />
+                    )}
                   </div>
                 )}
               </div>
               <Button
                 className="flex-none"
-                color="ghost"
-                leftIcon={<Pencil size={20} />}
+                leftSection={<Pencil size={20} />}
                 size="md"
                 onClick={() => togglePickerOpen()}
               >

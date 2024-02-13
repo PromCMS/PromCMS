@@ -1,5 +1,6 @@
 import { Loader } from '@components/SiteLoader';
 import { AuthProvider, useAuth } from '@contexts/AuthContext';
+import '@mantine/core/styles.css';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import React, { StrictMode, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';

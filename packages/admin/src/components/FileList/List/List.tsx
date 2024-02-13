@@ -168,7 +168,7 @@ export const List: FC = () => {
       ))}
       {showPlaceholder ? (
         <>
-          <div className="col-span-full flex items-center bg-white backdrop-blur-md bg-opacity-40 rounded-prom shadow-xl py-20 border-2 border-dashed border-gray-300">
+          <div className="col-span-full flex items-center bg-white dark:bg-transparent backdrop-blur-md bg-opacity-40 dark:bg-opacity-0 shadow-blue-100 rounded-prom py-20 border-2 border-dashed border-blue-200">
             <div className="flex flex-col mx-auto">
               <ItemsMissingMessage />
               <div className="flex gap-5 mt-5">

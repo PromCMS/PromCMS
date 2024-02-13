@@ -1,73 +1,39 @@
 import { apiClient } from '@api';
-import BackendImage from '@components/BackendImage';
-import ItemsMissingMessage from '@components/ItemsMissingMessage';
+import { TableView } from '@components/TableView';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { PageLayout } from '@layouts/PageLayout';
-import {
-  ActionIcon,
-  Button,
-  Divider,
-  Grid,
-  Group,
-  LoadingOverlay,
-  Pagination,
-  Paper,
-  Textarea,
-  createStyles,
-} from '@mantine/core';
+import { Button } from '@mantine/core';
 import { createLazyFileRoute } from '@tanstack/react-router';
-import clsx from 'clsx';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useModelItems } from 'hooks/useModelItems';
 import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
-import { Fragment } from 'react';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Edit, Plus, Trash } from 'tabler-icons-react';
+import { Plus, X } from 'tabler-icons-react';
 
 import { ItemID } from '@prom-cms/api-client';
+import { FieldPlacements } from '@prom-cms/schema';
 
 import { Drawer } from './-components/Drawer';
-import { CopyName } from './-components/Table';
-
-const useStyles = createStyles(() => ({
-  root: {
-    td: {
-      verticalAlign: 'baseline',
-    },
-  },
-}));
-
-const smallColSize = 2;
-const maxCols = 12;
-const colDivider = (
-  <Grid.Col span={maxCols}>
-    <Divider />
-  </Grid.Col>
-);
 
 export const Route = createLazyFileRoute('/_authorized/settings/system/')({
   component: Page,
 });
 
 function Page() {
-  const { classes } = useStyles();
   const { t } = useTranslation();
   const currentUser = useCurrentUser();
   const [currentPage, setCurrentPage] = useState(1);
-  const {
-    data,
-    refetch: mutate,
-    isLoading,
-    isRefetching,
-    isError,
-  } = useModelItems(BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS, {
-    params: { page: currentPage },
-  });
-  const [optionToEdit, setOptionToEdit] = useState<ItemID | undefined>();
-  const [creationAction, setCreationMode] = useState(false);
+  const { data, refetch, isLoading, isError } = useModelItems(
+    BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
+    {
+      params: { page: currentPage },
+    }
+  );
+  const [activeOption, setActiveOption] = useState<
+    ItemID | 'new' | undefined
+  >();
   const reqNotification = useRequestWithNotifications();
-  const largeColSize = currentUser?.isAdmin ? 6 : 8;
 
   const currentUserCanCreate = currentUser?.can({
     action: 'create',
@@ -82,21 +48,12 @@ function Page() {
     targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
   });
 
-  const onModalClose = () => {
-    mutate();
-    setOptionToEdit(undefined);
-    setCreationMode(false);
-  };
-
-  const onEditClick = useCallback(
-    (nextOption: ItemID | undefined) => () => {
-      setOptionToEdit(nextOption);
-    },
-    []
-  );
+  const onEditClick = useCallback((nextOption: ItemID | undefined) => {
+    setActiveOption(nextOption);
+  }, []);
 
   const onDeleteClick = useCallback(
-    (id: ItemID) => async () => {
+    async (id: ItemID) => {
       if (!confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
         return;
       }
@@ -110,137 +67,70 @@ function Page() {
           },
           async () => {
             await apiClient.settings.delete(id);
-            await mutate();
+            await refetch();
           }
         );
       } catch {}
     },
-    [t, reqNotification, mutate]
+    [t, reqNotification, refetch]
   );
 
-  return (
-    <PageLayout>
-      {currentUserCanCreate && (
-        <Button
-          color={'green'}
-          mt="lg"
-          leftIcon={<Plus />}
-          onClick={() => setCreationMode(true)}
-        >
-          {t('Add new')}
-        </Button>
-      )}
-      <div className="relative min-h-[400px]">
-        <LoadingOverlay
-          visible={isLoading || isRefetching || isError}
-          overlayBlur={2}
-        />
-        <Grid
-          sx={{ minWidth: 800 }}
-          className={clsx(classes.root, 'mt-5')}
-          columns={maxCols}
-        >
-          {currentUserCanCreate && (
-            <Grid.Col span={smallColSize} className="font-semibold uppercase">
-              {t('Slug')}
-            </Grid.Col>
-          )}
-          <Grid.Col span={smallColSize} className="font-semibold uppercase">
-            {t('Title')}
-          </Grid.Col>
-          <Grid.Col span={largeColSize} className="font-semibold uppercase">
-            {t('Value')}
-          </Grid.Col>
-          <Grid.Col span={smallColSize}>
-            <span className="hidden">{t('Tools')}</span>
-          </Grid.Col>
-          <Grid.Col span={maxCols}>
-            <Divider size="sm" />
-          </Grid.Col>
-          {data?.data ? (
-            data.data.map((row, index) => (
-              <Fragment key={row.id}>
-                {index !== 0 && colDivider}
-                {currentUserCanCreate && (
-                  <Grid.Col span={smallColSize}>
-                    <Group>
-                      <CopyName name={row.name} />
-                      {row.name}
-                    </Group>
-                  </Grid.Col>
-                )}
-                <Grid.Col span={smallColSize}>{row.label}</Grid.Col>
-                <Grid.Col span={largeColSize}>
-                  {row.content?.type === 'textArea' ? (
-                    <Textarea autosize readOnly value={row.content.data} />
-                  ) : row.content?.type === 'list' ? (
-                    <Paper
-                      sx={(theme) => ({ borderColor: theme.colors.gray[4] })}
-                      withBorder
-                      p="sm"
-                    >
-                      <ul className="list-disc pl-5">
-                        {row.content?.data.map(({ id, value }) => (
-                          <li
-                            key={id}
-                            dangerouslySetInnerHTML={{ __html: value }}
-                          />
-                        ))}
-                      </ul>
-                    </Paper>
-                  ) : row.content?.type === 'image' ? (
-                    <BackendImage
-                      className="h-20 w-auto"
-                      imageId={row.content?.data}
-                    />
-                  ) : (
-                    'none'
-                  )}
-                </Grid.Col>
-                <Grid.Col span={smallColSize}>
-                  <Group
-                    className="ml-auto"
-                    position="right"
-                    spacing="xs"
-                    noWrap
-                  >
-                    {currentUserCanEdit && (
-                      <ActionIcon onClick={onEditClick(row.id)} color="blue">
-                        <Edit />
-                      </ActionIcon>
-                    )}
-                    {currentUserCanDelete && (
-                      <ActionIcon onClick={onDeleteClick(row.id)} color="red">
-                        <Trash />
-                      </ActionIcon>
-                    )}
-                  </Group>
-                </Grid.Col>
-              </Fragment>
-            ))
-          ) : (
-            <Grid.Col span={12}>
-              <ItemsMissingMessage className="min-h-80" />
-            </Grid.Col>
-          )}
-        </Grid>
-
-        {data && (
-          <Group position="center" my="xl">
-            <Pagination
-              className="my-auto"
-              page={currentPage}
-              onChange={setCurrentPage}
-              total={data!.last_page}
-            />
-          </Group>
-        )}
-      </div>
+  const aside =
+    activeOption !== undefined ? (
       <Drawer
-        opened={creationAction || !!optionToEdit}
-        optionToEdit={optionToEdit}
-        onClose={onModalClose}
+        optionToEdit={activeOption === 'new' ? undefined : activeOption}
+        onOptionUpdateOrCreate={async () => {
+          await refetch();
+
+          setActiveOption(undefined);
+        }}
       />
+    ) : null;
+
+  return (
+    <PageLayout rightAsideOutlet={aside} rightAsideClassName="w-[500px]">
+      <PageLayout.Header>
+        {currentUserCanCreate ||
+        (!!currentUserCanEdit && activeOption !== undefined) ? (
+          <Button
+            color={activeOption !== undefined ? 'red' : 'green'}
+            leftSection={activeOption !== undefined ? <X /> : <Plus />}
+            onClick={() =>
+              setActiveOption(activeOption !== undefined ? undefined : 'new')
+            }
+            className="block mb-3 ml-auto"
+          >
+            {t(activeOption !== undefined ? 'Close' : 'Add new')}
+          </Button>
+        ) : null}
+      </PageLayout.Header>
+      <PageLayout.Content>
+        <TableView
+          isLoading={isLoading || isError}
+          items={data?.data ?? []}
+          onDeleteAction={currentUserCanDelete ? onDeleteClick : undefined}
+          onEditAction={currentUserCanEdit ? onEditClick : undefined}
+          columns={[
+            {
+              type: 'string',
+              admin: {
+                editor: { placement: FieldPlacements.MAIN, width: 12 },
+                fieldType: 'normal',
+                isHidden: false,
+              },
+              fieldName: 'name',
+              hide: false,
+              localized: false,
+              name: 'jmeno',
+              primaryString: false,
+              readonly: false,
+              required: true,
+              title: 'dsafasd',
+              unique: false,
+            },
+          ]}
+        />
+      </PageLayout.Content>
     </PageLayout>
   );
 }

@@ -18,7 +18,7 @@ const defaultMenuItems: ItemProps[] = [
   { label: 'Files', href: '/files', icon: Photo },
 ];
 
-const MENU_ICON_SIZE = 35;
+const MENU_ICON_SIZE = 40;
 const LOGO_SIZE = 40;
 
 export type ItemProps = {
@@ -106,7 +106,7 @@ const Item: FC<ItemProps> = ({ href, label, isSingleton, icon: Icon }) => {
       <Link
         to={href}
         className={clsx([
-          'relative flex cursor-pointer p-1 text-xl text-gray-500 transition-all duration-100',
+          'relative flex cursor-pointer p-1 text-xl text-gray-500 dark:text-white transition-all duration-100',
           isSingleton,
         ])}
         data-is-active={isCurrent}
@@ -137,7 +137,7 @@ export const AsideMenu: FC = () => {
     <nav className="group pl-2 absolute sm:relative z-10 left-0 top-10 sm:top-0 sm:translate-x-0 -translate-x-full flex flex-col">
       <a
         href="/"
-        className="w-full aspect-square bg-white p-1 rounded-l-prom border items-center justify-center text-white mb-2 relative hidden sm:flex flex-none"
+        className="w-full aspect-square bg-white dark:bg-gray-800 dark:bg-opacity-60 p-1 rounded-l-prom items-center justify-center text-white mb-2 relative hidden sm:flex flex-none"
       >
         <Image
           height={LOGO_SIZE}
@@ -145,19 +145,15 @@ export const AsideMenu: FC = () => {
           src={logoImage}
           alt=""
           fit="contain"
-          classNames={{
-            imageWrapper: clsx('w-full h-full'),
-          }}
+          className="drop-shadow-2xl"
+          w={LOGO_SIZE}
         />
-        <div className="bg-white w-3 h-3 absolute right-[-1px] bottom-[-1px] translate-y-full">
-          <div
-            style={{ background: 'gray' }}
-            className="absolute bottom-0 left-0 rounded-tr-full w-full h-full"
-          />
+        <div className="bg-white dark:bg-gray-800 dark:bg-opacity-60 w-3 h-3 absolute right-[-1px] bottom-[-1px] translate-y-full">
+          <div className="absolute bottom-0 left-0 rounded-tr-full w-full h-full bg-[var(--body-background)] dark:bg-black" />
         </div>
       </a>
       <div className="h-full pr-2 pb-0">
-        <div className="sticky top-2 left-0 grid gap-2 bg-white border backdrop-blur-lg border-gray-100 rounded-prom shadow-lg p-1 items-center opacity-70 hover:opacity-100 duration-150">
+        <div className="sticky top-2 left-0 grid gap-2 bg-white backdrop-blur-lg dark:bg-gray-800 dark:bg-opacity-60 rounded-prom dark:shadow-none shadow-lg shadow-blue-100 hover:shadow-blue-200 duration-200 p-1 items-center">
           {allMenuItems.map((items, index) => (
             <Fragment key={index}>
               {items.map((item) => (

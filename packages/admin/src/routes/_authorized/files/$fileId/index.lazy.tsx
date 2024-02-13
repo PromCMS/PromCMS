@@ -52,7 +52,7 @@ function Page() {
       onClose={handleClose}
       padding="xl"
       position="right"
-      closeButtonLabel={t('Close')}
+      closeButtonProps={{ 'aria-label': t('Close') }}
       title={
         <Title order={4}>
           <>

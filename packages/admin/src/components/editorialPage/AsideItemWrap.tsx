@@ -7,24 +7,16 @@ const AsideItemWrap: FC<
     description?: string;
   }
 > = ({ children, className, title, ref, description, ...rest }) => (
-  <Paper
-    className={clsx(
-      'rounded-prom border-2 border-project-border shadow-none',
-      className
-    )}
-    shadow="sm"
-    withBorder
-    {...rest}
-  >
+  <Paper className={clsx('rounded-prom', className)} withBorder {...rest}>
     {title && (
-      <Title order={5} className="w-full px-4 py-2 text-2xl font-semibold">
+      <Title order={5} className="w-full px-4 mt-4 my-3 text-xl font-semibold">
         {title}
       </Title>
     )}
     {description && (
       <p className="-mt-2 mb-4 px-4 font-medium text-gray-500">{description}</p>
     )}
-    <hr className="border-b-2 border-project-border" />
+    <hr className="border-b-2 border-project-border mx-4" />
     {children}
   </Paper>
 );

@@ -6,6 +6,8 @@ export const SIMPLE_WORDS = {
   PHOTO_ALBUM: 'Photo album',
   CLOSE: 'Close',
   GO_BACK: 'Go back',
+  ADD: 'Add',
+  ADD_ROW: 'Add row',
   LOG_OFF: 'Log off',
 };
 
@@ -43,6 +45,8 @@ export const MESSAGES = {
   ...EDITOR_MESSAGES,
   ...PROM_TABLES,
   MORE_OPTIONS_BUTTON_TEXT: 'More options',
+  ADMIN_PANEL: 'Admin panel',
+  OPENING_HOURS_OPEN: 'Open',
   NO_ITEMS_YET_PLACEHOLDER: 'No items yet...',
   PURGE_DATA: 'Purge data',
   MY_PROFILE_BUTTON_TEXT: 'My profile',
@@ -57,7 +61,7 @@ export const MESSAGES = {
   NEW_PASSWORD: 'New password',
   NEW_PASSWORD_AGAIN: 'New password again',
   OLD_PASSWORD: 'Old password',
-  WELCOME_USER: 'Welcome back, {{name}}',
+  WELCOME_USER: 'Welcome back',
   FILE_IS_SELECTED__WITH_NAME: 'File has been selected: {{filename}}',
   PLEASE_ENTER_PASSWORD: 'Please enter password',
   PLEASE_ENTER_EMAIL: 'Please enter email',

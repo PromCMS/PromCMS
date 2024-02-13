@@ -21,6 +21,12 @@ export const prepareFieldsForMapper = (
       column.name === 'is_published' ||
       column.name === 'coeditors'
     ) {
+      console.log({
+        placement: admin?.editor?.placement !== placement,
+        placeM: admin?.editor?.placement,
+        columnWithFieldName,
+        column,
+      });
       continue;
     }
 

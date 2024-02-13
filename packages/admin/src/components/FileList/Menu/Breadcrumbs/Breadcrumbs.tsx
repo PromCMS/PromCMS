@@ -22,7 +22,7 @@ export const Breadcrumbs: VFC = () => {
   return (
     <nav
       role="navigation"
-      className="flex w-full items-center overflow-auto rounded-prom shadow-lg shadow-gray-200 bg-white px-4"
+      className="flex w-full overflow-auto items-center ml-2"
     >
       <Item icon={Home} onClick={goToPath('/')} isLast={!pathPieces.length} />
       {pathPieces.map((folderName, index) => (

@@ -64,7 +64,7 @@ const MoreOptions: FC = () => {
           onClick={onItemDeleteRequest}
           color="red"
           className={clsx(formState.isSubmitting && '!cursor-progress')}
-          icon={<Trash className="aspect-square w-4" />}
+          leftSection={<Trash className="aspect-square w-4" />}
         >
           {t(MESSAGES.PURGE_DATA)}
         </Menu.Item>
@@ -126,16 +126,16 @@ export const Footer: FC<{}> = () => {
   };
 
   return (
-    <nav className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-end gap-2 p-2 rounded-prom bg-transparent">
+    <nav className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-end gap-2 px-5 rounded-prom bg-transparent">
       {currentModel?.draftable && (
         <Button
           size="sm"
-          variant="white"
+          variant="transparent"
           type="submit"
           disabled={formState.isSubmitting}
           className="ml-auto"
           onClick={handlePublishButtonClick}
-          px={'sm'}
+          px="sm"
         >
           {publishButtonText}
         </Button>

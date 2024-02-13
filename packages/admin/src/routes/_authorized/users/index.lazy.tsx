@@ -6,12 +6,12 @@ import { useAuth } from '@contexts/AuthContext';
 import { useModelInfo } from '@hooks/useModelInfo';
 import { useModelItems } from '@hooks/useModelItems';
 import { PageLayout } from '@layouts/PageLayout';
-import { Button } from '@mantine/core';
+import { ActionIcon, Button } from '@mantine/core';
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { canUser } from '@utils';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { UserPlus } from 'tabler-icons-react';
+import { Plus, UserPlus } from 'tabler-icons-react';
 
 import { ApiResultModel, ItemID } from '@prom-cms/api-client';
 
@@ -84,44 +84,56 @@ function Page() {
 
   return (
     <PageLayout>
-      <div className="flex w-full flex-col justify-between gap-5 pt-8 pb-7 md:flex-row">
-        <h1 className="text-4xl font-semibold capitalize my-0">{t('Users')}</h1>
-        <div className="flex items-center gap-5">
-          {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
-              <Input
-                placeholder="input..."
-                className="w-full"
-                prefixIcon={<iconSet.SearchIcon className="rotate-90" />}
-                {...register('query')}
-              />
-            </form>*/}
-          <Button
-            color="green"
-            className=" items-center font-semibold uppercase"
-            size="md"
-            onClick={onCreateRequest}
-          >
-            <span className="hidden md:block">{t('Add new user')}</span>
-            <UserPlus className="inline-block h-5 w-5 md:ml-3" />{' '}
-          </Button>
-        </div>
-      </div>
-      <TableView
-        isLoading={isLoading || isError}
-        items={filteredUsers}
-        columns={tableViewColumns || []}
-        onEditAction={onEditRequest}
-        onDeleteAction={onItemDeleteRequest}
-      />
-      <TableView.Footer>
-        {metadata && <TableView.Metadata {...metadata} />}
-        <TableView.Pagination
-          className="ml-auto"
-          total={data?.last_page || 1}
-          page={page}
-          onChange={setPage}
+      <PageLayout.Header
+        title={t('Users')}
+        classNames={{ wrapper: 'flex items-center justify-between' }}
+      >
+        {user?.role &&
+          canUser({
+            userRole: user?.role,
+            action: 'create',
+            targetEntityTableName: model.tableName,
+          }) && (
+            <>
+              <Button
+                color="green"
+                className="font-semibold uppercase hidden md:block"
+                size="md"
+                onClick={onCreateRequest}
+                leftSection={<Plus className="inline-block h-5 w-5" />}
+              >
+                <span className="hidden md:block">{t('Add new user')}</span>
+              </Button>
+
+              <ActionIcon
+                color="green"
+                className=" block md:hidden"
+                size="xl"
+                onClick={onCreateRequest}
+              >
+                <Plus className="inline-block h-7 w-7" />
+              </ActionIcon>
+            </>
+          )}
+      </PageLayout.Header>
+      <PageLayout.Content>
+        <TableView
+          isLoading={isLoading || isError}
+          items={filteredUsers}
+          columns={tableViewColumns || []}
+          onEditAction={onEditRequest}
+          onDeleteAction={onItemDeleteRequest}
         />
-      </TableView.Footer>
+        <TableView.Footer>
+          {metadata && <TableView.Metadata {...metadata} />}
+          <TableView.Pagination
+            className="ml-auto"
+            total={data?.last_page || 1}
+            value={page}
+            onChange={setPage}
+          />
+        </TableView.Footer>
+      </PageLayout.Content>
     </PageLayout>
   );
 }

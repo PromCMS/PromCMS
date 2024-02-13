@@ -1,10 +1,10 @@
 import { localizationLocalStorageKey } from '@constants';
-import { Select, SelectItem } from '@mantine/core';
+import { ComboboxData, Select } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import i18next from 'i18next';
 import { useTranslation } from 'react-i18next';
 
-const languages: SelectItem[] = [
+const languages: ComboboxData = [
   { value: 'en', label: '🇬🇧 English' },
   { value: 'cs', label: '🇨🇿 Česky' },
   { value: 'de', label: '🇩🇪 German' },

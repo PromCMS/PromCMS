@@ -172,9 +172,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
   return (
     <FormProvider {...formMethods}>
       <singletonPageContext.Provider value={contextValue}>
-        <form className="flex" onSubmit={onSubmit}>
-          {children}
-        </form>
+        <form onSubmit={onSubmit}>{children}</form>
       </singletonPageContext.Provider>
     </FormProvider>
   );

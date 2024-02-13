@@ -58,7 +58,7 @@ const LongTextItem: FC<{ value: string }> = ({ value }) => {
         title={t(MESSAGES.CONTENT)}
         position="bottom"
         classNames={{
-          header: 'container mx-auto border-b border-gray-300 py-3',
+          header: 'container mx-auto border-b border-blue-300 py-3',
           title: 'text-xl',
           body: 'container mx-auto',
         }}
@@ -127,7 +127,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
         if (column.admin.fieldType === 'color' && column.value?.value) {
           return (
             <div
-              className="w-8 h-8 rounded-full shadow-md border border-gray-200"
+              className="w-8 h-8 rounded-full shadow-md border border-blue-200"
               style={{ background: column.value.value }}
             ></div>
           );
@@ -194,7 +194,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
         {column.value ? (
           column.value
         ) : (
-          <span className="opacity-40 text-blue-700">
+          <span className="opacity-40 text-gray-700 dark:text-white">
             {t(MESSAGES.EMPTY_VALUE)}
           </span>
         )}

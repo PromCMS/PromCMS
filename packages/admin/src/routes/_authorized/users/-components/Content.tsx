@@ -1,16 +1,18 @@
-import Skeleton from '@components/Skeleton';
-import UnderPageBreadcrumbsMenu from '@components/UnderPageBreadcrumbsMenu';
+import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
+import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
+import { useAuth } from '@contexts/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { upperFirst } from '@mantine/hooks';
+import { PageLayout } from '@layouts/PageLayout';
 import { createUserSchema, updateUserSchema } from '@schemas';
-import { FC, PropsWithChildren, useEffect } from 'react';
+import { canUser } from '@utils';
+import { FC, PropsWithChildren, useEffect, useMemo } from 'react';
 import { FormProvider, useForm, useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+
+import { FieldPlacements } from '@prom-cms/schema';
 
 import { useData } from '../-context';
 import { useOnSubmitCallback } from '../-hooks';
 import { useCurrentUser } from '../-hooks/useCurrentUser';
-import { UserUnderpageForm } from './Form';
 import { FormAside } from './FormAside';
 import { Header } from './Header';
 
@@ -26,12 +28,12 @@ const FormWrapper: FC<PropsWithChildren> = ({ children }) => {
 };
 
 export const Content: FC = () => {
-  const { data: user } = useCurrentUser();
-  const { model, view } = useData();
-  const { t } = useTranslation();
-
+  const { view } = useData();
+  const { model } = useData();
+  const { data: currentUser } = useCurrentUser();
+  const { user: loggedUser } = useAuth();
   const formMethods = useForm({
-    defaultValues: user || {},
+    defaultValues: currentUser || {},
     reValidateMode: 'onBlur',
     mode: 'onTouched',
     resolver:
@@ -39,45 +41,52 @@ export const Content: FC = () => {
         ? zodResolver(createUserSchema)
         : zodResolver(updateUserSchema),
   });
-  const { reset } = formMethods;
+  const { reset, formState } = formMethods;
+
+  const groupedFields = useMemo(() => {
+    if (!model) return;
+    const roleColumnIndex = model.columns.findIndex(
+      (column) => column.name === 'role'
+    );
+
+    if (
+      roleColumnIndex > -1 &&
+      loggedUser &&
+      !canUser({
+        userRole: loggedUser.role,
+        action: 'update',
+        targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
+      })
+    ) {
+      model.columns = model.columns.splice(roleColumnIndex, 1);
+    }
+
+    return prepareFieldsForMapper(model, FieldPlacements.MAIN);
+  }, [model, currentUser]);
 
   useEffect(() => {
-    if (user) {
-      reset(user);
+    if (currentUser) {
+      reset(currentUser.data);
     }
-  }, [user, reset]);
+  }, [currentUser, reset]);
 
   return (
     <FormProvider {...formMethods}>
       <FormWrapper>
-        <UnderPageBreadcrumbsMenu
-          className="py-5"
-          items={[
-            {
-              content: t(upperFirst(model?.tableName || '')),
-              isLinkTo: `/${model?.tableName?.toLowerCase()}`,
-            },
-            { content: t(view == 'update' ? 'Update' : 'Create') as string },
-            ...(view === 'update'
-              ? [
-                  {
-                    content: (
-                      <p className="text-green-500 underline">
-                        {view == 'update' ? user?.id : 'Send invite'}
-                      </p>
-                    ),
-                  },
-                ]
-              : []),
-          ]}
-        />
-        <div className="mt-10 items-start justify-between xl:flex">
-          <div className="relative -mx-3 grid w-full max-w-4xl gap-5 px-3">
+        <PageLayout rightAsideOutlet={view === 'update' ? <FormAside /> : null}>
+          <PageLayout.Header>
             <Header />
-            <UserUnderpageForm />
-          </div>
-          <FormAside />
-        </div>
+          </PageLayout.Header>
+          <PageLayout.Content>
+            {groupedFields ? (
+              <FieldMapper type={FieldPlacements.MAIN} fields={groupedFields} />
+            ) : null}
+
+            {formState.isSubmitting ? (
+              <div className="absolute inset-0 cursor-progress bg-white/20 backdrop-blur-[2px]" />
+            ) : null}
+          </PageLayout.Content>
+        </PageLayout>
       </FormWrapper>
     </FormProvider>
   );

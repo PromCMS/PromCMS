@@ -32,15 +32,6 @@ function AuthorizedOnlyPageLayout() {
   return (
     <SettingsProvider>
       <EntitiesProvider>
-        <style
-          dangerouslySetInnerHTML={{
-            __html: `
-            body {
-              background: gray;
-            }
-          `,
-          }}
-        ></style>
         <TopMenu />
         <div className="flex min-h-screen">
           <AsideMenu />

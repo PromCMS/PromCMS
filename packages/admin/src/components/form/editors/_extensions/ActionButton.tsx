@@ -32,7 +32,7 @@ export const ActionButton = forwardRef<
       label={label}
       withArrow
       withinPortal
-      transition="scale"
+      transitionProps={{ transition: 'pop-top-left' }}
     >
       <ActionIcon
         ref={ref}

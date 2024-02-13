@@ -26,8 +26,7 @@ export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
           )}
           position="left"
           radius="xl"
-          transition="fade"
-          transitionDuration={200}
+          transitionProps={{ transition: 'fade', duration: 200 }}
           opened={hovered || clipboard.copied}
         >
           <ActionIcon

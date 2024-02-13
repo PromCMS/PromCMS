@@ -3,7 +3,6 @@ import { FC, PropsWithChildren } from 'react';
 
 export const theme: MantineThemeOverride = {
   /** Put your mantine theme override here */
-  colorScheme: 'light',
   fontFamily: "'Open Sans', sans-serif",
   defaultRadius: 'md',
   shadows: {
@@ -45,6 +44,9 @@ export const theme: MantineThemeOverride = {
       defaultProps: {
         size: 'md',
       },
+      classNames: {
+        option: 'dark:text-gray-800',
+      },
     },
     Modal: {
       defaultProps: {
@@ -52,6 +54,14 @@ export const theme: MantineThemeOverride = {
         overflow: 'outside',
         transition: 'slide-up',
         centered: 'true',
+      },
+    },
+    Paper: {
+      classNames: {
+        root: 'border-2 dark:border-0 border-blue-100 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60',
+      },
+      defaultProps: {
+        shadow: undefined,
       },
     },
     Popover: {
@@ -76,9 +86,7 @@ export const theme: MantineThemeOverride = {
 };
 
 const ThemeProvider: FC<PropsWithChildren> = ({ children }) => (
-  <MantineProvider withGlobalStyles withNormalizeCSS theme={theme}>
-    {children}
-  </MantineProvider>
+  <MantineProvider theme={theme}>{children}</MantineProvider>
 );
 
 export default ThemeProvider;

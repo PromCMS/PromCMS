@@ -2,11 +2,11 @@ import { Content } from '@components/editorialPage/Content';
 import { DynamicFormFields } from '@components/editorialPage/DynamicFormFields';
 import { Wrapper } from '@components/editorialPage/Wrapper';
 import useCurrentSingleton from '@hooks/useCurrentSingleton';
-import { UnderpageLayout } from '@layouts/UnderpageLayout';
+import { PageLayout } from '@layouts/PageLayout';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { FC } from 'react';
 
-import { Aside, Header } from './-components';
+import { Header } from './-components';
 import { Footer } from './-components/Footer';
 import { SingletonPageContextProvider } from './-context';
 
@@ -24,7 +24,7 @@ const Fields: FC = () => {
 function Page() {
   return (
     <SingletonPageContextProvider>
-      <UnderpageLayout asideOutlet={<Aside />}>
+      <PageLayout rightAsideOutlet>
         <Footer />
         <Wrapper>
           <Content>
@@ -32,7 +32,7 @@ function Page() {
             <Fields />
           </Content>
         </Wrapper>
-      </UnderpageLayout>
+      </PageLayout>
     </SingletonPageContextProvider>
   );
 }

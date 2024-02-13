@@ -40,7 +40,7 @@ export const Column = Node.create({
 
   renderHTML({ HTMLAttributes }) {
     const attrs = mergeAttributes(HTMLAttributes, {
-      class: 'overflow-auto border border-gray-400 rounded p-4',
+      class: 'overflow-auto border border-blue-400 rounded p-4',
       'data-layout-column': 'true',
     });
 

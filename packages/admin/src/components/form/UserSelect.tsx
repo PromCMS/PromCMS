@@ -1,8 +1,8 @@
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import {
   Autocomplete,
-  AutocompleteItem,
   AutocompleteProps,
+  ComboboxStringData,
   Skeleton,
   Text,
 } from '@mantine/core';
@@ -43,7 +43,7 @@ const AutoCompleteItem = forwardRef<HTMLDivElement, AutoCompleteItemProps>(
 
 export interface UserSelectProps
   extends Omit<AutocompleteProps, 'data' | 'onItemSubmit'> {
-  onItemSubmit: (item: AutocompleteItem & User) => void;
+  onItemSubmit: (item: ComboboxStringData & User) => void;
   /**
    * @defaultValue true
    */
@@ -88,12 +88,7 @@ export const UserSelect: FC<UserSelectProps> = ({
   return (
     <Autocomplete
       label={withLabel ? t(MESSAGES.USER) : undefined}
-      itemComponent={AutoCompleteItem}
       placeholder={t('Start typing to see options')}
-      filter={() => true}
-      nothingFound={
-        !!props.value ? <div>{t('Nothing has been found')}</div> : undefined
-      }
       {...props}
       data={(data?.data || []).map((item) => ({
         ...item,

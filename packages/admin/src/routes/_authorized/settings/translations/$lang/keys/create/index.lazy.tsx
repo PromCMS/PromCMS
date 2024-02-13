@@ -77,7 +77,7 @@ function Page() {
       padding={32}
       size={500}
       className="overflow-auto"
-      title={<Title order={4}>{t('Create translation key')}</Title>}
+      title={t('Create translation key')}
     >
       <FormProvider {...formMethods}>
         <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
@@ -105,7 +105,6 @@ function Page() {
             className="mr-auto block"
             type="submit"
             loading={formState.isSubmitting}
-            loaderPosition="right"
             mt={'lg'}
             size="md"
           >

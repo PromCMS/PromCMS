@@ -1,6 +1,5 @@
 import ThemeProvider from '@components/ThemeProvider';
 import { localizationConfig } from '@config';
-import { NotificationsProvider } from '@mantine/notifications';
 import { QueryClientProvider } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import 'dayjs/locale/cs';
@@ -25,9 +24,9 @@ const ContextProviders: FC<PropsWithChildren> = ({ children }) => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider>
       <I18nextProvider i18n={i18next}>
-        <NotificationsProvider position="top-right">
-          {children}
-        </NotificationsProvider>
+        {/* <NotificationsProvider position="top-right"> */}
+        {children}
+        {/* </NotificationsProvider> */}
       </I18nextProvider>
     </ThemeProvider>
   </QueryClientProvider>

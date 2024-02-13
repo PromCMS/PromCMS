@@ -9,6 +9,7 @@ import {
 
 export interface PageLayoutProps {
   rightAsideOutlet?: ReactNode;
+  rightAsideClassName?: string;
 }
 
 export interface HeaderProps {
@@ -34,7 +35,7 @@ const Header: FC<PropsWithChildren<HeaderProps>> = ({
   classNames,
 }) => {
   return (
-    <header className="max-w-[1760px] mx-auto">
+    <header className="container mx-auto">
       <div className={classNames?.wrapper}>
         {beforeOutlet}
         {title ? (
@@ -42,7 +43,7 @@ const Header: FC<PropsWithChildren<HeaderProps>> = ({
         ) : null}
         {children}
       </div>
-      <hr className="mt-7 h-0.5 w-full border-0 bg-project-border" />
+      <hr className="mb-5 mt-0 h-0.5 w-full border-0 bg-project-border" />
     </header>
   );
 };
@@ -83,18 +84,25 @@ export const PageLayout: FC<PropsWithChildren<PageLayoutProps>> & {
   Header: typeof Header;
   Section: typeof Section;
   Content: typeof Content;
-} = ({ children, rightAsideOutlet }) => {
+} = ({ children, rightAsideOutlet, rightAsideClassName }) => {
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col gap-3 lg:gap-0 lg:flex-row min-h-screen bg-white sm:bg-transparent dark:bg-gray-800 sm:dark:bg-transparent dark:bg-opacity-60 sm:dark:bg-opacity-100 rounded-t-xl">
       <div
         className={clsx(
-          'bg-white shadow-md rounded-t-xl sm:rounded-none w-full sm:rounded-tr-prom px-5'
+          'sm:bg-white sm:dark:bg-gray-800 sm:dark:bg-opacity-60 w-full rounded-bl-prom lg:rounded-bl-none sm:backdrop-blur-sm lg:rounded-tr-prom py-4 min-h-screen'
         )}
       >
         {children}
       </div>
       {rightAsideOutlet ? (
-        <aside className="flex-none ml-2 mr-2">{rightAsideOutlet}</aside>
+        <aside
+          className={clsx(
+            'flex-none lg:ml-2 sm:mr-2 p-3 sm:p-0',
+            rightAsideClassName
+          )}
+        >
+          {rightAsideOutlet}
+        </aside>
       ) : null}
     </div>
   );

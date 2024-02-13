@@ -65,6 +65,12 @@ const MoreOptions: FC = () => {
             type="button"
             className={clsx(formState.isSubmitting && '!cursor-progress')}
             loading={formState.isSubmitting}
+            styles={{
+              root: {
+                width: 50,
+                height: 50,
+              },
+            }}
           >
             <Dots className="aspect-square w-20 duration-150" />
           </ActionIcon>
@@ -77,7 +83,7 @@ const MoreOptions: FC = () => {
             onClick={onItemDeleteRequest}
             color="red"
             className={clsx(formState.isSubmitting && '!cursor-progress')}
-            icon={<Trash className="aspect-square w-4" />}
+            leftSection={<Trash className="aspect-square w-4" />}
           >
             {t(MESSAGES.PURGE_DATA)}
           </MantineMenu.Item>
@@ -159,14 +165,14 @@ export const Menu: FC = () => {
   };
 
   return (
-    <nav className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-between p-2 rounded-prom bg-transparent">
+    <nav className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-between px-5 rounded-prom bg-transparent">
       <div className="flex gap-3 justify-center"></div>
 
       <div className="flex items-center gap-3">
         {currentModel?.draftable && (
           <Button
             size="sm"
-            variant="white"
+            variant="transparent"
             type="submit"
             disabled={formState.isSubmitting}
             className="ml-auto"

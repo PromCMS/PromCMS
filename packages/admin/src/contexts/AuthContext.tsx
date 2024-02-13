@@ -1,5 +1,4 @@
 import { apiClient } from '@api';
-import { API_CURRENT_USER_URL } from '@constants';
 import { QueryFunction, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import {
@@ -25,20 +24,15 @@ export interface AuthContext {
 const fetchLoggedInUser: QueryFunction<LoggedUser | null, string[]> = async ({
   signal,
 }) => {
-  const request = await apiClient
-    .getAxios()
-    .get<{ data: User }>(API_CURRENT_USER_URL, {
-      signal,
-    })
-    .catch((error) => {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        return undefined;
-      }
+  const request = await apiClient.profile.me({ signal }).catch((error) => {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      return undefined;
+    }
 
-      throw error;
-    });
+    throw error;
+  });
 
-  const loggedInUser = request?.data.data;
+  const loggedInUser = request?.data;
   if (!loggedInUser) {
     return null;
   }

@@ -57,7 +57,7 @@ export const WysiwygEditor: FC<WysiwygEditorProps> = ({
           attributes() {
             return {
               class: clsx(
-                'border-2 border-gray-100 rounded-b-lg  px-3 py-3 bg-white wysiwyg-editor min-h-[300px]'
+                'border-2 border-blue-100 rounded-b-lg  px-3 py-3 bg-white wysiwyg-editor min-h-[300px]'
               ),
             };
           },

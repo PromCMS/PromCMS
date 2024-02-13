@@ -1,6 +1,6 @@
 import { Axios } from 'axios';
 
-import { Response, User } from '../../types';
+import { Response, RichAxiosRequestConfig, User } from '../../types';
 import { ApiClientPart } from '../ApiClientPart';
 
 export class ProfilePart extends ApiClientPart {
@@ -10,8 +10,15 @@ export class ProfilePart extends ApiClientPart {
     this.basePathname += `/profile`;
   }
 
+  me<T = User>(requestOptions?: Omit<RichAxiosRequestConfig<T>, 'url'>) {
+    return this.request<T>({
+      url: `/me`,
+      ...requestOptions,
+    });
+  }
+
   update<T = User>(payload: Partial<Omit<T, 'id'>>) {
-    return this.request<Response<T>>({
+    return this.request<T>({
       method: 'POST',
       url: '/update',
       data: {

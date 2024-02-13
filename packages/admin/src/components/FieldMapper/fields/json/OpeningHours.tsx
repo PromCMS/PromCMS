@@ -1,12 +1,19 @@
-import { ActionIcon, Checkbox, clsx, Input, Select } from '@mantine/core';
+import { MESSAGES } from '@constants';
+import { ActionIcon, Checkbox, Input, Select } from '@mantine/core';
+import { upperFirst } from '@mantine/hooks';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FC, useMemo } from 'react';
-import { Trash, Plus } from 'tabler-icons-react';
-
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
+import {
+  Controller,
+  useFieldArray,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Plus, Trash } from 'tabler-icons-react';
+
 import { FieldPlacements } from '@prom-cms/schema';
-import { upperFirst } from '@mantine/hooks';
 
 export const DAYS_IN_WEEK = [
   'monday',
@@ -53,7 +60,8 @@ const RowSelect: FC<{ name: string; disabled?: boolean }> = ({
   return (
     <>
       {allFields.map((field, index) => (
-        <div key={field.id} className="flex items-center gap-5">
+        <div key={field.id} className="flex items-end gap-5">
+          <div className="w-5 hidden md:block" />
           <Controller
             name={`${name}.${index}.from`}
             render={({ field: { value, onChange } }) => (
@@ -82,7 +90,7 @@ const RowSelect: FC<{ name: string; disabled?: boolean }> = ({
               />
             )}
           />
-          <div className={'grid flex-none grid-cols-2'}>
+          <div className="grid flex-none grid-cols-2">
             <ActionIcon
               size="xl"
               p="xs"
@@ -118,36 +126,40 @@ const Row: FC<{
   disabled?: boolean;
 }> = ({ name, weekdayName, disabled }) => {
   const { t } = useTranslation();
-  const formContext = useFormContext();
-  const { watch } = formContext;
-  const value = watch(name);
 
   return (
-    <div className="flex min-h-[70px] flex-col gap-5 py-5 lg:flex-row lg:justify-between lg:gap-16">
-      <div className="flex grid-cols-2 justify-between gap-8 lg:grid lg:pt-3.5">
-        <div className="font-medium uppercase text-gray-800">
-          {t(upperFirst(weekdayName))}
-        </div>
-        <Controller
-          name={name}
-          render={({ field: { value, onChange } }) => (
+    <Controller
+      name={name}
+      render={({ field: { value, onChange } }) => (
+        <div className="min-h-[70px] flex-col flex gap-3 py-2 lg:justify-between lg:gap-5">
+          <div className="flex items-center gap-8 lg:pt-3.5">
+            <div className="font-medium uppercase text-gray-800 dark:text-white">
+              {t(upperFirst(weekdayName))}
+            </div>
+            <hr
+              className={clsx(
+                'w-full m-0 h-0.5 duration-200',
+                Array.isArray(value) ? 'bg-blue-100' : 'bg-gray-100'
+              )}
+            />
+
             <Checkbox
-              checked={value === false}
-              label={t('Closed')}
+              checked={Array.isArray(value)}
+              label={t(MESSAGES.OPENING_HOURS_OPEN)}
               disabled={disabled}
               onChange={(event) =>
-                onChange(event.currentTarget.checked ? false : [])
+                onChange(event.currentTarget.checked ? [] : false)
               }
             />
-          )}
-        />
-      </div>
-      <div className="grid gap-5">
-        {Array.isArray(value) ? (
-          <RowSelect disabled={disabled} name={name} />
-        ) : null}
-      </div>
-    </div>
+          </div>
+          <div className="grid gap-5">
+            {Array.isArray(value) ? (
+              <RowSelect disabled={disabled} name={name} />
+            ) : null}
+          </div>
+        </div>
+      )}
+    />
   );
 };
 
@@ -171,9 +183,9 @@ export const OpeningHours: FC<{
     >
       <div
         className={clsx([
-          'mt-2 grid divide-y-2 divide-gray-100',
+          'mt-2 grid',
           placement === FieldPlacements.MAIN &&
-            'rounded-lg border border-gray-200 bg-white px-5',
+            'rounded-lg border border-blue-200 bg-white backdrop-blur-md dark:bg-transparent px-5 pb-5',
         ])}
       >
         {DAYS_IN_WEEK.map((name) => (

@@ -7,7 +7,7 @@ import { Link, useRouter } from '@tanstack/react-router';
 import { getInitials } from '@utils';
 import clsx from 'clsx';
 import { upperFirst } from 'lodash';
-import { FC, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft,
@@ -15,8 +15,10 @@ import {
   LanguageHiragana,
   Logout,
   Menu2,
+  Moon,
   Photo,
   Settings,
+  Sun,
   User,
   UserExclamation,
   Users,
@@ -32,6 +34,9 @@ const USER_MENU_ICON_SIZE = 14;
 const MENU_SUBITEM_CLASSNAMES = clsx(
   'group-hover:opacity-100 duration-150 sm:opacity-50 group-hover:blur-0 sm:blur-sm'
 );
+
+const MENU_BUTTON_CLASSNAME =
+  'relative flex w-9 h-9 overflow-hidden rounded-prom border border-blue-100 bg-white text-blue-400';
 
 enum SUBMENU_NAMES {
   USER = 'user-submenu',
@@ -72,12 +77,12 @@ const MobileMenu: FC = () => {
           {allMenuItems.map((itemInfo) => (
             <Link
               to={itemInfo.href}
-              className="group flex p-2 w-full rounded-prom shadow-sm duration-150 bg-white "
+              className="group flex p-2 w-full rounded-prom shadow-sm duration-150 bg-white dark:bg-gray-900 backdrop-blur-md"
               key={itemInfo.href}
               onClick={toggleOpen}
             >
-              <itemInfo.icon className="aspect-square h-7 w-7 text-gray-400 duration-150 group-hover:text-blue-500 p-1" />
-              <span className="mt-0.5 block font-semibold ml-3">
+              <itemInfo.icon className="aspect-square h-7 w-7 text-gray-400 dark:text-blue-200 duration-150 group-hover:text-blue-500 p-1" />
+              <span className="mt-0.5 block font-semibold ml-3 text-blue-300 dark:text-blue-200">
                 {t(upperFirst(itemInfo.label))}
               </span>
             </Link>
@@ -97,7 +102,9 @@ const BackButton = () => {
       type="button"
       color="red"
       variant="subtle"
-      leftIcon={<ArrowLeft className="aspect-square" width={20} height={20} />}
+      leftSection={
+        <ArrowLeft className="aspect-square" width={20} height={20} />
+      }
       onClick={() =>
         router.navigate({
           to: pageUrls.entryTypes(currentModel?.name as string).list,
@@ -117,10 +124,19 @@ export const TopMenu: FC = () => {
   const [hasError, setError] = useState(false);
   const { t } = useTranslation();
   const [openedSubmenus, setOpenedSubmenus] = useState<SUBMENU_NAMES[]>([]);
+  const [darkMode, setDarkMode] = useState(false);
   const mobileMenu = useMobileMenuToggle();
   const settings = useSettings();
 
   const isEntryUnderpage = /\/entry-types\/.+/g.test(location.pathname);
+
+  useEffect(() => {
+    if (darkMode) {
+      window.document.querySelector('html')?.classList.add('dark');
+    } else {
+      window.document.querySelector('html')?.classList.remove('dark');
+    }
+  }, [darkMode]);
 
   const toggleSubmenu = (submenu: SUBMENU_NAMES) =>
     setOpenedSubmenus((prevValue) => {
@@ -137,20 +153,25 @@ export const TopMenu: FC = () => {
 
   return (
     <header
-      className={clsx('relative group sm:hover:mt-0 sm:-mt-5 duration-150')}
-      onMouseLeave={() => {
-        setOpenedSubmenus([]);
-      }}
+      className={clsx(
+        'relative sm:hover:mt-0 duration-150 group',
+        openedSubmenus.length ? '' : 'sm:-mt-5'
+      )}
+      // onMouseLeave={() => {
+      //   setOpenedSubmenus([]);
+      // }}
     >
-      <div className="flex p-2 py-4 gap-2">
+      <div className="flex p-2 py-2 gap-2">
         <div className="w-11 hidden sm:block" />
+
         <ActionIcon
           className={clsx(
             'relative flex w-9 h-9 overflow-hidden rounded-prom border sm:hidden',
-            MENU_SUBITEM_CLASSNAMES
+            MENU_SUBITEM_CLASSNAMES,
+            !mobileMenu.open ? 'bg-white text-blue-400' : undefined
           )}
-          color={mobileMenu.open ? 'red' : 'white'}
-          variant={mobileMenu.open ? 'filled' : 'light'}
+          color={mobileMenu.open ? 'red' : undefined}
+          variant={mobileMenu.open ? 'filled' : undefined}
           onClick={mobileMenu.toggleOpen}
         >
           {mobileMenu.open ? (
@@ -161,11 +182,34 @@ export const TopMenu: FC = () => {
         </ActionIcon>
         {isEntryUnderpage ? <BackButton /> : null}
         <div className="mr-auto" />
+
+        <ActionIcon
+          className={clsx(
+            'ml-auto relative flex w-[37px] h-[37px] overflow-hidden rounded-prom border bg-white',
+            darkMode ? 'border-black' : 'border-transparent',
+            MENU_SUBITEM_CLASSNAMES
+          )}
+          onClick={() => setDarkMode((value) => !value)}
+        >
+          <div
+            className={clsx(
+              'absolute top-0 left-0 w-full h-full flex flex-col duration-150',
+              !darkMode ? '-translate-y-full' : ''
+            )}
+          >
+            <div className="h-full w-full p-1.5 text-yellow-500 ">
+              <Sun className="w-6 h-6" />
+            </div>
+            <div className="bg-gray-800 text-gray-100 p-1.5 h-full w-full">
+              <Moon className="w-6 h-6" fill="inherit" />
+            </div>
+          </div>
+        </ActionIcon>
         <Menu
           withArrow
           position="bottom-end"
           arrowPosition="center"
-          transition="pop"
+          transitionProps={{ transition: 'pop' }}
           shadow="xl"
           opened={openedSubmenus.includes(SUBMENU_NAMES.CONFIG)}
           onClose={() => toggleSubmenu(SUBMENU_NAMES.CONFIG)}
@@ -173,10 +217,7 @@ export const TopMenu: FC = () => {
         >
           <Menu.Target>
             <ActionIcon
-              className={clsx(
-                'ml-auto relative flex w-9 h-9 sm:w-10 sm:h-10 overflow-hidden rounded-prom border border-gray-100 bg-white',
-                MENU_SUBITEM_CLASSNAMES
-              )}
+              className={clsx(MENU_BUTTON_CLASSNAME, MENU_SUBITEM_CLASSNAMES)}
             >
               <Settings className="w-6 h-6" />
             </ActionIcon>
@@ -188,7 +229,7 @@ export const TopMenu: FC = () => {
             }) ? (
               <Menu.Item
                 color="teal"
-                icon={<Settings size={USER_MENU_ICON_SIZE} />}
+                leftSection={<Settings size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
                   router.navigate({ to: '/settings/system' });
                 }}
@@ -202,7 +243,7 @@ export const TopMenu: FC = () => {
             }) ? (
               <Menu.Item
                 color="blue"
-                icon={<Users size={USER_MENU_ICON_SIZE} />}
+                leftSection={<Users size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
                   router.navigate({ to: '/users' });
                 }}
@@ -213,7 +254,7 @@ export const TopMenu: FC = () => {
             {(settings.application?.i18n?.languages.length ?? 0) >= 2 ? (
               <Menu.Item
                 color="blue"
-                icon={<LanguageHiragana size={USER_MENU_ICON_SIZE} />}
+                leftSection={<LanguageHiragana size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
                   router.navigate({
                     to: pageUrls.settings.translations(
@@ -228,7 +269,7 @@ export const TopMenu: FC = () => {
             {currentUser?.isAdmin ? (
               <Menu.Item
                 color="orange"
-                icon={<UserExclamation size={USER_MENU_ICON_SIZE} />}
+                leftSection={<UserExclamation size={USER_MENU_ICON_SIZE} />}
                 onClick={() => {
                   router.navigate({ to: '/settings/user-roles' });
                 }}
@@ -242,7 +283,7 @@ export const TopMenu: FC = () => {
           withArrow
           position="bottom-end"
           arrowPosition="center"
-          transition="pop"
+          transitionProps={{ transition: 'pop' }}
           shadow="xl"
           opened={openedSubmenus.includes(SUBMENU_NAMES.USER)}
           onClose={() => toggleSubmenu(SUBMENU_NAMES.USER)}
@@ -251,14 +292,11 @@ export const TopMenu: FC = () => {
           <Menu.Target>
             <ActionIcon
               disabled={!currentUser}
-              className={clsx(
-                'relative flex w-9 h-9 sm:w-10 sm:h-10 overflow-hidden rounded-prom border border-gray-100 bg-white',
-                MENU_SUBITEM_CLASSNAMES
-              )}
+              className={clsx(MENU_BUTTON_CLASSNAME, MENU_SUBITEM_CLASSNAMES)}
             >
               {currentUser && currentUser.avatar && !hasError ? (
                 <BackendImage
-                  imageId={currentUser.avatar}
+                  imageId={currentUser.avatar.id}
                   alt=""
                   width={40}
                   quality={40}
@@ -266,7 +304,7 @@ export const TopMenu: FC = () => {
                   className="absolute top-0 left-0 h-full w-full object-cover"
                 />
               ) : (
-                <p className="m-auto font-bold text-[16px] tracking-wider text-black p-1">
+                <p className="m-auto font-bold text-[16px] tracking-wider text-blue-400 p-1">
                   {getInitials(currentUser?.name || '-- --')}
                 </p>
               )}
@@ -275,7 +313,7 @@ export const TopMenu: FC = () => {
           <Menu.Dropdown>
             <Menu.Item
               color="blue"
-              icon={<User size={USER_MENU_ICON_SIZE} />}
+              leftSection={<User size={USER_MENU_ICON_SIZE} />}
               onClick={() => {
                 router.navigate({ to: '/settings/profile' });
               }}
@@ -287,7 +325,7 @@ export const TopMenu: FC = () => {
             <Menu.Divider />
             <Menu.Item
               color="red"
-              icon={<Logout size={USER_MENU_ICON_SIZE} />}
+              leftSection={<Logout size={USER_MENU_ICON_SIZE} />}
               onClick={() => {
                 router.navigate({ to: '/logout' });
               }}

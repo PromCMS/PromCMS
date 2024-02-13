@@ -16,8 +16,7 @@ export const CopyName: VFC<{ name: string }> = ({ name }) => {
       offset={5}
       position="bottom"
       radius="xl"
-      transition="slide-down"
-      transitionDuration={150}
+      transitionProps={{ transition: 'slide-down', duration: 150 }}
       opened={clipboard.copied}
     >
       <ActionIcon color="blue" onClick={onCopyClick} size={20}>

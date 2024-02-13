@@ -1,5 +1,5 @@
 import { MESSAGES, pageUrls } from '@constants';
-import { Select, SelectItem, Text } from '@mantine/core';
+import { ComboboxItem, Select, Text } from '@mantine/core';
 import { Link } from '@tanstack/react-router';
 import { useModelItems } from 'hooks/useModelItems';
 import Mustache from 'mustache';
@@ -37,7 +37,7 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
     targetModelTableName,
     {}
   );
-  const values = useMemo<SelectItem[]>(
+  const values = useMemo<ComboboxItem[]>(
     () =>
       (data?.data ?? []).map((entry) => ({
         value: String(entry.slug),
@@ -56,8 +56,8 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
         onChange={field.onChange}
         className="w-full"
         placeholder={t('Select an option')}
-        shadow="xl"
         disabled={isError || isLoading || disabled}
+        comboboxProps={{ shadow: 'xl' }}
         error={error}
       />
       {field.value && !Array.isArray(field.value) ? (

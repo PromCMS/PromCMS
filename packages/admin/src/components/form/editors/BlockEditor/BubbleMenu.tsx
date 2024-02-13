@@ -1,5 +1,5 @@
 import { EDITOR_MESSAGES } from '@constants';
-import { Popover, UnstyledButton } from '@mantine/core';
+import { Paper } from '@mantine/core';
 import { isTextSelection, useCurrentEditor } from '@tiptap/react';
 import { BubbleMenuProps, BubbleMenu as TipTapBubbleMenu } from '@tiptap/react';
 import { FC, useCallback } from 'react';
@@ -57,45 +57,40 @@ export const BubbleMenu: FC = () => {
     <TipTapBubbleMenu
       editor={editor}
       shouldShow={shouldShowBubbleMenu}
-      tippyOptions={{ duration: 100 }}
+      tippyOptions={{ duration: 300 }}
       className="flex"
     >
-      <Popover opened withArrow position="top" offset={-5}>
-        <Popover.Target>
-          <UnstyledButton className="w-0" />
-        </Popover.Target>
-        <Popover.Dropdown p="0.3rem" className="flex flex-row gap-1">
+      <Paper p="0.2rem" className="flex flex-row gap-1 border-blue-200 border">
+        <ActionButton
+          onClick={() => editor?.chain().focus().toggleBold()?.run()}
+          icon={Bold}
+          active={editor?.isActive('bold')}
+          label={t(EDITOR_MESSAGES.BOLD)}
+        />
+        <ActionButton
+          onClick={() => editor?.chain().focus().toggleItalic()?.run()}
+          icon={Italic}
+          active={editor?.isActive('italic')}
+          label={t(EDITOR_MESSAGES.ITALIC)}
+        />
+        <ActionButton
+          label={t(EDITOR_MESSAGES.CLEAR_ALL_FORMATTING)}
+          icon={ClearFormatting}
+          onClick={() => editor?.chain().focus().unsetAllMarks().run()}
+        />
+        {divider}
+        {ALLOWED_HEADING_LEVELS.map((level) => (
           <ActionButton
-            onClick={() => editor?.chain().focus().toggleBold()?.run()}
-            icon={Bold}
-            active={editor?.isActive('bold')}
-            label={t(EDITOR_MESSAGES.BOLD)}
+            key={level}
+            onClick={() =>
+              editor?.chain().focus().toggleHeading({ level })?.run()
+            }
+            icon={HEADING_LEVEL_TO_ICON[level]}
+            active={editor?.isActive('heading', { level })}
+            label={t(EDITOR_MESSAGES[`HEADING_LEVEL_${level}`])}
           />
-          <ActionButton
-            onClick={() => editor?.chain().focus().toggleItalic()?.run()}
-            icon={Italic}
-            active={editor?.isActive('italic')}
-            label={t(EDITOR_MESSAGES.ITALIC)}
-          />
-          <ActionButton
-            label={t(EDITOR_MESSAGES.CLEAR_ALL_FORMATTING)}
-            icon={ClearFormatting}
-            onClick={() => editor?.chain().focus().unsetAllMarks().run()}
-          />
-          {divider}
-          {ALLOWED_HEADING_LEVELS.map((level) => (
-            <ActionButton
-              key={level}
-              onClick={() =>
-                editor?.chain().focus().toggleHeading({ level })?.run()
-              }
-              icon={HEADING_LEVEL_TO_ICON[level]}
-              active={editor?.isActive('heading', { level })}
-              label={t(EDITOR_MESSAGES[`HEADING_LEVEL_${level}`])}
-            />
-          ))}
-        </Popover.Dropdown>
-      </Popover>
+        ))}
+      </Paper>
     </TipTapBubbleMenu>
   );
 };

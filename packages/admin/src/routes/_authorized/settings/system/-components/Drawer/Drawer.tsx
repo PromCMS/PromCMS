@@ -1,23 +1,18 @@
 import { apiClient } from '@api';
+import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { LanguageSelect } from '@components/form/LanguageSelect';
-import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
+import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
-import {
-  Button,
-  Drawer as MantineDrawer,
-  DrawerProps as MantineDrawerProps,
-  Paper,
-  Select,
-  SimpleGrid,
-  TextInput,
-  Title,
-} from '@mantine/core';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button, Select, SimpleGrid, TextInput } from '@mantine/core';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useModelItem } from 'hooks/useModelItem';
 import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
-import { FC, useEffect, useState } from 'react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import slugify from 'slugify';
+import { z } from 'zod';
 
 import { ItemID } from '@prom-cms/api-client';
 
@@ -25,10 +20,30 @@ import { Image } from './contentTypes/Image';
 import { List } from './contentTypes/List';
 import { Textarea } from './contentTypes/Textarea';
 
-export const Drawer: FC<
-  Pick<MantineDrawerProps, 'opened' | 'onClose'> & { optionToEdit?: ItemID }
-> = ({ opened, onClose, optionToEdit }) => {
+const stringSchema = z
+  .string({
+    required_error: MESSAGES.FIELD_REQUIRED,
+  })
+  .min(1, MESSAGES.FIELD_REQUIRED);
+
+const schema = z.object({
+  id: z.any().optional(),
+  name: stringSchema,
+  slug: stringSchema,
+  content: z.object({
+    type: stringSchema,
+    data: z.any({ required_error: MESSAGES.FIELD_REQUIRED }),
+  }),
+});
+
+type FormValue = z.infer<typeof schema>;
+
+export const Drawer: FC<{
+  optionToEdit?: ItemID;
+  onOptionUpdateOrCreate: () => Promise<void>;
+}> = ({ optionToEdit, onOptionUpdateOrCreate }) => {
   const settings = useSettings();
+  const isCreate = optionToEdit === undefined;
   const [language, setLanguage] = useState<string | undefined>(
     settings.application?.i18n?.default
   );
@@ -42,10 +57,11 @@ export const Drawer: FC<
   );
   const { t } = useTranslation();
   const reqNotification = useRequestWithNotifications();
-  const formMethods = useForm({
+  const formMethods = useForm<FormValue>({
     defaultValues: {} as any,
+    resolver: zodResolver(schema),
   });
-  const { register, watch, reset, control, handleSubmit, setValue, formState } =
+  const { register, reset, control, handleSubmit, setValue, formState } =
     formMethods;
 
   const currentUserCanCreate = currentUser?.can({
@@ -61,24 +77,32 @@ export const Drawer: FC<
     } else {
       reset({});
     }
-  }, [data, reset, optionToEdit, opened]);
+  }, [data, reset, optionToEdit]);
 
-  const content = watch('content');
+  const contentType = useWatch({
+    name: 'content.type',
+    control,
+  });
+
+  const slug = useWatch({
+    name: 'slug',
+    control,
+  });
 
   const onSubmit = async (values) => {
     try {
       reqNotification(
         {
-          title: t(optionToEdit ? 'Updating option' : 'Creating option'),
+          title: t(!isCreate ? 'Updating option' : 'Creating option'),
           message: t('Please wait...'),
           successMessage: t(
-            optionToEdit
+            !isCreate
               ? 'Option successfully updated'
               : 'Option has been created'
           ),
         },
         async () => {
-          if (optionToEdit) {
+          if (!isCreate) {
             const { id, ...newOptionDataset } = values;
             await apiClient.settings.update(optionToEdit, newOptionDataset, {
               language,
@@ -86,7 +110,8 @@ export const Drawer: FC<
           } else {
             await apiClient.settings.create(values);
           }
-          onClose();
+
+          await onOptionUpdateOrCreate();
         }
       );
     } catch (e) {}
@@ -94,25 +119,14 @@ export const Drawer: FC<
 
   return (
     <FormProvider {...formMethods}>
-      <MantineDrawer
-        opened={opened}
-        onClose={onClose}
-        position="right"
-        size={700}
-        padding="xl"
+      <AsideItemWrap
+        title={!isCreate ? 'Update an option' : 'Create an option'}
         className=" overflow-auto"
-        title={
-          <Title order={4}>
-            {!!optionToEdit ? 'Update an option' : 'Create an option'}
-          </Title>
-        }
       >
-        <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
-          <SimpleGrid cols={1} spacing="md">
+        <form className="h-full px-3" onSubmit={handleSubmit(onSubmit)}>
+          <SimpleGrid cols={1} spacing="sm">
             {currentUserCanCreate && (
-              <Paper withBorder shadow="lg" mb="lg" radius="md" p="xs">
-                <TextInput label="Slug" {...register('name')} />
-
+              <>
                 <Controller
                   name="content.type"
                   control={control}
@@ -127,12 +141,16 @@ export const Drawer: FC<
                       onBlur={onBlur}
                       value={value}
                       label="Select datatype"
-                      pt="md"
                       data={[
                         { value: 'list', label: 'List' },
                         { value: 'textArea', label: 'Long text' },
                         { value: 'image', label: 'Image' },
                       ]}
+                      error={
+                        typeof formState.errors.content?.type === 'object'
+                          ? formState.errors.content?.type.message
+                          : undefined
+                      }
                     />
                   )}
                 />
@@ -142,30 +160,56 @@ export const Drawer: FC<
                     value={language}
                     onChange={(value) => value && setLanguage(value)}
                     className="w-full"
-                    shadow="xl"
+                    comboboxProps={{ shadow: 'xl' }}
                     pt="md"
                     disabled={!optionToEdit}
                   />
                 )}
-              </Paper>
+              </>
             )}
-            <TextInput label="Label" {...register('label')} />
-            {content?.type === 'list' && <List />}
-            {content?.type === 'textArea' && <Textarea />}
-            {content?.type === 'image' && <Image />}
+            <TextInput
+              label="Label"
+              {...register('name', {
+                onChange(event: ChangeEvent<HTMLInputElement>) {
+                  if (isCreate) {
+                    setValue(
+                      'slug',
+                      slugify(event.target.value, {
+                        replacement: '_',
+                        lower: true,
+                        trim: true,
+                      })
+                    );
+                  }
+                },
+              })}
+              description={slug ? <>Slug: {slug}</> : undefined}
+              inputWrapperOrder={['label', 'input', 'description', 'error']}
+              error={formState.errors.name?.message}
+            />
+            <div>
+              {contentType === 'list' && <List />}
+              {contentType === 'textArea' && <Textarea />}
+              {contentType === 'image' && <Image />}
+              {/* {typeof formState.errors.content?.data === 'object' ? (
+                <small className="color-red-500">
+                  {formState.errors.content?.data?.message}
+                </small>
+              ) : null} */}
+            </div>
           </SimpleGrid>
-          <div className="right-0 mt-8 rounded-lg pb-4">
+          <div className="right-0 mt-5 rounded-lg pb-4">
             <Button
               className="mr-auto block"
               type="submit"
+              color="green"
               loading={formState.isSubmitting}
-              loaderPosition="right"
             >
               {t(optionToEdit ? 'Save' : 'Create')}
             </Button>
           </div>
         </form>
-      </MantineDrawer>
+      </AsideItemWrap>
     </FormProvider>
   );
 };

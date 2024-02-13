@@ -63,13 +63,13 @@ export const CoeditorsEditor: FC = () => {
             opened={popoverOpen}
             onClose={() => setPopoverOpen(false)}
             position="bottom"
-            transition="pop-top-right"
+            transitionProps={{ transition: 'pop-top-right' }}
             width={400}
           >
             <Popover.Target>
               <Button
                 className="w-full"
-                leftIcon={<Plus className="h-7 w-7" />}
+                leftSection={<Plus className="h-7 w-7" />}
                 variant="light"
                 type="button"
                 onClick={() => setPopoverOpen((o) => !o)}
@@ -88,7 +88,7 @@ export const CoeditorsEditor: FC = () => {
                 onItemSubmit={onUserSelect}
               />
 
-              <Group position="apart" style={{ marginTop: 15 }}>
+              <Group justify="space-between" style={{ marginTop: 15 }}>
                 <Anchor
                   component="button"
                   color="gray"

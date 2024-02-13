@@ -110,16 +110,15 @@ function LoginPage() {
     <FormProvider {...formMethods}>
       <div className="flex flex-col min-h-screen w-full">
         <Image
-          height={50}
-          width={50}
+          height={75}
+          width={75}
           src={logoImage}
+          style={{ width: 75 }}
           alt=""
           fit="contain"
-          classNames={{
-            imageWrapper: 'p-5',
-          }}
+          p="sm"
         />
-        <div className="m-auto w-full max-w-md">
+        <div className="m-auto w-full max-w-lg">
           <Title className="text-2xl font-semibold mb-3 ">
             {t(MESSAGES.LOGIN_TO_MY_ACCOUNT)}
           </Title>
@@ -136,7 +135,7 @@ function LoginPage() {
                   autoComplete="email"
                   {...register('email')}
                 />
-                <Group position="right" className="z-10 -mb-12">
+                <Group justify="end" className="z-10 -mb-12">
                   <Link to="/reset-password">{t('Forgot password?')}</Link>
                 </Group>
                 <PasswordInput

@@ -22,8 +22,9 @@ safelist.push({
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx,css,scss}'],
+  content: ['./src/**/*.{js,jsx,ts,tsx,css,scss,html}'],
   safelist: safelist,
+  darkMode: 'class',
   theme: {
     container: {
       padding: {

@@ -39,7 +39,7 @@ export const JsonFieldInputAsLinkButton: FC<
   return (
     <Input.Wrapper size="md" label={title}>
       <div className="rounded-lg border-2 border-project-border bg-white p-3 text-left">
-        <Group className="items-start" noWrap grow>
+        <Group className="items-start" grow>
           <TextInput
             required={required}
             label={t('Link')}
@@ -66,7 +66,7 @@ export const JsonFieldInputAsLinkButton: FC<
           />
         </Group>
 
-        <Group className="mt-4 items-start" noWrap grow>
+        <Group className="mt-4 items-start" grow>
           <Select
             title={t(MESSAGES.ACTION_ON_CLICK)}
             name={actionField.name}

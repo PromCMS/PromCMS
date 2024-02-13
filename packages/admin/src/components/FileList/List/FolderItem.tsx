@@ -1,7 +1,8 @@
 import { ActionIcon } from '@mantine/core';
 import clsx from 'clsx';
-import { useCallback, useMemo, useState, VFC } from 'react';
+import { VFC, useCallback, useMemo, useState } from 'react';
 import { Folder, Folders, Trash } from 'tabler-icons-react';
+
 import { useFileListContext } from '../context';
 import { useClassNames } from '../useClassNames';
 
@@ -69,7 +70,6 @@ export const FolderItem: VFC<FolderItemProps> = ({
           onClick={onFolderDeleteClick}
           size={36}
           color="red"
-          className="border-2 border-red-200 bg-white"
           disabled={
             workingFolders[folderPath]?.type === 'deleting' ||
             workingFolders[folderPath]?.type === 'uploading'

@@ -134,7 +134,6 @@ function Page() {
             loading={formState.isSubmitting}
             type="submit"
             className="mt-5"
-            loaderPosition="right"
           >
             {t('Save')}
           </Button>

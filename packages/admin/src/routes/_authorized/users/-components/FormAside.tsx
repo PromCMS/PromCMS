@@ -1,110 +1,17 @@
-import { apiClient } from '@api';
-import Skeleton, { SkeltonProps } from '@components/Skeleton';
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
 import { AsideWrapper } from '@components/editorialPage/AsideWrapper';
-import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
-import { useAuth } from '@contexts/AuthContext';
-import { ActionIcon, Button, SimpleGrid } from '@mantine/core';
-import { useSetState } from '@mantine/hooks';
-import { canUser, getObjectDiff } from '@utils';
+import { MESSAGES } from '@constants';
 import clsx from 'clsx';
-import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
-import { FC, useMemo } from 'react';
-import { useFormContext } from 'react-hook-form';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Trash } from 'tabler-icons-react';
-
-import { UserStates } from '@prom-cms/api-client';
 
 import { useData } from '../-context';
 import { useCurrentUser } from '../-hooks/useCurrentUser';
 
-const TextSkeleton: FC<SkeltonProps> = ({ className, ...rest }) => (
-  <Skeleton
-    className={clsx('relative top-0.5 inline-block h-4', className)}
-    {...rest}
-  />
-);
-
 export const FormAside: FC = () => {
-  const { view, exitView } = useData();
-  const {
-    watch,
-    formState: { isSubmitting },
-  } = useFormContext();
-  const { data: user, refetch: refetchUser } = useCurrentUser();
-  const { user: loggedInUser } = useAuth();
-  const formValues = watch();
+  const { view } = useData();
+  const { data: user } = useCurrentUser();
   const { t } = useTranslation();
-  const reqNotification = useRequestWithNotifications();
-  const [workingState, setWorkingState] = useSetState({
-    isSendingPasswordReset: false,
-    isTogglingBlock: false,
-  });
-
-  const isEdited = useMemo(
-    () =>
-      view === 'update'
-        ? !!Object.keys(getObjectDiff(user || {}, formValues)).length
-        : true,
-    [formValues, view, user]
-  );
-
-  const onItemDeleteRequest = async () => {
-    if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
-      exitView();
-      apiClient.users.delete(user?.id!);
-    }
-  };
-
-  const onPasswordResetClick = async () => {
-    setWorkingState({ isSendingPasswordReset: true });
-    const thisIsResend = user?.state === UserStates.passwordReset;
-    try {
-      await reqNotification(
-        {
-          title: t('Password reset'),
-          message: t(
-            thisIsResend
-              ? 'Resending password reset email'
-              : 'Sending user password reset email'
-          ),
-          successMessage: t('User can now follow instruction in their email'),
-        },
-        async () => {
-          await apiClient.profile.requestPasswordReset(user!.email);
-
-          // TODO
-          // mutateUser(data.data);
-        }
-      );
-    } catch (e) {}
-    setWorkingState({ isSendingPasswordReset: false });
-  };
-
-  const onToggleBlockClick = async () => {
-    setWorkingState({ isTogglingBlock: true });
-    const userIsNowBlocked = user!.state === UserStates.blocked;
-
-    try {
-      await reqNotification(
-        {
-          title: t(userIsNowBlocked ? 'Unblocking' : 'Blocking'),
-          message: '',
-          successMessage: t(
-            userIsNowBlocked ? 'User is now unblocked' : 'User is now blocked'
-          ),
-        },
-        async () => {
-          await apiClient.users[userIsNowBlocked ? 'unblock' : 'block'](
-            user!.id
-          );
-          await refetchUser();
-        }
-      );
-    } catch (e) {}
-    setWorkingState({ isTogglingBlock: false });
-  };
 
   return (
     <AsideWrapper isOpen>
@@ -121,82 +28,7 @@ export const FormAside: FC = () => {
             </ul>
           </div>
         )}
-
-        <div className="flex items-center justify-between gap-5 border-t-2 border-project-border px-4 py-4">
-          {view === 'update' ? (
-            <ActionIcon
-              size="lg"
-              type="button"
-              loading={isSubmitting}
-              onClick={onItemDeleteRequest}
-              color="red"
-              variant="light"
-              className={clsx(
-                isSubmitting && '!cursor-progress',
-                'text-sm text-red-500'
-              )}
-            >
-              <Trash className="aspect-square w-5" />
-            </ActionIcon>
-          ) : (
-            <span></span>
-          )}
-          <Button
-            size="lg"
-            color="green"
-            type="submit"
-            disabled={isSubmitting || !isEdited}
-            loading={isSubmitting}
-            className={clsx(isSubmitting && '!cursor-progress')}
-          >
-            {t(
-              isSubmitting
-                ? view === 'create'
-                  ? 'Creating...'
-                  : 'Updating...'
-                : view === 'create'
-                  ? 'Create'
-                  : 'Update'
-            )}
-          </Button>
-        </div>
       </AsideItemWrap>
-      {view === 'update' &&
-        loggedInUser &&
-        canUser({
-          userRole: loggedInUser.role,
-
-          action: 'update',
-          targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
-        }) && (
-          <AsideItemWrap title={t('Actions')}>
-            <SimpleGrid cols={1} className="p-5">
-              <Button
-                loading={workingState.isSendingPasswordReset}
-                disabled={!user || user?.state === UserStates.blocked}
-                onClick={onPasswordResetClick}
-              >
-                {t(
-                  user?.state === UserStates.passwordReset
-                    ? 'Resend password reset'
-                    : 'Send password reset'
-                )}
-              </Button>
-              <Button
-                loading={workingState.isTogglingBlock}
-                disabled={!user}
-                color="red"
-                onClick={onToggleBlockClick}
-              >
-                {t(
-                  user?.state === UserStates.blocked
-                    ? 'Unblock user'
-                    : 'Block user'
-                )}
-              </Button>
-            </SimpleGrid>
-          </AsideItemWrap>
-        )}
     </AsideWrapper>
   );
 };

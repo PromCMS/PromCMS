@@ -2,6 +2,7 @@ import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { pageUrls } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
+import { PageLayout } from '@layouts/PageLayout';
 import {
   ActionIcon,
   Button,
@@ -17,7 +18,6 @@ import {
   createLazyFileRoute,
   useNavigate,
   useParams,
-  useRouterState,
 } from '@tanstack/react-router';
 import { useGeneralTranslations } from 'hooks/useGeneralTranslations';
 import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
@@ -123,17 +123,19 @@ function Page() {
   );
 
   const ths = (
-    <tr>
-      <th>{t('Translation key')}</th>
-      <th className="w-full max-w-[350px]">{t('Translation value')}</th>
-      <th className="w-full max-w-[100px] opacity-0">Tools</th>
-    </tr>
+    <Table.Tr>
+      <Table.Th>{t('Translation key')}</Table.Th>
+      <Table.Th className="w-full max-w-[350px]">
+        {t('Translation value')}
+      </Table.Th>
+      <Table.Th className="w-full max-w-[100px] opacity-0">Tools</Table.Th>
+    </Table.Tr>
   );
 
   const rows = sortedTranslations.map(([key, value]) => (
-    <tr key={key}>
-      <td className="align-top">{key}</td>
-      <td className="w-full max-w-[350px]">
+    <Table.Tr key={key}>
+      <Table.Td className="align-top">{key}</Table.Td>
+      <Table.Td className="w-full max-w-[350px]">
         <Textarea
           onFocus={setUserIsTyping}
           onBlur={() => onSaveItem(key)}
@@ -146,46 +148,51 @@ function Page() {
           value={value}
           placeholder={key}
         />
-      </td>
-      <td className="w-full max-w-[100px]">
-        <ActionIcon onClick={onDeleteClick(key)} color="red">
-          <Trash />
+      </Table.Td>
+      <Table.Td className="w-full max-w-[100px] align-baseline">
+        <ActionIcon onClick={onDeleteClick(key)} color="red" size="lg">
+          <Trash size={20} />
         </ActionIcon>
-      </td>
-    </tr>
+      </Table.Td>
+    </Table.Tr>
   ));
 
   return (
-    <>
-      <Group position="apart" mb="md" mt="md">
-        <LanguageSelect
-          label=""
-          value={lang}
-          disabledOptions={[settings.application?.i18n.default!]}
-          onChange={(value) =>
-            value &&
-            navigate({ to: pageUrls.settings.translations(value).list })
-          }
+    <PageLayout>
+      <PageLayout.Header>
+        <Group justify="space-between" mb="md" mt="md">
+          <LanguageSelect
+            label=""
+            value={lang}
+            disabledOptions={[settings.application?.i18n.default!]}
+            onChange={(value) =>
+              value &&
+              navigate({ to: pageUrls.settings.translations(value).list })
+            }
+          />
+          <Button
+            to={pageUrls.settings.translations(lang!).create}
+            color={'green'}
+            leftSection={<Plus />}
+            component={Link}
+          >
+            {t('Add new')}
+          </Button>
+        </Group>
+      </PageLayout.Header>
+      <PageLayout.Content>
+        <LoadingOverlay
+          visible={isLoading || itemIsUpdating}
+          overlayProps={{ blur: 2 }}
         />
-        <Button
-          to={pageUrls.settings.translations(lang!).create}
-          color={'green'}
-          leftIcon={<Plus />}
-          component={Link}
-        >
-          {t('Add new')}
-        </Button>
-      </Group>
-      <div className="relative min-h-[400px]">
-        <LoadingOverlay visible={isLoading || itemIsUpdating} overlayBlur={2} />
 
-        <Table className="-mx-5" horizontalSpacing="xl" verticalSpacing="sm">
-          <thead>{ths}</thead>
-          <tbody>{rows}</tbody>
-          <tfoot>{ths}</tfoot>
+        <Table verticalSpacing="lg">
+          <Table.Thead>{ths}</Table.Thead>
+          <Table.Tbody>{rows}</Table.Tbody>
+          <Table.Tfoot>{ths}</Table.Tfoot>
         </Table>
-      </div>
-      <Outlet />
-    </>
+        <Outlet />
+      </PageLayout.Content>
+    </PageLayout>
   );
 }

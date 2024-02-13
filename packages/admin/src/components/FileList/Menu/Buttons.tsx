@@ -1,9 +1,8 @@
-import { Button } from '@components/Button';
-import PopoverList from '@components/PopoverList';
-import { Popover } from '@mantine/core';
+import { ActionIcon, Button, Menu, Popover } from '@mantine/core';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus } from 'tabler-icons-react';
+import { ChevronDown, FolderPlus } from 'tabler-icons-react';
+
 import { useFileListContext } from '../context';
 
 export const Buttons: FC = () => {
@@ -11,35 +10,34 @@ export const Buttons: FC = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="ml-3 grid aspect-square h-full flex-none">
-      <Popover offset={10} position="bottom-end">
-        <Popover.Target>
-          <Button
-            color="success"
-            className="relative flex aspect-square h-full cursor-pointer"
-          >
-            <Plus size={32} className="absolute left-3 top-3" />
-          </Button>
-        </Popover.Target>
-        <Popover.Dropdown>
-          <PopoverList>
-            <PopoverList.Item
-              icon="FilePlus"
-              title="Add new file to current folder"
-              onClick={openFilePicker}
+    <div className="ml-3 h-full flex-none">
+      <div className="flex">
+        <Button size="sm" className="rounded-r-none" onClick={openFilePicker}>
+          {t('Add new file')}
+        </Button>
+
+        <Menu withArrow arrowPosition="center" position="bottom-end">
+          <Menu.Target>
+            <ActionIcon
+              variant="outline"
+              className="rounded-l-none flex-none h-full py-1.5 px-1 w-auto"
+              size="md"
             >
-              {t('Add new file')}
-            </PopoverList.Item>
-            <PopoverList.Item
-              icon="FolderPlus"
+              <ChevronDown size={22} />
+            </ActionIcon>
+          </Menu.Target>
+          <Menu.Dropdown>
+            <Menu.Item
+              color="blue"
+              leftSection={<FolderPlus className="w-4" />}
               onClick={() => updateValue('showNewFolderCreator', true)}
               title="Add new folder to current folder"
             >
               {t('Add new folder')}
-            </PopoverList.Item>
-          </PopoverList>
-        </Popover.Dropdown>
-      </Popover>
+            </Menu.Item>
+          </Menu.Dropdown>
+        </Menu>
+      </div>
     </div>
   );
 };

@@ -52,12 +52,12 @@ function FilesOverviewPage() {
         title={t(model?.tableName || '')}
         classNames={{ wrapper: clsx('') }}
       />
-      <div className="max-w-[1760px] mx-auto mb-20">
+      <PageLayout.Content className=" mb-20 mt-10">
         <FileList
           currentFolder={currentPath}
           onFolderChange={handleFolderChange}
         />
-      </div>
+      </PageLayout.Content>
       <Outlet />
     </PageLayout>
   );

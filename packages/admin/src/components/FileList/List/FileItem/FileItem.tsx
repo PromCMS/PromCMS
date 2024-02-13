@@ -113,7 +113,7 @@ export const FileItem: FC<FileItemProps> = ({
           onClick={handleDelete}
           size={36}
           color="red"
-          className="border-2 border-project-border bg-white flex-none"
+          className="flex-none"
         >
           <Trash size={20} />
         </ActionIcon>

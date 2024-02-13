@@ -3,7 +3,7 @@ import { TableView, TableViewCol, TableViewProps } from '@components/TableView';
 import { formatApiModelResultToTableView } from '@components/TableView/_utils';
 import { MESSAGES, pageUrls } from '@constants';
 import { PageLayout } from '@layouts/PageLayout';
-import { Button } from '@mantine/core';
+import { ActionIcon, Button } from '@mantine/core';
 import { useListState } from '@mantine/hooks';
 import { createLazyFileRoute, useNavigate } from '@tanstack/react-router';
 import { modelIsCustom } from '@utils';
@@ -131,9 +131,11 @@ function EntityMainPage() {
 
   return (
     <PageLayout>
-      <PageLayout.Header title={t(model.title ?? model.name)}>
-        <div className="flex items-center gap-5">
-          {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
+      <PageLayout.Header
+        classNames={{ wrapper: 'flex items-center justify-between' }}
+        title={t(model.title ?? model.name)}
+      >
+        {/*<form onSubmit={handleSubmit(console.log)} className="w-full">
             <Input
               placeholder="input..."
               className="w-full"
@@ -141,21 +143,31 @@ function EntityMainPage() {
               {...register('query')}
             />
   </form>*/}
-          {currentUser?.can({
-            action: 'create',
-            targetEntityTableName: model.name,
-          }) && (
+        {currentUser?.can({
+          action: 'create',
+          targetEntityTableName: model.name,
+        }) && (
+          <>
             <Button
               color="green"
-              className=" items-center font-semibold uppercase"
+              className="font-semibold uppercase hidden md:block"
               size="md"
               onClick={onCreateRequest}
+              leftSection={<Plus className="inline-block h-5 w-5" />}
             >
               <span className="hidden md:block">{t('Add new entry')}</span>
-              <Plus className="inline-block h-5 w-5 md:ml-3" />{' '}
             </Button>
-          )}
-        </div>
+
+            <ActionIcon
+              color="green"
+              className=" block md:hidden"
+              size="xl"
+              onClick={onCreateRequest}
+            >
+              <Plus className="inline-block h-7 w-7" />
+            </ActionIcon>
+          </>
+        )}
       </PageLayout.Header>
 
       <PageLayout.Content>
@@ -183,7 +195,7 @@ function EntityMainPage() {
           <TableView.Pagination
             className="ml-auto"
             total={data?.last_page || 1}
-            page={page}
+            value={page}
             onChange={setPage}
           />
         </TableView.Footer>
