@@ -22,16 +22,17 @@ safelist.push({
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{js,jsx,ts,tsx,css,scss}'],
+  content: ['./src/**/*.{js,jsx,ts,tsx,css,scss,html}'],
   safelist: safelist,
+  darkMode: 'class',
   theme: {
     container: {
       padding: {
         DEFAULT: '1rem',
-        sm: '2.2rem',
-        lg: '2.2rem',
-        xl: '2.2rem',
-        '2xl': '2.2rem',
+        sm: '1.5rem',
+        // lg: '2.2rem',
+        // xl: '2.2rem',
+        // '2xl': '1.5rem',
       },
       screens: {
         sm: '600px',

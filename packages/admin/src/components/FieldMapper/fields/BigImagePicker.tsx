@@ -1,13 +1,15 @@
 import BackendImage from '@components/BackendImage';
 import { FilePicker, FilePickerProps } from '@components/form/FilePicker';
-import { ActionIcon, Button, clsx, Input } from '@mantine/core';
+import { ActionIcon, Button, Input } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
-import { columnTypeFileSchema } from '@prom-cms/schema';
+import clsx from 'clsx';
 import { FC, useCallback, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Pencil, Trash } from 'tabler-icons-react';
 import { z } from 'zod';
+
+import { columnTypeFileSchema } from '@prom-cms/schema';
 
 export interface BigImageProps extends z.infer<typeof columnTypeFileSchema> {
   name: string;
@@ -68,9 +70,10 @@ export const BigImagePicker: FC<BigImageProps> = ({
   const picker = (
     <>
       <Button
-        color="ghost"
+        color="blue"
+        variant="light"
         size="lg"
-        leftIcon={<Pencil size={20} />}
+        leftSection={<Pencil size={20} />}
         onClick={() => toggleOpen()}
         className={clsx([!multiple && 'm-5'])}
       >

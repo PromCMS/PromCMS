@@ -32,7 +32,7 @@ const PopoverListItem: FC<PopoverListItemProps> = ({
     <li {...rest}>
       <UnstyledButton
         className={clsx(
-          'flex w-full items-center rounded-lg px-4 py-1.5 text-lg font-semibold',
+          'flex w-full items-center rounded-prom px-4 py-1.5 text-lg font-semibold',
           className?.includes('red') ? 'hover:bg-red-50' : 'hover:bg-blue-50',
           className
         )}

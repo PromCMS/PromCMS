@@ -1,4 +1,4 @@
-import { ItemID } from './ItemID.js';
+import { FileItem } from './FileItem.js';
 import { ResultItem } from './ResultItem.js';
 import { UserRole } from './UserRole.js';
 import { UserStates } from './UserStates.js';
@@ -11,6 +11,6 @@ export interface User extends ResultItem {
   email: string;
   role: string | UserRole;
   /** Avatar url */
-  avatar: string;
+  avatar?: FileItem | null;
   state: UserStates;
 }

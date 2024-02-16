@@ -75,7 +75,7 @@ export const MenuBefore: FC = () => {
   }, [editor]);
 
   return (
-    <div className="border-2 border-gray-100 border-b-0 rounded-t-lg p-1.5 bg-white sticky top-0 z-10 flex gap-1">
+    <div className="border-2 border-blue-100 border-b-0 rounded-t-lg p-1.5 bg-white sticky top-0 z-10 flex gap-1">
       <ActionButton
         onClick={() => editor?.chain().focus().toggleBold()?.run()}
         icon={Bold}

@@ -21,8 +21,7 @@ export const StaticBubbleMenu: FC<PropsWithChildren<{ open: boolean }>> = ({
         <Paper
           p="0.3rem"
           withBorder
-          className="flex flex-row gap-1 absolute top-0 -translate-x-1/2 -translate-y-1/2 left-1/2"
-          shadow={'lg'}
+          className="flex flex-row gap-1 absolute top-0 -translate-x-1/2 -translate-y-1/2 left-1/2 shadow-lg shadow-blue-100 border-blue-300 dark:shadow-none dark:bg-gray-900"
         >
           {children}
         </Paper>

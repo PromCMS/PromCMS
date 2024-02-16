@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+
 import { Response, ResultItem } from '@prom-cms/api-client';
 
 export const isApiResponse = <
@@ -8,6 +9,7 @@ export const isApiResponse = <
   response: AxiosResponse | undefined
 ): response is AxiosResponse<Response<ResponseData, ResponseCode>> =>
   !!response &&
+  typeof response === 'object' &&
   'code' in response.data &&
   'message' in response.data &&
   'data' in response.data;

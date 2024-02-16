@@ -1,3 +1,4 @@
+import { TanStackRouterVite } from '@tanstack/router-vite-plugin';
 import react from '@vitejs/plugin-react';
 import { execa } from 'execa';
 import * as fs from 'fs-extra';
@@ -12,12 +13,7 @@ export default defineConfig(async ({ mode, command }) => {
   const currentFolder = process.cwd();
   const repoRoot = path.join(currentFolder, '..', '..');
   const projectRoot = path.join(currentFolder, 'src');
-  const developmentProjectPath = path.join(
-    repoRoot,
-    'packages',
-    'cli',
-    '.dev'
-  );
+  const developmentProjectPath = path.join(repoRoot, 'packages', 'cli', '.dev');
   let abortController: AbortController | undefined;
 
   const env = loadEnv(mode, repoRoot, '');
@@ -27,6 +23,9 @@ export default defineConfig(async ({ mode, command }) => {
   const plugins: PluginOption[] = [
     tsconfigPaths({ root: currentFolder }),
     react(),
+    TanStackRouterVite({
+      routeFileIgnorePrefix: '-',
+    }),
   ];
 
   if (command === 'serve') {

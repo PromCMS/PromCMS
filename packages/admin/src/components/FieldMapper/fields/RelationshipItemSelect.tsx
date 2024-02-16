@@ -1,12 +1,12 @@
 import { MESSAGES, pageUrls } from '@constants';
-import { Select, SelectItem, Text } from '@mantine/core';
+import { ComboboxItem, Select, Text } from '@mantine/core';
+import { Link } from '@tanstack/react-router';
 import { useModelItems } from 'hooks/useModelItems';
 import Mustache from 'mustache';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useController } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { ExternalLink } from 'tabler-icons-react';
 
 import { UserRole } from '@prom-cms/api-client';
@@ -37,7 +37,7 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
     targetModelTableName,
     {}
   );
-  const values = useMemo<SelectItem[]>(
+  const values = useMemo<ComboboxItem[]>(
     () =>
       (data?.data ?? []).map((entry) => ({
         value: String(entry.slug),
@@ -56,8 +56,8 @@ export const RelationshipItemSelect: FC<RelationshipItemSelectProps> = ({
         onChange={field.onChange}
         className="w-full"
         placeholder={t('Select an option')}
-        shadow="xl"
         disabled={isError || isLoading || disabled}
+        comboboxProps={{ shadow: 'xl' }}
         error={error}
       />
       {field.value && !Array.isArray(field.value) ? (

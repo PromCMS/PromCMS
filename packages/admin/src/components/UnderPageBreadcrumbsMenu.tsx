@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import { DetailedHTMLProps, Fragment, HTMLAttributes, FC } from 'react';
-import { Link } from 'react-router-dom';
+import { DetailedHTMLProps, FC, Fragment, HTMLAttributes } from 'react';
 import { Home } from 'tabler-icons-react';
 
 export interface UnderPageBreadcrumbsMenuProps

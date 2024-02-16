@@ -1,9 +1,9 @@
 import { Skeleton } from '@mantine/core';
 import {
   DetailedHTMLProps,
-  forwardRef,
   ImgHTMLAttributes,
   ReactNode,
+  forwardRef,
   useState,
 } from 'react';
 
@@ -23,6 +23,10 @@ export type FlagProps = Omit<
   placeholder?: ReactNode | ((options: { type: FallbackType }) => ReactNode);
 };
 
+const languageToCountryCode = {
+  en: 'us',
+};
+
 export const Flag = forwardRef<HTMLImageElement, FlagProps>(function Flag(
   { countryCode, placeholder, width = 20, height = 15, ...rest },
   ref
@@ -34,7 +38,7 @@ export const Flag = forwardRef<HTMLImageElement, FlagProps>(function Flag(
     <>
       <img
         ref={ref}
-        src={`https://flagicons.lipis.dev/flags/4x3/${countryCode}.svg`}
+        src={`https://flagicons.lipis.dev/flags/4x3/${languageToCountryCode[countryCode] ?? countryCode}.svg`}
         width={width}
         height={height}
         style={{

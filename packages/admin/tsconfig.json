@@ -20,7 +20,7 @@
       "@events": ["./events"],
       "@hooks/*": ["./hooks/*"],
       "@logger": ["./logger"],
-      "@layouts": ["./layouts"]
+      "@layouts/*": ["./layouts/*"]
     },
     "jsx": "preserve"
   },

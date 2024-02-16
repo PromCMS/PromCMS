@@ -1,4 +1,4 @@
-import { Select, SelectItem } from '@mantine/core';
+import { ComboboxItem, Select } from '@mantine/core';
 import { upperFirst } from '@mantine/hooks';
 import { FC, useMemo } from 'react';
 import { Controller } from 'react-hook-form';
@@ -21,7 +21,7 @@ export const EnumSelect: FC<EnumSelectProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const enumValues = useMemo<SelectItem[]>(
+  const enumValues = useMemo<ComboboxItem[]>(
     () =>
       Object.values(enumOptions.values).map((enumKey) => ({
         value: enumKey,
@@ -42,7 +42,7 @@ export const EnumSelect: FC<EnumSelectProps> = ({
           onChange={onChange}
           className="w-full"
           placeholder={t('Select an option')}
-          shadow="xl"
+          comboboxProps={{ shadow: 'xl' }}
           error={error}
           disabled={disabled}
         />

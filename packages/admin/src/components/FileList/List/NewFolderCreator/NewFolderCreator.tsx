@@ -54,11 +54,11 @@ export const NewFolderCreator: FC<{ styles: any }> = ({ styles = {} }) => {
       style={styles}
     >
       <div className={clsx(classNames.itemSquare(false), 'flex')}>
-        <FolderPlus className="m-auto h-28 w-28 text-blue-500" />
+        <FolderPlus className="m-auto h-16 w-16 text-blue-500" />
       </div>
       <form onSubmit={handleSubmit(onSubmit)} className="relative">
         <input
-          className="mt-1 w-full !border-b-4 !border-blue-500 bg-transparent text-lg font-medium outline-0 disabled:opacity-50"
+          className="mt-1 w-full !border-b-2 !border-blue-200 bg-transparent text-lg font-medium outline-0 disabled:opacity-50"
           disabled={formState.isSubmitting || formState.isSubmitSuccessful}
           autoComplete="off"
           {...register('name', { onBlur })}

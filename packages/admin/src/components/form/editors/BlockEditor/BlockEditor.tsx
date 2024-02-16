@@ -1,5 +1,3 @@
-import Dropcursor from '@tiptap/extension-dropcursor';
-import Gapcursor from '@tiptap/extension-gapcursor';
 import {
   EditorOptions,
   EditorProvider,

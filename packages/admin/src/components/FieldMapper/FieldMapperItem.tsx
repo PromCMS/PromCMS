@@ -8,9 +8,8 @@ import {
   Input,
   TextInput,
   Textarea,
-  clsx,
 } from '@mantine/core';
-import { useEntryUnderpageContext } from '@pages/entry-types/[modelId]/entries/_context';
+import clsx from 'clsx';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
@@ -18,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ColumnType, FieldPlacements } from '@prom-cms/schema';
 
+import { useEntryUnderpageContext } from '../../routes/_authorized/entities/$modelId/$entryId/-context';
 import { EnumSelect, RelationshipItemSelect } from './fields';
 import { BigImagePicker } from './fields/BigImagePicker';
 import { Email } from './fields/Email';
@@ -49,7 +49,7 @@ export const FieldMapperItem: FC<
             <input
               className={clsx(
                 clsx(
-                  'w-full !border-b-2 border-project-border bg-transparent pb-2 text-5xl font-bold outline-none duration-200',
+                  'w-full !border-b-2 border-project-border dark:border-blue-200 bg-transparent pb-2 text-5xl font-bold outline-none duration-200 dark:text-white',
                   errorMessage ? 'border-red-500' : 'focus:border-blue-500'
                 )
               )}

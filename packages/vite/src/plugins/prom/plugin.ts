@@ -1,7 +1,9 @@
+import bodyParser from 'body-parser';
 import { watch } from 'chokidar';
+import formidable from 'formidable';
 import fs from 'fs-extra';
 import mime from 'mime';
-import fetch, { RequestInit } from 'node-fetch';
+import fetch, { File, FormData, RequestInit } from 'node-fetch';
 import path from 'path';
 import type { Logger, Plugin } from 'vite';
 
@@ -152,6 +154,55 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
         });
       }
 
+      server.middlewares.use(bodyParser.json());
+      server.middlewares.use(async (request, response, next) => {
+        if (
+          request.method !== 'GET' &&
+          request.method !== 'HEAD' &&
+          request.headers['content-type']?.includes('multipart/')
+        ) {
+          // parse a file upload
+          const form = formidable({});
+
+          const [fields, files] = await form.parse(request);
+
+          const formData = new FormData();
+          for (const [fieldName, fieldValues] of Object.entries(fields)) {
+            if (!fieldValues) {
+              continue;
+            }
+
+            for (const fieldValue of fieldValues) {
+              formData[fieldValues.length === 1 ? 'set' : 'append'](
+                fieldName,
+                fieldValue
+              );
+            }
+          }
+
+          for (const [fileName, uploadedFiles] of Object.entries(files)) {
+            if (!uploadedFiles) {
+              continue;
+            }
+
+            for (const uploadedFile of uploadedFiles) {
+              const file = await fs.readFile(uploadedFile.filepath);
+
+              formData[uploadedFiles.length === 1 ? 'set' : 'append'](
+                fileName,
+                new File([file], uploadedFile.originalFilename ?? '', {
+                  type: uploadedFile.mimetype ?? undefined,
+                })
+              );
+            }
+          }
+
+          // @ts-ignore
+          request.body = formData;
+        }
+        next();
+      });
+
       server.middlewares.use(async (clientRequest, res, next) => {
         // Take care of admin assets only for PromCMS instances
         if (
@@ -213,23 +264,20 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
               clientRequest.method !== 'GET' &&
               clientRequest.method !== 'HEAD'
             ) {
-              requestInit.body = await new Promise<string>(
-                (resolve, reject) => {
-                  let body = '';
-                  clientRequest.on('data', (chunk) => {
-                    body += chunk;
-                  });
-                  clientRequest.on('end', () => {
-                    resolve(body);
-                  });
-                  clientRequest.on('error', () => {
-                    reject();
-                  });
-                  // clientRequest.on('close', () => {
-                  //   resolve(body);
-                  // });
-                }
-              );
+              requestInit.body =
+                // @ts-ignore
+                clientRequest.body instanceof FormData
+                  ? // @ts-ignore
+                    clientRequest.body
+                  : // @ts-ignore
+                    JSON.stringify(clientRequest.body);
+
+              const headers = requestInit.headers! as Headers;
+              if (
+                headers.get('content-type')?.includes('multipart/form-data')
+              ) {
+                headers.delete('content-type');
+              }
             }
 
             const phpServerResult = await fetch(

@@ -27,7 +27,12 @@ export const BlockTypeButton = forwardRef<
     },
     ref
   ) => (
-    <Tooltip disabled={disabled} label={label} withArrow transition="scale">
+    <Tooltip
+      disabled={disabled}
+      label={label}
+      withArrow
+      transitionProps={{ transition: 'pop-top-left' }}
+    >
       <ActionIcon
         ref={ref}
         variant="filled"

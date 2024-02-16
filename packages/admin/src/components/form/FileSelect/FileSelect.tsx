@@ -83,7 +83,7 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
               <div
                 className={clsx(
                   'relative mt-3 mb-5 overflow-hidden rounded-lg',
-                  multiple ? 'border-2 border-gray-100' : ''
+                  multiple ? 'border-2 border-blue-100' : ''
                 )}
               >
                 {multiple ? (
@@ -94,8 +94,9 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
               </div>
 
               <Button
-                color="ghost"
-                leftIcon={<Pencil size={20} />}
+                color="blue"
+                variant="light"
+                leftSection={<Pencil size={20} />}
                 size="md"
                 onClick={() => togglePickerOpen()}
               >

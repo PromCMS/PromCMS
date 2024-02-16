@@ -9,7 +9,7 @@ export const AsideWrapper: FC<PropsWithChildren<{ isOpen: boolean }>> = ({
   <Transition
     show={isOpen}
     as="aside"
-    className="sticky top-0 z-10 overflow-hidden flex-none"
+    className="overflow-hidden flex-none"
     enter="duration-300"
     enterFrom="opacity-0 scale-75 w-0"
     enterTo="opacity-100 scale-100 w-[calc(400px+1.5rem)]"
@@ -17,7 +17,9 @@ export const AsideWrapper: FC<PropsWithChildren<{ isOpen: boolean }>> = ({
     leaveFrom="opacity-100 scale-100 w-[calc(400px+1.5rem)]"
     leaveTo="opacity-0 scale-75 w-0"
   >
-    <div className={clsx('flex h-full w-[400px] flex-col gap-5 mt-5 mx-3')}>
+    <div
+      className={clsx('flex h-full lg:w-[300px] xl:w-[400px] flex-col gap-3')}
+    >
       {children}
     </div>
   </Transition>
