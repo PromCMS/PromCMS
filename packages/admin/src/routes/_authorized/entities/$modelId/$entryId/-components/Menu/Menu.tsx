@@ -99,7 +99,8 @@ export const Menu: FC = () => {
   const { watch } = useFormContext();
   const formValues = watch();
   const { t } = useTranslation();
-  const { itemData, currentView } = useEntryUnderpageContext();
+  const { itemData, currentView, setLanguage, language } =
+    useEntryUnderpageContext();
   const currentModel = useCurrentModel();
   const settings = useSettings();
   const { setValue, formState } = useFormContext();
@@ -196,8 +197,9 @@ export const Menu: FC = () => {
         >
           {saveButtonText}
         </Button>
-        {(settings.application?.i18n.languages.length ?? 0) > 1 ? (
-          <LanguageMutation />
+        {(settings.application?.i18n.languages.length ?? 0) > 1 &&
+        currentView === 'update' ? (
+          <LanguageMutation language={language ?? ''} onSelect={setLanguage} />
         ) : null}
         <MoreOptions />
       </div>

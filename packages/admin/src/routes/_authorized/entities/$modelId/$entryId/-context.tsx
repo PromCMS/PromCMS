@@ -115,6 +115,14 @@ export const EntryUnderpageContextProvider: FC<{
     return itemData;
   }, [itemData, viewType]);
 
+  useEffect(() => {
+    if (viewType === 'update' && itemData) {
+      formMethods.reset(
+        constructDefaultFormValues(currentModel, itemData ?? {})
+      );
+    }
+  }, [itemData, viewType, formMethods.reset, currentModel]);
+
   const onSubmit = useCallback(
     async (values) => {
       const modelName = (currentModel as NonNullable<typeof currentModel>).name;
