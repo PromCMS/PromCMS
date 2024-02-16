@@ -51,7 +51,7 @@ describe('commands', () => {
           ignore: ['node_modules/**', 'vendor/**', 'public/admin/assets/**'],
         });
 
-        expect(createdFiles).to.include('package-lock.json');
+        expect(createdFiles).to.include('pnpm-lock.yaml');
         expect(createdFiles).to.include('composer.lock');
 
         for (const filePath of createdFiles
@@ -59,7 +59,7 @@ describe('commands', () => {
           .filter((filePath) => !fs.lstatSync(filePath).isDirectory())) {
           if (
             filePath.includes('composer.lock') ||
-            filePath.includes('package-lock.json')
+            filePath.includes('pnpm-lock.yaml')
           ) {
             continue;
           }
