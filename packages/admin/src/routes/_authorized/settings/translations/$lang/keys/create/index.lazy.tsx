@@ -2,7 +2,7 @@ import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { MESSAGES } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
-import { Button, Modal, TextInput, Title } from '@mantine/core';
+import { Button, Modal, TextInput } from '@mantine/core';
 import {
   createLazyFileRoute,
   useNavigate,

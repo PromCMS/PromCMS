@@ -1,9 +1,12 @@
 import { apiClient } from '@api';
-import { TableView } from '@components/TableView';
+import { TableView, TableViewCol } from '@components/TableView';
+import { UnauthorizedPageContent } from '@components/UnauthorizedPageContent';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
+import { useAuth } from '@contexts/AuthContext';
 import { PageLayout } from '@layouts/PageLayout';
 import { Button } from '@mantine/core';
 import { createLazyFileRoute } from '@tanstack/react-router';
+import { canUser } from '@utils';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useModelItems } from 'hooks/useModelItems';
 import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
@@ -17,8 +20,43 @@ import { FieldPlacements } from '@prom-cms/schema';
 import { Drawer } from './-components/Drawer';
 
 export const Route = createLazyFileRoute('/_authorized/settings/system/')({
-  component: Page,
+  component: () => {
+    const { user } = useAuth();
+
+    if (
+      !user ||
+      !canUser({
+        userRole: user.role,
+        action: 'read',
+        targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
+      })
+    ) {
+      return <UnauthorizedPageContent />;
+    }
+
+    return <Page />;
+  },
 });
+
+const columns: TableViewCol[] = [
+  {
+    type: 'string',
+    admin: {
+      editor: { placement: FieldPlacements.MAIN, width: 12 },
+      fieldType: 'normal',
+      isHidden: false,
+    },
+    fieldName: 'name',
+    hide: false,
+    localized: false,
+    name: 'jmeno',
+    primaryString: false,
+    readonly: false,
+    required: true,
+    title: 'dsafasd',
+    unique: false,
+  },
+];
 
 function Page() {
   const { t } = useTranslation();
@@ -110,25 +148,7 @@ function Page() {
           items={data?.data ?? []}
           onDeleteAction={currentUserCanDelete ? onDeleteClick : undefined}
           onEditAction={currentUserCanEdit ? onEditClick : undefined}
-          columns={[
-            {
-              type: 'string',
-              admin: {
-                editor: { placement: FieldPlacements.MAIN, width: 12 },
-                fieldType: 'normal',
-                isHidden: false,
-              },
-              fieldName: 'name',
-              hide: false,
-              localized: false,
-              name: 'jmeno',
-              primaryString: false,
-              readonly: false,
-              required: true,
-              title: 'dsafasd',
-              unique: false,
-            },
-          ]}
+          columns={columns}
         />
       </PageLayout.Content>
     </PageLayout>

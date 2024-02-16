@@ -1,1 +1,1 @@
-export const EntityDuplicateErrorCode = 900409;
+export const EntityDuplicateErrorCode = 23000;

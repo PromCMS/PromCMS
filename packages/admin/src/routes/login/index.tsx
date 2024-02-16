@@ -30,7 +30,6 @@ import logoImage from '../../assets/logos/logo.svg';
 export const Route = createFileRoute('/login/')({
   component: LoginPage,
   beforeLoad({ context }) {
-    console.log({ context });
     if (context.auth?.user) {
       throw redirect({
         to: '/',

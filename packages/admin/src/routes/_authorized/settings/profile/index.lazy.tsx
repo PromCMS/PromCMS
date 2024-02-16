@@ -5,10 +5,11 @@ import { refetchAuthContextData, useAuth } from '@contexts/AuthContext';
 import { PageLayout } from '@layouts/PageLayout';
 import { ActionIcon, Button, Divider, TextInput, Tooltip } from '@mantine/core';
 import { showNotification, updateNotification } from '@mantine/notifications';
-import { Link, createLazyFileRoute, useNavigate } from '@tanstack/react-router';
+import { Link, createLazyFileRoute } from '@tanstack/react-router';
+import { Outlet } from '@tanstack/react-router';
 import { getInitials, getObjectDiff } from '@utils';
 import clsx from 'clsx';
-import { DetailedHTMLProps, FC, HTMLAttributes, useMemo } from 'react';
+import { FC, useMemo } from 'react';
 import { Controller, FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Lock } from 'tabler-icons-react';
@@ -32,7 +33,9 @@ const AvatarSelect: FC = () => {
         return (
           <ImageSelect
             label={t('Avatar')}
-            selected={'id' in value ? value.id : value}
+            selected={
+              typeof value === 'object' && 'id' in value ? value.id : value
+            }
             multiple={false}
             onChange={(nextValue) => nextValue && onChange(nextValue)}
             onBlur={onBlur}
@@ -164,6 +167,7 @@ function Page() {
           </form>
         </FormProvider>
       </PageLayout.Content>
+      <Outlet />
     </PageLayout>
   );
 }

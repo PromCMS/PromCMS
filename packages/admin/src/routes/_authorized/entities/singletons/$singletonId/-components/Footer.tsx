@@ -12,7 +12,7 @@ import { Dots, Trash } from 'tabler-icons-react';
 import { useSingletonPageContext } from '../-context';
 
 const MoreOptions: FC = () => {
-  const { formState } = useFormContext();
+  const { formState, reset } = useFormContext();
   const { t } = useTranslation();
   const { clear } = useSingletonPageContext();
   const [hideTooltip, setHideTooltip] = useState(false);
@@ -20,6 +20,7 @@ const MoreOptions: FC = () => {
   const onItemDeleteRequest = async () => {
     if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
       await clear();
+      reset();
     }
   };
 

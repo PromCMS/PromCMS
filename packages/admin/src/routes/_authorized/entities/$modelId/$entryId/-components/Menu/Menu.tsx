@@ -1,5 +1,6 @@
 import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
+import { useSettings } from '@contexts/SettingsContext';
 import {
   ActionIcon,
   Button,
@@ -13,10 +14,11 @@ import { useMemo, useState } from 'react';
 import { FC } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Dots, Trash, World } from 'tabler-icons-react';
+import { Dots, Trash } from 'tabler-icons-react';
 
 import { useEntryUnderpageContext } from '../../-context';
 import useCurrentModel from '../../../-useCurrentModel';
+import { LanguageMutation } from './LanguageMutation';
 
 const MoreOptions: FC = () => {
   const { formState } = useFormContext();
@@ -99,6 +101,7 @@ export const Menu: FC = () => {
   const { t } = useTranslation();
   const { itemData, currentView } = useEntryUnderpageContext();
   const currentModel = useCurrentModel();
+  const settings = useSettings();
   const { setValue, formState } = useFormContext();
 
   const isEdited = useMemo(
@@ -193,29 +196,9 @@ export const Menu: FC = () => {
         >
           {saveButtonText}
         </Button>
-        <Tooltip
-          withArrow
-          label={t(MESSAGES.LOCALIZE)}
-          position="bottom"
-          color="gray"
-        >
-          <ActionIcon
-            size="xl"
-            type="button"
-            loading={formState.isSubmitting}
-            color="blue"
-            variant="light"
-            styles={{
-              root: {
-                width: 50,
-                height: 50,
-              },
-            }}
-            className={clsx(formState.isSubmitting && '!cursor-progress')}
-          >
-            <World className="aspect-square w-10" />
-          </ActionIcon>
-        </Tooltip>
+        {(settings.application?.i18n.languages.length ?? 0) > 1 ? (
+          <LanguageMutation />
+        ) : null}
         <MoreOptions />
       </div>
     </nav>

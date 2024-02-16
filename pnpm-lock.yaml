@@ -102,8 +102,8 @@ importers:
         specifier: ~4.2.1
         version: 4.2.3(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-router':
-        specifier: ^1.15.19
-        version: 1.15.19(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^1.16.2
+        version: 1.16.2(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/router-devtools':
         specifier: ^1.15.21
         version: 1.15.21(react-dom@18.2.0)(react@18.2.0)
@@ -3182,8 +3182,8 @@ packages:
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
-  /@tanstack/react-router@1.15.19(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-oZq+7WYz8cQq0Mdpb7Y/4SAXI4djpQiA8D2ZIl3XjDmYfi7twFZdjjnAL8V1P/DURss3QjZ8PK//AAnr+fcT4w==}
+  /@tanstack/react-router@1.15.21(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-iB+DT6naiBEJA1eMZQ9nf3G7OONXwCBvbRhSV50e2NOCXe2in+6U8tEg+o4uWZxxcuefIrwmyBdkiAodqGElvA==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16'
@@ -3197,8 +3197,8 @@ packages:
       tiny-warning: 1.0.3
     dev: false
 
-  /@tanstack/react-router@1.15.21(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-iB+DT6naiBEJA1eMZQ9nf3G7OONXwCBvbRhSV50e2NOCXe2in+6U8tEg+o4uWZxxcuefIrwmyBdkiAodqGElvA==}
+  /@tanstack/react-router@1.16.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-GgAxcs3JQjpC/nQd81S9MQ2wC9aPEw+fBt0n1VwYl/vW571OpU4HfRawu/OT4piHcV9/VS5oAUoZlwtApI0hLw==}
     engines: {node: '>=12'}
     peerDependencies:
       react: '>=16'

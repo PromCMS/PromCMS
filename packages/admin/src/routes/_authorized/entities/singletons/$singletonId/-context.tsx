@@ -115,7 +115,9 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
       if (
         axios.isAxiosError(e) &&
         isApiResponse(e.response) &&
-        e.response?.data?.code === EntityDuplicateErrorCode
+        e.response.headers['content-description']?.includes(
+          String(EntityDuplicateErrorCode)
+        )
       ) {
         // TODO: add types
         const fieldNames = e.response.data.data;
