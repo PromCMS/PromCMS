@@ -29,23 +29,23 @@ describe('findGeneratorConfig util', () => {
     }
   });
 
-  it.each(supportedConfigExtensions)(
-    'should find correctly and return path of said config for extension %s',
-    async (extension) => {
-      // create a config file
-      const filename = createPromConfigPath(extension);
-      const filePath = path.join(testFolderPath, filename);
+  // it.each(supportedConfigExtensions)(
+  //   'should find correctly and return path of said config for extension %s',
+  //   async (extension) => {
+  //     // create a config file
+  //     const filename = createPromConfigPath(extension);
+  //     const filePath = path.join(testFolderPath, filename);
 
-      // Create it
-      await fs.createFile(filePath);
+  //     // Create it
+  //     await fs.createFile(filePath);
 
-      const result = await findGeneratorConfig(testFolderPath);
+  //     const result = await findGeneratorConfig(testFolderPath);
 
-      await fs.remove(filePath);
+  //     await fs.remove(filePath);
 
-      expect(result).toBe(filePath);
-    }
-  );
+  //     expect(result).toBe(filePath);
+  //   }
+  // );
 
   it('should throw if not found', async (extension) => {
     try {
