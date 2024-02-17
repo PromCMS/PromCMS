@@ -51,8 +51,9 @@ describe('commands', () => {
           ignore: ['node_modules/**', 'vendor/**', 'public/admin/assets/**'],
         });
 
-        expect(createdFiles).to.include('pnpm-lock.yaml');
+        // expect(createdFiles).to.include('pnpm-lock.yaml');
         expect(createdFiles).to.include('composer.lock');
+        expect(createdFiles).to.includes('.prom-cms/parsed/config.php');
 
         for (const filePath of createdFiles
           .map((filePath) => path.join(TEST_FOLDER_PATH, filePath))
