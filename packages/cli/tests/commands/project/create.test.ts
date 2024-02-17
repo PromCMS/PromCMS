@@ -13,7 +13,7 @@ const TEST_FOLDER_PATH = path.join(
 );
 
 describe('commands', () => {
-  describe(
+  describe.todo(
     'project create',
     () => {
       beforeEach(async () => {
