@@ -1,5 +1,14 @@
 # @prom-cms/cli
 
+## 0.22.13
+
+### Patch Changes
+
+- 5a6b565: Fixes packages for new projects, and vite.config.ts file
+- Updated dependencies [07318be]
+- Updated dependencies [07318be]
+  - @prom-cms/admin@0.19.0
+
 ## 0.22.12
 
 ### Patch Changes
