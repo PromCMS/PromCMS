@@ -1,11 +1,5 @@
 # @prom-cms/api-client
 
-## 0.12.0
-
-### Minor Changes
-
-- 07318be: Adds new method `me` for getting current logged in user
-
 ## 0.11.1
 
 ### Patch Changes
