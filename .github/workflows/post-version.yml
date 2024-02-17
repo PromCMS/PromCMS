@@ -1,0 +1,49 @@
+name: Post Version Updates
+
+on:
+  push:
+    branches:
+      - 'changeset-release/**'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    steps:
+      - uses: n1hility/cancel-previous-runs@v3
+        with: 
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workflow: post-version.yml
+          
+      - uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - uses: actions/cache@v2
+        name: Cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Update lockfile after version
+        run: pnpm i --frozen-lockfile=false
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Adds updated lockfile
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          add: 'pnpm-lock.yaml'

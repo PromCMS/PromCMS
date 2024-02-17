@@ -20,8 +20,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: version-and-release.yml
           
-      - uses: stefanzweifel/git-auto-commit-action@v5
-
       - name: Checkout Repo
         # https://github.com/actions/checkout
         uses: actions/checkout@v2
@@ -54,9 +52,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-      
-      - name: Update lockfile after version
-        run: pnpm i --frozen-lockfile=false
 
       - name: Create JSON schema and upload
         run: node .github/scripts/generate-schema-and-upload.mjs
