@@ -1,17 +1,5 @@
 # @prom-cms/admin
 
-## 0.19.0
-
-### Minor Changes
-
-- 07318be: BREAKING: Updates mantine to latest and updates styles.
-- 07318be: BREAKING: Change router from react router to tanstack router
-
-### Patch Changes
-
-- Updated dependencies [07318be]
-  - @prom-cms/api-client@0.12.0
-
 ## 0.18.1
 
 ### Patch Changes
