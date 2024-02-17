@@ -24,7 +24,8 @@ export type FlagProps = Omit<
 };
 
 const languageToCountryCode = {
-  en: 'us',
+  en: 'gb',
+  cs: 'cz',
 };
 
 export const Flag = forwardRef<HTMLImageElement, FlagProps>(function Flag(

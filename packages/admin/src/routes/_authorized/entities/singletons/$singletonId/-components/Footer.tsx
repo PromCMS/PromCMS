@@ -1,4 +1,5 @@
 import { MESSAGES } from '@constants';
+import { useSettings } from '@contexts/SettingsContext';
 import { ActionIcon, Button, Menu, Paper, Tooltip } from '@mantine/core';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
@@ -10,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Dots, Trash } from 'tabler-icons-react';
 
 import { useSingletonPageContext } from '../-context';
+import { LanguageMutation } from '../../../$modelId/$entryId/-components/Menu/LanguageMutation';
 
 const MoreOptions: FC = () => {
   const { formState, reset } = useFormContext();
@@ -78,8 +80,9 @@ export const Footer: FC<{}> = () => {
   const { watch } = useFormContext();
   const formValues = watch();
   const { t } = useTranslation();
-  const { data } = useSingletonPageContext();
+  const { data, setLanguage, language } = useSingletonPageContext();
   const currentModel = useCurrentSingleton();
+  const settings = useSettings();
   const { setValue, formState } = useFormContext();
 
   const isEdited = useMemo(
@@ -152,6 +155,9 @@ export const Footer: FC<{}> = () => {
       >
         {saveButtonText}
       </Button>
+      {(settings.application?.i18n.languages.length ?? 0) > 1 ? (
+        <LanguageMutation language={language ?? ''} onSelect={setLanguage} />
+      ) : null}
       <MoreOptions />
     </nav>
   );

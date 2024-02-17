@@ -16,25 +16,23 @@ import { useFormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Check, World } from 'tabler-icons-react';
 
-import { useEntryUnderpageContext } from '../../-context';
-
 const languageTitles = {
   cs: 'Czech',
   en: 'English',
   fr: 'Francais',
   de: 'German',
 };
-const languageCodeToFlagCode = {
-  en: 'gb',
-  cs: 'cz',
-};
 
-export const LanguageMutation: FC = () => {
+export const LanguageMutation: FC<{
+  language: string;
+  onSelect: (language: string) => void;
+}> = ({ language, onSelect }) => {
   const formState = useFormState();
   const { t } = useTranslation();
   const settings = useSettings();
-  const { setLanguage, language } = useEntryUnderpageContext();
   const [opened, setOpened] = useState(false);
+
+  const onToggleOpen = () => setOpened((o) => !o);
 
   const formattedLanguages = useMemo<ComboboxItem[] | undefined>(() => {
     if (!settings) {
@@ -87,7 +85,7 @@ export const LanguageMutation: FC = () => {
               },
             }}
             className={clsx(formState.isSubmitting && '!cursor-progress')}
-            onClick={() => setOpened((o) => !o)}
+            onClick={onToggleOpen}
           >
             {language === settings.application?.i18n.default || !language ? (
               <World className="aspect-square w-10" />
@@ -109,7 +107,10 @@ export const LanguageMutation: FC = () => {
                 ) : null
               }
               variant="white"
-              onClick={() => setLanguage(item.value)}
+              onClick={() => {
+                onSelect(item.value);
+                onToggleOpen();
+              }}
               classNames={{
                 label: 'mr-auto',
               }}
