@@ -1,5 +1,18 @@
 # @prom-cms/admin
 
+## 0.19.0
+
+### Minor Changes
+
+- 59ffb7a: BREAKING: Updates mantine to latest and updates styles.
+- 59ffb7a: BREAKING: Change router from react router to tanstack router
+
+### Patch Changes
+
+- 323e944: Fixes changing of language where data were fetched but form did not update state after data is fetched
+- Updated dependencies [59ffb7a]
+  - @prom-cms/api-client@0.12.0
+
 ## 0.18.1
 
 ### Patch Changes
