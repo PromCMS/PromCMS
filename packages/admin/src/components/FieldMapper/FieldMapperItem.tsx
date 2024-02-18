@@ -163,7 +163,7 @@ export const FieldMapperItem: FC<
               render={({ field: { onChange, value } }) => (
                 <ImageSelect
                   onChange={onChange}
-                  selected={value ? String(value) : null}
+                  selected={value ? value : null}
                   error={errorMessage}
                   label={values.title}
                   disabled={disabled}
@@ -179,7 +179,9 @@ export const FieldMapperItem: FC<
               render={({ field: { onChange, value } }) => (
                 <FileSelect
                   onChange={onChange}
-                  selected={value ? String(value) : null}
+                  selected={
+                    typeof value === 'object' && 'id' in value ? value : null
+                  }
                   error={errorMessage}
                   label={values.title}
                   disabled={disabled}

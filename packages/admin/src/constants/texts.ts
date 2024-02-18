@@ -45,6 +45,7 @@ export const MESSAGES = {
   ...EDITOR_MESSAGES,
   ...PROM_TABLES,
   MORE_OPTIONS_BUTTON_TEXT: 'More options',
+  SELECT_EXISTING: 'Select existing',
   ADMIN_PANEL: 'Admin panel',
   OPENING_HOURS_OPEN: 'Open',
   NO_ITEMS_YET_PLACEHOLDER: 'No items yet...',

@@ -1,4 +1,4 @@
-import { ResultItem } from './ResultItem';
+import { Entity } from './Entity';
 import { Settings } from './Settings';
 
-export type SettingsItem = ResultItem & Settings;
+export type SettingsItem = Entity & Settings;

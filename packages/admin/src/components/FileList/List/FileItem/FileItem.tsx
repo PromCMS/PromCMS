@@ -54,15 +54,13 @@ export const FileItem: FC<FileItemProps> = ({
     onDeleteClick(fileInfo.id);
 
     if (onTogglePick) {
-      onTogglePick(fileInfo.id, false);
+      onTogglePick(fileInfo, false);
     }
   }, [fileInfo.id, onDeleteClick, onTogglePick]);
 
   const handlePick = useCallback<ChangeEventHandler<HTMLInputElement>>(
     (event) =>
-      onTogglePick
-        ? onTogglePick(fileInfo.id, event.currentTarget.checked)
-        : null,
+      onTogglePick ? onTogglePick(fileInfo, event.currentTarget.checked) : null,
     [fileInfo.id, onTogglePick]
   );
 

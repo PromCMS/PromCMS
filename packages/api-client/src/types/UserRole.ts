@@ -1,7 +1,7 @@
 import { ProjectSecurityRole } from '@prom-cms/schema';
 
 export type UserRole = {
-  id: string;
+  id: UserRole['slug'];
   /**
    * @deprecated
    */

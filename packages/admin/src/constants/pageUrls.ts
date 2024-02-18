@@ -1,4 +1,4 @@
-import { ItemID } from '@prom-cms/api-client';
+import { ItemID, UserRole } from '@prom-cms/api-client';
 
 export const pageUrls = {
   users: {
@@ -42,10 +42,10 @@ export const pageUrls = {
     get create() {
       return `${this.list}/create`;
     },
-    view(id: ItemID) {
+    view(id: ItemID | string) {
       return `${this.list}/${id}`;
     },
-    duplicate(id: ItemID) {
+    duplicate(id: ItemID | string) {
       return `${this.list}/${id}/duplicate`;
     },
   }),

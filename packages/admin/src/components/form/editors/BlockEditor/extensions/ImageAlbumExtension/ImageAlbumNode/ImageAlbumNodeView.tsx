@@ -43,24 +43,20 @@ export const ImageAlbumNodeView: FC<
   const [pickerOpen, togglePickerOpen] = useToggle();
   const pickedImages = props.node.attrs.images;
   const numberOfColumns = props.node.attrs.numberOfColumns;
-  const pickedImagesAsIds = useMemo(
-    () => pickedImages?.map(({ id }) => String(id)) || [],
-    [pickedImages]
-  );
 
   const handleImagesChange = useCallback<FilePickerProps['onChange']>(
     (items) => {
       const newImagesState: typeof pickedImages = [];
 
       if (items) {
-        for (const itemId of items) {
+        for (const item of items) {
           const existingItem = pickedImages.find(
-            ({ id }) => itemId === String(id)
+            ({ id }) => item.id === Number(id)
           );
 
           newImagesState.push(
             existingItem || {
-              id: itemId,
+              id: item.id,
             }
           );
         }
@@ -145,7 +141,7 @@ export const ImageAlbumNodeView: FC<
           fileQueryParameters={{
             where: { mimeType: { manipulator: 'LIKE', value: '%image%' } },
           }}
-          value={pickedImagesAsIds}
+          value={pickedImages}
           onChange={handleImagesChange}
           onClose={togglePickerOpen}
           isOpen={pickerOpen}

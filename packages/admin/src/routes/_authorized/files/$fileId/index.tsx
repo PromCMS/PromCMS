@@ -4,7 +4,7 @@ import { createFileRoute } from '@tanstack/react-router';
 export const Route = createFileRoute('/_authorized/files/$fileId/')({
   async loader({ params }) {
     return apiClient.library.files
-      .getOne(params.fileId)
+      .getOne(Number(params.fileId))
       .then(({ data }) => data.data);
   },
 });

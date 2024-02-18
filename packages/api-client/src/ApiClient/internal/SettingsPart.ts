@@ -7,7 +7,6 @@ import {
   ResultItem,
   RichAxiosRequestConfig,
   SettingsItem,
-  User,
 } from '../../types';
 import { EntryByTableNamePart } from './EntryByTableNamePart';
 

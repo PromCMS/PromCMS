@@ -48,6 +48,19 @@ export const theme: MantineThemeOverride = {
         option: 'dark:text-gray-800',
       },
     },
+    Drawer: {
+      defaultProps: {
+        offset: 8,
+        radius: 'md',
+      },
+    },
+    Overlay: {
+      defaultProps: {
+        blur: 4,
+        backgroundOpacity: 0.5,
+      },
+    },
+
     Modal: {
       defaultProps: {
         size: 'lg',

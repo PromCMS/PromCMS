@@ -12,8 +12,9 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil } from 'tabler-icons-react';
+import { EntityLink } from 'types/EntityLink';
 
-import { ItemID } from '@prom-cms/api-client';
+import { FileItem } from '@prom-cms/api-client';
 
 import { FilePicker, FilePickerProps } from '../FilePicker';
 import { MultipleItemDisplay } from './MultipleItemDisplay';
@@ -30,8 +31,10 @@ export interface FileSelectProps
   touched?: boolean;
   multiple?: boolean;
   wrapperClassName?: string;
-  selected: ItemID | ItemID[] | undefined | null;
-  onChange: (newValue: ItemID | ItemID[] | null) => void;
+  selected: EntityLink<FileItem> | EntityLink<FileItem>[] | undefined | null;
+  onChange: (
+    newValue: EntityLink<FileItem> | EntityLink<FileItem>[] | null
+  ) => void;
   onBlur?: () => void;
 }
 
@@ -71,7 +74,7 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
       () =>
         (Array.isArray(selected) ? selected : [selected]).filter(
           Boolean
-        ) as string[],
+        ) as EntityLink<FileItem>[],
       [selected]
     );
 
@@ -89,7 +92,7 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
                 {multiple ? (
                   <MultipleItemDisplay pickedFiles={modalPickedFiles} />
                 ) : (
-                  <SingleItemDisplay pickedFileId={modalPickedFiles[0]} />
+                  <SingleItemDisplay pickedFile={modalPickedFiles[0]} />
                 )}
               </div>
 

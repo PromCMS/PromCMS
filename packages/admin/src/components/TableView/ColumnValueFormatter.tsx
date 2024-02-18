@@ -159,7 +159,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
         );
 
       case 'relationship':
-        if (column.value) {
+        if (column.value && !column.multiple) {
           return (
             <Suspense
               fallback={<Skeleton height="1.2rem" className="max-w-[100px]" />}

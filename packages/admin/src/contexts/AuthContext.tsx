@@ -9,7 +9,7 @@ import {
   useMemo,
 } from 'react';
 
-import { ItemID, User, UserRole } from '@prom-cms/api-client';
+import { User, UserRole } from '@prom-cms/api-client';
 
 import { queryClient } from '../queryClient';
 
@@ -38,7 +38,9 @@ const fetchLoggedInUser: QueryFunction<LoggedUser | null, string[]> = async ({
   }
 
   const currentUserRoleQuery = await apiClient.userRoles.getOne(
-    loggedInUser.role as ItemID
+    typeof loggedInUser.role === 'string'
+      ? loggedInUser.role
+      : loggedInUser.role.id
   );
 
   return {

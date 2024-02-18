@@ -66,7 +66,7 @@ export const Content: FC = () => {
 
   useEffect(() => {
     if (currentUser) {
-      reset(currentUser.data);
+      reset(currentUser);
     }
   }, [currentUser, reset]);
 

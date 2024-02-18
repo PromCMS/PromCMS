@@ -1,11 +1,13 @@
 import { FileList, FileListProps } from '@components/FileList';
 import { SlideOver } from '@components/SlideOver';
-import { FileItem } from '@prom-cms/api-client';
 import { FC, useCallback, useState } from 'react';
+import { EntityLink } from 'types/EntityLink';
+
+import { FileItem } from '@prom-cms/api-client';
 
 export interface FilePickerProps {
-  value: FileItem['id'][] | null;
-  onChange: (nextValues: FileItem['id'][] | null) => void;
+  value: EntityLink<FileItem>[] | null;
+  onChange: (nextValues: EntityLink<FileItem>[] | null) => void;
   closeOnPick?: boolean;
   title?: string;
   isOpen: boolean;
@@ -30,20 +32,20 @@ export const FilePicker: FC<FilePickerProps> = ({
   const onToggleSelectedFile = useCallback<
     NonNullable<FileListProps['onToggleSelectedFile']>
   >(
-    (fileId, shouldBeSelected) => {
-      let finalValue: null | string[] = null;
+    (file, shouldBeSelected) => {
+      let finalValue: FilePickerProps['value'] = null;
 
       if (shouldBeSelected) {
         const valueAsArray = value ?? [];
 
-        if (valueAsArray.includes(String(fileId))) {
+        if (valueAsArray.find((value) => value.id === file.id)) {
           finalValue = valueAsArray;
         } else {
-          finalValue = [...valueAsArray, String(fileId)];
+          finalValue = [...valueAsArray, { id: file.id }];
         }
       } else {
         const nextValue = Array.isArray(value)
-          ? value?.filter((currentId) => String(currentId) !== String(fileId))
+          ? value?.filter((currentId) => String(currentId) !== String(file.id))
           : null;
 
         value = nextValue?.length ? nextValue : null;

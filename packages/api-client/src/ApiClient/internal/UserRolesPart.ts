@@ -3,9 +3,7 @@ import { Axios } from 'axios';
 import {
   ItemID,
   Response,
-  ResultItem,
   RichAxiosRequestConfig,
-  User,
   UserRole,
 } from '../../types';
 import { ApiClientPart } from '../ApiClientPart';
@@ -17,8 +15,8 @@ export class UserRolesPart extends ApiClientPart {
     this.basePathname += `/entry-types/prom__user_roles`;
   }
 
-  getOne<T extends ResultItem = UserRole>(
-    id: ItemID,
+  getOne<T extends UserRole>(
+    id: UserRole['id'],
     config?: RichAxiosRequestConfig<T> | undefined
   ) {
     return this.request<Response<T>>({
@@ -28,7 +26,7 @@ export class UserRolesPart extends ApiClientPart {
     });
   }
 
-  getMany<T extends ResultItem = UserRole>(
+  getMany<T extends UserRole[]>(
     config?: RichAxiosRequestConfig<T> | undefined
   ) {
     return this.request<T>({

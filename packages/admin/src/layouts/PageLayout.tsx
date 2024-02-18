@@ -86,7 +86,7 @@ export const PageLayout: FC<PropsWithChildren<PageLayoutProps>> & {
   Content: typeof Content;
 } = ({ children, rightAsideOutlet, rightAsideClassName }) => {
   return (
-    <div className="flex flex-col gap-3 lg:gap-0 lg:flex-row min-h-screen bg-white sm:bg-transparent dark:bg-gray-800 sm:dark:bg-transparent dark:bg-opacity-60 sm:dark:bg-opacity-100 rounded-t-xl">
+    <div className="flex flex-col gap-3 lg:gap-0 lg:flex-row min-h-screen bg-white sm:bg-transparent dark:bg-gray-800 sm:dark:bg-transparent dark:bg-opacity-60 sm:dark:bg-opacity-100 rounded-t-xl h-full">
       <div
         className={clsx(
           'sm:bg-white sm:dark:bg-gray-800 sm:dark:bg-opacity-60 w-full rounded-bl-prom lg:rounded-bl-none sm:backdrop-blur-sm lg:rounded-tr-prom py-4 min-h-screen'

@@ -13,8 +13,9 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pencil, Photo } from 'tabler-icons-react';
+import { EntityLink } from 'types/EntityLink';
 
-import { ItemID } from '@prom-cms/api-client';
+import { FileItem } from '@prom-cms/api-client';
 
 import { FilePicker, FilePickerProps } from './FilePicker';
 
@@ -41,8 +42,10 @@ export interface ImageSelectProps
     quality?: number;
   };
   placeholderElement?: ReactNode;
-  selected: ItemID | ItemID[] | undefined | null;
-  onChange: (newValue: ItemID | ItemID[] | null) => void;
+  selected: EntityLink<FileItem> | EntityLink<FileItem>[] | undefined | null;
+  onChange: (
+    newValue: EntityLink<FileItem> | EntityLink<FileItem>[] | null
+  ) => void;
   onBlur?: () => void;
 }
 
@@ -87,7 +90,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
       () =>
         (Array.isArray(selected) ? selected : [selected]).filter(
           Boolean
-        ) as string[],
+        ) as EntityLink<FileItem>[],
       [selected]
     );
 
@@ -108,7 +111,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                   <BackendImage
                     width={imageProps?.width ?? 80}
                     quality={imageProps?.quality ?? 60}
-                    imageId={modalPickedFiles[0]}
+                    imageId={modalPickedFiles[0]?.id}
                     className="absolute h-full w-full object-contain object-center"
                   />
                 ) : (

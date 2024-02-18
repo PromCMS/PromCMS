@@ -5,6 +5,9 @@ import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 export const columnTypeRelationshipSchema = columnTypeBaseSchema.extend({
   type: z.enum(['relationship']),
 
+  mappedBy: z.string().optional(),
+  inversedBy: z.string().optional(),
+
   /**
    * Specify target model
    */

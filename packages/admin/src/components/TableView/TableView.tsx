@@ -30,13 +30,13 @@ import {
 import { Trans, useTranslation } from 'react-i18next';
 import { Copy, GripVertical, Pencil, Trash } from 'tabler-icons-react';
 
-import { ItemID, PagedResponse } from '@prom-cms/api-client';
+import { ItemID, PagedResponse, ResultItem } from '@prom-cms/api-client';
 import { ColumnType } from '@prom-cms/schema';
 
 import { ColumnValueFormatter } from './ColumnValueFormatter';
 import { useClassNames } from './useClassNames';
 
-export type TableViewItem = { id: string | number; [x: string]: any };
+export type TableViewItem = { id: ResultItem['id']; [x: string]: any };
 
 export type TableViewCol = ColumnType & {
   title: string;

@@ -154,7 +154,11 @@ export const getModelItemSchema = (
 
   const shape = columns
     .filter(
-      (column) => !column.hide && !column.admin.isHidden && !column.readonly
+      (column) =>
+        !column.hide &&
+        !column.admin.isHidden &&
+        !column.readonly &&
+        !(column.type === 'relationship' && column.multiple)
     )
     .reduce(
       (shape, column) => {
@@ -197,6 +201,11 @@ export const getModelItemSchema = (
             break;
           case 'email':
             columnShape = emailSchema;
+            break;
+          case 'relationship':
+            const linkType = z.object({ id: z.number() });
+            columnShape = linkType;
+
             break;
           case 'url':
             // TODO: Support domainless url (eg: /somethings/something)

@@ -28,7 +28,7 @@ export const useCurrentModelItem = (language?: string) => {
 
   return useModelItem(
     modelInfo?.name,
-    (entryId as string) || undefined,
+    entryId ? Number(entryId as string) : undefined,
     axiosConfig,
     useMemo(
       () => ({

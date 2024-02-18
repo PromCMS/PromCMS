@@ -3,18 +3,19 @@ import { Table } from '@mantine/core';
 import { useFileList } from 'hooks/useFileList';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import { EntityLink } from 'types/EntityLink';
 
-import { ItemID } from '@prom-cms/api-client';
+import { FileItem } from '@prom-cms/api-client';
 
-export const MultipleItemDisplay: FC<{ pickedFiles: ItemID[] }> = ({
-  pickedFiles,
-}) => {
+export const MultipleItemDisplay: FC<{
+  pickedFiles: EntityLink<FileItem>[];
+}> = ({ pickedFiles }) => {
   const { t } = useTranslation();
   const { data } = useFileList(
     {
       limit: 999,
       where: {
-        id: { value: pickedFiles, manipulator: 'IN' },
+        id: { value: pickedFiles.map(({ id }) => id), manipulator: 'IN' },
       },
     },
     {

@@ -1,1 +1,1 @@
-export type ItemID = number | string;
+export type ItemID = number;

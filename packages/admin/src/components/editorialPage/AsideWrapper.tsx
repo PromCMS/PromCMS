@@ -18,7 +18,7 @@ export const AsideWrapper: FC<PropsWithChildren<{ isOpen: boolean }>> = ({
     leaveTo="opacity-0 scale-75 w-0"
   >
     <div
-      className={clsx('flex h-full lg:w-[300px] xl:w-[400px] flex-col gap-3')}
+      className={clsx('flex h-full lg:w-[300px] xl:w-[350px] flex-col gap-3')}
     >
       {children}
     </div>

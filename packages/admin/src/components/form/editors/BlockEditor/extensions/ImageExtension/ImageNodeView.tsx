@@ -4,7 +4,7 @@ import { ActionButton } from '@components/form/editors/_extensions/ActionButton'
 import { ActionButtonDivider } from '@components/form/editors/_extensions/ActionButtonDivider';
 import { StaticBubbleMenu } from '@components/form/editors/_extensions/StaticBubbleMenu';
 import { SIMPLE_WORDS } from '@constants';
-import { Button, Paper, Popover, TextInput, Textarea } from '@mantine/core';
+import { Button, Popover, TextInput, Textarea } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
 import clsx from 'clsx';
@@ -29,7 +29,7 @@ export const ImageNodeView: FC<
   const { t } = useTranslation();
   const { fileId, metadata } = props.node.attrs;
 
-  const pickedFiles = useMemo(() => (fileId ? [String(fileId)] : []), [fileId]);
+  const pickedFiles = useMemo(() => (fileId ? [{ id: fileId }] : []), [fileId]);
   const handleMetadataChange = (
     metadataKey: keyof NonNullable<NodeAttrs['metadata']>,
     metadataValue: any
@@ -46,7 +46,7 @@ export const ImageNodeView: FC<
     (items) => {
       if (items) {
         props.updateAttributes({
-          fileId: items?.at(-1) || '',
+          fileId: items?.at(-1)?.id || '',
         });
       }
     },

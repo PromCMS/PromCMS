@@ -4,8 +4,9 @@ import { useFile } from '@hooks/useFile';
 import { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { QuestionMark } from 'tabler-icons-react';
+import { EntityLink } from 'types/EntityLink';
 
-import { FileItem, ItemID } from '@prom-cms/api-client';
+import { FileItem } from '@prom-cms/api-client';
 
 const ImageOrExtension: FC<FileItem> = ({ filename, mimeType, id }) => {
   if (mimeType?.includes('image')) {
@@ -21,11 +22,11 @@ const ImageOrExtension: FC<FileItem> = ({ filename, mimeType, id }) => {
   return <>.{filename?.split('.').at(-1)}</>;
 };
 
-export const SingleItemDisplay: FC<{ pickedFileId?: ItemID }> = ({
-  pickedFileId,
+export const SingleItemDisplay: FC<{ pickedFile?: EntityLink<FileItem> }> = ({
+  pickedFile,
 }) => {
   const { t } = useTranslation();
-  const { data } = useFile(pickedFileId);
+  const { data } = useFile(pickedFile?.id);
 
   return (
     <div className="flex items-center gap-5">
@@ -33,7 +34,7 @@ export const SingleItemDisplay: FC<{ pickedFileId?: ItemID }> = ({
         title={data?.filename}
         className="w-14 overflow-hidden aspect-square relative bg-gray-50 flex items-center justify-center shadow-md rounded-lg text-sm"
       >
-        {pickedFileId ? (
+        {pickedFile?.id ? (
           data ? (
             <ImageOrExtension {...data} />
           ) : (
@@ -44,7 +45,7 @@ export const SingleItemDisplay: FC<{ pickedFileId?: ItemID }> = ({
         )}
       </div>
       <p className="text-gray-600">
-        {pickedFileId ? (
+        {pickedFile?.id ? (
           data ? (
             <Trans
               t={t}

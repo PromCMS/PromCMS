@@ -4,14 +4,14 @@ import { DetailedHTMLProps, FC, ImgHTMLAttributes, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { PhotoOff } from 'tabler-icons-react';
 
-import { ItemID } from '@prom-cms/api-client';
+import { Entity, ItemID } from '@prom-cms/api-client';
 
 export interface BackendImageProps
   extends Omit<
     DetailedHTMLProps<ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>,
     'src'
   > {
-  imageId: ItemID | Record<string, string> | undefined | null;
+  imageId: ItemID | (Entity & Record<string, string>) | undefined | null;
   /**
    * @defaultValue 60
    */
@@ -38,11 +38,15 @@ const BackendImage: FC<BackendImageProps> = ({
       return imageId.path;
     }
 
-    const id = String(imageId);
-
-    if (id === 'null' || id === 'undefined') {
+    if (
+      imageId === null ||
+      imageId === null ||
+      !(typeof imageId === 'number' || typeof imageId === 'object')
+    ) {
       return undefined;
     }
+
+    const id = typeof imageId === 'number' ? imageId : imageId.id;
 
     return String(id).startsWith('http')
       ? String(id)

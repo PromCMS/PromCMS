@@ -14,6 +14,7 @@ import {
   useReducer,
 } from 'react';
 import { DropzoneRootProps, useDropzone } from 'react-dropzone';
+import { EntityLink } from 'types/EntityLink';
 
 import {
   FileItem,
@@ -46,9 +47,9 @@ export interface IFileListContext {
   files: UseFileFolderData | undefined;
   mutateFiles: ReturnType<typeof useFileFolder>['mutateFiles'];
   mutateFolders: ReturnType<typeof useFileFolder>['mutateFolders'];
-  selectedFileIds?: FileItem['id'][];
+  selectedFileIds?: EntityLink<FileItem>[];
   onToggleSelectedFile?: (
-    selectedFileId: FileItem['id'],
+    selectedFileId: EntityLink<FileItem>,
     isSelected: boolean
   ) => void;
 
@@ -157,7 +158,9 @@ export const FileListContextProvider: FC<
 
       for (const { key: filePath, file } of files) {
         try {
-          await apiClient.library.files.create(file, { root: currentFolder });
+          await apiClient.library.files.create(file, {
+            root: currentFolder,
+          });
         } catch (error) {
           let reason = t(MESSAGES.FILE_CANNOT_BE_UPLOADED).toString();
 

@@ -9,10 +9,11 @@ export const formatApiModelResultToTableView = (
     ...columnInfo,
     fieldName: columnInfo.name,
     title: columnInfo.title,
-    show: !(
-      columnInfo.hide ||
-      columnInfo.type === 'slug' ||
-      columnInfo.admin?.isHidden ||
-      false
-    ),
+    show:
+      !(
+        columnInfo.hide ||
+        columnInfo.type === 'slug' ||
+        columnInfo.admin?.isHidden ||
+        false
+      ) && !(columnInfo.type === 'relationship' && columnInfo.multiple),
   }));

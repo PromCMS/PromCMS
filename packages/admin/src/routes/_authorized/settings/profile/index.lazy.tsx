@@ -33,9 +33,7 @@ const AvatarSelect: FC = () => {
         return (
           <ImageSelect
             label={t('Avatar')}
-            selected={
-              typeof value === 'object' && 'id' in value ? value.id : value
-            }
+            selected={value}
             multiple={false}
             onChange={(nextValue) => nextValue && onChange(nextValue)}
             onBlur={onBlur}

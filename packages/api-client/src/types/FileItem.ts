@@ -1,7 +1,6 @@
-import { ResultItem } from './ResultItem';
+import { Entity } from './Entity';
 
-export type FileItem = ResultItem & {
-  id: string;
+export type FileItem = Entity & {
   filename: string;
   filepath: string;
   created_at: string;

@@ -3,6 +3,7 @@ export * from './ApiResultModels';
 export * from './ApiResultSingleton';
 export * from './ApiResultSingletons';
 export * from './ChangePasswordErrorCode';
+export * from './Entity';
 export * from './EntityDuplicateErrorCode';
 export * from './FileInput';
 export * from './FileItem';

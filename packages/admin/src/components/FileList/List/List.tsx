@@ -150,7 +150,7 @@ export const List: FC = () => {
         <FileItem
           key={fileInfo.id}
           onDeleteClick={onFileDeleteClick}
-          isPicked={selectedFileIds?.includes(String(fileInfo.id))}
+          isPicked={!!selectedFileIds?.find((item) => item.id === fileInfo.id)}
           onTogglePick={onToggleSelectedFile}
           {...fileInfo}
         />

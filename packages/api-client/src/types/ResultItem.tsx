@@ -1,9 +1,5 @@
-import { ItemID } from './ItemID';
+import { Entity } from './Entity';
 
-export interface ResultItem {
-  /**
-   * Every returned model item has its own ID that is unique.
-   */
-  id: ItemID;
+export interface ResultItem extends Entity {
   [x: string]: any;
 }
