@@ -1,5 +1,18 @@
 # @prom-cms/admin
 
+## 0.20.0
+
+### Minor Changes
+
+- 2abb38e: BREAKING: Defines admin many-to-one relations and updates relationship inputs so they work with new implementation.
+
+### Patch Changes
+
+- Updated dependencies [2abb38e]
+- Updated dependencies [2abb38e]
+  - @prom-cms/api-client@0.13.0
+  - @prom-cms/schema@0.7.0
+
 ## 0.19.0
 
 ### Minor Changes

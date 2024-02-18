@@ -1,5 +1,11 @@
 # @prom-cms/schema
 
+## 0.7.0
+
+### Minor Changes
+
+- 2abb38e: Defines mappedBy and inversedBy to allow users to specify relations for many to one and one to many.
+
 ## 0.6.2
 
 ### Patch Changes

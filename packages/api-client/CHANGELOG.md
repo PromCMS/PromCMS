@@ -1,5 +1,16 @@
 # @prom-cms/api-client
 
+## 0.13.0
+
+### Minor Changes
+
+- 2abb38e: Fixes type declarations and exposes Entity type that specifies standard entity.
+
+### Patch Changes
+
+- Updated dependencies [2abb38e]
+  - @prom-cms/schema@0.7.0
+
 ## 0.12.0
 
 ### Minor Changes
