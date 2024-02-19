@@ -1,4 +1,5 @@
 import { DAYS_IN_WEEK } from '@components/FieldMapper/fields/json/OpeningHours';
+
 import { ApiResultModel, ApiResultModelSingleton } from '@prom-cms/api-client';
 
 /**
@@ -23,6 +24,14 @@ export const constructDefaultFormValues = <T extends Record<string, any>>(
           data: [],
         };
       }
+    }
+
+    if (
+      !value &&
+      'defaultValue' in columnInfo &&
+      typeof columnInfo.defaultValue !== 'undefined'
+    ) {
+      (result as any)[columnInfo.name] = columnInfo.defaultValue;
     }
   }
 

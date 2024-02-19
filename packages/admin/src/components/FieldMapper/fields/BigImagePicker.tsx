@@ -1,6 +1,9 @@
 import BackendImage from '@components/BackendImage';
+import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import { FilePicker, FilePickerProps } from '@components/form/FilePicker';
-import { ActionIcon, Button, Input } from '@mantine/core';
+import { MESSAGES } from '@constants';
+import { FileLink } from '@custom-types';
+import { ActionIcon, Button, Input, Paper } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
 import clsx from 'clsx';
 import { FC, useCallback, useMemo } from 'react';
@@ -18,10 +21,12 @@ export interface BigImageProps extends z.infer<typeof columnTypeFileSchema> {
   disabled?: boolean;
 }
 
+const TOTAL_ON_ROW = 4;
+
 export const BigImagePicker: FC<BigImageProps> = ({
   name,
   errorMessage,
-  label,
+  label: labelAsText,
   multiple,
   typeFilter,
 }) => {
@@ -32,12 +37,14 @@ export const BigImagePicker: FC<BigImageProps> = ({
   const { t } = useTranslation();
 
   const onRemoveOne = useCallback(
-    (nextValue: string) => {
+    (itemToRemove: FileLink) => {
       if (!multiple) {
         return;
       }
 
-      field.onChange(field.value.filter((itemValue) => itemValue != nextValue));
+      field.onChange(
+        field.value.filter((itemValue) => itemValue?.id != itemToRemove.id)
+      );
       field.onBlur();
     },
     [field.onChange, multiple, field.value, field.onBlur]
@@ -47,7 +54,7 @@ export const BigImagePicker: FC<BigImageProps> = ({
     () =>
       (Array.isArray(field.value) ? field.value : [field.value]).filter(
         Boolean
-      ),
+      ) as FileLink[],
     [field.value]
   );
 
@@ -69,21 +76,11 @@ export const BigImagePicker: FC<BigImageProps> = ({
   const isImage = typeFilter?.includes('image');
   const picker = (
     <>
-      <Button
-        color="blue"
-        variant="light"
-        size="lg"
-        leftSection={<Pencil size={20} />}
-        onClick={() => toggleOpen()}
-        className={clsx([!multiple && 'm-5'])}
-      >
-        {t(!modalPickedFiles.length ? 'Set image' : 'Change image')}
-      </Button>
       <FilePicker
         value={modalPickedFiles}
         onChange={onChange}
         closeOnPick={!multiple}
-        title={t(multiple ? 'Choose images' : 'Choose an image')}
+        title={t(multiple ? MESSAGES.CHOOSE_IMAGES : MESSAGES.CHOOSE_IMAGE)}
         fileQueryParameters={{
           where: { mimeType: { manipulator: 'LIKE', value: '%image%' } },
         }}
@@ -93,57 +90,119 @@ export const BigImagePicker: FC<BigImageProps> = ({
     </>
   );
 
+  const label = (
+    <>
+      {labelAsText}
+      {multiple && isImage && !!modalPickedFiles.length ? (
+        <Button
+          size="compact-sm"
+          rightSection={<Pencil size={15} />}
+          className="ml-auto block"
+          variant="light"
+          onClick={() => toggleOpen()}
+        >
+          {t(MESSAGES.CHANGE_SELECTION)}
+        </Button>
+      ) : null}
+    </>
+  );
+
+  const placeholderCount =
+    TOTAL_ON_ROW - (modalPickedFiles.length % TOTAL_ON_ROW);
+
   return (
-    <Input.Wrapper size="md" label={label} error={errorMessage}>
+    <Input.Wrapper
+      size="md"
+      label={label}
+      error={errorMessage}
+      classNames={{ label: 'w-full flex' }}
+    >
       <div>
         {isImage ? (
           multiple ? (
             <>
-              <div className="grid sm:grid-cols-5 gap-5 mt-3 mb-5">
+              <div className="grid sm:grid-cols-4 gap-3 mt-1 mb-3">
                 {modalPickedFiles.length ? (
-                  modalPickedFiles.map((fileId) => (
-                    <div className="w-full aspect-square rounded-lg overflow-hidden relative">
-                      <BackendImage
-                        width={250}
-                        quality={90}
-                        imageId={fileId}
-                        className="absolute h-full w-full object-cover object-center"
-                      />
-                      <div className="absolute top-0 right-0 m-3">
-                        <ActionIcon
-                          size="xl"
-                          color="red"
-                          variant="filled"
-                          onClick={() => onRemoveOne(fileId)}
-                        >
-                          <Trash />
-                        </ActionIcon>
+                  <>
+                    {modalPickedFiles.map((file) => (
+                      <div
+                        className="w-full aspect-square rounded-lg overflow-hidden relative shadow-md"
+                        key={file.id}
+                      >
+                        <BackendImage
+                          width={250}
+                          quality={90}
+                          imageId={file.id}
+                          className="absolute h-full w-full object-cover object-center"
+                        />
+                        <div className="absolute top-0 right-0 m-2">
+                          <ActionIcon
+                            size="lg"
+                            color="red"
+                            variant="filled"
+                            onClick={() => onRemoveOne(file)}
+                          >
+                            <Trash size={20} />
+                          </ActionIcon>
+                        </div>
                       </div>
-                    </div>
-                  ))
+                    ))}
+                    {new Array(placeholderCount).fill(true).map((_, index) => (
+                      <Paper
+                        key={index}
+                        className="bg-blue-50 opacity-60 dark:opacity-100 aspect-square border-dashed"
+                      />
+                    ))}
+                  </>
                 ) : (
-                  <div>{t('Empty')}</div>
+                  <Paper
+                    className={clsx(
+                      'w-full col-span-full py-5',
+                      errorMessage ? 'border-red-300' : ''
+                    )}
+                  >
+                    <ItemsMissingMessage />
+                    <Button
+                      color="blue"
+                      variant="light"
+                      leftSection={<Pencil size={20} />}
+                      onClick={() => toggleOpen()}
+                      className="backdrop-blur-sm mx-auto block mt-4"
+                    >
+                      {t(MESSAGES.CHOOSE_IMAGES)}
+                    </Button>
+                  </Paper>
                 )}
               </div>
               {picker}
             </>
           ) : (
-            <div className="h-[50vh] w-full relative">
+            <div className="min-h-[15rem] h-[50vh] w-full relative">
               {modalPickedFiles.length ? (
                 <BackendImage
                   width={900}
                   quality={75}
-                  imageId={modalPickedFiles[0]}
-                  className="absolute h-full w-full object-contain object-center rounded-lg overflow-hidden"
+                  imageId={modalPickedFiles[0]?.id}
+                  className="absolute h-full w-full object-contain object-center rounded-lg overflow-hidden bg-blue-50 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60"
                 />
               ) : (
                 <div className="absolute top-0 left-0 h-full w-full bg-gray-200 rounded-lg overflow-hidden" />
               )}
+              <Button
+                color="blue"
+                variant="light"
+                size="lg"
+                leftSection={<Pencil size={20} />}
+                onClick={() => toggleOpen()}
+                className={clsx('backdrop-blur-sm m-2')}
+              >
+                {t(!modalPickedFiles.length ? 'Set image' : 'Change image')}
+              </Button>
               {picker}
             </div>
           )
         ) : (
-          <>TODO</>
+          <>BigImage is not made for files</>
         )}
       </div>
     </Input.Wrapper>

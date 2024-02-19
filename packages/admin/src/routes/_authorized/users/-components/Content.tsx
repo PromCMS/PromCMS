@@ -21,7 +21,11 @@ const FormWrapper: FC<PropsWithChildren> = ({ children }) => {
   const onSubmitCallback = useOnSubmitCallback();
 
   return (
-    <form onSubmit={handleSubmit(onSubmitCallback)} autoComplete="off">
+    <form
+      onSubmit={handleSubmit(onSubmitCallback)}
+      autoComplete="off"
+      className="h-full"
+    >
       {children}
     </form>
   );

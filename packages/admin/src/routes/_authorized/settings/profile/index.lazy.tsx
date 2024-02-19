@@ -113,7 +113,7 @@ function Page() {
         <FormProvider {...formMethods}>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="mt-6 w-full gap-8 pb-5 flex flex-col items-baseline md:flex-row"
+            className="mt-6 w-full gap-8 pb-5 flex flex-col items-baseline md:flex-row h-full"
             autoComplete="off"
           >
             <AvatarSelect />

@@ -103,13 +103,13 @@ export const FileItem: FC<FileItemProps> = ({
             checked={isPicked}
             onChange={handlePick}
             color="blue"
-            size="xl"
+            size="lg"
             className="flex-none cursor-pointer"
           />
         ) : null}
         <ActionIcon
           onClick={handleDelete}
-          size={36}
+          size={31}
           color="red"
           className="flex-none"
         >

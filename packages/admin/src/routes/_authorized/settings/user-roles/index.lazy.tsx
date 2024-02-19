@@ -1,45 +1,14 @@
-import ItemsMissingMessage from '@components/ItemsMissingMessage';
-import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
+import { useUserRoles } from '@hooks/useUserRoles';
 import { PageLayout } from '@layouts/PageLayout';
-import { LoadingOverlay, Table } from '@mantine/core';
+import { Alert, JsonInput, LoadingOverlay } from '@mantine/core';
 import { createLazyFileRoute } from '@tanstack/react-router';
-import clsx from 'clsx';
-import { useModelItems } from 'hooks/useModelItems';
-import { useTranslation } from 'react-i18next';
 
 export const Route = createLazyFileRoute('/_authorized/settings/user-roles/')({
   component: Page,
 });
 
 function Page() {
-  const { t } = useTranslation();
-  const { data, isLoading, isError, isRefetching } = useModelItems(
-    BASE_PROM_ENTITY_TABLE_NAMES.USER_ROLES
-  );
-
-  const ths = (
-    <tr>
-      <th>{t('Title')}</th>
-      <th>{t('Description')}</th>
-      <th className="w-[100px] opacity-0">Tools</th>
-    </tr>
-  );
-
-  const rows = data?.data ? (
-    data.data.map((row, index) => (
-      <tr key={row.id}>
-        <td>{row.label}</td>
-        <td>{row.description}</td>
-        <td></td>
-      </tr>
-    ))
-  ) : (
-    <tr>
-      <td colSpan={3} rowSpan={5}>
-        <ItemsMissingMessage className="min-h-80" />
-      </td>
-    </tr>
-  );
+  const { data, isLoading, isError, isRefetching } = useUserRoles();
 
   return (
     <PageLayout>
@@ -50,15 +19,15 @@ function Page() {
             visible={isLoading || isRefetching || isError}
             overlayProps={{ blur: 2 }}
           />
-          <Table
-            className={clsx('-mx-5 mt-5')}
-            horizontalSpacing="xl"
-            verticalSpacing="sm"
-          >
-            <thead>{ths}</thead>
-            <tbody>{rows}</tbody>
-            <tfoot>{ths}</tfoot>
-          </Table>
+
+          <Alert>Editting is only allowed through code configuration</Alert>
+
+          <JsonInput
+            className="mt-5"
+            disabled
+            autosize
+            value={JSON.stringify(data ?? [], null, 2)}
+          />
         </div>
       </PageLayout.Content>
     </PageLayout>

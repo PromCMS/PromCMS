@@ -136,7 +136,7 @@ const relatedFieldSchema = z
   .number()
   .or(z.object({ id: z.number().or(z.string()) }))
   .transform((value) =>
-    typeof value === 'object' ? Number(value.id) : Number(value)
+    typeof value === 'object' ? value : { id: Number(value) }
   );
 
 // TODO: this should be moved to backend and client should only fetch json schemas

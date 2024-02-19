@@ -45,10 +45,10 @@ export const FilePicker: FC<FilePickerProps> = ({
         }
       } else {
         const nextValue = Array.isArray(value)
-          ? value?.filter((currentId) => String(currentId) !== String(file.id))
+          ? value?.filter((current) => String(current.id) !== String(file.id))
           : null;
 
-        value = nextValue?.length ? nextValue : null;
+        finalValue = nextValue?.length ? nextValue : null;
       }
 
       onChange(finalValue);

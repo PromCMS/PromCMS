@@ -68,7 +68,7 @@ export const FolderItem: VFC<FolderItemProps> = ({
       <div className="absolute top-0 right-0 m-2.5">
         <ActionIcon
           onClick={onFolderDeleteClick}
-          size={36}
+          size={31}
           color="red"
           disabled={
             workingFolders[folderPath]?.type === 'deleting' ||

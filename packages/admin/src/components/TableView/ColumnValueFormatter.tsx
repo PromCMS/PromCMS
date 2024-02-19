@@ -1,6 +1,14 @@
 import BackendImage from '@components/BackendImage';
 import { MESSAGES, pageUrls } from '@constants';
-import { ActionIcon, Drawer, Skeleton, Tooltip } from '@mantine/core';
+import { EntityLink } from '@custom-types';
+import {
+  ActionIcon,
+  Drawer,
+  NumberFormatter,
+  Paper,
+  Skeleton,
+  Tooltip,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { Link } from '@tanstack/react-router';
 import { useModelItem } from 'hooks/useModelItem';
@@ -16,12 +24,12 @@ import { useClassNames } from './useClassNames';
 
 type ColumnValueFormatterProps = TableViewCol & { value: any };
 
-const LazyRelationshipItem: FC<ColumnTypeRelationship & { value: any }> = (
-  column
-) => {
+const LazyRelationshipItem: FC<
+  ColumnTypeRelationship & { value: EntityLink<any> }
+> = (column) => {
   const { data, error } = useModelItem(
     column.targetModelTableName,
-    column.value,
+    column.value?.id,
     undefined,
     {
       suspense: true,
@@ -75,7 +83,7 @@ const LongTextItem: FC<{ value: string }> = ({ value }) => {
         label={t(MESSAGES.PREVIEW_CONTENT)}
       >
         <ActionIcon onClick={open}>
-          <Eye />
+          <Eye size={18} />
         </ActionIcon>
       </Tooltip>
     </>
@@ -91,14 +99,21 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
       case 'file':
         if (column.typeFilter?.includes('image')) {
           return (
-            <div className="w-14 aspect-square relative">
+            <div className="w-14 aspect-square relative inline-block">
               <BackendImage
                 quality={60}
                 width={56}
                 iconSize={20}
-                imageId={column.value}
+                imageId={
+                  column.multiple ? column.value?.at(0).id : column.value?.id
+                }
                 className="absolute top-0 left-0 w-full h-full object-contain rounded-lg"
               />
+              {column.multiple && column.value?.length - 1 > 0 ? (
+                <div className="px-1 flex absolute items-center justify-center aspect-square -top-2 -right-2 rounded-prom shadow-md border border-gray-200 bg-blue-50 font-semibold text-blue-600">
+                  +{column.value?.length - 1}
+                </div>
+              ) : null}
             </div>
           );
         } else if (column.value) {
@@ -179,6 +194,29 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
             </a>
           );
         }
+
+      case 'number':
+        if (typeof column.value === 'number') {
+          return (
+            <p className={classNames.tableDataParagraph} title={column.value}>
+              <NumberFormatter
+                prefix={
+                  'prefix' in column && column.prefix
+                    ? Mustache.render(column.prefix, column.value)
+                    : undefined
+                }
+                value={column.value}
+                thousandSeparator=" "
+                suffix={
+                  'suffix' in column && column.suffix
+                    ? Mustache.render(column.suffix, column.value)
+                    : undefined
+                }
+              />
+            </p>
+          );
+        }
+        break;
 
       case 'longText':
         if (column.value) {

@@ -1,2 +1,2 @@
-export * from './modelItem';
+export * from './getModelItemSchema';
 export * from './user';

@@ -85,7 +85,7 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
             <div className="mt-1 items-center">
               <div
                 className={clsx(
-                  'relative mt-3 mb-5 overflow-hidden rounded-lg',
+                  'relative my-3 overflow-hidden rounded-lg',
                   multiple ? 'border-2 border-blue-100' : ''
                 )}
               >

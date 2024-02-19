@@ -22,6 +22,7 @@ import { useEntryUnderpageContext } from '../../routes/_authorized/entities/$mod
 import { EnumSelect, RelationshipItemSelect } from './fields';
 import { BigImagePicker } from './fields/BigImagePicker';
 import { Email } from './fields/Email';
+import { NumberField } from './fields/NumberField';
 import { UrlFieldInput } from './fields/UrlFieldInput';
 import { JsonFieldInputAsLinkButton } from './fields/json/JsonFieldInputAsLinkButton';
 import { OpeningHours } from './fields/json/OpeningHours';
@@ -44,15 +45,11 @@ export const FieldMapperItem: FC<
   switch (type) {
     case 'number':
       result = (
-        // @ts-ignore
-        <NumberInput
-          label={title}
-          className="w-full"
-          autoComplete="off"
+        <NumberField
           error={errorMessage}
-          thousandSeparator=" "
           disabled={disabled}
-          {...register(columnName, { valueAsNumber: true })}
+          columnName={columnName}
+          {...values}
         />
       );
       break;
@@ -98,7 +95,7 @@ export const FieldMapperItem: FC<
           result = (
             <Textarea
               autosize
-              minRows={7}
+              minRows={9}
               label={title}
               className="w-full"
               error={errorMessage}
