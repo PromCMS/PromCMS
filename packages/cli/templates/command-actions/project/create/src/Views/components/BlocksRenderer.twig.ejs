@@ -142,7 +142,7 @@
             <div class="btn-box {% if block.data.placeholderImage %}is-image{% endif %}">
               <a href="{{block.data.linkTo}}?q=90&w=1240" title="{{block.data.label}}" {% if block.data.openOnNewTab %} target="_blank" {% endif %} {% if block.data.isDownload %} download {% endif %}>
                 {% if block.data.placeholderImage %}
-                  <img class="big-image w-100" src="/api/entry-types/files/items/{{ block.data.placeholderImage }}/raw?q=70&w=400" />
+                  <img class="big-image w-100" src="/api/library/files/items/{{ block.data.placeholderImage }}?q=70&w=400" />
                 {% else %}
                   {% if block.data.isDownload %}
                     <svg xmlns="http://www.w3.org/2000/svg"

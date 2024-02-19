@@ -71,7 +71,7 @@ export const Repeater: FC<{
             )}
             key={field.id}
           >
-            <div className="flex flex-col w-10">
+            <div className="flex flex-col w-10 justify-end">
               <ActionIcon
                 size="sm"
                 disabled={index === 0}

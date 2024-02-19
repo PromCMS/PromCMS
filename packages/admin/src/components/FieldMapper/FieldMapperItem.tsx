@@ -6,6 +6,7 @@ import {
   Checkbox,
   ColorInput,
   Input,
+  NumberInput,
   TextInput,
   Textarea,
 } from '@mantine/core';
@@ -41,9 +42,22 @@ export const FieldMapperItem: FC<
     (currentView === 'update' && readonly) || formState.isSubmitting;
 
   switch (type) {
-    case 'string':
     case 'number':
-      if (type === 'string' && admin.fieldType === 'heading') {
+      result = (
+        // @ts-ignore
+        <NumberInput
+          label={title}
+          className="w-full"
+          autoComplete="off"
+          error={errorMessage}
+          thousandSeparator=" "
+          disabled={disabled}
+          {...register(columnName, { valueAsNumber: true })}
+        />
+      );
+      break;
+    case 'string':
+      if (admin.fieldType === 'heading') {
         result = (
           <div className="relative w-full mb-4 ">
             <input
@@ -66,7 +80,7 @@ export const FieldMapperItem: FC<
         result = (
           <TextInput
             label={title}
-            type={type === 'string' ? 'text' : type}
+            type="text"
             className="w-full"
             autoComplete="off"
             error={errorMessage}
