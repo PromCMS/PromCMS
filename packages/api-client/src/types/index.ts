@@ -2,6 +2,7 @@ export * from './ApiResultModel';
 export * from './ApiResultModels';
 export * from './ApiResultSingleton';
 export * from './ApiResultSingletons';
+export * from './AppConfig';
 export * from './ChangePasswordErrorCode';
 export * from './Entity';
 export * from './EntityDuplicateErrorCode';

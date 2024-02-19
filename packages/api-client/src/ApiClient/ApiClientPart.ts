@@ -1,10 +1,10 @@
 import { Axios, AxiosResponse } from 'axios';
 
 import { RichAxiosRequestConfig } from '../types';
-import { formatQueryParams } from '../utils';
+import { formatQueryParams, removeTrailingSlash } from '../utils';
 
 export abstract class ApiClientPart {
-  protected basePathname: string = '/api';
+  protected basePathname: string = '';
   protected axios: Axios;
 
   constructor(axiosClient: Axios) {
@@ -28,7 +28,10 @@ export abstract class ApiClientPart {
   ): Promise<R> {
     return this.axios.request({
       ...this.formatAxiosConfig(config),
-      baseURL: (config.baseURL ?? '') + this.basePathname,
+      baseURL:
+        removeTrailingSlash(
+          config.baseURL ?? this.axios.defaults.baseURL ?? ''
+        ) + this.basePathname,
     });
   }
 }

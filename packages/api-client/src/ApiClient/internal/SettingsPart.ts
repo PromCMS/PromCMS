@@ -1,6 +1,7 @@
 import { Axios, AxiosResponse } from 'axios';
 
 import {
+  AppConfig,
   ItemID,
   PagedResponse,
   Response,
@@ -8,11 +9,24 @@ import {
   RichAxiosRequestConfig,
   SettingsItem,
 } from '../../types';
+import { removeTrailingSlash } from '../../utils';
 import { EntryByTableNamePart } from './EntryByTableNamePart';
 
 export class SettingsPart extends EntryByTableNamePart {
   constructor(axios: Axios) {
     super('prom__settings', axios);
+  }
+
+  getAppConfig<T = { data: AppConfig }>(
+    config?: RichAxiosRequestConfig<T> | undefined
+  ) {
+    return this.axios.request<T>({
+      ...this.formatAxiosConfig(config),
+      url: '/settings',
+      baseURL: removeTrailingSlash(
+        config?.baseURL ?? this.axios.defaults.baseURL ?? ''
+      ),
+    });
   }
 
   getOne<T extends ResultItem = SettingsItem>(

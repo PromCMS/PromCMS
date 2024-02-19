@@ -18,10 +18,9 @@ export class FilesPart extends ApiClientPart {
   }
 
   getUrl(fileId: ItemID, searchParams: Record<string, string> = {}) {
-    const url = new URL(
-      `${this.basePathname}/items/${fileId}`,
-      this.axios.defaults.baseURL || window.location.origin
-    );
+    const base = new URL(this.axios.defaults.baseURL ?? window.location.origin);
+    const url = new URL(`${base}${this.basePathname}/items/${fileId}`, base);
+
     url.search = new URLSearchParams(searchParams).toString();
 
     return url;
