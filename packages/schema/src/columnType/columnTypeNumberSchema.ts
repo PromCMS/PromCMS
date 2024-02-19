@@ -9,6 +9,8 @@ export const columnTypeNumberSchema = columnTypeBaseSchema.extend({
   // add validation to admin
   min: z.number().optional(),
   max: z.number().optional(),
+  prefix: z.string().optional(),
+  suffix: z.string().optional(),
 });
 
 export type ColumnTypeNumber = z.infer<typeof columnTypeNumberSchema>;
