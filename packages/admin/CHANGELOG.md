@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.20.1
+
+### Patch Changes
+
+- 7063e54: Fixes incorrect field type for number. Previously it had only text input, now it has correctly number input.
+
 ## 0.20.0
 
 ### Minor Changes
