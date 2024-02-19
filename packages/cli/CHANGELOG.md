@@ -1,5 +1,13 @@
 # @prom-cms/cli
 
+## 0.22.15
+
+### Patch Changes
+
+- 7063e54: Fixes incorrect path to file in templates
+- Updated dependencies [7063e54]
+  - @prom-cms/admin@0.20.1
+
 ## 0.22.14
 
 ### Patch Changes
