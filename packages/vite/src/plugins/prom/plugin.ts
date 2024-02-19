@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import { watch } from 'chokidar';
+import { ExecaChildProcess } from 'execa';
 import formidable from 'formidable';
 import fs from 'fs-extra';
 import mime from 'mime';
@@ -20,6 +21,12 @@ export type VitePromPluginOptions = {
       type: 'add' | 'change' | 'remove';
       fileInfo: { filePath: string; stats?: fs.Stats };
     }) => void | Promise<void>;
+  };
+  phpServer?: {
+    /**
+     * @default true
+     */
+    enabled?: boolean;
   };
 };
 
@@ -73,11 +80,16 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
     async configureServer(server) {
       const serverPort = server.config.server.port! + 1;
       const serverOrigin = `http://127.0.0.1:${serverPort}`;
-      const serverProcess = startPHPServer({
-        port: serverPort,
-        cwd: options?.paths?.phpFiles,
-        logger,
-      });
+      let serverProcess: ExecaChildProcess<string> | undefined = undefined;
+
+      if (options?.phpServer?.enabled ?? true) {
+        serverProcess = startPHPServer({
+          port: serverPort,
+          cwd: options?.paths?.phpFiles,
+          logger,
+        });
+      }
+
       const htmlTransform = server.transformIndexHtml;
 
       const viteTransformHtml = async (
