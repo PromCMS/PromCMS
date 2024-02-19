@@ -329,7 +329,7 @@ importers:
         specifier: ^7.6.0
         version: 7.6.0
       '@prom-cms/admin':
-        specifier: ^0.20.0
+        specifier: ^0.20.1
         version: link:../admin
       '@prom-cms/prettier-config':
         specifier: ^0.1.1
