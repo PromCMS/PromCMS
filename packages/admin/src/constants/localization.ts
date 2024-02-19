@@ -220,7 +220,7 @@ export const defaultLanguagePacks = {
       [MESSAGES.CREATE_TRANSLATION_KEY]: 'Vytvořit překladový klíč',
       [MESSAGES.FOR_LANGUAGE]: 'Pro jazyk',
       [MESSAGES.PAGINATION_CONTENT]:
-        'Zobrazeno položek od {{from}} do {{to}}. Celkem je položek {{total}}.',
+        'Ukazuji stránku {{current_page}} z {{last_page}}',
       [MESSAGES.CREATE_TRANSLATION_KEY_VALUE_DESC]:
         'Toto je překlad pro vybraný jazyk',
       [MESSAGES.ADD_CONTRIBUTOR_TEXT]:

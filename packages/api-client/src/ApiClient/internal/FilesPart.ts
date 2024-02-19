@@ -65,7 +65,7 @@ export class FilesPart extends ApiClientPart {
   async create(
     file: File,
     info?: { root: string } & Partial<
-      Omit<FileItem, 'id' | 'created_at' | 'updated_at'>
+      Omit<FileItem, 'id' | 'createdAt' | 'updatedAt'>
     >
   ) {
     const formData = new FormData();

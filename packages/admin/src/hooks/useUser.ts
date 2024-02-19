@@ -9,7 +9,7 @@ const fetcher: QueryFunction<User> = ({ queryKey }) =>
 
 const getUseUserQueryKey = (
   userId: ItemID | undefined
-): [string, string | number | undefined] => ['users', typeof userId];
+): [string, string | number | undefined] => ['users', userId];
 
 export function useUser(
   itemId: ItemID | undefined,

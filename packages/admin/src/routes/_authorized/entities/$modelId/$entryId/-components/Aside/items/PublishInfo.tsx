@@ -9,7 +9,7 @@ import { useUser } from 'hooks/useUser';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { ItemID } from '@prom-cms/api-client';
+import { User } from '@prom-cms/api-client';
 
 import { useEntryUnderpageContext } from '../../../-context';
 import useCurrentModel from '../../../../-useCurrentModel';
@@ -21,22 +21,25 @@ const TextSkeleton: FC<SkeletonProps> = ({ className, ...rest }) => (
   />
 );
 
-const UserName: FC<{ userId?: ItemID }> = ({ userId }) => {
+const UserName: FC<Partial<User>> = ({ id: userId, name: prefetchedName }) => {
   const { t } = useTranslation();
   const { data, isLoading } = useUser(userId, {
-    enabled: !!userId,
+    enabled: !!userId && !prefetchedName,
   });
   const currentUser = useCurrentUser();
-  const userIsCurrentUser = Number(userId) === Number(currentUser?.id);
 
-  return isLoading || !data || !userId ? (
+  const name = data?.name ?? prefetchedName;
+  const userIsCurrentUser =
+    Number(userId) === Number(currentUser?.id) || name === currentUser?.name;
+
+  return (isLoading && !prefetchedName) || !name || !userId ? (
     <TextSkeleton className="inline-block" />
   ) : (
     <Link
       to={userIsCurrentUser ? '/settings/profile' : pageUrls.users.view(userId)}
       className="font-semibold text-blue-600"
     >
-      {userIsCurrentUser ? t('Me') : data.name}
+      {userIsCurrentUser ? t('Me') : name}
     </Link>
   );
 };
@@ -47,10 +50,6 @@ export const PublishInfo: FC = () => {
   const { itemData, itemIsLoading } = useEntryUnderpageContext();
   const { t } = useTranslation();
   const currentModel = useCurrentModel();
-
-  if (!currentModel?.timestamp && !currentModel?.ownable) {
-    return null;
-  }
 
   return (
     <AsideItemWrap className="!pt-0" title={t(MESSAGES.PUBLISH_INFO)}>
@@ -64,20 +63,20 @@ export const PublishInfo: FC = () => {
                   <TextSkeleton className="w-full max-w-[6rem]" />
                 ) : (
                   <span className="font-semibold text-blue-600">
-                    {!!itemData?.updated_at
-                      ? dynamicDayjs(itemData.updated_at).format(dateFormat)
+                    {!!itemData?.updatedAt
+                      ? dynamicDayjs(itemData.updatedAt).format(dateFormat)
                       : t('Not edited yet')}
                   </span>
                 )}
               </li>
-              {!!itemData?.created_at && (
+              {!!itemData?.createdAt && (
                 <li>
                   {t('Created at')}:{' '}
                   {itemIsLoading ? (
                     <TextSkeleton className="w-full max-w-[6rem]" />
                   ) : (
                     <span className="font-semibold text-blue-600">
-                      {dynamicDayjs(itemData.created_at).format(dateFormat)}
+                      {dynamicDayjs(itemData.createdAt).format(dateFormat)}
                     </span>
                   )}
                 </li>
@@ -86,27 +85,23 @@ export const PublishInfo: FC = () => {
           )}
           {currentModel?.ownable && (
             <>
-              {!!itemData?.updated_by &&
-                String(itemData?.updated_by) !== '0' && (
-                  <li>
-                    <div className="flex items-center gap-1">
-                      <span className="flex-none">{t('Updated by')}:</span>{' '}
-                      <UserName userId={itemData?.updated_by} />
-                    </div>
-                  </li>
-                )}
+              {!!itemData?.updatedBy ? (
+                <li>
+                  <div className="flex items-center gap-1">
+                    <span className="flex-none">{t('Updated by')}:</span>{' '}
+                    <UserName {...itemData.updatedBy} />
+                  </div>
+                </li>
+              ) : null}
 
-              <li>
-                <div className="flex items-center gap-1">
-                  <span className="flex-none">{t('Created by')}:</span>{' '}
-                  {!!itemData?.created_by &&
-                  String(itemData?.created_by) !== '0' ? (
-                    <UserName userId={itemData?.created_by} />
-                  ) : (
-                    t('Unknown')
-                  )}
-                </div>
-              </li>
+              {!!itemData?.createdBy ? (
+                <li>
+                  <div className="flex items-center gap-1">
+                    <span className="flex-none">{t('Created by')}:</span>{' '}
+                    <UserName {...itemData.createdBy} />
+                  </div>
+                </li>
+              ) : null}
             </>
           )}
         </ul>

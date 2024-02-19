@@ -10,13 +10,14 @@ import { FC, useMemo } from 'react';
 
 import { ColumnType, FieldPlacements } from '@prom-cms/schema';
 
-import { Aside, Header, Menu } from '.';
 import {
   EntryUnderpageContextProvider,
   entryUnderpageContext,
 } from '../-context';
 import useCurrentModel from '../../-useCurrentModel';
 import { CoeditorsEditor, PublishInfo } from './Aside/items';
+import { Header } from './Header';
+import { Menu } from './Menu';
 
 export const EntryPageContent: FC<{ viewType: EntryTypeUrlActionType }> = ({
   viewType,

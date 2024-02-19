@@ -37,20 +37,20 @@ export const PublishInfo: FC = () => {
               <TextSkeleton className="w-full max-w-[6rem]" />
             ) : (
               <span className="font-semibold text-blue-600">
-                {!!data?.updated_at
-                  ? dynamicDayjs(data.updated_at).format(dateFormat)
+                {!!data?.updatedAt
+                  ? dynamicDayjs(data.updatedAt).format(dateFormat)
                   : t('Not edited yet')}
               </span>
             )}
           </li>
-          {!!data?.created_at && (
+          {!!data?.createdAt && (
             <li>
               {t('Created at:')}{' '}
               {isLoading ? (
                 <TextSkeleton className="w-full max-w-[6rem]" />
               ) : (
                 <span className="font-semibold text-blue-600">
-                  {dynamicDayjs(data.created_at).format(dateFormat)}
+                  {dynamicDayjs(data.createdA).format(dateFormat)}
                 </span>
               )}
             </li>
