@@ -87,7 +87,7 @@ const MoreOptions: FC = () => {
             className={clsx(formState.isSubmitting && '!cursor-progress')}
             leftSection={<Trash className="aspect-square w-4" />}
           >
-            {t(MESSAGES.PURGE_DATA)}
+            {t(MESSAGES.DELETE)}
           </MantineMenu.Item>
         ) : null}
       </MantineMenu.Dropdown>
@@ -115,7 +115,7 @@ export const Menu: FC = () => {
 
   const handleSaveButtonClick = () => {
     if (currentView === 'create') {
-      setValue('is_published', true);
+      setValue('published', true);
     }
   };
 
@@ -154,7 +154,7 @@ export const Menu: FC = () => {
     } else if (currentView === 'update') {
       if (!itemData) return text;
 
-      if (itemData.is_published) {
+      if (itemData.published) {
         text = 'Unpublish';
       } else {
         text = 'Publish';
@@ -165,8 +165,13 @@ export const Menu: FC = () => {
   }, [currentView, formState.isSubmitting, currentModel, itemData, t]);
 
   const handlePublishButtonClick = () => {
-    setValue('is_published', itemData ? !itemData.is_published : false);
+    setValue('published', itemData ? !itemData.published : false);
   };
+
+  const localizedFields = useMemo(
+    () => currentModel?.columns.filter((item) => item.localized),
+    [currentModel]
+  );
 
   return (
     <nav className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-between px-5 rounded-prom bg-transparent">
@@ -198,6 +203,7 @@ export const Menu: FC = () => {
           {saveButtonText}
         </Button>
         {(settings.application?.i18n.languages.length ?? 0) > 1 &&
+        !!localizedFields?.length &&
         currentView === 'update' ? (
           <LanguageMutation language={language ?? ''} onSelect={setLanguage} />
         ) : null}

@@ -228,7 +228,7 @@ export const getModelItemSchema = (
     );
 
   if (draftable) {
-    shape.is_published = z.boolean().default(false);
+    shape.published = z.boolean().default(false);
   }
 
   return z.object(shape);

@@ -150,7 +150,9 @@ export const BigImagePicker: FC<BigImageProps> = ({
                     {new Array(placeholderCount).fill(true).map((_, index) => (
                       <Paper
                         key={index}
-                        className="bg-blue-50 opacity-60 dark:opacity-100 aspect-square border-dashed"
+                        className={
+                          'bg-blue-50 opacity-60 dark:opacity-100 aspect-square border-dashed'
+                        }
                       />
                     ))}
                   </>
@@ -158,7 +160,7 @@ export const BigImagePicker: FC<BigImageProps> = ({
                   <Paper
                     className={clsx(
                       'w-full col-span-full py-5',
-                      errorMessage ? 'border-red-300' : ''
+                      errorMessage ? 'border-red-400' : ''
                     )}
                   >
                     <ItemsMissingMessage />
@@ -177,17 +179,20 @@ export const BigImagePicker: FC<BigImageProps> = ({
               {picker}
             </>
           ) : (
-            <div className="min-h-[15rem] h-[50vh] w-full relative">
+            <div
+              className={clsx(
+                'min-h-[15rem] h-[50vh] w-full relative rounded-lg border bg-blue-50 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60',
+                errorMessage ? 'border-red-400' : 'border-blue-100'
+              )}
+            >
               {modalPickedFiles.length ? (
                 <BackendImage
                   width={900}
                   quality={75}
                   imageId={modalPickedFiles[0]?.id}
-                  className="absolute h-full w-full object-contain object-center rounded-lg overflow-hidden bg-blue-50 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60"
+                  className="absolute h-full w-full object-contain object-center rounded-lg overflow-hidden "
                 />
-              ) : (
-                <div className="absolute top-0 left-0 h-full w-full bg-gray-200 rounded-lg overflow-hidden" />
-              )}
+              ) : null}
               <Button
                 color="blue"
                 variant="light"

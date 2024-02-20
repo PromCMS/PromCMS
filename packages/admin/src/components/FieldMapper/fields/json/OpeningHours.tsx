@@ -4,12 +4,7 @@ import { upperFirst } from '@mantine/hooks';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { FC, useMemo } from 'react';
-import {
-  Controller,
-  useFieldArray,
-  useFormContext,
-  useWatch,
-} from 'react-hook-form';
+import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Plus, Trash } from 'tabler-icons-react';
 

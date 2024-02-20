@@ -116,7 +116,7 @@ export const Footer: FC<{}> = () => {
 
     if (!data) return text;
 
-    if (data.is_published) {
+    if (data.published) {
       text = 'Unpublish';
     } else {
       text = 'Publish';
@@ -126,8 +126,13 @@ export const Footer: FC<{}> = () => {
   }, [data, formState.isSubmitting, currentModel, t]);
 
   const handlePublishButtonClick = () => {
-    setValue('is_published', data ? !data.is_published : false);
+    setValue('published', data ? !data.published : false);
   };
+
+  const localizedFields = useMemo(
+    () => currentModel?.columns.filter((item) => item.localized),
+    [currentModel]
+  );
 
   return (
     <nav className="align-center sticky bottom-1 left-0 z-10 mx-auto flex max-h-20 items-center justify-end gap-2 px-5 rounded-prom bg-transparent">
@@ -155,7 +160,8 @@ export const Footer: FC<{}> = () => {
       >
         {saveButtonText}
       </Button>
-      {(settings.application?.i18n.languages.length ?? 0) > 1 ? (
+      {(settings.application?.i18n.languages.length ?? 0) > 1 &&
+      !!localizedFields?.length ? (
         <LanguageMutation language={language ?? ''} onSelect={setLanguage} />
       ) : null}
       <MoreOptions />

@@ -71,6 +71,7 @@ export const EntryUnderpageContextProvider: FC<{
     isError: itemIsError,
     isLoading: itemIsLoading,
     key: modelItemQueryKey,
+    refetch,
   } = useCurrentModelItem(language);
 
   const resolver = useMemo<
@@ -146,15 +147,13 @@ export const EntryUnderpageContextProvider: FC<{
               const finalValues = getObjectDiff(itemData, values) as ResultItem;
               const itemId = (itemData as NonNullable<typeof itemData>).id;
 
-              const {
-                data: { data },
-              } = await apiClient.entries
+              await apiClient.entries
                 .for(modelName)
                 .update(itemId, finalValues, {
                   language,
                 });
 
-              mutateItemInCache(data);
+              await refetch();
             } else if (viewType === 'create') {
               const result = await apiClient.entries
                 .for(modelName)
@@ -216,6 +215,7 @@ export const EntryUnderpageContextProvider: FC<{
       t,
       viewType,
       language,
+      refetch,
     ]
   );
 
