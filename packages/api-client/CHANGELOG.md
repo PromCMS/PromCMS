@@ -1,5 +1,16 @@
 # @prom-cms/api-client
 
+## 0.14.0
+
+### Minor Changes
+
+- c1b2afc: Fixes base url definitions and exposes AppConfig type
+
+### Patch Changes
+
+- Updated dependencies [2b9fa49]
+  - @prom-cms/schema@0.8.0
+
 ## 0.13.0
 
 ### Minor Changes

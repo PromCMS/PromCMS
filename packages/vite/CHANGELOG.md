@@ -1,5 +1,11 @@
 # @prom-cms/vite
 
+## 0.3.0
+
+### Minor Changes
+
+- 5eeb00a: Adds a option to disable phpServer. Useful for using your own custom php server process.
+
 ## 0.2.1
 
 ### Patch Changes

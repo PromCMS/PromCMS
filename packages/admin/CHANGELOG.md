@@ -1,5 +1,19 @@
 # @prom-cms/admin
 
+## 0.20.2
+
+### Patch Changes
+
+- ddb7c6d: Fixes publish info and its information about user
+- 0876c4a: Fixes invalid validation of json fields and missing error message for big image
+- 0876c4a: Fixes published and created dates display with createdBy and updatedBy
+- f4f6c73: Fixes incorrect relationship display of tableview.
+- f4f6c73: Makes various fixes regarding entity links
+- Updated dependencies [c1b2afc]
+- Updated dependencies [2b9fa49]
+  - @prom-cms/api-client@0.14.0
+  - @prom-cms/schema@0.8.0
+
 ## 0.20.1
 
 ### Patch Changes
