@@ -1,5 +1,11 @@
 # @prom-cms/schema
 
+## 0.8.0
+
+### Minor Changes
+
+- 2b9fa49: Adds prefix and suffix option to number field
+
 ## 0.7.0
 
 ### Minor Changes
