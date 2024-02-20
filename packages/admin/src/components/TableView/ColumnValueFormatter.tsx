@@ -198,7 +198,10 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
       case 'number':
         if (typeof column.value === 'number') {
           return (
-            <p className={classNames.tableDataParagraph} title={column.value}>
+            <p
+              className={classNames.tableDataParagraph}
+              title={String(column.value)}
+            >
               <NumberFormatter
                 prefix={
                   'prefix' in column && column.prefix
