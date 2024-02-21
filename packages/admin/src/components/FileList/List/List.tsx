@@ -2,11 +2,7 @@ import { apiClient } from '@api';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
 import { MESSAGES } from '@constants';
 import { Button, Transition } from '@mantine/core';
-import {
-  showNotification,
-  updateNotification,
-  useNotifications,
-} from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import axios from 'axios';
 import { FC, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,7 +28,6 @@ export const List: FC = () => {
     selectedFileIds,
     openFilePicker,
   } = useFileListContext();
-  const notifications = useNotifications();
   const classNames = useClassNames();
   const { t } = useTranslation();
 
@@ -45,14 +40,11 @@ export const List: FC = () => {
 
   const onFolderDeleteClick: FolderItemProps['onDeleteClick'] = useCallback(
     async (path) => {
-      const notificationId = 'Deleting folder';
-      showNotification({
-        id: notificationId,
+      const id = notifications.show({
         loading: true,
         title: t(MESSAGES.DELETING_FOLDER),
         message: t(MESSAGES.DELETING_FOLDER) + '...',
         autoClose: false,
-        disallowClose: true,
       });
 
       if (confirm(t(MESSAGES.DELETE_FOLDER_QUESTION))) {
@@ -73,34 +65,37 @@ export const List: FC = () => {
             path: { type: 'none' },
           });
 
-          updateNotification({
-            id: notificationId,
+          notifications.update({
+            id,
             color: 'green',
             message: t(MESSAGES.DELETING_FOLDER_DONE),
             autoClose: 2000,
+            loading: false,
           });
         } catch (e) {
           console.log(e);
 
           if (axios.isAxiosError(e) && e.response?.status === 400) {
-            updateNotification({
-              id: notificationId,
+            notifications.update({
+              id,
               color: 'red',
               message: t(MESSAGES.DELETING_FOLDER_FAILED_NOT_EMPTY),
               autoClose: 2000,
+              loading: false,
             });
             return;
           }
-          updateNotification({
-            id: notificationId,
+          notifications.update({
+            id,
             color: 'red',
             message: t(MESSAGES.ERROR_BASIC),
             autoClose: 2000,
+            loading: false,
           });
         }
       }
     },
-    [workingFolders, updateValue, mutateFolders, t, notifications]
+    [workingFolders, updateValue, mutateFolders, t]
   );
 
   const onFileDeleteClick: FileItemProps['onDeleteClick'] = useCallback(

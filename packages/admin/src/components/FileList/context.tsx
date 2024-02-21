@@ -1,6 +1,6 @@
 import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
-import { showNotification, updateNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { createLogger } from '@utils';
 import { UseFileFolderData, useFileFolder } from 'hooks/useFileFolder';
 import { t } from 'i18next';
@@ -146,10 +146,7 @@ export const FileListContextProvider: FC<
 
       updateValue('uploadingFiles', files);
 
-      const rootNotificationId = 'on-drop-file-info';
-
-      showNotification({
-        id: rootNotificationId,
+      const id = notifications.show({
         title: t(MESSAGES.UPLOADING).toString(),
         message: t(MESSAGES.UPLOADING_FILES).toString(),
         color: 'blue',
@@ -177,12 +174,12 @@ export const FileListContextProvider: FC<
               );
           }
 
-          showNotification({
-            id: `failed-upload-${file.name}`,
+          notifications.show({
             title: t(MESSAGES.UPLOADING_FAILED).toString(),
             message: reason.replaceAll('{{fileName}}', file.name ?? 'file'),
             color: 'red',
             autoClose: 8000,
+            loading: false,
           });
 
           logger.error(error as Error);
@@ -198,12 +195,13 @@ export const FileListContextProvider: FC<
         await refetchFiles();
       }
 
-      updateNotification({
-        id: rootNotificationId,
+      notifications.update({
+        id,
         title: <>{t(MESSAGES.UPLOADING_FINISHED)}</>,
         message: t(MESSAGES.ALL_FILES_HAS_BEEN_PROCESSED).toString(),
         color: 'green',
         autoClose: 3000,
+        loading: false,
       });
     },
     [updateValue, currentFolder, mutateFiles]

@@ -1,4 +1,5 @@
 import { MantineProvider, MantineThemeOverride } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { FC, PropsWithChildren } from 'react';
 
 export const theme: MantineThemeOverride = {
@@ -99,7 +100,10 @@ export const theme: MantineThemeOverride = {
 };
 
 const ThemeProvider: FC<PropsWithChildren> = ({ children }) => (
-  <MantineProvider theme={theme}>{children}</MantineProvider>
+  <MantineProvider theme={theme}>
+    {children}
+    <Notifications position="top-right" />
+  </MantineProvider>
 );
 
 export default ThemeProvider;

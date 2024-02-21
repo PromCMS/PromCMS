@@ -2,7 +2,7 @@ import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Paper, PasswordInput } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { Link } from '@tanstack/react-router';
 import axios from 'axios';
 import { FC } from 'react';
@@ -41,8 +41,7 @@ export const FinalizeForm: FC<{ token?: string }> = ({ token }) => {
         if (e.response?.status) {
           setError('token', { message: MESSAGES.PASSWORD_RESET_TOKEN_EXPIRED });
         } else {
-          showNotification({
-            id: 'reset-password-finalization-notification',
+          notifications.show({
             color: 'red',
             title: MESSAGES.ERROR_BASIC,
             message: MESSAGES.ERROR_RETRY,

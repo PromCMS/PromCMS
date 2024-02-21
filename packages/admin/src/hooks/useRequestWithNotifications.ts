@@ -1,6 +1,6 @@
 import { MESSAGES } from '@constants';
 import { useId } from '@mantine/hooks';
-import { showNotification, updateNotification } from '@mantine/notifications';
+import { notifications, updateNotification } from '@mantine/notifications';
 import { useTranslation } from 'react-i18next';
 
 export interface NotificationConfig {
@@ -11,43 +11,44 @@ export interface NotificationConfig {
 }
 const autocloseInterval = 4000;
 export const useRequestWithNotifications = () => {
-  const notifId = useId();
   const { t } = useTranslation();
 
   return async <T extends () => Promise<any>>(
     config: NotificationConfig,
     fc: T
   ) => {
-    showNotification({
-      id: notifId,
+    const id = notifications.show({
       loading: true,
       title: config.title,
       message: config.message,
       autoClose: false,
-      disallowClose: true,
     });
 
     try {
       const fcRes = await fc();
 
       updateNotification({
-        id: notifId,
-        message:
+        id,
+        title:
           config.successMessage || t(MESSAGES.PROMISE_FINISHED_MESSAGE_DEFAULT),
+        message: '',
         autoClose: autocloseInterval,
+        loading: false,
       });
 
       return fcRes;
     } catch (e) {
-      updateNotification({
-        id: notifId,
+      notifications.update({
+        id,
         color: 'red',
-        message: config.errorMessage
+        title: config.errorMessage
           ? typeof config.errorMessage === 'function'
             ? config.errorMessage(e)
             : config.errorMessage
           : t(MESSAGES.ERROR_BASIC),
+        message: '',
         autoClose: autocloseInterval,
+        loading: false,
       });
       if (!import.meta.env.PROD) {
         console.error({

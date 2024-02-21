@@ -131,12 +131,12 @@ export const EntryUnderpageContextProvider: FC<{
       try {
         await reqNotification(
           {
-            title: MESSAGES.PLEASE_WAIT,
-            message: t(
+            title: t(
               viewType === 'update'
                 ? MESSAGES.ITEM_UPDATE_WORKING
                 : MESSAGES.ITEM_CREATE_WORKING
             ),
+            message: t(MESSAGES.PLEASE_WAIT),
             successMessage:
               viewType === 'create'
                 ? t(MESSAGES.ITEM_CREATE_DONE)

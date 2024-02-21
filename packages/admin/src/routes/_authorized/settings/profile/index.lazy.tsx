@@ -4,7 +4,7 @@ import { MESSAGES } from '@constants';
 import { refetchAuthContextData, useAuth } from '@contexts/AuthContext';
 import { PageLayout } from '@layouts/PageLayout';
 import { ActionIcon, Button, Divider, TextInput, Tooltip } from '@mantine/core';
-import { showNotification, updateNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { Link, createLazyFileRoute } from '@tanstack/react-router';
 import { Outlet } from '@tanstack/react-router';
 import { getObjectDiff } from '@utils';
@@ -36,15 +36,11 @@ function Page() {
   }, [user, values]);
 
   const onSubmit = async (values) => {
-    const id = 'update-profile-settings-notification';
-
-    showNotification({
-      id,
+    const id = notifications.show({
       loading: true,
       title: t(MESSAGES.PLEASE_WAIT),
       message: t(MESSAGES.ITEM_UPDATE_WORKING),
       autoClose: false,
-      disallowClose: true,
     });
 
     const diffedUser = getObjectDiff(user, values) as User;
@@ -53,17 +49,19 @@ function Page() {
       await apiClient.profile.update(diffedUser);
       await refetchAuthContextData();
 
-      updateNotification({
+      notifications.update({
         id,
         message: t(MESSAGES.ITEM_UPDATE_DONE),
         autoClose: 2000,
+        loading: false,
       });
     } catch (e) {
-      updateNotification({
+      notifications.update({
         id,
         color: 'red',
         message: t(MESSAGES.ERROR_BASIC),
         autoClose: 2000,
+        loading: false,
       });
     }
   };

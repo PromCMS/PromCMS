@@ -1,5 +1,5 @@
 import { MESSAGES } from '@constants';
-import { showNotification, updateNotification } from '@mantine/notifications';
+import { notifications } from '@mantine/notifications';
 import { t } from 'i18next';
 
 import { generateUuid } from './data';
@@ -17,22 +17,19 @@ export const toastedPromise = async <T extends () => Promise<any>>(
   config: NotificationConfig,
   fc: T
 ) => {
-  const id = generateUuid();
-
-  showNotification({
-    id,
+  const id = notifications.show({
     loading: true,
     title: config.title,
     message: config.message,
     autoClose: false,
-    disallowClose: true,
   });
 
   try {
     const fcRes = await fc();
 
-    updateNotification({
+    notifications.update({
       id,
+      loading: false,
       message:
         config.successMessage ||
         t(MESSAGES.PROMISE_FINISHED_MESSAGE_DEFAULT).toString(),
@@ -41,8 +38,9 @@ export const toastedPromise = async <T extends () => Promise<any>>(
 
     return fcRes;
   } catch (e) {
-    updateNotification({
+    notifications.update({
       id,
+      loading: false,
       color: 'red',
       message: config.errorMessage
         ? typeof config.errorMessage === 'function'
