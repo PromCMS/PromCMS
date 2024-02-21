@@ -54,31 +54,6 @@ const coeditorsSchema = z
 
 const emailSchema = z.string().email(MESSAGES.MUST_BE_VALID_EMAIL);
 
-const jsonRepeaterSchema = z
-  .object({
-    data: z.array(z.record(z.any())).optional(),
-  })
-  .transform((originalValue) => {
-    if (
-      typeof originalValue !== 'object' ||
-      !Array.isArray(originalValue.data)
-    ) {
-      return null;
-    }
-
-    const { data } = originalValue;
-
-    return {
-      ...originalValue,
-      data: data.filter(
-        (value) =>
-          !!Object.values(value).filter(
-            (value) => value !== undefined && value !== null
-          ).length
-      ),
-    };
-  });
-
 const daySchema = z
   .boolean()
   .transform((value) => (value === false ? false : undefined))
@@ -177,7 +152,45 @@ export const getModelItemSchema = (
             } else {
               switch (column.admin.fieldType) {
                 case 'repeater':
-                  columnShape = jsonRepeaterSchema;
+                  const rowSchema: Record<string, any> = {};
+
+                  for (const repeaterColumn of column.admin.columns) {
+                    rowSchema[repeaterColumn.name] =
+                      z[convertColumnTypeToPrimitive(repeaterColumn.type)]();
+
+                    if (!repeaterColumn.required) {
+                      rowSchema[repeaterColumn.name] = rowSchema[
+                        repeaterColumn.name
+                      ]
+                        .nullish()
+                        .optional();
+                    }
+                  }
+
+                  columnShape = z
+                    .object({
+                      data: z.array(z.object(rowSchema)).optional(),
+                    })
+                    .transform((originalValue) => {
+                      if (
+                        typeof originalValue !== 'object' ||
+                        !Array.isArray(originalValue.data)
+                      ) {
+                        return null;
+                      }
+
+                      const { data } = originalValue;
+
+                      return {
+                        ...originalValue,
+                        data: data.filter(
+                          (value) =>
+                            !!Object.values(value).filter(
+                              (value) => value !== undefined && value !== null
+                            ).length
+                        ),
+                      };
+                    });
                   break;
                 case 'blockEditor':
                   columnShape = z
