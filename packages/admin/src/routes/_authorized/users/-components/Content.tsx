@@ -1,3 +1,4 @@
+import { AvatarSelect } from '@components/AvatarSelect';
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import { BASE_PROM_ENTITY_TABLE_NAMES } from '@constants';
 import { useAuth } from '@contexts/AuthContext';
@@ -39,7 +40,7 @@ export const Content: FC = () => {
   const formMethods = useForm({
     defaultValues: currentUser || {},
     reValidateMode: 'onBlur',
-    mode: 'onTouched',
+    mode: 'onBlur',
     resolver:
       view === 'create'
         ? zodResolver(createUserSchema)
@@ -47,8 +48,8 @@ export const Content: FC = () => {
   });
   const { reset, formState } = formMethods;
 
-  const groupedFields = useMemo(() => {
-    if (!model) return;
+  const allFieldsExpectAvatar = useMemo(() => {
+    if (!model) return [];
     const roleColumnIndex = model.columns.findIndex(
       (column) => column.name === 'role'
     );
@@ -65,7 +66,16 @@ export const Content: FC = () => {
       model.columns = model.columns.splice(roleColumnIndex, 1);
     }
 
-    return prepareFieldsForMapper(model, FieldPlacements.MAIN);
+    const allFields = prepareFieldsForMapper(model, FieldPlacements.MAIN);
+    const avatarColumnIndex = allFields.findIndex(
+      (item) => item.name === 'avatar'
+    );
+
+    if (avatarColumnIndex > -1) {
+      allFields.splice(avatarColumnIndex, 1);
+    }
+
+    return allFields;
   }, [model, currentUser]);
 
   useEffect(() => {
@@ -82,9 +92,17 @@ export const Content: FC = () => {
             <Header />
           </PageLayout.Header>
           <PageLayout.Content>
-            {groupedFields ? (
-              <FieldMapper type={FieldPlacements.MAIN} fields={groupedFields} />
-            ) : null}
+            <div className="mt-6 w-full gap-8 pb-5 flex flex-col items-baseline md:flex-row h-full">
+              <AvatarSelect user={currentUser ?? null} />
+              <div className="flex flex-col gap-3 w-full">
+                {allFieldsExpectAvatar ? (
+                  <FieldMapper
+                    type={FieldPlacements.MAIN}
+                    fields={allFieldsExpectAvatar}
+                  />
+                ) : null}
+              </div>
+            </div>
 
             {formState.isSubmitting ? (
               <div className="absolute inset-0 cursor-progress bg-white/20 backdrop-blur-[2px]" />

@@ -1,6 +1,6 @@
 import BackendImage from '@components/BackendImage';
 import { MESSAGES } from '@constants';
-import { Button, Input } from '@mantine/core';
+import { Button, Input, Paper } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
 import clsx from 'clsx';
 import {
@@ -113,17 +113,22 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                     width={imageProps?.width ?? 80}
                     quality={imageProps?.quality ?? 60}
                     imageId={modalPickedFiles[0]?.id}
-                    className="absolute h-full w-full object-contain object-center"
+                    className="absolute h-full w-full object-contain object-center bg-blue-50 border border-blue-200"
                   />
                 ) : (
-                  <div className="absolute flex h-full w-full bg-gray-200">
+                  <Paper
+                    className={clsx(
+                      error ? 'border-red-400' : '',
+                      'aspect-square flex'
+                    )}
+                  >
                     {placeholderElement ?? (
                       <Photo
                         size={40}
                         className="icon icon-tabler icon-tabler-photo m-auto"
                       />
                     )}
-                  </div>
+                  </Paper>
                 )}
               </div>
               <Button

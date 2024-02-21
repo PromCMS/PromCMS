@@ -13,7 +13,7 @@ import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, UserPlus } from 'tabler-icons-react';
 
-import { ApiResultModel, ItemID } from '@prom-cms/api-client';
+import { ApiResultModel, ItemID, User } from '@prom-cms/api-client';
 
 export const Route = createLazyFileRoute('/_authorized/users/')({
   component: Page,
@@ -32,11 +32,14 @@ function Page() {
     isLoading,
     isError,
     refetch: mutate,
-  } = useModelItems(BASE_PROM_ENTITY_TABLE_NAMES.USERS, {
-    params: {
-      page,
-    },
-  });
+  } = useModelItems<User & { isMe?: boolean }>(
+    BASE_PROM_ENTITY_TABLE_NAMES.USERS,
+    {
+      params: {
+        page,
+      },
+    }
+  );
 
   // Models metadata
   const metadata = useMemo(() => {
@@ -46,10 +49,29 @@ function Page() {
     return metadata;
   }, [data]);
 
-  const filteredUsers = useMemo(
-    () => (data?.data ? data.data.filter((user) => user.id !== user?.id) : []),
-    [data, user]
-  );
+  const filteredUsers = useMemo(() => {
+    if (!data?.data?.length) {
+      return [];
+    }
+
+    const res = data.data;
+
+    if (!user) {
+      return res;
+    }
+
+    const me = res.find((item) => item.id === user?.id);
+
+    if (me) {
+      me.isMe = true;
+
+      const meLabel = ` (${t(MESSAGES.ME)})`;
+
+      me.email = me.email.replace(meLabel, '') + meLabel;
+    }
+
+    return res;
+  }, [data, user, t]);
 
   const userCanEdit = canUser({
     userRole: user!.role,
@@ -62,12 +84,26 @@ function Page() {
 
   // Take care of edit requests
   const onEditRequest = userCanEdit
-    ? (id: ItemID) => navigate({ to: `/users/${id}` })
+    ? (id: ItemID) => {
+        if (id === user?.id) {
+          navigate({ to: `/settings/profile` });
+
+          return;
+        }
+
+        navigate({ to: `/users/${id}` });
+      }
     : undefined;
 
   // Take care of delete item request
   const onItemDeleteRequest = userCanEdit
     ? async (id: ItemID) => {
+        if (id === user?.id) {
+          alert('You cannot delete yourself');
+
+          return;
+        }
+
         if (confirm(t(MESSAGES.ON_DELETE_REQUEST_PROMPT))) {
           await apiClient.users.delete(id);
           mutate();

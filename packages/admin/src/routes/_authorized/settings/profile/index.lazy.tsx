@@ -1,5 +1,5 @@
 import { apiClient } from '@api';
-import ImageSelect from '@components/form/ImageSelect';
+import { AvatarSelect } from '@components/AvatarSelect';
 import { MESSAGES } from '@constants';
 import { refetchAuthContextData, useAuth } from '@contexts/AuthContext';
 import { PageLayout } from '@layouts/PageLayout';
@@ -7,10 +7,9 @@ import { ActionIcon, Button, Divider, TextInput, Tooltip } from '@mantine/core';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { Link, createLazyFileRoute } from '@tanstack/react-router';
 import { Outlet } from '@tanstack/react-router';
-import { getInitials, getObjectDiff } from '@utils';
-import clsx from 'clsx';
-import { FC, useMemo } from 'react';
-import { Controller, FormProvider, useForm } from 'react-hook-form';
+import { getObjectDiff } from '@utils';
+import { useMemo } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Lock } from 'tabler-icons-react';
 
@@ -21,43 +20,6 @@ import { LanguageSelect } from './-components';
 export const Route = createLazyFileRoute('/_authorized/settings/profile/')({
   component: Page,
 });
-
-const AvatarSelect: FC = () => {
-  const { t } = useTranslation();
-  const { user } = useAuth();
-
-  return (
-    <Controller
-      name="avatar"
-      render={({ field: { onChange, onBlur, value } }) => {
-        return (
-          <ImageSelect
-            label={t(MESSAGES.AVATAR)}
-            selected={value}
-            multiple={false}
-            onChange={(nextValue) => nextValue && onChange(nextValue)}
-            onBlur={onBlur}
-            wrapperClassName={clsx('md:w-3/6 w-full text-left')}
-            classNames={{
-              wrapper: 'flex-col items-start gap-3',
-              imageWrapper:
-                'relative w-full aspect-square rounded-prom overflow-hidden',
-            }}
-            imageProps={{
-              width: 400,
-            }}
-            placeholderElement={
-              <div className="m-auto text-4xl">
-                {getInitials(user?.name || '-- --')}
-              </div>
-            }
-            imageWrapperProps={{ disableStyles: true }}
-          />
-        );
-      }}
-    />
-  );
-};
 
 function Page() {
   const { user } = useAuth();
@@ -116,7 +78,7 @@ function Page() {
             className="mt-6 w-full gap-8 pb-5 flex flex-col items-baseline md:flex-row h-full"
             autoComplete="off"
           >
-            <AvatarSelect />
+            <AvatarSelect user={user} />
             <div className="w-full">
               <div className="flex gap-4 flex-col w-full">
                 <TextInput
