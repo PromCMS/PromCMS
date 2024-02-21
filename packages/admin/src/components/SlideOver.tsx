@@ -1,6 +1,7 @@
 import { MESSAGES } from '@constants';
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, PropsWithChildren } from 'react';
+import clsx from 'clsx';
+import { Fragment, PropsWithChildren, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X } from 'tabler-icons-react';
 
@@ -77,12 +78,20 @@ export function SlideOver({
   );
 }
 
-SlideOver.Title = function SlideOverTitle({ children }: PropsWithChildren) {
+SlideOver.Title = function SlideOverTitle({
+  children,
+  classNames,
+  outletAfter,
+}: PropsWithChildren<{
+  outletAfter?: ReactNode;
+  classNames?: { root?: string };
+}>) {
   return (
-    <div className="px-4 sm:px-6">
+    <div className={clsx('px-4 sm:px-6', classNames?.root)}>
       <Dialog.Title className="text-base font-semibold leading-6 text-gray-900">
         {children}
       </Dialog.Title>
+      {outletAfter}
     </div>
   );
 };

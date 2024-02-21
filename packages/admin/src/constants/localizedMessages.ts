@@ -282,6 +282,7 @@ export const localizedMessages: Partial<
         'Tato složka není prázdná! Nejprve smažte její obsah než ji vymažete',
       [MESSAGES.DELETE_FOLDER_QUESTION]: 'Opravdu chcete tuto složku smazat?',
       [MESSAGES.DELETE_FILE_QUESTION]: 'Opravdu chcete tento soubor smazat?',
+      [MESSAGES.CONFIRM_SELECTION]: 'Potvrdit výběr',
     },
   },
   fr: {

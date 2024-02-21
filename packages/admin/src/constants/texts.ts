@@ -84,6 +84,7 @@ export const MESSAGES = {
   ...PROM_TABLES,
   FROM_TIME: 'From',
   TO_TIME: 'To',
+  CONFIRM_SELECTION: 'Confirm selection',
   TIME_PICKER_PLACEHOLDER: 'Pick time',
   MORE_OPTIONS_BUTTON_TEXT: 'More options',
   LOADING_MESSAGE: 'Loading, please wait...',

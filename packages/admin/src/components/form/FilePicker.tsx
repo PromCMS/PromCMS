@@ -1,6 +1,9 @@
 import { FileList, FileListProps } from '@components/FileList';
 import { SlideOver } from '@components/SlideOver';
+import { MESSAGES } from '@constants';
+import { Button } from '@mantine/core';
 import { FC, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { EntityLink } from 'types/EntityLink';
 
 import { FileItem } from '@prom-cms/api-client';
@@ -27,6 +30,7 @@ export const FilePicker: FC<FilePickerProps> = ({
   onClose,
   fileQueryParameters,
 }) => {
+  const { t } = useTranslation();
   const [pickerFolderLocation, setFolderLocation] = useState('/');
 
   const onToggleSelectedFile = useCallback<
@@ -62,7 +66,21 @@ export const FilePicker: FC<FilePickerProps> = ({
 
   return (
     <SlideOver isOpen={pickerOpen} onClose={onClose}>
-      <SlideOver.Title>{title}</SlideOver.Title>
+      <SlideOver.Title
+        classNames={{ root: 'flex' }}
+        outletAfter={
+          <Button
+            disabled={!value?.length}
+            onClick={onClose}
+            color="green"
+            className="ml-auto block"
+          >
+            {t(MESSAGES.CONFIRM_SELECTION)}
+          </Button>
+        }
+      >
+        {title}
+      </SlideOver.Title>
       <SlideOver.Content>
         <FileList
           currentFolder={pickerFolderLocation}
