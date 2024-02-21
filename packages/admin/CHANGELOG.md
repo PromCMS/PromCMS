@@ -1,5 +1,27 @@
 # @prom-cms/admin
 
+## 0.21.0
+
+### Minor Changes
+
+- cc22417: Fixes json button field to be null when empty instead of undefined so deletion is collected and recorded to database
+- 87807e5: Repeater design updates. Now it has correct add row button when its modifiable and correctly shows error messages
+- 134a2b1: Update localizations for admin languages and autogenerate every mutation
+- d68fe90: Fixes users pages and underpages and restyles it
+- 8b1dd6d: Uses prefetched data instead of fetching all data again in tableview relationships
+- c6b04d7: Fixes incorrect repeater validation which was really lenient. Now it validates correctly
+
+### Patch Changes
+
+- 662277b: Adds missing confirm selection button for file picker
+- 134a2b1: Adds ts-import and translatte for automated localized messages
+- 890c1d1: Unifies border color for paper
+- cc60fa0: Updates styles for admin
+- a4a79c3: Fixes notifications
+- Updated dependencies [3640751]
+  - @prom-cms/schema@0.9.0
+  - @prom-cms/api-client@0.14.1
+
 ## 0.20.2
 
 ### Patch Changes
