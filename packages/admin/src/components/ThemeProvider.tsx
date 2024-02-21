@@ -71,7 +71,7 @@ export const theme: MantineThemeOverride = {
     },
     Paper: {
       classNames: {
-        root: 'border-2 dark:border-0 border-blue-100 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60',
+        root: 'border dark:border-0 border-blue-200 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60',
       },
       defaultProps: {
         shadow: undefined,
