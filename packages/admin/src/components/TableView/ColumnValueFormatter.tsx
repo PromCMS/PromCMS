@@ -5,7 +5,6 @@ import {
   ActionIcon,
   Drawer,
   NumberFormatter,
-  Paper,
   Skeleton,
   Tooltip,
 } from '@mantine/core';
@@ -27,6 +26,8 @@ type ColumnValueFormatterProps = TableViewCol & { value: any };
 const LazyRelationshipItem: FC<
   ColumnTypeRelationship & { value: EntityLink<any> }
 > = (column) => {
+  const hasOnlyId = Object.keys(column.value).length === 1;
+
   const { data, error } = useModelItem(
     column.targetModelTableName,
     column.value?.id,
@@ -39,13 +40,17 @@ const LazyRelationshipItem: FC<
       refetchOnMount: true,
       refetchOnWindowFocus: false,
       refetchIntervalInBackground: false,
+      enabled: hasOnlyId,
     }
   );
 
-  const text = useMemo(
-    () => (data ? Mustache.render(column.labelConstructor, data) : ''),
-    [data, column.labelConstructor]
-  );
+  const text = useMemo(() => {
+    const renderParams = data ?? column.value;
+
+    return renderParams
+      ? Mustache.render(column.labelConstructor, renderParams)
+      : '';
+  }, [data, column.value, column.labelConstructor]);
 
   if (error) {
     return <X className="text-red-600" />;
