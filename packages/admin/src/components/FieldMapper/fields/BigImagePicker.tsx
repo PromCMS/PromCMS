@@ -151,7 +151,7 @@ export const BigImagePicker: FC<BigImageProps> = ({
                       <Paper
                         key={index}
                         className={
-                          'bg-blue-50 opacity-60 dark:opacity-100 aspect-square border-dashed'
+                          'opacity-60 dark:opacity-100 aspect-square border-dashed'
                         }
                       />
                     ))}
@@ -181,7 +181,7 @@ export const BigImagePicker: FC<BigImageProps> = ({
           ) : (
             <div
               className={clsx(
-                'min-h-[15rem] h-[50vh] w-full relative rounded-lg border bg-blue-50 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60',
+                'min-h-[15rem] h-[50vh] w-full relative rounded-lg border bg-blue-50/50 dark:backdrop-blur-md dark:bg-gray-800 sm:dark:bg-opacity-60',
                 errorMessage ? 'border-red-400' : 'border-blue-100'
               )}
             >

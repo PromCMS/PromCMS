@@ -78,7 +78,7 @@ function LayoutComponent() {
             .map((itemInfo) => (
               <Link
                 to={itemInfo.href}
-                className="group flex items-center rounded-prom hover:no-underline hover:scale-105 duration-150 border-2 border-blue-100 bg-opacity-70 bg-blue-50 p-2"
+                className="group flex items-center rounded-prom hover:no-underline hover:scale-105 duration-150 border-2 border-blue-100 bg-opacity-70 bg-blue-50/50 p-2"
                 key={itemInfo.href}
               >
                 <itemInfo.icon className="aspect-square h-12 w-12 text-blue-400 duration-150 bg-white p-1.5 rounded-prom border-2 border-blue-100" />

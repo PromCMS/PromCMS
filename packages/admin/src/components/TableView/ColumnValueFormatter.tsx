@@ -115,7 +115,7 @@ export const ColumnValueFormatter: FC<ColumnValueFormatterProps> = memo(
                 className="absolute top-0 left-0 w-full h-full object-contain rounded-lg"
               />
               {column.multiple && column.value?.length - 1 > 0 ? (
-                <div className="px-1 flex absolute items-center justify-center aspect-square -top-2 -right-2 rounded-prom shadow-md border border-gray-200 bg-blue-50 font-semibold text-blue-600">
+                <div className="px-1 flex absolute items-center justify-center aspect-square -top-2 -right-2 rounded-prom shadow-md border border-gray-200 bg-blue-50/50 font-semibold text-blue-600">
                   +{column.value?.length - 1}
                 </div>
               ) : null}
