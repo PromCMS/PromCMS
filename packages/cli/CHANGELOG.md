@@ -1,5 +1,24 @@
 # @prom-cms/cli
 
+## 0.22.17
+
+### Patch Changes
+
+- Updated dependencies [662277b]
+- Updated dependencies [cc22417]
+- Updated dependencies [87807e5]
+- Updated dependencies [134a2b1]
+- Updated dependencies [134a2b1]
+- Updated dependencies [890c1d1]
+- Updated dependencies [cc60fa0]
+- Updated dependencies [d68fe90]
+- Updated dependencies [3640751]
+- Updated dependencies [8b1dd6d]
+- Updated dependencies [c6b04d7]
+- Updated dependencies [a4a79c3]
+  - @prom-cms/admin@0.21.0
+  - @prom-cms/schema@0.9.0
+
 ## 0.22.16
 
 ### Patch Changes

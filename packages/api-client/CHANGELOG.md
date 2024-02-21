@@ -1,5 +1,12 @@
 # @prom-cms/api-client
 
+## 0.14.1
+
+### Patch Changes
+
+- Updated dependencies [3640751]
+  - @prom-cms/schema@0.9.0
+
 ## 0.14.0
 
 ### Minor Changes

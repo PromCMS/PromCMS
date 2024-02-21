@@ -1,5 +1,11 @@
 # @prom-cms/schema
 
+## 0.9.0
+
+### Minor Changes
+
+- 3640751: BREAKING: Removes relationship from repeater column type and adds longText and boolean types to repeater
+
 ## 0.8.0
 
 ### Minor Changes
