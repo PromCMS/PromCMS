@@ -49,7 +49,7 @@ export const JsonFieldInputAsLinkButton: FC<
       const { value } = target;
       const name = target.name.replace(`${columnName}.`, '');
 
-      let newFieldValue: typeof field.value | undefined = field.value ?? {};
+      let newFieldValue: typeof field.value | null = field.value ?? {};
       newFieldValue[name] = value;
 
       const newFieldValueAsObject = Object.entries(newFieldValue).filter(
@@ -58,7 +58,7 @@ export const JsonFieldInputAsLinkButton: FC<
       newFieldValue = Object.fromEntries(newFieldValueAsObject) as any;
 
       if (!newFieldValueAsObject.length) {
-        newFieldValue = undefined;
+        newFieldValue = null;
       }
 
       field.onChange(newFieldValue);
@@ -106,7 +106,7 @@ export const JsonFieldInputAsLinkButton: FC<
                 <Link size={16} />
               )
             }
-            value={field.value?.href}
+            value={(field.value?.href ?? '') as any}
             name={`${columnName}.href`}
             onChange={handleValuesChanged}
             onBlur={field.onBlur}
@@ -119,7 +119,7 @@ export const JsonFieldInputAsLinkButton: FC<
             onChange={handleValuesChanged}
             disabled={disabled}
             onBlur={field.onBlur}
-            value={field.value?.label}
+            value={(field.value?.label ?? '') as any}
             error={fieldErrors?.label?.message}
           />
         </Group>
@@ -134,7 +134,7 @@ export const JsonFieldInputAsLinkButton: FC<
             onChange={handleActionChanged}
             onBlur={field.onBlur}
             placeholder={t(MESSAGES.NO_ACTION)}
-            value={field.value?.action}
+            value={field.value?.action ?? null}
             error={fieldErrors?.action?.message}
           />
         </Group>
