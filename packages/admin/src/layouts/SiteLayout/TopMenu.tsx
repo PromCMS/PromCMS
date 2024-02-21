@@ -234,7 +234,7 @@ export const TopMenu: FC = () => {
                   router.navigate({ to: '/settings/system' });
                 }}
               >
-                {t('System settings')}
+                {t(MESSAGES.SYSTEM_SETTINGS)}
               </Menu.Item>
             ) : null}
             {currentUser?.can({
@@ -248,7 +248,7 @@ export const TopMenu: FC = () => {
                   router.navigate({ to: '/users' });
                 }}
               >
-                {t('Users')}
+                {t(MESSAGES.USERS)}
               </Menu.Item>
             ) : null}
             {(settings.application?.i18n?.languages.length ?? 0) >= 2 ? (

@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { ActionIcon, Tooltip } from '@mantine/core';
 import { useClipboard } from '@mantine/hooks';
 import { VFC } from 'react';
@@ -12,7 +13,7 @@ export const CopyName: VFC<{ name: string }> = ({ name }) => {
 
   return (
     <Tooltip
-      label={t('Copied')}
+      label={t(MESSAGES.COPY_DONE)}
       offset={5}
       position="bottom"
       radius="xl"

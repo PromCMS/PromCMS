@@ -43,9 +43,9 @@ function Page() {
     try {
       reqWithNotification(
         {
-          title: t('Creating translation key'),
-          message: t('Please wait...'),
-          successMessage: t('Translation key successfully created'),
+          title: t(MESSAGES.PLEASE_WAIT),
+          message: t(MESSAGES.TRANSLATION_CREATE_WORKING),
+          successMessage: t(MESSAGES.TRANSLATION_CREATE_DONE),
         },
         async () => {
           await apiClient.generalTranslations.update(
@@ -77,7 +77,7 @@ function Page() {
       padding={32}
       size={500}
       className="overflow-auto"
-      title={t('Create translation key')}
+      title={t(MESSAGES.TRANSLATION_CREATE_PAGE_TITLE)}
     >
       <FormProvider {...formMethods}>
         <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
@@ -87,14 +87,14 @@ function Page() {
             value={lang}
           />
           <TextInput
-            label={t('Key title')}
+            label={t(MESSAGES.TRANSLATION_KEY)}
             mt={'sm'}
             {...register('key', {
               min: { value: 1, message: t(MESSAGES.FIELD_REQUIRED) },
             })}
           />
           <TextInput
-            label={t('Value')}
+            label={t(MESSAGES.TRANSLATION_VALUE)}
             mt={'sm'}
             description={t(MESSAGES.CREATE_TRANSLATION_KEY_VALUE_DESC)}
             {...register('value', {
@@ -108,7 +108,7 @@ function Page() {
             mt={'lg'}
             size="md"
           >
-            {t('Create')}
+            {t(MESSAGES.CREATE_ITEM)}
           </Button>
         </form>
       </FormProvider>

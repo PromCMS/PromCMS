@@ -1,5 +1,6 @@
 import FieldMapper, { prepareFieldsForMapper } from '@components/FieldMapper';
 import AsideItemWrap from '@components/editorialPage/AsideItemWrap';
+import { MESSAGES } from '@constants';
 import { useMemo } from 'react';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +24,7 @@ export const AsideFields: FC<{
   }
 
   return (
-    <AsideItemWrap title={t('Other info')}>
+    <AsideItemWrap title={t(MESSAGES.OTHER_INFO)}>
       <div className="mb-5 flex flex-wrap gap-y-5 items-baseline p-2">
         <FieldMapper type={FieldPlacements.ASIDE} fields={groupedFields} />
       </div>

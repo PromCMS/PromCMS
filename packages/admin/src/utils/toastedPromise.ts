@@ -1,5 +1,7 @@
+import { MESSAGES } from '@constants';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { t } from 'i18next';
+
 import { generateUuid } from './data';
 
 export interface NotificationConfig {
@@ -32,7 +34,8 @@ export const toastedPromise = async <T extends () => Promise<any>>(
     updateNotification({
       id,
       message:
-        config.successMessage || t('Task completed successfully').toString(),
+        config.successMessage ||
+        t(MESSAGES.PROMISE_FINISHED_MESSAGE_DEFAULT).toString(),
       autoClose: autocloseInterval,
     });
 
@@ -45,7 +48,7 @@ export const toastedPromise = async <T extends () => Promise<any>>(
         ? typeof config.errorMessage === 'function'
           ? config.errorMessage(e)
           : config.errorMessage
-        : t('An error happened').toString(),
+        : t(MESSAGES.ERROR_BASIC).toString(),
       autoClose: autocloseInterval,
     });
     if (!import.meta.env.PROD) {

@@ -3,7 +3,7 @@ import { FilePicker, FilePickerProps } from '@components/form/FilePicker';
 import { ActionButton } from '@components/form/editors/_extensions/ActionButton';
 import { ActionButtonDivider } from '@components/form/editors/_extensions/ActionButtonDivider';
 import { StaticBubbleMenu } from '@components/form/editors/_extensions/StaticBubbleMenu';
-import { SIMPLE_WORDS } from '@constants';
+import { MESSAGES, SIMPLE_WORDS } from '@constants';
 import { Button, Popover, TextInput, Textarea } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { NodeViewProps, NodeViewWrapper } from '@tiptap/react';
@@ -77,19 +77,19 @@ export const ImageNodeView: FC<
         </div>
         <StaticBubbleMenu open={props.selected}>
           <ActionButton
-            label={t('Change image')}
+            label={t(MESSAGES.CHANGE_IMAGE)}
             icon={Pencil}
             onClick={open}
           />
           <ActionButtonDivider />
           <ActionButton
-            label={t('Fit')}
+            label={t(MESSAGES.FIT_TO_CONTENT)}
             icon={ArrowsMinimize}
             active={!metadata?.stretch}
             onClick={() => handleMetadataChange('stretch', false)}
           />
           <ActionButton
-            label={t('Stretch')}
+            label={t(MESSAGES.STRETCH_TO_PARENT)}
             icon={ArrowsMaximize}
             active={metadata?.stretch}
             onClick={() => handleMetadataChange('stretch', true)}
@@ -97,27 +97,30 @@ export const ImageNodeView: FC<
           <ActionButtonDivider />
           <Popover withArrow width={590} position="top" withinPortal={false}>
             <Popover.Target>
-              <ActionButton label={t('Change metadata')} icon={Settings} />
+              <ActionButton
+                label={t(MESSAGES.CHANGE_METADATA)}
+                icon={Settings}
+              />
             </Popover.Target>
             <Popover.Dropdown>
               <TextInput
-                label={t('Label')}
+                label={t(MESSAGES.LABEL)}
                 value={metadata?.label || ''}
-                placeholder={t('Some text')}
+                placeholder={t(MESSAGES.TEXT_PLACEHOLDER_GENERIC)}
                 onChange={(event) =>
                   handleMetadataChange('label', event.target.value)
                 }
               />
               <Textarea
-                label={t('Description')}
+                label={t(MESSAGES.DESCRIPTION)}
                 mt="sm"
                 value={metadata?.description || ''}
-                placeholder={t('Some text')}
+                placeholder={t(MESSAGES.DESCRIPTION_PLACEHOLDER)}
                 onChange={(event) =>
                   handleMetadataChange('description', event.target.value)
                 }
               />
-              <Button className="mt-5">Ok</Button>
+              <Button className="mt-5">OK</Button>
             </Popover.Dropdown>
           </Popover>
           <ActionButtonDivider />
@@ -137,7 +140,7 @@ export const ImageNodeView: FC<
         onChange={handleImagesChange}
         onClose={close}
         value={pickedFiles}
-        title={t('Choose an image')}
+        title={t(MESSAGES.CHOOSE_IMAGE)}
         fileQueryParameters={{
           where: { mimeType: { manipulator: 'LIKE', value: '%image%' } },
         }}

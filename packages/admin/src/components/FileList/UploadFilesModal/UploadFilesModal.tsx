@@ -1,6 +1,8 @@
+import { MESSAGES } from '@constants';
 import { Modal, ModalProps } from '@mantine/core';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+
 import { useFileListContext } from '../context';
 
 export type UploadFilesModalProps = Pick<ModalProps, 'onClose'> & {
@@ -24,7 +26,7 @@ export const UploadFilesModal: FC<UploadFilesModalProps> = ({
       >
         <div className="m-auto text-center">
           <p className="text-xl font-semibold text-gray-400">
-            {t('Drag your files here here')}
+            {t(MESSAGES.DRAG_FILES_HERE)}
           </p>
         </div>
       </div>

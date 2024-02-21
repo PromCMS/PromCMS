@@ -1,10 +1,11 @@
 import {
-  defaultLanguagePacks,
   localizationCookieStorageKey,
   localizationLocalStorageKey,
   localizationSessionStorageKey,
 } from '@constants';
 import { InitOptions } from 'i18next';
+
+import { localizedMessages } from '../constants/localizedMessages';
 
 export const localizationConfig: InitOptions = {
   backend: {
@@ -28,7 +29,7 @@ export const localizationConfig: InitOptions = {
     // optional set cookie options, reference:[MDN Set-Cookie docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
     cookieOptions: { path: '/', sameSite: 'strict' },
   },
-  resources: defaultLanguagePacks,
+  resources: localizedMessages,
   react: {
     useSuspense: false,
     bindI18n: 'added languageChanged',

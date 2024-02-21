@@ -1,4 +1,5 @@
 import { apiClient } from '@api';
+import { MESSAGES } from '@constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Paper, PasswordInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
@@ -42,13 +43,13 @@ export const Form: FC = () => {
     } catch (e) {
       if (axios.isAxiosError(e)) {
         if (e.response?.status) {
-          setError('token', { message: 'Your token seems expired...' });
+          setError('token', { message: MESSAGES.PASSWORD_RESET_TOKEN_EXPIRED });
         } else {
           showNotification({
             id: 'reset-password-finalization-notification',
             color: 'red',
-            title: 'An error happened',
-            message: 'An error happened during request. Please try again...',
+            title: MESSAGES.ERROR_BASIC,
+            message: MESSAGES.ERROR_RETRY,
           });
         }
 
@@ -64,10 +65,11 @@ export const Form: FC = () => {
     <FormProvider {...formMethods}>
       <div className="flex min-h-screen w-full">
         <div className="m-auto w-full max-w-lg">
-          <h1 className="mb-1 ml-5 text-2xl font-semibold">{t('Welcome!')}</h1>
+          <h1 className="mb-1 ml-5 text-2xl font-semibold">
+            {t(MESSAGES.REGISTER_FINALIZE_PAGE_TITLE)}
+          </h1>
           <p className="ml-5 mb-7 font-semibold text-blue-400">
-            You are so close to completing registration! Please enter your
-            desired password and continue.
+            {t(MESSAGES.REGISTER_FINALIZE_PAGE_SUBTITLE)}
           </p>
           <form onSubmit={handleSubmit(onSubmitCallback)}>
             <Paper shadow="xl" p="md" withBorder className="w-full">
@@ -75,13 +77,13 @@ export const Form: FC = () => {
                 <>
                   <div className="grid gap-5">
                     <PasswordInput
-                      label={t('Your new password')}
+                      label={t(MESSAGES.PASSWORD_RESET_INPUT)}
                       className="w-full"
                       error={t(formState.errors.new_password?.message || '')}
                       {...register('new_password')}
                     />
                     <PasswordInput
-                      label={t('Your new password again')}
+                      label={t(MESSAGES.PASSWORD_RESET_INPUT_AGAIN)}
                       className="w-full"
                       error={t(
                         formState.errors.confirmed_new_password?.message || ''
@@ -96,7 +98,11 @@ export const Form: FC = () => {
                     size="md"
                     className="mt-7"
                   >
-                    {t(formState.isSubmitting ? 'Working...' : 'Send')}
+                    {t(
+                      formState.isSubmitting
+                        ? MESSAGES.DOING_WORKING
+                        : MESSAGES.SEND
+                    )}
                   </Button>
                 </>
               ) : (
@@ -111,14 +117,14 @@ export const Form: FC = () => {
                       {t(
                         tokenFailed
                           ? tokenErrorMessage
-                          : 'We are done here! You can login and start working.'
+                          : MESSAGES.REGISTER_FINALIZE_PAGE_DONE
                       )}
                     </p>
                     <Link
                       to="/login"
                       className="mt-5 block font-semibold text-blue-400 hover:underline"
                     >
-                      {t('Login to my account')}
+                      {t(MESSAGES.LOGIN_TO_MY_ACCOUNT)}
                     </Link>
                   </div>
                 </>

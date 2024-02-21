@@ -135,10 +135,12 @@ function LoginPage() {
                   {...register('email')}
                 />
                 <Group justify="end" className="z-10 -mb-12">
-                  <Link to="/reset-password">{t('Forgot password?')}</Link>
+                  <Link to="/reset-password">
+                    {t(MESSAGES.PASSWORD_RESET_PAGE_TITLE)}
+                  </Link>
                 </Group>
                 <PasswordInput
-                  label={t('Password')}
+                  label={t(MESSAGES.PASSWORD)}
                   error={t(
                     formState?.errors?.password?.message as unknown as string
                   )}

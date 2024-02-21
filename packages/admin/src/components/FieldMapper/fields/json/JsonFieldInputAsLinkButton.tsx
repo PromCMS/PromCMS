@@ -113,7 +113,7 @@ export const JsonFieldInputAsLinkButton: FC<
           />
           <TextInput
             name={`${columnName}.label`}
-            label={t('Label')}
+            label={t(MESSAGES.LABEL)}
             placeholder={t(MESSAGES.SOME_TEXT)}
             rightSection={<AB size={16} />}
             onChange={handleValuesChanged}

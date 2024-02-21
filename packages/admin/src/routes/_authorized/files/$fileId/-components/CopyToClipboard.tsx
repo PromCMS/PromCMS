@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { ActionIcon, TextInput, Tooltip } from '@mantine/core';
 import { useClipboard, useHover } from '@mantine/hooks';
 import { FC } from 'react';
@@ -14,7 +15,7 @@ export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
   return (
     <TextInput
       key="fileUrl"
-      label={t('File URL')}
+      label={t(MESSAGES.FILE_URL)}
       type={'string'}
       className="w-full"
       autoComplete="off"
@@ -22,7 +23,7 @@ export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
       rightSection={
         <Tooltip
           label={t(
-            clipboard.copied ? 'Link copied!' : 'Copy link to clipboard'
+            clipboard.copied ? MESSAGES.COPY_DONE : MESSAGES.COPY_TO_CLIPBOARD
           )}
           position="left"
           radius="xl"

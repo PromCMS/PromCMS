@@ -39,7 +39,7 @@ const UserName: FC<Partial<User>> = ({ id: userId, name: prefetchedName }) => {
       to={userIsCurrentUser ? '/settings/profile' : pageUrls.users.view(userId)}
       className="font-semibold text-blue-600"
     >
-      {userIsCurrentUser ? t('Me') : name}
+      {userIsCurrentUser ? t(MESSAGES.ME) : name}
     </Link>
   );
 };
@@ -57,21 +57,21 @@ export const PublishInfo: FC = () => {
         <ul className="flex list-disc flex-col gap-2 pl-5">
           {currentModel?.timestamp && (
             <>
-              <li>
-                {t('Updated at')}:{' '}
-                {itemIsLoading ? (
-                  <TextSkeleton className="w-full max-w-[6rem]" />
-                ) : (
-                  <span className="font-semibold text-blue-600">
-                    {!!itemData?.updatedAt
-                      ? dynamicDayjs(itemData.updatedAt).format(dateFormat)
-                      : t('Not edited yet')}
-                  </span>
-                )}
-              </li>
+              {!!itemData?.updatedAt && (
+                <li>
+                  {t(MESSAGES.UPDATED_AT)}:{' '}
+                  {itemIsLoading ? (
+                    <TextSkeleton className="w-full max-w-[6rem]" />
+                  ) : (
+                    <span className="font-semibold text-blue-600">
+                      {dynamicDayjs(itemData.updatedAt).format(dateFormat)}
+                    </span>
+                  )}
+                </li>
+              )}
               {!!itemData?.createdAt && (
                 <li>
-                  {t('Created at')}:{' '}
+                  {t(MESSAGES.CREATED_AT)}:{' '}
                   {itemIsLoading ? (
                     <TextSkeleton className="w-full max-w-[6rem]" />
                   ) : (
@@ -88,7 +88,7 @@ export const PublishInfo: FC = () => {
               {!!itemData?.updatedBy ? (
                 <li>
                   <div className="flex items-center gap-1">
-                    <span className="flex-none">{t('Updated by')}:</span>{' '}
+                    <span className="flex-none">{t(MESSAGES.UPDATED_BY)}:</span>{' '}
                     <UserName {...itemData.updatedBy} />
                   </div>
                 </li>
@@ -97,7 +97,7 @@ export const PublishInfo: FC = () => {
               {!!itemData?.createdBy ? (
                 <li>
                   <div className="flex items-center gap-1">
-                    <span className="flex-none">{t('Created by')}:</span>{' '}
+                    <span className="flex-none">{t(MESSAGES.CREATED_BY)}:</span>{' '}
                     <UserName {...itemData.createdBy} />
                   </div>
                 </li>

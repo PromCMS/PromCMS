@@ -92,6 +92,8 @@
     "execa": "^8.0.1",
     "find-config": "1.0.0",
     "fs-extra": "^10.1.0",
+    "ts-import": "^5.0.0-beta.0",
+    "translatte": "^3.0.1",
     "mime": "^3.0.0",
     "postcss": "^8.4.4",
     "prettier-plugin-tailwindcss": "^0.5.4",

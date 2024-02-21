@@ -99,9 +99,9 @@ function Page() {
       try {
         reqNotification(
           {
-            title: 'Deleting',
-            message: t('Deleting selected option, please wait...'),
-            successMessage: t('Option deleted!'),
+            title: t(MESSAGES.PLEASE_WAIT),
+            message: t(MESSAGES.SELECT_OPTION_DELETE_WORKING),
+            successMessage: t(MESSAGES.SELECT_OPTION_DELETE_DONE),
           },
           async () => {
             await apiClient.settings.delete(id);

@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { useId } from '@mantine/hooks';
 import { showNotification, updateNotification } from '@mantine/notifications';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +32,8 @@ export const useRequestWithNotifications = () => {
 
       updateNotification({
         id: notifId,
-        message: config.successMessage || t('Task completed successfully'),
+        message:
+          config.successMessage || t(MESSAGES.PROMISE_FINISHED_MESSAGE_DEFAULT),
         autoClose: autocloseInterval,
       });
 
@@ -44,7 +46,7 @@ export const useRequestWithNotifications = () => {
           ? typeof config.errorMessage === 'function'
             ? config.errorMessage(e)
             : config.errorMessage
-          : t('An error happened'),
+          : t(MESSAGES.ERROR_BASIC),
         autoClose: autocloseInterval,
       });
       if (!import.meta.env.PROD) {

@@ -43,7 +43,7 @@ export const LanguageMutation: FC<{
       let label = t(languageTitles[value] ?? value);
 
       if (value === settings.application?.i18n.default) {
-        label += ` (${t('Default')})`;
+        label += ` (${t(MESSAGES.DEFAULT)})`;
       }
 
       return {
@@ -96,7 +96,7 @@ export const LanguageMutation: FC<{
         </Tooltip>
       </Popover.Target>
       <Popover.Dropdown className="p-2">
-        <Title order={5}>{t('Select language')}</Title>
+        <Title order={5}>{t(MESSAGES.SELECT_PLACEHOLDER)}</Title>
         <Divider className="my-2" />
         <div className="flex flex-col gap-2">
           {formattedLanguages?.map((item) => (

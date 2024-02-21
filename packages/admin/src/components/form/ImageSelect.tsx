@@ -1,4 +1,5 @@
 import BackendImage from '@components/BackendImage';
+import { MESSAGES } from '@constants';
 import { Button, Input } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
 import clsx from 'clsx';
@@ -131,7 +132,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
                 size="md"
                 onClick={() => togglePickerOpen()}
               >
-                {t('Change')}
+                {t(MESSAGES.CHANGE_SELECTION)}
               </Button>
             </div>
           </Input.Wrapper>
@@ -142,7 +143,7 @@ const ImageSelect = forwardRef<HTMLInputElement, ImageSelectProps>(
           onChange={onChangeCallback}
           onClose={() => togglePickerOpen()}
           value={modalPickedFiles}
-          title={t('Choose an image')}
+          title={t(MESSAGES.CHOOSE_IMAGE)}
           fileQueryParameters={{
             where: { mimeType: { manipulator: 'LIKE', value: '%image%' } },
           }}

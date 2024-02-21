@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { ComboboxItem, Select } from '@mantine/core';
 import { upperFirst } from '@mantine/hooks';
 import { FC, useMemo } from 'react';
@@ -41,7 +42,7 @@ export const EnumSelect: FC<EnumSelectProps> = ({
           value={value}
           onChange={onChange}
           className="w-full"
-          placeholder={t('Select an option')}
+          placeholder={t(MESSAGES.SELECT_PLACEHOLDER)}
           comboboxProps={{ shadow: 'xl' }}
           error={error}
           disabled={disabled}

@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { Button } from '@mantine/core';
 import { Link, createFileRoute } from '@tanstack/react-router';
 import { FC } from 'react';
@@ -13,7 +14,7 @@ const NotFoundPage: FC<{ text?: string }> = ({ text = 'Missing' }) => {
         <hr className="mx-auto my-4 w-1/4 border-t-8 border-blue-100" />
         <p className="text-xl text-gray-500">{text}</p>
         <Button to="/" mt="lg" component={Link}>
-          {t('Go Home')}
+          {t(MESSAGES.GO_HOME)}
         </Button>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import { Header as StyledHeader } from '@components/editorialPage/Header';
+import { MESSAGES } from '@constants';
 import useCurrentSingleton from 'hooks/useCurrentSingleton';
 import { FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +30,7 @@ export const Header: FC = () => {
   return (
     <StyledHeader>
       <StyledHeader.Title>
-        {t('Update')} {title || name}
+        {t(MESSAGES.UPDATE_ITEM)} {title || name}
       </StyledHeader.Title>
       <StyledHeader.Divider />
     </StyledHeader>

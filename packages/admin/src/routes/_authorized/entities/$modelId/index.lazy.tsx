@@ -155,7 +155,9 @@ function EntityMainPage() {
               onClick={onCreateRequest}
               leftSection={<Plus className="inline-block h-5 w-5" />}
             >
-              <span className="hidden md:block">{t('Add new entry')}</span>
+              <span className="hidden md:block">
+                {t(MESSAGES.ADD_NEW_GENERIC)}
+              </span>
             </Button>
 
             <ActionIcon

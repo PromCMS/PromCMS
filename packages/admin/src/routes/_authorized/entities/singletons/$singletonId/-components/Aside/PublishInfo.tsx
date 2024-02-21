@@ -23,7 +23,7 @@ export const PublishInfo: FC = () => {
   const { t } = useTranslation();
   const singleton = useCurrentSingleton();
 
-  if (!singleton?.timestamp) {
+  if (!singleton?.timestamp || (!data?.updatedAt && !data?.createdAt)) {
     return null;
   }
 
@@ -31,21 +31,21 @@ export const PublishInfo: FC = () => {
     <AsideItemWrap className="!pt-0" title={t(MESSAGES.PUBLISH_INFO)}>
       <div className="w-full px-4 py-5">
         <ul className="flex list-disc flex-col gap-2 pl-5">
-          <li>
-            {t('Updated at:')}{' '}
-            {isLoading ? (
-              <TextSkeleton className="w-full max-w-[6rem]" />
-            ) : (
-              <span className="font-semibold text-blue-600">
-                {!!data?.updatedAt
-                  ? dynamicDayjs(data.updatedAt).format(dateFormat)
-                  : t('Not edited yet')}
-              </span>
-            )}
-          </li>
+          {!!data?.updatedAt && (
+            <li>
+              {t(MESSAGES.UPDATED_AT)}:{' '}
+              {isLoading ? (
+                <TextSkeleton className="w-full max-w-[6rem]" />
+              ) : (
+                <span className="font-semibold text-blue-600">
+                  {dynamicDayjs(data.updatedAt).format(dateFormat)}
+                </span>
+              )}
+            </li>
+          )}
           {!!data?.createdAt && (
             <li>
-              {t('Created at:')}{' '}
+              {t(MESSAGES.CREATED_AT)}:{' '}
               {isLoading ? (
                 <TextSkeleton className="w-full max-w-[6rem]" />
               ) : (

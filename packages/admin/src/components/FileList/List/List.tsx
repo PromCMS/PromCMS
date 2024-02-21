@@ -1,5 +1,6 @@
 import { apiClient } from '@api';
 import ItemsMissingMessage from '@components/ItemsMissingMessage';
+import { MESSAGES } from '@constants';
 import { Button, Transition } from '@mantine/core';
 import {
   showNotification,
@@ -48,13 +49,13 @@ export const List: FC = () => {
       showNotification({
         id: notificationId,
         loading: true,
-        title: t('Deleting folder'),
-        message: t('Deleting folder') + '...',
+        title: t(MESSAGES.DELETING_FOLDER),
+        message: t(MESSAGES.DELETING_FOLDER) + '...',
         autoClose: false,
         disallowClose: true,
       });
 
-      if (confirm(t('Do you really want to delete this folder?'))) {
+      if (confirm(t(MESSAGES.DELETE_FOLDER_QUESTION))) {
         const folderName = path.split('/').at(-1);
         updateValue('workingFolders', {
           ...workingFolders,
@@ -75,7 +76,7 @@ export const List: FC = () => {
           updateNotification({
             id: notificationId,
             color: 'green',
-            message: t('Your folder has been deleted'),
+            message: t(MESSAGES.DELETING_FOLDER_DONE),
             autoClose: 2000,
           });
         } catch (e) {
@@ -85,7 +86,7 @@ export const List: FC = () => {
             updateNotification({
               id: notificationId,
               color: 'red',
-              message: t('This folder is not empty! Delete its contents first'),
+              message: t(MESSAGES.DELETING_FOLDER_FAILED_NOT_EMPTY),
               autoClose: 2000,
             });
             return;
@@ -93,7 +94,7 @@ export const List: FC = () => {
           updateNotification({
             id: notificationId,
             color: 'red',
-            message: t('An unexpected error happened'),
+            message: t(MESSAGES.ERROR_BASIC),
             autoClose: 2000,
           });
         }
@@ -104,7 +105,7 @@ export const List: FC = () => {
 
   const onFileDeleteClick: FileItemProps['onDeleteClick'] = useCallback(
     async (id) => {
-      if (confirm(t('Do you really want to delete this file?'))) {
+      if (confirm(t(MESSAGES.DELETE_FILE_QUESTION))) {
         await apiClient.library.files.delete(id);
         mutateFiles((memory) => {
           if (!memory) return memory;
@@ -172,11 +173,13 @@ export const List: FC = () => {
             <div className="flex flex-col mx-auto">
               <ItemsMissingMessage />
               <div className="flex gap-5 mt-5">
-                <Button onClick={openFilePicker}>Add new file</Button>
+                <Button onClick={openFilePicker}>
+                  {t(MESSAGES.ADD_NEW_FILE)}
+                </Button>
                 <Button
                   onClick={() => updateValue('showNewFolderCreator', true)}
                 >
-                  Add new folder
+                  {t(MESSAGES.ADD_NEW_FOLDER)}
                 </Button>
               </div>
             </div>

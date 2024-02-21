@@ -54,13 +54,13 @@ export const Header: FC = () => {
     try {
       await reqNotification(
         {
-          title: t('Password reset'),
+          title: t(MESSAGES.PLEASE_WAIT),
           message: t(
             thisIsResend
-              ? 'Resending password reset email'
-              : 'Sending user password reset email'
+              ? MESSAGES.PASSWORD_RESET_FOR_USER_WORKING_RESEND
+              : MESSAGES.PASSWORD_RESET_FOR_USER_WORKING
           ),
-          successMessage: t('User can now follow instruction in their email'),
+          successMessage: t(MESSAGES.PASSWORD_RESET_FOR_USER_DONE),
         },
         async () => {
           await apiClient.profile.requestPasswordReset(user!.email);
@@ -80,10 +80,16 @@ export const Header: FC = () => {
     try {
       await reqNotification(
         {
-          title: t(userIsNowBlocked ? 'Unblocking' : 'Blocking'),
-          message: '',
+          title: t(
+            userIsNowBlocked
+              ? MESSAGES.USER_BLOCKING_WORKING_UNBLOCK
+              : MESSAGES.USER_BLOCKING_WORKING_BLOCK
+          ),
+          message: t(MESSAGES.PLEASE_WAIT),
           successMessage: t(
-            userIsNowBlocked ? 'User is now unblocked' : 'User is now blocked'
+            userIsNowBlocked
+              ? MESSAGES.USER_BLOCKING_DONE_BLOCKED
+              : MESSAGES.USER_BLOCKING_DONE_UNBLOCKED
           ),
         },
         async () => {
@@ -122,8 +128,8 @@ export const Header: FC = () => {
               >
                 {t(
                   user?.state === UserStates.passwordReset
-                    ? 'Resend password reset'
-                    : 'Send password reset'
+                    ? MESSAGES.PASSWORD_RESET_FOR_USER_REQUEST_AGAIN
+                    : MESSAGES.PASSWORD_RESET_FOR_USER_REQUEST
                 )}
               </Button>
               <Button
@@ -134,8 +140,8 @@ export const Header: FC = () => {
               >
                 {t(
                   user?.state === UserStates.blocked
-                    ? 'Unblock user'
-                    : 'Block user'
+                    ? MESSAGES.USER_BLOCKING_REQUEST_UNBLOCK
+                    : MESSAGES.USER_BLOCKING_REQUEST_BLOCK
                 )}
               </Button>
             </>
@@ -150,11 +156,11 @@ export const Header: FC = () => {
           {t(
             isSubmitting
               ? view === 'create'
-                ? 'Creating...'
-                : 'Updating...'
+                ? MESSAGES.ITEM_CREATE_WORKING
+                : MESSAGES.ITEM_UPDATE_WORKING
               : view === 'create'
-                ? 'Create'
-                : 'Update'
+                ? MESSAGES.CREATE_ITEM
+                : MESSAGES.UPDATE_ITEM
           )}
         </Button>
         {view === 'update' ? (

@@ -167,7 +167,7 @@ export const Repeater: FC<{
             {!readonly ? (
               <Input.Wrapper
                 label={hasLabels ? t('Actions') : undefined}
-                labelProps={{ className: 'opacity-0' }}
+                classNames={{ label: 'opacity-0' }}
                 className="flex-none"
               >
                 <div className="grid grid-cols-1">

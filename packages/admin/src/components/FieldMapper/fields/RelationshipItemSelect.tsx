@@ -311,7 +311,7 @@ const SingleSelect: FC<RelationshipItemSelectProps> = ({
           field.onChange(nextValue);
         }}
         className="w-full"
-        placeholder={t('Select an option')}
+        placeholder={t(MESSAGES.SELECT_PLACEHOLDER)}
         disabled={isError || isLoading || disabled}
         comboboxProps={{ shadow: 'xl' }}
         error={error}

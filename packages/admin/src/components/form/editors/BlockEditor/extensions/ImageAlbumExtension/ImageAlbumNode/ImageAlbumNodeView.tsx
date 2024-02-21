@@ -130,7 +130,7 @@ export const ImageAlbumNodeView: FC<
         ))}
         <Button
           variant="light"
-          title={t('Select new image')}
+          title={t(MESSAGES.SELECT_IMAGE_PLACEHOLDER)}
           className="flex aspect-square h-full w-full items-center border-dashed border-2 border-blue-200 justify-center dark:bg-transparent backdrop-blur-md active:outline-none"
           onClick={() => togglePickerOpen()}
         >

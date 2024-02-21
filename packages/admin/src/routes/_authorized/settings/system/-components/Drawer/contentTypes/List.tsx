@@ -1,4 +1,5 @@
 import { Repeater } from '@components/FieldMapper/fields/json/Repeater';
+import { MESSAGES } from '@constants';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,7 +22,7 @@ export const List: FC = () => {
   return (
     <Repeater
       name="content"
-      label={t('Value')}
+      label={t(MESSAGES.VALUE)}
       placement={FieldPlacements.MAIN}
       columns={repeaterFields}
     />

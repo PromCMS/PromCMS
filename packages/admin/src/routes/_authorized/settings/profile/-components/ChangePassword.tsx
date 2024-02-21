@@ -59,7 +59,7 @@ export const ChangePassword: FC = () => {
           {
             title: t(MESSAGES.CHANGE_PASSWORD),
             message: t(MESSAGES.PLEASE_WAIT),
-            successMessage: t('Password changed successfully. Logging off...'),
+            successMessage: t(MESSAGES.PASSWORD_CHANGE_DONE),
           },
           async () => {
             await apiClient.profile.changePassword(
@@ -97,7 +97,7 @@ export const ChangePassword: FC = () => {
       size="xl"
       position="right"
       className="overflow-auto"
-      title={t('Change password')}
+      title={t(MESSAGES.CHANGE_PASSWORD)}
     >
       <FormProvider {...formMethods}>
         <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
@@ -130,7 +130,7 @@ export const ChangePassword: FC = () => {
             type="submit"
             className="mt-5"
           >
-            {t('Save')}
+            {t(MESSAGES.SAVE)}
           </Button>
         </form>
       </FormProvider>

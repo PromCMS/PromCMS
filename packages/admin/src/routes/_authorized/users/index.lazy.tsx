@@ -85,7 +85,7 @@ function Page() {
   return (
     <PageLayout>
       <PageLayout.Header
-        title={t('Users')}
+        title={t(MESSAGES.USERS)}
         classNames={{ wrapper: 'flex items-center justify-between' }}
       >
         {user?.role &&
@@ -102,7 +102,9 @@ function Page() {
                 onClick={onCreateRequest}
                 leftSection={<Plus className="inline-block h-5 w-5" />}
               >
-                <span className="hidden md:block">{t('Add new user')}</span>
+                <span className="hidden md:block">
+                  {t(MESSAGES.ADD_NEW_USER)}
+                </span>
               </Button>
 
               <ActionIcon

@@ -233,7 +233,7 @@ const TableView: FC<TableViewProps> & {
                                     'duplicate',
                                     itemData.id
                                   )}
-                                  title={t('Duplicate')}
+                                  title={t(MESSAGES.DUPLICATE_ITEM)}
                                   color={'blue'}
                                 >
                                   <Copy className="w-4" />{' '}
@@ -242,7 +242,7 @@ const TableView: FC<TableViewProps> & {
                               {onEditAction && (
                                 <ActionIcon
                                   onClick={onActionClick('edit', itemData.id)}
-                                  title={t('Edit')}
+                                  title={t(MESSAGES.EDIT)}
                                   color={'blue'}
                                 >
                                   <Pencil className="w-4" />{' '}
@@ -251,7 +251,7 @@ const TableView: FC<TableViewProps> & {
                               {onDeleteAction && (
                                 <ActionIcon
                                   onClick={onActionClick('delete', itemData.id)}
-                                  title={t('Delete')}
+                                  title={t(MESSAGES.DELETE)}
                                   color={'red'}
                                 >
                                   <Trash className="w-4" />{' '}
@@ -358,7 +358,7 @@ const PageSizeSelect: FC<
   const { t } = useTranslation();
 
   const data = useMemo(() => {
-    const label = t('items');
+    const label = t(MESSAGES.ITEMS);
 
     return options.map<ComboboxItem>((value) => ({
       value: String(value),

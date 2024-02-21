@@ -1,4 +1,5 @@
 import { apiClient } from '@api';
+import { MESSAGES } from '@constants';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Paper, TextInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
@@ -35,8 +36,8 @@ export const InitializeForm: FC = () => {
         showNotification({
           id: 'reset-password-request-notification',
           color: 'red',
-          title: 'An error happened',
-          message: 'An error happened during request. Please try again...',
+          title: MESSAGES.ERROR_BASIC,
+          message: MESSAGES.ERROR_RETRY,
         });
         throw e;
       }
@@ -48,7 +49,7 @@ export const InitializeForm: FC = () => {
       <div className="flex min-h-screen w-full">
         <div className="m-auto w-full max-w-lg">
           <h1 className="mb-3 ml-5 text-2xl font-semibold">
-            {t('Reset password')}
+            {t(MESSAGES.PASSWORD_RESET_PAGE_TITLE)}
           </h1>
           <form onSubmit={handleSubmit(onSubmitCallback)}>
             <Paper shadow="xl" p="md" withBorder className="w-full">
@@ -68,7 +69,11 @@ export const InitializeForm: FC = () => {
                     size="md"
                     className="mt-7"
                   >
-                    {t(formState.isSubmitting ? 'Working...' : 'Send')}
+                    {t(
+                      formState.isSubmitting
+                        ? MESSAGES.DOING_WORKING
+                        : MESSAGES.SEND
+                    )}
                   </Button>
                 </>
               ) : (
@@ -77,20 +82,18 @@ export const InitializeForm: FC = () => {
                     <Check className="mx-auto aspect-square w-16 text-green-400" />
                     <p className="mt-3 text-xl">
                       <Trans
-                        i18nKey={
-                          'Please check your inbox on {{providedEmail}} and follow instructions there.'
-                        }
+                        i18nKey={MESSAGES.PASSWORD_RESET_DONE_MESSAGE}
                         values={{ providedEmail }}
                         components={{ 1: <b /> }}
                       >
-                        {`Please check your inbox on <1>{{ providedEmail }}</1> and follow instructions there.`}
+                        {MESSAGES.PASSWORD_RESET_DONE_MESSAGE}
                       </Trans>
                     </p>
                     <Link
                       to="/login"
                       className="mt-5 block font-semibold text-blue-400 hover:underline"
                     >
-                      {t('Back to login')}
+                      {t(MESSAGES.GO_BACK_TO_LOGIN)}
                     </Link>
                   </div>
                 </>

@@ -1,5 +1,5 @@
 import { apiClient } from '@api';
-import { pageUrls } from '@constants';
+import { MESSAGES, pageUrls } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
 import { EntryTypeUrlActionType } from '@custom-types';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -131,16 +131,16 @@ export const EntryUnderpageContextProvider: FC<{
       try {
         await reqNotification(
           {
-            title: viewType === 'update' ? 'Updating' : 'Creating',
+            title: MESSAGES.PLEASE_WAIT,
             message: t(
               viewType === 'update'
-                ? 'Updating your entry, please wait...'
-                : 'Creating new entry, please wait...'
+                ? MESSAGES.ITEM_UPDATE_WORKING
+                : MESSAGES.ITEM_CREATE_WORKING
             ),
             successMessage:
               viewType === 'create'
-                ? t('Your entry is created!')
-                : t('Your entry is updated!'),
+                ? t(MESSAGES.ITEM_CREATE_DONE)
+                : t(MESSAGES.ITEM_UPDATE_DONE),
           },
           async () => {
             if (viewType === 'update') {
@@ -196,9 +196,7 @@ export const EntryUnderpageContextProvider: FC<{
               }
 
               setError(variableFieldName, {
-                message: t(
-                  'This field is unique and other entry has the same value'
-                ),
+                message: t(MESSAGES.FIELD_UNIQUE),
               });
             }
           }

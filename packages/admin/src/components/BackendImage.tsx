@@ -1,4 +1,5 @@
 import { apiClient } from '@api';
+import { MESSAGES } from '@constants';
 import clsx from 'clsx';
 import { DetailedHTMLProps, FC, ImgHTMLAttributes, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -79,7 +80,7 @@ const BackendImage: FC<BackendImageProps> = ({
         !className?.includes('h-') ? 'h-full' : '',
         className
       )}
-      title={t('Empty')}
+      title={t(MESSAGES.EMPTY_VALUE)}
     >
       <PhotoOff size={iconSize} className="my-2" />
     </div>

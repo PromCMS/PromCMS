@@ -1,6 +1,6 @@
 import { MESSAGES } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
-import { ActionIcon, Button, Menu, Paper, Tooltip } from '@mantine/core';
+import { ActionIcon, Button, Menu, Tooltip } from '@mantine/core';
 import { getObjectDiff } from '@utils';
 import clsx from 'clsx';
 import useCurrentSingleton from 'hooks/useCurrentSingleton';

@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import {
   EditorOptions,
   EditorProvider,
@@ -72,9 +73,7 @@ export const BlockEditor: FC<BlockEditorProps> = ({ name, disabled }) => {
   return (
     <Suspense
       fallback={
-        <div className="min-h-[350px]">
-          {t('Loading editor, please wait...')}
-        </div>
+        <div className="min-h-[350px]">{t(MESSAGES.LOADING_MESSAGE)}</div>
       }
     >
       <div className="mb-10">

@@ -1,7 +1,8 @@
 import InfiniteHorizontalProgress from '@components/InfiniteHorizontalProgress';
+import { MESSAGES } from '@constants';
 import { Transition } from '@headlessui/react';
 import clsx from 'clsx';
-import { memo, FC } from 'react';
+import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export interface LoaderProps {
@@ -33,7 +34,7 @@ export const Loader: FC<LoaderProps> = memo(function Loader({
       leaveTo="opacity-0"
     >
       <div className="text-center text-2xl text-gray-400">
-        <p>{t('Loading, please wait...')}</p>
+        <p>{t(MESSAGES.LOADING_MESSAGE)}</p>
         <InfiniteHorizontalProgress className="mx-auto mt-3 h-3 w-[400px]" />
       </div>
     </Transition>

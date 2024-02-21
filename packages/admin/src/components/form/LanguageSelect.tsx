@@ -1,4 +1,5 @@
 import { Flag } from '@components/Flag';
+import { MESSAGES, adminLanguages } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
 import { ComboboxItem, Group, Select, SelectProps, Text } from '@mantine/core';
 import { ComponentPropsWithoutRef, FC, forwardRef, useMemo } from 'react';
@@ -12,12 +13,7 @@ interface ItemProps extends ComponentPropsWithoutRef<'div'> {
   label: string;
   value: string;
 }
-const languageTitles = {
-  cs: 'Czech',
-  en: 'English',
-  fr: 'Francais',
-  de: 'German',
-};
+
 const languageCodeToFlagCode = {
   en: 'gb',
   cs: 'cz',
@@ -60,8 +56,8 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
       const isDisabled = disabledOptions?.includes(value);
 
       return {
-        label: `${t(languageTitles[value] ?? value)} ${
-          isDisabled ? ` (${t('Default')})` : ''
+        label: `${t(adminLanguages[value] ?? value)} ${
+          isDisabled ? ` (${t(MESSAGES.DEFAULT)})` : ''
         }`,
         value,
         disabled: isDisabled,
@@ -72,8 +68,8 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
   return (
     <Select
       data={formattedLanguages || []}
-      label={t('Language')}
-      placeholder={t('Select an option')}
+      label={t(MESSAGES.LANGUAGE)}
+      placeholder={t(MESSAGES.SELECT_PLACEHOLDER)}
       disabled={!settings || disabled}
       value={value}
       leftSection={

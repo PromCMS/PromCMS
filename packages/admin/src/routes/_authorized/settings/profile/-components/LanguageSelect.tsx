@@ -1,4 +1,4 @@
-import { localizationLocalStorageKey } from '@constants';
+import { MESSAGES, localizationLocalStorageKey } from '@constants';
 import { ComboboxData, Select } from '@mantine/core';
 import { useLocalStorage } from '@mantine/hooks';
 import i18next from 'i18next';
@@ -25,8 +25,8 @@ export const LanguageSelect = () => {
 
   return (
     <Select
-      label={t('Admin language')}
-      placeholder={t('Select an option')}
+      label={t(MESSAGES.ADMIN_LANGUAGE)}
+      placeholder={t(MESSAGES.SELECT_PLACEHOLDER)}
       data={languages}
       value={currentLanguage}
       onChange={onLanguageSelect}

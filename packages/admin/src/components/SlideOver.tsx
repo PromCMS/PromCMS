@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, PropsWithChildren } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -58,7 +59,7 @@ export function SlideOver({
                         onClick={onClose}
                       >
                         <span className="absolute -inset-2.5" />
-                        <span className="sr-only">{t('Close')}</span>
+                        <span className="sr-only">{t(MESSAGES.CLOSE)}</span>
                         <X className="h-6 w-6" aria-hidden="true" />
                       </button>
                     </div>

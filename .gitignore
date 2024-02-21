@@ -6,6 +6,7 @@ dev
 .env*
 .pnp
 .pnp.js
+.cache
 .temp
 dist
 dist-ssr

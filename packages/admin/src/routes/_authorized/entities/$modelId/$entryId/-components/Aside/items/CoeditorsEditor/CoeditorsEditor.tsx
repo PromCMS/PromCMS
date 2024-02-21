@@ -79,7 +79,10 @@ export const CoeditorsEditor: FC = () => {
                 </span>
               </Button>
             </Popover.Target>
-            <Popover.Dropdown className="w-full" title={t('Select user')}>
+            <Popover.Dropdown
+              className="w-full"
+              title={t(MESSAGES.SELECT_USER_PLACEHOLDER)}
+            >
               <UserSelect
                 withLabel={false}
                 disabled={isAddingUser}
@@ -96,7 +99,7 @@ export const CoeditorsEditor: FC = () => {
                   disabled={isAddingUser}
                   onClick={() => setPopoverOpen(false)}
                 >
-                  {t('Cancel')}
+                  {t(MESSAGES.CANCEL_ACTION)}
                 </Anchor>
               </Group>
             </Popover.Dropdown>

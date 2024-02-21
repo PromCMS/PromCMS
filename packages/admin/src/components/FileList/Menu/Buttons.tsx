@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { ActionIcon, Button, Menu, Popover } from '@mantine/core';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +14,7 @@ export const Buttons: FC = () => {
     <div className="ml-3 h-full flex-none">
       <div className="flex">
         <Button size="sm" className="rounded-r-none" onClick={openFilePicker}>
-          {t('Add new file')}
+          {t(MESSAGES.ADD_NEW_FILE)}
         </Button>
 
         <Menu withArrow arrowPosition="center" position="bottom-end">
@@ -31,9 +32,8 @@ export const Buttons: FC = () => {
               color="blue"
               leftSection={<FolderPlus className="w-4" />}
               onClick={() => updateValue('showNewFolderCreator', true)}
-              title="Add new folder to current folder"
             >
-              {t('Add new folder')}
+              {t(MESSAGES.ADD_NEW_FOLDER)}
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>

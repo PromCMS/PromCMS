@@ -1,4 +1,5 @@
 import { apiClient } from '@api';
+import { MESSAGES } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { logger } from '@logger';
@@ -98,8 +99,8 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
       await toastedPromise(
         {
           title: 'Updating',
-          message: t('Updating, please wait...'),
-          successMessage: t('Your entry is updated!'),
+          message: t(MESSAGES.PLEASE_WAIT),
+          successMessage: t(MESSAGES.ITEM_UPDATE_DONE),
         },
         async () => {
           const finalValues = getObjectDiff(data, values) as ResultItem;
@@ -138,9 +139,7 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
             }
 
             setError(variableFieldName, {
-              message: t(
-                'This field is unique and other entry has the same value'
-              ),
+              message: t(MESSAGES.FIELD_REQUIRED),
             });
           }
         }
@@ -152,10 +151,10 @@ export const SingletonPageContextProvider: FC<PropsWithChildren> = ({
     async () =>
       toastedPromise(
         {
-          message: t('Clearing singleton...'),
-          title: t('Clearing'),
-          errorMessage: t('Failed to clear'),
-          successMessage: t('Clearing successful!'),
+          title: t(MESSAGES.PLEASE_WAIT),
+          message: t(MESSAGES.ITEM_SINGLETON_DELETE_DONE),
+          successMessage: t(MESSAGES.ITEM_SINGLETON_DELETE_DONE),
+          errorMessage: t(MESSAGES.ITEM_SINGLETON_DELETE_FAILED),
         },
         async () => {
           await apiClient.singletons.for(singleton?.key!).clear();

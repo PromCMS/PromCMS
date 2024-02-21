@@ -1,5 +1,6 @@
 import { apiClient } from '@api';
 import BackendImage from '@components/BackendImage';
+import { MESSAGES } from '@constants';
 import { Divider, Drawer, Input, Title } from '@mantine/core';
 import {
   createLazyFileRoute,
@@ -52,7 +53,7 @@ function Page() {
       onClose={handleClose}
       padding="xl"
       position="right"
-      closeButtonProps={{ 'aria-label': t('Close') }}
+      closeButtonProps={{ 'aria-label': t(MESSAGES.CLOSE) }}
       title={
         <Title order={4}>
           <>
@@ -69,7 +70,7 @@ function Page() {
 
           {isImage ? (
             <Input.Wrapper
-              label={t('File preview')}
+              label={t(MESSAGES.FILE_PREVIEW)}
               className="py-3"
               labelProps={{
                 className: 'font-semibold',

@@ -93,12 +93,16 @@ export const Drawer: FC<{
     try {
       reqNotification(
         {
-          title: t(!isCreate ? 'Updating option' : 'Creating option'),
-          message: t('Please wait...'),
+          title: t(
+            !isCreate
+              ? MESSAGES.SELECT_OPTION_UPDATE_WORKING
+              : MESSAGES.SELECT_OPTION_ADD_NEW_WORKING
+          ),
+          message: t(MESSAGES.PLEASE_WAIT),
           successMessage: t(
             !isCreate
-              ? 'Option successfully updated'
-              : 'Option has been created'
+              ? MESSAGES.SELECT_OPTION_UPDATE_DONE
+              : MESSAGES.SELECT_OPTION_ADD_NEW_DONE
           ),
         },
         async () => {

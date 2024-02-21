@@ -1,7 +1,8 @@
-import { VFC } from 'react';
+import { MESSAGES } from '@constants';
 import { Textarea as MantineTextarea } from '@mantine/core';
-import { useTranslation } from 'react-i18next';
+import { VFC } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 export const Textarea: VFC = () => {
   const { t } = useTranslation();
@@ -10,7 +11,7 @@ export const Textarea: VFC = () => {
   return (
     <MantineTextarea
       autosize
-      label={t('Value')}
+      label={t(MESSAGES.VALUE)}
       minRows={4}
       {...register('content.data')}
     />

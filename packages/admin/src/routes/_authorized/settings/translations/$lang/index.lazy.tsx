@@ -1,6 +1,6 @@
 import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
-import { pageUrls } from '@constants';
+import { MESSAGES, pageUrls } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
 import { PageLayout } from '@layouts/PageLayout';
 import {
@@ -80,9 +80,9 @@ function Page() {
     setIsUpdating(true);
     await reqWithNotification(
       {
-        title: 'Saving',
-        message: t('Saving, please wait...'),
-        successMessage: t('Key translated!'),
+        title: t(MESSAGES.TRANSLATION_UPDATE_WORKING),
+        message: t(MESSAGES.PLEASE_WAIT),
+        successMessage: t(MESSAGES.TRANSLATION_UPDATE_DONE),
       },
       async () => {
         await apiClient.generalTranslations.update(key, data![key], lang!);
@@ -99,18 +99,16 @@ function Page() {
 
   const onDeleteClick = useCallback(
     (id: string) => async () => {
-      if (
-        !confirm(t('Do you really want to delete this key for ALL languages?'))
-      ) {
+      if (!confirm(t(MESSAGES.TRANSLATION_DELETE_REQUEST_CONFIRM))) {
         return;
       }
 
       try {
         reqWithNotification(
           {
-            title: 'Deleting',
-            message: t('Deleting selected key, please wait...'),
-            successMessage: t('Key deleted!'),
+            title: t(MESSAGES.TRANSLATION_DELETE_WORKING),
+            message: t(MESSAGES.LOADING_MESSAGE),
+            successMessage: t(MESSAGES.TRANSLATION_DELETE_DONE),
           },
           async () => {
             await apiClient.generalTranslations.delete(id);
@@ -124,9 +122,9 @@ function Page() {
 
   const ths = (
     <Table.Tr>
-      <Table.Th>{t('Translation key')}</Table.Th>
+      <Table.Th>{t(MESSAGES.TRANSLATION_KEY)}</Table.Th>
       <Table.Th className="w-full max-w-[350px]">
-        {t('Translation value')}
+        {t(MESSAGES.TRANSLATION_VALUE)}
       </Table.Th>
       <Table.Th className="w-full max-w-[100px] opacity-0">Tools</Table.Th>
     </Table.Tr>
@@ -176,7 +174,7 @@ function Page() {
             leftSection={<Plus />}
             component={Link}
           >
-            {t('Add new')}
+            {t(MESSAGES.ADD_NEW_GENERIC)}
           </Button>
         </Group>
       </PageLayout.Header>

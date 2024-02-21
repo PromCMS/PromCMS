@@ -1,3 +1,4 @@
+import { MESSAGES } from '@constants';
 import { AuthContext, prefetchAuthContextData } from '@contexts/AuthContext';
 import { useInternetConnection } from '@hooks/useInternetConnection';
 import { Dialog, Text } from '@mantine/core';
@@ -28,12 +29,10 @@ const OfflineNotification: FC = () => {
   return (
     <Dialog opened={!isOnline} size="lg" className="rounded-prom bg-orange-100">
       <Text size="md" mb="xs" fw={500} className="text-orange-700">
-        💬 {t('Network connection has been lost')}
+        💬 {t(MESSAGES.NETWORK_STATUS_LOST_TITLE)}
       </Text>
       <p className="text-orange-700 opacity-75">
-        {t(
-          "It appears that you're not online, please connect back to a network before proceeding further..."
-        )}
+        {t(MESSAGES.NETWORK_STATUS_LOST_MESSAGE)}
       </p>
     </Dialog>
   );

@@ -87,7 +87,7 @@ export const UserSelect: FC<UserSelectProps> = ({
   return (
     <Autocomplete
       label={withLabel ? t(MESSAGES.USER) : undefined}
-      placeholder={t('Start typing to see options')}
+      placeholder={t(MESSAGES.PLACEHOLDER_AUTOCOMPLETE)}
       {...props}
       data={(data?.data || []).map((item) => ({
         ...item,

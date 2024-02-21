@@ -2,6 +2,7 @@ import { FileSelect } from '@components/form/FileSelect';
 import ImageSelect from '@components/form/ImageSelect';
 import { BlockEditor } from '@components/form/editors/BlockEditor';
 import { WysiwygEditor } from '@components/form/editors/WysiwygEditor';
+import { MESSAGES } from '@constants';
 import {
   Checkbox,
   ColorInput,
@@ -64,7 +65,7 @@ export const FieldMapperItem: FC<
                   errorMessage ? 'border-red-500' : 'focus:border-blue-500'
                 )
               )}
-              placeholder={t('Title here...')}
+              placeholder={t(MESSAGES.PLACEHOLDER_TITLE)}
               disabled={disabled}
               {...register(columnName)}
             />
@@ -216,7 +217,7 @@ export const FieldMapperItem: FC<
                 checked={!!value}
                 size={'md'}
                 onChange={(event) => onChange(event.currentTarget.checked)}
-                label={t(value ? 'Yes' : 'No')}
+                label={t(value ? MESSAGES.YES : MESSAGES.NO)}
                 className="mt-1"
                 disabled={disabled}
               />

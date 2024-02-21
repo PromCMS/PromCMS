@@ -62,8 +62,8 @@ const RowSelect: FC<{ name: string; disabled?: boolean }> = ({
             render={({ field: { value, onChange } }) => (
               <Select
                 className="items-center sm:flex sm:gap-3 [&>label]:flex-none"
-                label={t('From')}
-                placeholder={t('Pick time')}
+                label={t(MESSAGES.FROM_TIME)}
+                placeholder={t(MESSAGES.TIME_PICKER_PLACEHOLDER)}
                 value={value}
                 onChange={onChange}
                 data={timeOptions}
@@ -76,8 +76,8 @@ const RowSelect: FC<{ name: string; disabled?: boolean }> = ({
             render={({ field: { value, onChange } }) => (
               <Select
                 className="items-center sm:flex sm:gap-3 [&>label]:flex-none"
-                label={t('To')}
-                placeholder={t('Pick time')}
+                label={t(MESSAGES.TO_TIME)}
+                placeholder={t(MESSAGES.TIME_PICKER_PLACEHOLDER)}
                 value={value}
                 onChange={onChange}
                 data={timeOptions}

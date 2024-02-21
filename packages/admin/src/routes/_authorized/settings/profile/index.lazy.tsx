@@ -32,7 +32,7 @@ const AvatarSelect: FC = () => {
       render={({ field: { onChange, onBlur, value } }) => {
         return (
           <ImageSelect
-            label={t('Avatar')}
+            label={t(MESSAGES.AVATAR)}
             selected={value}
             multiple={false}
             onChange={(nextValue) => nextValue && onChange(nextValue)}
@@ -79,8 +79,8 @@ function Page() {
     showNotification({
       id,
       loading: true,
-      title: 'Updating',
-      message: t('Updating your data, please wait...'),
+      title: t(MESSAGES.PLEASE_WAIT),
+      message: t(MESSAGES.ITEM_UPDATE_WORKING),
       autoClose: false,
       disallowClose: true,
     });
@@ -93,14 +93,14 @@ function Page() {
 
       updateNotification({
         id,
-        message: t('Update done!'),
+        message: t(MESSAGES.ITEM_UPDATE_DONE),
         autoClose: 2000,
       });
     } catch (e) {
       updateNotification({
         id,
         color: 'red',
-        message: t('An error happened'),
+        message: t(MESSAGES.ERROR_BASIC),
         autoClose: 2000,
       });
     }
@@ -108,7 +108,7 @@ function Page() {
 
   return (
     <PageLayout>
-      <PageLayout.Header title={t('My profile')} />
+      <PageLayout.Header title={t(MESSAGES.PROFILE_PAGE_TITLE)} />
       <PageLayout.Content>
         <FormProvider {...formMethods}>
           <form
@@ -120,7 +120,7 @@ function Page() {
             <div className="w-full">
               <div className="flex gap-4 flex-col w-full">
                 <TextInput
-                  label={t('Full name')}
+                  label={t(MESSAGES.FULL_NAME)}
                   className="w-full"
                   {...register('name')}
                 />
@@ -159,7 +159,7 @@ function Page() {
                 disabled={!canSubmit}
                 loading={formMethods.formState.isSubmitting}
               >
-                {t('Save')}
+                {t(MESSAGES.SAVE)}
               </Button>
             </div>
           </form>

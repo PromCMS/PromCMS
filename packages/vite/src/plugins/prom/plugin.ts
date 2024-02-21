@@ -167,6 +167,7 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
       }
 
       server.middlewares.use(bodyParser.json());
+      server.middlewares.use(bodyParser.urlencoded({ extended: true }));
       server.middlewares.use(async (request, response, next) => {
         if (
           request.method !== 'GET' &&
@@ -212,6 +213,15 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
           // @ts-ignore
           request.body = formData;
         }
+
+        if (
+          request.headers['content-type'] ===
+          'application/x-www-form-urlencoded'
+        ) {
+          // @ts-ignore
+          request.body = new URLSearchParams(Object.entries(request.body));
+        }
+
         next();
       });
 
@@ -282,7 +292,11 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
                   ? // @ts-ignore
                     clientRequest.body
                   : // @ts-ignore
-                    JSON.stringify(clientRequest.body);
+                    typeof clientRequest.body === 'string'
+                    ? // @ts-ignore
+                      clientRequest.body
+                    : // @ts-ignore
+                      JSON.stringify(clientRequest.body);
 
               const headers = requestInit.headers! as Headers;
               if (

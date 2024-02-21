@@ -1,4 +1,5 @@
 import BackendImage from '@components/BackendImage';
+import { MESSAGES } from '@constants';
 import {
   ActionIcon,
   Button,
@@ -55,7 +56,7 @@ export const ImageAlbumItem: FC<ImageAlbumItemProps> = ({
               size="xl"
               color="blue"
               variant="filled"
-              title={t('Select new image')}
+              title={t(MESSAGES.SELECT_IMAGE_PLACEHOLDER)}
               className="aspect-square w-full"
               onClick={() => setPopoverOpen((s) => !s)}
             >
@@ -64,9 +65,9 @@ export const ImageAlbumItem: FC<ImageAlbumItemProps> = ({
           </Popover.Target>
           <Popover.Dropdown>
             <TextInput
-              label={t('Title')}
+              label={t(MESSAGES.TITLE)}
               value={metadata?.title || ''}
-              placeholder={t('Some text')}
+              placeholder={t(MESSAGES.PLACEHOLDER_TITLE)}
               onChange={(e) =>
                 onMetadataUpdate(id, {
                   key: 'title',
@@ -75,10 +76,10 @@ export const ImageAlbumItem: FC<ImageAlbumItemProps> = ({
               }
             />
             <Textarea
-              label={t('Description')}
+              label={t(MESSAGES.DESCRIPTION)}
               mt="sm"
               value={metadata?.description || ''}
-              placeholder={t('Some text')}
+              placeholder={t(MESSAGES.DESCRIPTION_PLACEHOLDER)}
               onChange={(e) =>
                 onMetadataUpdate(id, {
                   key: 'description',
