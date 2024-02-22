@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.21.1
+
+### Patch Changes
+
+- d799d5d: Fixes admin language selector
+
 ## 0.21.0
 
 ### Minor Changes

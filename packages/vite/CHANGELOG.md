@@ -1,5 +1,11 @@
 # @prom-cms/vite
 
+## 0.3.1
+
+### Patch Changes
+
+- 015a05a: Fixes outdir to be correct path to public directory
+
 ## 0.3.0
 
 ### Minor Changes

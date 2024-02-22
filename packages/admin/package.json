@@ -1,6 +1,6 @@
 {
   "name": "@prom-cms/admin",
-  "version": "0.21.0",
+  "version": "0.21.1",
   "type": "module",
   "main": "./index.js",
   "exports": {
@@ -74,7 +74,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@prom-cms/vite": "^0.3.0",
+    "@prom-cms/vite": "^0.3.1",
     "@prom-cms/prettier-config": "^0.1.1",
     "@types/find-config": "1.0.1",
     "@types/fs-extra": "9.0.13",
