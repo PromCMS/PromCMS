@@ -11,6 +11,12 @@ import type { Logger, Plugin } from 'vite';
 import { runBeforeExiting } from './runBeforeExiting.js';
 import { startPHPServer } from './startPhpServer.js';
 
+declare module 'http' {
+  export interface IncomingMessage {
+    body?: string | Record<any, any> | FormData;
+  }
+}
+
 export type VitePromPluginOptions = {
   paths?: { project?: string; phpFiles?: string };
   onExit?: () => void | Promise<void>;
@@ -210,16 +216,17 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
             }
           }
 
-          // @ts-ignore
           request.body = formData;
         }
 
         if (
           request.headers['content-type'] ===
-          'application/x-www-form-urlencoded'
+            'application/x-www-form-urlencoded' &&
+          typeof request.body === 'object'
         ) {
-          // @ts-ignore
-          request.body = new URLSearchParams(Object.entries(request.body));
+          request.body = new URLSearchParams(
+            Object.entries(request.body)
+          ).toString();
         }
 
         next();
@@ -287,16 +294,11 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
               clientRequest.method !== 'HEAD'
             ) {
               requestInit.body =
-                // @ts-ignore
                 clientRequest.body instanceof FormData
-                  ? // @ts-ignore
-                    clientRequest.body
-                  : // @ts-ignore
-                    typeof clientRequest.body === 'string'
-                    ? // @ts-ignore
-                      clientRequest.body
-                    : // @ts-ignore
-                      JSON.stringify(clientRequest.body);
+                  ? clientRequest.body
+                  : typeof clientRequest.body === 'string'
+                    ? clientRequest.body
+                    : JSON.stringify(clientRequest.body);
 
               const headers = requestInit.headers! as Headers;
               if (
