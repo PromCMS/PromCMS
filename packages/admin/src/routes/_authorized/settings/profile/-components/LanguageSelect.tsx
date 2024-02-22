@@ -1,26 +1,21 @@
-import { MESSAGES, localizationLocalStorageKey } from '@constants';
-import { ComboboxData, Select } from '@mantine/core';
-import { useLocalStorage } from '@mantine/hooks';
-import i18next from 'i18next';
+import { MESSAGES, adminLanguages } from '@constants';
+import { Select } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 
-const languages: ComboboxData = [
-  { value: 'en', label: '🇬🇧 English' },
-  { value: 'cs', label: '🇨🇿 Česky' },
-  { value: 'de', label: '🇩🇪 German' },
-  { value: 'sk', label: '🇸🇰 Slovensky' },
-];
+const languages: Array<{ value: keyof typeof adminLanguages; label: string }> =
+  [
+    { value: 'cs', label: '🇨🇿 Česky' },
+    { value: 'en', label: '🇬🇧 English' },
+    { value: 'fr', label: '🇫🇷 Français' },
+    { value: 'sk', label: '🇸🇰 Slovensky' },
+    { value: 'de', label: '🇩🇪 Allemand' },
+  ];
 
 export const LanguageSelect = () => {
-  const { t } = useTranslation();
-  const [currentLanguage, setCurrentLanguage] = useLocalStorage({
-    key: localizationLocalStorageKey,
-    defaultValue: 'en',
-  });
+  const { t, i18n } = useTranslation();
 
   const onLanguageSelect = (nextLang: string | null) => {
-    setCurrentLanguage(nextLang || 'en');
-    i18next.changeLanguage(nextLang || 'en');
+    i18n.changeLanguage(nextLang || 'en');
   };
 
   return (
@@ -28,8 +23,9 @@ export const LanguageSelect = () => {
       label={t(MESSAGES.ADMIN_LANGUAGE)}
       placeholder={t(MESSAGES.SELECT_PLACEHOLDER)}
       data={languages}
-      value={currentLanguage}
+      value={i18n.language}
       onChange={onLanguageSelect}
+      allowDeselect
     />
   );
 };
