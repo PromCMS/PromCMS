@@ -57,7 +57,7 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
       c.server.strictPort = true;
 
       c.build ??= {};
-      c.build.outDir ??= '../public/dist';
+      c.build.outDir ??= '../../public/dist';
       // Serve static file on development but ignore in production build
       c.publicDir ??=
         envConfig.command === 'build'
