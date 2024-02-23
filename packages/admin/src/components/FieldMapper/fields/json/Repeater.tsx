@@ -77,26 +77,28 @@ export const Repeater: FC<{
             )}
             key={field.id}
           >
-            <div className="flex flex-col w-10 mt-6">
-              <ActionIcon
-                size="sm"
-                disabled={index === 0}
-                className="w-full max-h-[22px] min-h-[22px] rounded-b-none rounded-prom"
-                variant="white"
-                onClick={() => move(index, index - 1)}
-              >
-                <ChevronUp size={16} />
-              </ActionIcon>
-              <ActionIcon
-                size="sm"
-                disabled={allFields.length - 1 === index}
-                className="w-full max-h-[22px] min-h-[22px] rounded-t-none rounded-prom"
-                variant="white"
-                onClick={() => move(index, index + 1)}
-              >
-                <ChevronDown size={16} />
-              </ActionIcon>
-            </div>
+            {readonly ? null : (
+              <div className="flex flex-col w-10 mt-6">
+                <ActionIcon
+                  size="sm"
+                  disabled={index === 0}
+                  className="w-full max-h-[22px] min-h-[22px] rounded-b-none rounded-prom"
+                  variant="white"
+                  onClick={() => move(index, index - 1)}
+                >
+                  <ChevronUp size={16} />
+                </ActionIcon>
+                <ActionIcon
+                  size="sm"
+                  disabled={allFields.length - 1 === index}
+                  className="w-full max-h-[22px] min-h-[22px] rounded-t-none rounded-prom"
+                  variant="white"
+                  onClick={() => move(index, index + 1)}
+                >
+                  <ChevronDown size={16} />
+                </ActionIcon>
+              </div>
+            )}
             {columns.map((columnInfo) => {
               let result = <></>;
               const columnFieldName = `${fieldName}.${index}.${columnInfo.name}`;
