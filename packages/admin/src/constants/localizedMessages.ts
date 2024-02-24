@@ -574,6 +574,8 @@ export const localizedMessages: Partial<
         'Voulez-vous vraiment supprimer ce dossier?',
       [MESSAGES.DELETE_FILE_QUESTION]:
         'Voulez-vous vraiment supprimer ce fichier?',
+      [MESSAGES.UPDATE_AN_ENTRY]: 'Úprava prvku',
+      [MESSAGES.CREATE_AN_ENTRY]: 'Vytvoření nového prvku',
     },
   },
   sk: {

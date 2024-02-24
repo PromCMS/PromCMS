@@ -232,6 +232,8 @@ export const MESSAGES = {
   USERS: 'Users',
   CREATE_AN_USER: 'Create an user',
   UPDATE_AN_USER: 'Update an user',
+  UPDATE_AN_ENTRY: 'Update an entry',
+  CREATE_AN_ENTRY: 'Create an entry',
   ADD_CONTRIBUTOR_TEXT:
     'Add contributor and add permission to edit to some user',
   CONTRIBUTORS: 'Contributors',
