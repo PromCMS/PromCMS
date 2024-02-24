@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.21.3
+
+### Patch Changes
+
+- 464c781: Adds missing translations for show selected item on select
+
 ## 0.21.2
 
 ### Patch Changes
