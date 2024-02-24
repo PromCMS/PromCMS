@@ -1,5 +1,11 @@
 # @prom-cms/api-client
 
+## 0.15.0
+
+### Minor Changes
+
+- 7d0087c: BREAKING: Fixes and removes incorrect handler methods. Updates and creates of localization keys should be done through upsert
+
 ## 0.14.1
 
 ### Patch Changes

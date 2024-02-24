@@ -1,5 +1,11 @@
 # @prom-cms/vite
 
+## 0.3.2
+
+### Patch Changes
+
+- cd421cc: Fixes missing toString for url search params on encoded form data
+
 ## 0.3.1
 
 ### Patch Changes
