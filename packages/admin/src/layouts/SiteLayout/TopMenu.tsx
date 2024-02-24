@@ -151,6 +151,25 @@ export const TopMenu: FC = () => {
       return [...newValue];
     });
 
+  const showRolesLink = currentUser?.isAdmin;
+  const showLocalizationsLink =
+    (settings.application?.i18n?.languages.length ?? 0) >= 2 &&
+    currentUser?.can({
+      action: 'read',
+      targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.TRANSLATIONS,
+    });
+  const showUsersLink = currentUser?.can({
+    action: 'read',
+    targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
+  });
+  const showSettingsLink = currentUser?.can({
+    action: 'read',
+    targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
+  });
+
+  const showOptionsDropdown =
+    showRolesLink || showLocalizationsLink || showUsersLink || showSettingsLink;
+
   return (
     <header
       className={clsx(
@@ -205,80 +224,76 @@ export const TopMenu: FC = () => {
             </div>
           </div>
         </ActionIcon>
-        <Menu
-          withArrow
-          position="bottom-end"
-          arrowPosition="center"
-          transitionProps={{ transition: 'pop' }}
-          shadow="xl"
-          opened={openedSubmenus.includes(SUBMENU_NAMES.CONFIG)}
-          onClose={() => toggleSubmenu(SUBMENU_NAMES.CONFIG)}
-          onOpen={() => toggleSubmenu(SUBMENU_NAMES.CONFIG)}
-        >
-          <Menu.Target>
-            <ActionIcon
-              className={clsx(MENU_BUTTON_CLASSNAME, MENU_SUBITEM_CLASSNAMES)}
-            >
-              <Settings className="w-6 h-6" />
-            </ActionIcon>
-          </Menu.Target>
-          <Menu.Dropdown>
-            {currentUser?.can({
-              action: 'read',
-              targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
-            }) ? (
-              <Menu.Item
-                color="teal"
-                leftSection={<Settings size={USER_MENU_ICON_SIZE} />}
-                onClick={() => {
-                  router.navigate({ to: '/settings/system' });
-                }}
+        {showOptionsDropdown ? (
+          <Menu
+            withArrow
+            position="bottom-end"
+            arrowPosition="center"
+            transitionProps={{ transition: 'pop' }}
+            shadow="xl"
+            opened={openedSubmenus.includes(SUBMENU_NAMES.CONFIG)}
+            onClose={() => toggleSubmenu(SUBMENU_NAMES.CONFIG)}
+            onOpen={() => toggleSubmenu(SUBMENU_NAMES.CONFIG)}
+          >
+            <Menu.Target>
+              <ActionIcon
+                className={clsx(MENU_BUTTON_CLASSNAME, MENU_SUBITEM_CLASSNAMES)}
               >
-                {t(MESSAGES.SYSTEM_SETTINGS)}
-              </Menu.Item>
-            ) : null}
-            {currentUser?.can({
-              action: 'read',
-              targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.USERS,
-            }) ? (
-              <Menu.Item
-                color="blue"
-                leftSection={<Users size={USER_MENU_ICON_SIZE} />}
-                onClick={() => {
-                  router.navigate({ to: '/users' });
-                }}
-              >
-                {t(MESSAGES.USERS)}
-              </Menu.Item>
-            ) : null}
-            {(settings.application?.i18n?.languages.length ?? 0) >= 2 ? (
-              <Menu.Item
-                color="blue"
-                leftSection={<LanguageHiragana size={USER_MENU_ICON_SIZE} />}
-                onClick={() => {
-                  router.navigate({
-                    to: pageUrls.settings.translations(
-                      settings?.application?.i18n.languages[1]!
-                    ).list,
-                  });
-                }}
-              >
-                {t(MESSAGES.GENERAL_TRANSLATIONS)}
-              </Menu.Item>
-            ) : null}
-            {currentUser?.isAdmin ? (
-              <Menu.Item
-                color="orange"
-                leftSection={<UserExclamation size={USER_MENU_ICON_SIZE} />}
-                onClick={() => {
-                  router.navigate({ to: '/settings/user-roles' });
-                }}
-              >
-                {t(MESSAGES.USER_ROLES)}
-              </Menu.Item>
-            ) : null}
-          </Menu.Dropdown>
-        </Menu>
+                <Settings className="w-6 h-6" />
+              </ActionIcon>
+            </Menu.Target>
+            <Menu.Dropdown>
+              {showSettingsLink ? (
+                <Menu.Item
+                  color="teal"
+                  leftSection={<Settings size={USER_MENU_ICON_SIZE} />}
+                  onClick={() => {
+                    router.navigate({ to: '/settings/system' });
+                  }}
+                >
+                  {t(MESSAGES.SYSTEM_SETTINGS)}
+                </Menu.Item>
+              ) : null}
+              {showUsersLink ? (
+                <Menu.Item
+                  color="blue"
+                  leftSection={<Users size={USER_MENU_ICON_SIZE} />}
+                  onClick={() => {
+                    router.navigate({ to: '/users' });
+                  }}
+                >
+                  {t(MESSAGES.USERS)}
+                </Menu.Item>
+              ) : null}
+              {showLocalizationsLink ? (
+                <Menu.Item
+                  color="blue"
+                  leftSection={<LanguageHiragana size={USER_MENU_ICON_SIZE} />}
+                  onClick={() => {
+                    router.navigate({
+                      to: pageUrls.settings.translations(
+                        settings?.application?.i18n.languages[1]!
+                      ).list,
+                    });
+                  }}
+                >
+                  {t(MESSAGES.GENERAL_TRANSLATIONS)}
+                </Menu.Item>
+              ) : null}
+              {showRolesLink ? (
+                <Menu.Item
+                  color="orange"
+                  leftSection={<UserExclamation size={USER_MENU_ICON_SIZE} />}
+                  onClick={() => {
+                    router.navigate({ to: '/settings/user-roles' });
+                  }}
+                >
+                  {t(MESSAGES.USER_ROLES)}
+                </Menu.Item>
+              ) : null}
+            </Menu.Dropdown>
+          </Menu>
+        ) : null}
         <Menu
           withArrow
           position="bottom-end"
