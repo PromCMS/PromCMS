@@ -26,10 +26,10 @@ export class GeneralTranslationsPart extends ApiClientPart {
     });
   }
 
-  async update(key: string, value: string, language: string) {
+  async upsert(key: string, value: string, language: string) {
     return this.request<Response<Record<string, string>>>({
       method: 'POST',
-      url: '/update',
+      url: '/items/upsert',
       data: {
         value,
         key,
@@ -44,18 +44,7 @@ export class GeneralTranslationsPart extends ApiClientPart {
   async delete(key: string) {
     return this.request<Response<Record<string, string>>>({
       method: 'DELETE',
-      url: '/delete',
-      data: { data: { key } },
-    });
-  }
-
-  /**
-   * Creates key in default language
-   */
-  async create(key: string) {
-    return this.request<Response<Record<string, string>>>({
-      method: 'DELETE',
-      url: '/create',
+      url: '/items/delete',
       data: { data: { key } },
     });
   }

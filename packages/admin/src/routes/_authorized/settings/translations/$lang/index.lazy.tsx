@@ -85,7 +85,7 @@ function Page() {
         successMessage: t(MESSAGES.TRANSLATION_UPDATE_DONE),
       },
       async () => {
-        await apiClient.generalTranslations.update(key, data![key], lang!);
+        await apiClient.generalTranslations.upsert(key, data![key], lang!);
         await refetch();
         setIsUpdating(false);
         setUserIsNotTyping();

@@ -48,7 +48,7 @@ function Page() {
           successMessage: t(MESSAGES.TRANSLATION_CREATE_DONE),
         },
         async () => {
-          await apiClient.generalTranslations.update(
+          await apiClient.generalTranslations.upsert(
             values.key,
             values.value,
             lang!
