@@ -20,6 +20,7 @@ export class GeneralTranslationsPart extends ApiClientPart {
   async getManyForLanguage(lang: string) {
     return this.request<Response<Record<string, string>>>({
       method: 'GET',
+      url: '/items',
       params: {
         lang,
       },
