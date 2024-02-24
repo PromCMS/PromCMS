@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.21.4
+
+### Patch Changes
+
+- 8d9de35: Updates design of file underpage and create new localization key page
+
 ## 0.21.3
 
 ### Patch Changes
