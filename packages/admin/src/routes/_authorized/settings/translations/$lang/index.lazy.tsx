@@ -5,13 +5,15 @@ import { useSettings } from '@contexts/SettingsContext';
 import { PageLayout } from '@layouts/PageLayout';
 import {
   ActionIcon,
+  Alert,
   Button,
   Group,
+  Kbd,
   LoadingOverlay,
   Table,
   Textarea,
 } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { useDisclosure, useLocalStorage } from '@mantine/hooks';
 import {
   Link,
   Outlet,
@@ -22,8 +24,8 @@ import {
 import { useGeneralTranslations } from 'hooks/useGeneralTranslations';
 import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Plus, Trash } from 'tabler-icons-react';
+import { Trans, useTranslation } from 'react-i18next';
+import { Plus, QuestionMark, Trash } from 'tabler-icons-react';
 
 import { TranslationsForLanguageRoute } from './index';
 
@@ -39,6 +41,12 @@ function Page() {
   const navigate = useNavigate();
   const { lang } = useParams({
     from: TranslationsForLanguageRoute.id,
+  });
+  const [howToDismissed, setHowToDismissed] = useLocalStorage({
+    key: 'how-to-localizations-dismissed',
+    defaultValue: false,
+    deserialize: (value) => value === '1',
+    serialize: (value) => (value ? '1' : '0'),
   });
   const reqWithNotification = useRequestWithNotifications();
   const [userIsUpdating, { open: setUserIsTyping, close: setUserIsNotTyping }] =
@@ -143,6 +151,8 @@ function Page() {
               onSaveItem(key);
             }
           }}
+          autosize
+          minRows={4}
           value={value}
           placeholder={key}
         />
@@ -183,6 +193,23 @@ function Page() {
           visible={isLoading || itemIsUpdating}
           overlayProps={{ blur: 2 }}
         />
+
+        {!howToDismissed ? (
+          <Alert
+            icon={<QuestionMark />}
+            title={t(MESSAGES.HOW_TO)}
+            withCloseButton
+            onClose={() => setHowToDismissed(true)}
+          >
+            <Trans
+              t={t}
+              i18nKey={MESSAGES.HOW_TO_MESSAGE}
+              components={{
+                kbd: <Kbd />,
+              }}
+            />
+          </Alert>
+        ) : null}
 
         <Table verticalSpacing="lg">
           <Table.Thead>{ths}</Table.Thead>

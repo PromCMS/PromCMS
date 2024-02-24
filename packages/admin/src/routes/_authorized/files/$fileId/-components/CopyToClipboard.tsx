@@ -16,16 +16,16 @@ export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
     <TextInput
       key="fileUrl"
       label={t(MESSAGES.FILE_URL)}
-      type={'string'}
+      type="string"
       className="w-full"
       autoComplete="off"
-      value={fileUrl.pathname}
+      value={fileUrl.toString()}
       rightSection={
         <Tooltip
           label={t(
             clipboard.copied ? MESSAGES.COPY_DONE : MESSAGES.COPY_TO_CLIPBOARD
           )}
-          position="left"
+          position="top"
           radius="xl"
           transitionProps={{ transition: 'fade', duration: 200 }}
           opened={hovered || clipboard.copied}
@@ -35,10 +35,9 @@ export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
             onClick={onCopyClick}
             color="blue"
             variant="filled"
-            size="xl"
             className="mr-2"
           >
-            <ClipboardCheck className="h-7 w-7" />
+            <ClipboardCheck className="h-5 w-5" />
           </ActionIcon>
         </Tooltip>
       }

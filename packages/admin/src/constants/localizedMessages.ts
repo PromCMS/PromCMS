@@ -283,6 +283,9 @@ export const localizedMessages: Partial<
       [MESSAGES.DELETE_FOLDER_QUESTION]: 'Opravdu chcete tuto složku smazat?',
       [MESSAGES.DELETE_FILE_QUESTION]: 'Opravdu chcete tento soubor smazat?',
       [MESSAGES.CONFIRM_SELECTION]: 'Potvrdit výběr',
+      [MESSAGES.HOW_TO]: 'Jak na to 🤔',
+      [MESSAGES.HOW_TO_MESSAGE]: `Po vybrání jazyka v nabídce v levé horní části můžete přidat novou jazykovou mutaci na text z hlavního jazyka nebo upravit již vytvořené mutace.<br />
+Pro upravení jazykové mutace stačí pouze upravit hodnotu mutace a uložit ji pomocí klávesy <kbd>Enter</kbd>. `,
     },
   },
   fr: {

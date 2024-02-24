@@ -2,6 +2,7 @@ import { apiClient } from '@api';
 import { IFileListContext } from '@components/FileList/context';
 import { pageUrls } from '@constants';
 import { ActionIcon, Checkbox } from '@mantine/core';
+import { Link } from '@tanstack/react-router';
 import {
   AnchorHTMLAttributes,
   ChangeEventHandler,
@@ -28,9 +29,9 @@ const LinkItem: FC<
     'ref'
   >
 > = ({ itemId, children, className, ...rest }) => (
-  <a href={`/admin${pageUrls.files.view(itemId)}`} {...rest}>
+  <Link to={`/admin${pageUrls.files.view(itemId)}`} {...rest}>
     {children}
-  </a>
+  </Link>
 );
 
 export interface FileItemProps extends FileItemType {

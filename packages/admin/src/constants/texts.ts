@@ -273,6 +273,9 @@ export const MESSAGES = {
   GO_BACK_TO_LOGIN: 'Back to login',
 
   PROMISE_FINISHED_MESSAGE_DEFAULT: 'Task completed successfully',
+  HOW_TO: 'How to',
+  HOW_TO_MESSAGE: `After choosing language from select in top left corner you can either add new language mutation of your text from default langugage or manage your existing items.<br />
+To update existing mutation in current language you can simply find your mutation, change it to your liking and just press <kbd>Enter</kbd> to save it.`,
 
   UPLOADING: 'Uploading',
   UPLOADING_FILES: 'Uploading files...',

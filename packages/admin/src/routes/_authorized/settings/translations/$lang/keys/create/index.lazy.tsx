@@ -2,7 +2,8 @@ import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
 import { MESSAGES } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
-import { Button, Modal, TextInput } from '@mantine/core';
+import { PageLayout } from '@layouts/PageLayout';
+import { Alert, Button, TextInput, Textarea } from '@mantine/core';
 import {
   createLazyFileRoute,
   useNavigate,
@@ -70,48 +71,47 @@ function Page() {
   }, [lang, settings]);
 
   return (
-    <Modal
-      opened={true}
-      onClose={onClose}
-      centered
-      padding={32}
-      size={500}
-      className="overflow-auto"
-      title={t(MESSAGES.TRANSLATION_CREATE_PAGE_TITLE)}
-    >
-      <FormProvider {...formMethods}>
-        <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
-          <LanguageSelect
-            disabled
-            label={t(MESSAGES.FOR_LANGUAGE)}
-            value={lang}
-          />
-          <TextInput
-            label={t(MESSAGES.TRANSLATION_KEY)}
-            mt={'sm'}
-            {...register('key', {
-              min: { value: 1, message: t(MESSAGES.FIELD_REQUIRED) },
-            })}
-          />
-          <TextInput
-            label={t(MESSAGES.TRANSLATION_VALUE)}
-            mt={'sm'}
-            description={t(MESSAGES.CREATE_TRANSLATION_KEY_VALUE_DESC)}
-            {...register('value', {
-              min: { value: 1, message: t(MESSAGES.FIELD_REQUIRED) },
-            })}
-          />
-          <Button
-            className="mr-auto block"
-            type="submit"
-            loading={formState.isSubmitting}
-            mt={'lg'}
-            size="md"
-          >
-            {t(MESSAGES.CREATE_ITEM)}
-          </Button>
-        </form>
-      </FormProvider>
-    </Modal>
+    <PageLayout>
+      <PageLayout.Header
+        title={t(MESSAGES.TRANSLATION_CREATE_PAGE_TITLE)}
+      ></PageLayout.Header>
+      <PageLayout.Content>
+        <FormProvider {...formMethods}>
+          <form className="h-full" onSubmit={handleSubmit(onSubmit)}>
+            <LanguageSelect
+              disabled
+              label={t(MESSAGES.FOR_LANGUAGE)}
+              value={lang}
+            />
+            <TextInput
+              label={t(MESSAGES.TRANSLATION_KEY)}
+              mt={'sm'}
+              {...register('key', {
+                min: { value: 1, message: t(MESSAGES.FIELD_REQUIRED) },
+              })}
+            />
+            <Textarea
+              label={t(MESSAGES.TRANSLATION_VALUE)}
+              mt={'sm'}
+              minRows={4}
+              autosize
+              description={t(MESSAGES.CREATE_TRANSLATION_KEY_VALUE_DESC)}
+              {...register('value', {
+                min: { value: 1, message: t(MESSAGES.FIELD_REQUIRED) },
+              })}
+            />
+            <Button
+              className="mr-auto block"
+              type="submit"
+              loading={formState.isSubmitting}
+              mt={'lg'}
+              size="md"
+            >
+              {t(MESSAGES.CREATE_ITEM)}
+            </Button>
+          </form>
+        </FormProvider>
+      </PageLayout.Content>
+    </PageLayout>
   );
 }
