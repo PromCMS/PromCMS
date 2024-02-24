@@ -323,7 +323,7 @@ const SingleSelect: FC<RelationshipItemSelectProps> = ({
         >
           <Text size="sm" color="blue">
             <ExternalLink size={15} className="mr-1 relative top-0.5" />
-            {MESSAGES.SHOW_SELECTED_ITEM}
+            {t(MESSAGES.SHOW_SELECTED_ITEM)}
           </Text>
         </Link>
       ) : null}
