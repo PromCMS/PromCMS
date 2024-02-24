@@ -1,5 +1,16 @@
 # @prom-cms/admin
 
+## 0.21.2
+
+### Patch Changes
+
+- 7d0087c: Fixes usage of generalTranslations methods
+- 79c331b: Fixes missing condition for translations when user does not have necessary user role that can atleast read translations
+- af64685: Adds missing translations for entity underpages title.
+- 74c2e4c: Hides arrow buttons in repeater on readonly
+- Updated dependencies [7d0087c]
+  - @prom-cms/api-client@0.15.0
+
 ## 0.21.1
 
 ### Patch Changes
