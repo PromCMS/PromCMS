@@ -1,5 +1,11 @@
 # @prom-cms/admin
 
+## 0.21.5
+
+### Patch Changes
+
+- cd6697c: Updates designs of localization editor. Now it has better clarity on what is possible and what is not
+
 ## 0.21.4
 
 ### Patch Changes
