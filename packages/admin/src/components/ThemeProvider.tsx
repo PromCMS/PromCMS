@@ -44,6 +44,8 @@ export const theme: MantineThemeOverride = {
     Select: {
       defaultProps: {
         size: 'md',
+        allowDeselect: false,
+        checkIconPosition: 'right',
       },
       classNames: {
         option: 'dark:text-gray-800',

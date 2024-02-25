@@ -39,7 +39,7 @@ const Header: FC<PropsWithChildren<HeaderProps>> = ({
       <div className={classNames?.wrapper}>
         {beforeOutlet}
         {title ? (
-          <h1 className="text-4xl font-semibold mt-6">{title}</h1>
+          <h1 className="text-2xl sm:text-4xl font-semibold mt-6">{title}</h1>
         ) : null}
         {children}
       </div>

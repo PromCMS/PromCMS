@@ -1,6 +1,11 @@
 import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
-import { MESSAGES, pageUrls } from '@constants';
+import {
+  MESSAGES,
+  adminLanguages,
+  adminLanguagesToFlags,
+  pageUrls,
+} from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
 import { PageLayout } from '@layouts/PageLayout';
 import {
@@ -130,9 +135,12 @@ function Page() {
 
   const ths = (
     <Table.Tr>
-      <Table.Th>{t(MESSAGES.TRANSLATION_KEY)}</Table.Th>
-      <Table.Th className="w-full max-w-[350px]">
-        {t(MESSAGES.TRANSLATION_VALUE)}
+      <Table.Th className="w-1/2">
+        {adminLanguagesToFlags[settings.application?.i18n.default!] ?? null}{' '}
+        {t(MESSAGES.TRANSLATION_KEY)}
+      </Table.Th>
+      <Table.Th className="w-1/2">
+        {adminLanguagesToFlags[lang] ?? null} {t(MESSAGES.TRANSLATION_VALUE)}
       </Table.Th>
       <Table.Th className="w-full max-w-[100px] opacity-0">Tools</Table.Th>
     </Table.Tr>
@@ -140,8 +148,10 @@ function Page() {
 
   const rows = sortedTranslations.map(([key, value]) => (
     <Table.Tr key={key}>
-      <Table.Td className="align-top">{key}</Table.Td>
-      <Table.Td className="w-full max-w-[350px]">
+      <Table.Td className="align-top w-1/2">
+        <Textarea autosize readOnly minRows={4} value={key} disabled />
+      </Table.Td>
+      <Table.Td className="w-1/2">
         <Textarea
           onFocus={setUserIsTyping}
           onBlur={() => onSaveItem(key)}
@@ -211,7 +221,7 @@ function Page() {
           </Alert>
         ) : null}
 
-        <Table verticalSpacing="lg">
+        <Table verticalSpacing="md">
           <Table.Thead>{ths}</Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>
           <Table.Tfoot>{ths}</Table.Tfoot>

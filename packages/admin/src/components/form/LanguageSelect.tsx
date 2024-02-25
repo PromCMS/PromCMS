@@ -72,13 +72,13 @@ export const LanguageSelect: FC<LanguageSelectProps> = ({
       placeholder={t(MESSAGES.SELECT_PLACEHOLDER)}
       disabled={!settings || disabled}
       value={value}
-      leftSection={
-        <Flag
-          width={18}
-          countryCode={(value && languageCodeToFlagCode[value]) || value}
-          placeholder={<Hash size={18} />}
-        />
-      }
+      // leftSection={
+      //   <Flag
+      //     width={18}
+      //     countryCode={(value && languageCodeToFlagCode[value]) || value}
+      //     placeholder={<Hash size={18} />}
+      //   />
+      // }
       {...rest}
     />
   );

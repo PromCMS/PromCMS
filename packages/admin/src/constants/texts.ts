@@ -114,6 +114,8 @@ export const MESSAGES = {
   TRANSLATION_CREATE_PAGE_TITLE: 'Create a translation key',
   TRANSLATION_KEY: 'Translation key',
   TRANSLATION_VALUE: 'Translation value',
+  CREATE_TRANSLATION_KEY_KEY_DESC:
+    'Enter some text that you want to mutate from your default language.',
 
   ITEM_SINGLETON_UPDATE_WORKING: 'Updating singleton data, please wait...',
   ITEM_SINGLETON_UPDATE_DONE: 'Singleton updated!',
@@ -240,7 +242,8 @@ export const MESSAGES = {
   ADD_CONTRIBUTOR: 'Add contributor',
   USER_ROLES: 'User Roles',
   GENERAL_TRANSLATIONS: 'General translations',
-  FOR_LANGUAGE: 'For language',
+  FROM_LANGUAGE: 'From language',
+  FOR_LANGUAGE: 'To language',
   EDIT: 'Upravit',
   CHOOSE_A_FILE: 'Choose a file',
   NAME: 'Name',

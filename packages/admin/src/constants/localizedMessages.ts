@@ -56,6 +56,7 @@ export const localizedMessages: Partial<
       [MESSAGES.BOLD]: 'tučně',
       [MESSAGES.DESCRIPTION_PLACEHOLDER]: 'Váš popis',
       [MESSAGES.ITALIC]: 'Kurzíva',
+      [MESSAGES.FROM_LANGUAGE]: 'Z jazyku',
       [MESSAGES.BLOCKQUOTE]: 'Blockquote',
       [MESSAGES.UNDO]: 'vrátit',
       [MESSAGES.REDO]: 'Předělat',
@@ -104,9 +105,12 @@ export const localizedMessages: Partial<
         'Mazání vybraného klíče, počkejte ...',
       [MESSAGES.TRANSLATION_DELETE_DONE]: 'Klíč vymazán!',
       [MESSAGES.TRANSLATION_DELETE_FAILED]: 'Odstranění se nepovedlo',
-      [MESSAGES.TRANSLATION_CREATE_PAGE_TITLE]: 'Vytvořte překladový klíč',
+      [MESSAGES.TRANSLATION_CREATE_PAGE_TITLE]:
+        'Vytvořte překladový klíč s jeho mutací',
       [MESSAGES.TRANSLATION_KEY]: 'Klíč překladu',
       [MESSAGES.TRANSLATION_VALUE]: 'Překladová hodnota',
+      [MESSAGES.CREATE_TRANSLATION_KEY_KEY_DESC]:
+        'Zadejte nějaký text, který chcete přeložit z vašeho hlavního jazyku.',
       [MESSAGES.ITEM_SINGLETON_UPDATE_WORKING]:
         'Ukládání změn vašich dat, počkejte ...',
       [MESSAGES.ITEM_SINGLETON_UPDATE_DONE]:
@@ -232,7 +236,7 @@ export const localizedMessages: Partial<
       [MESSAGES.ADD_CONTRIBUTOR]: 'Přidat přispěvatele',
       [MESSAGES.USER_ROLES]: 'Uživatelské role',
       [MESSAGES.GENERAL_TRANSLATIONS]: 'Obecné překlady',
-      [MESSAGES.FOR_LANGUAGE]: 'Pro jazyk',
+      [MESSAGES.FOR_LANGUAGE]: 'Do jazyku',
       [MESSAGES.EDIT]: 'Upravit',
       [MESSAGES.CHOOSE_A_FILE]: 'Vyberte soubor',
       [MESSAGES.NAME]: 'Název',
@@ -679,7 +683,7 @@ Pro upravení jazykové mutace stačí pouze upravit hodnotu mutace a uložit ji
       [MESSAGES.TRANSLATION_DELETE_DONE]: 'Kľúč odstránený!',
       [MESSAGES.TRANSLATION_DELETE_FAILED]: 'Odstrániť zlyhal',
       [MESSAGES.TRANSLATION_CREATE_PAGE_TITLE]: 'Vytvorte prekladový kľúč',
-      [MESSAGES.TRANSLATION_KEY]: 'Preklad',
+      [MESSAGES.TRANSLATION_KEY]: 'Kľúč Prekladu',
       [MESSAGES.TRANSLATION_VALUE]: 'Hodnota prekladu',
       [MESSAGES.ITEM_SINGLETON_UPDATE_WORKING]:
         'Aktualizácia svojich údajov, počkajte ...',
