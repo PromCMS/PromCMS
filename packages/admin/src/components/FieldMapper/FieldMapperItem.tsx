@@ -197,6 +197,7 @@ export const FieldMapperItem: FC<
                   error={errorMessage}
                   label={values.title}
                   disabled={disabled}
+                  showDownloadButton={values.admin.showDownloadButton}
                   {...values}
                 />
               )}

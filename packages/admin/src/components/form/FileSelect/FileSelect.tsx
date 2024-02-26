@@ -1,3 +1,4 @@
+import { apiClient } from '@api';
 import { MESSAGES } from '@constants';
 import { Button, Input } from '@mantine/core';
 import { useToggle } from '@mantine/hooks';
@@ -11,7 +12,7 @@ import {
   useMemo,
 } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pencil } from 'tabler-icons-react';
+import { Download, Pencil } from 'tabler-icons-react';
 import { EntityLink } from 'types/EntityLink';
 
 import { FileItem } from '@prom-cms/api-client';
@@ -36,6 +37,7 @@ export interface FileSelectProps
     newValue: EntityLink<FileItem> | EntityLink<FileItem>[] | null
   ) => void;
   onBlur?: () => void;
+  showDownloadButton?: boolean;
 }
 
 const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
@@ -49,6 +51,7 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
       onBlur,
       multiple,
       error,
+      showDownloadButton = false,
     },
     ref
   ) {
@@ -96,15 +99,32 @@ const FileSelect = forwardRef<HTMLInputElement, FileSelectProps>(
                 )}
               </div>
 
-              <Button
-                color="blue"
-                variant="light"
-                leftSection={<Pencil size={20} />}
-                size="md"
-                onClick={() => togglePickerOpen()}
-              >
-                {t(MESSAGES.EDIT)}
-              </Button>
+              <div className="flex flex-wrap gap-3">
+                <Button
+                  color="blue"
+                  variant="light"
+                  leftSection={<Pencil size={20} />}
+                  size="md"
+                  onClick={() => togglePickerOpen()}
+                >
+                  {t(MESSAGES.EDIT)}
+                </Button>
+                {showDownloadButton && modalPickedFiles[0] ? (
+                  <Button
+                    color="grape"
+                    variant="light"
+                    component="a"
+                    leftSection={<Download size={20} />}
+                    size="md"
+                    download
+                    href={apiClient.library.files
+                      .getUrl(modalPickedFiles[0]?.id ?? '', { q: '100' })
+                      .toString()}
+                  >
+                    {t(MESSAGES.DOWNLOAD)}
+                  </Button>
+                ) : null}
+              </div>
             </div>
           </Input.Wrapper>
         </div>

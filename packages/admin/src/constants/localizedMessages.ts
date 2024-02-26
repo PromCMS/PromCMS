@@ -7,6 +7,12 @@ export const localizedMessages: Partial<
     { translation: Record<(typeof MESSAGES)[keyof typeof MESSAGES], string> }
   >
 > = {
+  en: {
+    translation: {
+      [MESSAGES.PROM_FILES]: 'Files',
+      [MESSAGES.PROM_USERS]: 'Users',
+    },
+  },
   cs: {
     translation: {
       [MESSAGES.LINK]: 'Odkaz',
