@@ -1,5 +1,11 @@
 # @prom-cms/schema
 
+## 0.10.0
+
+### Minor Changes
+
+- 33b13d6: Adds a way to define cascade and onDelete actions for relationship models
+
 ## 0.9.0
 
 ### Minor Changes

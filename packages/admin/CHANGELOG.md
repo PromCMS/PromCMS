@@ -1,5 +1,15 @@
 # @prom-cms/admin
 
+## 0.21.6
+
+### Patch Changes
+
+- 9896610: Fixes many issues regarding relationship reflection field and moves await to submit of login and submit of create new translation
+- ab94f6f: Adds a way to define showing download button for file select
+- Updated dependencies [33b13d6]
+  - @prom-cms/schema@0.10.0
+  - @prom-cms/api-client@0.15.2
+
 ## 0.21.5
 
 ### Patch Changes
