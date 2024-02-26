@@ -2,11 +2,28 @@ import { z } from 'zod';
 
 import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 
+export enum OnDeleteRelationshipMode {
+  SET_NULL = 'set-null',
+  CASCADE = 'cascade',
+}
+
+export enum RelationshipCascadeMode {
+  PERSIST = 'persist',
+  REMOVE = 'remove',
+}
+
 export const columnTypeRelationshipSchema = columnTypeBaseSchema.extend({
   type: z.enum(['relationship']),
 
+  // TODO: Validate them during schema validation if they are correctly setuped
   mappedBy: z.string().optional(),
   inversedBy: z.string().optional(),
+
+  // TODO: Validate if onDelete is correctly used. This should be used only if this model is the owning side
+  onDelete: z.nativeEnum(OnDeleteRelationshipMode).optional(),
+
+  // TODO: Validate if this is used correctly - should be only at the reflection side
+  cascade: z.array(z.nativeEnum(RelationshipCascadeMode)).optional(),
 
   /**
    * Specify target model
