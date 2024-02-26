@@ -93,7 +93,6 @@ const MultipleSelect: FC<RelationshipItemSelectProps> = ({
   targetModelTableName,
   columnName,
   labelConstructor,
-  readonly,
 }) => {
   const [selectOpen, { toggle: toggleSelectOpen }] = useDisclosure();
   const { t } = useTranslation();

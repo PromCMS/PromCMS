@@ -225,7 +225,9 @@ export const getModelItemSchema = (
             columnShape = urlSchema;
             break;
           case 'enum':
-            columnShape = z.enum(column.enum as any);
+            columnShape = z.enum(
+              Object.values(column.enum.values) as [string, ...string[]]
+            );
             break;
         }
 

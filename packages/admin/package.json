@@ -62,7 +62,7 @@
     "@tiptap/extension-gapcursor": "^2.2.1",
     "react-dom": "18.2.0",
     "react-dropzone": "14.2.2",
-    "react-hook-form": "7.34.0",
+    "react-hook-form": "^7.50.1",
     "react-i18next": "11.18.3",
     "react-popper": "~2.3.0",
     "@tanstack/react-router": "^1.16.2",

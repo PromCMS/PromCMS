@@ -73,7 +73,7 @@ importers:
         version: 1.6.6(react-dom@18.2.0)(react@18.2.0)
       '@hookform/resolvers':
         specifier: 2.8.10
-        version: 2.8.10(react-hook-form@7.34.0)
+        version: 2.8.10(react-hook-form@7.50.1)
       '@mantine/core':
         specifier: ^7.5.2
         version: 7.5.2(@mantine/hooks@7.5.2)(@types/react@18.2.52)(react-dom@18.2.0)(react@18.2.0)
@@ -195,8 +195,8 @@ importers:
         specifier: 14.2.2
         version: 14.2.2(react@18.2.0)
       react-hook-form:
-        specifier: 7.34.0
-        version: 7.34.0(react@18.2.0)
+        specifier: ^7.50.1
+        version: 7.50.1(react@18.2.0)
       react-i18next:
         specifier: 11.18.3
         version: 11.18.3(i18next@21.6.14)(react-dom@18.2.0)(react@18.2.0)
@@ -2493,12 +2493,12 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
     dev: false
 
-  /@hookform/resolvers@2.8.10(react-hook-form@7.34.0):
+  /@hookform/resolvers@2.8.10(react-hook-form@7.50.1):
     resolution: {integrity: sha512-DDFtNlugsbwAhCJHYp3NcN5LvJrwSsCLPi41Wo5O8UAIbUFnBfY/jW+zKnlX57BZ4jE0j/g6R9rB3JlO89ad0g==}
     peerDependencies:
       react-hook-form: ^7.0.0
     dependencies:
-      react-hook-form: 7.34.0(react@18.2.0)
+      react-hook-form: 7.50.1(react@18.2.0)
     dev: false
 
   /@humanwhocodes/config-array@0.11.14:
@@ -8275,8 +8275,8 @@ packages:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
     dev: false
 
-  /react-hook-form@7.34.0(react@18.2.0):
-    resolution: {integrity: sha512-s0/TJ09NVlEk2JPp3yit1WnMuPNBXFmUKEQPulgDi9pYBw/ZmmAFHe6AXWq73Y+kp8ye4OcMf0Jv+i/qLPektg==}
+  /react-hook-form@7.50.1(react@18.2.0):
+    resolution: {integrity: sha512-3PCY82oE0WgeOgUtIr3nYNNtNvqtJ7BZjsbxh6TnYNbXButaD5WpjOmTjdxZfheuHKR68qfeFnEDVYoSSFPMTQ==}
     engines: {node: '>=12.22.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18

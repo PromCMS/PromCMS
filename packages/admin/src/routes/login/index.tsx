@@ -73,7 +73,7 @@ function LoginPage() {
       await apiClient.auth.login({ password, email });
       await refetchAuthContextData();
 
-      navigate({
+      await navigate({
         to: '/',
       });
     } catch (e) {

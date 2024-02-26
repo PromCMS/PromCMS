@@ -32,7 +32,8 @@ export const Repeater: FC<{
   const { fields, remove, move, append } = useFieldArray({
     name: fieldName,
   });
-  const fieldError = formState.errors?.[name]?.data?.message;
+  const fieldError = (formState.errors?.[name] as any | undefined)?.data
+    ?.message;
 
   const hasLabels = useMemo(
     () => !!Array.from(columns.values()).find(({ title }) => !!title),

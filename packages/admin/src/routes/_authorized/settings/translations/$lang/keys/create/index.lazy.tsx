@@ -37,11 +37,6 @@ function Page() {
   const { t } = useTranslation();
   const { handleSubmit, formState, register } = formMethods;
 
-  const onClose = useCallback(
-    () => navigate({ to: pageUrls.settings.translations(lang).list }),
-    [navigate]
-  );
-
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     try {
       reqWithNotification(
@@ -56,7 +51,8 @@ function Page() {
             values.value,
             lang!
           );
-          onClose();
+
+          await navigate({ to: pageUrls.settings.translations(lang).list });
         }
       );
     } catch (e) {}
