@@ -94,7 +94,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish prerelease
-        if: ${{ steps.versionAndRelease.outputs.published != true && steps.versionAndRelease.outputs.hasChangesets == true }}
+        if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
         run: |
           pnpm changeset pre enter next
           pnpm run version-packages
@@ -104,7 +104,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create JSON schema and upload
-        if: ${{ steps.versionAndRelease.outputs.published == true }}
+        if: ${{ steps.versionAndRelease.outputs.published == 'true' }}
         run: node .github/scripts/generate-schema-and-upload.mjs
         env:
           PROM_FTP_CONNECTION_STRING: ${{ secrets.PROM_FTP_CONNECTION_STRING }}
