@@ -97,6 +97,8 @@ jobs:
       - name: Remove changes
         run: git checkout .
 
+      - run: cd .changeset && ls
+
       - name: Publish prerelease
         if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
         run: |
