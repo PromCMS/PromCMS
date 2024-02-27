@@ -10,14 +10,14 @@ on:
 
 jobs:
   cancelPrevious: 
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - uses: n1hility/cancel-previous-runs@v3
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: version-and-release.yml 
   test:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     needs: cancelPrevious
     env:
       TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
