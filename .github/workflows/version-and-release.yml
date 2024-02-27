@@ -78,6 +78,7 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
+          registry-url: "https://npm.pkg.github.com"
 
       - name: Install Dependencies
         run: pnpm i
