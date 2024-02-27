@@ -62,6 +62,8 @@ jobs:
       - name: Checkout Repo
         # https://github.com/actions/checkout
         uses: actions/checkout@v4
+        with:
+          ref: 'main'
 
       - uses: actions/cache@v4
         name: Cache
@@ -78,7 +80,7 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install Dependencies
         run: pnpm i
@@ -94,10 +96,28 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Remove changes
-        run: git checkout .
+      - name: Update lockfile after version
+        if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
+        run: pnpm i --frozen-lockfile=false
 
-      - run: cd .changeset && ls
+      - name: Push changed lockfile
+        uses: EndBug/add-and-commit@v9
+        if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
+        with:
+          message: Adds updated lockfile
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          add: 'pnpm-lock.yaml'
+
+      - name: Checkout main
+        run: git checkout origin/main
+
+      - name: Authorize npm
+        run: |
+          touch .npmrc
+          echo //registry.npmjs.org/:_authToken=$NPM_TOKEN >> .npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish prerelease
         if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
