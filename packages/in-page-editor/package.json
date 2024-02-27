@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/in-page-edit",
   "description": "A PromCMS in page editor",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/icons/README.md",

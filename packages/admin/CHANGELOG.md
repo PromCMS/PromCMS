@@ -1,5 +1,13 @@
 # @prom-cms/admin
 
+## 0.21.7
+
+### Patch Changes
+
+- f3ed05c: Update tabler-icons to latest
+- Updated dependencies [f3ed05c]
+  - @prom-cms/schema@0.10.1
+
 ## 0.21.6
 
 ### Patch Changes

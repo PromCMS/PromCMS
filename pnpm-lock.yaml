@@ -90,7 +90,7 @@ importers:
         specifier: ^0.15.2
         version: link:../api-client
       '@prom-cms/schema':
-        specifier: ^0.10.0
+        specifier: ^0.10.1
         version: link:../schema
       '@svgr/webpack':
         specifier: ^6.1.2
