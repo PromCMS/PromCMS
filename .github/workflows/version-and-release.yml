@@ -1,4 +1,4 @@
-name: Release
+name: Check And Release
 
 on:
   workflow_dispatch:
@@ -9,22 +9,61 @@ on:
       - packages/**
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  cancelPrevious: 
+    runs-on: ubuntu-lates
     steps:
       - uses: n1hility/cancel-previous-runs@v3
         with: 
           token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: version-and-release.yml
-          
+          workflow: version-and-release.yml 
+  test:
+    runs-on: ubuntu-lates
+    needs: cancelPrevious
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    steps:
       - name: Checkout Repo
         # https://github.com/actions/checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - uses: actions/cache@v2
+      - uses: actions/cache@v4
+        name: Cache
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Test it all out
+        run: pnpm test
+
+      - name: Build it all out
+        run: pnpm build:packages
+    
+  release:
+    runs-on: ubuntu-latest
+    needs: test
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+    steps:
+      - name: Checkout Repo
+        # https://github.com/actions/checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
         name: Cache
         with:
           path: '**/node_modules'
@@ -44,7 +83,8 @@ jobs:
         run: pnpm i
 
         # https://github.com/changesets/action
-      - name: Create Release Pull Request or Publish to node package registry
+      - id: versionAndRelease
+        name: Create Release Pull Request or Publish to node package registry
         uses: changesets/action@v1
         with:
           publish: pnpm run release
@@ -53,9 +93,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Publish prerelease
+        if: ${{ steps.versionAndRelease.outputs.published != true && steps.versionAndRelease.outputs.hasChangesets == true }}
+        run: |
+          pnpm changeset pre enter next
+          pnpm run version-packages
+          pnpm run release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Create JSON schema and upload
+        if: ${{ steps.versionAndRelease.outputs.published == true }}
         run: node .github/scripts/generate-schema-and-upload.mjs
         env:
           PROM_FTP_CONNECTION_STRING: ${{ secrets.PROM_FTP_CONNECTION_STRING }}
-       
-          
