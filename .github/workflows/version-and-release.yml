@@ -108,6 +108,7 @@ jobs:
           committer_name: GitHub Actions
           committer_email: actions@github.com
           add: 'pnpm-lock.yaml'
+          push: '--set-upstream origin changeset-release/main'
 
       - name: Checkout main
         run: git checkout origin/main
