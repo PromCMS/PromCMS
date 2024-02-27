@@ -94,6 +94,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Remove changes
+        run: git checkout .
+
       - name: Publish prerelease
         if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
         run: |
