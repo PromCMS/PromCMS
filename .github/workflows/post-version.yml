@@ -1,6 +1,8 @@
 name: Post Version Updates
 
 on:
+  pull_request:
+    types: [opened, reopened]
   push:
     branches:
       - 'changeset-release/**'
