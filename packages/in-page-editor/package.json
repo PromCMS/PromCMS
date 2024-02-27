@@ -31,7 +31,7 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "tabler-icons-react": "^1.52.0"
+    "tabler-icons-react": "^1.56.0"
   },
   "devDependencies": {
     "@types/find-config": "1.0.1",

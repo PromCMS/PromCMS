@@ -70,7 +70,7 @@
     "@tanstack/router-vite-plugin": "^1.15.20",
     "sass": "~1.54.3",
     "svg-country-flags": "~1.2.10",
-    "tabler-icons-react": "^1.55.0"
+    "tabler-icons-react": "^1.56.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
