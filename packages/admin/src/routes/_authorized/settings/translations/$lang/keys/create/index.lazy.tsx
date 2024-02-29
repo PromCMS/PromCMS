@@ -10,8 +10,8 @@ import {
   useNavigate,
   useParams,
 } from '@tanstack/react-router';
-import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
-import { useCallback, useEffect } from 'react';
+import { toastedPromise } from '@utils';
+import { useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { ArrowDown, ArrowLeft, ArrowRight } from 'tabler-icons-react';
@@ -30,7 +30,6 @@ function Page() {
   const navigate = useNavigate();
   const settings = useSettings();
   const formMethods = useForm<FormValues>();
-  const reqWithNotification = useRequestWithNotifications();
   const { lang } = useParams({
     from: TranslationsForLanguageRoute.id,
   });
@@ -39,7 +38,7 @@ function Page() {
 
   const onSubmit: SubmitHandler<FormValues> = async (values) => {
     try {
-      reqWithNotification(
+      await toastedPromise(
         {
           title: t(MESSAGES.PLEASE_WAIT),
           message: t(MESSAGES.TRANSLATION_CREATE_WORKING),

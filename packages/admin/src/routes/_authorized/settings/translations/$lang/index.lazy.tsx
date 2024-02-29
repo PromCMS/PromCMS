@@ -1,12 +1,8 @@
 import { apiClient } from '@api';
 import { LanguageSelect } from '@components/form/LanguageSelect';
-import {
-  MESSAGES,
-  adminLanguages,
-  adminLanguagesToFlags,
-  pageUrls,
-} from '@constants';
+import { MESSAGES, adminLanguagesToFlags, pageUrls } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
+import { useGeneralTranslations } from '@hooks/useGeneralTranslations';
 import { PageLayout } from '@layouts/PageLayout';
 import {
   ActionIcon,
@@ -26,8 +22,7 @@ import {
   useNavigate,
   useParams,
 } from '@tanstack/react-router';
-import { useGeneralTranslations } from 'hooks/useGeneralTranslations';
-import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
+import { toastedPromise } from '@utils';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import { Plus, QuestionMark, Trash } from 'tabler-icons-react';
@@ -53,7 +48,6 @@ function Page() {
     deserialize: (value) => value === '1',
     serialize: (value) => (value ? '1' : '0'),
   });
-  const reqWithNotification = useRequestWithNotifications();
   const [userIsUpdating, { open: setUserIsTyping, close: setUserIsNotTyping }] =
     useDisclosure(false);
   const [itemIsUpdating, setIsUpdating] = useState(false);
@@ -91,7 +85,7 @@ function Page() {
     }
 
     setIsUpdating(true);
-    await reqWithNotification(
+    await toastedPromise(
       {
         title: t(MESSAGES.TRANSLATION_UPDATE_WORKING),
         message: t(MESSAGES.PLEASE_WAIT),
@@ -117,7 +111,7 @@ function Page() {
       }
 
       try {
-        reqWithNotification(
+        await toastedPromise(
           {
             title: t(MESSAGES.TRANSLATION_DELETE_WORKING),
             message: t(MESSAGES.LOADING_MESSAGE),

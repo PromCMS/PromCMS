@@ -1,10 +1,9 @@
 import { apiClient } from '@api';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { useAuth } from '@contexts/AuthContext';
-import { useRequestWithNotifications } from '@hooks/useRequestWithNotifications';
 import { ActionIcon, Button } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
-import { canUser, getObjectDiff } from '@utils';
+import { canUser, getObjectDiff, toastedPromise } from '@utils';
 import clsx from 'clsx';
 import { FC, useMemo } from 'react';
 import { useFormContext } from 'react-hook-form';
@@ -27,7 +26,6 @@ export const Header: FC = () => {
   const formValues = watch();
   const { user: loggedInUser } = useAuth();
 
-  const reqNotification = useRequestWithNotifications();
   const [workingState, setWorkingState] = useSetState({
     isSendingPasswordReset: false,
     isTogglingBlock: false,
@@ -52,7 +50,7 @@ export const Header: FC = () => {
     setWorkingState({ isSendingPasswordReset: true });
     const thisIsResend = user?.state === UserStates.passwordReset;
     try {
-      await reqNotification(
+      await toastedPromise(
         {
           title: t(MESSAGES.PLEASE_WAIT),
           message: t(
@@ -78,7 +76,7 @@ export const Header: FC = () => {
     const userIsNowBlocked = user!.state === UserStates.blocked;
 
     try {
-      await reqNotification(
+      await toastedPromise(
         {
           title: t(
             userIsNowBlocked

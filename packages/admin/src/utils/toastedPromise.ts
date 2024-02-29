@@ -1,14 +1,13 @@
 import { MESSAGES } from '@constants';
 import { notifications } from '@mantine/notifications';
-import { t } from 'i18next';
-
-import { generateUuid } from './data';
+import { t as importedT } from 'i18next';
 
 export interface NotificationConfig {
   message: string;
   title: string;
   successMessage?: string;
   errorMessage?: string | ((e: unknown) => string);
+  t?: typeof importedT;
 }
 
 const autocloseInterval = 4000;
@@ -17,6 +16,7 @@ export const toastedPromise = async <T extends () => Promise<any>>(
   config: NotificationConfig,
   fc: T
 ) => {
+  const { t = importedT } = config;
   const id = notifications.show({
     loading: true,
     title: config.title,
@@ -30,9 +30,10 @@ export const toastedPromise = async <T extends () => Promise<any>>(
     notifications.update({
       id,
       loading: false,
-      message:
+      title:
         config.successMessage ||
         t(MESSAGES.PROMISE_FINISHED_MESSAGE_DEFAULT).toString(),
+      message: '',
       autoClose: autocloseInterval,
     });
 
@@ -42,11 +43,12 @@ export const toastedPromise = async <T extends () => Promise<any>>(
       id,
       loading: false,
       color: 'red',
-      message: config.errorMessage
+      title: config.errorMessage
         ? typeof config.errorMessage === 'function'
           ? config.errorMessage(e)
           : config.errorMessage
         : t(MESSAGES.ERROR_BASIC).toString(),
+      message: '',
       autoClose: autocloseInterval,
     });
     if (!import.meta.env.PROD) {

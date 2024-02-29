@@ -1,9 +1,8 @@
 import { apiClient } from '@api';
 import { MESSAGES, pageUrls } from '@constants';
 import { useNavigate } from '@tanstack/react-router';
-import { getObjectDiff } from '@utils';
+import { getObjectDiff, toastedPromise } from '@utils';
 import axios from 'axios';
-import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -12,7 +11,6 @@ import { useCurrentUser } from './useCurrentUser';
 
 export const useOnSubmitCallback = () => {
   const navigate = useNavigate();
-  const reqNotification = useRequestWithNotifications();
   const { data: currentUser, refetch } = useCurrentUser();
   const { view } = useData();
   const { t } = useTranslation();
@@ -20,7 +18,7 @@ export const useOnSubmitCallback = () => {
 
   const callback = async (values) => {
     try {
-      await reqNotification(
+      await toastedPromise(
         {
           title: view === 'update' ? 'Updating' : 'Creating',
           message: t(

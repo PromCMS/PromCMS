@@ -4,10 +4,10 @@ import { LanguageSelect } from '@components/form/LanguageSelect';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { useSettings } from '@contexts/SettingsContext';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useCurrentUser } from '@hooks/useCurrentUser';
+import { useModelItem } from '@hooks/useModelItem';
 import { Button, Select, SimpleGrid, TextInput } from '@mantine/core';
-import { useCurrentUser } from 'hooks/useCurrentUser';
-import { useModelItem } from 'hooks/useModelItem';
-import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
+import { toastedPromise } from '@utils';
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { Controller, FormProvider, useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -56,7 +56,6 @@ export const Drawer: FC<{
     }
   );
   const { t } = useTranslation();
-  const reqNotification = useRequestWithNotifications();
   const formMethods = useForm<FormValue>({
     defaultValues: {} as any,
     resolver: zodResolver(schema),
@@ -90,35 +89,33 @@ export const Drawer: FC<{
   });
 
   const onSubmit = async (values) => {
-    try {
-      reqNotification(
-        {
-          title: t(
-            !isCreate
-              ? MESSAGES.SELECT_OPTION_UPDATE_WORKING
-              : MESSAGES.SELECT_OPTION_ADD_NEW_WORKING
-          ),
-          message: t(MESSAGES.PLEASE_WAIT),
-          successMessage: t(
-            !isCreate
-              ? MESSAGES.SELECT_OPTION_UPDATE_DONE
-              : MESSAGES.SELECT_OPTION_ADD_NEW_DONE
-          ),
-        },
-        async () => {
-          if (!isCreate) {
-            const { id, ...newOptionDataset } = values;
-            await apiClient.settings.update(optionToEdit, newOptionDataset, {
-              language,
-            });
-          } else {
-            await apiClient.settings.create(values);
-          }
-
-          await onOptionUpdateOrCreate();
+    await toastedPromise(
+      {
+        title: t(
+          !isCreate
+            ? MESSAGES.SELECT_OPTION_UPDATE_WORKING
+            : MESSAGES.SELECT_OPTION_ADD_NEW_WORKING
+        ),
+        message: t(MESSAGES.PLEASE_WAIT),
+        successMessage: t(
+          !isCreate
+            ? MESSAGES.SELECT_OPTION_UPDATE_DONE
+            : MESSAGES.SELECT_OPTION_ADD_NEW_DONE
+        ),
+      },
+      async () => {
+        if (!isCreate) {
+          const { id, ...newOptionDataset } = values;
+          await apiClient.settings.update(optionToEdit, newOptionDataset, {
+            language,
+          });
+        } else {
+          await apiClient.settings.create(values);
         }
-      );
-    } catch (e) {}
+
+        await onOptionUpdateOrCreate();
+      }
+    );
   };
 
   return (

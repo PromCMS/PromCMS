@@ -7,9 +7,8 @@ import { logger } from '@logger';
 import { getModelItemSchema } from '@schemas';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
-import { getObjectDiff, isApiResponse } from '@utils';
+import { getObjectDiff, isApiResponse, toastedPromise } from '@utils';
 import axios from 'axios';
-import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import {
   FC,
   createContext,
@@ -99,7 +98,6 @@ export const EntryUnderpageContextProvider: FC<{
   });
   const queryClient = useQueryClient();
   const { setError } = formMethods;
-  const reqNotification = useRequestWithNotifications();
   const mutateItemInCache = useCallback(
     (values: ResultItem) => queryClient.setQueryData(modelItemQueryKey, values),
     [modelItemQueryKey]
@@ -129,7 +127,7 @@ export const EntryUnderpageContextProvider: FC<{
       const modelName = (currentModel as NonNullable<typeof currentModel>).name;
 
       try {
-        await reqNotification(
+        await toastedPromise(
           {
             title: t(
               viewType === 'update'
@@ -208,7 +206,6 @@ export const EntryUnderpageContextProvider: FC<{
       itemData,
       mutateItemInCache,
       navigate,
-      reqNotification,
       setError,
       t,
       viewType,

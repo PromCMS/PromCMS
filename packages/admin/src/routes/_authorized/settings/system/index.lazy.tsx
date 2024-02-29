@@ -6,10 +6,9 @@ import { useAuth } from '@contexts/AuthContext';
 import { PageLayout } from '@layouts/PageLayout';
 import { Button } from '@mantine/core';
 import { createLazyFileRoute } from '@tanstack/react-router';
-import { canUser } from '@utils';
+import { canUser, toastedPromise } from '@utils';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useModelItems } from 'hooks/useModelItems';
-import { useRequestWithNotifications } from 'hooks/useRequestWithNotifications';
 import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, X } from 'tabler-icons-react';
@@ -71,8 +70,6 @@ function Page() {
   const [activeOption, setActiveOption] = useState<
     ItemID | 'new' | undefined
   >();
-  const reqNotification = useRequestWithNotifications();
-
   const currentUserCanCreate = currentUser?.can({
     action: 'create',
     targetEntityTableName: BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
@@ -97,7 +94,7 @@ function Page() {
       }
 
       try {
-        reqNotification(
+        await toastedPromise(
           {
             title: t(MESSAGES.PLEASE_WAIT),
             message: t(MESSAGES.SELECT_OPTION_DELETE_WORKING),
@@ -110,7 +107,7 @@ function Page() {
         );
       } catch {}
     },
-    [t, reqNotification, refetch]
+    [t, refetch]
   );
 
   const aside =
