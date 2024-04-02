@@ -47,11 +47,16 @@ export class FilesPart extends ApiClientPart {
     });
   }
 
-  async update(fileId: ItemID, payload: FileInput) {
+  async update(
+    fileId: ItemID,
+    payload: Partial<FileInput & { filename: string }>
+  ) {
     return this.request<Response<FileItem>>({
       method: 'PATCH',
       url: `/items/${fileId}`,
-      data: payload,
+      data: {
+        data: payload,
+      },
     });
   }
 

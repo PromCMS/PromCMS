@@ -3,7 +3,7 @@ import { ActionIcon, TextInput, Tooltip } from '@mantine/core';
 import { useClipboard, useHover } from '@mantine/hooks';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ClipboardCheck } from 'tabler-icons-react';
+import { Check, Link } from 'tabler-icons-react';
 
 export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
   const { hovered, ref } = useHover<HTMLButtonElement>();
@@ -19,7 +19,7 @@ export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
       type="string"
       className="w-full"
       autoComplete="off"
-      value={fileUrl.toString()}
+      value={fileUrl.pathname.toString()}
       rightSection={
         <Tooltip
           label={t(
@@ -37,7 +37,11 @@ export const CopyToClipboard: FC<{ fileUrl: URL }> = ({ fileUrl }) => {
             variant="filled"
             className="mr-2"
           >
-            <ClipboardCheck className="h-5 w-5" />
+            {clipboard.copied ? (
+              <Check className="h-5 w-5" />
+            ) : (
+              <Link className="h-5 w-5" />
+            )}
           </ActionIcon>
         </Tooltip>
       }

@@ -246,6 +246,8 @@ export const MESSAGES = {
   FOR_LANGUAGE: 'To language',
   EDIT: 'Upravit',
   CHOOSE_A_FILE: 'Choose a file',
+  FILENAME: 'Filename',
+  FILEPATH: 'Filepath',
   NAME: 'Name',
   FULL_NAME: 'Full Name',
   CREATE_TRANSLATION_KEY: 'Create translation key',
