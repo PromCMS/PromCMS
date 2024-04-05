@@ -11,10 +11,15 @@ import {
 } from '../../types';
 import { removeTrailingSlash } from '../../utils';
 import { EntryByTableNamePart } from './EntryByTableNamePart';
+import { SettingsMaintanancePart } from './SettingsMaintanancePart';
 
 export class SettingsPart extends EntryByTableNamePart {
+  public maintanance: SettingsMaintanancePart;
+
   constructor(axios: Axios) {
     super('prom__settings', axios);
+
+    this.maintanance = new SettingsMaintanancePart(axios);
   }
 
   getAppConfig<T = { data: AppConfig }>(
