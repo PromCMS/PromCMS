@@ -78,10 +78,23 @@ export const PROM_TABLES = {
   PROM_USERS: 'prom__users',
 };
 
+export const MAINTANANCE_MODE_MESSAGES = {
+  MAINTANANCE_MODE: 'Maintanance mode',
+  MAINTANANCE_COUNTDOWN: 'Countdown',
+  MAINTANANCE_COUNTDOWN_CHOOSE_VALUE:
+    'Choose final date and time for countdown',
+  MAINTANANCE_TITLE_PLACEHOLDER: 'We are working on it!',
+  MAINTANANCE_DESCRIPTION_PLACEHOLDER:
+    'This page is currently down for maintanance. Please sit back and wait for our return!',
+  MAINTANANCE_MINIMUM_DATE_INCORRECT:
+    'Minimum value must be fifteen minutes larger than current time',
+};
+
 export const MESSAGES = {
   ...SIMPLE_WORDS,
   ...EDITOR_MESSAGES,
   ...PROM_TABLES,
+  ...MAINTANANCE_MODE_MESSAGES,
   FROM_TIME: 'From',
   TO_TIME: 'To',
   CONFIRM_SELECTION: 'Confirm selection',

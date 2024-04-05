@@ -53,7 +53,7 @@ export const localizedMessages: Partial<
       [MESSAGES.UPDATE_ITEM]: 'Uložit',
       [MESSAGES.COPY_DONE]: 'Zkopírováno!',
       [MESSAGES.COPY_TO_CLIPBOARD]: 'Zkopírovat do schránky',
-      [MESSAGES.TITLE]: 'Titul',
+      [MESSAGES.TITLE]: 'Titulek',
       [MESSAGES.ITEMS]: 'položky',
       [MESSAGES.YES]: 'Ano',
       [MESSAGES.NO]: 'Ne',
@@ -296,6 +296,15 @@ export const localizedMessages: Partial<
       [MESSAGES.HOW_TO]: 'Jak na to 🤔',
       [MESSAGES.HOW_TO_MESSAGE]: `Po vybrání jazyka v nabídce v levé horní části můžete přidat novou jazykovou mutaci na text z hlavního jazyka nebo upravit již vytvořené mutace.<br />
 Pro upravení jazykové mutace stačí pouze upravit hodnotu mutace a uložit ji pomocí klávesy <kbd>Enter</kbd>. `,
+      [MESSAGES.MAINTANANCE_MODE]: 'Režim údržby',
+      [MESSAGES.MAINTANANCE_COUNTDOWN]: 'Odpočet',
+      [MESSAGES.MAINTANANCE_COUNTDOWN_CHOOSE_VALUE]:
+        'Vyberte konečný datum a čas pro odpočet',
+      [MESSAGES.MAINTANANCE_TITLE_PLACEHOLDER]: 'Pracujeme na tom!',
+      [MESSAGES.MAINTANANCE_DESCRIPTION_PLACEHOLDER]: `Na této stránce právě probíhá údržba. 
+Prosím vraťte se za chvíli!`,
+      [MESSAGES.MAINTANANCE_MINIMUM_DATE_INCORRECT]:
+        'Datum a čas musí více než patnáct minut od aktuálního času',
     },
   },
   fr: {
@@ -631,7 +640,7 @@ Pro upravení jazykové mutace stačí pouze upravit hodnotu mutace a uložit ji
       [MESSAGES.UPDATE_ITEM]: 'Aktualizácia',
       [MESSAGES.COPY_DONE]: 'Skopírované!',
       [MESSAGES.COPY_TO_CLIPBOARD]: 'Skopírovať do schránky',
-      [MESSAGES.TITLE]: 'Titul',
+      [MESSAGES.TITLE]: 'Titulek',
       [MESSAGES.ITEMS]: 'položky',
       [MESSAGES.YES]: 'Áno',
       [MESSAGES.NO]: 'Nie',

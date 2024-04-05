@@ -4,12 +4,12 @@ import { UnauthorizedPageContent } from '@components/UnauthorizedPageContent';
 import { BASE_PROM_ENTITY_TABLE_NAMES, MESSAGES } from '@constants';
 import { useAuth } from '@contexts/AuthContext';
 import { PageLayout } from '@layouts/PageLayout';
-import { Button } from '@mantine/core';
+import { Button, Divider, Skeleton } from '@mantine/core';
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { canUser, toastedPromise } from '@utils';
 import { useCurrentUser } from 'hooks/useCurrentUser';
 import { useModelItems } from 'hooks/useModelItems';
-import { useCallback, useState } from 'react';
+import { Suspense, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Plus, X } from 'tabler-icons-react';
 
@@ -17,6 +17,7 @@ import { ItemID } from '@prom-cms/api-client';
 import { FieldPlacements } from '@prom-cms/schema';
 
 import { Drawer } from './-components/Drawer';
+import { MaintananceMode } from './-components/MaintananceMode/MaintananceMode';
 
 export const Route = createLazyFileRoute('/_authorized/settings/system/')({
   component: () => {
@@ -64,7 +65,11 @@ function Page() {
   const { data, refetch, isLoading, isError } = useModelItems(
     BASE_PROM_ENTITY_TABLE_NAMES.SETTINGS,
     {
-      params: { page: currentPage },
+      params: {
+        page: currentPage,
+        limit: 50,
+        where: { slug: { manipulator: 'NOTLIKE', value: '__prom_%' } },
+      },
     }
   );
   const [activeOption, setActiveOption] = useState<
@@ -140,6 +145,12 @@ function Page() {
         ) : null}
       </PageLayout.Header>
       <PageLayout.Content>
+        <Divider
+          label={t(MESSAGES.SYSTEM_SETTINGS)}
+          labelPosition="left"
+          orientation="vertical"
+          className="h-3 my-auto mb-4"
+        />
         <TableView
           isLoading={isLoading || isError}
           items={data?.data ?? []}
@@ -147,6 +158,25 @@ function Page() {
           onEditAction={currentUserCanEdit ? onEditClick : undefined}
           columns={columns}
         />
+        <TableView.Footer>
+          {data ? (
+            <TableView.Metadata
+              current_page={data.current_page}
+              last_page={data.current_page}
+              total={data.total}
+              className="mr-auto"
+            />
+          ) : null}
+          <TableView.Pagination
+            className="ml-auto"
+            total={data?.last_page || 1}
+            value={currentPage}
+            onChange={setCurrentPage}
+          />
+        </TableView.Footer>
+        <Suspense fallback={<Skeleton className="w-full mt-8 min-h-[440px]" />}>
+          <MaintananceMode disabled={activeOption !== undefined} />
+        </Suspense>
       </PageLayout.Content>
     </PageLayout>
   );

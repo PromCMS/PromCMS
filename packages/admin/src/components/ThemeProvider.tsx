@@ -10,6 +10,11 @@ export const theme: MantineThemeOverride = {
     sm: '0 10px 15px -3px #dbeafe, 0 4px 6px -4px #dbeafe',
   },
   components: {
+    Loader: {
+      defaultProps: {
+        type: 'dots',
+      },
+    },
     Input: {
       defaultProps: {
         size: 'md',
