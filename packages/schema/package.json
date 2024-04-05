@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/schema",
   "description": "Schema package for prom cms packages",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "license": "MIT",

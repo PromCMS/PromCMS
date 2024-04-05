@@ -1,5 +1,24 @@
 # @prom-cms/admin
 
+## 0.22.0
+
+### Minor Changes
+
+- 8b4e94a: Adds ability to edit maintanance mode in admin through system settings.
+- 76c2d9d: Filters out internal settings from overall main settings list
+- a3c68e1: Creates new implementation for file update page which now enables editing filename and description.
+
+### Patch Changes
+
+- 1f7c71b: Cleans up useRequestWithNotifications
+- f3ed05c: Update tabler-icons to latest
+- Updated dependencies [a3c68e1]
+- Updated dependencies [7178caa]
+- Updated dependencies [f3ed05c]
+- Updated dependencies [ec6f84c]
+  - @prom-cms/api-client@0.16.0
+  - @prom-cms/schema@0.10.1
+
 ## 0.21.6
 
 ### Patch Changes
