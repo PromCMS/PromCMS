@@ -123,7 +123,7 @@ jobs:
       - name: Publish prerelease
         if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
         run: |
-          pnpm run version-packages --snapshot
+          pnpm run version-packages --snapshot main
           pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
