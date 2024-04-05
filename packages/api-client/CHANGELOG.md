@@ -1,5 +1,18 @@
 # @prom-cms/api-client
 
+## 0.16.0
+
+### Minor Changes
+
+- 7178caa: Extents possible manipulator for where query param on requests.
+- ec6f84c: Introduces handlers for maintanance routes. They are accessible in your api clients under apiclient -> settings object by maintanance
+
+### Patch Changes
+
+- a3c68e1: Fixes incorrect implemention of update for file metadata
+- Updated dependencies [f3ed05c]
+  - @prom-cms/schema@0.10.1
+
 ## 0.15.2
 
 ### Patch Changes
