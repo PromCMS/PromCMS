@@ -25,7 +25,7 @@ export class SettingsMaintanancePart extends ApiClientPart {
       ...value,
       data: {
         ...value.data,
-        countdown: value.data
+        countdown: value.data.countdown
           ? new Date((value.data.countdown as unknown as number) * 1000)
           : null,
       },
