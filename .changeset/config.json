@@ -4,6 +4,10 @@
   "commit": false,
   "fixed": [],
   "linked": [],
+  "snapshot": {
+    "useCalculatedVersion": true,
+    "prereleaseTemplate": "{tag}.{commit}"
+  },
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch"
