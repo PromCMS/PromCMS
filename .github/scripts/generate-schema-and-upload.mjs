@@ -1,7 +1,7 @@
 // @ts-check
 
 /**
- * @typedef {{major: number, minor: number, patch: number|string}} Version
+ * @typedef {{major: string, minor: string, patch: string}} Version
  */
 import fs from 'fs-extra';
 import FtpClient from 'ftp';
@@ -29,31 +29,29 @@ const uploadFile = (version, fileContent) =>
     fs.ensureFileSync(tempFilepath);
     fs.writeFileSync(tempFilepath, fileContent);
     const file = fs.readFileSync(tempFilepath);
-    const versionAsArray = Object.values(version);
+
+    const jsonPathToUpsert = `versions/${Object.values(version).join('/')}/schema.json`;
+    const privateJsonPathToUpsert = `/subdoms/schema/${jsonPathToUpsert}`;
 
     client.on('ready', async () => {
-      await Promise.all(
-        versionAsArray.flatMap((_version, index) => {
-          const part = versionAsArray.slice(0, index + 1).join('/');
-          const pathname = `/subdoms/schema/versions/${part}`;
+      console.log(`- Updating ${jsonPathToUpsert}`);
 
-          // Ensure directory first and then upload file
-          return [
-            new Promise((resolveOne, rejectOne) =>
-              client.mkdir(pathname, true, (err) => {
-                if (err) rejectOne(err);
-                resolveOne(undefined);
-              })
-            ),
-            new Promise((resolveOne, rejectOne) => {
-              client.put(file, `${pathname}/schema.json`, (err) => {
-                if (err) rejectOne(err);
-                resolveOne(undefined);
-              });
-            }),
-          ];
-        })
-      ).catch(reject);
+      try {
+        await new Promise((resolveOne, rejectOne) =>
+          client.mkdir(path.dirname(privateJsonPathToUpsert), true, (err) => {
+            if (err) rejectOne(err);
+            resolveOne(undefined);
+          })
+        );
+        await new Promise((resolveOne, rejectOne) => {
+          client.put(file, privateJsonPathToUpsert, (err) => {
+            if (err) rejectOne(err);
+            resolveOne(undefined);
+          });
+        });
+      } catch (error) {
+        reject(error);
+      }
 
       client.end();
     });
@@ -85,9 +83,13 @@ const getVersion = async () => {
     path.join(process.cwd(), 'packages/schema/package.json')
   );
   /**
-   * @type {[number, number, number]}
+   * @type {[string, string, string]}
    */
-  const [major, minor, patch] = version.replace('/', '').split('.').map(Number);
+  const [major, minor, patch] = version.replace('/', '').split('.').map(String);
+
+  if (!major || !minor || !patch) {
+    throw new Error(`Invalid version "${version}"!`);
+  }
 
   return {
     major,
