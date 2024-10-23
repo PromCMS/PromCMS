@@ -87,7 +87,7 @@ const getVersion = async () => {
   /**
    * @type {[number, number, number]}
    */
-  const [major, minor, patch] = version.split('.').replace('/', '').map(Number);
+  const [major, minor, patch] = version.replace('/', '').split('.').map(Number);
 
   return {
     major,
