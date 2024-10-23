@@ -1,5 +1,11 @@
 # @prom-cms/schema
 
+## 0.10.1
+
+### Patch Changes
+
+- f3ed05c: Update tabler-icons to latest
+
 ## 0.10.0
 
 ### Minor Changes
