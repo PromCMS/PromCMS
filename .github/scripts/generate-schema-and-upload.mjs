@@ -83,18 +83,21 @@ const getVersion = async () => {
     path.join(process.cwd(), 'packages/schema/package.json')
   );
   /**
-   * @type {[string, string, string]}
+   * @type {string[]}
    */
-  const [major, minor, patch] = version.replace('/', '').split('.').map(String);
+  const [major, minor, ...patch] = version
+    .replace('/', '')
+    .split('.')
+    .map(String);
 
-  if (!major || !minor || !patch) {
+  if (!major || !minor || !patch[0]) {
     throw new Error(`Invalid version "${version}"!`);
   }
 
   return {
     major,
     minor,
-    patch,
+    patch: patch.join('.'),
   };
 };
 
