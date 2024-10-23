@@ -6,10 +6,12 @@ import { installPHPDeps } from '@jobs/install-php-deps.js';
 import { Logger, generateByTemplates, isDirEmpty } from '@utils';
 import { createPromptWithOverrides } from '@utils/createPromptWithOverrides.js';
 import { getGeneratorConfigData } from '@utils/getGeneratorConfigData.js';
+import { getUsedSchemaPackageVersion } from '@utils/getUsedSchemaPackageVersion.js';
 import { runWithProgress } from '@utils/runWithProgress.js';
 import crypto from 'crypto';
 import fs from 'fs-extra';
-import path from 'path';
+import module from 'node:module';
+import path from 'node:path';
 import slugify from 'slugify';
 
 import { createPromConfigPath, mockedGeneratorConfig } from '@prom-cms/schema';
@@ -82,6 +84,7 @@ export const createProjectAction = async (
     }
   }
 
+  const schemaPackageVersion = getUsedSchemaPackageVersion();
   await runWithProgress(
     generateByTemplates('command-actions.project.create', tempBuildFolder, {
       '*': {
@@ -93,6 +96,7 @@ export const createProjectAction = async (
             secret: crypto.randomBytes(20).toString('hex'),
           },
         },
+        schemaJsonPath: `https://schema.prom-cms.cz/versions/${schemaPackageVersion.replace('.', '/')}/schema.json`,
       },
     }),
     'Scaffold project'

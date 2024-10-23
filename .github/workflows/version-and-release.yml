@@ -9,13 +9,13 @@ on:
       - packages/**
 
 jobs:
-  cancelPrevious: 
+  cancelPrevious:
     runs-on: ubuntu-latest
     steps:
       - uses: n1hility/cancel-previous-runs@v3
-        with: 
+        with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          workflow: version-and-release.yml 
+          workflow: version-and-release.yml
   test:
     runs-on: ubuntu-latest
     needs: cancelPrevious
@@ -51,7 +51,7 @@ jobs:
 
       - name: Build it all out
         run: pnpm build:packages
-    
+
   release:
     runs-on: ubuntu-latest
     needs: test
@@ -80,7 +80,7 @@ jobs:
         with:
           node-version: 20
           cache: 'pnpm'
-          registry-url: "https://registry.npmjs.org"
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install Dependencies
         run: pnpm i
@@ -130,7 +130,6 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create JSON schema and upload
-        if: ${{ steps.versionAndRelease.outputs.published == 'true' }}
         run: node .github/scripts/generate-schema-and-upload.mjs
         env:
           PROM_FTP_CONNECTION_STRING: ${{ secrets.PROM_FTP_CONNECTION_STRING }}

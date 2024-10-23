@@ -4,7 +4,7 @@
 This is a cli package of PromCMS that makes things happen.
 </center>
 
-## 🍻 Commands 
+## 🍻 Commands
 
 ### `db`
 
@@ -48,7 +48,7 @@ Subcommand to create project
 
 ##### 🔯 Parameters
 
-- `--cwd`/`-c` 
+- `--cwd`/`-c`
     - **String** (default: current cwd), optional
     - Path to PromCMS project
 
@@ -64,18 +64,20 @@ Subcommand to update your project. Useful for the time when you update @prom-cms
 
 ##### 🔯 Parameters
 
-- `--cwd`/`-c` 
+- `--cwd`/`-c`
     - **String** (default: current cwd), optional
     - Path to PromCMS project
 
-- `--admin`/`-a` 
+- `--admin`/`-a`
     - **Boolean** (default: true), optional
     - If admin should be regenerated or not
+
+- `--ensure-json-schema`
+    - **Boolean** (default: true), optional
+    - If .json PromCMS config is defined it updates the config and ensures correct schema definition with correct version is used
 
 #### 😎 Examples
 
 - Update admin and models in default module: `npx @prom-cms/cli project update`
 
 - Update only models in default module: `npx @prom-cms/cli project update --admin false`
-
-

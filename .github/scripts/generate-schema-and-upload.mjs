@@ -1,18 +1,17 @@
 // @ts-check
 
 /**
- * @typedef {{major: number, minor: number, patch: number}} Version
+ * @typedef {{major: number, minor: number, patch: number|string}} Version
  */
-
-import FtpClient from "ftp";
-import fs from "fs-extra";
-import path from "path";
-import { zodToJsonSchema } from "zod-to-json-schema";
+import fs from 'fs-extra';
+import FtpClient from 'ftp';
+import path from 'path';
+import { zodToJsonSchema } from 'zod-to-json-schema';
 
 const { PROM_FTP_CONNECTION_STRING } = process.env;
 
 if (!PROM_FTP_CONNECTION_STRING) {
-  throw new Error("Missing PROM_FTP_CONNECTION_STRING");
+  throw new Error('Missing PROM_FTP_CONNECTION_STRING');
 }
 
 const ftpConnectionURL = new URL(PROM_FTP_CONNECTION_STRING);
@@ -26,16 +25,16 @@ const ftpConnectionURL = new URL(PROM_FTP_CONNECTION_STRING);
 const uploadFile = (version, fileContent) =>
   new Promise((resolve, reject) => {
     const client = new FtpClient();
-    const tempFilepath = path.join(process.cwd(), "scripts/.temp/schema.json");
+    const tempFilepath = path.join(process.cwd(), 'scripts/.temp/schema.json');
     fs.ensureFileSync(tempFilepath);
     fs.writeFileSync(tempFilepath, fileContent);
     const file = fs.readFileSync(tempFilepath);
     const versionAsArray = Object.values(version);
 
-    client.on("ready", async () => {
+    client.on('ready', async () => {
       await Promise.all(
         versionAsArray.flatMap((_version, index) => {
-          const part = versionAsArray.slice(0, index + 1).join("/");
+          const part = versionAsArray.slice(0, index + 1).join('/');
           const pathname = `/subdoms/schema/versions/${part}`;
 
           // Ensure directory first and then upload file
@@ -59,12 +58,12 @@ const uploadFile = (version, fileContent) =>
       client.end();
     });
 
-    client.on("error", (error) => {
+    client.on('error', (error) => {
       reject(error);
       client.end();
     });
 
-    client.on("end", () => {
+    client.on('end', () => {
       fs.removeSync(tempFilepath);
       resolve(undefined);
     });
@@ -83,12 +82,12 @@ const uploadFile = (version, fileContent) =>
  */
 const getVersion = async () => {
   const { version } = await fs.readJson(
-    path.join(process.cwd(), "packages/schema/package.json")
+    path.join(process.cwd(), 'packages/schema/package.json')
   );
   /**
    * @type {[number, number, number]}
    */
-  const [major, minor, patch] = version.split(".").map(Number);
+  const [major, minor, patch] = version.split('.').replace('/', '').map(Number);
 
   return {
     major,
@@ -97,18 +96,18 @@ const getVersion = async () => {
   };
 };
 
-console.log("-- Begin schema generate");
-const { generatorConfigSchema } = await import("@prom-cms/schema");
-console.log("Schema has been found!");
+console.log('-- Begin schema generate');
+const { generatorConfigSchema } = await import('@prom-cms/schema');
+console.log('Schema has been found!');
 const jsonSchema = JSON.stringify(
-  zodToJsonSchema(generatorConfigSchema, "prom-cms-generate-schema")
+  zodToJsonSchema(generatorConfigSchema, 'prom-cms-generate-schema')
 );
-console.log("Schema has been generated");
+console.log('Schema has been generated');
 console.log(jsonSchema);
 
-console.log("-- Begin schema upload");
+console.log('-- Begin schema upload');
 const version = await getVersion();
-console.log(`Will upload for version "${Object.values(version).join(".")}"`);
+console.log(`Will upload for version "${Object.values(version).join('.')}"`);
 
 await uploadFile(version, jsonSchema);
-console.log("FTP upload complete!");
+console.log('FTP upload complete!');

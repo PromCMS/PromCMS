@@ -7,6 +7,7 @@ import { PACKAGE_ROOT } from '@constants';
 import { adminOption } from '@options/adminOption.js';
 import { cleanOption } from '@options/cleanOption.js';
 import { cwdOption } from '@options/cwdOption.js';
+import { ensureJsonSchemaOption } from '@options/ensureJsonSchemaOption.js';
 import { packageManagerOption } from '@options/packageManagerOption.js';
 import { projectNameOption } from '@options/projectNameOption.js';
 import { promDevelopOption } from '@options/promDevelopOption.js';
@@ -79,6 +80,7 @@ import { findGeneratorConfig } from '@prom-cms/schema';
     .addOption(cwdOption)
     .addOption(packageManagerOption)
     .addOption(adminOption)
+    .addOption(ensureJsonSchemaOption)
     .action(updateProjectAction);
 
   await program.parseAsync(process.argv);
