@@ -61,7 +61,18 @@ export const databaseConfigItemBaseSchema = z.object({
   /**
    * Table columns
    */
-  columns: z.array(columnTypeSchema),
+  columns: z.array(columnTypeSchema).refine(
+    (columns) => {
+      const numberOfIdentifiers = columns.filter(
+        (column) => 'identifier' in column && column.identifier
+      );
+
+      return numberOfIdentifiers.length <= 1;
+    },
+    {
+      message: 'More than one identifier columns is not allowed',
+    }
+  ),
 });
 
 export type DatabaseConfigItemBase = z.infer<

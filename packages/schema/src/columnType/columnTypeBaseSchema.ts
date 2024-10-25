@@ -50,6 +50,11 @@ export const columnTypeBaseSchema = z.object({
    * @default false
    */
   hide: z.boolean().default(false),
+
+  /**
+   * If true marks the current column as identifier and removes the default 'id'
+   */
+  identifier: z.boolean().default(false),
 });
 
 export type ColumnTypeBase = z.infer<typeof columnTypeBaseSchema>;
