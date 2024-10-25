@@ -96,6 +96,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Checkout main
+        run: git checkout origin/main
+
       - name: Authorize npm
         run: |
           touch .npmrc
@@ -107,7 +110,7 @@ jobs:
         if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
         run: |
           pnpm run version-packages --snapshot main
-          pnpm run release
+          pnpm run ci:publish --no-git-checks
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
