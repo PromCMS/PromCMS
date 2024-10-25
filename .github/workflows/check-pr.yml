@@ -2,7 +2,7 @@ name: Check PR project validity
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   check-build:
@@ -14,7 +14,7 @@ jobs:
       TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
     steps:
       - uses: n1hility/cancel-previous-runs@v3
-        with: 
+        with:
           token: ${{ secrets.GITHUB_TOKEN }}
           workflow: check-pr.yml
 
@@ -22,17 +22,17 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
         with:
-            fetch-depth: 2
+          fetch-depth: 2
 
       - uses: actions/cache@v4
         name: Cache
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
-      
+
       - uses: pnpm/action-setup@v2
         with:
-          version: 8
+          version: 9
 
       - name: Setup node 20
         uses: actions/setup-node@v4

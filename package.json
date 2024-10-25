@@ -14,7 +14,8 @@
     "dev": "npx turbo run dev --filter=@prom-cms/admin...",
     "prettier": "npx turbo run prettier --filter=./packages/*",
     "test": "npx turbo run test --filter=./packages/* && pnpm prettier",
-    "release": "pnpm build:packages && changeset publish",
+    "preci:publish": "pnpm build:packages",
+    "ci:publish": "pnpm publish -r",
     "version-packages": "changeset version"
   },
   "license": "MIT",
@@ -48,5 +49,6 @@
     "prettier": "^3.0.3",
     "turbo": "^1.13.2",
     "zod-to-json-schema": "^3.21.4"
-  }
+  },
+  "packageManager": "pnpm@9.12.2"
 }

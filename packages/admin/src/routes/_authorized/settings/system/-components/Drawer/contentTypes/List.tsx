@@ -13,6 +13,7 @@ const repeaterFields: RepeaterAdminSchema['columns'] = [
     primaryString: false,
     readonly: false,
     required: true,
+    identifier: false,
   },
 ];
 

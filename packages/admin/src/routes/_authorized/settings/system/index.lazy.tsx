@@ -55,6 +55,7 @@ const columns: TableViewCol[] = [
     required: true,
     title: 'dsafasd',
     unique: false,
+    identifier: false,
   },
 ];
 
