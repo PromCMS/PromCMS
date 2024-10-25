@@ -96,23 +96,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Update lockfile after version
-        if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
-        run: pnpm i --frozen-lockfile=false
-
-      - name: Push changed lockfile
-        uses: EndBug/add-and-commit@v9
-        if: ${{ steps.versionAndRelease.outputs.published == 'false' && steps.versionAndRelease.outputs.hasChangesets == 'true' }}
-        with:
-          message: Adds updated lockfile
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
-          add: 'pnpm-lock.yaml'
-          push: '--set-upstream origin changeset-release/main'
-
-      - name: Checkout main
-        run: git checkout origin/main
-
       - name: Authorize npm
         run: |
           touch .npmrc
