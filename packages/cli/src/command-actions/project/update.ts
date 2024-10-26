@@ -12,11 +12,11 @@ import { findGeneratorConfig } from '@prom-cms/schema';
 type Options = {
   cwd: string;
   admin: boolean;
-  updateSchema: boolean;
+  updateSchema?: boolean;
 };
 
 export const updateProjectAction = async (options: Options) => {
-  const { cwd, admin, updateSchema } = options;
+  const { cwd, admin, updateSchema = true } = options;
 
   const generatorConfigPath = await findGeneratorConfig(cwd);
 
@@ -28,8 +28,10 @@ export const updateProjectAction = async (options: Options) => {
       delete existingContent['$schema'];
     }
 
+    const [major, minor, ...patchParts] = schemaPackageVersion.split('.');
+
     existingContent = {
-      $schema: `https://schema.prom-cms.cz/versions/${schemaPackageVersion.replace('.', '/')}/schema.json`,
+      $schema: `https://schema.prom-cms.cz/versions/${major}/${minor}/${patchParts.join('.')}/schema.json`,
       ...existingContent,
     };
 
