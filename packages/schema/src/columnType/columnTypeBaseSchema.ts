@@ -31,6 +31,12 @@ export const columnTypeBaseSchema = z.object({
    */
   localized: z.boolean().default(false),
 
+  database: z
+    .object({
+      columnName: z.string().optional(),
+    })
+    .optional(),
+
   /**
    * Admin settings
    */
