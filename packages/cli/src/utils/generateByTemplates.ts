@@ -1,9 +1,10 @@
-import fs from 'fs-extra';
-import path from 'path';
 import ejs from 'ejs';
-import { formatCodeString } from './formatCodeString.js';
-import { getTemplateFolder, Path } from './getTemplateFolder.js';
+import fs from 'fs-extra';
 import { glob } from 'glob';
+import path from 'path';
+
+import { formatCodeString } from './formatCodeString.js';
+import { Path, getTemplateFolder } from './getTemplateFolder.js';
 
 export type GenerateByTemplatesOptions = {
   /**

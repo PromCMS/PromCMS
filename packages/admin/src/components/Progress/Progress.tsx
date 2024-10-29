@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, ProgressHTMLAttributes, FC } from 'react';
+import { DetailedHTMLProps, FC, ProgressHTMLAttributes } from 'react';
 
 export interface ProgressProps
   extends DetailedHTMLProps<

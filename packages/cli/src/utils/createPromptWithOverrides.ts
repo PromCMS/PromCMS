@@ -1,4 +1,4 @@
-import inquirer, { DistinctQuestion, Answers } from 'inquirer';
+import inquirer, { Answers, DistinctQuestion } from 'inquirer';
 
 /**
  * Creates prompt for only empty values

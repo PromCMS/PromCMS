@@ -1,5 +1,7 @@
+import { adminUpdateCommandAction } from '@actions/admin/update.js';
+import { migrationApplyCommandAction } from '@actions/database/migration/apply.js';
+import { migrationCreateCommandAction } from '@actions/database/migration/create.js';
 import { createProjectAction } from '@actions/project/create.js';
-import { updateProjectAction } from '@actions/project/update.js';
 import { changeUserPasswordCommandAction } from '@actions/users/change-password.js';
 import { createUserCommandAction } from '@actions/users/create.js';
 import { deleteUserCommandAction } from '@actions/users/delete.js';
@@ -7,7 +9,6 @@ import { PACKAGE_ROOT } from '@constants';
 import { adminOption } from '@options/adminOption.js';
 import { cleanOption } from '@options/cleanOption.js';
 import { cwdOption } from '@options/cwdOption.js';
-import { ensureJsonSchemaOption } from '@options/ensureJsonSchemaOption.js';
 import { packageManagerOption } from '@options/packageManagerOption.js';
 import { projectNameOption } from '@options/projectNameOption.js';
 import { promDevelopOption } from '@options/promDevelopOption.js';
@@ -66,7 +67,6 @@ import { findGeneratorConfig } from '@prom-cms/schema';
 
   projectCommand
     .command('create')
-    .option('--no-install', 'specify if install script should be run')
     .addOption(cleanOption)
     .addOption(cwdOption)
     .addOption(packageManagerOption)
@@ -75,13 +75,20 @@ import { findGeneratorConfig } from '@prom-cms/schema';
     .addOption(projectNameOption)
     .action(createProjectAction);
 
-  projectCommand
-    .command('update')
+  program
+    .command('database:migration:create')
     .addOption(cwdOption)
-    .addOption(packageManagerOption)
-    .addOption(adminOption)
-    .addOption(ensureJsonSchemaOption)
-    .action(updateProjectAction);
+    .action(migrationCreateCommandAction);
+
+  program
+    .command('database:migration:apply')
+    .addOption(cwdOption)
+    .action(migrationApplyCommandAction);
+
+  program
+    .command('admin:update')
+    .addOption(cwdOption)
+    .action(adminUpdateCommandAction);
 
   await program.parseAsync(process.argv);
 })();

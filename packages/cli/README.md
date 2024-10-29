@@ -6,11 +6,11 @@ This is a cli package of PromCMS that makes things happen.
 
 ## 🍻 Commands
 
-### `db`
+### `db`
 
 TBD
 
-### `users`
+### `users`
 
 Manage users with the help of a CLI
 
@@ -38,11 +38,11 @@ Let's you delete user by email
 
 `npx @prom-cms/cli user delete`
 
-### `project`
+### `project`
 
 Main command for managing your project
 
-#### `project create`
+#### `project create`
 
 Subcommand to create project
 
@@ -58,9 +58,9 @@ Subcommand to create project
 
 - Create in custom directory: `npx @prom-cms/cli generate-cms --cwd ../../directory`
 
-#### `project update`
+#### `admin:update`
 
-Subcommand to update your project. Useful for the time when you update @prom-cms/cli inside your project or update your PromCMS config
+Subcommand to update your admin. It removes old version and generates the admin files anew.
 
 ##### 🔯 Parameters
 
@@ -68,16 +68,22 @@ Subcommand to update your project. Useful for the time when you update @prom-cms
     - **String** (default: current cwd), optional
     - Path to PromCMS project
 
-- `--admin`/`-a`
-    - **Boolean** (default: true), optional
-    - If admin should be regenerated or not
+#### `database:migration:create`
 
-- `--ensure-json-schema`
-    - **Boolean** (default: true), optional
-    - If .json PromCMS config is defined it updates the config and ensures correct schema definition with correct version is used
+Validates PromCMS config, applies configuration to Models
 
-#### 😎 Examples
+##### 🔯 Parameters
 
-- Update admin and models in default module: `npx @prom-cms/cli project update`
+- `--cwd`/`-c`
+    - **String** (default: current cwd), optional
+    - Path to PromCMS project
 
-- Update only models in default module: `npx @prom-cms/cli project update --admin false`
+#### `database:migration:apply`
+
+Connects to database and applies
+
+##### 🔯 Parameters
+
+- `--cwd`/`-c`
+    - **String** (default: current cwd), optional
+    - Path to PromCMS project

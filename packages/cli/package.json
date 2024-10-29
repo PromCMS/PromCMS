@@ -31,7 +31,7 @@
     "build:types": "tsc",
     "build:types:aliases": "tsc-alias",
     "prettier": "prettier --config \"../../prettier.config.js\" --ignore-path \"../../.prettierignore\" --write \"**/*.{ts,tsx}\" ",
-    "test": "vitest",
+    "test": "vitest --watch=false",
     "test:dev": "vitest --update",
     "test:coverage": "vitest run --coverage"
   },

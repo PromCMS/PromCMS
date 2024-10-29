@@ -1,8 +1,9 @@
 import { FC, useCallback, useState } from 'react';
-import { Menu } from './Menu';
-import { FileListContextProvider, FileListProviderProps } from './context';
-import { UploadFilesModal } from './UploadFilesModal';
+
 import { List } from './List';
+import { Menu } from './Menu';
+import { UploadFilesModal } from './UploadFilesModal';
+import { FileListContextProvider, FileListProviderProps } from './context';
 
 export type FileListProps = FileListProviderProps;
 

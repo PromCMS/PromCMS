@@ -1,7 +1,6 @@
+import { pathToAbsolute } from '@utils';
 import { Option } from 'commander';
 import fs from 'fs-extra';
-
-import { pathToAbsolute } from '@utils';
 
 export const cwdOption = new Option(
   '-c, --cwd <string>',

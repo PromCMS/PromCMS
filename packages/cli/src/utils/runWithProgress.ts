@@ -1,4 +1,5 @@
 import logUpdate from 'log-update';
+
 import { Logger } from './logger.js';
 
 const FRAMES = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];

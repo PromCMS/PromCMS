@@ -1,6 +1,7 @@
 import { PACKAGE_ROOT, SUPPORTED_PACKAGE_MANAGERS } from '@constants';
+import { applyMigration } from '@jobs/applyMigration.js';
 import { createAdminFiles } from '@jobs/create-admin-files.js';
-import generateModels from '@jobs/generate-models.js';
+import { createMigration } from '@jobs/createMigration.js';
 import { installNodeJsDeps } from '@jobs/install-node-deps.js';
 import { installPHPDeps } from '@jobs/install-php-deps.js';
 import { Logger, generateByTemplates, isDirEmpty } from '@utils';
@@ -10,7 +11,6 @@ import { getUsedSchemaPackageVersion } from '@utils/getUsedSchemaPackageVersion.
 import { runWithProgress } from '@utils/runWithProgress.js';
 import crypto from 'crypto';
 import fs from 'fs-extra';
-import module from 'node:module';
 import path from 'node:path';
 import slugify from 'slugify';
 
@@ -22,7 +22,6 @@ type Options = {
   name: string;
   admin: boolean;
   clean?: boolean;
-  install: boolean;
   /**
    * Hidden option that is for doing special login inside prom monorepo
    */
@@ -32,7 +31,7 @@ type Options = {
 export const createProjectAction = async (
   optionsFromParameters: Partial<Options>
 ) => {
-  const { cwd, packageManager, name, admin, promDevelop, clean, install } =
+  const { cwd, packageManager, name, admin, promDevelop, clean } =
     await createPromptWithOverrides(
       [
         {
@@ -112,21 +111,24 @@ export const createProjectAction = async (
   // Now we get project config event though it's still the default one
   const generatorConfig = await getGeneratorConfigData(tempBuildFolder);
 
-  if (install) {
-    await runWithProgress(
-      installNodeJsDeps({ cwd: tempBuildFolder, packageManager }),
-      `Calling ${packageManager} to install Node.js deps`
-    );
-
-    await runWithProgress(
-      installPHPDeps({ cwd: tempBuildFolder }),
-      'Calling composer to install PHP deps'
-    );
-  }
+  await runWithProgress(
+    installNodeJsDeps({ cwd: tempBuildFolder, packageManager }),
+    `Calling ${packageManager} to install Node.js deps`
+  );
 
   await runWithProgress(
-    generateModels({ config: generatorConfig, appRoot: tempBuildFolder }),
-    'Generate models, if any'
+    installPHPDeps({ cwd: tempBuildFolder }),
+    'Calling composer to install PHP deps'
+  );
+
+  await runWithProgress(
+    createMigration({ cwd: tempBuildFolder }),
+    'Create first migration'
+  );
+
+  await runWithProgress(
+    applyMigration({ cwd: tempBuildFolder }),
+    'Apply first migration (create database structure)'
   );
 
   if (admin) {

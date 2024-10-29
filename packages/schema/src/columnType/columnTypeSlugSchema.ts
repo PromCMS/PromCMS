@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 
 export const columnTypeSlugSchema = columnTypeBaseSchema.extend({

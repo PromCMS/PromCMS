@@ -1,6 +1,5 @@
-import { Option } from 'commander';
-
 import { SUPPORTED_PACKAGE_MANAGERS } from '@constants';
+import { Option } from 'commander';
 
 export const packageManagerOption = new Option(
   '-p, --packageManager <manager>',

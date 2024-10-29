@@ -31,7 +31,7 @@
     "build:package": "swc ./src -d dist",
     "build:types": "tsc",
     "build:types:aliases": "tsc-alias",
-    "test": "vitest",
+    "test": "vitest --watch=false",
     "test:dev": "vitest --update",
     "test:coverage": "vitest run --coverage",
     "dev": "pnpm run \"/^dev:.*/\"",

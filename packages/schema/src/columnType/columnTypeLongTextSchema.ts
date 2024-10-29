@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { columnTypeBaseAdminConfigSchema } from './columnTypeBaseAdminConfigSchema.js';
 import { columnTypeBaseSchema } from './columnTypeBaseSchema.js';
 
