@@ -1,7 +1,7 @@
 {
   "name": "@prom-cms/cli",
   "description": "PromCMS cli package",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "type": "module",
   "author": "Ondřej Langr <hi@ondrejlangr.cz>",
   "homepage": "https://github.com/PromCMS/PromCMS/blob/main/packages/clie/README.md",
