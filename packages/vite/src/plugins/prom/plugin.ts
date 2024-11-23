@@ -268,6 +268,7 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
           const requestInit: RequestInit = {
             signal: abortController.signal,
             method: clientRequest.method,
+            redirect: 'manual',
             headers: new Headers(
               Object.entries(clientRequest.headers)
                 .map(([key, value]) => [
@@ -312,28 +313,40 @@ export const plugin = (options?: VitePromPluginOptions): Plugin => {
               new URL(clientRequest.url!, serverOrigin).toString(),
               requestInit
             );
+            const isHtmlResponse = (
+              phpServerResult.headers.get('content-type') ?? 'text/html'
+            ).includes('text/html');
+            let responseBody = isHtmlResponse
+              ? await viteTransformHtml(
+                  await phpServerResult.text(),
+                  clientRequest.url ?? '/'
+                )
+              : await phpServerResult
+                  .blob()
+                  .then((result) => result.arrayBuffer())
+                  .then((arrayResult) => Buffer.from(arrayResult));
 
             if (phpServerResult.status !== 404) {
-              const isHtmlResponse = (
-                phpServerResult.headers.get('content-type') ?? 'text/html'
-              ).includes('text/html');
-              let responseBody = isHtmlResponse
-                ? await viteTransformHtml(
-                    await phpServerResult.text(),
-                    clientRequest.url ?? '/'
-                  )
-                : await phpServerResult
-                    .blob()
-                    .then((result) => result.arrayBuffer())
-                    .then((arrayResult) => Buffer.from(arrayResult));
-
               res.statusCode = phpServerResult.status;
+              res.statusMessage = phpServerResult.statusText;
 
               for (const [key, value] of phpServerResult.headers) {
                 res.setHeader(key, value);
               }
 
               return res.end(responseBody);
+            } else {
+              const oldEnd = res.end;
+
+              // Return 404 page from PHP server instead of vite 404
+              res.end = function (...params) {
+                if (this.statusCode === 404) {
+                  res.write(responseBody);
+                }
+
+                // @ts-expect-error -- it still works, but we need to catch all parameters and pass it
+                return oldEnd.apply(this, params);
+              };
             }
           } catch (error) {
             // No need to log on abort
