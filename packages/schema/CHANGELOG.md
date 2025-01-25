@@ -1,5 +1,20 @@
 # @prom-cms/schema
 
+## 0.12.0
+
+### Minor Changes
+
+- 0227ca8: BREAKING: columnTypeNormalSchema and ColumnTypeNormal is removed, because password is moved to columnTypePasswordSchema and date+dateTime is moved to columnTypeDateSchema
+- 11af6a4: Adds database property to each column. This property is an object which has "columnName" option in it. Through this option user can override the default column name generation by PromCMS and apply their own.
+- 0227ca8: Adds option "identifier" to specific column types. When column is marked as "identifier" it replaces default "id" column and acts as primary key and identifier in admin.
+  There could only be one identifier in entity
+
+### Patch Changes
+
+- a3c44b5: Fixes used local versions as dependencies
+- f3ed05c: Update tabler-icons to latest
+- ebc2ebf: Uses latest pnpm which manages updating local package versions after release
+
 ## 0.10.0
 
 ### Minor Changes

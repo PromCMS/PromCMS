@@ -1,5 +1,34 @@
 # @prom-cms/admin
 
+## 0.23.0
+
+### Minor Changes
+
+- 8b4e94a: Adds ability to edit maintanance mode in admin through system settings.
+- 76c2d9d: Filters out internal settings from overall main settings list
+- a3c68e1: Creates new implementation for file update page which now enables editing filename and description.
+
+### Patch Changes
+
+- a3c44b5: Fixes used local versions as dependencies
+- 1f7c71b: Cleans up useRequestWithNotifications
+- f3ed05c: Update tabler-icons to latest
+- ebc2ebf: Adapts admin after the identifier column property has been introduced
+- ebc2ebf: Uses latest pnpm which manages updating local package versions after release
+- d8219c6: Fixes invalid assertion for formatting countdown
+- Updated dependencies [a3c44b5]
+- Updated dependencies [a3c68e1]
+- Updated dependencies [0227ca8]
+- Updated dependencies [7178caa]
+- Updated dependencies [f3ed05c]
+- Updated dependencies [ec6f84c]
+- Updated dependencies [11af6a4]
+- Updated dependencies [ebc2ebf]
+- Updated dependencies [d8219c6]
+- Updated dependencies [0227ca8]
+  - @prom-cms/api-client@0.17.0
+  - @prom-cms/schema@0.12.0
+
 ## 0.21.6
 
 ### Patch Changes

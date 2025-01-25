@@ -1,5 +1,13 @@
 # @prom-cms/vite
 
+## 0.3.4
+
+### Patch Changes
+
+- a3c44b5: Fixes used local versions as dependencies
+- b449f6f: Passes through redirects and returns 404 body from PHP server to allow for improved DX
+- ebc2ebf: Uses latest pnpm which manages updating local package versions after release
+
 ## 0.3.2
 
 ### Patch Changes
