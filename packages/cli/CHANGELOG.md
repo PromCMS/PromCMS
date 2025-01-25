@@ -1,5 +1,32 @@
 # @prom-cms/cli
 
+## 0.24.0
+
+### Minor Changes
+
+- f60f619: Implements autoupdate of json config with $schema definition with currently used version
+- 17ba11b: BREAKING: Deprecates the `project update` command which is replaced with `admin:update` to update admin, `database:migration:create` to apply PromCMS config, `database:migration:apply` to connect to database and apply updated models with database
+
+### Patch Changes
+
+- a3c44b5: Fixes used local versions as dependencies
+- 5fa9b54: Fixes version formatting of autoupdate of json schema path.
+- ebc2ebf: Uses latest pnpm which manages updating local package versions after release
+- Updated dependencies [a3c44b5]
+- Updated dependencies [0227ca8]
+- Updated dependencies [1f7c71b]
+- Updated dependencies [f3ed05c]
+- Updated dependencies [8b4e94a]
+- Updated dependencies [ebc2ebf]
+- Updated dependencies [11af6a4]
+- Updated dependencies [ebc2ebf]
+- Updated dependencies [d8219c6]
+- Updated dependencies [0227ca8]
+- Updated dependencies [76c2d9d]
+- Updated dependencies [a3c68e1]
+  - @prom-cms/schema@0.12.0
+  - @prom-cms/admin@0.23.0
+
 ## 0.22.18
 
 ### Patch Changes

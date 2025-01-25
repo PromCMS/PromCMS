@@ -1,5 +1,11 @@
 # @prom-cms/in-page-edit
 
+## 0.2.4
+
+### Patch Changes
+
+- f3ed05c: Update tabler-icons to latest
+
 ## 0.2.2
 
 ### Patch Changes
