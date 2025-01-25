@@ -35,7 +35,7 @@
     "url": "https://github.com/PromCMS/PromCMS/issues"
   },
   "dependencies": {
-    "@prom-cms/schema": "workspace:*"
+    "@prom-cms/schema": "workspace:^"
   },
   "devDependencies": {
     "typescript": "^5.3.3",
